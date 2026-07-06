@@ -1,0 +1,634 @@
+/**
+ * Announcement Management — panel layout, filters, table, form, preview
+ */
+
+.admin-theme .admin-ticker-badge-disabled-label {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  background: #f3f4f6;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0f172a;
+}
+
+.admin-theme .admin-ticker-edit-page {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.admin-theme .admin-ticker-form-publish-row {
+  padding: 1rem 1.125rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.admin-theme .admin-ticker-form-publish-row--live {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.admin-theme .admin-ticker-form-publish-row--draft {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+.admin-theme .admin-ticker-form-publish-row--disabled {
+  border-color: #e5e7eb;
+  background: #f9fafb;
+}
+
+.admin-theme .admin-ticker-form-publish-row--urgent {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+.admin-theme .admin-ticker-edit-page .admin-ticker-publish-options {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.admin-theme .admin-ticker-edit-page .admin-ticker-publish-option {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #666666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.admin-theme .admin-ticker-edit-page .admin-ticker-publish-option:hover {
+  border-color: #c5d4bc;
+  background: #f5f8f3;
+}
+
+.admin-theme .admin-ticker-edit-page .admin-ticker-publish-option--active {
+  border-color: #2d4a22;
+  background: #2d4a22;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(45, 74, 34, 0.2);
+}
+
+.admin-theme .admin-ticker-edit-page .admin-ticker-expired-note {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  font-size: 0.8125rem;
+  color: #9a3412;
+}
+
+.admin-theme .admin-ticker-page {
+  padding-bottom: 2rem;
+}
+
+.admin-theme .admin-ticker-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.admin-theme .admin-ticker-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-theme .admin-ticker-header-text h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #1c2119;
+}
+
+.admin-theme .admin-ticker-header-text p {
+  margin: 0.375rem 0 0;
+  max-width: 40rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #666666;
+}
+
+.admin-theme .admin-ticker-header-text strong {
+  font-weight: 600;
+  color: #2d4a22;
+}
+
+.admin-theme .admin-ticker-toolbar-row {
+  display: block;
+}
+
+.admin-theme .admin-ticker-toolbar-row .admin-input {
+  width: 100% !important;
+  min-height: 2.75rem !important;
+}
+
+.admin-theme .admin-ticker-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  background: #faf9f6;
+}
+
+.admin-theme .admin-ticker-filter-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem 1.25rem;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.admin-theme .admin-ticker-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 10rem;
+}
+
+.admin-theme .admin-ticker-filter-field label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #888888;
+}
+
+.admin-theme .admin-ticker-filter-field select {
+  min-height: 2.5rem !important;
+  width: 100%;
+  min-width: 11rem;
+}
+
+.admin-theme .admin-ticker-active-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #4a5244;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.admin-theme .admin-ticker-table-shell {
+  overflow-x: auto;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+}
+
+.admin-theme .admin-ticker-table {
+  width: 100%;
+  min-width: 56rem;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-theme .admin-ticker-col-order {
+  width: 5.5rem;
+}
+.admin-theme .admin-ticker-col-message {
+  width: auto;
+}
+.admin-theme .admin-ticker-col-priority {
+  width: 6.75rem;
+}
+.admin-theme .admin-ticker-col-status {
+  width: 6.75rem;
+}
+.admin-theme .admin-ticker-col-visibility {
+  width: 6.5rem;
+}
+.admin-theme .admin-ticker-col-expiry {
+  width: 10.5rem;
+}
+.admin-theme .admin-ticker-col-actions {
+  width: 11.5rem;
+}
+
+.admin-theme .admin-ticker-table thead th {
+  padding: 1rem 1rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #aaaaaa;
+  background: #f5f4f0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.admin-theme .admin-ticker-table thead th.admin-ticker-th-message {
+  text-align: center;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.admin-theme .admin-ticker-table thead th.admin-ticker-th-expiry {
+  padding-right: 1.5rem;
+}
+
+.admin-theme .admin-ticker-table thead th.admin-ticker-th-actions {
+  padding-left: 1.5rem;
+}
+
+.admin-theme .admin-ticker-table tbody td {
+  padding: 1rem 1rem;
+  text-align: center;
+  vertical-align: middle;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  color: #666666;
+}
+
+.admin-theme .admin-ticker-table tbody td.admin-ticker-cell-expiry {
+  padding-right: 1.5rem;
+}
+
+.admin-theme .admin-ticker-table tbody td:last-child {
+  padding-left: 1.5rem;
+}
+
+.admin-theme .admin-ticker-table tbody tr.admin-ticker-row {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.admin-theme .admin-ticker-table tbody tr.admin-ticker-row:hover {
+  background: #f1f5f9;
+}
+
+.admin-theme .admin-ticker-cell-order {
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-theme .admin-ticker-order-manual {
+  display: flex;
+  justify-content: center;
+}
+
+.admin-theme .admin-ticker-order-input {
+  width: 4.25rem !important;
+  min-height: 2.25rem !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.admin-theme .admin-ticker-cell-message {
+  text-align: center !important;
+  color: #1c2119;
+  max-width: 0;
+  padding-left: 1.25rem !important;
+  padding-right: 1.25rem !important;
+}
+
+.admin-theme .admin-ticker-message-cell {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.admin-theme .admin-ticker-message-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.admin-theme .admin-ticker-urgent-dot {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #ea580c;
+  box-shadow: 0 0 0 2px #fff7ed;
+}
+
+.admin-theme .admin-ticker-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-theme .admin-ticker-badge-priority-critical {
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.admin-theme .admin-ticker-badge-priority-high {
+  color: #9a3412;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+}
+
+.admin-theme .admin-ticker-badge-priority-medium {
+  color: #854d0e;
+  background: #fefce8;
+  border: 1px solid #fde047;
+}
+
+.admin-theme .admin-ticker-badge-priority-normal {
+  color: #4a5244;
+  background: #f5f4f0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.admin-theme .admin-ticker-badge-status-active {
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.admin-theme .admin-ticker-badge-status-draft {
+  color: #4a5244;
+  background: #f5f4f0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.admin-theme .admin-ticker-badge-status-disabled {
+  color: #0f172a;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+}
+
+.admin-theme .admin-ticker-badge-status-expired {
+  color: #7f1d1d;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.admin-theme .admin-ticker-cell-visibility {
+  font-size: 0.8125rem;
+}
+
+.admin-theme .admin-ticker-cell-expiry {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.admin-theme .admin-ticker-cell-expiry--none {
+  color: #bbbbbb;
+}
+
+.admin-theme .admin-ticker-table .admin-ticker-row-actions {
+  display: inline-flex !important;
+  flex-flow: row nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.375rem;
+}
+
+.admin-theme .admin-ticker-table .admin-ticker-row-actions > * {
+  flex: 0 0 auto !important;
+}
+
+.admin-theme .admin-ticker-empty {
+  padding: 2.5rem 1rem !important;
+  text-align: center;
+  color: #888888;
+}
+
+.admin-theme .admin-ticker-empty-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-theme .admin-ticker-dialog,
+.admin-ticker-dialog.admin-theme {
+  border-color: rgba(0, 0, 0, 0.1);
+  padding: 1.75rem 1.75rem 1.5rem !important;
+  gap: 1.25rem !important;
+}
+
+.admin-theme .admin-ticker-form,
+.admin-ticker-dialog .admin-ticker-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.admin-theme .admin-ticker-form-section,
+.admin-ticker-dialog .admin-ticker-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.admin-theme .admin-ticker-form-section:first-child,
+.admin-ticker-dialog .admin-ticker-form-section:first-child {
+  padding-top: 0.25rem;
+}
+
+.admin-theme .admin-ticker-form-section--preview,
+.admin-ticker-dialog .admin-ticker-form-section--preview {
+  border-bottom: none;
+  padding-bottom: 0.5rem;
+}
+
+.admin-theme .admin-ticker-form-section-header,
+.admin-ticker-dialog .admin-ticker-form-section-header {
+  margin-bottom: 1.25rem;
+}
+
+.admin-theme .admin-ticker-form-section-body,
+.admin-ticker-dialog .admin-ticker-form-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-theme .admin-ticker-form-section-title,
+.admin-ticker-dialog .admin-ticker-form-section-title {
+  margin: 0 0 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4a5244;
+}
+
+.admin-theme .admin-ticker-form-section-desc,
+.admin-ticker-dialog .admin-ticker-form-section-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #888888;
+}
+
+.admin-theme .admin-ticker-char-count {
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  color: #aaaaaa;
+  text-align: right;
+}
+
+.admin-theme .admin-ticker-form-grid,
+.admin-ticker-dialog .admin-ticker-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .admin-theme .admin-ticker-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-theme .admin-ticker-publish-options,
+.admin-ticker-dialog .admin-ticker-publish-options {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.admin-theme .admin-ticker-publish-option,
+.admin-ticker-dialog .admin-ticker-publish-option {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #666666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.admin-theme .admin-ticker-publish-option:hover,
+.admin-ticker-dialog .admin-ticker-publish-option:hover {
+  border-color: #c5d4bc;
+  background: #f5f8f3;
+}
+
+.admin-theme .admin-ticker-publish-option--active,
+.admin-ticker-dialog .admin-ticker-publish-option--active {
+  border-color: #2d4a22;
+  background: #2d4a22;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(45, 74, 34, 0.2);
+}
+
+.admin-theme .admin-ticker-expired-note {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  font-size: 0.8125rem;
+  color: #9a3412;
+}
+
+.admin-theme .admin-ticker-form-toggle-row,
+.admin-ticker-dialog .admin-ticker-form-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.25rem;
+  padding: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: #4a5244;
+}
+
+.admin-theme .admin-ticker-dialog .admin-ticker-form-section-body .space-y-2,
+.admin-ticker-dialog .admin-ticker-form-section-body > .space-y-2 {
+  gap: 0.5rem;
+}
+
+.admin-theme .admin-ticker-preview,
+.admin-ticker-dialog .admin-ticker-preview {
+  margin-top: 0;
+}
+
+.admin-theme .admin-ticker-dialog-footer,
+.admin-ticker-dialog .admin-ticker-dialog-footer {
+  margin-top: 0.5rem;
+  padding-top: 1.25rem !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.admin-theme .admin-ticker-preview-strip,
+.admin-ticker-dialog .admin-ticker-preview-strip {
+  overflow: hidden;
+  border-radius: 8px;
+  padding: 0;
+}
+
+.admin-theme .admin-ticker-preview-strip.announcement-ticker,
+.admin-ticker-dialog .admin-ticker-preview-strip.announcement-ticker {
+  --cinematic-ticker-height: 44px;
+  cursor: default;
+}
+
+@media (min-width: 640px) {
+  .admin-theme .admin-ticker-preview-strip.announcement-ticker,
+  .admin-ticker-dialog .admin-ticker-preview-strip.announcement-ticker {
+    --cinematic-ticker-height: 48px;
+  }
+}

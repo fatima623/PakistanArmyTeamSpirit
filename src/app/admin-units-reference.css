@@ -1,0 +1,28 @@
+/**
+ * Participating Teams (/admin/units) — centered table + action button spacing
+ */
+
+.admin-theme .admin-units-table thead th,
+.admin-theme .admin-units-table tbody td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.admin-theme .admin-units-table .admin-units-row-actions {
+  display: inline-flex !important;
+  flex-flow: row nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-theme .admin-units-table .admin-units-row-actions > * {
+  flex: 0 0 auto !important;
+}
+
+.admin-theme .admin-units-table tbody tr:hover {
+  background: #f1f5f9;
+}
+
+/* Row actions: portal-design.css (gap + compact buttons) */

@@ -1,0 +1,12 @@
+-- Participant manual payment instructions (PKR, bank, mobile wallets)
+ALTER TABLE `SiteSettings` MODIFY `defaultPaymentAmount` DECIMAL(10, 2) NOT NULL DEFAULT 15000.00;
+
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentCurrency` VARCHAR(191) NOT NULL DEFAULT 'PKR';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentBankName` VARCHAR(191) NOT NULL DEFAULT 'HBL';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentBankAccountTitle` VARCHAR(191) NOT NULL DEFAULT 'HQ 37 DIV';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentBankAccountNumber` VARCHAR(191) NOT NULL DEFAULT '1234567890';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentBankIban` VARCHAR(191) NOT NULL DEFAULT 'PK00HABB0000000012345678';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentEasypaisaNumber` VARCHAR(191) NOT NULL DEFAULT '0312-3456789';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentEasypaisaTitle` VARCHAR(191) NOT NULL DEFAULT 'HQ 37 DIV';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentJazzcashNumber` VARCHAR(191) NOT NULL DEFAULT '0300-9876543';
+ALTER TABLE `SiteSettings` ADD COLUMN `paymentJazzcashTitle` VARCHAR(191) NOT NULL DEFAULT 'HQ 37 DIV';

@@ -1,0 +1,380 @@
+/**
+ * Admin participant detail (View) page — day theme.
+ */
+
+.admin-theme .admin-user-detail-page {
+  --aud-green: #2e7d32;
+  --aud-ink: #1e293b;
+  --aud-muted: #0f172a;
+  --aud-border: #e2e8f0;
+  --aud-surface: #ffffff;
+  --aud-header-bg: #f8fafc;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  padding-bottom: 1.5rem;
+}
+
+.admin-theme .admin-user-detail-card {
+  border: 1px solid var(--aud-border);
+  border-radius: 14px;
+  background: var(--aud-surface);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.admin-theme .admin-user-detail-card-header {
+  padding: 1.125rem 1.375rem;
+  border-bottom: 1px solid var(--aud-border);
+  background: var(--aud-header-bg);
+  border-radius: 14px 14px 0 0;
+}
+
+.admin-theme .admin-user-detail-card-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--aud-ink);
+}
+
+.admin-theme .admin-user-detail-card-desc {
+  margin: 0.35rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-card-body {
+  padding: 1.25rem 1.375rem 1.375rem;
+}
+
+.admin-theme .admin-user-detail-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding: 1.375rem 1.5rem;
+  border: 1px solid var(--aud-border);
+  border-radius: 16px;
+  background: var(--aud-surface);
+  box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
+}
+
+.admin-theme .admin-user-detail-hero-main {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.admin-theme .admin-user-detail-back {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--aud-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.admin-theme .admin-user-detail-back:hover {
+  color: var(--aud-green);
+}
+
+.admin-theme .admin-user-detail-name {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--aud-ink);
+}
+
+.admin-theme .admin-user-detail-email {
+  margin: 0.35rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+}
+
+.admin-theme .admin-user-detail-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.admin-theme .admin-user-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1280px) {
+  .admin-theme .admin-user-detail-grid--split {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-theme .admin-user-detail-grid--duo {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.admin-theme .admin-user-detail-dl {
+  display: grid;
+  grid-template-columns: minmax(7rem, 9rem) minmax(0, 1fr);
+  gap: 0.75rem 1.25rem;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.admin-theme .admin-user-detail-dl dt {
+  margin: 0;
+  font-weight: 500;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-dl dd {
+  margin: 0;
+  color: #475569;
+  word-break: break-word;
+}
+
+.admin-theme .admin-user-detail-card-header-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.admin-theme .admin-user-detail-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--aud-border);
+  border-radius: 10px;
+  background: var(--aud-header-bg);
+}
+
+.admin-theme .admin-user-detail-status-item label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.125rem;
+}
+
+.admin-theme .admin-user-detail-notes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .admin-theme .admin-user-detail-notes-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.admin-theme .admin-user-detail-field label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.admin-theme .admin-user-detail-field textarea {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.admin-theme .admin-user-detail-payments-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--aud-border);
+  border-radius: 10px;
+}
+
+.admin-theme .admin-user-detail-payments-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-theme .admin-user-detail-payments-table thead th {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--aud-border);
+  background: var(--aud-header-bg);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-payments-table tbody td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--aud-border);
+  color: #475569;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.admin-theme .admin-user-detail-payments-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-theme .admin-user-detail-payments-table tbody tr:hover {
+  background: #f1f5f9;
+}
+
+.admin-theme .admin-user-detail-empty {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-audit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.admin-theme .admin-user-detail-audit-item {
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--aud-border);
+  border-radius: 8px;
+  background: var(--aud-header-bg);
+}
+
+.admin-theme .admin-user-detail-audit-action {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--aud-ink);
+}
+
+.admin-theme .admin-user-detail-audit-meta {
+  margin: 0.25rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-reset-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.625rem;
+}
+
+.admin-theme .admin-user-detail-actions .ops-btn-approve,
+.admin-theme .admin-user-detail-actions .admin-btn-approve {
+  background: var(--portal-approve) !important;
+  border-color: var(--portal-approve) !important;
+  color: #ffffff !important;
+}
+
+.admin-theme .admin-user-detail-actions .ops-btn-approve:hover:not(:disabled),
+.admin-theme .admin-user-detail-actions .admin-btn-approve:hover:not(:disabled) {
+  background: var(--portal-approve-hover) !important;
+  border-color: var(--portal-approve-hover) !important;
+  color: #ffffff !important;
+}
+
+.admin-theme .admin-user-detail-actions .ops-btn-approve:disabled,
+.admin-theme .admin-user-detail-actions .admin-btn-approve:disabled {
+  background: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+.admin-theme .admin-user-detail-actions .ops-btn-secondary,
+.admin-theme .admin-user-detail-actions .admin-btn-outline {
+  background: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #475569 !important;
+}
+
+.admin-theme .admin-user-detail-reset-row .admin-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  max-width: 20rem;
+}
+
+.admin-theme .admin-user-detail-subline {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--aud-muted);
+}
+
+.admin-theme .admin-user-detail-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.admin-theme .admin-user-detail-proof-frame {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  border: 1px solid var(--aud-border);
+  border-radius: 10px;
+  background: var(--aud-header-bg);
+}
+
+.admin-theme .admin-user-detail-proof-frame img {
+  max-width: 100%;
+  height: auto;
+}
+
+.admin-theme .admin-user-detail-callout {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  background: #f0f9ff;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #0c4a6e;
+}
+
+.admin-theme .admin-user-detail-status-controls--locked {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.admin-theme .admin-user-detail-status-controls-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: #0f172a;
+}

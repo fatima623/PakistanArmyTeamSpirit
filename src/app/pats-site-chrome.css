@@ -1,0 +1,300 @@
+/**
+ * Public shell — sticky marquee + nav; footer flush to page end.
+ */
+
+/* Fixed header stack — ticker (when present) + nav stay visible while scrolling */
+.army-site:not(.dashboard-day) .pats-site-chrome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 50;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome:has(.pats-header--menu-open) {
+  pointer-events: auto;
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-header {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: 100%;
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: 1;
+  pointer-events: auto;
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease;
+}
+
+/* Marquee band — 32px in hero and scrolled states (colors change on scroll only) */
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker.announcement-ticker,
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker
+  .announcement-ticker-viewport,
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker
+  .announcement-ticker-track {
+  height: 32px;
+  min-height: 32px;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker
+  .announcement-ticker-viewport,
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker
+  .announcement-ticker-track,
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker
+  .announcement-ticker-segment {
+  display: flex;
+  align-items: center;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-site-chrome
+  .pats-hero-ticker
+  .announcement-ticker-track {
+  /* 35% slower than the previous 20s. */
+  animation: announcement-ticker-scroll-rtl 27s linear infinite;
+}
+
+/* Scrolled marquee — shared text colors (hero/default band unchanged) */
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled {
+  --pats-marquee-scrolled-accent: #d4c252;
+  --pats-marquee-scrolled-body: #ffffff;
+}
+
+/* Day — military olive scrolled marquee + warm gold accents */
+html.light-theme .army-site .pats-site-chrome--marquee-scrolled,
+html[data-site-theme="day"] .army-site .pats-site-chrome--marquee-scrolled {
+  --pats-marquee-scrolled-bg: #1e2a0e;
+  --pats-marquee-scrolled-accent: #f0c93a;
+  --pats-marquee-scrolled-body: #ffffff;
+}
+
+/* Night — deep midnight scrolled marquee (distinct from day olive) */
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
+  .army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled {
+  --pats-marquee-scrolled-bg: #1a1a2e;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker.announcement-ticker {
+  background: var(--pats-marquee-scrolled-bg) !important;
+  background-color: var(--pats-marquee-scrolled-bg) !important;
+  box-shadow: none !important;
+}
+
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
+  .army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker.announcement-ticker {
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+}
+
+html.light-theme
+  .army-site
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker.announcement-ticker,
+html[data-site-theme="day"]
+  .army-site
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker.announcement-ticker {
+  border-bottom: 1px solid #b8960c !important;
+}
+
+html.light-theme
+  .army-site
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment,
+html[data-site-theme="day"]
+  .army-site
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment {
+  letter-spacing: 0.03em;
+}
+
+html.light-theme
+  .army-site
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment
+  > span
+  > span:first-child,
+html[data-site-theme="day"]
+  .army-site
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment
+  > span
+  > span:first-child {
+  color: #f0c93a !important;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-viewport {
+  background: transparent !important;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment {
+  text-shadow: none !important;
+}
+
+/* ◆ separators — white */
+.army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment
+  > span
+  > span:first-child {
+  color: var(--pats-marquee-scrolled-body) !important;
+}
+
+/* Message body — white */
+.army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment
+  > span
+  > span:last-child {
+  color: var(--pats-marquee-scrolled-body) !important;
+}
+
+/* Highlighted / urgent lines — yellow-green */
+.army-site:not(.dashboard-day)
+  .pats-site-chrome--marquee-scrolled
+  .pats-hero-ticker
+  .announcement-ticker-segment
+  > span
+  > span:last-child[class*="tactical-brass"] {
+  color: var(--pats-marquee-scrolled-accent) !important;
+}
+
+.cinematic-site.page-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.cinematic-site.page-shell > #main-content {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  padding-bottom: 0 !important;
+  overflow: visible;
+}
+
+/* Page body — content height drives scroll; footer is full natural height after */
+.pats-site-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: visible;
+}
+
+.pats-site-body--inner:not(.pats-site-body--portal-app) {
+  padding-top: var(--site-header-height, 5.5rem);
+  box-sizing: border-box;
+  /* Short pages: keep footer at viewport bottom without clipping footer content */
+  min-height: 100dvh;
+}
+
+/* Compact page banners — bleed under fixed chrome (same model as homepage hero) */
+.pats-site-body--inner.pats-site-body--page-banner:not(.pats-site-body--portal-app) {
+  padding-top: 0;
+}
+
+.pats-site-body__main {
+  flex: 1 0 auto;
+  width: 100%;
+  min-height: 0;
+}
+
+.pats-site-footer {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: 0;
+  overflow: visible;
+  scroll-margin-bottom: 0;
+}
+
+.pats-site-footer .paf-prefooter,
+.pats-site-footer .paf-footer {
+  margin-bottom: 0;
+}
+
+.pats-site-footer .paf-footer {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Overscroll / below-document — match footer bookend (not white parchment) */
+html.light-theme,
+html[data-site-theme="day"],
+html.site-theme-day {
+  background-color: var(--lt-footer-bg-bottom, #121a14);
+}
+
+html.light-theme body,
+html[data-site-theme="day"] body,
+html.site-theme-day body {
+  background-color: var(--lt-parchment, #f4f1ea);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+html.light-theme,
+html[data-site-theme="day"],
+html.site-theme-day {
+  scroll-padding-bottom: 1.5rem;
+}
+
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) {
+  background-color: #0a0c10;
+}
+
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) body {
+  background-color: var(--bg-base, #0a0c10);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+html.light-theme .cinematic-site.page-shell.army-site--day,
+html[data-site-theme="day"] .cinematic-site.page-shell {
+  background-color: var(--lt-parchment, #f4f1ea);
+}
+
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.page-shell {
+  background-color: var(--bg-base, #0a0c10);
+}

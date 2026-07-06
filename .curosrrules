@@ -1,0 +1,1 @@
+Always follow DESIGN_SPEC.md for all design, styling, layout, typography, color, and spacing decisions. Never deviate from it. When building any component or page, check DESIGN_SPEC.md first. Dark backgrounds only. No white sections. No rounded corners. Bebas Neue and Barlow Condensed fonts only. All-caps everywhere. Gold accent #c8a84b only.

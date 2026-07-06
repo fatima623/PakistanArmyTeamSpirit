@@ -1,0 +1,455 @@
+/**
+ * Awards page — hero medal showcase, standings, team composition cards.
+ */
+
+@keyframes pats-awards-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Awards page section spacing — tighter, premium rhythm */
+.army-site .pats-awards-page-section {
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+}
+
+.army-site .pats-awards-page-section .pats-section__inner {
+  padding-left: max(1.25rem, env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(1.25rem, env(safe-area-inset-right, 0px)) !important;
+}
+
+@media (min-width: 768px) {
+  .army-site .pats-awards-page-section .pats-section__inner {
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+  }
+}
+
+.pats-awards-showcase__header {
+  margin: 0 auto;
+  max-width: 48rem;
+  text-align: center;
+}
+
+.pats-awards-showcase__label {
+  color: #b8960c;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.pats-awards-showcase__rule {
+  width: 48px;
+  height: 2px;
+  margin: 8px auto;
+  background: #b8960c;
+}
+
+.pats-awards-showcase__title {
+  color: #1e4620;
+  font-weight: 700;
+  text-transform: none;
+}
+
+html.light-theme .army-site .pats-awards-showcase__title,
+html[data-site-theme="day"] .army-site .pats-awards-showcase__title {
+  color: #1e4620;
+}
+
+.pats-awards-showcase__subtitle {
+  margin: 1rem auto 0;
+  max-width: 36rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+html.light-theme .army-site .pats-awards-showcase__subtitle,
+html[data-site-theme="day"] .army-site .pats-awards-showcase__subtitle {
+  color: var(--lt-body, #475569);
+}
+
+/* Hero medal grid — 2×2 showcase */
+.pats-awards-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 960px;
+  margin: 48px auto 0;
+}
+
+@media (max-width: 639px) {
+  .pats-awards-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+}
+
+.pats-awards-hero-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #1a2208;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.pats-awards-hero-card--gold {
+  border-left: 4px solid #ffd700;
+}
+
+.pats-awards-hero-card--silver {
+  border-left: 4px solid #c0c0c0;
+}
+
+.pats-awards-hero-card--bronze {
+  border-left: 4px solid #cd7f32;
+}
+
+.pats-awards-hero-card--certificate {
+  border-left: 4px solid #2d5a1e;
+}
+
+.pats-awards-hero-grid--visible .pats-awards-hero-card {
+  animation: pats-awards-fade-in-up 0.65s ease forwards;
+}
+
+.pats-awards-hero-grid--visible .pats-awards-hero-card:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.pats-awards-hero-grid--visible .pats-awards-hero-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.pats-awards-hero-grid--visible .pats-awards-hero-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.pats-awards-hero-grid--visible .pats-awards-hero-card:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pats-awards-hero-card {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+}
+
+.pats-awards-hero-grid--visible .pats-awards-hero-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+}
+
+.pats-awards-hero-card__visual {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 280px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.pats-awards-hero-card__visual > span {
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.pats-awards-hero-card__image {
+  object-fit: contain;
+  object-position: center 12%;
+  border: none;
+  border-radius: 0;
+  transform: scale(1.15);
+  /* multiply only works on the light visual well — strips PNG white matte + black frame */
+  mix-blend-mode: multiply;
+}
+
+.pats-awards-hero-card__footer {
+  flex: 0 0 auto;
+  padding: 24px 28px;
+  text-align: left;
+  background: #1a2208;
+}
+
+.pats-awards-hero-card__tier {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #b8960c;
+}
+
+.pats-awards-hero-card__name {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.pats-awards-hero-card__score {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Day/light theme globals force dark ink inside .pats-section — beat higher-specificity h3/p rules */
+html.light-theme .cinematic-site.army-site .pats-awards-hero-card__footer .pats-awards-hero-card__tier,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__footer .pats-awards-hero-card__tier {
+  color: #b8960c !important;
+}
+
+html.light-theme .cinematic-site.army-site .pats-awards-hero-card__footer .pats-awards-hero-card__name,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__footer .pats-awards-hero-card__name {
+  color: #ffffff !important;
+}
+
+html.light-theme .cinematic-site.army-site .pats-awards-hero-card__footer .pats-awards-hero-card__score,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__footer .pats-awards-hero-card__score {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Current standings — white card */
+.pats-awards-showcase__standings {
+  margin-top: 48px;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+}
+
+.pats-awards-standings__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pats-awards-standings__title {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.pats-awards-standings__badge {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b8960c;
+}
+
+.pats-awards-standings__list {
+  max-height: 28rem;
+  overflow-y: auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pats-awards-standings__row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.875rem 1rem;
+}
+
+.pats-awards-standings__row:nth-child(odd) {
+  background: #ffffff;
+}
+
+.pats-awards-standings__row:nth-child(even) {
+  background: #f8faf5;
+}
+
+.pats-awards-standings__rank {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #b8960c;
+}
+
+.pats-awards-standings__team {
+  display: block;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.pats-awards-standings__nation {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.pats-awards-standings__score {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-align: right;
+  color: #1a1a1a;
+}
+
+.pats-awards-standings__footnote {
+  margin: 1rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+/* Team composition — white card */
+.pats-awards-team-card {
+  margin-top: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+.pats-awards-team-card .pats-data-table {
+  border: none;
+  margin: 0;
+}
+
+.pats-awards-team-card .pats-data-table__row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 1rem 1.25rem;
+}
+
+.pats-awards-team-card .pats-data-table__row:nth-child(odd) {
+  background: #ffffff !important;
+}
+
+.pats-awards-team-card .pats-data-table__row:nth-child(even) {
+  background: #eef2e8 !important;
+}
+
+.pats-awards-team-card .pats-data-table__row:last-child {
+  border-bottom: none;
+}
+
+.pats-awards-team-card .pats-data-table__label {
+  color: #1a1a1a;
+}
+
+.pats-awards-team-card .pats-data-table__value {
+  color: #475569;
+}
+
+/* Night theme: the standings card and the team-composition card use a light
+   (#fff) surface in EVERY theme, but the sitewide night rules blanket
+   descendant text white — making it invisible on these cards. Restore the
+   intended dark text (matches the day-theme colours). */
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-awards-standings__title,
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-awards-standings__team,
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-awards-standings__score {
+  color: #1a1a1a !important;
+}
+
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-awards-standings__nation,
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-awards-standings__footnote {
+  color: #64748b !important;
+}
+
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-awards-team-card .pats-data-table__value {
+  color: #475569 !important;
+}
+
+/* Lightbox (retained for optional medal preview) */
+.pats-award-lightbox {
+  max-width: min(94vw, 820px) !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: #000000 !important;
+  box-shadow: none !important;
+}
+
+.pats-award-lightbox button.absolute {
+  color: #ffffff;
+  opacity: 0.9;
+  z-index: 2;
+}
+
+.pats-award-lightbox__stage {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 640px);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.pats-award-lightbox__image {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  filter: none;
+  box-shadow: none;
+}
+
+.pats-award-lightbox__caption {
+  padding: 14px 20px 18px;
+  border-top: 2px solid #c8a800;
+  text-align: center;
+  background: #000000;
+}
+
+.pats-award-lightbox__name {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.pats-award-lightbox__range {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #b8960c;
+}

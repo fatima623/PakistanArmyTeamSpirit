@@ -1,0 +1,58 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+/tsconfig.tsbuildinfo
+
+# legacy public uploads (migrate to storage/payment-proofs)
+/public/uploads/payments/*
+!/public/uploads/payments/.gitkeep
+
+# private payment proof storage (legacy path — prefer uploads/payment-proofs)
+/storage/payment-proofs/*
+!/storage/payment-proofs/.gitkeep
+
+# Ignore uploaded files but keep folder structure
+uploads/**
+!uploads/.gitkeep
+!uploads/payment-proofs/
+!uploads/payment-proofs/.gitkeep
+
+# News PDF storage (auto-created on npm install)
+storage/news-pdfs/**
+!storage/news-pdfs/.gitkeep
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# local env files
+.env*
+!.env.example
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# stray local databases / build artifacts
+prisma/prisma/
+*.db
+*.db-journal
+ADMIN_QA_REPORT.md

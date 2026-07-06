@@ -1,0 +1,360 @@
+/**
+ * Team Members section — self-contained, theme-aware styling.
+ *
+ * This block is rendered in two very different contexts: the (public)
+ * registration form and the participant panel. Both contexts apply aggressive
+ * text-colour rules of their own, so every colour here keys on the GLOBAL theme
+ * attribute (`html.light-theme` / `html[data-site-theme="day"]` for day,
+ * otherwise night) and uses `!important` so the component reads identically and
+ * correctly everywhere, in both light and dark themes.
+ */
+
+/* Team Members page wrapper (back link → header → panel). */
+.team-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-page__panel {
+  margin-top: 1.5rem;
+}
+
+.team-members {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.team-members__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.team-members__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #f1f5f9 !important;
+}
+
+.team-members__desc {
+  margin-top: 0.2rem;
+  max-width: 52ch;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #9aa6b2 !important;
+}
+
+.team-members__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8 !important;
+}
+
+/* ---- Desktop table ---- */
+.team-members__table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+}
+
+.team-members__table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.team-members__table thead th {
+  padding: 0.85rem 1.15rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8 !important;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+}
+
+.team-members__table tbody td {
+  padding: 0.95rem 1.15rem;
+  color: #e2e8f0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  vertical-align: middle;
+}
+
+.team-members__table tbody tr {
+  transition: background 0.15s ease;
+}
+
+.team-members__table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.team-members__table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Name column carries the visual weight; let it absorb extra width so the
+   action icons sit flush right in a tidy, fixed-width column. */
+.team-members__name {
+  width: 36%;
+  font-weight: 600;
+  color: #f8fafc !important;
+}
+
+.team-members__table th:last-child,
+.team-members__table td:last-child {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.team-members__actions {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+/* ---- Icon-only action buttons (View / Delete) ---- */
+.tm-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease,
+    border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tm-icon-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.tm-icon-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.5);
+}
+
+.tm-icon-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Delete stays neutral by default; it only turns red on hover/focus so the
+   table doesn't read as a wall of destructive red. */
+.tm-icon-btn--danger:hover:not(:disabled),
+.tm-icon-btn--danger:focus-visible {
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+/* Outline action buttons (View / header Add) need explicit, theme-safe colours:
+   the base `outline` variant uses light tokens that wash out on the dark night
+   surface. */
+.team-members .tm-outline-btn {
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  background: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+.team-members .tm-outline-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+html.light-theme .team-members .tm-outline-btn,
+html[data-site-theme="day"] .team-members .tm-outline-btn {
+  border-color: #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #334155 !important;
+}
+
+html.light-theme .team-members .tm-outline-btn:hover,
+html[data-site-theme="day"] .team-members .tm-outline-btn:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* ---- Mobile cards ---- */
+.team-members__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.team-members__card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.team-members__card-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f8fafc !important;
+}
+
+.team-members__card-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+}
+
+.team-members__card-label {
+  color: #94a3b8 !important;
+}
+
+.team-members__card-value {
+  color: #e2e8f0 !important;
+  text-align: right;
+}
+
+.team-members__card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+html.light-theme .team-members__card-actions,
+html[data-site-theme="day"] .team-members__card-actions {
+  border-top-color: #eef2f6;
+}
+
+/* ---- Empty state ---- */
+.team-members__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.75rem 1rem;
+  text-align: center;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  color: #9aa6b2 !important;
+  font-size: 0.875rem;
+}
+
+.team-members__empty p {
+  color: inherit !important;
+}
+
+/* ===================== DAY / LIGHT THEME ===================== */
+html.light-theme .team-members__title,
+html[data-site-theme="day"] .team-members__title {
+  color: #1e293b !important;
+}
+
+html.light-theme .team-members__desc,
+html.light-theme .team-members__count,
+html.light-theme .team-members__empty,
+html[data-site-theme="day"] .team-members__desc,
+html[data-site-theme="day"] .team-members__count,
+html[data-site-theme="day"] .team-members__empty {
+  color: #64748b !important;
+}
+
+html.light-theme .team-members__table-wrap,
+html.light-theme .team-members__card,
+html[data-site-theme="day"] .team-members__table-wrap,
+html[data-site-theme="day"] .team-members__card {
+  border-color: #e2e8f0;
+}
+
+html.light-theme .team-members__card,
+html[data-site-theme="day"] .team-members__card {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+html.light-theme .team-members__table thead th,
+html[data-site-theme="day"] .team-members__table thead th {
+  color: #64748b !important;
+  background: #f8fafc;
+  border-bottom-color: #e2e8f0;
+}
+
+html.light-theme .team-members__table tbody td,
+html[data-site-theme="day"] .team-members__table tbody td {
+  color: #334155 !important;
+  border-bottom-color: #eef2f6;
+}
+
+html.light-theme .team-members__table tbody tr:hover td,
+html[data-site-theme="day"] .team-members__table tbody tr:hover td {
+  background: #f8fafc;
+}
+
+/* Icon buttons — light surface */
+html.light-theme .tm-icon-btn,
+html[data-site-theme="day"] .tm-icon-btn {
+  border-color: #e2e8f0;
+  background: #ffffff;
+  color: #475569;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+html.light-theme .tm-icon-btn:hover:not(:disabled),
+html[data-site-theme="day"] .tm-icon-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+html.light-theme .tm-icon-btn--danger:hover:not(:disabled),
+html.light-theme .tm-icon-btn--danger:focus-visible,
+html[data-site-theme="day"] .tm-icon-btn--danger:hover:not(:disabled),
+html[data-site-theme="day"] .tm-icon-btn--danger:focus-visible {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+html.light-theme .team-members__name,
+html.light-theme .team-members__card-name,
+html[data-site-theme="day"] .team-members__name,
+html[data-site-theme="day"] .team-members__card-name {
+  color: #0f172a !important;
+}
+
+html.light-theme .team-members__card-label,
+html[data-site-theme="day"] .team-members__card-label {
+  color: #64748b !important;
+}
+
+html.light-theme .team-members__card-value,
+html[data-site-theme="day"] .team-members__card-value {
+  color: #334155 !important;
+}
+
+html.light-theme .team-members__empty,
+html[data-site-theme="day"] .team-members__empty {
+  border-color: #cbd5e1;
+}

@@ -1,0 +1,188 @@
+/**
+ * Admin console — readable type scale (13px labels minimum, 15px body, 16px tables).
+ * Imported from admin layout so it applies on every /admin/* page.
+ */
+
+.admin-theme {
+  --admin-type-xs: 0.8125rem;
+  --admin-type-sm: 0.9375rem;
+  --admin-type-base: 1rem;
+  --admin-type-label: 0.8125rem;
+}
+
+/* Tailwind utility bumps */
+.admin-theme .text-xs {
+  font-size: var(--admin-type-xs) !important;
+  line-height: 1.45 !important;
+}
+
+.admin-theme .text-sm {
+  font-size: var(--admin-type-sm) !important;
+  line-height: 1.5 !important;
+}
+
+.admin-theme .text-\[11px\] {
+  font-size: var(--admin-type-xs) !important;
+}
+
+/* Core copy */
+.admin-theme .admin-muted,
+.admin-theme .admin-setting-hint,
+.admin-theme .portal-body,
+.admin-theme .admin-payments-page-desc,
+.admin-theme .admin-users-page-desc,
+.admin-theme .admin-payments-alert,
+.admin-theme .admin-alert-banner {
+  font-size: var(--admin-type-sm) !important;
+  line-height: 1.55 !important;
+}
+
+.admin-theme .admin-label,
+.admin-theme .admin-setting-label {
+  font-size: 0.875rem !important;
+}
+
+.admin-theme .admin-heading,
+.admin-theme .admin-section-title {
+  font-size: 1.0625rem !important;
+}
+
+.admin-theme .admin-page-title,
+.admin-theme .portal-h1 {
+  font-size: 1.625rem !important;
+}
+
+/* Sidebar + header */
+.admin-theme .admin-sidebar-link,
+.admin-theme .admin-sidebar-logout {
+  font-size: 14px !important;
+}
+
+.admin-theme .admin-header-bar .admin-heading {
+  font-size: 20px !important;
+}
+
+.admin-theme .admin-session-badge {
+  font-size: var(--admin-type-xs) !important;
+}
+
+/* Table headers — all admin tables */
+.admin-theme
+  :is(
+    .admin-data-table,
+    .admin-users-table,
+    .admin-payments-table,
+    .admin-key-dates-table,
+    .admin-news-table,
+    .admin-ticker-table,
+    .admin-units-table,
+    .admin-user-detail-payments-table,
+    .admin-dashboard-recent-table,
+    .tac-admin-table
+  )
+  thead
+  th,
+.admin-theme .admin-table-head th {
+  font-size: var(--admin-type-label) !important;
+  letter-spacing: 0.06em !important;
+  line-height: 1.35 !important;
+}
+
+/* Table body cells */
+.admin-theme
+  :is(
+    .admin-data-table,
+    .admin-users-table,
+    .admin-payments-table,
+    .admin-key-dates-table,
+    .admin-news-table,
+    .admin-ticker-table,
+    .admin-units-table,
+    .admin-user-detail-payments-table,
+    .admin-dashboard-recent-table,
+    .tac-admin-table
+  )
+  tbody
+  td,
+.admin-theme .admin-data-table td {
+  font-size: var(--admin-type-sm) !important;
+  line-height: 1.5 !important;
+}
+
+/* Status pills */
+.admin-theme .ops-status-pill,
+.admin-theme .ops-status-badge,
+.admin-theme .ops-status-badge-table {
+  font-size: var(--admin-type-label) !important;
+  min-height: 1.875rem !important;
+  padding: 0.375rem 0.875rem !important;
+  line-height: 1.35 !important;
+}
+
+.admin-theme .ops-status-pill--review {
+  min-width: 7.25rem !important;
+}
+
+/* Row action buttons */
+.admin-theme
+  :is(
+    .admin-table-actions,
+    .admin-users-row-actions,
+    .admin-users-row-actions-pair,
+    .admin-news-row-actions,
+    .admin-ticker-row-actions,
+    .admin-units-row-actions,
+    .admin-key-dates-row-actions,
+    .admin-payments-cell-actions
+  )
+  :is(.portal-table-action-btn, .admin-users-action-btn, .ops-btn, button, a) {
+  font-size: var(--admin-type-label) !important;
+  min-height: 2rem !important;
+  max-height: 2rem !important;
+  padding: 0 0.625rem !important;
+}
+
+.admin-theme .admin-approve-btn {
+  font-size: var(--admin-type-label) !important;
+  min-height: 2rem !important;
+  max-height: 2rem !important;
+}
+
+/* Filter chips */
+.admin-theme :is(.admin-filter-chip, .ops-filter-chip) {
+  font-size: var(--admin-type-sm) !important;
+}
+
+/* Stat cards */
+.admin-theme .portal-stat-label {
+  font-size: var(--admin-type-label) !important;
+}
+
+/* Pagination */
+.admin-theme .ops-pagination {
+  font-size: var(--admin-type-sm) !important;
+}
+
+.admin-theme .ops-pagination button,
+.admin-theme .ops-pagination a {
+  font-size: var(--admin-type-sm) !important;
+  min-width: 2.25rem !important;
+  min-height: 2.25rem !important;
+}
+
+/* Payment / user cell stacks */
+.admin-theme .admin-payments-name,
+.admin-theme .admin-users-name {
+  font-size: var(--admin-type-sm) !important;
+}
+
+.admin-theme .admin-payments-email,
+.admin-theme .admin-payments-cell-muted,
+.admin-theme .admin-users-email {
+  font-size: 0.875rem !important;
+}
+
+.admin-theme .admin-payments-count-badge,
+.admin-theme .admin-users-count-badge {
+  font-size: var(--admin-type-xs) !important;
+}

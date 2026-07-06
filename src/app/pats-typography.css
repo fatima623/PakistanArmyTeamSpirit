@@ -1,0 +1,275 @@
+/**
+ * PATS global typography — Competition Overview reference (strict scale).
+ *
+ * - Eyebrow / label: 14px uppercase
+ * - Section display title: clamp(30px → 44px) bold uppercase
+ * - Body / description / links: 18px regular
+ * - Feature / card title: 20px bold
+ * - Feature heading (list strong): 22px bold
+ * - Footer column headers: 20px bold uppercase
+ *
+ * Hero slider copy exempt. Stat numerals use --pats-type-stat-value.
+ */
+
+:root {
+  --pats-radius-btn: 8px;
+  --pats-radius-card: 12px;
+  --pats-radius-media: 12px;
+  --pats-type-brand: 1.5rem; /* 24px */
+  --pats-type-display: clamp(1.5rem, 4vw + 0.5rem, 2.75rem); /* 24–44px section titles */
+  --pats-type-feature: 1.375rem; /* 22px — list / feature headings */
+  --pats-type-title: 1.25rem; /* 20px — card titles, footer h4 */
+  --pats-type-body: 1.125rem; /* 18px — body, captions, links */
+  --pats-type-caption: 1.125rem;
+  --pats-type-eyebrow: 0.875rem; /* 14px — UI labels */
+  --pats-type-section-eyebrow: 1.0625rem; /* 17px — section kicker above titles */
+  --pats-type-body-sm: 1rem; /* 16px */
+  --pats-type-ui-sm: 1rem;
+  --pats-type-form-label: 1rem;
+  --pats-type-form-helper: 1rem;
+  --pats-type-form-section: 1.125rem;
+  --pats-type-stat-value: clamp(1.75rem, 3.5vw, 2.5rem);
+  --pats-type-stat-label: 10px;
+  --pats-type-quote: clamp(1.25rem, 3vw, 1.75rem); /* 20–28px — Quaid strip */
+  --pats-type-quote-credit: 0.875rem; /* 14px attribution */
+  --pats-type-btn: 1rem;
+  --pats-type-line-body: 1.65;
+  --pats-type-line-title: 1.35;
+  --pats-type-line-tight: 1.12;
+}
+
+.army-site:not(.dashboard-day),
+.pats-portal,
+.admin-theme.pats-dashboard {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-body);
+  line-height: var(--pats-type-line-body);
+}
+
+/* Semantic utilities */
+.pats-type-brand,
+.army-site:not(.dashboard-day) .pats-type-brand {
+  font-size: var(--pats-type-brand);
+  font-weight: 700;
+  line-height: var(--pats-type-line-tight);
+}
+
+.pats-type-display {
+  font-size: var(--pats-type-display);
+  font-weight: 700;
+  line-height: var(--pats-type-line-tight);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pats-type-title {
+  font-size: var(--pats-type-title);
+  font-weight: 700;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pats-type-body {
+  font-size: var(--pats-type-body);
+  font-weight: 400;
+  line-height: var(--pats-type-line-body);
+}
+
+.pats-type-caption {
+  font-size: var(--pats-type-caption);
+  font-weight: 400;
+  line-height: var(--pats-type-line-body);
+}
+
+.pats-type-eyebrow {
+  font-size: var(--pats-type-eyebrow);
+  font-weight: 600;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.pats-type-feature {
+  font-size: var(--pats-type-feature);
+  font-weight: 700;
+  line-height: var(--pats-type-line-title);
+}
+
+.pats-feature-title {
+  display: block;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-feature);
+  font-weight: 700;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.02em;
+}
+
+/* Forest / content tiles — not section display titles */
+.army-site:not(.dashboard-day) .pats-panel__label {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-title);
+  font-weight: 600;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Rounded buttons (public site) */
+.army-site:not(.dashboard-day) .pats-btn,
+.army-site:not(.dashboard-day) .army-btn,
+.army-site:not(.dashboard-day) a.pats-btn,
+.army-site:not(.dashboard-day) button.pats-btn {
+  border-radius: var(--pats-radius-btn) !important;
+}
+
+.army-site:not(.dashboard-day) .paf-prefooter .army-btn,
+.army-site:not(.dashboard-day) .paf-footer a.flex[class*="border"] {
+  border-radius: var(--pats-radius-btn) !important;
+}
+
+.army-site:not(.dashboard-day) .army-btn {
+  font-size: var(--pats-type-btn) !important;
+}
+
+.army-site:not(.dashboard-day) .tac-mission-card,
+.army-site:not(.dashboard-day) .paf-card,
+.army-site:not(.dashboard-day) .pats-pillar-card,
+.army-site:not(.dashboard-day) .pats-rule-card,
+.army-site:not(.dashboard-day) .pats-doc-card {
+  border-radius: var(--pats-radius-card) !important;
+}
+
+.pats-portal .pats-btn,
+.pats-portal .army-btn,
+.pats-portal button.pats-btn {
+  border-radius: var(--pats-radius-btn) !important;
+}
+
+/**
+ * Map Tailwind text-* to reference scale (public site).
+ * Hero / scroll-deck hero reverts to component styles (unchanged).
+ */
+.army-site:not(.dashboard-day) .text-xs,
+.army-site:not(.dashboard-day) .text-sm {
+  font-size: var(--pats-type-body-sm) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+.army-site:not(.dashboard-day) .text-base {
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+.army-site:not(.dashboard-day) .text-lg {
+  font-size: var(--pats-type-title) !important;
+  line-height: var(--pats-type-line-title) !important;
+}
+
+.army-site:not(.dashboard-day) .text-xl {
+  font-size: var(--pats-type-feature) !important;
+  line-height: var(--pats-type-line-title) !important;
+}
+
+.army-site:not(.dashboard-day) .text-2xl,
+.army-site:not(.dashboard-day) .text-3xl,
+.army-site:not(.dashboard-day) .text-4xl {
+  font-size: var(--pats-type-display) !important;
+  line-height: var(--pats-type-line-tight) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-hero .text-xs,
+.army-site:not(.dashboard-day) .pats-hero .text-sm,
+.army-site:not(.dashboard-day) .pats-hero .text-base,
+.army-site:not(.dashboard-day) .pats-hero .text-lg,
+.army-site:not(.dashboard-day) .pats-hero .text-xl,
+.army-site:not(.dashboard-day) .pats-hero .text-2xl,
+.army-site:not(.dashboard-day) .pats-hero .text-3xl,
+.army-site:not(.dashboard-day) .pats-hero .text-4xl,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-xs,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-sm,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-base,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-lg,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-xl,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-2xl,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-3xl,
+.army-site:not(.dashboard-day) .scroll-deck__hero .text-4xl {
+  font-size: revert !important;
+  line-height: revert !important;
+}
+
+.army-site:not(.dashboard-day) [class*="text-[10px]"],
+.army-site:not(.dashboard-day) [class*="text-[11px]"],
+.army-site:not(.dashboard-day) [class*="text-[12px]"],
+.army-site:not(.dashboard-day) [class*="text-[13px]"],
+.army-site:not(.dashboard-day) [class*="text-[14px]"] {
+  font-size: var(--pats-type-eyebrow) !important;
+  line-height: var(--pats-type-line-title) !important;
+}
+
+/* Section titles — always display scale */
+.army-site:not(.dashboard-day) .pats-section-title,
+.army-site:not(.dashboard-day) .pats-section-title--display {
+  font-size: var(--pats-type-display) !important;
+  line-height: var(--pats-type-line-tight) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-body,
+.army-site:not(.dashboard-day) .paf-body,
+.army-site:not(.dashboard-day) .pats-footer-col a {
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-eyebrow,
+.army-site:not(.dashboard-day) .paf-label {
+  font-size: var(--pats-type-eyebrow) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-section-heading .pats-eyebrow,
+.army-site:not(.dashboard-day) .pats-page-hero .pats-eyebrow,
+.army-site:not(.dashboard-day) .pats-mission-banner .pats-eyebrow {
+  font-size: var(--pats-type-section-eyebrow) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+}
+
+.army-site:not(.dashboard-day) .pats-footer-col h4 {
+  font-size: var(--pats-type-title) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-hero [class*="text-["],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class*="text-["] {
+  font-size: revert !important;
+  line-height: revert !important;
+}
+
+/* Participant portal + admin dashboard */
+.pats-portal .text-xs,
+.pats-portal .text-sm,
+.pats-portal .text-base,
+.admin-theme.pats-dashboard .text-xs,
+.admin-theme.pats-dashboard .text-sm,
+.admin-theme.pats-dashboard .text-base {
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+.pats-portal .text-lg,
+.admin-theme.pats-dashboard .text-lg {
+  font-size: var(--pats-type-title) !important;
+}
+
+.pats-portal .text-xl,
+.pats-portal .text-2xl,
+.pats-portal .text-3xl,
+.admin-theme.pats-dashboard .text-xl,
+.admin-theme.pats-dashboard .text-2xl,
+.admin-theme.pats-dashboard .text-3xl {
+  font-size: var(--pats-type-display) !important;
+}
+
+.army-site:not(.dashboard-day) .tac-mission-card__meta-line {
+  font-size: var(--pats-type-eyebrow);
+}

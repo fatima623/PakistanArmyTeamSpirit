@@ -1,0 +1,939 @@
+/* PATS navigation — PAF.gov.pk lockup + DESIGN_SPEC scroll behavior */
+
+.army-site:not(.dashboard-day) {
+  --pats-nav-solid-bg: rgba(16, 28, 40, 0.94);
+  --pats-nav-ref-bg: #ffffff;
+  --pats-nav-ref-text: #2a3d52;
+  --pats-nav-ref-text-muted: #5a6570;
+  --pats-nav-ref-border: rgba(42, 61, 82, 0.12);
+  --pats-nav-ref-shadow: 0 2px 12px rgba(21, 37, 53, 0.1);
+  --pats-nav-paf-navy: #152535;
+  --gold: #c8a84b;
+  --text-warm: #e8e4d8;
+  --pats-nav-height: 5.25rem;
+  --pats-nav-inner-pad-y: 0.4375rem;
+  --pats-nav-pad-x: 1.25rem;
+  --pats-nav-emblem: calc(
+    var(--pats-nav-height) - (2 * var(--pats-nav-inner-pad-y))
+  );
+  --pats-nav-menu-w: 1.375rem;
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) {
+    --pats-nav-height: 6rem;
+    --pats-nav-inner-pad-y: 0.5rem;
+    --pats-nav-pad-x: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) {
+    --pats-nav-height: 6.25rem;
+    --pats-nav-inner-pad-y: 0.5625rem;
+    --pats-nav-pad-x: 2.5rem;
+  }
+}
+
+/* Nav bar inside fixed site chrome — see pats-site-chrome.css */
+.army-site:not(.dashboard-day) .pats-header {
+  pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Nav bar — transparent on home at top; solid after 80px scroll (DESIGN_SPEC) */
+.army-site:not(.dashboard-day) .pats-nav {
+  background: transparent;
+  border: 0;
+  transition:
+    background-color 0.4s ease,
+    backdrop-filter 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-header--solid .pats-nav {
+  background: var(--pats-nav-solid-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Scrolled / inner pages — DGDP compact white bar (~52–56px); padding + logo only */
+.army-site:not(.dashboard-day) .pats-header--compact,
+.army-site:not(.dashboard-day) .pats-header--shrunk {
+  --pats-nav-height: 3.25rem;
+  --pats-nav-inner-pad-y: 0.25rem;
+  --pats-nav-pad-x: 1rem;
+  --pats-nav-emblem: calc(var(--pats-nav-height) - (2 * var(--pats-nav-inner-pad-y)));
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) .pats-header--compact,
+  .army-site:not(.dashboard-day) .pats-header--shrunk {
+    --pats-nav-height: 3.5rem;
+    --pats-nav-inner-pad-y: 0.25rem;
+    --pats-nav-pad-x: 1.5rem;
+  }
+}
+
+/* Night — scrolled compact: midnight frosted bar + gold edge (day theme unchanged below) */
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
+  .army-site:not(.dashboard-day)
+  .pats-header--compact
+  .pats-nav {
+  background: #16213e !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Day — scrolled compact: frosted ivory bar + olive-gold anchor */
+html.light-theme .army-site .pats-header--compact .pats-nav,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav {
+  background: rgba(250, 250, 247, 0.96) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 2px solid #b8960c !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__brand-title,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__brand-title {
+  color: var(--pats-nav-ref-text);
+  text-shadow: none;
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__brand {
+  max-width: min(68%, 18rem);
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__inner {
+  gap: 0.75rem;
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__emblem {
+  animation: none;
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__menu-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__brand-subtitle {
+  display: none;
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__brand-title,
+.army-site:not(.dashboard-day) .pats-header--shrunk .pats-nav__brand-title {
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) .pats-header--compact .pats-nav__brand-title,
+  .army-site:not(.dashboard-day) .pats-header--shrunk .pats-nav__brand-title {
+    font-size: 1.625rem;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-header {
+  transition: none;
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-nav__inner {
+  transition:
+    min-height 0.35s cubic-bezier(0.33, 1, 0.68, 1),
+    padding 0.35s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-nav__emblem-wrap {
+  transition:
+    width 0.35s cubic-bezier(0.33, 1, 0.68, 1),
+    height 0.35s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-nav__brand-title {
+  transition: font-size 0.35s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__brand,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__brand {
+  color: var(--pats-nav-ref-text);
+}
+
+/* Scrolled — emblem matches compact title line height in the bar */
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__emblem-wrap,
+.army-site:not(.dashboard-day) .pats-header--shrunk .pats-nav__emblem-wrap {
+  width: var(--pats-nav-emblem);
+  height: var(--pats-nav-emblem);
+  filter: none;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-header:not(.pats-header--compact):not(.pats-header--shrunk)
+  .pats-nav__emblem-wrap {
+  width: var(--pats-nav-emblem);
+  height: var(--pats-nav-emblem);
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__link,
+html.light-theme .army-site .pats-header--compact .pats-nav__menu-btn,
+html.light-theme .army-site .pats-header--compact .pats-nav__logout button,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__link,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-btn,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__logout button {
+  color: var(--pats-nav-ref-text-muted);
+  text-shadow: none;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__link:hover,
+html.light-theme .army-site .pats-header--compact .pats-nav__link:focus-visible,
+html.light-theme .army-site .pats-header--compact .pats-nav__link--active,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__link:hover,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__link:focus-visible,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__link--active {
+  color: var(--pats-nav-ref-text);
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link,
+html.light-theme .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__logout button,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__logout button {
+  color: var(--pats-nav-ref-text-muted);
+  text-shadow: none;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link:hover,
+html.light-theme .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link:focus-visible,
+html.light-theme .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link--active,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link:hover,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link:focus-visible,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__link--active {
+  color: var(--pats-nav-ref-text);
+}
+
+.army-site:not(.dashboard-day) .pats-header--compact .pats-nav__menu-btn {
+  filter: none;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__menu-line,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-line {
+  background: var(--pats-nav-ref-text);
+}
+
+/* Inner row — PAF: emblem + stacked title left, hamburger right */
+.army-site:not(.dashboard-day) .pats-nav__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  box-sizing: border-box;
+  min-height: var(--pats-nav-height);
+  padding: var(--pats-nav-inner-pad-y) var(--pats-nav-pad-x);
+  pointer-events: auto;
+  transition:
+    min-height 0.35s ease,
+    max-height 0.35s ease,
+    padding 0.35s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-header:not(.pats-header--menu-open) .pats-nav__inner {
+  max-height: var(--pats-nav-height);
+  overflow: hidden;
+}
+
+/* Menu open — allow panel to expand (compact/scrolled bar clips links otherwise) */
+.army-site:not(.dashboard-day) .pats-header--menu-open,
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav {
+  pointer-events: auto;
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__inner {
+  max-height: min(80dvh, 36rem);
+  overflow: visible;
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__menu-btn {
+  position: relative;
+  z-index: 2;
+}
+
+/* Brand — PAF: emblem + bold title + muted subtitle */
+.army-site:not(.dashboard-day) .pats-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+  max-width: min(72%, 24rem);
+  text-decoration: none;
+  color: #fff;
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) .pats-nav__brand {
+    max-width: 26rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .pats-nav__brand {
+    max-width: 28rem;
+  }
+}
+
+/* Emblem — height matches stacked brand lockup beside it */
+.army-site:not(.dashboard-day) .pats-nav__emblem-wrap {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--pats-nav-emblem);
+  height: var(--pats-nav-emblem);
+  margin: 0;
+  overflow: hidden;
+  perspective: 720px;
+  transition:
+    width 0.35s ease,
+    height 0.35s ease;
+}
+
+.army-site:not(.dashboard-day)
+  .pats-header--home:not(.pats-header--solid)
+  .pats-nav__emblem-wrap,
+.army-site:not(.dashboard-day)
+  .pats-header--over-hero:not(.pats-header--solid)
+  .pats-nav__emblem-wrap {
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.55));
+}
+
+.army-site:not(.dashboard-day) .pats-nav__emblem {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  /* 7s spin + 1s hold per cycle */
+  animation: pats-nav-emblem-spin 8s linear infinite;
+  will-change: transform;
+}
+
+/* One full Y spin, then stop 1s front-facing, repeat */
+@keyframes pats-nav-emblem-spin {
+  0% {
+    transform: rotateY(0deg);
+  }
+  87.5% {
+    transform: rotateY(360deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .army-site:not(.dashboard-day) .pats-nav__emblem {
+    animation: none;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-nav__brand-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
+  line-height: 1.05;
+}
+
+/* PAF-style main title — Barlow Condensed bold white caps */
+.army-site:not(.dashboard-day) .pats-nav__brand-title {
+  display: block;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(1.4375rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__brand-title,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__brand-title {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+}
+
+/* PAF-style subtitle — small tracked caps, muted white (not gold) */
+.army-site:not(.dashboard-day) .pats-nav__brand-subtitle {
+  display: block;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) .pats-nav__brand-subtitle {
+    font-size: 12px;
+    letter-spacing: 0.22em;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__brand-subtitle,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__brand-subtitle {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65);
+}
+
+/* Legacy desktop row — unused (hamburger panel only) */
+.army-site:not(.dashboard-day) .pats-nav__links--desktop {
+  display: none !important;
+}
+
+/* PAF: horizontal link row in header band, to the left of the hamburger */
+.army-site:not(.dashboard-day) .pats-nav__panel-links {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem 0.6rem;
+  padding: 0 0.35rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+/* Divider line between each public nav item.
+   Desktop (>=1024px) = horizontal bar -> vertical divider on the left of each item.
+   Mobile (<=1023px)  = stacked dropdown -> horizontal divider on top of each item.
+   !important is needed to beat Tailwind's `*{border-width:0}` preflight reset. */
+/* Line separators between nav items removed — links are now pill buttons. */
+
+@media (max-width: 1023px) {
+  .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links {
+    overflow-x: visible;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-nav__panel-links::-webkit-scrollbar {
+  display: none;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__link {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links .pats-nav__link:hover,
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links .pats-nav__link:focus-visible {
+  color: var(--gold);
+  outline: none;
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .pats-nav__panel-links {
+    gap: 0.875rem 0.75rem;
+  }
+
+  .army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__link {
+    font-size: 13.5px;
+  }
+
+  /* Scrolled compact bar — tighter menu row when open (link size unchanged vs hero) */
+  .army-site:not(.dashboard-day) .pats-header--compact.pats-header--menu-open .pats-nav__panel-links {
+    gap: 0.5rem 0.5rem;
+  }
+}
+
+/* Sliding sun/moon theme switch — inline at end of nav panel */
+.army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__theme {
+  flex-shrink: 0;
+  align-self: center;
+  margin: 0 0 0 0.5rem;
+  padding: 0 0 0 0.5rem;
+  border-top: none;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__theme,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__panel-links .pats-nav__theme {
+  border-left-color: var(--pats-nav-ref-border);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-switch {
+  --pats-theme-switch-w: 2.875rem;
+  --pats-theme-switch-h: 1.375rem;
+  --pats-theme-switch-pad: 2px;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  width: var(--pats-theme-switch-w);
+  height: var(--pats-theme-switch-h);
+  padding: var(--pats-theme-switch-pad);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(16, 28, 40, 0.9);
+  box-shadow:
+    0 1px 6px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  isolation: isolate;
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .pats-nav__theme-switch {
+    --pats-theme-switch-w: 3rem;
+    --pats-theme-switch-h: 1.4375rem;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-switch,
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__theme-switch,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__theme-switch {
+  border-color: rgba(255, 255, 255, 0.62);
+  background: rgba(12, 22, 34, 0.92);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__theme-switch,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-switch {
+  border-color: rgba(42, 61, 82, 0.35);
+  background: rgba(16, 28, 40, 0.14);
+  box-shadow:
+    0 1px 6px rgba(21, 37, 53, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  filter: none;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-thumb {
+  position: absolute;
+  top: var(--pats-theme-switch-pad);
+  left: var(--pats-theme-switch-pad);
+  width: calc(50% - var(--pats-theme-switch-pad));
+  height: calc(100% - (2 * var(--pats-theme-switch-pad)));
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.85);
+  transition: transform 0.28s cubic-bezier(0.33, 1, 0.68, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-switch[data-active="night"] .pats-nav__theme-thumb {
+  transform: translateX(100%);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  transition: color 0.22s ease, transform 0.15s ease;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__theme-btn,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-btn {
+  color: rgba(42, 61, 82, 0.55);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-btn:hover {
+  color: #ffffff;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__theme-btn:hover,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-btn:hover {
+  color: rgba(42, 61, 82, 0.9);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-btn--active {
+  color: #0f1a28;
+}
+
+html.light-theme .army-site .pats-header--compact .pats-nav__theme-btn--active,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-btn--active {
+  color: #0f1a28;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-btn:active {
+  transform: scale(0.92);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__theme-icon {
+  width: 0.6875rem;
+  height: 0.6875rem;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .pats-nav__theme-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .army-site:not(.dashboard-day) .pats-nav__theme-thumb {
+    transition: none;
+  }
+
+  .army-site:not(.dashboard-day) .pats-nav__theme-btn {
+    transition: color 0.15s ease;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open:not(.pats-header--solid) .pats-nav {
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 28, 40, 0.72) 0%,
+    rgba(16, 28, 40, 0.35) 70%,
+    transparent 100%
+  );
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open.pats-header--solid:not(.pats-header--compact) .pats-nav {
+  background: var(--pats-nav-solid-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
+  .army-site:not(.dashboard-day)
+  .pats-header--menu-open.pats-header--compact
+  .pats-nav {
+  background: #16213e !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+html.light-theme .army-site .pats-header--menu-open.pats-header--compact .pats-nav,
+html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--compact .pats-nav {
+  background: rgba(250, 250, 247, 0.96) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 2px solid #b8960c !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open:not(.pats-header--compact) .pats-nav {
+  background: rgba(16, 28, 40, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__link--trigger {
+  cursor: pointer;
+}
+
+/* Nav link — DESIGN_SPEC: 12px Barlow Condensed, 0.15em tracking */
+.army-site:not(.dashboard-day) .pats-nav__link {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0.42rem 0.8rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__link,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__link {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__link:hover,
+.army-site:not(.dashboard-day) .pats-nav__link:focus-visible {
+  color: #fff;
+  background: rgba(201, 168, 76, 0.12);
+  border-color: rgba(201, 168, 76, 0.32);
+  outline: none;
+}
+
+.army-site:not(.dashboard-day) .pats-header--solid .pats-nav__link:hover,
+.army-site:not(.dashboard-day) .pats-header--solid .pats-nav__link:focus-visible {
+  color: var(--gold);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__link--active,
+.army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__link--active {
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.16);
+  border-color: rgba(201, 168, 76, 0.5);
+  box-shadow: none;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__logout button,
+.army-site:not(.dashboard-day) .pats-nav__logout .ops-btn {
+  min-width: 0;
+  padding: 0.25rem 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ffffff;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  white-space: nowrap;
+  transition:
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__logout button,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__logout button {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__logout button:hover {
+  color: var(--gold);
+}
+
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__logout button:hover,
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__logout button:focus-visible {
+  color: var(--gold);
+  outline: none;
+}
+
+/* Hamburger — all breakpoints; PAF-style thin lines, top-right */
+.army-site:not(.dashboard-day) .pats-nav__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__menu-btn,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__menu-btn {
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.55));
+}
+
+.army-site:not(.dashboard-day) .pats-nav__menu-icon {
+  display: flex;
+  width: var(--pats-nav-menu-w);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__menu-line {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__menu-btn[aria-expanded="true"] .pats-nav__menu-line:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__menu-btn[aria-expanded="true"] .pats-nav__menu-line:nth-child(2) {
+  opacity: 0;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__menu-btn[aria-expanded="true"] .pats-nav__menu-line:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__menu-btn:focus-visible {
+  outline: none;
+}
+
+/* Dropdown — DESIGN_SPEC dark panel */
+.army-site:not(.dashboard-day) .pats-nav__item {
+  position: relative;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 13rem;
+  padding: 0.375rem 0;
+  background: #152535;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__item--open .pats-nav__dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__dropdown-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__dropdown-link:hover,
+.army-site:not(.dashboard-day) .pats-nav__dropdown-link--active {
+  color: var(--gold);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__dropdown-arrow {
+  font-size: 0.75rem;
+  opacity: 0.55;
+}
+
+/* Fullscreen overlay — not used; menu uses .pats-nav__panel-links in the nav row */
+.army-site:not(.dashboard-day) .pats-nav__overlay {
+  display: none !important;
+}
+
+@keyframes pats-nav-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow-y: auto;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-link {
+  display: block;
+  padding: 0.35rem 0;
+  font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(2.75rem, 10vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-link:hover {
+  color: var(--gold);
+  transform: translateX(8px);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-link--active {
+  color: var(--gold);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-parent {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0.5rem 0 0.25rem;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-link--child {
+  font-size: clamp(1.75rem, 6vw, 2.75rem);
+  padding-left: 0.5rem;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-logout button {
+  margin-top: 0.5rem;
+  padding: 0.35rem 0;
+  font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(2.75rem, 10vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__overlay-logout button:hover {
+  color: var(--gold);
+  transform: translateX(8px);
+}
+
+/* PAF-style readability gradient when menu open on home hero (see rule above) */

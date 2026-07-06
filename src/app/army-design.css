@@ -1,0 +1,434 @@
+/* Pakistan Army / PATS official design system */
+
+.army-site {
+  --army-green: #01411c;
+  --dark-olive: #1a2a1a;
+  --charcoal: #0d1117;
+  --steel: #1e2a35;
+  --gold: #c9a84c;
+  --cream: #f5f0e8;
+  --red-accent: #b5121b;
+  --muted: #8a9bae;
+  --glass: rgba(255, 255, 255, 0.05);
+  --army-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --army-ribbon: 0px;
+  --army-ticker: 40px;
+  --army-nav: 3.25rem;
+  --army-header: calc(var(--army-ticker) + var(--army-nav));
+  --cinematic-header-height: var(--army-header);
+  --cinematic-accent: var(--gold);
+  color: var(--cream);
+  background-color: var(--charcoal);
+}
+
+@media (min-width: 640px) {
+  .army-site {
+    --army-nav: 3.5rem;
+    --army-ticker: 44px;
+  }
+}
+
+/* Government ribbon (legacy — ribbon component removed) */
+.gov-ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: var(--army-ribbon);
+  padding: 0.35rem 1rem;
+  background: var(--army-green);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+  font-family: var(--font-dm), var(--font-inter), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--cream);
+}
+
+@media (min-width: 640px) {
+  .gov-ribbon {
+    padding: 0.4rem 1.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Micro labels */
+.army-micro-label {
+  font-family: var(--font-barlow), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Display headings */
+.army-display {
+  font-family: var(--font-barlow), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cream);
+  line-height: 1.15;
+}
+
+.army-body {
+  font-family: var(--font-dm), var(--font-inter), sans-serif;
+  color: var(--cream);
+  line-height: 1.65;
+}
+
+.army-muted {
+  color: var(--muted);
+}
+
+/* Gold rule */
+.army-gold-rule {
+  width: 5rem;
+  height: 1px;
+  background: var(--gold);
+  margin: 1.25rem auto;
+}
+
+.army-gold-rule--wide {
+  width: 100%;
+  max-width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 168, 76, 0.5) 20%,
+    rgba(201, 168, 76, 0.5) 80%,
+    transparent
+  );
+}
+
+/* Diagonal section cut */
+.army-section-cut {
+  clip-path: polygon(0 0, 100% 3%, 100% 100%, 0 97%);
+}
+
+/* Army buttons — outline → fill sweep */
+.army-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(245, 240, 232, 0.55);
+  border-radius: var(--pats-radius-btn, 8px);
+  font-family: var(--font-barlow), sans-serif;
+  font-size: var(--pats-type-btn, 1rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: transparent;
+  transition: color 0.35s var(--army-ease), border-color 0.25s var(--army-ease);
+}
+
+.army-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--army-green);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s var(--army-ease);
+}
+
+.army-btn:hover::after,
+.army-btn:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.army-btn > span {
+  position: relative;
+  z-index: 1;
+}
+
+.army-btn:hover,
+.army-btn:focus-visible {
+  border-color: var(--gold);
+  color: var(--cream);
+  outline: none;
+}
+
+.army-btn--gold {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, #3d5230 0%, var(--army-green) 100%);
+}
+
+.army-btn--gold::after {
+  background: var(--gold);
+}
+
+.army-btn--gold:hover,
+.army-btn--gold:focus-visible {
+  color: var(--charcoal);
+}
+
+/* Navbar */
+.army-nav {
+  transition:
+    background-color 0.35s var(--army-ease),
+    border-color 0.35s var(--army-ease),
+    backdrop-filter 0.35s var(--army-ease);
+}
+
+.army-nav--solid {
+  background: rgba(13, 17, 23, 0.95);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.army-nav-link {
+  position: relative;
+  padding: 0.35rem 0.75rem;
+  font-family: var(--font-barlow), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cream);
+  transition: color 0.2s ease;
+}
+
+.army-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0.75rem;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.3s var(--army-ease);
+}
+
+.army-nav-link:hover::after,
+.army-nav-link--active::after {
+  width: 2.5rem;
+}
+
+.army-nav-link:hover,
+.army-nav-link--active {
+  color: var(--gold);
+}
+
+/* Hero slider */
+.army-hero {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--charcoal);
+}
+
+.army-hero__grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background-image: linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.5;
+}
+
+.army-hero__scanlines {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0.04;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.4) 2px,
+    rgba(0, 0, 0, 0.4) 4px
+  );
+}
+
+.army-hero__watermark {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  z-index: 2;
+  width: min(420px, 70vw);
+  height: min(420px, 70vw);
+  transform: translate(-50%, -50%);
+  opacity: 0.04;
+  background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.army-hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.army-hero-slide--active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.army-hero-slide__media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  animation: army-ken-burns 8s ease-out forwards;
+}
+
+.army-hero-slide--active .army-hero-slide__media {
+  animation: army-ken-burns 8s ease-out forwards;
+}
+
+@keyframes army-ken-burns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.army-hero-slide__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.82) 0%,
+    rgba(0, 0, 0, 0.45) 45%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+}
+
+.army-hero-slide__fade-bottom {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--charcoal) 0%, transparent 35%);
+}
+
+.army-hero-indicators {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.army-hero-indicator {
+  height: 2px;
+  width: 2rem;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.army-hero-indicator--active {
+  background: var(--cream);
+  width: 3rem;
+}
+
+/* Stats bar */
+.army-stats-bar {
+  background: var(--dark-olive);
+  border-top: 1px solid rgba(201, 168, 76, 0.35);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.35);
+}
+
+.army-stat-value {
+  font-family: var(--font-barlow), sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+/* Value / career cards */
+.army-value-card {
+  background: var(--steel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  transition:
+    transform 0.3s var(--army-ease),
+    border-color 0.3s var(--army-ease),
+    box-shadow 0.3s var(--army-ease);
+}
+
+.army-value-card:hover {
+  transform: translateY(-6px);
+  border-left: 3px solid var(--gold);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.army-career-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+}
+
+.army-career-card__media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s var(--army-ease);
+}
+
+.army-career-card:hover .army-career-card__media {
+  transform: none;
+}
+
+.army-career-card:hover {
+  border-color: rgba(201, 168, 76, 0.55);
+}
+
+/* Scroll reveal */
+.army-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s var(--army-ease),
+    transform 0.7s var(--army-ease);
+}
+
+.army-reveal.army-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Pre-footer CTA */
+.army-prefooter-cta {
+  background: var(--army-green);
+  border-top: 2px solid var(--gold);
+}
+
+/* Footer */
+.army-footer {
+  background: var(--charcoal);
+  border-top: 1px solid rgba(201, 168, 76, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .army-hero-slide__media {
+    animation: none;
+  }
+
+  .army-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

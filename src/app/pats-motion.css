@@ -1,0 +1,314 @@
+/**
+ * Global motion — scroll deck, viewport reveals, hover lift, Quaid band.
+ * No layout/content changes. Respects prefers-reduced-motion.
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html.motion-active {
+  scroll-behavior: smooth;
+}
+
+/* —— Homepage hero overlap (card stack scroll) —— */
+@media (prefers-reduced-motion: no-preference) {
+  .army-home.scroll-deck {
+    isolation: isolate;
+  }
+
+  .army-home.scroll-deck .scroll-deck__hero {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .army-home.scroll-deck .scroll-deck__hero .pats-hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .army-home.scroll-deck .scroll-deck-layer {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .army-home.scroll-deck .scroll-deck-layer--first {
+    margin-top: -0.5rem;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.14);
+    overflow: hidden;
+  }
+
+  html.light-theme .army-home.scroll-deck .scroll-deck-layer--first,
+  html[data-site-theme="day"] .army-home.scroll-deck .scroll-deck-layer--first {
+    box-shadow: 0 -8px 28px rgba(26, 32, 24, 0.12);
+  }
+}
+
+/* —— Viewport entrance (Intersection Observer → .in-view) —— */
+html.motion-active .animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+  will-change: opacity, transform;
+}
+
+html.motion-active .animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html.motion-active .reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+html.motion-active .reveal.visible,
+html.motion-active .reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html.motion-active .reveal-delay-1,
+html.motion-active .animate-on-scroll.reveal-delay-1 {
+  transition-delay: 0.1s;
+}
+
+html.motion-active .reveal-delay-2,
+html.motion-active .animate-on-scroll.reveal-delay-2 {
+  transition-delay: 0.2s;
+}
+
+html.motion-active .reveal-delay-3,
+html.motion-active .animate-on-scroll.reveal-delay-3 {
+  transition-delay: 0.3s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(1) {
+  transition-delay: 0.05s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(2) {
+  transition-delay: 0.15s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(3) {
+  transition-delay: 0.25s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(4) {
+  transition-delay: 0.35s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(5) {
+  transition-delay: 0.45s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(6) {
+  transition-delay: 0.55s;
+}
+
+html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(n + 7) {
+  transition-delay: 0.65s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion-active .animate-on-scroll,
+  html.motion-active .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .quote-slide {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* Quaid strip — not hidden by scroll entrance animations */
+html.motion-active .quaid-quote-strip {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Stats bar — always visible; count-up handled in StatsBar.tsx */
+html.motion-active .pats-section--stats,
+html.motion-active .pats-section--stats .pats-stats,
+html.motion-active .pats-section--stats .pats-stat,
+html.motion-active .pats-section--stats .animate-on-scroll {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* —— Quaid cycling quote strip —— */
+.quaid-quote-strip {
+  min-height: clamp(10rem, 16vw, 12.5rem);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #0a0c10;
+  padding: 1.5rem clamp(1.25rem, 4vw, 2.5rem) 3rem;
+  border-top: 1px solid #c9a84c;
+  border-bottom: 1px solid #c9a84c;
+  color: #ffffff;
+  z-index: 2;
+}
+
+html.light-theme .army-site .quaid-quote-strip,
+html[data-site-theme="day"] .army-site .quaid-quote-strip {
+  background: #0a0c10 !important;
+  color: #ffffff !important;
+}
+
+.quaid-quote-strip__stage {
+  position: absolute;
+  inset: 1.25rem clamp(1rem, 3vw, 2rem) 2.75rem;
+  overflow: hidden;
+}
+
+.quote-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 clamp(0.5rem, 3vw, 3rem);
+  margin: 0;
+  border: 0;
+  quotes: none;
+  color: #ffffff;
+  font-family: var(--font-barlow), Georgia, "Times New Roman", serif;
+  font-size: var(--pats-type-quote, clamp(1.25rem, 3vw, 1.75rem));
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: var(--pats-type-line-body, 1.65);
+  transform: translateY(100%);
+  opacity: 0;
+  transition:
+    transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.7s ease;
+}
+
+.quote-slide.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.quote-slide.exit {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.quaid-quote-strip .quote-slide::before,
+.quaid-quote-strip .quote-slide::after {
+  content: none !important;
+  display: none !important;
+}
+
+.quaid-strip-attribution {
+  position: absolute;
+  bottom: 1.125rem;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-quote-credit, var(--pats-type-eyebrow, 0.875rem));
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #c9a84c;
+  text-transform: uppercase;
+}
+
+html.light-theme .army-site .quaid-quote-strip .quote-slide,
+html.light-theme .army-site .quaid-strip-attribution,
+html[data-site-theme="day"] .army-site .quaid-quote-strip .quote-slide,
+html[data-site-theme="day"] .army-site .quaid-strip-attribution {
+  color: inherit;
+}
+
+html.light-theme .army-site .quaid-quote-strip .quote-slide,
+html[data-site-theme="day"] .army-site .quaid-quote-strip .quote-slide {
+  color: #ffffff !important;
+  font-size: var(--pats-type-quote, clamp(1.25rem, 3vw, 1.75rem)) !important;
+  line-height: var(--pats-type-line-body, 1.65) !important;
+}
+
+html.light-theme .army-site .quaid-strip-attribution,
+html[data-site-theme="day"] .army-site .quaid-strip-attribution {
+  color: #c9a84c !important;
+  font-size: var(--pats-type-quote-credit, var(--pats-type-eyebrow, 0.875rem)) !important;
+}
+
+/* Keep Quaid copy readable — beat global section typography */
+.army-site .quaid-quote-strip .quote-slide {
+  font-size: var(--pats-type-quote, clamp(1.25rem, 3vw, 1.75rem)) !important;
+  line-height: var(--pats-type-line-body, 1.65) !important;
+}
+
+.army-site .quaid-strip-attribution {
+  font-size: var(--pats-type-quote-credit, var(--pats-type-eyebrow, 0.875rem)) !important;
+}
+
+html.light-theme .army-site .quaid-quote-strip .text-white,
+html.light-theme .army-site .quaid-quote-strip [class*="text-white"],
+html[data-site-theme="day"] .army-site .quaid-quote-strip .text-white,
+html[data-site-theme="day"] .army-site .quaid-quote-strip [class*="text-white"] {
+  color: #ffffff !important;
+}
+
+/* —— Navbar scroll solid state — transition only; colors from pats-navigation.css —— */
+.army-site:not(.dashboard-day) .pats-header--solid .pats-nav {
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+html.light-theme .army-site .pats-header--solid .pats-nav,
+html.light-theme .army-site .pats-header--menu-open.pats-header--solid .pats-nav,
+html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav,
+html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--solid .pats-nav {
+  background: rgba(250, 250, 247, 0.96) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 2px solid #b8960c !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* —— Button hover (card lift: pats-card-surface.css) —— */
+@media (prefers-reduced-motion: no-preference) {
+  .pats-btn,
+  .army-btn,
+  .operational-map__term {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .pats-btn:hover,
+  .army-btn:hover {
+    transform: translateY(-2px);
+  }
+}

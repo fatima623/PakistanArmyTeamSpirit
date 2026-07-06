@@ -1,0 +1,249 @@
+/**
+ * Forest cards — grid (homepage / single row) + carousel (overflow / inner pages).
+ */
+
+/* —— Grid: equal-width row when cards fit —— */
+.forest-card-grid {
+  display: grid;
+  width: 100%;
+  max-width: min(96rem, 100%);
+  margin-inline: auto;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  justify-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .forest-card-grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .forest-card-grid--3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .forest-card-grid--4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .forest-card-grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .forest-card-grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.forest-card-grid__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 280px;
+}
+
+.forest-card-grid__cell > * {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 280px;
+  height: 100%;
+  margin: 0;
+}
+
+.forest-card-grid__cell .tac-mission-card,
+.forest-card-grid__cell .pats-pillar-card {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 280px;
+  margin: 0;
+}
+
+/* —— Carousel: arrows only when track overflows (see ForestCardCarousel) —— */
+.forest-carousel,
+.tac-mission-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  width: 100%;
+  max-width: min(96rem, 100%);
+  margin-inline: auto;
+  padding-inline: 0.25rem;
+}
+
+.forest-carousel--single {
+  display: block;
+  overflow: visible;
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.forest-carousel__arrow,
+.tac-mission-carousel__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  margin: 0;
+  border: none !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #ffffff;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  z-index: 3;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+html.light-theme .forest-carousel__arrow,
+html[data-site-theme="day"] .forest-carousel__arrow,
+html.light-theme .tac-mission-carousel__arrow,
+html[data-site-theme="day"] .tac-mission-carousel__arrow {
+  color: #000000;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.forest-carousel__arrow svg,
+.tac-mission-carousel__arrow svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  stroke-width: 1.75;
+  stroke: currentColor;
+  color: currentColor;
+}
+
+.forest-carousel__arrow:hover,
+.tac-mission-carousel__arrow:hover {
+  color: inherit;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  opacity: 0.65;
+}
+
+.forest-carousel__track,
+.tac-mission-track--carousel,
+.tac-mission-track {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0.5rem;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 12px 0.25rem 16px;
+  position: relative;
+  isolation: isolate;
+}
+
+.forest-carousel--fits .forest-carousel__track {
+  overflow-x: hidden;
+}
+
+.forest-carousel__track--centered {
+  justify-content: center;
+}
+
+.forest-carousel__track::-webkit-scrollbar,
+.tac-mission-track--carousel::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+
+.forest-carousel__slide,
+.tac-mission-carousel__slide {
+  flex: 0 0 300px;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  min-height: 280px;
+  align-self: stretch;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  position: relative;
+  isolation: isolate;
+}
+
+.forest-carousel__slide > *,
+.tac-mission-carousel__slide > *,
+.forest-card-slide-host {
+  width: 100%;
+  min-width: 0;
+  min-height: 280px;
+  height: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+.forest-carousel__slide .tac-mission-card,
+.forest-carousel__slide .pats-pillar-card,
+.tac-mission-carousel__slide .tac-mission-card {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 280px;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .forest-carousel__slide,
+  .tac-mission-carousel__slide {
+    flex: 0 0 min(280px, calc(100vw - 5.5rem));
+    width: min(280px, calc(100vw - 5.5rem));
+    min-width: min(280px, calc(100vw - 5.5rem));
+    max-width: min(280px, calc(100vw - 5.5rem));
+    min-height: 280px;
+  }
+}
+
+/* Center card rows inside sections */
+.army-site:not(.dashboard-day) :is(.pats-section__inner, .pats-section) > :is(.forest-carousel, .forest-card-grid) {
+  margin-inline: auto;
+  width: 100%;
+}
+
+.army-site:not(.dashboard-day) :is(.pats-section__inner, .pats-section) > div:has(> .forest-carousel) {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Inner-page sections must not clip carousel arrows or card lift */
+.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section:has(.forest-carousel),
+.army-site:not(.dashboard-day) .pats-section:has(.forest-carousel) {
+  overflow: visible !important;
+}
+
+.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section:has(.forest-carousel) > * {
+  overflow: visible;
+}
