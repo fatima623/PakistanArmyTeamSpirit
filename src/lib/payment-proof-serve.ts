@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { isStaffRole } from "@/lib/auth-routes";
 import {
   hasInternalProof,
   hasLegacyPublicProof,
@@ -28,8 +29,8 @@ export async function loadPaymentProofForPayment(
   }
 
   const isOwner = payment.userId === requester.userId;
-  const isAdmin = requester.role === "admin";
-  if (!isOwner && !isAdmin) {
+  const isStaff = isStaffRole(requester.role);
+  if (!isOwner && !isStaff) {
     throw new Error("FORBIDDEN");
   }
 

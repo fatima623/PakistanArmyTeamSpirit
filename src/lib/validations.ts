@@ -25,12 +25,64 @@ export const LoginSchema = z.object({
  */
 export const TeamMemberSchema = z.object({
   fullName: z.string().trim().min(1, "Full name is required"),
-  serviceNumber: z.string().trim().min(1, "Service number is required"),
-  serviceArm: z.string().trim().min(1, "Service / Arm is required"),
+  serviceNumber: z.string().trim().min(1, "Serial number is required"),
+  rank: z.string().trim().min(1, "Rank is required"),
+  /** Optional detail — may be empty. Kept as a plain string so the schema's
+   *  input and output types match (react-hook-form resolver requirement). */
+  serviceArm: z.string().trim().max(120),
   gender: z.enum(["Male", "Female", "Other"]),
 });
 
 export type TeamMemberInput = z.infer<typeof TeamMemberSchema>;
+
+/** First-login participation availability decision. */
+export const ParticipationActionSchema = z.object({
+  action: z.enum(["confirm", "decline"]),
+});
+
+/** Request to exceed the team-member cap (justification goes to Admin). */
+export const TeamSizeRequestSchema = z.object({
+  requestedCount: z.coerce
+    .number()
+    .int()
+    .min(1, "Requested size required")
+    .max(200, "Requested size too large"),
+  justification: z
+    .string()
+    .trim()
+    .min(20, "Please provide a justification (at least 20 characters)")
+    .max(2000),
+});
+
+export const AdminTeamSizeReviewSchema = z
+  .object({
+    status: z.enum(["APPROVED", "REJECTED"]),
+    reviewNote: z.string().trim().max(2000).optional().nullable(),
+  })
+  .refine(
+    (d) => d.status !== "REJECTED" || (d.reviewNote?.trim().length ?? 0) > 0,
+    {
+      message: "A note is required when rejecting a request",
+      path: ["reviewNote"],
+    }
+  );
+
+/** Flight detail text fields (files validated separately in the API). */
+export const FlightDetailFieldsSchema = z.object({
+  teamMemberId: z.string().trim().min(1, "Select the traveler"),
+  passengerName: z.string().trim().min(1, "Passenger name is required").max(160),
+  passportNumber: z
+    .string()
+    .trim()
+    .min(3, "Passport number is required")
+    .max(50)
+    .regex(/^[A-Za-z0-9-]+$/, "Letters, digits and dashes only"),
+});
+
+export const AdminFlightFinalizeSchema = z.object({
+  userId: z.string().trim().min(1),
+  finalized: z.boolean(),
+});
 
 export const RegisterSchema = z
   .object({
@@ -41,34 +93,19 @@ export const RegisterSchema = z
     lastName: z.string().min(1, "Required"),
     rank: z.string().min(1, "Required"),
     gender: z.enum(["Male", "Female", "Other"]),
-    unitType: z.enum(["Regular", "Reserve", "UOTC", "International"]),
-    jointPatrol: z.boolean(),
+    unitType: z.enum(["Regular", "Reserve"]),
     branch: z.enum(["Army", "Navy", "Air Force"]),
     unitName: z.string().min(1, "Required"),
     country: z.string().min(1, "Required"),
     customCountry: z.string().optional(),
     nationality: z.string().optional(),
-    bdeOrFmn: z.string().min(1, "Required"),
-    divOrFmn: z.string().min(1, "Required"),
     arm: z.string().min(1, "Required"),
-    service: z.string().min(1, "Required"),
-    unitAddress: z.string().min(1, "Required"),
-    postcode: z.string().min(1, "Required"),
-    telephoneMil: z.string().min(1, "Required"),
-    telephoneCiv: z.string().min(1, "Required"),
     secondPocEmail: z.string().email().optional().or(z.literal("")),
     thirdPocEmail: z.string().email().optional().or(z.literal("")),
     additionalInfo: z.string().optional(),
     coName: z.string().min(1, "Required"),
     coEmail: z.string().email("Valid email required"),
     coPhone: z.string().min(1, "Required"),
-    coRank: z.string().min(1, "Required"),
-    coSalutations: z.string().optional(),
-    canAccommodateIntl: z.boolean(),
-    preferredIntlPatrol: z.string().optional(),
-    longStandingRelation: z.boolean(),
-    /** Optional team members captured during registration — never blocks submit. */
-    teamMembers: z.array(TeamMemberSchema).optional(),
     privacyAccepted: z.literal(true, {
       error: "You must accept the privacy policy",
     }),
@@ -104,26 +141,16 @@ export const UnitUpdateSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   rank: z.string().min(1),
-  unitType: z.enum(["Regular", "Reserve", "UOTC", "International"]),
-  jointPatrol: z.boolean(),
+  unitType: z.enum(["Regular", "Reserve"]),
   branch: z.enum(["Army", "Navy", "Air Force"]),
   unitName: z.string().min(1),
-  bdeOrFmn: z.string().min(1),
-  divOrFmn: z.string().min(1),
   arm: z.string().min(1),
-  service: z.string().min(1),
-  unitAddress: z.string().min(1),
-  postcode: z.string().min(1),
-  telephoneMil: z.string().min(1),
-  telephoneCiv: z.string().min(1),
   secondPocEmail: z.string().email().optional().or(z.literal("")),
   thirdPocEmail: z.string().email().optional().or(z.literal("")),
   additionalInfo: z.string().optional(),
   coName: z.string().min(1),
   coEmail: z.string().email(),
   coPhone: z.string().min(1),
-  coRank: z.string().min(1),
-  coSalutations: z.string().optional(),
 });
 
 export const NewsPostSchema = z.object({
@@ -221,6 +248,13 @@ export const SiteSettingsSchema = z.object({
   intlRegistrationOpen: z.boolean(),
   registrationDeadline: nullableDeadline,
   paymentDeadline: nullableDeadline,
+  participationConfirmDeadline: nullableDeadline,
+  teamRegistrationOpenDate: nullableDeadline,
+  teamRegistrationCloseDate: nullableDeadline,
+  flightDetailsDeadline: nullableDeadline,
+  maxTeamMembers: z.coerce.number().int().min(1).max(200).default(13),
+  hostInfoPublished: z.boolean().default(false),
+  hostInfoContent: z.string().max(20000).optional().nullable(),
   exerciseYear: z.number().int().min(2024).max(2099),
   exerciseDates: z.string().min(1),
   privacyPolicyUrl: z.string().min(1),
@@ -253,7 +287,9 @@ export const AdminUserUpdateSchema = z.object({
   rank: z.string().trim().min(1, "Required").optional(),
   gender: z.enum(["Male", "Female", "Other"]).optional(),
   role: z.enum(["user", "sdbs", "mtd", "admin"]).optional(),
-  applicationStatus: z.enum(["PENDING", "APPROVED", "REJECTED"]).optional(),
+  applicationStatus: z
+    .enum(["PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED", "RETURNED"])
+    .optional(),
   paymentStatus: z
     .enum([
       "PENDING",
@@ -307,9 +343,6 @@ export const AdminPaymentUpdateSchema = z.object({
 export const AdminUnitUpdateSchema = UnitUpdateSchema.extend({
   preferredPhase: z.string().optional().nullable(),
   patrolsRequested: z.number().int().min(1).optional(),
-  canAccommodateIntl: z.boolean().optional(),
-  preferredIntlPatrol: z.string().optional().nullable(),
-  longStandingRelation: z.boolean().optional(),
 });
 
 export const TicketCreateSchema = z.object({

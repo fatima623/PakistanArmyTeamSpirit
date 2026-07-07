@@ -10,7 +10,8 @@ import {
 import {
   ApiError,
   handleApiError,
-  requireAdmin,
+  requirePaymentVerifier,
+  requireStaff,
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { AdminPaymentUpdateSchema } from "@/lib/validations";
@@ -22,9 +23,10 @@ import { sendPaymentConfirmedEmail } from "@/lib/participant-status-emails";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
+/** All staff (Admin, SD, MT) may VIEW payment verification details. */
 export async function GET(_request: Request, context: RouteContext) {
   try {
-    await requireAdmin();
+    await requireStaff();
     const { id } = await context.params;
 
     const payment = await prisma.payment.findUnique({
@@ -68,11 +70,12 @@ export async function GET(_request: Request, context: RouteContext) {
   }
 }
 
+/** Payment verification decisions — MT (Management Team) ONLY. */
 export async function PUT(request: Request, context: RouteContext) {
   const { id } = await context.params;
 
   try {
-    const session = await requireAdmin();
+    const session = await requirePaymentVerifier();
     requireJsonContentType(request);
     const body = await request.json();
     const parsed = AdminPaymentUpdateSchema.safeParse(body);
@@ -157,8 +160,16 @@ export async function PUT(request: Request, context: RouteContext) {
       actorId: session.user.id,
       metadata:
         isReject || isReturned
-          ? { status, rejectionReason: updateData.rejectionReason }
-          : { status, previousStatus: existingNormalized },
+          ? {
+              status,
+              rejectionReason: updateData.rejectionReason,
+              actorRole: session.user.role,
+            }
+          : {
+              status,
+              previousStatus: existingNormalized,
+              actorRole: session.user.role,
+            },
     });
 
     revalidatePath("/admin/payments");

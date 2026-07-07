@@ -3,20 +3,21 @@ import { NextResponse } from "next/server";
 import {
   ApiError,
   handleApiError,
-  requireAdmin,
+  requireStaff,
 } from "@/lib/api-helpers";
 import { loadPaymentProofForPayment } from "@/lib/payment-proof-serve";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
+/** All staff (Admin, SD, MT) may view uploaded proofs; only MT decides. */
 export async function GET(_request: Request, context: RouteContext) {
   try {
-    const session = await requireAdmin();
+    const session = await requireStaff();
     const { id } = await context.params;
 
     const proof = await loadPaymentProofForPayment(id, {
       userId: session.user.id,
-      role: "admin",
+      role: session.user.role ?? "user",
     });
 
     return new NextResponse(new Uint8Array(proof.buffer), {

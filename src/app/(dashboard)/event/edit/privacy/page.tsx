@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { PrivacyForm } from "@/components/dashboard/PrivacyForm";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EditPrivacyPage() {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

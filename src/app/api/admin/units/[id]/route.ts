@@ -73,39 +73,20 @@ export async function PUT(request: Request, context: RouteContext) {
         where: { id },
         data: {
           unitType: data.unitType,
-          jointPatrol: data.jointPatrol,
           branch: data.branch,
           unitName: data.unitName,
-          bdeOrFmn: data.bdeOrFmn,
-          divOrFmn: data.divOrFmn,
           arm: data.arm,
-          service: data.service,
-          unitAddress: data.unitAddress,
-          postcode: data.postcode,
-          telephoneMil: data.telephoneMil,
-          telephoneCiv: data.telephoneCiv,
           secondPocEmail: data.secondPocEmail || null,
           thirdPocEmail: data.thirdPocEmail || null,
           additionalInfo: data.additionalInfo ?? null,
           coName: data.coName,
           coEmail: data.coEmail,
           coPhone: data.coPhone,
-          coRank: data.coRank,
-          coSalutations: data.coSalutations ?? null,
           ...(data.preferredPhase !== undefined && {
             preferredPhase: data.preferredPhase,
           }),
           ...(data.patrolsRequested !== undefined && {
             patrolsRequested: data.patrolsRequested,
-          }),
-          ...(data.canAccommodateIntl !== undefined && {
-            canAccommodateIntl: data.canAccommodateIntl,
-          }),
-          ...(data.preferredIntlPatrol !== undefined && {
-            preferredIntlPatrol: data.preferredIntlPatrol,
-          }),
-          ...(data.longStandingRelation !== undefined && {
-            longStandingRelation: data.longStandingRelation,
           }),
         },
         include: {

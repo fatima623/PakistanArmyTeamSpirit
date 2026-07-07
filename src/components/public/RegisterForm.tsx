@@ -32,97 +32,14 @@ import {
 } from "@/lib/countries";
 import { UNIT_NAMES } from "@/lib/units-list";
 import { CountrySelect } from "@/components/ui/CountrySelect";
-import { TeamMembersSection } from "@/components/team/TeamMembersSection";
-import type { TeamMemberInput } from "@/lib/validations";
-import type { TeamMemberRecord } from "@/lib/team-members";
 
 type RegisterFormValues = z.infer<typeof RegisterSchema>;
-
-/** Local (pre-registration) team member: same fields plus a client-only id. */
-type LocalTeamMember = TeamMemberInput & { id: string };
-
-function makeLocalId() {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `tmp-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-const BDE_OPTIONS = [
-  "16 Air Asslt BCT",
-  "1 (UK) Div",
-  "3 (UK) Div",
-  "6 Div",
-  "11 (SE) Bde",
-  "38 (Irish) Bde",
-  "51 (Scottish) Bde",
-  "HQ 37 DIV",
-  "ARRC",
-  "Other",
-];
-
-const DIV_OPTIONS = ["CFA", "1 Div", "3 Div", "6 Div", "RN", "RAF", "Other"];
 
 const ARM_OPTIONS = [
   "Combat",
   "Combat Support",
   "Combat Service Support",
 ];
-
-const SERVICE_OPTIONS = [
-  "INF",
-  "AAC",
-  "RE",
-  "RLC",
-  "RA",
-  "REME",
-  "RMP",
-  "AGC(SPS)",
-  "AGC(ETS)",
-  "AGC(RMP)",
-  "AMS",
-  "QARANC",
-  "Int Corps",
-  "Sig",
-  "Cav",
-  "PARA",
-  "Gds",
-  "RN",
-  "RAF",
-  "UOTC",
-  "Other",
-];
-
-function BoolRadio({
-  value,
-  onChange,
-  idPrefix,
-}: {
-  value: boolean;
-  onChange: (v: boolean) => void;
-  idPrefix: string;
-}) {
-  return (
-    <RadioGroup
-      value={value ? "true" : "false"}
-      onValueChange={(v) => onChange(v === "true")}
-      className="flex flex-wrap gap-4"
-    >
-      <div className="flex items-center gap-2">
-        <RadioGroupItem value="true" id={`${idPrefix}-yes`} />
-        <Label htmlFor={`${idPrefix}-yes`} className="pats-form-choice font-normal">
-          Yes
-        </Label>
-      </div>
-      <div className="flex items-center gap-2">
-        <RadioGroupItem value="false" id={`${idPrefix}-no`} />
-        <Label htmlFor={`${idPrefix}-no`} className="pats-form-choice font-normal">
-          No
-        </Label>
-      </div>
-    </RadioGroup>
-  );
-}
 
 type RegisterFormProps = {
   initialIntlRegistrationOpen: boolean;
@@ -133,15 +50,6 @@ export function RegisterForm({
 }: RegisterFormProps) {
   const router = useRouter();
   const [csrfToken, setCsrfToken] = useState("");
-  const [teamMembers, setTeamMembers] = useState<LocalTeamMember[]>([]);
-
-  const addTeamMember = async (values: TeamMemberInput) => {
-    setTeamMembers((prev) => [...prev, { ...values, id: makeLocalId() }]);
-  };
-
-  const removeTeamMember = async (id: string) => {
-    setTeamMembers((prev) => prev.filter((m) => m.id !== id));
-  };
 
   const {
     register,
@@ -156,9 +64,6 @@ export function RegisterForm({
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
-      jointPatrol: false,
-      canAccommodateIntl: false,
-      longStandingRelation: false,
       gender: "Male",
       unitType: "Regular",
       branch: "Army",
@@ -201,12 +106,6 @@ export function RegisterForm({
       country,
       nationality:
         country === PAKISTAN_COUNTRY ? "Pakistani" : data.nationality?.trim(),
-      teamMembers: teamMembers.map((member) => ({
-        fullName: member.fullName,
-        serviceNumber: member.serviceNumber,
-        serviceArm: member.serviceArm,
-        gender: member.gender,
-      })),
       csrfToken,
     };
 
@@ -347,29 +246,15 @@ export function RegisterForm({
                 }
                 className="flex flex-wrap gap-4"
               >
-                {(["Regular", "Reserve", "UOTC", "International"] as const).map(
-                  (t) => (
-                    <div key={t} className="flex items-center gap-2">
-                      <RadioGroupItem value={t} id={`unitType-${t}`} />
-                      <Label htmlFor={`unitType-${t}`} className="font-normal">
-                        {t}
-                      </Label>
-                    </div>
-                  )
-                )}
+                {(["Regular", "Reserve"] as const).map((t) => (
+                  <div key={t} className="flex items-center gap-2">
+                    <RadioGroupItem value={t} id={`unitType-${t}`} />
+                    <Label htmlFor={`unitType-${t}`} className="font-normal">
+                      {t}
+                    </Label>
+                  </div>
+                ))}
               </RadioGroup>
-            </FormField>
-            <FormField stacked
-              label="Joint patrol"
-              required
-              hint="Definition of a joint patrol: the combination of a Pakistan and international patrol"
-              error={errors.jointPatrol?.message}
-            >
-              <BoolRadio
-                idPrefix="jointPatrol"
-                value={watch("jointPatrol")}
-                onChange={(v) => setValue("jointPatrol", v)}
-              />
             </FormField>
             <FormField stacked label="Branch" required error={errors.branch?.message}>
               <RadioGroup
@@ -455,52 +340,6 @@ export function RegisterForm({
                 />
               </FormField>
             ) : null}
-            <FormField stacked label="Bde / Fmn" required error={errors.bdeOrFmn?.message}>
-              <Controller
-                name="bdeOrFmn"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    value={field.value || undefined}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {BDE_OPTIONS.map((o) => (
-                        <SelectItem key={o} value={o}>
-                          {o}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </FormField>
-            <FormField stacked label="Div / Fmn" required error={errors.divOrFmn?.message}>
-              <Controller
-                name="divOrFmn"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    value={field.value || undefined}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {DIV_OPTIONS.map((o) => (
-                        <SelectItem key={o} value={o}>
-                          {o}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </FormField>
             <FormField stacked label="Arm" required error={errors.arm?.message}>
               <Controller
                 name="arm"
@@ -523,55 +362,6 @@ export function RegisterForm({
                   </Select>
                 )}
               />
-            </FormField>
-            <FormField stacked label="Service" required error={errors.service?.message}>
-              <Controller
-                name="service"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    value={field.value || undefined}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SERVICE_OPTIONS.map((o) => (
-                        <SelectItem key={o} value={o}>
-                          {o}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </FormField>
-            <FormField stacked
-              label="Unit address"
-              required
-              error={errors.unitAddress?.message}
-            >
-              <Input {...register("unitAddress")} />
-            </FormField>
-            <FormField stacked label="Postcode" required error={errors.postcode?.message}>
-              <Input {...register("postcode")} />
-            </FormField>
-            <FormField stacked
-              label="Telephone (mil)"
-              required
-              hint="with ATN code"
-              error={errors.telephoneMil?.message}
-            >
-              <Input {...register("telephoneMil")} />
-            </FormField>
-            <FormField stacked
-              label="Telephone (civ)"
-              required
-              hint="with STD code"
-              error={errors.telephoneCiv?.message}
-            >
-              <Input {...register("telephoneCiv")} />
             </FormField>
             <FormField stacked
               label="2nd POC email"
@@ -597,7 +387,7 @@ export function RegisterForm({
 
         <div className={sectionClass}>
           <h2 className="pats-form-section-title">
-            CO / 2IC details
+            DETAIL OF DEFENCE ATTACHE
           </h2>
           <div className={gridClass}>
             <FormField stacked label="CO name" required error={errors.coName?.message}>
@@ -608,68 +398,6 @@ export function RegisterForm({
             </FormField>
             <FormField stacked label="CO phone" required error={errors.coPhone?.message}>
               <Input {...register("coPhone")} />
-            </FormField>
-            <FormField stacked label="CO rank" required error={errors.coRank?.message}>
-              <Input {...register("coRank")} />
-            </FormField>
-            <FormField stacked
-              label="CO salutations (optional)"
-              error={errors.coSalutations?.message}
-            >
-              <Input {...register("coSalutations")} />
-            </FormField>
-          </div>
-        </div>
-
-        <div className={sectionClass}>
-          <h2 className="pats-form-section-title">Team Members (optional)</h2>
-          <TeamMembersSection
-            members={teamMembers as TeamMemberRecord[]}
-            onAdd={addTeamMember}
-            onDelete={removeTeamMember}
-            title="Your team"
-            description="Optionally add the members participating in the event. This is not required — you can submit your registration without any team members and manage them later from the Participant Panel."
-          />
-        </div>
-
-        <div className={sectionClass}>
-          <h2 className="pats-form-section-title">
-            Hosting
-          </h2>
-          <p className="mb-4 italic text-cp-ink-muted">
-            All Pakistan Army patrols are expected to host an international patrol;
-            those that
-            are unable to host will be placed on the reserve list until all
-            hosting duties have been allocated.
-          </p>
-          <div className={gridClass}>
-            <FormField stacked
-              label="Can accommodate international"
-              required
-              error={errors.canAccommodateIntl?.message}
-            >
-              <BoolRadio
-                idPrefix="canAccommodateIntl"
-                value={watch("canAccommodateIntl")}
-                onChange={(v) => setValue("canAccommodateIntl", v)}
-              />
-            </FormField>
-            <FormField stacked
-              label="Preferred international patrol"
-              error={errors.preferredIntlPatrol?.message}
-            >
-              <Input {...register("preferredIntlPatrol")} />
-            </FormField>
-            <FormField stacked
-              label="Long-standing relationship"
-              required
-              error={errors.longStandingRelation?.message}
-            >
-              <BoolRadio
-                idPrefix="longStandingRelation"
-                value={watch("longStandingRelation")}
-                onChange={(v) => setValue("longStandingRelation", v)}
-              />
             </FormField>
           </div>
         </div>

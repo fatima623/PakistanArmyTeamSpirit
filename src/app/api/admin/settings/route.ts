@@ -56,6 +56,10 @@ export async function PUT(request: Request) {
     revalidatePath("/page/key-dates");
     revalidatePath("/event/dashboard");
     revalidatePath("/event/payment");
+    revalidatePath("/event/team");
+    revalidatePath("/event/flights");
+    revalidatePath("/event/host-info");
+    revalidatePath("/event/confirm-participation");
 
     return NextResponse.json({ settings });
   } catch (error) {

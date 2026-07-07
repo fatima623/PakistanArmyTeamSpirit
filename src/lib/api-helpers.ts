@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import {
   canAccessAdminArea,
   canApproveRegistration,
+  canVerifyPayment,
 } from "@/lib/auth-routes";
 
 export class ApiError extends Error {
@@ -39,11 +40,26 @@ export async function requireStaff() {
   return session;
 }
 
-/** Admin or MTD — roles allowed to approve / return registrations. */
+/** SD (Sports Directorate) only — registration verification decisions. */
 export async function requireRegistrationApprover() {
   const session = await requireAuth();
   if (!canApproveRegistration(session.user.role)) {
-    throw new ApiError("Forbidden", 403);
+    throw new ApiError(
+      "Registration verification is performed by the SD (Sports Directorate) only",
+      403
+    );
+  }
+  return session;
+}
+
+/** MT (Management Team) only — payment verification decisions. */
+export async function requirePaymentVerifier() {
+  const session = await requireAuth();
+  if (!canVerifyPayment(session.user.role)) {
+    throw new ApiError(
+      "Payment verification is performed by the MT (Management Team) only",
+      403
+    );
   }
   return session;
 }
@@ -86,6 +102,12 @@ export const userSelect = {
   suspended: true,
   privacyAccepted: true,
   privacyAcceptedAt: true,
+  participationConfirmedAt: true,
+  participationDeclinedAt: true,
+  teamRegisteredAt: true,
+  rosterCompletedAt: true,
+  maxTeamMembersOverride: true,
+  flightsFinalizedAt: true,
   createdAt: true,
   updatedAt: true,
 } as const;

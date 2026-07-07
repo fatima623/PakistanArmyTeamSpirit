@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { formatDateTime } from "@/lib/utils";
 import {
   TICKET_CATEGORY_LABELS,
@@ -28,7 +28,7 @@ type PageProps = { params: Promise<{ id: string }> };
 export default async function ParticipantTicketDetailPage({
   params,
 }: PageProps) {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
   const { id } = await params;
 
   const ticket = await prisma.supportTicket.findUnique({

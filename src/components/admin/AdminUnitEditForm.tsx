@@ -20,12 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AdminUnitUpdateSchema } from "@/lib/validations";
-import {
-  ARM_OPTIONS,
-  BDE_OR_FMN_OPTIONS,
-  DIV_OR_FMN_OPTIONS,
-  SERVICE_OPTIONS,
-} from "@/lib/form-options";
+import { ARM_OPTIONS } from "@/lib/form-options";
 import { TOAST } from "@/lib/toast";
 
 type FormValues = z.infer<typeof AdminUnitUpdateSchema>;
@@ -34,29 +29,16 @@ export type AdminUnitData = {
   id: string;
   preferredPhase: string | null;
   patrolsRequested: number;
-  canAccommodateIntl: boolean;
-  preferredIntlPatrol: string | null;
-  longStandingRelation: boolean;
   unitType: string;
-  jointPatrol: boolean;
   branch: string;
   unitName: string;
-  bdeOrFmn: string;
-  divOrFmn: string;
   arm: string;
-  service: string;
-  unitAddress: string;
-  postcode: string;
-  telephoneMil: string;
-  telephoneCiv: string;
   secondPocEmail: string | null;
   thirdPocEmail: string | null;
   additionalInfo: string | null;
   coName: string;
   coEmail: string;
   coPhone: string;
-  coRank: string;
-  coSalutations: string | null;
   user: {
     firstName: string;
     lastName: string;
@@ -83,30 +65,17 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
       lastName: unit.user.lastName,
       rank: unit.user.rank,
       unitType: unit.unitType as FormValues["unitType"],
-      jointPatrol: unit.jointPatrol,
       branch: unit.branch as FormValues["branch"],
       unitName: unit.unitName,
-      bdeOrFmn: unit.bdeOrFmn,
-      divOrFmn: unit.divOrFmn,
       arm: unit.arm,
-      service: unit.service,
-      unitAddress: unit.unitAddress,
-      postcode: unit.postcode,
-      telephoneMil: unit.telephoneMil,
-      telephoneCiv: unit.telephoneCiv,
       secondPocEmail: unit.secondPocEmail ?? "",
       thirdPocEmail: unit.thirdPocEmail ?? "",
       additionalInfo: unit.additionalInfo ?? "",
       coName: unit.coName,
       coEmail: unit.coEmail,
       coPhone: unit.coPhone,
-      coRank: unit.coRank,
-      coSalutations: unit.coSalutations ?? "",
       preferredPhase: unit.preferredPhase,
       patrolsRequested: unit.patrolsRequested,
-      canAccommodateIntl: unit.canAccommodateIntl,
-      preferredIntlPatrol: unit.preferredIntlPatrol ?? "",
-      longStandingRelation: unit.longStandingRelation,
     },
   });
 
@@ -126,7 +95,6 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
         body: JSON.stringify({
           ...data,
           preferredPhase: data.preferredPhase || null,
-          preferredIntlPatrol: data.preferredIntlPatrol || null,
         }),
       });
       if (res.ok) {
@@ -181,7 +149,7 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
             onValueChange={(v) => setValue("unitType", v as FormValues["unitType"])}
             className="flex flex-wrap gap-4"
           >
-            {(["Regular", "Reserve", "UOTC", "International"] as const).map((opt) => (
+            {(["Regular", "Reserve"] as const).map((opt) => (
               <div key={opt} className="flex items-center gap-2 text-cp-ink">
                 <RadioGroupItem value={opt} id={`a-unitType-${opt}`} />
                 <label htmlFor={`a-unitType-${opt}`}>{opt}</label>
@@ -201,30 +169,6 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
             </SelectContent>
           </Select>
         </FormFieldAdmin>
-        <FormFieldAdmin label="Bde / Fmn" required error={errors.bdeOrFmn?.message}>
-          <Select value={watch("bdeOrFmn")} onValueChange={(v) => setValue("bdeOrFmn", v)}>
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {BDE_OR_FMN_OPTIONS.map((o) => (
-                <SelectItem key={o} value={o}>{o}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Div / Fmn" required error={errors.divOrFmn?.message}>
-          <Select value={watch("divOrFmn")} onValueChange={(v) => setValue("divOrFmn", v)}>
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {DIV_OR_FMN_OPTIONS.map((o) => (
-                <SelectItem key={o} value={o}>{o}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormFieldAdmin>
         <FormFieldAdmin label="Arm" required error={errors.arm?.message}>
           <Select value={watch("arm")} onValueChange={(v) => setValue("arm", v)}>
             <SelectTrigger className="admin-input">
@@ -237,30 +181,6 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
             </SelectContent>
           </Select>
         </FormFieldAdmin>
-        <FormFieldAdmin label="Service" required error={errors.service?.message}>
-          <Select value={watch("service")} onValueChange={(v) => setValue("service", v)}>
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SERVICE_OPTIONS.map((o) => (
-                <SelectItem key={o} value={o}>{o}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Unit address" required error={errors.unitAddress?.message}>
-          <Input className="admin-input" {...register("unitAddress")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Postcode" required error={errors.postcode?.message}>
-          <Input className="admin-input" {...register("postcode")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Telephone (mil)" required error={errors.telephoneMil?.message}>
-          <Input className="admin-input" {...register("telephoneMil")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Telephone (civ)" required error={errors.telephoneCiv?.message}>
-          <Input className="admin-input" {...register("telephoneCiv")} />
-        </FormFieldAdmin>
         <FormFieldAdmin label="CO name" required error={errors.coName?.message}>
           <Input className="admin-input" {...register("coName")} />
         </FormFieldAdmin>
@@ -271,7 +191,7 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
 
       <div className={section}>
         <h2 className="admin-section-title border-b border-cp-border pb-3">
-          Hosting (admin)
+          Phase allocation (admin)
         </h2>
         <FormFieldAdmin label="Preferred phase" error={errors.preferredPhase?.message}>
           <Input
@@ -290,41 +210,6 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
             className="w-32 admin-input"
             {...register("patrolsRequested", { valueAsNumber: true })}
           />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Can accommodate international">
-          <RadioGroup
-            value={watch("canAccommodateIntl") ? "true" : "false"}
-            onValueChange={(v) => setValue("canAccommodateIntl", v === "true")}
-            className="flex gap-4"
-          >
-            <div className="flex items-center gap-2 text-cp-ink">
-              <RadioGroupItem value="true" id="intl-yes" />
-              <label htmlFor="intl-yes">Yes</label>
-            </div>
-            <div className="flex items-center gap-2 text-cp-ink">
-              <RadioGroupItem value="false" id="intl-no" />
-              <label htmlFor="intl-no">No</label>
-            </div>
-          </RadioGroup>
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Preferred international patrol">
-          <Input className="admin-input" {...register("preferredIntlPatrol")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Long-standing relationship">
-          <RadioGroup
-            value={watch("longStandingRelation") ? "true" : "false"}
-            onValueChange={(v) => setValue("longStandingRelation", v === "true")}
-            className="flex gap-4"
-          >
-            <div className="flex items-center gap-2 text-cp-ink">
-              <RadioGroupItem value="true" id="lsr-yes" />
-              <label htmlFor="lsr-yes">Yes</label>
-            </div>
-            <div className="flex items-center gap-2 text-cp-ink">
-              <RadioGroupItem value="false" id="lsr-no" />
-              <label htmlFor="lsr-no">No</label>
-            </div>
-          </RadioGroup>
         </FormFieldAdmin>
       </div>
 

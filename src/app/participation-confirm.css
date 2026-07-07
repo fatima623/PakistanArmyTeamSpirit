@@ -1,0 +1,323 @@
+/**
+ * Participation confirmation gate — first-login dialog.
+ *
+ * The card intentionally does NOT use .pats-panel / .portal-card so the
+ * portal theme catch-alls leave it alone. Every text colour is asserted
+ * with !important so the dialog stays readable in BOTH the night theme
+ * (which paints bare p/span/label white) and the day/light theme (whose
+ * safety nets force slate). The palette below matches the day-theme slate
+ * scale, so both themes render an identical, professional white dialog.
+ */
+
+.pconfirm {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.08),
+    0 12px 32px rgba(15, 23, 42, 0.14) !important;
+}
+
+/* Thin regimental accent along the top edge */
+.pconfirm::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1b5e20 0%, #2e7d32 55%, #c9a227 100%);
+}
+
+.pconfirm__header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1.375rem 1.75rem 1.25rem;
+  border-bottom: 1px solid #eef2f6;
+  background: #fbfcfe;
+}
+
+.pconfirm__icon {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #15803d !important;
+}
+
+.pconfirm__icon svg {
+  color: #15803d !important;
+}
+
+.pconfirm__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94a3b8 !important;
+}
+
+.pconfirm__title {
+  margin-top: 0.125rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a !important;
+}
+
+.pconfirm__meta {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b !important;
+}
+
+.pconfirm__body {
+  padding: 1.5rem 1.75rem 1.625rem;
+  display: grid;
+  gap: 1.125rem;
+}
+
+.pconfirm__body p,
+.pconfirm__desc {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #475569 !important;
+}
+
+/* —— Deadline panel —— */
+.pconfirm__deadline {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 1rem 1.125rem 1.125rem;
+}
+
+.pconfirm__deadline-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #64748b !important;
+}
+
+.pconfirm__deadline-head svg {
+  color: #15803d !important;
+}
+
+.pconfirm__deadline-date {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b !important;
+}
+
+.pconfirm__count {
+  margin-top: 0.875rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pconfirm__unit {
+  min-width: 3.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 0.5rem 0.625rem;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.pconfirm__unit-value {
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  color: #0f172a !important;
+}
+
+.pconfirm__unit-label {
+  margin-top: 0.125rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8 !important;
+}
+
+.pconfirm__count-caption {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #94a3b8 !important;
+}
+
+/* —— Status panels —— */
+.pconfirm__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.pconfirm__notice svg {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.pconfirm__notice--warn {
+  border: 1px solid #fde68a;
+  background: #fffbeb;
+}
+
+.pconfirm__notice--warn,
+.pconfirm__notice--warn div {
+  color: #92400e !important;
+}
+
+.pconfirm__notice--warn svg {
+  color: #d97706 !important;
+}
+
+.pconfirm__notice--error {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  font-weight: 600;
+}
+
+.pconfirm__notice--error,
+.pconfirm__notice--error div {
+  color: #b91c1c !important;
+}
+
+.pconfirm__notice--error svg {
+  color: #dc2626 !important;
+}
+
+/* —— Reject confirmation panel —— */
+.pconfirm__reject-panel {
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  background: #fef2f2;
+  padding: 1rem 1.125rem;
+}
+
+.pconfirm__reject-panel .pconfirm__reject-msg {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #991b1b !important;
+}
+
+/* —— Buttons —— */
+.pconfirm__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+@media (min-width: 640px) {
+  .pconfirm__actions {
+    flex-direction: row;
+  }
+}
+
+.pconfirm-btn {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 10px !important;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pconfirm-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pconfirm-btn:focus-visible {
+  outline: 2px solid #15803d;
+  outline-offset: 2px;
+}
+
+.pconfirm-btn--primary {
+  border: 1px solid #14532d !important;
+  background: linear-gradient(180deg, #15803d 0%, #166534 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(22, 101, 52, 0.35);
+}
+
+.pconfirm-btn--primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #166534 0%, #14532d 100%) !important;
+}
+
+.pconfirm-btn--danger {
+  border: 1px solid #fca5a5 !important;
+  background: #ffffff !important;
+  color: #b91c1c !important;
+}
+
+.pconfirm-btn--danger:hover:not(:disabled) {
+  background: #fef2f2 !important;
+  border-color: #f87171 !important;
+}
+
+.pconfirm-btn--danger-solid {
+  border: 1px solid #991b1b !important;
+  background: #dc2626 !important;
+  color: #ffffff !important;
+}
+
+.pconfirm-btn--danger-solid:hover:not(:disabled) {
+  background: #b91c1c !important;
+}
+
+.pconfirm-btn--neutral {
+  border: 1px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #475569 !important;
+}
+
+.pconfirm-btn--neutral:hover:not(:disabled) {
+  background: #f8fafc !important;
+}
+
+.pconfirm-btn--sm {
+  flex: 0 0 auto;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+}
+
+/* —— Footnote —— */
+.pconfirm__foot {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: #94a3b8 !important;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 0.875rem;
+  margin-top: 0.125rem;
+}

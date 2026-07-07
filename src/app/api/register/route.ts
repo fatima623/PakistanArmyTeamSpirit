@@ -17,7 +17,7 @@ import {
 } from "@/lib/constants";
 import { createAuditLog } from "@/lib/audit";
 import { getDeadlines, registrationClosedByDeadline } from "@/lib/deadlines";
-import { resolveCountryForSubmit } from "@/lib/countries";
+import { PAKISTAN_COUNTRY, resolveCountryForSubmit } from "@/lib/countries";
 import { resolveNationalityForSubmit } from "@/lib/participant-country";
 import { RegisterSchema } from "@/lib/validations";
 import {
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     }
 
     if (
-      data.unitType === "International" &&
+      country !== PAKISTAN_COUNTRY &&
       settings &&
       !settings.intlRegistrationOpen
     ) {
@@ -124,42 +124,33 @@ export async function POST(request: Request) {
         approved: false,
         privacyAccepted: true,
         privacyAcceptedAt: now,
-        teamMembers:
-          data.teamMembers && data.teamMembers.length > 0
-            ? {
-                create: data.teamMembers.map((member) => ({
-                  fullName: member.fullName,
-                  serviceNumber: member.serviceNumber,
-                  serviceArm: member.serviceArm,
-                  gender: member.gender,
-                })),
-              }
-            : undefined,
         unit: {
           create: {
             unitType: data.unitType,
-            jointPatrol: data.jointPatrol,
             branch: data.branch,
             unitName: data.unitName,
-            bdeOrFmn: data.bdeOrFmn,
-            divOrFmn: data.divOrFmn,
             arm: data.arm,
-            service: data.service,
-            unitAddress: data.unitAddress,
-            postcode: data.postcode,
-            telephoneMil: data.telephoneMil,
-            telephoneCiv: data.telephoneCiv,
             secondPocEmail: data.secondPocEmail || null,
             thirdPocEmail: data.thirdPocEmail || null,
             additionalInfo: data.additionalInfo ?? null,
             coName: data.coName,
             coEmail: data.coEmail,
             coPhone: data.coPhone,
-            coRank: data.coRank,
-            coSalutations: data.coSalutations ?? null,
-            canAccommodateIntl: data.canAccommodateIntl,
-            preferredIntlPatrol: data.preferredIntlPatrol ?? null,
-            longStandingRelation: data.longStandingRelation,
+            // Legacy columns retired from the registration form — the DB
+            // schema still requires values, so store neutral defaults.
+            jointPatrol: false,
+            bdeOrFmn: "",
+            divOrFmn: "",
+            service: "",
+            unitAddress: "",
+            postcode: "",
+            telephoneMil: "",
+            telephoneCiv: "",
+            coRank: "",
+            coSalutations: null,
+            canAccommodateIntl: false,
+            preferredIntlPatrol: null,
+            longStandingRelation: false,
           },
         },
       },

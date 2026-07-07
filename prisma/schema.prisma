@@ -31,6 +31,16 @@ model User {
   lockedUntil         DateTime?
   privacyAccepted     Boolean  @default(false)
   privacyAcceptedAt   DateTime?
+  /** Participation confirmation (first-login availability dialog). */
+  participationConfirmedAt DateTime?
+  participationDeclinedAt  DateTime?
+  /** Team registration workflow. */
+  teamRegisteredAt         DateTime?
+  rosterCompletedAt        DateTime?
+  /** Approved team-size override (defaults to SiteSettings.maxTeamMembers). */
+  maxTeamMembersOverride   Int?
+  /** Set by administration once flight details are reviewed & finalized. */
+  flightsFinalizedAt       DateTime?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   unit                Unit?
@@ -43,6 +53,9 @@ model User {
   supportTickets      SupportTicket[] @relation("TicketCreator")
   assignedTickets     SupportTicket[] @relation("TicketAssignee")
   ticketMessages      TicketMessage[] @relation("TicketMessageAuthor")
+  teamSizeRequests    TeamSizeRequest[] @relation("TeamSizeRequestUser")
+  teamSizeReviews     TeamSizeRequest[] @relation("TeamSizeRequestReviewer")
+  flightDetails       FlightDetail[]    @relation("FlightDetailUser")
 
   @@index([applicationStatus])
   @@index([paymentStatus])
@@ -91,10 +104,54 @@ model TeamMember {
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   fullName      String
   serviceNumber String
-  serviceArm    String
+  rank          String   @default("")
+  serviceArm    String   @default("")
   gender        String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  flightDetail  FlightDetail?
+
+  @@index([userId])
+}
+
+/// Participant request to exceed the team-member cap; decided by Admin.
+model TeamSizeRequest {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation("TeamSizeRequestUser", fields: [userId], references: [id], onDelete: Cascade)
+  requestedCount Int
+  justification  String    @db.Text
+  status         String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  reviewNote     String?   @db.Text
+  reviewedById   String?
+  reviewedBy     User?     @relation("TeamSizeRequestReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+/// Per-traveler flight information with passport / ticket PDF attachments.
+model FlightDetail {
+  id                 String      @id @default(cuid())
+  userId             String
+  user               User        @relation("FlightDetailUser", fields: [userId], references: [id], onDelete: Cascade)
+  teamMemberId       String?     @unique
+  teamMember         TeamMember? @relation(fields: [teamMemberId], references: [id], onDelete: SetNull)
+  passengerName      String
+  passportNumber     String
+  passportFilePath   String?     @unique
+  passportFileName   String?
+  passportFileSize   Int?
+  passportUploadedAt DateTime?
+  ticketFilePath     String?     @unique
+  ticketFileName     String?
+  ticketFileSize     Int?
+  ticketUploadedAt   DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
 
   @@index([userId])
 }
@@ -294,6 +351,18 @@ model SiteSettings {
   intlRegistrationOpen       Boolean @default(true)
   registrationDeadline       DateTime?
   paymentDeadline            DateTime?
+  /** Deadline for the first-login participation confirmation dialog. */
+  participationConfirmDeadline DateTime?
+  /** Team registration window (participants may register only inside it). */
+  teamRegistrationOpenDate   DateTime?
+  teamRegistrationCloseDate  DateTime?
+  /** Flight details editable until this deadline (or admin finalization). */
+  flightDetailsDeadline      DateTime?
+  /** Default team-member cap (per-user override on User). */
+  maxTeamMembers             Int     @default(13)
+  /** Host information visibility + content for finalized participants. */
+  hostInfoPublished          Boolean @default(false)
+  hostInfoContent            String? @db.Text
   exerciseYear               Int     @default(2026)
   exerciseDates              String  @default("2 – 13 October 2026")
   privacyPolicyUrl           String  @default("/privacy")

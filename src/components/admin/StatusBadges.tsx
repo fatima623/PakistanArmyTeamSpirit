@@ -17,8 +17,10 @@ const badgePill = "ops-status-pill";
 
 const applicationStyles: Record<ApplicationStatus, string> = {
   PENDING: "ops-status-pending",
+  UNDER_REVIEW: "ops-status-review",
   APPROVED: "ops-status-approved",
   REJECTED: "ops-status-rejected",
+  RETURNED: "ops-status-pending",
 };
 
 const paymentStyles: Record<PaymentStatus, string> = {

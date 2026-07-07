@@ -20,8 +20,8 @@ export const ASSIGNABLE_ROLES: string[] = [
 
 export const ROLE_LABELS: Record<string, string> = {
   user: "Participant",
-  sdbs: "SDBS (viewer)",
-  mtd: "MTD (approver)",
+  sdbs: "SD (Sports Directorate)",
+  mtd: "MT (Management Team)",
   admin: "Administrator",
 };
 
@@ -44,11 +44,22 @@ export function canAccessAdminArea(role: string | undefined | null): boolean {
   return isStaffRole(role);
 }
 
-/** MTD and Admin may approve / return registrations. */
+/**
+ * Registration verification is performed EXCLUSIVELY by the SD
+ * (Sports Directorate). Admin and MT have read-only visibility.
+ */
 export function canApproveRegistration(
   role: string | undefined | null
 ): boolean {
-  return role === ROLES.ADMIN || role === ROLES.MTD;
+  return role === ROLES.SDBS;
+}
+
+/**
+ * Payment verification is performed EXCLUSIVELY by the MT
+ * (Management Team). Admin and SD have read-only visibility.
+ */
+export function canVerifyPayment(role: string | undefined | null): boolean {
+  return role === ROLES.MTD;
 }
 
 /** Only full admins manage settings, content, payments, roles, and deletion. */

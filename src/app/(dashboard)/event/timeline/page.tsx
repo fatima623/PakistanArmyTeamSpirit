@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { getTimelineData } from "@/lib/timeline";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 import {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ParticipantTimelinePage() {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
   const [data, user] = await Promise.all([
     getTimelineData(),
     prisma.user.findUnique({

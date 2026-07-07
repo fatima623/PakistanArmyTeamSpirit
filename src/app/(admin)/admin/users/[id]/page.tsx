@@ -69,9 +69,16 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       suspended: true,
       privacyAccepted: true,
       privacyAcceptedAt: true,
+      participationConfirmedAt: true,
+      participationDeclinedAt: true,
+      teamRegisteredAt: true,
+      rosterCompletedAt: true,
+      maxTeamMembersOverride: true,
+      flightsFinalizedAt: true,
       createdAt: true,
       unit: true,
       payments: { orderBy: { createdAt: "desc" } },
+      _count: { select: { teamMembers: true, flightDetails: true } },
     },
   });
 
@@ -148,6 +155,60 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           {canManageRoles ? <AdminResetPassword userId={user.id} /> : null}
         </div>
       ) : null}
+
+      {!canApprove ? (
+        <div className="portal-alert-info mb-4 rounded-lg px-4 py-3 text-sm">
+          Registration verification is performed exclusively by the SD (Sports
+          Directorate). Your role has view-only access to the verification
+          status.
+        </div>
+      ) : null}
+
+      <section className="admin-user-detail-card mb-4">
+        <div className="admin-user-detail-card-header">
+          <h3 className="admin-user-detail-card-title">Workflow progress</h3>
+          <p className="admin-user-detail-card-desc">
+            Participant journey milestones (read-only).
+          </p>
+        </div>
+        <div className="admin-user-detail-card-body">
+          <dl className="admin-user-detail-dl">
+            <dt>Participation confirmed</dt>
+            <dd>
+              {user.participationConfirmedAt
+                ? formatDateDisplay(user.participationConfirmedAt)
+                : user.participationDeclinedAt
+                  ? `Rejected ${formatDateDisplay(user.participationDeclinedAt)}`
+                  : "Not yet"}
+            </dd>
+            <dt>Team registered</dt>
+            <dd>
+              {user.teamRegisteredAt
+                ? formatDateDisplay(user.teamRegisteredAt)
+                : "Not yet"}
+            </dd>
+            <dt>Roster</dt>
+            <dd>
+              {user._count.teamMembers} member
+              {user._count.teamMembers === 1 ? "" : "s"}
+              {user.maxTeamMembersOverride
+                ? ` (limit raised to ${user.maxTeamMembersOverride})`
+                : ""}
+              {user.rosterCompletedAt
+                ? ` — completed ${formatDateShort(user.rosterCompletedAt)}`
+                : " — in progress"}
+            </dd>
+            <dt>Flight details</dt>
+            <dd>
+              {user._count.flightDetails} record
+              {user._count.flightDetails === 1 ? "" : "s"}
+              {user.flightsFinalizedAt
+                ? ` — finalized ${formatDateShort(user.flightsFinalizedAt)}`
+                : " — not finalized"}
+            </dd>
+          </dl>
+        </div>
+      </section>
 
       <div className="admin-user-detail-grid admin-user-detail-grid--duo">
         <section className="admin-user-detail-card">

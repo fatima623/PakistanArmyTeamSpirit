@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { handleApiError, requireAdmin } from "@/lib/api-helpers";
+import { handleApiError, requireStaff } from "@/lib/api-helpers";
 
+/** All staff (Admin, SD, MT) may view the payment verification queue. */
 export async function GET(request: Request) {
   try {
-    await requireAdmin();
+    await requireStaff();
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status");
     const search = searchParams.get("search") ?? "";

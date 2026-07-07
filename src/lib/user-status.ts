@@ -24,10 +24,16 @@ export function canSubmitPayment(
 
 export function applicationStatusSummary(applicationStatus: string): string {
   if (applicationStatus === APPLICATION_STATUS.REJECTED) {
-    return "Your participation request was returned for correction by authorized staff.";
+    return "Your registration was rejected by the Sports Directorate. See the reason provided.";
+  }
+  if (applicationStatus === APPLICATION_STATUS.RETURNED) {
+    return "Your registration was returned for correction. Update your details and await re-verification.";
+  }
+  if (applicationStatus === APPLICATION_STATUS.UNDER_REVIEW) {
+    return "Your registration is under review by the Sports Directorate (SD).";
   }
   if (applicationStatus === APPLICATION_STATUS.PENDING) {
-    return "Your registration is pending review by PATS. Payment opens after approval.";
+    return "Your registration is pending verification by the Sports Directorate (SD). Payment opens after approval.";
   }
   return "Your application is approved. Complete payment verification below.";
 }
@@ -71,7 +77,9 @@ export function normalizeApplicationStatus(
 ): ApplicationStatus {
   if (
     value === APPLICATION_STATUS.APPROVED ||
-    value === APPLICATION_STATUS.REJECTED
+    value === APPLICATION_STATUS.REJECTED ||
+    value === APPLICATION_STATUS.UNDER_REVIEW ||
+    value === APPLICATION_STATUS.RETURNED
   ) {
     return value;
   }

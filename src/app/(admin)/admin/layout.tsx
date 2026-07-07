@@ -11,34 +11,53 @@ export default async function AdminSectionLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [userInitials, role, pendingUsers, pendingPayments, openTickets] =
-    await Promise.all([
-      getAdminInitials(),
-      getAdminRole(),
-      prisma.user.count({
-        where: {
-          role: { not: "admin" },
-          applicationStatus: APPLICATION_STATUS.PENDING,
+  const [
+    userInitials,
+    role,
+    pendingUsers,
+    pendingPayments,
+    openTickets,
+    pendingTeamRequests,
+    awaitingFinalize,
+  ] = await Promise.all([
+    getAdminInitials(),
+    getAdminRole(),
+    prisma.user.count({
+      where: {
+        role: { not: "admin" },
+        applicationStatus: {
+          in: [APPLICATION_STATUS.PENDING, APPLICATION_STATUS.UNDER_REVIEW],
         },
-      }),
-      prisma.payment.count({
-        where: {
-          status: {
-            in: [PAYMENT_STATUS.SUBMITTED, PAYMENT_STATUS.UNDER_REVIEW],
-          },
+      },
+    }),
+    prisma.payment.count({
+      where: {
+        status: {
+          in: [PAYMENT_STATUS.SUBMITTED, PAYMENT_STATUS.UNDER_REVIEW],
         },
-      }),
-      prisma.supportTicket.count({
-        where: {
-          status: { in: [TICKET_STATUS.OPEN, TICKET_STATUS.IN_PROGRESS] },
-        },
-      }),
-    ]);
+      },
+    }),
+    prisma.supportTicket.count({
+      where: {
+        status: { in: [TICKET_STATUS.OPEN, TICKET_STATUS.IN_PROGRESS] },
+      },
+    }),
+    prisma.teamSizeRequest.count({ where: { status: "PENDING" } }),
+    prisma.user.count({
+      where: {
+        role: "user",
+        rosterCompletedAt: { not: null },
+        flightsFinalizedAt: null,
+      },
+    }),
+  ]);
 
   const navCounts = {
     users: pendingUsers,
     payments: pendingPayments,
     tickets: openTickets,
+    teamRequests: pendingTeamRequests,
+    flights: awaitingFinalize,
   };
 
   return (

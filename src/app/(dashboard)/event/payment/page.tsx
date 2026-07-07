@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import "@/app/payment-status-timeline.css";
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { APPLICATION_STATUS, isPaymentVerified } from "@/lib/constants";
 import { getParticipantPaymentData } from "@/lib/participant-payment-data";
 import { getDeadlines, paymentClosedByDeadline } from "@/lib/deadlines";
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PaymentPage() {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

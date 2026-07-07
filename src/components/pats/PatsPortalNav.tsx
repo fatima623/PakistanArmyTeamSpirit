@@ -7,9 +7,11 @@ import {
   CalendarClock,
   ClipboardList,
   CreditCard,
+  Home,
   LayoutDashboard,
   LifeBuoy,
   LogOut,
+  Plane,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -17,53 +19,59 @@ import {
 import { logoutAction } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 
+type NavGate = "always" | "payment" | "flights" | "hostInfo";
+
 const BASE_LINKS: {
   href: string;
   label: string;
   Icon: LucideIcon;
-  requiresApproval?: boolean;
+  gate: NavGate;
 }[] = [
-  { href: "/event/dashboard", label: "Dashboard", Icon: LayoutDashboard },
-  { href: "/event/edit/unit", label: "Unit information", Icon: ClipboardList },
-  { href: "/event/team", label: "Team Members", Icon: Users },
-  {
-    href: "/event/payment",
-    label: "Payment",
-    Icon: CreditCard,
-    requiresApproval: true,
-  },
-  { href: "/event/timeline", label: "Timeline", Icon: CalendarClock },
-  { href: "/event/tickets", label: "Support", Icon: LifeBuoy },
-  { href: "/event/edit/privacy", label: "Privacy policy", Icon: ShieldCheck },
+  { href: "/event/dashboard", label: "Dashboard", Icon: LayoutDashboard, gate: "always" },
+  { href: "/event/edit/unit", label: "Unit information", Icon: ClipboardList, gate: "always" },
+  { href: "/event/team", label: "Team Registration", Icon: Users, gate: "always" },
+  { href: "/event/payment", label: "Payment", Icon: CreditCard, gate: "payment" },
+  { href: "/event/flights", label: "Flight Details", Icon: Plane, gate: "flights" },
+  { href: "/event/host-info", label: "Host Information", Icon: Home, gate: "hostInfo" },
+  { href: "/event/timeline", label: "Timeline", Icon: CalendarClock, gate: "always" },
+  { href: "/event/tickets", label: "Support", Icon: LifeBuoy, gate: "always" },
+  { href: "/event/edit/privacy", label: "Privacy policy", Icon: ShieldCheck, gate: "always" },
 ];
-
-const STAGE_META: Record<1 | 2 | 3, { label: string; tone: string }> = {
-  1: { label: "Awaiting review", tone: "pending" },
-  2: { label: "Payment required", tone: "pending" },
-  3: { label: "Confirmed", tone: "confirmed" },
-};
 
 export function PatsPortalNav({
   showPaymentLink = false,
-  stage,
+  showFlightsLink = false,
+  showHostInfoLink = false,
+  stageLabel,
+  stageStep,
+  stageTone = "pending",
 }: {
   showPaymentLink?: boolean;
-  stage?: 1 | 2 | 3;
+  showFlightsLink?: boolean;
+  showHostInfoLink?: boolean;
+  stageLabel?: string;
+  stageStep?: { current: number; total: number };
+  stageTone?: "pending" | "confirmed";
 }) {
   const pathname = usePathname();
-  const links = BASE_LINKS.filter(
-    (link) => !("requiresApproval" in link && link.requiresApproval) || showPaymentLink
-  );
-  const stageMeta = stage ? STAGE_META[stage] : null;
+  const gates: Record<NavGate, boolean> = {
+    always: true,
+    payment: showPaymentLink,
+    flights: showFlightsLink,
+    hostInfo: showHostInfoLink,
+  };
+  const links = BASE_LINKS.filter((link) => gates[link.gate]);
 
   return (
     <nav className="pats-portal-nav" aria-label="Participant portal">
       <p className="pats-eyebrow mb-3">Portal</p>
-      {stageMeta ? (
-        <div className={`pats-portal-stage-chip pats-portal-stage-chip--${stageMeta.tone}`}>
+      {stageLabel && stageStep ? (
+        <div className={`pats-portal-stage-chip pats-portal-stage-chip--${stageTone}`}>
           <span className="pats-portal-stage-dot" aria-hidden />
-          <span className="pats-portal-stage-label">{stageMeta.label}</span>
-          <span className="pats-portal-stage-step">Step {stage}/3</span>
+          <span className="pats-portal-stage-label">{stageLabel}</span>
+          <span className="pats-portal-stage-step">
+            Step {stageStep.current}/{stageStep.total}
+          </span>
         </div>
       ) : null}
       <ul>

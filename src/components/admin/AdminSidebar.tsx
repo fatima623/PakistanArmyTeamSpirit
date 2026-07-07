@@ -12,9 +12,11 @@ import {
   LifeBuoy,
   LogOut,
   Newspaper,
+  Plane,
   Settings,
   Shield,
   UserCog,
+  UserPlus,
   Users,
 } from "lucide-react";
 
@@ -29,9 +31,9 @@ import { PatsLogo } from "@/components/pats/PatsLogo";
 
 /** Sidebar identity strip copy, keyed on staff role. */
 const ROLE_IDENTITY: Record<string, { label: string; access: string }> = {
-  admin: { label: "Administrator", access: "Full access" },
-  mtd: { label: "Approver", access: "Approvals" },
-  sdbs: { label: "Viewer", access: "Read-only" },
+  admin: { label: "Administrator", access: "System management" },
+  mtd: { label: "MT (Management Team)", access: "Payment verification" },
+  sdbs: { label: "SD (Sports Directorate)", access: "Registration verification" },
 };
 
 const navIcons: Record<(typeof ADMIN_NAV_ITEMS)[number]["key"], LucideIcon> = {
@@ -39,6 +41,8 @@ const navIcons: Record<(typeof ADMIN_NAV_ITEMS)[number]["key"], LucideIcon> = {
   users: Users,
   payments: CreditCard,
   units: Shield,
+  teamRequests: UserPlus,
+  flights: Plane,
   news: Newspaper,
   gallery: Images,
   ticker: Bell,

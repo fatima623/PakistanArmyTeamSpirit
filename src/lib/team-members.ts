@@ -3,6 +3,7 @@ export type TeamMemberRecord = {
   id: string;
   fullName: string;
   serviceNumber: string;
+  rank: string;
   serviceArm: string;
   gender: string;
 };
@@ -12,6 +13,7 @@ export const teamMemberSelect = {
   id: true,
   fullName: true,
   serviceNumber: true,
+  rank: true,
   serviceArm: true,
   gender: true,
 } as const;

@@ -27,7 +27,14 @@ function initials(first: string, last: string): string {
   return `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "–";
 }
 
-export function UsersManagementTable({ users }: { users: UserManagementRow[] }) {
+export function UsersManagementTable({
+  users,
+  canApprove = false,
+}: {
+  users: UserManagementRow[];
+  /** SD (Sports Directorate) only — enables the quick-approve button. */
+  canApprove?: boolean;
+}) {
   if (users.length === 0) {
     return (
       <div className="admin-users-table-shell">
@@ -103,6 +110,7 @@ export function UsersManagementTable({ users }: { users: UserManagementRow[] }) 
                     userId={u.id}
                     applicationStatus={u.applicationStatus}
                     suspended={u.suspended}
+                    canApprove={canApprove}
                   />
                   <div className="admin-users-app-date">
                     {formatDateShort(u.createdAt)}

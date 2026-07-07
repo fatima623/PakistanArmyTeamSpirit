@@ -446,3 +446,47 @@
   color: inherit;
   border-bottom: none;
 }
+
+/* --------------------------------------------------------------------------
+ * Compact / sleek layout — fit all six columns on one screen without scroll.
+ *
+ * The table shares markup with the Users table, so its colgroup uses
+ * `.admin-users-col-participant`, which has no width of its own. Under the
+ * payments table's fixed layout that column absorbed all leftover width,
+ * leaving the participant column hugely oversized and pushing the table past
+ * its 68rem min-width into a horizontal scroll. Give every column an explicit,
+ * balanced width and lower the min-width so the row fits the panel. Scoped to
+ * `.admin-payments-panel` so the Users table is unaffected.
+ * ------------------------------------------------------------------------ */
+.admin-theme .admin-payments-panel .admin-payments-table {
+  min-width: 44rem;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-users-col-participant {
+  width: 28%;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-payments-col-unit {
+  width: 15%;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-payments-col-amount {
+  width: 10%;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-payments-col-ref {
+  width: 15%;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-payments-col-pay-status {
+  width: 20%;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-users-col-actions {
+  width: 12%;
+}
+
+/* Tighter rows read as sleeker, and keep the amount on one line. */
+.admin-theme .admin-payments-panel .admin-payments-table thead th {
+  padding: 0.9rem 0.875rem;
+}
+.admin-theme .admin-payments-panel .admin-payments-table tbody td {
+  padding: 0.95rem 0.875rem;
+}
+.admin-theme .admin-payments-panel .admin-payments-table .admin-payments-cell-amount {
+  white-space: nowrap;
+}

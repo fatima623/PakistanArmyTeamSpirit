@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { formatDateShort } from "@/lib/utils";
 import { TICKET_CATEGORY_LABELS, type TicketCategory } from "@/lib/constants";
 import { SupportTicketsPanel } from "@/components/tickets/SupportTicketsPanel";
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ParticipantTicketsPage() {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
 
   const tickets = await prisma.supportTicket.findMany({
     where: { userId: session.user.id },

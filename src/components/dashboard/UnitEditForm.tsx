@@ -20,42 +20,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UnitUpdateSchema } from "@/lib/validations";
-import {
-  ARM_OPTIONS,
-  BDE_OR_FMN_OPTIONS,
-  DIV_OR_FMN_OPTIONS,
-  SERVICE_OPTIONS,
-} from "@/lib/form-options";
+import { ARM_OPTIONS } from "@/lib/form-options";
 import { TOAST } from "@/lib/toast";
 
 type UnitEditValues = z.infer<typeof UnitUpdateSchema>;
 
 type UnitData = {
-  preferredPhase: string | null;
-  patrolsRequested: number;
-  canAccommodateIntl: boolean;
-  preferredIntlPatrol: string | null;
-  longStandingRelation: boolean;
   unitType: string;
-  jointPatrol: boolean;
   branch: string;
   unitName: string;
-  bdeOrFmn: string;
-  divOrFmn: string;
   arm: string;
-  service: string;
-  unitAddress: string;
-  postcode: string;
-  telephoneMil: string;
-  telephoneCiv: string;
   secondPocEmail: string | null;
   thirdPocEmail: string | null;
   additionalInfo: string | null;
   coName: string;
   coEmail: string;
   coPhone: string;
-  coRank: string;
-  coSalutations: string | null;
 };
 
 export type UnitEditUser = {
@@ -90,25 +70,15 @@ export function UnitEditForm({
       lastName: user.lastName,
       rank: user.rank,
       unitType: (unit?.unitType as UnitEditValues["unitType"]) ?? "Regular",
-      jointPatrol: unit?.jointPatrol ?? false,
       branch: (unit?.branch as UnitEditValues["branch"]) ?? "Army",
       unitName: unit?.unitName ?? "",
-      bdeOrFmn: unit?.bdeOrFmn ?? "",
-      divOrFmn: unit?.divOrFmn ?? "",
       arm: unit?.arm ?? "",
-      service: unit?.service ?? "",
-      unitAddress: unit?.unitAddress ?? "",
-      postcode: unit?.postcode ?? "",
-      telephoneMil: unit?.telephoneMil ?? "",
-      telephoneCiv: unit?.telephoneCiv ?? "",
       secondPocEmail: unit?.secondPocEmail ?? "",
       thirdPocEmail: unit?.thirdPocEmail ?? "",
       additionalInfo: unit?.additionalInfo ?? "",
       coName: unit?.coName ?? "",
       coEmail: unit?.coEmail ?? "",
       coPhone: unit?.coPhone ?? "",
-      coRank: unit?.coRank ?? "",
-      coSalutations: unit?.coSalutations ?? "",
     },
   });
 
@@ -178,41 +148,14 @@ export function UnitEditForm({
               }
               className="flex flex-wrap gap-4"
             >
-              {(["Regular", "Reserve", "UOTC", "International"] as const).map(
-                (opt) => (
-                  <div key={opt} className="flex items-center gap-2">
-                    <RadioGroupItem value={opt} id={`unitType-${opt}`} />
-                    <label htmlFor={`unitType-${opt}`} className="text-sm">
-                      {opt}
-                    </label>
-                  </div>
-                )
-              )}
-            </RadioGroup>
-          </FormField>
-
-          <FormField
-            label="Joint patrol"
-            hint="Definition of a joint patrol: the combination of a Pakistan and international patrol"
-            error={errors.jointPatrol?.message}
-          >
-            <RadioGroup
-              value={watch("jointPatrol") ? "true" : "false"}
-              onValueChange={(v) => setValue("jointPatrol", v === "true")}
-              className="flex gap-4"
-            >
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="true" id="joint-yes" />
-                <label htmlFor="joint-yes" className="text-sm">
-                  Yes
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="false" id="joint-no" />
-                <label htmlFor="joint-no" className="text-sm">
-                  No
-                </label>
-              </div>
+              {(["Regular", "Reserve"] as const).map((opt) => (
+                <div key={opt} className="flex items-center gap-2">
+                  <RadioGroupItem value={opt} id={`unitType-${opt}`} />
+                  <label htmlFor={`unitType-${opt}`} className="text-sm">
+                    {opt}
+                  </label>
+                </div>
+              ))}
             </RadioGroup>
           </FormField>
 
@@ -256,48 +199,6 @@ export function UnitEditForm({
             />
           </FormField>
 
-          <FormField label="Bde / Fmn" required error={errors.bdeOrFmn?.message}>
-            <Controller
-              name="bdeOrFmn"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {BDE_OR_FMN_OPTIONS.map((opt) => (
-                      <SelectItem key={opt} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </FormField>
-
-          <FormField label="Div / Fmn" required error={errors.divOrFmn?.message}>
-            <Controller
-              name="divOrFmn"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {DIV_OR_FMN_OPTIONS.map((opt) => (
-                      <SelectItem key={opt} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </FormField>
-
           <FormField label="Arm" required error={errors.arm?.message}>
             <Controller
               name="arm"
@@ -319,49 +220,6 @@ export function UnitEditForm({
             />
           </FormField>
 
-          <FormField label="Service" required error={errors.service?.message}>
-            <Controller
-              name="service"
-              control={control}
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SERVICE_OPTIONS.map((opt) => (
-                      <SelectItem key={opt} value={opt}>
-                        {opt}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </FormField>
-
-          <FormField label="Unit address" required error={errors.unitAddress?.message}>
-            <Input {...register("unitAddress")} />
-          </FormField>
-          <FormField label="Postcode" required error={errors.postcode?.message}>
-            <Input {...register("postcode")} />
-          </FormField>
-          <FormField
-            label="Telephone (mil)"
-            required
-            hint="with ATN code"
-            error={errors.telephoneMil?.message}
-          >
-            <Input {...register("telephoneMil")} />
-          </FormField>
-          <FormField
-            label="Telephone (civ)"
-            required
-            hint="with STD code"
-            error={errors.telephoneCiv?.message}
-          >
-            <Input {...register("telephoneCiv")} />
-          </FormField>
           <FormField label="2nd POC email" error={errors.secondPocEmail?.message}>
             <Input type="email" {...register("secondPocEmail")} />
           </FormField>
@@ -394,58 +252,8 @@ export function UnitEditForm({
           <FormField label="CO phone" required error={errors.coPhone?.message}>
             <Input {...register("coPhone")} />
           </FormField>
-          <FormField label="CO rank" required error={errors.coRank?.message}>
-            <Input {...register("coRank")} />
-          </FormField>
-          <FormField
-            label="CO salutations (optional)"
-            error={errors.coSalutations?.message}
-          >
-            <Input {...register("coSalutations")} />
-          </FormField>
         </div>
       </div>
-
-      {unit && (
-        <div className="portal-form-card mb-6">
-          <h2 className="portal-section-title mb-6 border-b border-cp-border pb-3">
-            Hosting
-          </h2>
-          <div className="grid grid-cols-1 gap-y-4 text-sm md:grid-cols-[220px_1fr]">
-            <span className="portal-subtitle text-[11px]">Preferred phase</span>
-            <div>
-              <span className="text-cp-ink">
-                {unit.preferredPhase ?? "No phase entered"}
-              </span>
-              <p className="portal-muted mt-1 text-xs">
-                Please contact the CP Helpdesk if a change to the selected Phase
-                is required. Please note a change to the Phase is not always
-                possible.
-              </p>
-            </div>
-            <span className="portal-subtitle text-[11px]">Patrols requested</span>
-            <span className="text-cp-ink">{unit.patrolsRequested ?? 1}</span>
-            <span className="portal-subtitle text-[11px]">
-              Can accommodate international
-            </span>
-            <span className="text-cp-ink">
-              {unit.canAccommodateIntl ? "Yes" : "No"}
-            </span>
-            <span className="portal-subtitle text-[11px]">
-              Preferred international patrol
-            </span>
-            <span className="text-cp-ink">
-              {unit.preferredIntlPatrol || "—"}
-            </span>
-            <span className="portal-subtitle text-[11px]">
-              Long-standing relationship
-            </span>
-            <span className="text-cp-ink">
-              {unit.longStandingRelation ? "Yes" : "No"}
-            </span>
-          </div>
-        </div>
-      )}
 
       <div className="flex justify-end">
         <Button

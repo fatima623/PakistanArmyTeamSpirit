@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { UNIT_NAMES } from "@/lib/units-list";
 import { UnitEditForm } from "@/components/dashboard/UnitEditForm";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EditUnitPage() {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },

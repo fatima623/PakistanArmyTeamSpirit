@@ -1,0 +1,272 @@
+/**
+ * Participant journey stepper (dashboard).
+ *
+ * Deliberately avoids .pats-panel / .portal-card so the portal theme
+ * catch-alls can't repaint the state colours. Text colours are asserted
+ * with !important on dedicated classes (divs, not p/span) so both the
+ * day safety nets and the night white-paint rule leave them alone.
+ *
+ * State colour language:
+ *   green  = complete
+ *   yellow = pending / in progress (action with the participant or staff)
+ *   red    = needs attention (rejected, returned, deadline missed)
+ *   blue   = blocked (stage not yet unlocked)
+ */
+
+.pwf {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+  padding: 1.375rem 1.5rem 1.5rem;
+}
+
+.pwf__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.625rem;
+  margin-bottom: 0.875rem;
+}
+
+.pwf__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #1e293b !important;
+  margin: 0;
+}
+
+.pwf__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  background: #f8fafc;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569 !important;
+}
+
+.pwf__count-dot {
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background: #16a34a;
+}
+
+/* —— Progress bar —— */
+.pwf__bar {
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  margin-bottom: 1.25rem;
+}
+
+.pwf__bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+  transition: width 0.5s ease;
+}
+
+/* —— Steps grid —— */
+.pwf__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .pwf__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .pwf__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.pwf__cell {
+  list-style: none;
+  min-width: 0;
+}
+
+.pwf__cell > a {
+  display: block;
+  height: 100%;
+  border-radius: 14px;
+  text-decoration: none;
+}
+
+.pwf__cell > a:focus-visible {
+  outline: 2px solid #16a34a;
+  outline-offset: 2px;
+}
+
+/* —— Step tile —— */
+.pwf-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  height: 100%;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 0.875rem 0.9375rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.pwf__cell > a:hover .pwf-step {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* Status circle */
+.pwf-step__dot {
+  display: flex;
+  height: 2.125rem;
+  width: 2.125rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.pwf-step__dot svg {
+  height: 1rem;
+  width: 1rem;
+}
+
+.pwf-step__text {
+  min-width: 0;
+  flex: 1;
+}
+
+.pwf-step__label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #1e293b !important;
+}
+
+.pwf-step__label svg {
+  height: 0.875rem;
+  width: 0.875rem;
+  flex-shrink: 0;
+  color: #94a3b8 !important;
+}
+
+.pwf-step__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pwf-step__sub {
+  margin-top: 0.1875rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #64748b !important;
+}
+
+/* ——————————————————— state: COMPLETE (green) ——————————————————— */
+.pwf-step--done {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.pwf-step--done .pwf-step__dot {
+  background: #16a34a;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.14);
+}
+
+.pwf-step--done .pwf-step__dot svg {
+  color: #ffffff !important;
+}
+
+.pwf-step--done .pwf-step__sub {
+  color: #15803d !important;
+}
+
+/* —————————————— state: PENDING / IN PROGRESS (yellow) —————————————— */
+.pwf-step--current {
+  border-color: #fde68a;
+  background: #fffbeb;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.12);
+}
+
+.pwf-step--current .pwf-step__dot {
+  background: #f59e0b;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.16);
+}
+
+.pwf-step--current .pwf-step__dot svg {
+  color: #ffffff !important;
+}
+
+.pwf-step--current .pwf-step__sub {
+  color: #b45309 !important;
+}
+
+/* ———————————————— state: NEEDS ATTENTION (red) ———————————————— */
+.pwf-step--attention {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.pwf-step--attention .pwf-step__dot {
+  background: #dc2626;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.14);
+}
+
+.pwf-step--attention .pwf-step__dot svg {
+  color: #ffffff !important;
+}
+
+.pwf-step--attention .pwf-step__sub {
+  color: #b91c1c !important;
+}
+
+/* ————————————————— state: BLOCKED / LOCKED (blue) ————————————————— */
+.pwf-step--locked {
+  border-color: #dbeafe;
+  background: #f8fafc;
+}
+
+.pwf-step--locked .pwf-step__dot {
+  background: #3b82f6;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
+}
+
+.pwf-step--locked .pwf-step__dot svg {
+  color: #ffffff !important;
+}
+
+.pwf-step--locked .pwf-step__label {
+  color: #64748b !important;
+}
+
+.pwf-step--locked .pwf-step__sub {
+  color: #3b82f6 !important;
+}

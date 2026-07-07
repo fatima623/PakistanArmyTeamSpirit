@@ -18,6 +18,13 @@ type Settings = {
   intlRegistrationOpen: boolean;
   registrationDeadline: string;
   paymentDeadline: string;
+  participationConfirmDeadline: string;
+  teamRegistrationOpenDate: string;
+  teamRegistrationCloseDate: string;
+  flightDetailsDeadline: string;
+  maxTeamMembers: number;
+  hostInfoPublished: boolean;
+  hostInfoContent: string;
   exerciseYear: number;
   exerciseDates: string;
   privacyPolicyUrl: string;
@@ -47,6 +54,13 @@ const defaults: Settings = {
   intlRegistrationOpen: true,
   registrationDeadline: "",
   paymentDeadline: "",
+  participationConfirmDeadline: "",
+  teamRegistrationOpenDate: "",
+  teamRegistrationCloseDate: "",
+  flightDetailsDeadline: "",
+  maxTeamMembers: 13,
+  hostInfoPublished: false,
+  hostInfoContent: "",
   exerciseYear: 2026,
   exerciseDates: "2 – 13 October 2026",
   privacyPolicyUrl: "/privacy",
@@ -218,6 +232,21 @@ export function SettingsForm() {
               data.settings.registrationDeadline
             ),
             paymentDeadline: toLocalInput(data.settings.paymentDeadline),
+            participationConfirmDeadline: toLocalInput(
+              data.settings.participationConfirmDeadline
+            ),
+            teamRegistrationOpenDate: toLocalInput(
+              data.settings.teamRegistrationOpenDate
+            ),
+            teamRegistrationCloseDate: toLocalInput(
+              data.settings.teamRegistrationCloseDate
+            ),
+            flightDetailsDeadline: toLocalInput(
+              data.settings.flightDetailsDeadline
+            ),
+            maxTeamMembers: Number(data.settings.maxTeamMembers ?? 13),
+            hostInfoPublished: Boolean(data.settings.hostInfoPublished),
+            hostInfoContent: data.settings.hostInfoContent ?? "",
           });
         }
       })
@@ -332,6 +361,129 @@ export function SettingsForm() {
               />
             </SettingField>
           </div>
+        </div>
+      </SettingsCard>
+
+      <SettingsCard
+        title="Participant workflow"
+        description="Deadlines and windows for the guided participant journey: confirmation → team registration → roster → flight details → host information."
+      >
+        <div className="admin-settings-stack">
+          <SettingField
+            label="Participation confirmation deadline"
+            hint="Participants must confirm their registration (first-login dialog) before this date/time. After it passes, confirmation is disabled. Leave empty for no deadline."
+          >
+            <Input
+              type="datetime-local"
+              value={form.participationConfirmDeadline}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  participationConfirmDeadline: e.target.value,
+                }))
+              }
+              className={adminInput}
+            />
+          </SettingField>
+          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
+            <SettingField
+              label="Team registration opens"
+              hint="Empty = open immediately."
+            >
+              <Input
+                type="datetime-local"
+                value={form.teamRegistrationOpenDate}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    teamRegistrationOpenDate: e.target.value,
+                  }))
+                }
+                className={adminInput}
+              />
+            </SettingField>
+            <SettingField
+              label="Team registration closes"
+              hint="Empty = no closing date."
+            >
+              <Input
+                type="datetime-local"
+                value={form.teamRegistrationCloseDate}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    teamRegistrationCloseDate: e.target.value,
+                  }))
+                }
+                className={adminInput}
+              />
+            </SettingField>
+          </div>
+          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
+            <SettingField
+              label="Flight details deadline"
+              hint="Participants can edit/replace flight documents until this date/time or until finalized."
+            >
+              <Input
+                type="datetime-local"
+                value={form.flightDetailsDeadline}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    flightDetailsDeadline: e.target.value,
+                  }))
+                }
+                className={adminInput}
+              />
+            </SettingField>
+            <SettingField
+              label="Maximum team members"
+              hint="Default cap per team (13). Per-team increases are granted via Team Size Requests."
+            >
+              <Input
+                type="number"
+                min={1}
+                max={200}
+                value={form.maxTeamMembers}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    maxTeamMembers: parseInt(e.target.value, 10) || 13,
+                  }))
+                }
+                className={adminInput}
+              />
+            </SettingField>
+          </div>
+        </div>
+      </SettingsCard>
+
+      <SettingsCard
+        title="Host information"
+        description="Read-only hosting/arrival dashboard shown to participants whose flight details are finalized."
+      >
+        <div className="admin-settings-stack">
+          <SettingToggle
+            label="Host information published"
+            checked={form.hostInfoPublished}
+            onCheckedChange={(v) =>
+              setForm((f) => ({ ...f, hostInfoPublished: v }))
+            }
+          />
+          <SettingField
+            label="Hosting & arrival information"
+            hint="Shown at the top of the participant Host Information page. Basic HTML is allowed and sanitized."
+          >
+            <Textarea
+              rows={6}
+              value={form.hostInfoContent}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, hostInfoContent: e.target.value }))
+              }
+              className={cn(adminInput, "min-h-[8rem] resize-y")}
+              placeholder="Arrival procedures, host unit contacts, accommodation, transport…"
+            />
+          </SettingField>
         </div>
       </SettingsCard>
 

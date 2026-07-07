@@ -8,7 +8,11 @@ import { fileURLToPath } from "url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-const dirs = ["uploads/payment-proofs", "storage/news-pdfs"];
+const dirs = [
+  "uploads/payment-proofs",
+  "storage/news-pdfs",
+  "uploads/flight-docs",
+];
 
 for (const dir of dirs) {
   fs.mkdirSync(path.join(ROOT, dir), { recursive: true });

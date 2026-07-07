@@ -8,16 +8,19 @@ export function UserApplicationStatusCell({
   userId,
   applicationStatus,
   suspended = false,
+  canApprove = false,
 }: {
   userId: string;
   applicationStatus: string;
   suspended?: boolean;
+  /** SD (Sports Directorate) only — enables the quick-approve button. */
+  canApprove?: boolean;
 }) {
   const isPending = applicationStatus === APPLICATION_STATUS.PENDING;
 
   return (
     <div className="admin-users-app-status-cell">
-      {isPending ? (
+      {isPending && canApprove ? (
         <ApproveButton userId={userId} />
       ) : (
         <ApplicationStatusBadge

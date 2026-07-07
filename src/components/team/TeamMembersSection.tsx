@@ -90,8 +90,8 @@ export function TeamMembersSection({
               <thead>
                 <tr>
                   <th scope="col">Member</th>
-                  <th scope="col">Service Number</th>
-                  <th scope="col">Service Arm</th>
+                  <th scope="col">Serial Number</th>
+                  <th scope="col">Rank</th>
                   <th scope="col">Gender</th>
                   <th scope="col" className="text-right">
                     Actions
@@ -112,7 +112,7 @@ export function TeamMembersSection({
                       </span>
                     </td>
                     <td>{m.serviceNumber}</td>
-                    <td>{m.serviceArm}</td>
+                    <td>{m.rank || m.serviceArm || "—"}</td>
                     <td>{m.gender}</td>
                     <td>
                       <div className="team-members__actions">
@@ -163,14 +163,16 @@ export function TeamMembersSection({
               <li key={m.id} className="team-members__card">
                 <p className="team-members__card-name">{m.fullName}</p>
                 <div className="team-members__card-row">
-                  <span className="team-members__card-label">Service Number</span>
+                  <span className="team-members__card-label">Serial Number</span>
                   <span className="team-members__card-value">
                     {m.serviceNumber}
                   </span>
                 </div>
                 <div className="team-members__card-row">
-                  <span className="team-members__card-label">Service Arm</span>
-                  <span className="team-members__card-value">{m.serviceArm}</span>
+                  <span className="team-members__card-label">Rank</span>
+                  <span className="team-members__card-value">
+                    {m.rank || m.serviceArm || "—"}
+                  </span>
                 </div>
                 <div className="team-members__card-row">
                   <span className="team-members__card-label">Gender</span>

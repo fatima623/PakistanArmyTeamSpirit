@@ -7,6 +7,8 @@ import "@/app/admin-user-detail.css";
 import "@/app/payment-status-timeline.css";
 import { prisma } from "@/lib/prisma";
 import { AUDIT_ENTITY, PAYMENT_STATUS } from "@/lib/constants";
+import { getAdminRole } from "@/lib/admin-session";
+import { canVerifyPayment } from "@/lib/auth-routes";
 import { serializeRejectionHistory } from "@/lib/payment-rejection-history";
 import { AuditLogList } from "@/components/admin/AuditLogList";
 import { PaymentReviewPanel } from "@/components/admin/admin-dynamic";
@@ -61,7 +63,12 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  if (payment.status === PAYMENT_STATUS.SUBMITTED) {
+  const viewerRole = await getAdminRole();
+  const canDecide = canVerifyPayment(viewerRole);
+
+  // Opening the proof for review marks it "under review" — but only when the
+  // viewer is the MT (the role that actually performs the verification).
+  if (canDecide && payment.status === PAYMENT_STATUS.SUBMITTED) {
     await prisma.payment.update({
       where: { id },
       data: { status: PAYMENT_STATUS.UNDER_REVIEW },
@@ -136,9 +143,17 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
         </div>
       </header>
 
+      {!canDecide ? (
+        <div className="portal-alert-info mb-4 rounded-lg px-4 py-3 text-sm">
+          Payment verification is performed exclusively by the MT (Management
+          Team). Your role has view-only access to the verification status.
+        </div>
+      ) : null}
+
       <PaymentReviewPanel
         payment={serialized}
         rejectionHistory={rejectionHistory}
+        canDecide={canDecide}
       />
 
       <section className="admin-user-detail-card">

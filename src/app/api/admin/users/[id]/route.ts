@@ -11,12 +11,15 @@ import {
   ApiError,
   handleApiError,
   requireAdmin,
-  requireRegistrationApprover,
   requireStaff,
   requireJsonContentType,
   userSelect,
 } from "@/lib/api-helpers";
-import { canManageSystem } from "@/lib/auth-routes";
+import {
+  canApproveRegistration,
+  canManageSystem,
+  canVerifyPayment,
+} from "@/lib/auth-routes";
 import { createAuditLog } from "@/lib/audit";
 import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { buildApplicationUpdateData } from "@/lib/payments";
@@ -62,8 +65,17 @@ export async function GET(_request: Request, context: RouteContext) {
 
 export async function PUT(request: Request, context: RouteContext) {
   try {
-    const session = await requireRegistrationApprover();
+    // Role-based responsibilities:
+    //   • Registration verification (applicationStatus / approved / reason)
+    //     → SD (Sports Directorate) ONLY. Admin & MT are read-only.
+    //   • Payment status → MT (Management Team) ONLY (normally via the
+    //     payments route; mirrored field guarded identically here).
+    //   • Account management (profile, role, suspension, notes, password)
+    //     → Admin ONLY.
+    const session = await requireStaff();
     const isAdmin = canManageSystem(session.user.role);
+    const isRegistrationVerifier = canApproveRegistration(session.user.role);
+    const isPaymentVerifierRole = canVerifyPayment(session.user.role);
     requireJsonContentType(request);
     const { id } = await context.params;
     const body = await request.json();
@@ -108,9 +120,6 @@ export async function PUT(request: Request, context: RouteContext) {
       );
     }
 
-    // Account management (role changes, suspension, payment status, notes) is
-    // reserved for full admins. MTD approvers may only act on the application
-    // decision fields.
     const editsProfile =
       parsed.data.firstName !== undefined ||
       parsed.data.lastName !== undefined ||
@@ -118,16 +127,34 @@ export async function PUT(request: Request, context: RouteContext) {
       parsed.data.rank !== undefined ||
       parsed.data.gender !== undefined;
 
+    const editsApplicationDecision =
+      parsed.data.applicationStatus !== undefined ||
+      parsed.data.approved !== undefined ||
+      parsed.data.rejectionReason !== undefined;
+
+    if (editsApplicationDecision && !isRegistrationVerifier) {
+      throw new ApiError(
+        "Registration verification is performed by the SD (Sports Directorate) only. Your role has view-only access.",
+        403
+      );
+    }
+
+    if (parsed.data.paymentStatus !== undefined && !isPaymentVerifierRole) {
+      throw new ApiError(
+        "Payment verification is performed by the MT (Management Team) only. Your role has view-only access.",
+        403
+      );
+    }
+
     if (
       !isAdmin &&
       (parsed.data.role !== undefined ||
         parsed.data.suspended !== undefined ||
-        parsed.data.paymentStatus !== undefined ||
         parsed.data.adminNotes !== undefined ||
         editsProfile)
     ) {
       throw new ApiError(
-        "Only administrators can change account details, roles, suspension, payment status, or notes",
+        "Only administrators can change account details, roles, suspension, or notes",
         403
       );
     }
@@ -218,9 +245,11 @@ export async function PUT(request: Request, context: RouteContext) {
     await createAuditLog({
       entityType: AUDIT_ENTITY.USER,
       entityId: id,
-      action: "application_updated",
+      action: editsApplicationDecision
+        ? "registration_verification_updated"
+        : "account_updated",
       actorId: session.user.id,
-      metadata: parsed.data,
+      metadata: { ...parsed.data, actorRole: session.user.role },
     });
 
     revalidatePath("/admin/users");

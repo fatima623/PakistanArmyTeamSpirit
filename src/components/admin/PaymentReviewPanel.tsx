@@ -73,9 +73,12 @@ type Payment = {
 export function PaymentReviewPanel({
   payment,
   rejectionHistory,
+  canDecide = true,
 }: {
   payment: Payment;
   rejectionHistory: PaymentRejectionHistoryEntry[];
+  /** MT (Management Team) only — false renders a read-only panel. */
+  canDecide?: boolean;
 }) {
   const router = useRouter();
   const participantName = `${payment.user.firstName} ${payment.user.lastName}`;
@@ -90,7 +93,7 @@ export function PaymentReviewPanel({
   const [rejectReason, setRejectReason] = useState("");
 
   const alreadyVerified = isPaymentVerified(payment.status);
-  const statusControlsLocked = alreadyVerified;
+  const statusControlsLocked = alreadyVerified || !canDecide;
   const hasProof = Boolean(payment.internalFilePath || payment.proofFileName);
   const statusDirty = selectedStatus !== persistedStatus;
   const isProofRejected = persistedStatus === PAYMENT_STATUS.REJECTED;
@@ -338,51 +341,55 @@ export function PaymentReviewPanel({
             </div>
             {statusControlsLocked ? (
               <p className="admin-user-detail-status-controls-hint">
-                Payment has been verified. Reject proof to make changes.
+                {!canDecide
+                  ? "View-only — payment decisions are made by the MT (Management Team)."
+                  : "Payment has been verified. Reject proof to make changes."}
               </p>
             ) : null}
           </div>
 
-          <div className="admin-user-detail-actions mt-4">
-            <ConfirmDialog
-              trigger={
-                <Button
-                  size="sm"
-                  variant="adminApprove"
-                  disabled={loading || alreadyVerified}
-                >
-                  Verify payment
-                </Button>
-              }
-              title="Verify this payment?"
-              description={`You are about to mark ${participantName}'s payment of ${formatRegistrationFee(payment.amount)} as verified. The participant will see payment verified on their portal.`}
-              confirmLabel="Yes, verify payment"
-              confirmClassName="admin-dialog-confirm"
-              onConfirm={() => save(PAYMENT_STATUS.VERIFIED)}
-            />
-            <Button
-              size="sm"
-              variant="adminDestructive"
-              disabled={loading || isProofRejected || isReturned}
-              onClick={() => openReasonDialog(PAYMENT_STATUS.REJECTED)}
-            >
-              Reject proof
-            </Button>
-            {statusDirty ? (
+          {canDecide ? (
+            <div className="admin-user-detail-actions mt-4">
+              <ConfirmDialog
+                trigger={
+                  <Button
+                    size="sm"
+                    variant="adminApprove"
+                    disabled={loading || alreadyVerified}
+                  >
+                    Verify payment
+                  </Button>
+                }
+                title="Verify this payment?"
+                description={`You are about to mark ${participantName}'s payment of ${formatRegistrationFee(payment.amount)} as verified. The participant will see payment verified on their portal.`}
+                confirmLabel="Yes, verify payment"
+                confirmClassName="admin-dialog-confirm"
+                onConfirm={() => save(PAYMENT_STATUS.VERIFIED)}
+              />
               <Button
                 size="sm"
-                variant="adminOutline"
-                disabled={loading || statusControlsLocked}
-                className={cn(
-                  statusControlsLocked &&
-                    "admin-user-detail-status-controls--locked"
-                )}
-                onClick={() => void handleApplyStatus()}
+                variant="adminDestructive"
+                disabled={loading || isProofRejected || isReturned}
+                onClick={() => openReasonDialog(PAYMENT_STATUS.REJECTED)}
               >
-                Apply status
+                Reject proof
               </Button>
-            ) : null}
-          </div>
+              {statusDirty ? (
+                <Button
+                  size="sm"
+                  variant="adminOutline"
+                  disabled={loading || statusControlsLocked}
+                  className={cn(
+                    statusControlsLocked &&
+                      "admin-user-detail-status-controls--locked"
+                  )}
+                  onClick={() => void handleApplyStatus()}
+                >
+                  Apply status
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </section>
 

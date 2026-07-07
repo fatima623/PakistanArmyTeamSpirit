@@ -22,6 +22,7 @@ const GENDERS = ["Male", "Female", "Other"] as const;
 const EMPTY: TeamMemberInput = {
   fullName: "",
   serviceNumber: "",
+  rank: "",
   serviceArm: "",
   gender: "Male",
 };
@@ -124,7 +125,7 @@ export function TeamMemberFormDialog({
           </Field>
 
           <Field
-            label="Service number"
+            label="Serial number"
             htmlFor="tm-serviceNumber"
             error={errors.serviceNumber}
           >
@@ -133,6 +134,15 @@ export function TeamMemberFormDialog({
               value={form.serviceNumber}
               onChange={(e) => set("serviceNumber", e.target.value)}
               placeholder="e.g. PA-123456"
+            />
+          </Field>
+
+          <Field label="Rank" htmlFor="tm-rank" error={errors.rank}>
+            <Input
+              id="tm-rank"
+              value={form.rank}
+              onChange={(e) => set("rank", e.target.value)}
+              placeholder="e.g. Captain"
             />
           </Field>
 

@@ -42,7 +42,8 @@ export function TeamMemberViewDialog({
         {member ? (
           <dl className="space-y-3">
             <Row label="Full name" value={member.fullName} />
-            <Row label="Service number" value={member.serviceNumber} />
+            <Row label="Serial number" value={member.serviceNumber} />
+            <Row label="Rank" value={member.rank} />
             <Row label="Service / Arm" value={member.serviceArm} />
             <Row label="Gender" value={member.gender} />
           </dl>

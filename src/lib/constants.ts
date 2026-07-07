@@ -1,7 +1,9 @@
 export const APPLICATION_STATUS = {
   PENDING: "PENDING",
+  UNDER_REVIEW: "UNDER_REVIEW",
   APPROVED: "APPROVED",
   REJECTED: "REJECTED",
+  RETURNED: "RETURNED",
 } as const;
 
 export type ApplicationStatus =
@@ -25,9 +27,11 @@ export const LEGACY_PAYMENT_STATUS = {
 } as const;
 
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
-  PENDING: "Awaiting Review",
+  PENDING: "Pending",
+  UNDER_REVIEW: "Under Review",
   APPROVED: "Approved",
-  REJECTED: "Returned for Correction",
+  REJECTED: "Rejected",
+  RETURNED: "Returned for Correction",
 };
 
 export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
@@ -42,9 +46,11 @@ export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
 /** Compact labels for admin data tables */
 export const APPLICATION_STATUS_TABLE_LABELS: Record<ApplicationStatus, string> =
   {
-    PENDING: "Awaiting review",
+    PENDING: "Pending",
+    UNDER_REVIEW: "In review",
     APPROVED: "Approved",
-    REJECTED: "Returned",
+    REJECTED: "Rejected",
+    RETURNED: "Returned",
   };
 
 export const PAYMENT_STATUS_TABLE_LABELS: Record<PaymentStatus, string> = {
@@ -105,7 +111,39 @@ export const AUDIT_ENTITY = {
   PAYMENT: "payment",
   UNIT: "unit",
   TICKET: "ticket",
+  TEAM_SIZE_REQUEST: "team_size_request",
+  FLIGHT_DETAIL: "flight_detail",
 } as const;
+
+/** Fallback team-member cap when SiteSettings is unavailable. */
+export const DEFAULT_MAX_TEAM_MEMBERS = 13;
+
+export const TEAM_SIZE_REQUEST_STATUS = {
+  PENDING: "PENDING",
+  APPROVED: "APPROVED",
+  REJECTED: "REJECTED",
+} as const;
+
+export type TeamSizeRequestStatus =
+  (typeof TEAM_SIZE_REQUEST_STATUS)[keyof typeof TEAM_SIZE_REQUEST_STATUS];
+
+export const TEAM_SIZE_REQUEST_STATUS_LABELS: Record<
+  TeamSizeRequestStatus,
+  string
+> = {
+  PENDING: "Pending",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+};
+
+export function normalizeTeamSizeRequestStatus(
+  value: string
+): TeamSizeRequestStatus {
+  const allowed = Object.values(TEAM_SIZE_REQUEST_STATUS);
+  return allowed.includes(value as TeamSizeRequestStatus)
+    ? (value as TeamSizeRequestStatus)
+    : TEAM_SIZE_REQUEST_STATUS.PENDING;
+}
 
 export const TICKET_STATUS = {
   OPEN: "OPEN",

@@ -8,6 +8,7 @@ import {
   requireAuth,
   requireJsonContentType,
 } from "@/lib/api-helpers";
+import { requireEditableRoster } from "@/lib/roster-guard";
 
 /** List the current participant's own team members. */
 export async function GET() {
@@ -24,7 +25,10 @@ export async function GET() {
   }
 }
 
-/** Add a team member to the current participant's own registration. */
+/**
+ * Add a team member. Enforces the team-size cap (13 by default, or the
+ * admin-approved override) and the roster lock.
+ */
 export async function POST(request: Request) {
   try {
     const session = await requireAuth();
@@ -39,12 +43,25 @@ export async function POST(request: Request) {
       );
     }
 
+    const ctx = await requireEditableRoster(session.user.id);
+    if (ctx.memberCount >= ctx.limit) {
+      return NextResponse.json(
+        {
+          error: `Team member limit reached (${ctx.limit}). Use “Request Additional Team Members” to ask the administrators for a larger team.`,
+          limitReached: true,
+          limit: ctx.limit,
+        },
+        { status: 409 }
+      );
+    }
+
     const teamMember = await prisma.teamMember.create({
       data: {
         userId: session.user.id,
         fullName: parsed.data.fullName,
         serviceNumber: parsed.data.serviceNumber,
-        serviceArm: parsed.data.serviceArm,
+        rank: parsed.data.rank,
+        serviceArm: parsed.data.serviceArm ?? "",
         gender: parsed.data.gender,
       },
       select: teamMemberSelect,

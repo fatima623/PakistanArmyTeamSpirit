@@ -8,6 +8,8 @@ import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
 import { UsersManagementTable } from "@/components/admin/UsersManagementTable";
 import { prisma } from "@/lib/prisma";
+import { getAdminRole } from "@/lib/admin-session";
+import { canApproveRegistration } from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { APPLICATION_STATUS } from "@/lib/constants";
@@ -81,6 +83,8 @@ export default async function AdminUsersPage({
       { lastName: { contains: search } },
     ];
   }
+
+  const viewerRole = await getAdminRole();
 
   const [users, totalCount] = await Promise.all([
     prisma.user.findMany({
@@ -186,7 +190,10 @@ export default async function AdminUsersPage({
             />
           </section>
 
-          <UsersManagementTable users={users} />
+          <UsersManagementTable
+            users={users}
+            canApprove={canApproveRegistration(viewerRole)}
+          />
 
           <footer className={adminUsersPagination}>
             <p className="admin-users-pagination-page">

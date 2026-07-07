@@ -1,25 +1,57 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { requireParticipantSession } from "@/lib/require-participant";
+import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { teamMemberSelect } from "@/lib/team-members";
+import { getWorkflowSettings } from "@/lib/workflow-settings";
+import {
+  canRegisterTeam,
+  effectiveTeamLimit,
+  getTeamRegistrationWindowState,
+  workflowUserSelect,
+} from "@/lib/participant-workflow";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
-import { TeamMembersPanel } from "@/components/team/TeamMembersPanel";
+import { TeamRosterManager } from "@/components/team/TeamRosterManager";
 
 export const metadata: Metadata = {
-  title: "Team Members",
+  title: "Team Registration",
 };
 
 export default async function TeamMembersPage() {
-  const session = await requireParticipantSession();
+  const session = await requireConfirmedParticipant();
 
-  const teamMembers = await prisma.teamMember.findMany({
-    where: { userId: session.user.id },
-    orderBy: { createdAt: "asc" },
-    select: teamMemberSelect,
-  });
+  const [user, settings, teamMembers, latestRequest] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: workflowUserSelect,
+    }),
+    getWorkflowSettings(),
+    prisma.teamMember.findMany({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "asc" },
+      select: teamMemberSelect,
+    }),
+    prisma.teamSizeRequest.findFirst({
+      where: { userId: session.user.id },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        requestedCount: true,
+        status: true,
+        reviewNote: true,
+        createdAt: true,
+      },
+    }),
+  ]);
+
+  if (!user) {
+    redirect("/event/login");
+  }
+
+  const windowState = getTeamRegistrationWindowState(settings);
 
   return (
     <div className="team-page">
@@ -28,12 +60,30 @@ export default async function TeamMembersPage() {
         Back to dashboard
       </Link>
       <PatsPortalHeader
-        title="Team Members"
-        subtitle="Manage the members participating in the event with your unit."
+        title="Team Registration"
+        subtitle="Register your team during the active window, then manage your team member roster."
       />
-      <div className="portal-card pats-panel team-page__panel">
-        <TeamMembersPanel initialMembers={teamMembers} />
-      </div>
+      <TeamRosterManager
+        initialMembers={teamMembers}
+        teamRegistered={!!user.teamRegisteredAt}
+        rosterCompleted={!!user.rosterCompletedAt}
+        flightsFinalized={!!user.flightsFinalizedAt}
+        canRegister={canRegisterTeam(user, settings)}
+        windowState={windowState}
+        windowOpenIso={settings.teamRegistrationOpenDate?.toISOString() ?? null}
+        windowCloseIso={
+          settings.teamRegistrationCloseDate?.toISOString() ?? null
+        }
+        limit={effectiveTeamLimit(user, settings)}
+        latestRequest={
+          latestRequest
+            ? {
+                ...latestRequest,
+                createdAt: latestRequest.createdAt.toISOString(),
+              }
+            : null
+        }
+      />
     </div>
   );
 }
