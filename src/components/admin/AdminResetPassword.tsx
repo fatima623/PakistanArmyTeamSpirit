@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { KeyRound, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { TOAST } from "@/lib/toast";
 import { validateNewPassword } from "@/lib/password-policy";
 
 export function AdminResetPassword({ userId }: { userId: string }) {
+  const [open, setOpen] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,44 +29,65 @@ export function AdminResetPassword({ userId }: { userId: string }) {
     if (res.ok) {
       toast.success("Password updated");
       setPassword("");
+      setOpen(false);
     } else {
       toast.error(TOAST.GENERIC_ERROR);
     }
     setLoading(false);
   };
 
+  if (!open) {
+    return (
+      <Button
+        size="sm"
+        variant="adminOutline"
+        onClick={() => setOpen(true)}
+        className="admin-reset-trigger"
+      >
+        <KeyRound className="mr-1.5 h-4 w-4" aria-hidden />
+        Reset password
+      </Button>
+    );
+  }
+
   return (
-    <section className="admin-user-detail-card">
-      <div className="admin-user-detail-card-header">
-        <h3 className="admin-user-detail-card-title">Reset password</h3>
-        <p className="admin-user-detail-card-desc">
-          Set a new password for this participant account.
-        </p>
+    <div className="admin-reset-form">
+      <div className="admin-reset-form-head">
+        <span className="admin-reset-form-title">Reset password</span>
+        <button
+          type="button"
+          className="admin-reset-form-cancel"
+          onClick={() => {
+            setOpen(false);
+            setPassword("");
+          }}
+        >
+          Cancel
+        </button>
       </div>
-      <div className="admin-user-detail-card-body">
-        <div className="admin-user-detail-reset-row">
-          <Input
-            type="password"
-            placeholder="New password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="admin-input"
-            aria-label="New password"
-          />
-          <Button
-            size="sm"
-            variant="adminPrimary"
-            disabled={loading}
-            onClick={handleReset}
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              "Set password"
-            )}
-          </Button>
-        </div>
+      <div className="admin-user-detail-reset-row">
+        <Input
+          type="password"
+          placeholder="New password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="admin-input"
+          aria-label="New password"
+          autoFocus
+        />
+        <Button
+          size="sm"
+          variant="adminPrimary"
+          disabled={loading}
+          onClick={handleReset}
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            "Set password"
+          )}
+        </Button>
       </div>
-    </section>
+    </div>
   );
 }

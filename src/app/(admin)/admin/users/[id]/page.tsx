@@ -9,25 +9,21 @@ import { formatDateDisplay, formatDateShort } from "@/lib/utils";
 import { AUDIT_ENTITY } from "@/lib/constants";
 import { ApplicationReviewPanel } from "@/components/admin/admin-dynamic";
 import { AdminResetPassword } from "@/components/admin/AdminResetPassword";
-import { AdminRoleSelect } from "@/components/admin/AdminRoleSelect";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { getAdminRole } from "@/lib/admin-session";
-import {
-  canApproveRegistration,
-  canManageSystem,
-  roleLabel,
-} from "@/lib/auth-routes";
+import { canApproveRegistration, canManageSystem } from "@/lib/auth-routes";
 import { AuditLogList } from "@/components/admin/AuditLogList";
 import {
   ApplicationStatusBadge,
   PaymentStatusBadge,
 } from "@/components/admin/StatusBadges";
 import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
-import { Button } from "@/components/ui/button";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
-import { displayCountry, isInternationalParticipant } from "@/lib/participant-country";
-import { formatRegistrationFee } from "@/lib/payment-settings";
+import {
+  displayCountry,
+  isInternationalParticipant,
+} from "@/lib/participant-country";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -46,6 +42,26 @@ export async function generateMetadata({
   };
 }
 
+/** One labelled field block — laid out 2–3 per row inside a section grid. */
+function Field({
+  label,
+  value,
+  wide = false,
+}: {
+  label: string;
+  value: string;
+  wide?: boolean;
+}) {
+  return (
+    <div
+      className={`admin-detail-field ${wide ? "admin-detail-field--wide" : ""}`.trim()}
+    >
+      <span className="admin-detail-field-label">{label}</span>
+      <span className="admin-detail-field-value">{value || "—"}</span>
+    </div>
+  );
+}
+
 export default async function AdminUserDetailPage({ params }: PageProps) {
   const { id } = await params;
 
@@ -60,15 +76,12 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       gender: true,
       country: true,
       nationality: true,
-      role: true,
       applicationStatus: true,
       paymentStatus: true,
       rejectionReason: true,
       rejectedAt: true,
       approvedAt: true,
       suspended: true,
-      privacyAccepted: true,
-      privacyAcceptedAt: true,
       participationConfirmedAt: true,
       participationDeclinedAt: true,
       teamRegisteredAt: true,
@@ -77,7 +90,6 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       flightsFinalizedAt: true,
       createdAt: true,
       unit: true,
-      payments: { orderBy: { createdAt: "desc" } },
       _count: { select: { teamMembers: true, flightDetails: true } },
     },
   });
@@ -95,14 +107,37 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     orderBy: { createdAt: "desc" },
     take: 50,
     include: {
-      actor: {
-        select: { firstName: true, lastName: true, email: true },
-      },
+      actor: { select: { firstName: true, lastName: true, email: true } },
     },
   });
 
+  const participationValue = user.participationConfirmedAt
+    ? formatDateDisplay(user.participationConfirmedAt)
+    : user.participationDeclinedAt
+      ? `Declined ${formatDateDisplay(user.participationDeclinedAt)}`
+      : "Not yet";
+
+  const teamRegisteredValue = user.teamRegisteredAt
+    ? formatDateDisplay(user.teamRegisteredAt)
+    : "Not yet";
+
+  const rosterValue =
+    `${user._count.teamMembers} member${user._count.teamMembers === 1 ? "" : "s"}` +
+    (user.maxTeamMembersOverride
+      ? ` (limit raised to ${user.maxTeamMembersOverride})`
+      : "") +
+    (user.rosterCompletedAt
+      ? ` — completed ${formatDateShort(user.rosterCompletedAt)}`
+      : " — in progress");
+
+  const flightValue =
+    `${user._count.flightDetails} record${user._count.flightDetails === 1 ? "" : "s"}` +
+    (user.flightsFinalizedAt
+      ? ` — finalized ${formatDateShort(user.flightsFinalizedAt)}`
+      : " — not finalized");
+
   return (
-    <div className="admin-user-detail-page">
+    <div className="admin-user-detail-page admin-user-detail-page--compact">
       <AdminBreadcrumbs
         items={[
           { label: "Dashboard", href: "/admin" },
@@ -110,6 +145,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           { label: `${user.firstName} ${user.lastName}` },
         ]}
       />
+
       <header className="admin-user-detail-hero">
         <div className="admin-user-detail-hero-main">
           <Link href="/admin/users" className="admin-user-detail-back">
@@ -141,8 +177,8 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
         ) : null}
       </header>
 
-      {canApprove || canManageRoles ? (
-        <div className="admin-user-detail-grid admin-user-detail-grid--split">
+      <div className="admin-detail-layout">
+        <div className="admin-detail-layout-main">
           {canApprove ? (
             <ApplicationReviewPanel
               userId={user.id}
@@ -152,197 +188,80 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
               suspended={user.suspended}
             />
           ) : null}
-          {canManageRoles ? <AdminResetPassword userId={user.id} /> : null}
-        </div>
-      ) : null}
 
-      {!canApprove ? (
-        <div className="portal-alert-info mb-4 rounded-lg px-4 py-3 text-sm">
-          Registration verification is performed exclusively by the SD (Sports
-          Directorate). Your role has view-only access to the verification
-          status.
-        </div>
-      ) : null}
-
-      <section className="admin-user-detail-card mb-4">
-        <div className="admin-user-detail-card-header">
-          <h3 className="admin-user-detail-card-title">Workflow progress</h3>
-          <p className="admin-user-detail-card-desc">
-            Participant journey milestones (read-only).
-          </p>
-        </div>
-        <div className="admin-user-detail-card-body">
-          <dl className="admin-user-detail-dl">
-            <dt>Participation confirmed</dt>
-            <dd>
-              {user.participationConfirmedAt
-                ? formatDateDisplay(user.participationConfirmedAt)
-                : user.participationDeclinedAt
-                  ? `Rejected ${formatDateDisplay(user.participationDeclinedAt)}`
-                  : "Not yet"}
-            </dd>
-            <dt>Team registered</dt>
-            <dd>
-              {user.teamRegisteredAt
-                ? formatDateDisplay(user.teamRegisteredAt)
-                : "Not yet"}
-            </dd>
-            <dt>Roster</dt>
-            <dd>
-              {user._count.teamMembers} member
-              {user._count.teamMembers === 1 ? "" : "s"}
-              {user.maxTeamMembersOverride
-                ? ` (limit raised to ${user.maxTeamMembersOverride})`
-                : ""}
-              {user.rosterCompletedAt
-                ? ` — completed ${formatDateShort(user.rosterCompletedAt)}`
-                : " — in progress"}
-            </dd>
-            <dt>Flight details</dt>
-            <dd>
-              {user._count.flightDetails} record
-              {user._count.flightDetails === 1 ? "" : "s"}
-              {user.flightsFinalizedAt
-                ? ` — finalized ${formatDateShort(user.flightsFinalizedAt)}`
-                : " — not finalized"}
-            </dd>
-          </dl>
-        </div>
-      </section>
-
-      <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-        <section className="admin-user-detail-card">
-          <div className="admin-user-detail-card-header">
-            <h3 className="admin-user-detail-card-title">Account details</h3>
-          </div>
-          <div className="admin-user-detail-card-body">
-            <dl className="admin-user-detail-dl">
-              <dt>Rank</dt>
-              <dd>{user.rank}</dd>
-              <dt>Gender</dt>
-              <dd>{user.gender}</dd>
-              <dt>Country of application</dt>
-              <dd>{displayCountry(user.country)}</dd>
-              {isInternationalParticipant(user.country) ? (
-                <>
-                  <dt>Nationality</dt>
-                  <dd>{user.nationality?.trim() || "—"}</dd>
-                </>
-              ) : null}
-              <dt>Role</dt>
-              <dd>{roleLabel(user.role)}</dd>
-              <dt>Privacy</dt>
-              <dd>
-                {user.privacyAccepted ? "Accepted" : "Not accepted"}
-                {user.privacyAcceptedAt
-                  ? ` (${formatDateShort(user.privacyAcceptedAt)})`
-                  : ""}
-              </dd>
-              <dt>Registered</dt>
-              <dd>{formatDateDisplay(user.createdAt)}</dd>
-              {user.approvedAt ? (
-                <>
-                  <dt>Approved</dt>
-                  <dd>{formatDateDisplay(user.approvedAt)}</dd>
-                </>
-              ) : null}
-              {user.rejectedAt ? (
-                <>
-                  <dt>Returned</dt>
-                  <dd>{formatDateDisplay(user.rejectedAt)}</dd>
-                </>
-              ) : null}
-            </dl>
-            {canManageRoles ? (
-              <div className="mt-4 border-t border-cp-border/60 pt-4">
-                <AdminRoleSelect userId={user.id} currentRole={user.role} />
-              </div>
-            ) : null}
-          </div>
-        </section>
-
-        {user.unit ? (
           <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header admin-user-detail-card-header-row">
-              <h3 className="admin-user-detail-card-title">Unit details</h3>
-              <Link href={`/admin/units/${user.unit.id}/edit`}>
-                <Button size="sm" variant="adminOutline">
-                  Edit unit
-                </Button>
-              </Link>
-            </div>
             <div className="admin-user-detail-card-body">
-              <dl className="admin-user-detail-dl">
-                <dt>Unit name</dt>
-                <dd>{user.unit.unitName}</dd>
-                <dt>Type</dt>
-                <dd>{user.unit.unitType}</dd>
-                <dt>Branch</dt>
-                <dd>{user.unit.branch}</dd>
-                <dt>Preferred phase</dt>
-                <dd>{user.unit.preferredPhase ?? "—"}</dd>
-              </dl>
+              <h4 className="admin-detail-subhead">Account</h4>
+              <div className="admin-detail-fields">
+                <Field label="Rank" value={user.rank} />
+                <Field label="Gender" value={user.gender} />
+                <Field label="Country" value={displayCountry(user.country)} />
+                {isInternationalParticipant(user.country) ? (
+                  <Field
+                    label="Nationality"
+                    value={user.nationality?.trim() || "—"}
+                  />
+                ) : null}
+                <Field
+                  label="Registered"
+                  value={formatDateDisplay(user.createdAt)}
+                />
+                {user.approvedAt ? (
+                  <Field
+                    label="Approved"
+                    value={formatDateDisplay(user.approvedAt)}
+                  />
+                ) : null}
+                {user.rejectedAt ? (
+                  <Field
+                    label="Returned"
+                    value={formatDateDisplay(user.rejectedAt)}
+                  />
+                ) : null}
+              </div>
+
+              {user.unit ? (
+                <>
+                  <h4 className="admin-detail-subhead">Unit</h4>
+                  <div className="admin-detail-fields">
+                    <Field label="Unit name" value={user.unit.unitName} />
+                    <Field label="Type" value={user.unit.unitType} />
+                    <Field label="Branch" value={user.unit.branch} />
+                    <Field label="Arm" value={user.unit.arm} />
+                  </div>
+                </>
+              ) : null}
+
+              <h4 className="admin-detail-subhead">Workflow progress</h4>
+              <div className="admin-detail-fields">
+                <Field
+                  label="Participation confirmed"
+                  value={participationValue}
+                />
+                <Field label="Team registered" value={teamRegisteredValue} />
+                <Field label="Roster" value={rosterValue} wide />
+                <Field label="Flight details" value={flightValue} wide />
+              </div>
+
+              {canManageRoles ? (
+                <div className="admin-detail-reset">
+                  <AdminResetPassword userId={user.id} />
+                </div>
+              ) : null}
             </div>
           </section>
-        ) : null}
-      </div>
-
-      <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-header">
-          <h3 className="admin-user-detail-card-title">Payments</h3>
-          <p className="admin-user-detail-card-desc">
-            Submitted fee proofs for this participant.
-          </p>
         </div>
-        <div className="admin-user-detail-card-body">
-          {user.payments.length === 0 ? (
-            <p className="admin-user-detail-empty">No payments submitted yet.</p>
-          ) : (
-            <div className="admin-user-detail-payments-table-wrap">
-              <table className="admin-user-detail-payments-table">
-                <thead>
-                  <tr>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Reference</th>
-                    <th>Submitted</th>
-                    <th aria-label="Actions" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {user.payments.map((p) => (
-                    <tr key={p.id}>
-                      <td>{formatRegistrationFee(p.amount)}</td>
-                      <td>
-                        <PaymentStatusBadge status={p.status} />
-                      </td>
-                      <td>{p.transactionReference ?? "—"}</td>
-                      <td>{formatDateShort(p.createdAt)}</td>
-                      <td>
-                        <Link href={`/admin/payments/${p.id}`}>
-                          <Button size="sm" variant="adminOutline">
-                            Review
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+
+        <aside className="admin-detail-layout-aside">
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header">
+              <h3 className="admin-user-detail-card-title">Activity</h3>
             </div>
-          )}
-        </div>
-      </section>
-
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-header">
-          <h3 className="admin-user-detail-card-title">Activity history</h3>
-        </div>
-        <div className="admin-user-detail-card-body">
-          <AuditLogList logs={auditLogs} />
-        </div>
-      </section>
+            <div className="admin-user-detail-card-body">
+              <AuditLogList logs={auditLogs} />
+            </div>
+          </section>
+        </aside>
       </div>
     </div>
   );

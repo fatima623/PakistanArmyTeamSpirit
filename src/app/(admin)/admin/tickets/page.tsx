@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Prisma } from "@prisma/client";
+import { LifeBuoy } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 import { cn } from "@/lib/utils";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
+import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import {
   adminFilterChip,
   adminFilterChipActive,
   adminFilterChipInactive,
-  adminSurface,
 } from "@/lib/admin-ui";
 import {
   TICKET_CATEGORY_LABELS,
@@ -39,10 +40,6 @@ const FILTERS = [
 
 function ticketRef(id: string): string {
   return `TK-${id.slice(-5).toUpperCase()}`;
-}
-
-function initials(first: string, last: string): string {
-  return `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "–";
 }
 
 function timeAgo(date: Date, now: Date): string {
@@ -109,27 +106,15 @@ export default async function AdminTicketsPage({
   const now = new Date();
 
   return (
-    <div className={cn(adminSurface, "p-6")}>
-      <header className="admin-users-page-header mb-5 flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h2 className="admin-users-panel-title">Support tickets</h2>
-          <p className="admin-users-page-desc">
-            Participant support tickets. Open one to reply and update its status.
-          </p>
-        </div>
-        <span className="admin-users-count-badge">
-          {statusCounts.all} {statusCounts.all === 1 ? "ticket" : "tickets"}
-        </span>
-      </header>
-
-      <section className="mb-5 flex flex-wrap items-center gap-3">
+    <div className="admin-fade-in-up">
+      <section className="admin-tickets-controls mb-4 flex flex-wrap items-center gap-3">
         <LiveSearchInput
           paramName="search"
           placeholder="Search subject, name, email…"
           ariaLabel="Search tickets"
-          className="relative"
-          inputClassName="admin-input pl-8"
-          iconClassName="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-cp-khaki"
+          className="admin-unit-search-field"
+          inputClassName="admin-input admin-unit-search-input"
+          iconClassName="admin-unit-search-icon"
         />
         <nav className="flex flex-wrap gap-2" aria-label="Filter tickets">
           {FILTERS.map((f) => (
@@ -151,46 +136,63 @@ export default async function AdminTicketsPage({
       </section>
 
       {tickets.length === 0 ? (
-        <p className="admin-team-empty">No tickets found</p>
+        <AdminEmptyState
+          icon={LifeBuoy}
+          title="No tickets found"
+          description="Participant support tickets will appear here. Adjust the filters to widen your search."
+        />
       ) : (
-        <ul className="admin-tickets-list">
-          {tickets.map((t) => (
-            <li key={t.id}>
-              <Link href={`/admin/tickets/${t.id}`} className="admin-ticket-row">
-                <div className="admin-ticket-row__main">
-                  <div className="admin-ticket-row__head">
-                    <span className="admin-ticket-row__ref">{ticketRef(t.id)}</span>
-                    <span className="admin-ticket-row__subject">{t.subject}</span>
+        <div className="admin-tickets-table-wrap">
+          <table className="admin-data-table admin-tickets-table w-full">
+            <thead className="admin-table-head">
+              <tr>
+                <th scope="col">Ref</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Category</th>
+                <th scope="col">Priority</th>
+                <th scope="col">Requester</th>
+                <th scope="col">Updated</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tickets.map((t) => (
+                <tr key={t.id} className="admin-row-hover">
+                  <td className="admin-tickets-ref">{ticketRef(t.id)}</td>
+                  <td>
+                    <Link
+                      href={`/admin/tickets/${t.id}`}
+                      className="admin-tickets-subject"
+                    >
+                      {t.subject}
+                    </Link>
+                  </td>
+                  <td className="admin-tickets-muted">
+                    {TICKET_CATEGORY_LABELS[t.category as TicketCategory] ??
+                      t.category}
+                  </td>
+                  <td>
                     <span
-                      className={`admin-ticket-row__priority admin-ticket-row__priority--${t.priority.toLowerCase()}`}
+                      className={`admin-tag-priority admin-tag-priority--${t.priority.toLowerCase()}`}
                     >
                       {TICKET_PRIORITY_LABELS[t.priority as TicketPriority] ??
                         t.priority}
                     </span>
-                  </div>
-                  <div className="admin-ticket-row__cat">
-                    {TICKET_CATEGORY_LABELS[t.category as TicketCategory] ??
-                      t.category}
-                  </div>
-                </div>
-                <div className="admin-ticket-row__aside">
-                  <span className="admin-users-avatar" aria-hidden>
-                    {initials(t.user.firstName, t.user.lastName)}
-                  </span>
-                  <div className="admin-ticket-row__who">
-                    <span className="admin-ticket-row__name">
-                      {t.user.firstName} {t.user.lastName}
-                    </span>
-                    <span className="admin-ticket-row__metaline">
-                      {t._count.messages} · {timeAgo(t.lastReplyAt, now)}
-                    </span>
-                  </div>
-                  <TicketStatusBadge status={t.status} />
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                  </td>
+                  <td className="admin-tickets-requester">
+                    {t.user.firstName} {t.user.lastName}
+                  </td>
+                  <td className="admin-tickets-muted">
+                    {timeAgo(t.lastReplyAt, now)}
+                  </td>
+                  <td>
+                    <TicketStatusBadge status={t.status} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

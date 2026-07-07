@@ -134,18 +134,6 @@ export default async function AdminUsersPage({
   return (
       <div className={cn(adminUsersPage, "admin-fade-in-up")}>
         <div className={adminUsersPanel}>
-          <header className="admin-users-page-header flex items-start justify-between gap-4">
-            <div className="admin-users-page-intro">
-              <h2 className="admin-users-panel-title">All participation requests</h2>
-              <p className="admin-users-page-desc">
-                Review applications, payment status, and operational actions.
-              </p>
-            </div>
-            <span className="admin-users-count-badge">
-              {totalCount} {totalCount === 1 ? "request" : "requests"}
-            </span>
-          </header>
-
           <section className={adminUsersControls}>
             <div className={adminUsersToolbarSearch}>
               <LiveSearchInput
@@ -155,6 +143,20 @@ export default async function AdminUsersPage({
                 className="admin-users-search-field"
                 inputClassName="admin-input admin-users-search-input"
                 iconClassName="admin-users-search-icon"
+              />
+              <AdminExportButton
+                rows={exportRows}
+                columns={[
+                  "Name",
+                  "Email",
+                  "Rank",
+                  "Unit",
+                  "Country",
+                  "Application",
+                  "Payment",
+                  "Registered",
+                ]}
+                filename="participation-requests.csv"
               />
             </div>
             <nav className={adminUsersFilterTabs} aria-label="Filter users">
@@ -173,21 +175,10 @@ export default async function AdminUsersPage({
                   {FILTER_LABELS[f] ?? f}
                 </Link>
               ))}
+              <span className="admin-users-count-badge">
+                {totalCount} {totalCount === 1 ? "request" : "requests"}
+              </span>
             </nav>
-            <AdminExportButton
-              rows={exportRows}
-              columns={[
-                "Name",
-                "Email",
-                "Rank",
-                "Unit",
-                "Country",
-                "Application",
-                "Payment",
-                "Registered",
-              ]}
-              filename="participation-requests.csv"
-            />
           </section>
 
           <UsersManagementTable

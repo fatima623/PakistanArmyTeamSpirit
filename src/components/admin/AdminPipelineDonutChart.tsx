@@ -6,12 +6,12 @@ import type { PipelineStatusRow } from "@/lib/admin-dashboard-charts";
 import { APPLICATION_STATUS } from "@/lib/constants";
 
 const COLORS: Record<string, string> = {
-  [APPLICATION_STATUS.APPROVED]: "#10b981",
-  [APPLICATION_STATUS.PENDING]: "#6366f1",
-  [APPLICATION_STATUS.REJECTED]: "#f43f5e",
+  [APPLICATION_STATUS.APPROVED]: "#3d5230",
+  [APPLICATION_STATUS.PENDING]: "#b8941f",
+  [APPLICATION_STATUS.REJECTED]: "#c2703d",
 };
 
-const DEFAULT_COLOR = "#3b82f6";
+const DEFAULT_COLOR = "#4f7096";
 
 export function AdminPipelineDonutChart({
   initialRows,
@@ -35,7 +35,7 @@ export function AdminPipelineDonutChart({
       ) : (
         <div className="admin-crm-pipeline">
           <div className="admin-crm-pipeline-chart">
-            <ResponsiveContainer width="100%" height={220}>
+            <ResponsiveContainer width="100%" height={180}>
               <PieChart>
                 <Pie
                   data={chartData}

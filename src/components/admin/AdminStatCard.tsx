@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 
 type Tone = "rose" | "mint" | "amber" | "violet";
 
@@ -14,6 +15,7 @@ export function AdminStatCard({
   staggerIndex = 0,
   href,
   series,
+  variant = "default",
 }: {
   label: string;
   value: number;
@@ -22,14 +24,16 @@ export function AdminStatCard({
   staggerIndex?: number;
   href?: string;
   series?: number[];
+  variant?: "default" | "feature";
 }) {
   const [display, setDisplay] = useState(0);
   // Truthful "new this month" delta = latest bucket of the real monthly series.
   const delta = series && series.length ? series[series.length - 1] : 0;
-  const sparkMax = series && series.length ? Math.max(...series, 1) : 1;
+  const isFeature = variant === "feature";
+  const deltaPositive = delta >= 0;
 
   useEffect(() => {
-    const duration = 1000;
+    const duration = 900;
     const start = performance.now();
     let frame = 0;
 
@@ -47,38 +51,46 @@ export function AdminStatCard({
   const delayClass =
     staggerIndex > 0 && staggerIndex <= 4
       ? `admin-stat-card--delay-${staggerIndex}`
-      : staggerIndex === 0
-        ? "admin-stat-card--delay-0"
-        : "";
+      : "admin-stat-card--delay-0";
 
-  const className = `admin-stat-card admin-stat-card--${tone} admin-fade-in-up ${delayClass}`;
+  const className = [
+    "admin-stat-card",
+    isFeature ? "admin-stat-card--feature" : `admin-stat-card--${tone}`,
+    "admin-fade-in-up",
+    delayClass,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const inner = (
     <>
-      <div className="admin-stat-card-body">
-        <p className="admin-stat-card-label">{label}</p>
-        <p className="admin-stat-card-value" aria-live="polite">
-          {display}
-          {delta > 0 ? (
-            <span className="admin-stat-card-delta">+{delta}</span>
-          ) : null}
-        </p>
-        {series && series.length ? (
-          <div className="admin-stat-card-spark" aria-hidden>
-            {series.map((v, i) => (
-              <span
-                key={i}
-                style={{ height: `${Math.max(8, Math.round((v / sparkMax) * 100))}%` }}
-              />
-            ))}
-          </div>
+      <div className="admin-stat-top">
+        <span
+          className={`admin-stat-card-icon admin-stat-card-icon--${tone}`}
+          aria-hidden
+        >
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </span>
+        {delta !== 0 ? (
+          <span
+            className={`admin-stat-pill ${
+              deltaPositive ? "admin-stat-pill--up" : "admin-stat-pill--down"
+            }`}
+          >
+            {deltaPositive ? (
+              <TrendingUp className="h-3 w-3" aria-hidden />
+            ) : (
+              <TrendingDown className="h-3 w-3" aria-hidden />
+            )}
+            {deltaPositive ? "+" : ""}
+            {delta}
+          </span>
         ) : null}
       </div>
-      <div
-        className={`admin-stat-card-icon admin-stat-card-icon--${tone}`}
-        aria-hidden
-      >
-        <Icon className="h-5 w-5" strokeWidth={2} />
-      </div>
+      <p className="admin-stat-card-value" aria-live="polite">
+        {display}
+      </p>
+      <p className="admin-stat-card-label">{label}</p>
     </>
   );
 

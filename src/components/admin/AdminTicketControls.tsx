@@ -23,44 +23,11 @@ import { TOAST } from "@/lib/toast";
 const STATUSES = Object.entries(TICKET_STATUS_LABELS);
 const PRIORITIES = Object.entries(TICKET_PRIORITY_LABELS);
 
-export function AdminTicketControls({
-  ticketId,
-  status,
-  priority,
-  assignedToId,
-  currentAdminId,
-}: {
-  ticketId: string;
-  status: string;
-  priority: string;
-  assignedToId: string | null;
-  currentAdminId: string;
-}) {
+/** Reply composer — the main action in the conversation column. */
+export function TicketReplyForm({ ticketId }: { ticketId: string }) {
   const router = useRouter();
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  const patch = async (payload: Record<string, unknown>) => {
-    setSaving(true);
-    try {
-      const res = await fetch(`/api/admin/tickets/${ticketId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (res.ok) {
-        router.refresh();
-        return;
-      }
-      const data = await res.json();
-      toast.error(data.error ?? TOAST.GENERIC_ERROR);
-    } catch {
-      toast.error(TOAST.GENERIC_ERROR);
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleReply = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -87,75 +54,114 @@ export function AdminTicketControls({
     }
   };
 
+  return (
+    <form onSubmit={handleReply} className="admin-ticket-reply">
+      <Textarea
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        rows={4}
+        placeholder="Reply to the participant…"
+        maxLength={5000}
+        className="admin-textarea"
+      />
+      <div className="flex justify-end">
+        <Button
+          type="submit"
+          variant="adminPrimary"
+          size="sm"
+          disabled={sending || !body.trim()}
+        >
+          {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Send reply
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+/** Status / priority / assignment controls — the ticket "Manage" sidebar. */
+export function TicketManagePanel({
+  ticketId,
+  status,
+  priority,
+  assignedToId,
+  currentAdminId,
+}: {
+  ticketId: string;
+  status: string;
+  priority: string;
+  assignedToId: string | null;
+  currentAdminId: string;
+}) {
+  const router = useRouter();
+  const [saving, setSaving] = useState(false);
+
+  const patch = async (payload: Record<string, unknown>) => {
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/admin/tickets/${ticketId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        router.refresh();
+        return;
+      }
+      const data = await res.json();
+      toast.error(data.error ?? TOAST.GENERIC_ERROR);
+    } catch {
+      toast.error(TOAST.GENERIC_ERROR);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const assignedToMe = assignedToId === currentAdminId;
 
   return (
-    <div className="space-y-5">
-      <form onSubmit={handleReply} className="space-y-3">
-        <Textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          rows={4}
-          placeholder="Reply to the participant…"
-          maxLength={5000}
-          className="admin-textarea"
-        />
-        <div className="flex justify-end">
-          <Button
-            type="submit"
-            variant="adminPrimary"
-            size="sm"
-            disabled={sending || !body.trim()}
-          >
-            {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Send reply
-          </Button>
-        </div>
-      </form>
+    <div className="admin-ticket-manage">
+      <label className="block">
+        <span className="admin-label mb-1 block">Status</span>
+        <Select
+          value={status}
+          onValueChange={(v) => patch({ status: v })}
+          disabled={saving}
+        >
+          <SelectTrigger className="admin-input">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {STATUSES.map(([value, label]) => (
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </label>
 
-      <div className="grid grid-cols-1 gap-4 border-t border-cp-border/60 pt-4 sm:grid-cols-2">
-        <label className="block">
-          <span className="admin-label mb-1 block">Status</span>
-          <Select
-            value={status}
-            onValueChange={(v) => patch({ status: v })}
-            disabled={saving}
-          >
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {STATUSES.map(([value, label]) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
+      <label className="block">
+        <span className="admin-label mb-1 block">Priority</span>
+        <Select
+          value={priority}
+          onValueChange={(v) => patch({ priority: v })}
+          disabled={saving}
+        >
+          <SelectTrigger className="admin-input">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PRIORITIES.map(([value, label]) => (
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </label>
 
-        <label className="block">
-          <span className="admin-label mb-1 block">Priority</span>
-          <Select
-            value={priority}
-            onValueChange={(v) => patch({ priority: v })}
-            disabled={saving}
-          >
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {PRIORITIES.map(([value, label]) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-      </div>
-
-      <div className="flex items-center gap-3 border-t border-cp-border/60 pt-4">
+      <div className="admin-ticket-assign">
         <span className="admin-label">Assignment</span>
         {assignedToMe ? (
           <Button

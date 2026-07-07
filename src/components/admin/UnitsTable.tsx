@@ -22,28 +22,13 @@ type UnitRow = {
   unitName: string;
   unitType: string;
   branch: string;
-  service: string;
-  patrolsRequested: number;
-  preferredPhase: string | null;
-  jointPatrol: boolean;
-  bdeOrFmn: string;
-  divOrFmn: string;
   arm: string;
-  unitAddress: string;
-  postcode: string;
-  telephoneMil: string;
-  telephoneCiv: string;
   secondPocEmail: string | null;
   thirdPocEmail: string | null;
   additionalInfo: string | null;
   coName: string;
   coEmail: string;
   coPhone: string;
-  coRank: string;
-  coSalutations: string | null;
-  canAccommodateIntl: boolean;
-  preferredIntlPatrol: string | null;
-  longStandingRelation: boolean;
   user: {
     id: string;
     firstName: string;
@@ -60,12 +45,23 @@ function initials(first: string, last: string): string {
   return `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "–";
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
+/** One labelled field block — laid out 2–3 per row inside a section grid. */
+function Field({
+  label,
+  value,
+  wide = false,
+}: {
+  label: string;
+  value: string;
+  wide?: boolean;
+}) {
   return (
-    <>
-      <span className="font-medium text-cp-ink-muted">{label}</span>
-      <span className="text-cp-ink">{value || "—"}</span>
-    </>
+    <div
+      className={`admin-unit-field ${wide ? "admin-unit-field--wide" : ""}`.trim()}
+    >
+      <span className="admin-unit-field-label">{label}</span>
+      <span className="admin-unit-field-value">{value || "—"}</span>
+    </div>
   );
 }
 
@@ -81,7 +77,7 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
       <div className="admin-team-grid">
         {units.map((u) => {
           const captain = u.coName
-            ? `${u.coRank} ${u.coName}`.trim()
+            ? u.coName
             : `${u.user.firstName} ${u.user.lastName}`;
           const intl = isInternationalParticipant(u.user.country);
           const country = formatAdminTableCountry(
@@ -89,9 +85,22 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
             u.user.nationality
           );
           const members = u.user._count.teamMembers;
-          const sub = [u.branch, u.bdeOrFmn].filter(Boolean).join(" · ");
+          const sub = [u.branch, u.arm].filter(Boolean).join(" · ");
           return (
-            <article key={u.id} className="admin-team-card">
+            <article
+              key={u.id}
+              className="admin-team-card admin-team-card--clickable"
+              role="button"
+              tabIndex={0}
+              aria-label={`View ${u.unitName} details`}
+              onClick={() => setViewUnit(u)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setViewUnit(u);
+                }
+              }}
+            >
               <div className="admin-team-card-head">
                 <div className="min-w-0">
                   <div className="admin-team-card-name">{u.unitName}</div>
@@ -128,13 +137,9 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                 <span className="admin-team-card-members">
                   {members} {members === 1 ? "member" : "members"}
                 </span>
-                <button
-                  type="button"
-                  className="admin-team-card-link"
-                  onClick={() => setViewUnit(u)}
-                >
-                  View team roster →
-                </button>
+                <span className="admin-team-card-link" aria-hidden>
+                  View details →
+                </span>
               </div>
             </article>
           );
@@ -142,73 +147,76 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
       </div>
 
       <Dialog open={!!viewUnit} onOpenChange={() => setViewUnit(null)}>
-        <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto border-cp-border bg-white text-cp-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
+        <DialogContent className="admin-unit-dialog max-h-[85vh] max-w-2xl overflow-y-auto border-cp-border bg-white text-cp-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
           {viewUnit && (
             <>
               <DialogHeader>
-                <DialogTitle>{viewUnit.unitName}</DialogTitle>
+                <DialogTitle className="text-cp-olive-dark">
+                  {viewUnit.unitName}
+                </DialogTitle>
               </DialogHeader>
-              <div className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-[160px_1fr]">
-                <DetailRow
-                  label="Team members"
-                  value={String(viewUnit.user._count.teamMembers)}
-                />
-                <DetailRow
-                  label="User"
-                  value={`${viewUnit.user.firstName} ${viewUnit.user.lastName}`}
-                />
-                <DetailRow label="Email" value={viewUnit.user.email} />
-                <DetailRow
-                  label="Country of application"
-                  value={displayCountry(viewUnit.user.country)}
-                />
-                {isInternationalParticipant(viewUnit.user.country) ? (
-                  <DetailRow
-                    label="Nationality"
-                    value={viewUnit.user.nationality ?? ""}
-                  />
-                ) : null}
-                <DetailRow label="Unit type" value={viewUnit.unitType} />
-                <DetailRow label="Branch" value={viewUnit.branch} />
-                <DetailRow label="Joint patrol" value={viewUnit.jointPatrol ? "Yes" : "No"} />
-                <DetailRow label="Bde / Fmn" value={viewUnit.bdeOrFmn} />
-                <DetailRow label="Div / Fmn" value={viewUnit.divOrFmn} />
-                <DetailRow label="Arm" value={viewUnit.arm} />
-                <DetailRow label="Service" value={viewUnit.service} />
-                <DetailRow label="Address" value={viewUnit.unitAddress} />
-                <DetailRow label="Postcode" value={viewUnit.postcode} />
-                <DetailRow label="Tel (mil)" value={viewUnit.telephoneMil} />
-                <DetailRow label="Tel (civ)" value={viewUnit.telephoneCiv} />
-                <DetailRow label="2nd POC" value={viewUnit.secondPocEmail ?? ""} />
-                <DetailRow label="3rd POC" value={viewUnit.thirdPocEmail ?? ""} />
-                <DetailRow label="Additional" value={viewUnit.additionalInfo ?? ""} />
-                <span className="col-span-2 mt-4 border-t border-cp-border pt-4 font-bold text-cp-ink-muted">
-                  CO details
-                </span>
-                <DetailRow label="CO name" value={viewUnit.coName} />
-                <DetailRow label="CO email" value={viewUnit.coEmail} />
-                <DetailRow label="CO phone" value={viewUnit.coPhone} />
-                <DetailRow label="CO rank" value={viewUnit.coRank} />
-                <DetailRow label="Salutations" value={viewUnit.coSalutations ?? ""} />
-                <span className="col-span-2 mt-4 border-t border-cp-border pt-4 font-bold text-cp-ink-muted">
-                  Hosting
-                </span>
-                <DetailRow label="Preferred phase" value={viewUnit.preferredPhase ?? ""} />
-                <DetailRow label="Patrols requested" value={String(viewUnit.patrolsRequested)} />
-                <DetailRow
-                  label="Can accommodate intl"
-                  value={viewUnit.canAccommodateIntl ? "Yes" : "No"}
-                />
-                <DetailRow
-                  label="Preferred intl patrol"
-                  value={viewUnit.preferredIntlPatrol ?? ""}
-                />
-                <DetailRow
-                  label="Long-standing relation"
-                  value={viewUnit.longStandingRelation ? "Yes" : "No"}
-                />
+
+              <div className="admin-unit-detail">
+                <section className="admin-unit-section">
+                  <h4 className="admin-unit-section-title">Team &amp; captain</h4>
+                  <div className="admin-unit-fields">
+                    <Field
+                      label="Team members"
+                      value={String(viewUnit.user._count.teamMembers)}
+                    />
+                    <Field
+                      label="Captain"
+                      value={`${viewUnit.user.firstName} ${viewUnit.user.lastName}`}
+                    />
+                    <Field
+                      label="Country"
+                      value={displayCountry(viewUnit.user.country)}
+                    />
+                    <Field label="Email" value={viewUnit.user.email} wide />
+                    {isInternationalParticipant(viewUnit.user.country) ? (
+                      <Field
+                        label="Nationality"
+                        value={viewUnit.user.nationality ?? ""}
+                      />
+                    ) : null}
+                  </div>
+                </section>
+
+                <section className="admin-unit-section">
+                  <h4 className="admin-unit-section-title">Unit details</h4>
+                  <div className="admin-unit-fields">
+                    <Field label="Unit type" value={viewUnit.unitType} />
+                    <Field label="Branch" value={viewUnit.branch} />
+                    <Field label="Arm" value={viewUnit.arm} />
+                    <Field
+                      label="2nd POC email"
+                      value={viewUnit.secondPocEmail ?? ""}
+                    />
+                    <Field
+                      label="3rd POC email"
+                      value={viewUnit.thirdPocEmail ?? ""}
+                    />
+                    {viewUnit.additionalInfo ? (
+                      <Field
+                        label="Additional info"
+                        value={viewUnit.additionalInfo}
+                        wide
+                      />
+                    ) : null}
+                  </div>
+                </section>
+
+                <section className="admin-unit-section">
+                  <h4 className="admin-unit-section-title">CO / 2IC</h4>
+                  <div className="admin-unit-fields">
+                    <Field label="CO name" value={viewUnit.coName} />
+                    <Field label="CO email" value={viewUnit.coEmail} />
+                    <Field label="CO phone" value={viewUnit.coPhone} />
+                  </div>
+                </section>
               </div>
-              <div className="mt-5 flex justify-end border-t border-cp-border pt-4">
+
+              <div className="admin-unit-dialog-foot">
                 <Button
                   size="sm"
                   variant="adminPrimary"

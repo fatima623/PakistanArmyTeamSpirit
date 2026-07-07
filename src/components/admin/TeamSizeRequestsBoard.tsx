@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { TOAST } from "@/lib/toast";
 
 type BoardRequest = {
@@ -101,11 +102,11 @@ export function TeamSizeRequestsBoard({
 
   if (requests.length === 0) {
     return (
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-body py-10 text-center text-sm text-slate-500">
-          No team size requests yet.
-        </div>
-      </section>
+      <AdminEmptyState
+        icon={CheckCircle2}
+        title="No team size requests"
+        description="You're all caught up. New requests to exceed the team-member cap will appear here for review."
+      />
     );
   }
 

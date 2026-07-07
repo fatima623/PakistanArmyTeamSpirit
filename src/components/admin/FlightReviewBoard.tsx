@@ -1,19 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  CheckCircle2,
-  Eye,
+  ChevronLeft,
+  ChevronRight,
   FileText,
   Loader2,
   Lock,
+  Plane,
   Unlock,
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { TOAST } from "@/lib/toast";
 
 type ReviewFlight = {
@@ -38,16 +39,14 @@ type ReviewParticipant = {
   flights: ReviewFlight[];
 };
 
-function fmt(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
+type FlightRow = ReviewFlight & {
+  participantId: string;
+  participantName: string;
+  unitName: string | null;
+  finalizedAt: string | null;
+};
+
+const PAGE_SIZE = 8;
 
 function DocLink({
   flightId,
@@ -60,7 +59,7 @@ function DocLink({
 }) {
   if (!fileName) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-600">
+      <span className="admin-flights-doc admin-flights-doc--missing">
         <FileText className="h-3.5 w-3.5" aria-hidden />
         Missing
       </span>
@@ -71,7 +70,7 @@ function DocLink({
       href={`/api/admin/flights/${flightId}/file?type=${type}`}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 underline-offset-2 hover:underline"
+      className="admin-flights-doc"
       title={fileName}
     >
       <FileText className="h-3.5 w-3.5" aria-hidden />
@@ -81,8 +80,9 @@ function DocLink({
 }
 
 /**
- * Staff review board for flight submissions. All staff can view documents;
- * only the Administrator finalizes / unlocks records.
+ * Staff review board for flight submissions — a single paginated table of all
+ * flight records. All staff can view documents; only the Administrator
+ * finalizes / unlocks a participant's records.
  */
 export function FlightReviewBoard({
   participants,
@@ -93,6 +93,25 @@ export function FlightReviewBoard({
 }) {
   const router = useRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
+
+  const rows = useMemo<FlightRow[]>(
+    () =>
+      participants.flatMap((p) =>
+        p.flights.map((f) => ({
+          ...f,
+          participantId: p.id,
+          participantName: p.name,
+          unitName: p.unitName,
+          finalizedAt: p.flightsFinalizedAt,
+        }))
+      ),
+    [participants]
+  );
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const current = Math.min(page, totalPages - 1);
+  const pageRows = rows.slice(current * PAGE_SIZE, current * PAGE_SIZE + PAGE_SIZE);
 
   const setFinalized = async (userId: string, finalized: boolean) => {
     setBusyId(userId);
@@ -120,169 +139,142 @@ export function FlightReviewBoard({
     }
   };
 
-  if (participants.length === 0) {
+  if (rows.length === 0) {
     return (
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-body py-10 text-center text-sm text-slate-500">
-          No participants have reached the flight details stage yet.
-        </div>
-      </section>
+      <AdminEmptyState
+        icon={Plane}
+        title="No flight records yet"
+        description="Once participants submit passports and tickets for their travellers, the records will appear here for review."
+      />
     );
   }
 
   return (
-    <div className="space-y-4">
-      {!canFinalize ? (
-        <div className="portal-alert-info flex items-center gap-2 rounded-lg px-4 py-3 text-sm">
-          <Eye className="h-4 w-4 shrink-0" aria-hidden />
-          View-only access — finalization is performed by the Administrator.
-        </div>
-      ) : null}
-
-      {participants.map((p) => (
-        <section key={p.id} className="admin-user-detail-card">
-          <div className="admin-user-detail-card-header">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="min-w-0">
-                <h3 className="admin-user-detail-card-title">
-                  {p.name}
-                  {p.unitName ? ` · ${p.unitName}` : ""}
-                </h3>
-                <p className="admin-user-detail-card-desc">
-                  {p.email}
-                  {p.country ? ` · ${p.country}` : ""} · {p.memberCount} roster
-                  members · {p.flights.length} flight record
-                  {p.flights.length === 1 ? "" : "s"}
-                </p>
-              </div>
-              <div className="flex items-center gap-2">
-                {p.flightsFinalizedAt ? (
-                  <span className="ops-status-pill ops-status-approved">
-                    Finalized {fmt(p.flightsFinalizedAt)}
-                  </span>
-                ) : (
-                  <span className="ops-status-pill ops-status-pending">
-                    Awaiting finalization
-                  </span>
-                )}
-                {canFinalize ? (
-                  p.flightsFinalizedAt ? (
-                    <Button
-                      size="sm"
-                      variant="adminOutline"
-                      disabled={busyId !== null}
-                      onClick={() => setFinalized(p.id, false)}
-                    >
-                      {busyId === p.id ? (
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                      ) : (
-                        <Unlock className="h-4 w-4" aria-hidden />
-                      )}
-                      Unlock
-                    </Button>
-                  ) : (
-                    <ConfirmDialog
-                      trigger={
-                        <Button
-                          size="sm"
-                          variant="adminApprove"
+    <div className="admin-flights">
+      <div className="admin-flights-wrap">
+        <table className="admin-data-table admin-flights-table w-full">
+          <thead className="admin-table-head">
+            <tr>
+              <th scope="col">Traveller</th>
+              <th scope="col">Passenger Name</th>
+              <th scope="col">Passport No.</th>
+              <th scope="col">Passport</th>
+              <th scope="col">Ticket</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pageRows.map((r) => (
+              <tr key={r.id} className="admin-row-hover">
+                <td className="admin-flights-strong">{r.traveler ?? "—"}</td>
+                <td className="admin-flights-strong">{r.passengerName}</td>
+                <td className="admin-flights-mono">{r.passportNumber}</td>
+                <td>
+                  <DocLink
+                    flightId={r.id}
+                    type="passport"
+                    fileName={r.passportFileName}
+                  />
+                </td>
+                <td>
+                  <DocLink
+                    flightId={r.id}
+                    type="ticket"
+                    fileName={r.ticketFileName}
+                  />
+                </td>
+                <td>
+                  <div className="admin-flights-status">
+                    {r.finalizedAt ? (
+                      <span className="ops-status-pill ops-status-approved">
+                        Finalized
+                      </span>
+                    ) : (
+                      <span className="ops-status-pill ops-status-pending">
+                        Awaiting
+                      </span>
+                    )}
+                    {canFinalize ? (
+                      r.finalizedAt ? (
+                        <button
+                          type="button"
+                          className="admin-flights-fin admin-flights-fin--unlock"
+                          title="Unlock records"
+                          aria-label={`Unlock ${r.participantName}'s flight records`}
                           disabled={busyId !== null}
+                          onClick={() => setFinalized(r.participantId, false)}
                         >
-                          {busyId === p.id ? (
-                            <Loader2
-                              className="h-4 w-4 animate-spin"
-                              aria-hidden
-                            />
+                          {busyId === r.participantId ? (
+                            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
                           ) : (
-                            <Lock className="h-4 w-4" aria-hidden />
+                            <Unlock className="h-4 w-4" aria-hidden />
                           )}
-                          Finalize
-                        </Button>
-                      }
-                      title="Finalize flight details"
-                      description={`Lock ${p.name}'s flight records? The participant can no longer edit them, and the Host Information section becomes visible to them once published.`}
-                      confirmLabel="Finalize"
-                      onConfirm={() => setFinalized(p.id, true)}
-                    />
-                  )
-                ) : null}
-              </div>
-            </div>
+                        </button>
+                      ) : (
+                        <ConfirmDialog
+                          trigger={
+                            <button
+                              type="button"
+                              className="admin-flights-fin admin-flights-fin--lock"
+                              title="Finalize records"
+                              aria-label={`Finalize ${r.participantName}'s flight records`}
+                              disabled={busyId !== null}
+                            >
+                              {busyId === r.participantId ? (
+                                <Loader2
+                                  className="h-4 w-4 animate-spin"
+                                  aria-hidden
+                                />
+                              ) : (
+                                <Lock className="h-4 w-4" aria-hidden />
+                              )}
+                            </button>
+                          }
+                          title="Finalize flight details"
+                          description={`Lock ${r.participantName}'s flight records? The participant can no longer edit them, and the Host Information section becomes visible to them once published.`}
+                          confirmLabel="Finalize"
+                          onConfirm={() => setFinalized(r.participantId, true)}
+                        />
+                      )
+                    ) : null}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="admin-flights-foot">
+        <span className="admin-flights-count">
+          {rows.length} flight record{rows.length === 1 ? "" : "s"}
+        </span>
+        {totalPages > 1 ? (
+          <div className="admin-flights-pager">
+            <button
+              type="button"
+              className="admin-flights-pager-btn"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={current === 0}
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden />
+            </button>
+            <span className="admin-flights-pager-label">
+              Page {current + 1} of {totalPages}
+            </span>
+            <button
+              type="button"
+              className="admin-flights-pager-btn"
+              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+              disabled={current >= totalPages - 1}
+              aria-label="Next page"
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden />
+            </button>
           </div>
-          <div className="admin-user-detail-card-body">
-            {p.flights.length === 0 ? (
-              <p className="py-2 text-sm text-slate-500">
-                Roster completed — no flight records submitted yet.
-              </p>
-            ) : (
-              <div className="overflow-x-auto rounded-lg border border-slate-200">
-                <table className="w-full min-w-[640px] border-collapse text-sm">
-                  <thead>
-                    <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                      <th scope="col" className="px-3 py-2">
-                        Traveler
-                      </th>
-                      <th scope="col" className="px-3 py-2">
-                        Passenger Name
-                      </th>
-                      <th scope="col" className="px-3 py-2">
-                        Passport No.
-                      </th>
-                      <th scope="col" className="px-3 py-2">
-                        Passport
-                      </th>
-                      <th scope="col" className="px-3 py-2">
-                        Ticket
-                      </th>
-                      <th scope="col" className="px-3 py-2">
-                        Updated
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 bg-white">
-                    {p.flights.map((f) => (
-                      <tr key={f.id}>
-                        <td className="px-3 py-2 text-slate-800">
-                          {f.traveler ?? "—"}
-                        </td>
-                        <td className="px-3 py-2 text-slate-800">
-                          {f.passengerName}
-                        </td>
-                        <td className="px-3 py-2 font-mono text-xs text-slate-700">
-                          {f.passportNumber}
-                        </td>
-                        <td className="px-3 py-2">
-                          <DocLink
-                            flightId={f.id}
-                            type="passport"
-                            fileName={f.passportFileName}
-                          />
-                        </td>
-                        <td className="px-3 py-2">
-                          <DocLink
-                            flightId={f.id}
-                            type="ticket"
-                            fileName={f.ticketFileName}
-                          />
-                        </td>
-                        <td className="px-3 py-2 text-xs text-slate-500">
-                          {fmt(f.updatedAt)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-            {canFinalize && !p.flightsFinalizedAt ? (
-              <p className="mt-2 flex items-center gap-1.5 text-xs text-slate-500">
-                <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
-                Verify every traveler has both PDFs before finalizing.
-              </p>
-            ) : null}
-          </div>
-        </section>
-      ))}
+        ) : null}
+      </div>
     </div>
   );
 }

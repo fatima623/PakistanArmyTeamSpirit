@@ -76,10 +76,6 @@ export function ApplicationReviewPanel({
         <h3 className="admin-user-detail-card-title">
           Registration verification (SD)
         </h3>
-        <p className="admin-user-detail-card-desc">
-          Verification is performed exclusively by the Sports Directorate.
-          Payment verification is handled separately by the MT.
-        </p>
       </div>
       <div className="admin-user-detail-card-body">
         <div className="admin-user-detail-status-row">

@@ -16,10 +16,7 @@ import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
 import { Button } from "@/components/ui/button";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
-import {
-  displayCountry,
-  isInternationalParticipant,
-} from "@/lib/participant-country";
+import { isInternationalParticipant } from "@/lib/participant-country";
 import { formatRegistrationFee } from "@/lib/payment-settings";
 
 type PageProps = { params: Promise<{ id: string }> };
@@ -106,7 +103,7 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="admin-user-detail-page">
+    <div className="admin-user-detail-page admin-user-detail-page--compact">
       <header className="admin-user-detail-hero">
         <div className="admin-user-detail-hero-main">
           <Link href="/admin/payments" className="admin-user-detail-back">
@@ -124,12 +121,6 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
             {payment.user.unit?.unitName ?? "No unit"} ·{" "}
             {formatRegistrationFee(payment.amount)}
           </p>
-          <p className="admin-user-detail-subline">
-            Country of application: {displayCountry(payment.user.country)}
-            {isInternationalParticipant(payment.user.country)
-              ? ` · Nationality: ${payment.user.nationality?.trim() || "—"}`
-              : ""}
-          </p>
           <div className="admin-user-detail-badges">
             <PaymentStatusBadge status={payment.status} />
           </div>
@@ -143,27 +134,33 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
         </div>
       </header>
 
-      {!canDecide ? (
-        <div className="portal-alert-info mb-4 rounded-lg px-4 py-3 text-sm">
-          Payment verification is performed exclusively by the MT (Management
-          Team). Your role has view-only access to the verification status.
-        </div>
-      ) : null}
+      <div className="admin-detail-layout">
+        <div className="admin-detail-layout-main">
+          {!canDecide ? (
+            <div className="portal-alert-info rounded-lg px-4 py-2.5 text-[13px]">
+              Payment verification is performed exclusively by the MT (Management
+              Team). Your role has view-only access.
+            </div>
+          ) : null}
 
-      <PaymentReviewPanel
-        payment={serialized}
-        rejectionHistory={rejectionHistory}
-        canDecide={canDecide}
-      />
+          <PaymentReviewPanel
+            payment={serialized}
+            rejectionHistory={rejectionHistory}
+            canDecide={canDecide}
+          />
+        </div>
 
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-header">
-          <h3 className="admin-user-detail-card-title">Payment activity</h3>
-        </div>
-        <div className="admin-user-detail-card-body">
-          <AuditLogList logs={auditLogs} />
-        </div>
-      </section>
+        <aside className="admin-detail-layout-aside">
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header">
+              <h3 className="admin-user-detail-card-title">Activity</h3>
+            </div>
+            <div className="admin-user-detail-card-body">
+              <AuditLogList logs={auditLogs} />
+            </div>
+          </section>
+        </aside>
+      </div>
     </div>
   );
 }

@@ -2,20 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import "@/app/admin-user-detail.css";
 import { prisma } from "@/lib/prisma";
 import { getCachedSession } from "@/lib/cached-auth";
-import { cn, formatDateTime } from "@/lib/utils";
+import { formatDateTime } from "@/lib/utils";
 import {
   TICKET_CATEGORY_LABELS,
   type TicketCategory,
 } from "@/lib/constants";
-import { adminSurface } from "@/lib/admin-ui";
 import {
   TicketPriorityTag,
   TicketStatusBadge,
 } from "@/components/tickets/TicketStatusBadge";
 import { TicketThread } from "@/components/tickets/TicketThread";
-import { AdminTicketControls } from "@/components/admin/AdminTicketControls";
+import {
+  TicketManagePanel,
+  TicketReplyForm,
+} from "@/components/admin/AdminTicketControls";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 
 export const metadata: Metadata = {
@@ -64,7 +67,7 @@ export default async function AdminTicketDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="admin-ticket-detail">
       <AdminBreadcrumbs
         items={[
           { label: "Dashboard", href: "/admin" },
@@ -73,42 +76,75 @@ export default async function AdminTicketDetailPage({ params }: PageProps) {
         ]}
       />
 
-      <div className={cn(adminSurface, "mb-5 p-6")}>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h1 className="admin-page-title">{ticket.subject}</h1>
-            <p className="admin-muted mt-1 text-sm">
+      <header className="admin-ticket-detail-hero">
+        <div className="min-w-0">
+          <h1 className="admin-ticket-detail-subject">{ticket.subject}</h1>
+          <div className="admin-ticket-detail-meta">
+            <span>
               {TICKET_CATEGORY_LABELS[ticket.category as TicketCategory] ??
-                ticket.category}{" "}
-              · Opened {formatDateTime(ticket.createdAt)}
-            </p>
-            <p className="admin-muted mt-1 text-sm">
+                ticket.category}
+            </span>
+            <span className="admin-ticket-detail-dot" aria-hidden>
+              ·
+            </span>
+            <span>Opened {formatDateTime(ticket.createdAt)}</span>
+            <span className="admin-ticket-detail-dot" aria-hidden>
+              ·
+            </span>
+            <span>
               Raised by {ticket.user.firstName} {ticket.user.lastName} ·{" "}
-              <Link href={`/admin/users/${ticket.user.id}`} className="admin-link">
+              <Link
+                href={`/admin/users/${ticket.user.id}`}
+                className="admin-link"
+              >
                 {ticket.user.email}
               </Link>
-            </p>
-          </div>
-          <div className="flex flex-col items-end gap-2">
-            <TicketStatusBadge status={ticket.status} />
-            <TicketPriorityTag priority={ticket.priority} />
+            </span>
           </div>
         </div>
-      </div>
+        <div className="admin-ticket-detail-badges">
+          <TicketStatusBadge status={ticket.status} />
+          <TicketPriorityTag priority={ticket.priority} />
+        </div>
+      </header>
 
-      <div className={cn(adminSurface, "mb-5 p-6")}>
-        <TicketThread messages={ticket.messages} />
-      </div>
+      <div className="admin-ticket-detail-grid">
+        <div className="admin-ticket-detail-main">
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header">
+              <h3 className="admin-user-detail-card-title">Conversation</h3>
+            </div>
+            <div className="admin-user-detail-card-body">
+              <TicketThread messages={ticket.messages} />
+            </div>
+          </section>
 
-      <div className={cn(adminSurface, "p-6")}>
-        <h2 className="admin-section-title mb-4">Respond &amp; manage</h2>
-        <AdminTicketControls
-          ticketId={ticket.id}
-          status={ticket.status}
-          priority={ticket.priority}
-          assignedToId={ticket.assignedToId}
-          currentAdminId={session?.user?.id ?? ""}
-        />
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header">
+              <h3 className="admin-user-detail-card-title">Reply</h3>
+            </div>
+            <div className="admin-user-detail-card-body">
+              <TicketReplyForm ticketId={ticket.id} />
+            </div>
+          </section>
+        </div>
+
+        <aside className="admin-ticket-detail-aside">
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header">
+              <h3 className="admin-user-detail-card-title">Manage</h3>
+            </div>
+            <div className="admin-user-detail-card-body">
+              <TicketManagePanel
+                ticketId={ticket.id}
+                status={ticket.status}
+                priority={ticket.priority}
+                assignedToId={ticket.assignedToId}
+                currentAdminId={session?.user?.id ?? ""}
+              />
+            </div>
+          </section>
+        </aside>
       </div>
     </div>
   );

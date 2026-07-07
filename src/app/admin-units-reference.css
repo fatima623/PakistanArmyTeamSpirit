@@ -26,3 +26,123 @@
 }
 
 /* Row actions: portal-design.css (gap + compact buttons) */
+
+/* —— Toolbar: single sleek row (search + count + export) —— */
+.admin-theme .admin-units-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin-theme .admin-unit-search-field {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.admin-theme .admin-unit-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: #5a655c;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.admin-theme .admin-unit-search-input {
+  width: 100% !important;
+  height: 2.75rem !important;
+  padding: 0 0.875rem 0 2.5rem !important;
+  border: 1px solid #e4e7e0 !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  font-size: 0.875rem !important;
+  box-shadow: 0 1px 2px rgba(20, 30, 24, 0.04) !important;
+}
+
+.admin-theme .admin-unit-search-input:focus-visible {
+  border-color: #9cbf8a !important;
+  box-shadow: 0 0 0 3px rgba(30, 90, 58, 0.15) !important;
+  outline: none !important;
+}
+
+.admin-theme .admin-units-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #5a655c;
+  white-space: nowrap;
+  padding: 0 2px;
+}
+
+/* —— Team detail modal — sectioned multi-column fields (portal: unscoped) —— */
+.admin-unit-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 2px;
+}
+
+.admin-unit-section-title {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1e5a3a;
+}
+
+.admin-unit-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (min-width: 560px) {
+  .admin-unit-fields {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.admin-unit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #e7eae2;
+  border-radius: 9px;
+  background: #f7f9f5;
+}
+
+.admin-unit-field--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-unit-field-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c857a;
+}
+
+.admin-unit-field-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #18221c;
+  word-break: break-word;
+}
+
+.admin-unit-dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e4e7e0;
+}

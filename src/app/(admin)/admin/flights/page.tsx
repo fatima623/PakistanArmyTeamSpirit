@@ -43,21 +43,6 @@ export default async function AdminFlightsPage() {
 
   return (
     <div className="admin-fade-in-up">
-      <header className="mb-5 flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h2 className="admin-users-panel-title">Flight details review</h2>
-          <p className="admin-users-page-desc">
-            Review submitted travel documents per participant. Finalizing locks
-            the records and reveals the Host Information section to the
-            participant.
-          </p>
-        </div>
-        <span className="admin-users-count-badge">
-          {participants.filter((p) => !p.flightsFinalizedAt).length} awaiting
-          finalization
-        </span>
-      </header>
-
       <FlightReviewBoard
         canFinalize={canManageSystem(role)}
         participants={participants.map((p) => ({

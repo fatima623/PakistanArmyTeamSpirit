@@ -109,12 +109,12 @@ export function AdminRegistrationActivityChart({
           <svg width="0" height="0" aria-hidden className="admin-crm-chart-gradient-defs">
             <defs>
               <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#6366f1" />
-                <stop offset="100%" stopColor="#8b5cf6" />
+                <stop offset="0%" stopColor="#4d6340" />
+                <stop offset="100%" stopColor="#2f4025" />
               </linearGradient>
             </defs>
           </svg>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
               <XAxis
@@ -130,7 +130,7 @@ export function AdminRegistrationActivityChart({
                 tickLine={false}
               />
               <Tooltip
-                cursor={{ fill: "rgba(59, 130, 246, 0.08)" }}
+                cursor={{ fill: "rgba(61, 82, 48, 0.08)" }}
                 contentStyle={{
                   borderRadius: 8,
                   border: "1px solid #e2e8f0",

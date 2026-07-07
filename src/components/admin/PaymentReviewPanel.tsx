@@ -70,6 +70,25 @@ type Payment = {
   };
 };
 
+function Field({
+  label,
+  value,
+  wide = false,
+}: {
+  label: string;
+  value: string;
+  wide?: boolean;
+}) {
+  return (
+    <div
+      className={`admin-detail-field ${wide ? "admin-detail-field--wide" : ""}`.trim()}
+    >
+      <span className="admin-detail-field-label">{label}</span>
+      <span className="admin-detail-field-value">{value || "—"}</span>
+    </div>
+  );
+}
+
 export function PaymentReviewPanel({
   payment,
   rejectionHistory,
@@ -192,65 +211,65 @@ export function PaymentReviewPanel({
       : "Reject and notify participant";
 
   return (
-    <div className="admin-user-detail-grid admin-user-detail-grid--split">
-      <div className="admin-user-detail-stack">
+    <div className="admin-user-detail-stack">
         <section className="admin-user-detail-card">
           <div className="admin-user-detail-card-header">
             <h3 className="admin-user-detail-card-title">Transaction details</h3>
-            <p className="admin-user-detail-card-desc">
-              Amount and reference submitted by the participant.
-            </p>
           </div>
           <div className="admin-user-detail-card-body">
-            <dl className="admin-user-detail-dl">
-              <dt>Amount</dt>
-              <dd>{formatRegistrationFee(payment.amount)}</dd>
-              <dt>Submitted</dt>
-              <dd>{formatDateShort(payment.createdAt)}</dd>
-              <dt>Reference</dt>
-              <dd className="font-mono">
-                {payment.transactionReference ?? "—"}
-              </dd>
-              <dt>Payment date</dt>
-              <dd>
-                {payment.paymentDate
-                  ? formatDateDisplay(payment.paymentDate)
-                  : "—"}
-              </dd>
+            <div className="admin-detail-fields">
+              <Field
+                label="Amount"
+                value={formatRegistrationFee(payment.amount)}
+              />
+              <Field
+                label="Submitted"
+                value={formatDateShort(payment.createdAt)}
+              />
+              <Field
+                label="Payment date"
+                value={
+                  payment.paymentDate
+                    ? formatDateDisplay(payment.paymentDate)
+                    : "—"
+                }
+              />
+              <Field
+                label="Reference"
+                value={payment.transactionReference ?? "—"}
+                wide
+              />
               {payment.uploaderName ? (
-                <>
-                  <dt>Uploaded by</dt>
-                  <dd>
-                    {payment.uploaderName}
-                    {payment.uploaderEmail ? (
-                      <span className="block text-xs text-cp-ink-muted">
-                        {payment.uploaderEmail}
-                      </span>
-                    ) : null}
-                  </dd>
-                </>
+                <Field
+                  label="Uploaded by"
+                  value={
+                    payment.uploaderEmail
+                      ? `${payment.uploaderName} · ${payment.uploaderEmail}`
+                      : payment.uploaderName
+                  }
+                  wide
+                />
               ) : null}
               {payment.proofUploadedAt ? (
-                <>
-                  <dt>Proof uploaded</dt>
-                  <dd>{formatDateShort(payment.proofUploadedAt)}</dd>
-                </>
+                <Field
+                  label="Proof uploaded"
+                  value={formatDateShort(payment.proofUploadedAt)}
+                />
               ) : null}
               {payment.proofFileSize != null ? (
-                <>
-                  <dt>File size</dt>
-                  <dd>{(payment.proofFileSize / 1024).toFixed(1)} KB</dd>
-                </>
+                <Field
+                  label="File size"
+                  value={`${(payment.proofFileSize / 1024).toFixed(1)} KB`}
+                />
               ) : null}
               {payment.proofOriginalFileName ? (
-                <>
-                  <dt>Filename</dt>
-                  <dd className="font-mono text-xs">
-                    {payment.proofOriginalFileName}
-                  </dd>
-                </>
+                <Field
+                  label="Filename"
+                  value={payment.proofOriginalFileName}
+                  wide
+                />
               ) : null}
-            </dl>
+            </div>
           </div>
         </section>
 
@@ -258,9 +277,6 @@ export function PaymentReviewPanel({
           <section className="admin-user-detail-card">
             <div className="admin-user-detail-card-header">
               <h3 className="admin-user-detail-card-title">Payment proof</h3>
-              <p className="admin-user-detail-card-desc">
-                Review the uploaded receipt before verifying.
-              </p>
             </div>
             <div className="admin-user-detail-card-body">
               <div className="admin-user-detail-proof-frame">
@@ -279,15 +295,10 @@ export function PaymentReviewPanel({
             </div>
           </section>
         ) : null}
-      </div>
 
       <section className="admin-user-detail-card">
         <div className="admin-user-detail-card-header">
           <h3 className="admin-user-detail-card-title">Verify payment</h3>
-          <p className="admin-user-detail-card-desc">
-            Confirm the proof matches the amount and reference. This does not
-            approve the application — only payment verification.
-          </p>
         </div>
         <div className="admin-user-detail-card-body">
           <div className="admin-user-detail-status-row">
@@ -313,7 +324,7 @@ export function PaymentReviewPanel({
           />
 
           <div className="admin-user-detail-field mt-4">
-            <label htmlFor="payment-status">Payment status</label>
+            <label htmlFor="payment-status">Update status</label>
             <div
               className={cn(
                 statusControlsLocked &&

@@ -72,29 +72,18 @@ export default async function AdminUnitsPage({
 
   return (
     <div className="admin-units-page admin-fade-in-up">
-      <header className="admin-units-page-header flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h2 className="admin-users-panel-title">Participating teams</h2>
-          <p className="admin-users-page-desc">
-            Registered units and their team rosters.
-          </p>
-        </div>
-        <span className="admin-users-count-badge">
+      <section className="admin-units-controls">
+        <LiveSearchInput
+          paramName="search"
+          placeholder="Search teams or units..."
+          ariaLabel="Search teams"
+          className="admin-unit-search-field"
+          inputClassName="admin-input admin-unit-search-input"
+          iconClassName="admin-unit-search-icon"
+        />
+        <span className="admin-units-count">
           {units.length} {units.length === 1 ? "team" : "teams"}
         </span>
-      </header>
-
-      <section className="admin-units-controls mb-5 flex flex-wrap items-center gap-3">
-        <div className="admin-units-toolbar-search min-w-[220px] flex-1">
-          <LiveSearchInput
-            paramName="search"
-            placeholder="Search teams or units..."
-            ariaLabel="Search teams"
-            className="admin-users-search-field"
-            inputClassName="admin-input admin-users-search-input"
-            iconClassName="admin-users-search-icon"
-          />
-        </div>
         <AdminExportButton
           rows={exportRows}
           columns={[
