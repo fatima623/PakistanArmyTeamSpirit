@@ -29,49 +29,52 @@ export function ParticipantRegistrationDetailsCard({
   unit,
 }: Props) {
   return (
-    <section className="portal-card pats-panel">
-      <h2 className="participant-dash-section-title mb-4 border-b border-cp-border pb-3">
-        Registration details
-      </h2>
-      <dl className="grid gap-3 text-sm sm:grid-cols-2">
+    <section className="pp-card">
+      <div className="pp-card__head">
         <div>
-          <dt className="portal-subtitle text-[11px]">Name</dt>
-          <dd className="mt-1 font-semibold text-cp-ink">
+          <p className="pp-eyebrow">Profile</p>
+          <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
+            Registration details
+          </h2>
+        </div>
+      </div>
+      <dl className="pp-dl">
+        <div>
+          <dt className="pp-dl__term">Name</dt>
+          <dd className="pp-dl__desc">
             {firstName} {lastName}
           </dd>
         </div>
         <div>
-          <dt className="portal-subtitle text-[11px]">Unit</dt>
-          <dd className="mt-1 font-semibold text-cp-ink">
-            {unit?.unitName ?? "—"}
-          </dd>
+          <dt className="pp-dl__term">Unit</dt>
+          <dd className="pp-dl__desc">{unit?.unitName ?? "—"}</dd>
         </div>
         <div>
-          <dt className="portal-subtitle text-[11px]">Email</dt>
-          <dd className="mt-1 text-cp-ink">{email}</dd>
+          <dt className="pp-dl__term">Email</dt>
+          <dd className="pp-dl__desc">{email}</dd>
         </div>
         <div>
-          <dt className="portal-subtitle text-[11px]">Rank</dt>
-          <dd className="mt-1 text-cp-ink">{rank || "—"}</dd>
+          <dt className="pp-dl__term">Rank</dt>
+          <dd className="pp-dl__desc">{rank || "—"}</dd>
         </div>
         <div>
-          <dt className="portal-subtitle text-[11px]">Date registered</dt>
-          <dd className="mt-1 text-cp-ink">{formatDateShort(createdAt)}</dd>
+          <dt className="pp-dl__term">Date registered</dt>
+          <dd className="pp-dl__desc">{formatDateShort(createdAt)}</dd>
         </div>
         <div>
-          <dt className="portal-subtitle text-[11px]">Country of Application</dt>
-          <dd className="mt-1 text-cp-ink">{displayCountry(country)}</dd>
+          <dt className="pp-dl__term">Country of Application</dt>
+          <dd className="pp-dl__desc">{displayCountry(country)}</dd>
         </div>
         {isInternationalParticipant(country) ? (
           <div>
-            <dt className="portal-subtitle text-[11px]">Nationality</dt>
-            <dd className="mt-1 text-cp-ink">{nationality?.trim() || "—"}</dd>
+            <dt className="pp-dl__term">Nationality</dt>
+            <dd className="pp-dl__desc">{nationality?.trim() || "—"}</dd>
           </div>
         ) : null}
         {unit ? (
           <div>
-            <dt className="portal-subtitle text-[11px]">Branch / formation</dt>
-            <dd className="mt-1 text-cp-ink">
+            <dt className="pp-dl__term">Branch / formation</dt>
+            <dd className="pp-dl__desc">
               {unit.branch}
               {unit.bdeOrFmn ? ` · ${unit.bdeOrFmn}` : ""}
             </dd>

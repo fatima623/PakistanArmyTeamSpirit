@@ -5,11 +5,14 @@ import { useRouter } from "next/navigation";
 import {
   CalendarClock,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   ClipboardCheck,
   Loader2,
   Lock,
   Save,
   Trash2,
+  UserPlus,
   Users,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -25,6 +28,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { TOAST } from "@/lib/toast";
 import type { TeamMemberRecord } from "@/lib/team-members";
 
@@ -159,6 +168,7 @@ export function TeamRosterManager({
     initialRosterCompleted
   );
   const [busy, setBusy] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
 
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestedCount, setRequestedCount] = useState(limit + 1);
@@ -169,7 +179,6 @@ export function TeamRosterManager({
 
   const canEdit = teamRegistered && !flightsFinalized;
   const filledCount = rows.filter((r) => !isRowBlank(r)).length;
-  const atCap = filledCount >= limit;
   const dirty = useMemo(
     () => JSON.stringify(buildRows(members, limit)) !== JSON.stringify(rows),
     [members, rows, limit]
@@ -458,10 +467,19 @@ export function TeamRosterManager({
     Math.round((filledCount / Math.max(limit, 1)) * 100)
   );
 
+  // Paginate so every member is enterable without a long scroll.
+  const pageSize = 7;
+  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
+  const safePage = Math.min(page, pageCount - 1);
+  const startIdx = safePage * pageSize;
+  const pageRows = rows
+    .map((row, i) => ({ row, i }))
+    .slice(startIdx, startIdx + pageSize);
+
   return (
     <div className="space-y-4">
       <section className="portal-card pats-panel">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="portal-h2 mb-0.5">Team Members</h2>
             <p className="text-sm text-slate-600">
@@ -478,6 +496,29 @@ export function TeamRosterManager({
               </span>
             ) : (
               <>
+                <TooltipProvider delayDuration={150}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="h-9 w-9 p-0"
+                        disabled={busy !== null}
+                        onClick={() => {
+                          setRequestedCount(limit + 1);
+                          setRequestOpen(true);
+                        }}
+                        aria-label="Request additional team members"
+                      >
+                        <UserPlus className="h-4 w-4" aria-hidden />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Request additional team members
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <Button
                   variant="outline"
                   size="sm"
@@ -529,7 +570,7 @@ export function TeamRosterManager({
         </div>
 
         {/* progress */}
-        <div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+        <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
           <div
             className="h-full rounded-full bg-emerald-600 transition-all"
             style={{ width: `${progress}%` }}
@@ -567,7 +608,7 @@ export function TeamRosterManager({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white">
-              {rows.map((row, i) => {
+              {pageRows.map(({ row, i }) => {
                 const num = (
                   <td className="px-3 py-2 text-center font-medium text-slate-400">
                     {i + 1}
@@ -670,27 +711,58 @@ export function TeamRosterManager({
           </table>
         </div>
 
-        {canEdit ? (
+        {pageCount > 1 ? (
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs text-slate-500">
-              Fill in your team members above, then save and mark the roster
-              complete to unlock Flight Details.
+              Showing {startIdx + 1}–
+              {Math.min(startIdx + pageSize, rows.length)} of {rows.length} rows
             </p>
-            {atCap ? (
+            <div className="flex items-center gap-1">
               <Button
+                variant="outline"
                 size="sm"
-                className="bg-amber-600 text-white hover:bg-amber-700"
-                disabled={busy !== null || sizeRequest?.status === "PENDING"}
-                onClick={() => {
-                  setRequestedCount(limit + 1);
-                  setRequestOpen(true);
-                }}
+                className="h-8 w-8 p-0"
+                disabled={safePage === 0}
+                onClick={() => setPage(safePage - 1)}
+                aria-label="Previous page"
               >
-                <Users className="h-4 w-4" aria-hidden />
-                Request Additional Team Members
+                <ChevronLeft className="h-4 w-4" aria-hidden />
               </Button>
-            ) : null}
+              {Array.from({ length: pageCount }).map((_, p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPage(p)}
+                  aria-label={`Page ${p + 1}`}
+                  aria-current={p === safePage ? "page" : undefined}
+                  className={`h-8 min-w-8 rounded-md px-2 text-sm font-semibold transition-colors ${
+                    p === safePage
+                      ? "bg-emerald-700 text-white"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  {p + 1}
+                </button>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 w-8 p-0"
+                disabled={safePage === pageCount - 1}
+                onClick={() => setPage(safePage + 1)}
+                aria-label="Next page"
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </Button>
+            </div>
           </div>
+        ) : null}
+
+        {canEdit ? (
+          <p className="mt-3 text-xs text-slate-500">
+            Fill in your team members, then save and mark the roster complete to
+            unlock Flight Details.
+          </p>
         ) : null}
 
         {sizeRequest ? (
@@ -717,19 +789,39 @@ export function TeamRosterManager({
       </section>
 
       <Dialog open={requestOpen} onOpenChange={setRequestOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Request Additional Team Members</DialogTitle>
-            <DialogDescription>
-              Your current limit is {limit}. Tell the administrators how many
-              members you need and why — they will review your justification.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-1">
+        <DialogContent className="overflow-hidden p-0 sm:max-w-md">
+          <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-800 to-green-900 px-6 py-5">
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(120% 140% at 100% 0%, rgba(216,185,104,0.28), transparent 55%)",
+              }}
+              aria-hidden
+            />
+            <DialogHeader className="relative space-y-0 text-left">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
+                  <UserPlus className="h-5 w-5 text-white" aria-hidden />
+                </span>
+                <div>
+                  <DialogTitle className="text-base font-bold text-white">
+                    Request additional members
+                  </DialogTitle>
+                  <DialogDescription className="mt-0.5 text-xs text-emerald-50/90">
+                    Your team limit is {limit}. Ask the administration to raise
+                    it — they&apos;ll review your request.
+                  </DialogDescription>
+                </div>
+              </div>
+            </DialogHeader>
+          </div>
+
+          <div className="space-y-4 px-6 py-5">
             <div>
               <label
                 htmlFor="requested-count"
-                className="mb-1 block text-sm font-medium text-slate-700"
+                className="mb-1 block text-sm font-semibold text-slate-700"
               >
                 Requested team size
               </label>
@@ -743,24 +835,37 @@ export function TeamRosterManager({
                   setRequestedCount(Number(e.target.value) || limit + 1)
                 }
               />
+              <p className="mt-1 text-xs text-slate-500">
+                Between {limit + 1} and 200 members.
+              </p>
             </div>
             <div>
               <label
                 htmlFor="justification"
-                className="mb-1 block text-sm font-medium text-slate-700"
+                className="mb-1 block text-sm font-semibold text-slate-700"
               >
-                Justification for the administrators
+                Justification
               </label>
               <Textarea
                 id="justification"
                 rows={4}
                 value={justification}
                 onChange={(e) => setJustification(e.target.value)}
-                placeholder="Explain why your team needs additional members (minimum 20 characters)…"
+                placeholder="Explain why your team needs additional members…"
               />
+              <p
+                className={`mt-1 text-xs ${
+                  justification.trim().length < 20
+                    ? "text-slate-400"
+                    : "text-emerald-700"
+                }`}
+              >
+                {justification.trim().length}/20 characters minimum
+              </p>
             </div>
           </div>
-          <DialogFooter>
+
+          <DialogFooter className="gap-2 border-t border-slate-100 px-6 py-4">
             <Button
               variant="outline"
               disabled={busy !== null}

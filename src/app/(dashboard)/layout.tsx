@@ -8,12 +8,12 @@ export default function DashboardLayout({
 }) {
   return (
     <PublicLayout>
-      <div className="pats-portal participant-portal dashboard-day w-full">
-        <div className="pats-portal-shell">
-          <div className="pats-portal-layout">
-            <PatsPortalNavServer />
-            <div className="min-w-0">{children}</div>
-          </div>
+      {/* Legacy shell classes are kept so not-yet-redesigned pages keep their
+          scoped styles during the phased rollout; `pp` adds the new system. */}
+      <div className="pats-portal participant-portal dashboard-day pp w-full">
+        <div className="pp-shell">
+          <PatsPortalNavServer />
+          <main className="pp-main">{children}</main>
         </div>
       </div>
     </PublicLayout>

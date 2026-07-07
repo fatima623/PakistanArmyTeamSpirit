@@ -37,6 +37,9 @@
 /* Institutional design refresh (olive / brass / sage). MUST load last so it
    overrides admin-day-theme.css. Re-skins admin + participant portal only. */
 @import "./pats-refresh.css";
+/* Participant Panel design system v2 (refined institutional). Scoped to `.pp`
+   with fresh class names, so it wins without fighting the legacy cascade. */
+@import "./participant-panel.css";
 
 @tailwind base;
 @tailwind components;

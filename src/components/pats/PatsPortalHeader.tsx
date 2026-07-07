@@ -1,21 +1,15 @@
-import { PatsLogo } from "@/components/pats/PatsLogo";
-
 type Props = {
   title: string;
   subtitle?: string;
 };
 
-/** Dashboard page title band — DESIGN_SPEC typography */
+/** Participant page title band — participant-panel.css (.pp) design system. */
 export function PatsPortalHeader({ title, subtitle }: Props) {
   return (
-    <header className="pats-portal-header">
-      <div className="mb-4 flex items-center gap-3">
-        <PatsLogo size={44} variant="nav" />
-        <p className="pats-eyebrow !mb-0">Participant portal</p>
-      </div>
-      <div className="pats-gold-rule" aria-hidden />
-      <h1>{title}</h1>
-      {subtitle && <p className="pats-body mt-2">{subtitle}</p>}
+    <header className="pp-page-header">
+      <p className="pp-eyebrow">Participant portal</p>
+      <h1 className="pp-page-title">{title}</h1>
+      {subtitle ? <p className="pp-page-sub">{subtitle}</p> : null}
     </header>
   );
 }

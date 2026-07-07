@@ -60,7 +60,10 @@ export async function PUT(request: Request, context: RouteContext) {
     }
 
     // Traveler may be re-linked only to the caller's own roster members.
-    if (parsed.data.teamMemberId !== existing.teamMemberId) {
+    if (
+      parsed.data.teamMemberId &&
+      parsed.data.teamMemberId !== existing.teamMemberId
+    ) {
       const teamMember = await prisma.teamMember.findFirst({
         where: { id: parsed.data.teamMemberId, userId: session.user.id },
         select: { id: true, flightDetail: { select: { id: true } } },

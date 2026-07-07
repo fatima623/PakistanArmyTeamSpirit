@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function FlightDetailsPage() {
   const session = await requireConfirmedParticipant();
 
-  const [user, settings, flights, members] = await Promise.all([
+  const [user, settings, flights] = await Promise.all([
     prisma.user.findUnique({
       where: { id: session.user.id },
       select: workflowUserSelect,
@@ -36,11 +36,6 @@ export default async function FlightDetailsPage() {
       where: { userId: session.user.id },
       orderBy: { createdAt: "asc" },
       select: flightDetailSelect,
-    }),
-    prisma.teamMember.findMany({
-      where: { userId: session.user.id },
-      orderBy: { createdAt: "asc" },
-      select: { id: true, fullName: true, rank: true, serviceNumber: true },
     }),
   ]);
 
@@ -71,7 +66,7 @@ export default async function FlightDetailsPage() {
       </Link>
       <PatsPortalHeader
         title="Flight Details"
-        subtitle="Submit travel information and passport / ticket documents for each traveler."
+        subtitle="Submit your team's travel information and passport / ticket documents in a single submission."
       />
       {!rosterDone ? (
         <section className="portal-card pats-panel">
@@ -95,7 +90,6 @@ export default async function FlightDetailsPage() {
       ) : (
         <FlightDetailsManager
           initialFlights={serializedFlights}
-          members={members}
           canEdit={canEditFlights(user, settings)}
           finalized={!!user.flightsFinalizedAt}
           deadlineIso={settings.flightDetailsDeadline?.toISOString() ?? null}

@@ -12,6 +12,7 @@ import {
   LifeBuoy,
   LogOut,
   Plane,
+  Shield,
   ShieldCheck,
   Users,
 } from "lucide-react";
@@ -62,45 +63,72 @@ export function PatsPortalNav({
   };
   const links = BASE_LINKS.filter((link) => gates[link.gate]);
 
+  const pct =
+    stageStep && stageStep.total > 0
+      ? Math.round((stageStep.current / stageStep.total) * 100)
+      : 0;
+
   return (
-    <nav className="pats-portal-nav" aria-label="Participant portal">
-      <p className="pats-eyebrow mb-3">Portal</p>
+    <nav className="pp-sidebar" aria-label="Participant portal">
+      <div className="pp-sidebar__brand">
+        <span className="pp-sidebar__mark" aria-hidden>
+          <Shield className="h-5 w-5" />
+        </span>
+        <div className="min-w-0">
+          <div className="pp-sidebar__brand-title">PATS Portal</div>
+          <div className="pp-sidebar__brand-sub">Participant</div>
+        </div>
+      </div>
+
       {stageLabel && stageStep ? (
-        <div className={`pats-portal-stage-chip pats-portal-stage-chip--${stageTone}`}>
-          <span className="pats-portal-stage-dot" aria-hidden />
-          <span className="pats-portal-stage-label">{stageLabel}</span>
-          <span className="pats-portal-stage-step">
-            Step {stageStep.current}/{stageStep.total}
-          </span>
+        <div className="pp-progress">
+          <div className="pp-progress__row">
+            <span className="pp-progress__label">{stageLabel}</span>
+            <span className="pp-progress__step">
+              {stageTone === "confirmed"
+                ? "Done"
+                : `${stageStep.current}/${stageStep.total}`}
+            </span>
+          </div>
+          <div className="pp-progress__track">
+            <div className="pp-progress__fill" style={{ width: `${pct}%` }} />
+          </div>
         </div>
       ) : null}
-      <ul>
-        {links.map((link) => {
-          const active =
-            pathname === link.href ||
-            (link.href !== "/event/dashboard" && pathname.startsWith(link.href));
-          const Icon = link.Icon;
-          return (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                prefetch
-                className={cn("inline-flex items-center gap-2", active && "is-active")}
-                aria-current={active ? "page" : undefined}
-              >
-                <Icon className="h-4 w-4 shrink-0" aria-hidden />
-                <span>{link.label}</span>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-      <form action={logoutAction} className="pats-portal-nav-logout">
-        <button type="submit" className="pats-portal-logout">
-          <LogOut className="h-4 w-4 shrink-0" aria-hidden />
-          <span>Log out</span>
-        </button>
-      </form>
+
+      <div className="pp-nav">
+        <p className="pp-nav__label">Menu</p>
+        <ul className="pp-nav__list">
+          {links.map((link) => {
+            const active =
+              pathname === link.href ||
+              (link.href !== "/event/dashboard" && pathname.startsWith(link.href));
+            const Icon = link.Icon;
+            return (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  prefetch
+                  className={cn("pp-nav__link", active && "is-active")}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <Icon className="pp-nav__icon" aria-hidden />
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div className="pp-sidebar__foot">
+        <form action={logoutAction}>
+          <button type="submit" className="pp-logout">
+            <LogOut className="pp-nav__icon" aria-hidden />
+            <span>Log out</span>
+          </button>
+        </form>
+      </div>
     </nav>
   );
 }

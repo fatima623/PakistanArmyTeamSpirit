@@ -70,7 +70,7 @@ export async function POST(request: Request) {
 
     const formData = await request.formData();
     const parsed = FlightDetailFieldsSchema.safeParse({
-      teamMemberId: formData.get("teamMemberId"),
+      teamMemberId: formData.get("teamMemberId") || null,
       passengerName: formData.get("passengerName"),
       passportNumber: formData.get("passportNumber"),
     });
@@ -81,18 +81,35 @@ export async function POST(request: Request) {
       );
     }
 
-    const teamMember = await prisma.teamMember.findFirst({
-      where: { id: parsed.data.teamMemberId, userId: session.user.id },
-      select: { id: true, fullName: true, flightDetail: { select: { id: true } } },
-    });
-    if (!teamMember) {
-      throw new ApiError("Team member not found on your roster", 404);
-    }
-    if (teamMember.flightDetail) {
-      throw new ApiError(
-        "A flight record already exists for this traveler — edit it instead",
-        409
-      );
+    // The team submits a single, team-level flight record. A legacy per-member
+    // id is still honoured, but the default flow links to no member.
+    let teamMemberId: string | null = null;
+    if (parsed.data.teamMemberId) {
+      const teamMember = await prisma.teamMember.findFirst({
+        where: { id: parsed.data.teamMemberId, userId: session.user.id },
+        select: { id: true, flightDetail: { select: { id: true } } },
+      });
+      if (!teamMember) {
+        throw new ApiError("Team member not found on your roster", 404);
+      }
+      if (teamMember.flightDetail) {
+        throw new ApiError(
+          "A flight record already exists for this traveler — edit it instead",
+          409
+        );
+      }
+      teamMemberId = teamMember.id;
+    } else {
+      const existing = await prisma.flightDetail.findFirst({
+        where: { userId: session.user.id },
+        select: { id: true },
+      });
+      if (existing) {
+        throw new ApiError(
+          "Flight details have already been submitted for your team — edit them instead",
+          409
+        );
+      }
     }
 
     const passportFile = await fileFromForm(formData, "passport");
@@ -127,7 +144,7 @@ export async function POST(request: Request) {
     const flight = await prisma.flightDetail.create({
       data: {
         userId: session.user.id,
-        teamMemberId: teamMember.id,
+        teamMemberId,
         passengerName: parsed.data.passengerName,
         passportNumber: parsed.data.passportNumber,
         passportFilePath: passportUpload?.internalFilePath ?? null,

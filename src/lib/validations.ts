@@ -67,9 +67,11 @@ export const AdminTeamSizeReviewSchema = z
     }
   );
 
-/** Flight detail text fields (files validated separately in the API). */
+/** Flight detail text fields (files validated separately in the API).
+ *  `teamMemberId` is optional: the team submits a single, team-level flight
+ *  record (no per-member link). A legacy member id is still accepted. */
 export const FlightDetailFieldsSchema = z.object({
-  teamMemberId: z.string().trim().min(1, "Select the traveler"),
+  teamMemberId: z.string().trim().min(1).optional().nullable(),
   passengerName: z.string().trim().min(1, "Passenger name is required").max(160),
   passportNumber: z
     .string()

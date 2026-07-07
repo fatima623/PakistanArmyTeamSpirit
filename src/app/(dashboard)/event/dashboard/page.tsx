@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Users } from "lucide-react";
+import {
+  CalendarClock,
+  CreditCard,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
 
 import "@/app/payment-status-timeline.css";
 import { prisma } from "@/lib/prisma";
@@ -20,6 +25,7 @@ import { resolveParticipantJourneyStage } from "@/lib/participant-journey";
 import {
   currentWorkflowStageIndex,
   deriveWorkflowStages,
+  effectiveTeamLimit,
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 
@@ -115,13 +121,11 @@ export default async function EventDashboardPage() {
   const fullName = `${user.firstName} ${user.lastName}`.trim();
   const activeStage =
     activeStageIdx >= 0 ? workflowStages[activeStageIdx] : null;
-  const chip = activeStage
-    ? {
-        label: activeStage.sub,
-        className:
-          activeStage.state === "done" ? "" : "participant-dash-welcome__chip--pending",
-      }
-    : { label: "All stages complete", className: "" };
+  const chipLabel = activeStage ? activeStage.sub : "All stages complete";
+  const chipPending = activeStage ? activeStage.state !== "done" : false;
+
+  const teamLimit = effectiveTeamLimit(user, workflowSettings);
+
 
   const feeNoticeHtml =
     settings?.feeNoticeText &&
@@ -132,22 +136,22 @@ export default async function EventDashboardPage() {
     );
 
   return (
-    <div className="participant-dashboard">
-      <div className="participant-dash-welcome">
+    <>
+      <header className="pp-hero">
         <div className="min-w-0">
-          <p className="participant-dash-welcome__label">Welcome back</p>
-          <p className="participant-dash-welcome__name">{fullName}</p>
-          <p className="participant-dash-welcome__meta">
+          <p className="pp-hero__eyebrow">Welcome back</p>
+          <h1 className="pp-hero__title">{fullName}</h1>
+          <p className="pp-hero__meta">
             {user.unit?.unitName ?? "Unit not registered"} · {user.email}
           </p>
         </div>
-        <div className="participant-dash-welcome__aside">
+        <div className="pp-hero__aside">
           <span
-            className={`participant-dash-welcome__chip ${chip.className}`.trim()}
+            className={`pp-hero__chip ${chipPending ? "pp-hero__chip--pending" : ""}`.trim()}
           >
-            {chip.label}
+            {chipLabel}
           </span>
-          <Link href="/event/team" className="participant-dash-welcome__team">
+          <Link href="/event/team" className="pp-hero__team">
             <Users className="h-4 w-4" aria-hidden />
             <span>
               {user._count.teamMembers}{" "}
@@ -155,13 +159,15 @@ export default async function EventDashboardPage() {
             </span>
           </Link>
         </div>
-      </div>
+      </header>
+
+
 
       <ParticipantWorkflowPanel stages={workflowStages} />
 
       {feeNoticeHtml ? (
         <div
-          className="portal-alert-warning participant-dashboard__notice"
+          className="pp-alert pp-alert--warning"
           dangerouslySetInnerHTML={{ __html: feeNoticeHtml }}
         />
       ) : null}
@@ -175,8 +181,8 @@ export default async function EventDashboardPage() {
         exerciseDates={siteSettings.exerciseDates}
       />
 
-      <div className="participant-dashboard__layout">
-        <div className="participant-dashboard__main">
+      <div className="pp-grid">
+        <div className="pp-grid__col">
           <ParticipantRegistrationDetailsCard
             firstName={user.firstName}
             lastName={user.lastName}
@@ -188,23 +194,28 @@ export default async function EventDashboardPage() {
             unit={user.unit}
           />
 
-          <section className="portal-card pats-panel">
-            <h2 className="portal-h2 mb-3">Data entry periods</h2>
-            <p className="mb-3 text-xs font-medium text-red-700">
-              Available only after payment has been verified.
-            </p>
+          <section className="pp-card">
+            <div className="pp-card__head">
+              <div>
+                <p className="pp-eyebrow">Schedule</p>
+                <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
+                  Data entry periods
+                </h2>
+                <p className="pp-card__desc">
+                  Available only after payment has been verified.
+                </p>
+              </div>
+            </div>
             {dataEntryPeriods.length === 0 ? (
-              <p className="portal-muted text-sm">No periods scheduled yet.</p>
+              <p className="pp-muted">No periods scheduled yet.</p>
             ) : (
-              <ul className="participant-dashboard__dates">
+              <ul className="pp-dates">
                 {dataEntryPeriods.map((p) => (
-                  <li key={p.id}>
-                    <span className="participant-dashboard__dates-date">
+                  <li key={p.id} className="pp-dates__item">
+                    <span className="pp-dates__date">
                       {formatDateDisplay(p.openDate)}
                     </span>
-                    <span className="participant-dashboard__dates-label">
-                      {p.label}
-                    </span>
+                    <span className="pp-dates__label">{p.label}</span>
                   </li>
                 ))}
               </ul>
@@ -212,37 +223,54 @@ export default async function EventDashboardPage() {
           </section>
         </div>
 
-        <aside className="participant-dashboard__side">
+        <aside className="pp-grid__col">
           {timelineData.deadlines.length > 0 ? (
-            <section className="portal-card pats-panel">
-              <h2 className="portal-h2 mb-4">Timeline &amp; deadlines</h2>
+            <section className="pp-card">
+              <div className="pp-card__head">
+                <div>
+                  <p className="pp-eyebrow">Deadlines</p>
+                  <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
+                    Timeline
+                  </h2>
+                </div>
+              </div>
               <Timeline data={timelineData} compact />
             </section>
           ) : null}
 
-          <section
-            className="participant-dashboard__news"
-            aria-labelledby="dashboard-news-heading"
-          >
-            <h3 id="dashboard-news-heading">Latest news</h3>
-            <ul>
-              {newsPosts.length === 0 ? (
-                <li className="portal-muted text-sm">No news posts yet.</li>
-              ) : (
-                newsPosts.map((post) => (
-                  <li key={post.id}>
-                    <Link href={`/news/${post.slug}`}>{post.title}</Link>
-                    <span className="participant-dashboard__news-date">
+          <section className="pp-card" aria-labelledby="dashboard-news-heading">
+            <div className="pp-card__head">
+              <div>
+                <p className="pp-eyebrow">Updates</p>
+                <h2
+                  id="dashboard-news-heading"
+                  className="pp-card__title"
+                  style={{ marginTop: "0.15rem" }}
+                >
+                  Latest news
+                </h2>
+              </div>
+            </div>
+            {newsPosts.length === 0 ? (
+              <p className="pp-muted">No news posts yet.</p>
+            ) : (
+              <ul className="pp-news">
+                {newsPosts.map((post) => (
+                  <li key={post.id} className="pp-news__item">
+                    <Link href={`/news/${post.slug}`} className="pp-news__link">
+                      {post.title}
+                    </Link>
+                    <span className="pp-news__date">
                       {formatDateShort(post.publishedAt)}
                     </span>
                   </li>
-                ))
-              )}
-            </ul>
+                ))}
+              </ul>
+            )}
           </section>
         </aside>
       </div>
-    </div>
+    </>
   );
 }
 // Workflow v2: guided multi-stage participant journey.

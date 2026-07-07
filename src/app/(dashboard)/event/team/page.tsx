@@ -55,14 +55,11 @@ export default async function TeamMembersPage() {
 
   return (
     <div className="team-page">
-      <Link href="/event/dashboard" className="portal-back-link mb-4">
+      <Link href="/event/dashboard" className="portal-back-link mb-3">
         <ArrowLeft className="h-4 w-4" aria-hidden />
         Back to dashboard
       </Link>
-      <PatsPortalHeader
-        title="Team Registration"
-        subtitle="Register your team during the active window, then manage your team member roster."
-      />
+     
       <TeamRosterManager
         initialMembers={teamMembers}
         teamRegistered={!!user.teamRegisteredAt}
