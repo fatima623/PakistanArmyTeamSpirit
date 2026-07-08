@@ -7,9 +7,10 @@ function pageHref(
   basePath: string,
   page: number,
   filter: string,
-  search: string
+  search: string,
+  filterParam: string
 ) {
-  return `${basePath}?page=${page}&filter=${filter}&search=${encodeURIComponent(search)}`;
+  return `${basePath}?page=${page}&${filterParam}=${filter}&search=${encodeURIComponent(search)}`;
 }
 
 function visiblePages(current: number, total: number): number[] {
@@ -26,12 +27,14 @@ export function AdminUsersPagination({
   filter,
   search,
   basePath = "/admin/users",
+  filterParam = "filter",
 }: {
   page: number;
   totalPages: number;
   filter: string;
   search: string;
   basePath?: string;
+  filterParam?: string;
 }) {
   const pages = visiblePages(page, totalPages);
 
@@ -39,7 +42,7 @@ export function AdminUsersPagination({
     <nav className="admin-users-page-nav" aria-label="Pagination">
       {page > 1 ? (
         <Link
-          href={pageHref(basePath, page - 1, filter, search)}
+          href={pageHref(basePath, page - 1, filter, search, filterParam)}
           className="admin-users-page-btn admin-users-page-btn--icon"
           aria-label="Previous page"
         >
@@ -65,7 +68,7 @@ export function AdminUsersPagination({
               </span>
             ) : null}
             <Link
-              href={pageHref(basePath, p, filter, search)}
+              href={pageHref(basePath, p, filter, search, filterParam)}
               className={cn(
                 "admin-users-page-btn admin-users-page-num",
                 p === page && "admin-users-page-num--active"
@@ -80,7 +83,7 @@ export function AdminUsersPagination({
 
       {page < totalPages ? (
         <Link
-          href={pageHref(basePath, page + 1, filter, search)}
+          href={pageHref(basePath, page + 1, filter, search, filterParam)}
           className="admin-users-page-btn admin-users-page-btn--icon"
           aria-label="Next page"
         >

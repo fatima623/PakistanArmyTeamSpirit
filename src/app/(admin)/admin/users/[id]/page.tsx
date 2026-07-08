@@ -17,7 +17,6 @@ import {
   ApplicationStatusBadge,
   PaymentStatusBadge,
 } from "@/components/admin/StatusBadges";
-import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import {
@@ -138,47 +137,27 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
 
   return (
     <div className="admin-user-detail-page admin-user-detail-page--compact">
-      <AdminBreadcrumbs
-        items={[
-          { label: "Dashboard", href: "/admin" },
-          { label: "Participation Requests", href: "/admin/users" },
-          { label: `${user.firstName} ${user.lastName}` },
-        ]}
-      />
-
-      <header className="admin-user-detail-hero">
-        <div className="admin-user-detail-hero-main">
-          <Link href="/admin/users" className="admin-user-detail-back">
-            <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-            Back to participation requests
-          </Link>
-          <h1 className="admin-user-detail-name">
-            {user.firstName} {user.lastName}
-            {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
-          </h1>
-          <p className="admin-user-detail-email">{user.email}</p>
-          <div className="admin-user-detail-badges">
-            <ApplicationStatusBadge status={user.applicationStatus} />
-            <PaymentStatusBadge status={user.paymentStatus} />
-            {user.suspended ? (
-              <span
-                className="ops-status-pill ops-status-rejected"
-                title="Suspended"
-              >
-                Suspended
-              </span>
-            ) : null}
-          </div>
-        </div>
-        {canManageRoles ? (
-          <div className="admin-user-detail-hero-actions">
-            <DeleteUserButton userId={user.id} />
-          </div>
-        ) : null}
-      </header>
-
       <div className="admin-detail-layout">
         <div className="admin-detail-layout-main">
+          <AdminBreadcrumbs
+            items={[
+              { label: "Dashboard", href: "/admin" },
+              { label: "Participation Requests", href: "/admin/users" },
+              { label: `${user.firstName} ${user.lastName}` },
+            ]}
+          />
+
+          <div className="admin-user-detail-headline">
+            <Link href="/admin/users" className="admin-user-detail-back">
+              <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+              Back to participation requests
+            </Link>
+            <h1 className="admin-user-detail-name">
+              {user.firstName} {user.lastName}
+              {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
+            </h1>
+          </div>
+
           {canApprove ? (
             <ApplicationReviewPanel
               userId={user.id}
@@ -190,8 +169,42 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           ) : null}
 
           <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header admin-user-detail-card-header--sky">
+              <h3 className="admin-user-detail-card-title">Status</h3>
+            </div>
             <div className="admin-user-detail-card-body">
-              <h4 className="admin-detail-subhead">Account</h4>
+              <div className="admin-user-detail-status-grid">
+                <div className="admin-user-detail-status-item">
+                  <span className="admin-user-detail-status-label">
+                    Application
+                  </span>
+                  <ApplicationStatusBadge status={user.applicationStatus} />
+                </div>
+                <div className="admin-user-detail-status-item">
+                  <span className="admin-user-detail-status-label">Payment</span>
+                  <PaymentStatusBadge status={user.paymentStatus} />
+                </div>
+                <div className="admin-user-detail-status-item">
+                  <span className="admin-user-detail-status-label">Account</span>
+                  <span
+                    className={
+                      user.suspended
+                        ? "ops-status-pill ops-status-rejected"
+                        : "ops-status-pill ops-status-approved"
+                    }
+                  >
+                    {user.suspended ? "Suspended" : "Active"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header admin-user-detail-card-header--emerald">
+              <h3 className="admin-user-detail-card-title">Account</h3>
+            </div>
+            <div className="admin-user-detail-card-body">
               <div className="admin-detail-fields">
                 <Field label="Rank" value={user.rank} />
                 <Field label="Gender" value={user.gender} />
@@ -219,20 +232,30 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                   />
                 ) : null}
               </div>
+            </div>
+          </section>
 
-              {user.unit ? (
-                <>
-                  <h4 className="admin-detail-subhead">Unit</h4>
-                  <div className="admin-detail-fields">
-                    <Field label="Unit name" value={user.unit.unitName} />
-                    <Field label="Type" value={user.unit.unitType} />
-                    <Field label="Branch" value={user.unit.branch} />
-                    <Field label="Arm" value={user.unit.arm} />
-                  </div>
-                </>
-              ) : null}
+          {user.unit ? (
+            <section className="admin-user-detail-card">
+              <div className="admin-user-detail-card-header admin-user-detail-card-header--amber">
+                <h3 className="admin-user-detail-card-title">Unit</h3>
+              </div>
+              <div className="admin-user-detail-card-body">
+                <div className="admin-detail-fields">
+                  <Field label="Unit name" value={user.unit.unitName} />
+                  <Field label="Type" value={user.unit.unitType} />
+                  <Field label="Branch" value={user.unit.branch} />
+                  <Field label="Arm" value={user.unit.arm} />
+                </div>
+              </div>
+            </section>
+          ) : null}
 
-              <h4 className="admin-detail-subhead">Workflow progress</h4>
+          <section className="admin-user-detail-card">
+            <div className="admin-user-detail-card-header admin-user-detail-card-header--violet">
+              <h3 className="admin-user-detail-card-title">Workflow progress</h3>
+            </div>
+            <div className="admin-user-detail-card-body">
               <div className="admin-detail-fields">
                 <Field
                   label="Participation confirmed"
@@ -242,19 +265,24 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                 <Field label="Roster" value={rosterValue} wide />
                 <Field label="Flight details" value={flightValue} wide />
               </div>
-
-              {canManageRoles ? (
-                <div className="admin-detail-reset">
-                  <AdminResetPassword userId={user.id} />
-                </div>
-              ) : null}
             </div>
           </section>
+
+          {canManageRoles ? (
+            <section className="admin-user-detail-card">
+              <div className="admin-user-detail-card-header admin-user-detail-card-header--slate">
+                <h3 className="admin-user-detail-card-title">Security</h3>
+              </div>
+              <div className="admin-user-detail-card-body">
+                <AdminResetPassword userId={user.id} />
+              </div>
+            </section>
+          ) : null}
         </div>
 
         <aside className="admin-detail-layout-aside">
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header">
+          <section className="admin-user-detail-card admin-user-detail-card--activity">
+            <div className="admin-user-detail-card-header admin-user-detail-card-header--emerald">
               <h3 className="admin-user-detail-card-title">Activity</h3>
             </div>
             <div className="admin-user-detail-card-body">

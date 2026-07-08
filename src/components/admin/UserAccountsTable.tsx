@@ -27,7 +27,13 @@ function initials(first: string, last: string): string {
  * Account-management table for /admin/user-management — mockup layout:
  * USER (avatar + name + email) · ROLE · STATUS · LAST ACTIVE · ACTIONS.
  */
-export function UserAccountsTable({ users }: { users: UserAccountRow[] }) {
+export function UserAccountsTable({
+  users,
+  startIndex = 0,
+}: {
+  users: UserAccountRow[];
+  startIndex?: number;
+}) {
   if (users.length === 0) {
     return (
       <div className="admin-users-table-shell">
@@ -40,6 +46,7 @@ export function UserAccountsTable({ users }: { users: UserAccountRow[] }) {
     <section className="admin-users-table-shell" aria-label="User accounts table">
       <table className="admin-users-table">
         <colgroup>
+          <col className="admin-users-col-num" />
           <col className="admin-users-col-participant" />
           <col className="admin-users-col-unit" />
           <col className="admin-users-col-app" />
@@ -48,6 +55,9 @@ export function UserAccountsTable({ users }: { users: UserAccountRow[] }) {
         </colgroup>
         <thead className="admin-users-thead">
           <tr>
+            <th scope="col" className="admin-users-th-num">
+              #
+            </th>
             <th scope="col" className="admin-users-th-primary">
               User
             </th>
@@ -66,8 +76,9 @@ export function UserAccountsTable({ users }: { users: UserAccountRow[] }) {
           </tr>
         </thead>
         <tbody>
-          {users.map((u) => (
+          {users.map((u, i) => (
             <tr key={u.id} className="admin-users-row">
+              <td className="admin-users-cell-num">{startIndex + i + 1}</td>
               <td className="admin-users-cell-participant">
                 <div className="admin-users-participant">
                   <span className="admin-users-avatar" aria-hidden>

@@ -89,9 +89,6 @@ export default async function AdminUserManagementPage({
             </p>
           </div>
           <div className="flex flex-shrink-0 items-center gap-3">
-            <span className="admin-users-count-badge">
-              {totalCount} {totalCount === 1 ? "account" : "accounts"}
-            </span>
             <Button variant="adminPrimary" size="sm" asChild>
               <Link href="/admin/users/new">Invite user</Link>
             </Button>
@@ -111,7 +108,7 @@ export default async function AdminUserManagementPage({
           </div>
         </section>
 
-        <UserAccountsTable users={users} />
+        <UserAccountsTable users={users} startIndex={(page - 1) * PAGE_SIZE} />
 
         <footer className={adminUsersPagination}>
           <p className="admin-users-pagination-page">

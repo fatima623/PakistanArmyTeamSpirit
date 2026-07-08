@@ -175,9 +175,6 @@ export default async function AdminUsersPage({
                   {FILTER_LABELS[f] ?? f}
                 </Link>
               ))}
-              <span className="admin-users-count-badge">
-                {totalCount} {totalCount === 1 ? "request" : "requests"}
-              </span>
             </nav>
           </section>
 

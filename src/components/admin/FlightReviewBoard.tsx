@@ -155,6 +155,7 @@ export function FlightReviewBoard({
         <table className="admin-data-table admin-flights-table w-full">
           <thead className="admin-table-head">
             <tr>
+              <th scope="col">#</th>
               <th scope="col">Traveller</th>
               <th scope="col">Passenger Name</th>
               <th scope="col">Passport No.</th>
@@ -164,8 +165,11 @@ export function FlightReviewBoard({
             </tr>
           </thead>
           <tbody>
-            {pageRows.map((r) => (
+            {pageRows.map((r, i) => (
               <tr key={r.id} className="admin-row-hover">
+                <td className="admin-flights-mono">
+                  {current * PAGE_SIZE + i + 1}
+                </td>
                 <td className="admin-flights-strong">{r.traveler ?? "—"}</td>
                 <td className="admin-flights-strong">{r.passengerName}</td>
                 <td className="admin-flights-mono">{r.passportNumber}</td>
@@ -245,11 +249,9 @@ export function FlightReviewBoard({
         </table>
       </div>
 
-      <div className="admin-flights-foot">
-        <span className="admin-flights-count">
-          {rows.length} flight record{rows.length === 1 ? "" : "s"}
-        </span>
-        {totalPages > 1 ? (
+      {totalPages > 1 ? (
+        <div className="admin-flights-foot">
+          <span aria-hidden />
           <div className="admin-flights-pager">
             <button
               type="button"
@@ -273,8 +275,8 @@ export function FlightReviewBoard({
               <ChevronRight className="h-4 w-4" aria-hidden />
             </button>
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -42,17 +42,8 @@ export default async function AdminTeamRequestsPage() {
   return (
     <div className="admin-fade-in-up">
       <header className="mb-5 flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h2 className="admin-users-panel-title">Team size requests</h2>
-          <p className="admin-users-page-desc">
-            Participant justifications to exceed the team-member cap (default{" "}
-            {settings?.maxTeamMembers ?? 13}). Approval raises the
-            participant&apos;s limit to the requested size.
-          </p>
-        </div>
-        <span className="admin-users-count-badge">
-          {requests.filter((r) => r.status === "PENDING").length} pending
-        </span>
+       
+      
       </header>
 
       <TeamSizeRequestsBoard
