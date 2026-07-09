@@ -27,10 +27,9 @@
     "src/app/pats-site-chrome.css",
     "src/app/pats-typography.css",
     "src/app/pats-video-gallery.css",
-    "src/app/portal-design.css",
-    "src/app/team-members.css"
+    "src/app/portal-design.css"
   ],
-  "importantCount": 1709,
+  "importantCount": 1680,
   "importantByFile": {
     "src/app/admin-day-theme.css": 230,
     "src/app/cinematic-tactical.css": 2,
@@ -59,8 +58,7 @@
     "src/app/pats-site-chrome.css": 12,
     "src/app/pats-typography.css": 33,
     "src/app/pats-video-gallery.css": 9,
-    "src/app/portal-design.css": 80,
-    "src/app/team-members.css": 29
+    "src/app/portal-design.css": 80
   },
   "cssImports": [
     "src/app/layout.tsx -> ./globals.css",

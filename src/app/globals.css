@@ -25,7 +25,6 @@
 /* Loads last: dashboard day theme must win over the sitewide forest-card
    day rules in daylight-theme.css / pats-forest-cards.css for .participant-portal. */
 @import "./participant-portal-day.css";
-@import "./team-members.css";
 @import "./exercise-contour.css";
 /* Institutional design refresh (olive / brass / sage). MUST load last so it
    overrides admin-day-theme.css. Re-skins admin + participant portal only. */

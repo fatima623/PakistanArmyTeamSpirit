@@ -71,7 +71,7 @@ export default async function HostInfoPage() {
 
   if (!available) {
     return (
-      <div className="team-page">
+      <div className="flex flex-col">
         <Link href="/event/dashboard" className="portal-back-link mb-4">
           <ArrowLeft className="h-4 w-4" aria-hidden />
           Back to dashboard
@@ -140,7 +140,7 @@ export default async function HostInfoPage() {
     : null;
 
   return (
-    <div className="team-page">
+    <div className="flex flex-col">
       <Link href="/event/dashboard" className="portal-back-link mb-4">
         <ArrowLeft className="h-4 w-4" aria-hidden />
         Back to dashboard
