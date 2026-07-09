@@ -7,5 +7,5 @@ export async function ArmyFooterAsync({ dayTheme = false }: { dayTheme?: boolean
   if (dayTheme) {
     return <CinematicFooter social={social} />;
   }
-  return <ArmyFooter social={social} />;
+  return <ArmyFooter />;
 }

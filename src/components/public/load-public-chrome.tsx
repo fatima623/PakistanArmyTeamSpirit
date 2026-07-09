@@ -82,7 +82,7 @@ export async function loadPublicChrome(): Promise<PublicChrome> {
 
     nav: <ArmyNavbar pathname={pathname} />,
 
-    footer: <ArmyFooter social={social} />,
+    footer: <ArmyFooter />,
 
     siteTicker,
 

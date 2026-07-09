@@ -93,4 +93,4 @@ export const MISSION_MOTTO = PATS_MOTTO;
 /** Homepage mission triptych — soldier portrait slot (replace when final asset is ready). */
 export const MISSION_SOLDIER_PLACEHOLDER = operationsCard37.src;
 
-export const ABOUT_FEATURE_IMAGE = aboutFeature35.src;
+export const ABOUT_FEATURE_IMAGE = "/media/pats/crops/pats9.jpeg";

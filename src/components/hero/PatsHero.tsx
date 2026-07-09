@@ -9,8 +9,14 @@ import {
   HERO_MOTTO,
   HERO_TITLE,
 } from "@/lib/branding";
-import { HERO_VIDEO_SRC, HERO_VIDEO_POSTER } from "@/lib/cinematic-constants";
 import { cn } from "@/lib/utils";
+
+const HERO_IMAGES = [
+  "/media/pats/crops/home2.jpeg",
+  "/media/pats/crops/home3.jpeg",
+  "/media/pats/crops/home4.jpeg",
+  "/media/pats/crops/home5.jpeg",
+];
 
 type Props = {
   exerciseYear: number;
@@ -32,19 +38,23 @@ function HeroHeadlineLines({ title }: { title: string }) {
 
 export function PatsHero({ exerciseYear }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const [showScrollHint, setShowScrollHint] = useState(true);
+  const [dynamicYear, setDynamicYear] = useState(exerciseYear);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.muted = true;
-    const play = () => {
-      void el.play().catch(() => undefined);
-    };
-    play();
-    el.addEventListener("loadeddata", play);
-    return () => el.removeEventListener("loadeddata", play);
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    // getMonth() is 0-indexed, so 6 is July
+    const computedYear = now.getMonth() >= 6 ? currentYear + 1 : currentYear;
+    setDynamicYear(computedYear);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -67,22 +77,19 @@ export function PatsHero({ exerciseYear }: Props) {
       className="pats-hero"
       aria-label="Featured highlights"
     >
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        loop
-        playsInline
-        disablePictureInPicture
-        controls={false}
-        preload="metadata"
-        poster={HERO_VIDEO_POSTER}
-        className="pats-hero__video"
-        aria-hidden
-        tabIndex={-1}
-      >
-        <source src={HERO_VIDEO_SRC} type="video/mp4" />
-      </video>
+      {HERO_IMAGES.map((src, index) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          className="pats-hero__video"
+          style={{
+            transition: "opacity 1s ease-in-out",
+            opacity: index === currentImageIndex ? 1 : 0,
+          }}
+          aria-hidden
+        />
+      ))}
 
       <div className="pats-hero__overlay-base" aria-hidden />
       <div className="pats-hero__overlay-vignette" aria-hidden />
@@ -94,7 +101,7 @@ export function PatsHero({ exerciseYear }: Props) {
           </div>
           <h1 className="pats-hero__headline">
             <HeroHeadlineLines title={HERO_TITLE} />
-            <span className="pats-hero__headline-accent">{exerciseYear}</span>
+            <span className="pats-hero__headline-accent">{dynamicYear}</span>
           </h1>
           <p className="pats-hero__subline">{HERO_DESCRIPTION}</p>
         </div>

@@ -1,4 +1,4 @@
-﻿-- CreateTable
+-- CreateTable
 CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
@@ -156,4 +156,3 @@ ALTER TABLE `Patrol` ADD CONSTRAINT `Patrol_userId_fkey` FOREIGN KEY (`userId`) 
 
 -- AddForeignKey
 ALTER TABLE `PasswordReset` ADD CONSTRAINT `PasswordReset_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
