@@ -42,6 +42,7 @@ export function GalleryManager({
   const [images, setImages] = useState<AdminGalleryImage[]>(initialImages);
   const [bust, setBust] = useState<Record<string, number>>({});
   const [editing, setEditing] = useState<AdminGalleryImage | null>(null);
+  const [showForm, setShowForm] = useState(false);
 
   const upsert = (img: AdminGalleryImage) =>
     setImages((prev) => {
@@ -58,27 +59,39 @@ export function GalleryManager({
       <section className="admin-gallery-panel">
         <header className="admin-gallery-header">
           <div>
-            <h2>Add image</h2>
-            <p>
-              Upload a photo for the public gallery. JPG, PNG, WEBP or GIF, up to
-              8 MB.
-            </p>
-          </div>
-        </header>
-        <UploadForm onCreated={upsert} />
-      </section>
-
-      <section className="admin-gallery-panel">
-        <header className="admin-gallery-header">
-          <div>
-            <h2>Gallery images ({images.length})</h2>
+            <h2>Gallery images</h2>
             <p>Lower order numbers appear first on the public gallery.</p>
           </div>
+          <Button
+            variant="adminPrimary"
+            onClick={() => setShowForm((v) => !v)}
+          >
+            {showForm ? (
+              "Close"
+            ) : (
+              <>
+                <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
+                Add image
+              </>
+            )}
+          </Button>
         </header>
+
+        {showForm ? (
+          <div className="admin-gallery-form-wrap">
+            <UploadForm
+              onCreated={(img) => {
+                upsert(img);
+                setShowForm(false);
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          </div>
+        ) : null}
 
         {images.length === 0 ? (
           <div className="admin-gallery-empty">
-            No images yet — upload your first photo above.
+            No images yet — click “Add image” to upload your first photo.
           </div>
         ) : (
           <div className="admin-gallery-grid">
@@ -151,8 +164,10 @@ export function GalleryManager({
 
 function UploadForm({
   onCreated,
+  onCancel,
 }: {
   onCreated: (img: AdminGalleryImage) => void;
+  onCancel?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -228,35 +243,41 @@ function UploadForm({
 
   return (
     <div className="admin-gallery-form">
-      <button
-        type="button"
-        className="admin-gallery-drop"
-        onClick={() => fileRef.current?.click()}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          pickFile(e.dataTransfer.files?.[0] ?? null);
-        }}
-      >
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Preview" />
-        ) : (
-          <>
-            <ImagePlus className="h-7 w-7 text-cp-olive" aria-hidden />
-            <span className="admin-gallery-drop__hint">
-              Click or drop an image
-            </span>
-          </>
-        )}
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif"
-          className="sr-only"
-          onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
-        />
-      </button>
+      <div className="admin-gallery-upload">
+        <label className="admin-gallery-upload-label">Image *</label>
+        <button
+          type="button"
+          className="admin-gallery-drop"
+          onClick={() => fileRef.current?.click()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            pickFile(e.dataTransfer.files?.[0] ?? null);
+          }}
+        >
+          {preview ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={preview} alt="Preview" />
+          ) : (
+            <>
+              <ImagePlus className="h-8 w-8 text-cp-olive" aria-hidden />
+              <span className="admin-gallery-drop__hint">
+                Click or drop to upload an image
+              </span>
+              <span className="admin-gallery-drop__sub">
+                JPG, PNG, WEBP or GIF · up to 8 MB
+              </span>
+            </>
+          )}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            className="sr-only"
+            onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+          />
+        </button>
+      </div>
 
       <div>
         <div className="admin-gallery-fields">
@@ -326,7 +347,7 @@ function UploadForm({
           </label>
         </div>
 
-        <div className="mt-4 flex gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           <Button onClick={submit} disabled={submitting} variant="adminPrimary">
             {submitting ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -338,6 +359,15 @@ function UploadForm({
           {file ? (
             <Button variant="adminOutline" onClick={reset} disabled={submitting}>
               Clear
+            </Button>
+          ) : null}
+          {onCancel ? (
+            <Button
+              variant="adminOutline"
+              onClick={onCancel}
+              disabled={submitting}
+            >
+              Cancel
             </Button>
           ) : null}
         </div>

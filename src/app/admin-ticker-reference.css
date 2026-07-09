@@ -144,12 +144,33 @@
 }
 
 .admin-theme .admin-ticker-toolbar-row {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.admin-theme .admin-ticker-toolbar-row .admin-input {
+.admin-theme .admin-ticker-toolbar-search {
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+.admin-theme .admin-ticker-toolbar-search .admin-input {
   width: 100% !important;
   min-height: 2.75rem !important;
+}
+
+.admin-theme .admin-ticker-toolbar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.admin-theme .admin-ticker-toolbar-filters .admin-input {
+  min-height: 2.75rem !important;
+  min-width: 11rem;
 }
 
 .admin-theme .admin-ticker-filters-row {

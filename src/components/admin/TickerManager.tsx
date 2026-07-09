@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import { adminInput } from "@/lib/admin-ui";
 import {
   formatTickerExpiry,
@@ -80,31 +79,20 @@ export function TickerManager({
   const debouncedSearch = useDebouncedValue(search, 200);
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
-  const [onlyActive, setOnlyActive] = useState(false);
   const [orderSavingId, setOrderSavingId] = useState<string | null>(null);
   const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({});
-
-  const liveCount = useMemo(
-    () =>
-      tickers.filter(
-        (t) =>
-          effectiveTickerStatus(t.status, t.expiresAt) === TICKER_STATUS.ACTIVE
-      ).length,
-    [tickers]
-  );
 
   const filtered = useMemo(() => {
     const q = debouncedSearch.trim().toLowerCase();
     const list = tickers.filter((t) => {
       const effective = effectiveTickerStatus(t.status, t.expiresAt);
-      if (onlyActive && effective !== TICKER_STATUS.ACTIVE) return false;
       if (statusFilter !== "all" && effective !== statusFilter) return false;
       if (priorityFilter !== "all" && t.priority !== priorityFilter) return false;
       if (!q) return true;
       return t.message.toLowerCase().includes(q);
     });
     return [...list].sort(compareTickersForDisplay);
-  }, [tickers, debouncedSearch, statusFilter, priorityFilter, onlyActive]);
+  }, [tickers, debouncedSearch, statusFilter, priorityFilter]);
 
   const deleteTicker = async (id: string) => {
     const res = await fetch(`/api/admin/ticker/${id}`, { method: "DELETE" });
@@ -172,12 +160,8 @@ export function TickerManager({
       <div className="admin-ticker-panel">
         <header className="admin-ticker-header">
           <div className="admin-ticker-header-text">
-            <h2>Announcements ({tickers.length})</h2>
-            <p>
-              Manage homepage operational announcements and scrolling alerts.{" "}
-              <strong>{liveCount}</strong> live on site — sorted by priority,
-              then display order.
-            </p>
+            <h2>Announcements</h2>
+            
           </div>
           <Button type="button" variant="adminPrimary" asChild>
             <Link href="/admin/ticker/new">Add announcement</Link>
@@ -185,57 +169,44 @@ export function TickerManager({
         </header>
 
         <div className="admin-ticker-toolbar-row">
-          <Input
-            type="search"
-            placeholder="Search messages…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className={adminInput}
-            aria-label="Search announcements"
-          />
-        </div>
-
-        <div className="admin-ticker-filters-row">
-          <div className="admin-ticker-filter-fields">
-            <div className="admin-ticker-filter-field">
-              <label htmlFor="announcement-filter-status">Status</label>
-              <select
-                id="announcement-filter-status"
-                className={adminInput}
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                {STATUS_FILTER_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="admin-ticker-filter-field">
-              <label htmlFor="announcement-filter-priority">Priority</label>
-              <select
-                id="announcement-filter-priority"
-                className={adminInput}
-                value={priorityFilter}
-                onChange={(e) => setPriorityFilter(e.target.value)}
-              >
-                {PRIORITY_FILTER_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <label className="admin-ticker-active-toggle">
-            <Switch
-              checked={onlyActive}
-              onCheckedChange={setOnlyActive}
-              aria-label="Show only active"
+          <div className="admin-ticker-toolbar-search">
+            <Input
+              type="search"
+              placeholder="Search messages…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className={adminInput}
+              aria-label="Search announcements"
             />
-            <span>Show only active</span>
-          </label>
+          </div>
+          <div className="admin-ticker-toolbar-filters">
+            <select
+              id="announcement-filter-status"
+              className={adminInput}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              aria-label="Filter by status"
+            >
+              {STATUS_FILTER_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <select
+              id="announcement-filter-priority"
+              className={adminInput}
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              aria-label="Filter by priority"
+            >
+              {PRIORITY_FILTER_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="admin-ticker-table-shell">

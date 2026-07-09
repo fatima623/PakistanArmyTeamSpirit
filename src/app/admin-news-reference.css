@@ -55,17 +55,29 @@
   font-size: 0.875rem;
 }
 
+.admin-theme .admin-news-col-num {
+  width: 6%;
+}
 .admin-theme .admin-news-col-title {
-  width: 42%;
+  width: 32%;
 }
 .admin-theme .admin-news-col-pdf {
   width: 18%;
 }
 .admin-theme .admin-news-col-date {
-  width: 16%;
+  width: 14%;
+}
+.admin-theme .admin-news-col-status {
+  width: 12%;
 }
 .admin-theme .admin-news-col-actions {
-  width: 24%;
+  width: 18%;
+}
+
+.admin-theme .admin-news-table tbody td.admin-news-cell-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #64748b;
 }
 
 .admin-theme .admin-news-table thead th {

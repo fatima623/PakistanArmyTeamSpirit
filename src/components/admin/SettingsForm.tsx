@@ -1,14 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Banknote, Globe, Landmark, Loader2, Smartphone } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { DEFAULT_PAYMENT_SETTINGS } from "@/lib/payment-settings";
+import {
+  DEFAULT_PAYMENT_SETTINGS,
+  formatRegistrationFee,
+} from "@/lib/payment-settings";
 import { TOAST } from "@/lib/toast";
 import { adminInput } from "@/lib/admin-ui";
 import { cn } from "@/lib/utils";
@@ -96,6 +99,16 @@ function toLocalInput(iso: string | null | undefined): string {
   )}:${pad(d.getMinutes())}`;
 }
 
+/* Tailwind class tokens shared across the settings cards. */
+const CARD =
+  "overflow-hidden rounded-[14px] border border-[#e4e7e0] bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]";
+const CARD_HEADER = "border-b border-[#e4e7e0] bg-[#f7f9f5] px-[1.1rem] py-[0.7rem]";
+const CARD_TITLE = "text-sm font-bold tracking-tight text-[#18221c]";
+const CARD_DESC = "mt-1 text-xs leading-snug text-[#5a655c]";
+const CARD_BODY = "px-[1.1rem] py-4";
+const STACK = "flex flex-col gap-5";
+const DUO_GRID = "grid grid-cols-1 gap-4 lg:grid-cols-2";
+
 function SettingsCard({
   title,
   description,
@@ -106,14 +119,12 @@ function SettingsCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="admin-user-detail-card">
-      <div className="admin-user-detail-card-header">
-        <h3 className="admin-user-detail-card-title">{title}</h3>
-        {description ? (
-          <p className="admin-user-detail-card-desc">{description}</p>
-        ) : null}
+    <section className={CARD}>
+      <div className={CARD_HEADER}>
+        <h3 className={CARD_TITLE}>{title}</h3>
+        {description ? <p className={CARD_DESC}>{description}</p> : null}
       </div>
-      <div className="admin-user-detail-card-body">{children}</div>
+      <div className={CARD_BODY}>{children}</div>
     </section>
   );
 }
@@ -130,10 +141,10 @@ function SettingField({
   className?: string;
 }) {
   return (
-    <div className={cn("admin-user-detail-field", className)}>
+    <div className={cn("flex flex-col gap-1.5", className)}>
       <label className="text-sm font-semibold text-[#0f172a]">{label}</label>
       {hint ? (
-        <p className="admin-user-detail-status-controls-hint">{hint}</p>
+        <p className="text-[0.8rem] leading-snug text-[#64748b]">{hint}</p>
       ) : null}
       {children}
     </div>
@@ -152,12 +163,14 @@ function SettingToggle({
   return (
     <div
       className={cn(
-        "admin-settings-toggle-row",
-        checked && "admin-settings-toggle-row--on"
+        "flex items-center rounded-[10px] border px-[1.125rem] py-3.5 transition-colors",
+        checked
+          ? "border-[#bbf7d0] bg-[#f0fdf4]"
+          : "border-[#e2e8f0] bg-[#f8fafc]"
       )}
     >
       <label className="flex flex-1 items-center justify-between gap-3">
-        <span className="text-sm font-medium text-cp-ink">{label}</span>
+        <span className="text-sm font-medium text-[#18221c]">{label}</span>
         <Switch
           checked={checked}
           onCheckedChange={onCheckedChange}
@@ -168,17 +181,43 @@ function SettingToggle({
   );
 }
 
-function PaymentGroup({
+function PaymentMethodCard({
+  icon: Icon,
   title,
+  subtitle,
+  wide = false,
   children,
 }: {
+  icon: React.ElementType;
   title: string;
+  subtitle?: string;
+  /** Full-width primary method — lays fields out in two columns. */
+  wide?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className="admin-settings-payment-group">
-      <h4 className="admin-settings-payment-group-title">{title}</h4>
-      <div className="admin-settings-grid">{children}</div>
+    <div className="flex flex-col gap-4 rounded-xl border border-[#e2e8f0] bg-white px-5 pb-5 pt-[1.1rem] shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-[border-color,box-shadow] hover:border-[#cfe0d5] hover:shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
+      <div className="flex items-center gap-2.5 border-b border-[#eef2f0] pb-3.5">
+        <span
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-[#dbe6dc] bg-[#eaf1ea] text-[#1e5a3a]"
+          aria-hidden
+        >
+          <Icon className="h-4 w-4" />
+        </span>
+        <div className="min-w-0">
+          <h4 className="text-sm font-bold tracking-tight text-[#0f172a]">
+            {title}
+          </h4>
+          {subtitle ? (
+            <p className="mt-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
+              {subtitle}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <div className={cn("grid grid-cols-1 gap-4", wide && "sm:grid-cols-2")}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -277,28 +316,24 @@ export function SettingsForm() {
 
   if (loading) {
     return (
-      <div className="admin-user-detail-page admin-settings-page">
-        <div className="flex justify-center py-16">
-          <Loader2 className="admin-icon-accent h-7 w-7 animate-spin" />
-        </div>
+      <div className="mx-auto flex max-w-[52rem] justify-center py-16">
+        <Loader2 className="h-7 w-7 animate-spin text-[#1e5a3a]" />
       </div>
     );
   }
 
+  const currency = (form.paymentCurrency || "PKR").toUpperCase();
+
   return (
-    <div className="admin-user-detail-page admin-settings-page">
-      <header className="admin-user-detail-hero">
-        <div className="admin-user-detail-hero-main">
-          <h1 className="admin-user-detail-name">Site settings</h1>
-          <p className="admin-user-detail-subline">
-            Registration, dashboard notices, payment details, and public
-            links. Save when you are done editing.
-          </p>
-        </div>
+    <div className="mx-auto flex max-w-[52rem] flex-col gap-4 pb-8">
+      <header className="rounded-[14px] border border-[#e4e7e0] bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <h1 className="text-[1.15rem] font-extrabold tracking-tight text-[#18221c]">
+          Site settings
+        </h1>
       </header>
 
       <SettingsCard title="Registration">
-        <div className="admin-settings-stack">
+        <div className={STACK}>
           <SettingToggle
             label="Registration open"
             checked={form.registrationOpen}
@@ -306,7 +341,7 @@ export function SettingsForm() {
               setForm((f) => ({ ...f, registrationOpen: v }))
             }
           />
-          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
+          <div className={DUO_GRID}>
             <SettingField label="Exercise year">
               <Input
                 type="number"
@@ -330,11 +365,8 @@ export function SettingsForm() {
               />
             </SettingField>
           </div>
-          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-            <SettingField
-              label="Registration deadline"
-              hint="After this date/time, new registrations are blocked. Leave empty for no deadline."
-            >
+          <div className={DUO_GRID}>
+            <SettingField label="Registration deadline">
               <Input
                 type="datetime-local"
                 value={form.registrationDeadline}
@@ -347,10 +379,7 @@ export function SettingsForm() {
                 className={adminInput}
               />
             </SettingField>
-            <SettingField
-              label="Payment deadline"
-              hint="After this date/time, payment submission is blocked. Leave empty for no deadline."
-            >
+            <SettingField label="Payment deadline">
               <Input
                 type="datetime-local"
                 value={form.paymentDeadline}
@@ -364,15 +393,9 @@ export function SettingsForm() {
         </div>
       </SettingsCard>
 
-      <SettingsCard
-        title="Participant workflow"
-        description="Deadlines and windows for the guided participant journey: confirmation → team registration → roster → flight details → host information."
-      >
-        <div className="admin-settings-stack">
-          <SettingField
-            label="Participation confirmation deadline"
-            hint="Participants must confirm their registration (first-login dialog) before this date/time. After it passes, confirmation is disabled. Leave empty for no deadline."
-          >
+      <SettingsCard title="Participant workflow">
+        <div className={STACK}>
+          <SettingField label="Participation confirmation deadline">
             <Input
               type="datetime-local"
               value={form.participationConfirmDeadline}
@@ -385,11 +408,8 @@ export function SettingsForm() {
               className={adminInput}
             />
           </SettingField>
-          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-            <SettingField
-              label="Team registration opens"
-              hint="Empty = open immediately."
-            >
+          <div className={DUO_GRID}>
+            <SettingField label="Team registration opens">
               <Input
                 type="datetime-local"
                 value={form.teamRegistrationOpenDate}
@@ -402,10 +422,7 @@ export function SettingsForm() {
                 className={adminInput}
               />
             </SettingField>
-            <SettingField
-              label="Team registration closes"
-              hint="Empty = no closing date."
-            >
+            <SettingField label="Team registration closes">
               <Input
                 type="datetime-local"
                 value={form.teamRegistrationCloseDate}
@@ -419,11 +436,8 @@ export function SettingsForm() {
               />
             </SettingField>
           </div>
-          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-            <SettingField
-              label="Flight details deadline"
-              hint="Participants can edit/replace flight documents until this date/time or until finalized."
-            >
+          <div className={DUO_GRID}>
+            <SettingField label="Flight details deadline">
               <Input
                 type="datetime-local"
                 value={form.flightDetailsDeadline}
@@ -436,10 +450,7 @@ export function SettingsForm() {
                 className={adminInput}
               />
             </SettingField>
-            <SettingField
-              label="Maximum team members"
-              hint="Default cap per team (13). Per-team increases are granted via Team Size Requests."
-            >
+            <SettingField label="Maximum team members">
               <Input
                 type="number"
                 min={1}
@@ -462,7 +473,7 @@ export function SettingsForm() {
         title="Host information"
         description="Read-only hosting/arrival dashboard shown to participants whose flight details are finalized."
       >
-        <div className="admin-settings-stack">
+        <div className={STACK}>
           <SettingToggle
             label="Host information published"
             checked={form.hostInfoPublished}
@@ -470,10 +481,7 @@ export function SettingsForm() {
               setForm((f) => ({ ...f, hostInfoPublished: v }))
             }
           />
-          <SettingField
-            label="Hosting & arrival information"
-            hint="Shown at the top of the participant Host Information page. Basic HTML is allowed and sanitized."
-          >
+          <SettingField label="Hosting & arrival information">
             <Textarea
               rows={6}
               value={form.hostInfoContent}
@@ -488,71 +496,71 @@ export function SettingsForm() {
       </SettingsCard>
 
       <SettingsCard
-        title="Dashboard notices"
-        description="Banners shown on the participant dashboard."
-      >
-        <div className="admin-settings-stack">
-          <SettingField
-            label="Fee notice text"
-            hint="Leave empty to hide the fee notice banner."
-          >
-            <Textarea
-              rows={3}
-              value={form.feeNoticeText}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, feeNoticeText: e.target.value }))
-              }
-              className={cn(adminInput, "min-h-[5rem] resize-y")}
-            />
-          </SettingField>
-          <SettingField label="Approval notice text">
-            <Textarea
-              rows={3}
-              value={form.approvalNoticeText}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, approvalNoticeText: e.target.value }))
-              }
-              className={cn(adminInput, "min-h-[5rem] resize-y")}
-            />
-          </SettingField>
-        </div>
-      </SettingsCard>
-
-      <SettingsCard
         title="Payment settings"
-        description="Bank and mobile payment details for approved participants (PKR manual transfer)."
+        description="Registration fee and the bank / mobile transfer details shown to approved participants."
       >
-        <div className="admin-settings-stack">
-          <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-            <SettingField label="Registration fee amount">
-              <Input
-                type="number"
-                step="1"
-                min="1"
-                value={form.defaultPaymentAmount}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    defaultPaymentAmount:
-                      parseInt(e.target.value, 10) ||
-                      DEFAULT_PAYMENT_SETTINGS.registrationFee,
-                  }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-            <SettingField label="Currency code">
-              <Input
-                value={form.paymentCurrency}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, paymentCurrency: e.target.value }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
+        <div className={STACK}>
+          <div className="flex flex-wrap items-start gap-x-7 gap-y-4 rounded-xl border border-[#cfe6d8] bg-gradient-to-b from-[#f1f9f4] to-[#f9fbf9] px-[1.35rem] py-[1.15rem]">
+            <div className="flex min-w-0 flex-1 basis-60 flex-col gap-2.5">
+              <span className="text-[0.7rem] font-bold uppercase tracking-[0.08em] text-[#15803d]">
+                Registration fee
+              </span>
+              <div className="inline-flex max-w-full items-stretch self-start overflow-hidden rounded-[10px] border border-[#cbd5e1] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[border-color,box-shadow] focus-within:border-[#9cbf8a] focus-within:ring-[3px] focus-within:ring-[#1e5a3a]/15">
+                <span className="inline-flex items-center border-r border-[#e2e8f0] bg-[#f1f5f9] px-3.5 text-[0.8125rem] font-bold tracking-wide text-[#475569]">
+                  {currency}
+                </span>
+                <input
+                  type="number"
+                  step="1"
+                  min="1"
+                  inputMode="numeric"
+                  aria-label="Registration fee amount"
+                  value={form.defaultPaymentAmount}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      defaultPaymentAmount:
+                        parseInt(e.target.value, 10) ||
+                        DEFAULT_PAYMENT_SETTINGS.registrationFee,
+                    }))
+                  }
+                  className="w-[8.5rem] max-w-full border-0 bg-transparent px-3.5 py-2 text-[1.35rem] font-bold tabular-nums text-[#0f172a] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
+              </div>
+              <p className="text-[0.78rem] leading-relaxed text-[#475569]">
+                Charged to every approved participant — they see{" "}
+                <strong className="font-bold text-[#15803d]">
+                  {formatRegistrationFee(form.defaultPaymentAmount, currency)}
+                </strong>
+                .
+              </p>
+            </div>
+            <div className="min-w-[8rem] shrink grow-0 basis-44">
+              <SettingField label="Currency" hint="ISO code — e.g. PKR, USD, GBP.">
+                <Input
+                  value={form.paymentCurrency}
+                  maxLength={3}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      paymentCurrency: e.target.value.toUpperCase(),
+                    }))
+                  }
+                  className={cn(
+                    adminInput,
+                    "max-w-[8rem] font-semibold uppercase tracking-wide"
+                  )}
+                />
+              </SettingField>
+            </div>
           </div>
 
-          <PaymentGroup title="Bank transfer">
+          <PaymentMethodCard
+            icon={Landmark}
+            title="Bank transfer"
+            subtitle="Domestic PKR account"
+            wide
+          >
             <SettingField label="Bank name">
               <Input
                 value={form.paymentBankName}
@@ -586,11 +594,7 @@ export function SettingsForm() {
                 className={adminInput}
               />
             </SettingField>
-            <SettingField
-              label="IBAN"
-              hint="Optional — leave blank to hide."
-              className="admin-settings-grid-span-2"
-            >
+            <SettingField label="IBAN" hint="Optional — leave blank to hide.">
               <Input
                 value={form.paymentBankIban}
                 onChange={(e) =>
@@ -599,10 +603,14 @@ export function SettingsForm() {
                 className={adminInput}
               />
             </SettingField>
-          </PaymentGroup>
+          </PaymentMethodCard>
 
-          <div className="admin-settings-mobile-grid">
-            <PaymentGroup title="Wise transfer">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <PaymentMethodCard
+              icon={Globe}
+              title="Wise transfer"
+              subtitle="International"
+            >
               <SettingField label="Wise email">
                 <Input
                   value={form.paymentWiseEmail}
@@ -621,9 +629,13 @@ export function SettingsForm() {
                   className={adminInput}
                 />
               </SettingField>
-            </PaymentGroup>
+            </PaymentMethodCard>
 
-            <PaymentGroup title="Mobile wallets">
+            <PaymentMethodCard
+              icon={Smartphone}
+              title="Mobile wallets"
+              subtitle="JazzCash / Easypaisa"
+            >
               <SettingField label="Wallet number">
                 <Input
                   value={form.paymentMobileNumber}
@@ -648,9 +660,13 @@ export function SettingsForm() {
                   className={adminInput}
                 />
               </SettingField>
-            </PaymentGroup>
+            </PaymentMethodCard>
 
-            <PaymentGroup title="Remitly">
+            <PaymentMethodCard
+              icon={Banknote}
+              title="Remitly"
+              subtitle="International"
+            >
               <SettingField label="Remitly email">
                 <Input
                   value={form.paymentRemitlyEmail}
@@ -675,72 +691,18 @@ export function SettingsForm() {
                   className={adminInput}
                 />
               </SettingField>
-            </PaymentGroup>
+            </PaymentMethodCard>
           </div>
         </div>
       </SettingsCard>
 
-      <SettingsCard title="QR links">
-        <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-          <SettingField label="Merchandise QR / link">
-            <Input
-              value={form.merchandiseQrUrl}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, merchandiseQrUrl: e.target.value }))
-              }
-              className={adminInput}
-            />
-          </SettingField>
-          <SettingField label="Photography QR / link">
-            <Input
-              value={form.photographyQrUrl}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, photographyQrUrl: e.target.value }))
-              }
-              className={adminInput}
-            />
-          </SettingField>
-        </div>
-      </SettingsCard>
-
-      <SettingsCard title="Social links">
-        <div className="admin-user-detail-grid admin-user-detail-grid--duo">
-          {(
-            [
-              ["facebookUrl", "Facebook URL"],
-              ["twitterUrl", "Twitter/X URL"],
-              ["instagramUrl", "Instagram URL"],
-              ["privacyPolicyUrl", "Privacy policy URL"],
-            ] as const
-          ).map(([key, label]) => (
-            <SettingField key={key} label={label}>
-              <Input
-                value={form[key]}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, [key]: e.target.value }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-          ))}
-        </div>
-      </SettingsCard>
-
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-body">
-          <div className="admin-user-detail-actions admin-settings-save-row">
-            <Button
-              onClick={handleSave}
-              disabled={saving}
-              variant="adminPrimary"
-            >
+      <section className={CARD}>
+        <div className={CARD_BODY}>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button onClick={handleSave} disabled={saving} variant="adminPrimary">
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {saved ? "Saved" : "Save settings"}
             </Button>
-            <p className="admin-user-detail-status-controls-hint">
-              Changes apply to registration, participant dashboard, and payment
-              instructions.
-            </p>
           </div>
         </div>
       </section>

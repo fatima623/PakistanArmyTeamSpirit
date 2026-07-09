@@ -32,17 +32,32 @@
   color: var(--cp-ink-muted, #4a5245);
 }
 
-/* upload form */
+/* upload form (revealed via the Add image button) */
+.admin-gallery-form-wrap {
+  margin-bottom: 1.35rem;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid var(--cp-border, #e4e1d6);
+}
 .admin-gallery-form {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
   grid-template-columns: 1fr;
 }
 @media (min-width: 820px) {
   .admin-gallery-form {
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 260px 1fr;
     align-items: start;
   }
+}
+.admin-gallery-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.admin-gallery-upload-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cp-ink, #1c2119);
 }
 .admin-gallery-drop {
   display: flex;
@@ -50,9 +65,9 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 168px;
-  padding: 1rem;
-  border: 1px dashed var(--cp-border, #c8c2b4);
+  min-height: 240px;
+  padding: 1.25rem;
+  border: 2px dashed var(--cp-border, #c8c2b4);
   border-radius: 12px;
   background: #faf9f5;
   text-align: center;
@@ -62,6 +77,7 @@
 }
 .admin-gallery-drop:hover {
   border-color: var(--cp-olive, #3d5230);
+  background: #f5f8f3;
 }
 .admin-gallery-drop img {
   position: absolute;
@@ -71,8 +87,13 @@
   object-fit: cover;
 }
 .admin-gallery-drop__hint {
-  font-size: 0.78rem;
-  color: var(--cp-ink-muted, #4a5245);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--cp-ink, #1c2119);
+}
+.admin-gallery-drop__sub {
+  font-size: 0.72rem;
+  color: var(--cp-ink-muted, #6b7280);
 }
 .admin-gallery-fields {
   display: grid;

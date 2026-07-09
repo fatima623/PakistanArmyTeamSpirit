@@ -29,7 +29,7 @@ export function ParticipantRegistrationDetailsCard({
   unit,
 }: Props) {
   return (
-    <section className="pp-card">
+    <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
       <div className="pp-card__head">
         <div>
           <p className="pp-eyebrow">Profile</p>

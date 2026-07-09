@@ -1090,11 +1090,15 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #2a332a;
   font-weight: 500;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .admin-theme .admin-users-unit-sub {
   font-size: 11px;
   color: #9aa298;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-top: 3px;
 }
 .admin-theme .admin-users-app-date {

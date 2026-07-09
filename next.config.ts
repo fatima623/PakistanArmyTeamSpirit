@@ -38,6 +38,7 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     // Cache optimized images for 31 days (default is 60s).
     minimumCacheTTL: 2678400,
+    qualities: [25, 50, 75, 92, 95, 100],
   },
   experimental: {
     scrollRestoration: true,

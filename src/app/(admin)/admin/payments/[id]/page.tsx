@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Activity, FileText, Mail } from "lucide-react";
 
 import "@/app/admin-user-detail.css";
 import "@/app/payment-status-timeline.css";
+import "@/app/admin-payment-detail.css";
 import { prisma } from "@/lib/prisma";
 import { AUDIT_ENTITY, PAYMENT_STATUS } from "@/lib/constants";
 import { getAdminRole } from "@/lib/admin-session";
@@ -18,6 +19,7 @@ import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import { isInternationalParticipant } from "@/lib/participant-country";
 import { formatRegistrationFee } from "@/lib/payment-settings";
+import { formatDateShort } from "@/lib/utils";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -102,40 +104,51 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
     createdAt: payment.createdAt.toISOString(),
   };
 
+  const initials =
+    `${payment.user.firstName?.[0] ?? ""}${payment.user.lastName?.[0] ?? ""}`.toUpperCase() ||
+    "–";
+
   return (
-    <div className="admin-user-detail-page admin-user-detail-page--compact">
-      <header className="admin-user-detail-hero">
-        <div className="admin-user-detail-hero-main">
-          <Link href="/admin/payments" className="admin-user-detail-back">
-            <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-            Back to payment verification
-          </Link>
-          <h1 className="admin-user-detail-name">
+    <div className="admin-pay-page">
+      <Link href="/admin/payments" className="admin-pay-back">
+        <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+        Back to payment verification
+      </Link>
+
+      <section className="admin-pay-summary">
+        <span className="admin-pay-summary__avatar" aria-hidden>
+          {initials}
+        </span>
+        <div className="admin-pay-summary__id">
+          <h1 className="admin-pay-summary__name">
             {payment.user.firstName} {payment.user.lastName}
             {isInternationalParticipant(payment.user.country) ? (
               <IntlBadge />
             ) : null}
           </h1>
-          <p className="admin-user-detail-email">{payment.user.email}</p>
-          <p className="admin-user-detail-subline">
-            {payment.user.unit?.unitName ?? "No unit"} ·{" "}
-            {formatRegistrationFee(payment.amount)}
-          </p>
-          <div className="admin-user-detail-badges">
-            <PaymentStatusBadge status={payment.status} />
+          <p className="admin-pay-summary__email">{payment.user.email}</p>
+          <div className="admin-pay-summary__meta">
+            <span>{payment.user.unit?.unitName ?? "No unit"}</span>
+            <span className="admin-pay-summary__meta-dot" aria-hidden />
+            <span className="admin-pay-summary__amount">
+              {formatRegistrationFee(payment.amount)}
+            </span>
+            <span className="admin-pay-summary__meta-dot" aria-hidden />
+            <span>Submitted {formatDateShort(payment.createdAt)}</span>
           </div>
         </div>
-        <div className="admin-user-detail-hero-actions">
+        <div className="admin-pay-summary__right">
+          <PaymentStatusBadge status={payment.status} />
           <Link href={`/admin/users/${payment.user.id}`}>
             <Button size="sm" variant="adminOutline">
               View application
             </Button>
           </Link>
         </div>
-      </header>
+      </section>
 
-      <div className="admin-detail-layout">
-        <div className="admin-detail-layout-main">
+      <div className="admin-pay-layout">
+        <div className="admin-pay-main">
           {!canDecide ? (
             <div className="portal-alert-info rounded-lg px-4 py-2.5 text-[13px]">
               Payment verification is performed exclusively by the MT (Management
@@ -150,13 +163,38 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
           />
         </div>
 
-        <aside className="admin-detail-layout-aside">
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header">
-              <h3 className="admin-user-detail-card-title">Activity</h3>
+        <aside className="admin-pay-aside">
+          <section className="admin-pay-card">
+            <div className="admin-pay-card__header">
+              <h3 className="admin-pay-card__title">
+                <Activity className="h-4 w-4" aria-hidden />
+                Activity timeline
+              </h3>
             </div>
-            <div className="admin-user-detail-card-body">
+            <div className="admin-pay-card__body">
               <AuditLogList logs={auditLogs} />
+            </div>
+          </section>
+
+          <section className="admin-pay-card">
+            <div className="admin-pay-card__header">
+              <h3 className="admin-pay-card__title">Quick actions</h3>
+            </div>
+            <div className="admin-pay-card__body">
+              <div className="flex flex-col gap-2">
+                <Button variant="adminOutline" className="justify-start" asChild>
+                  <Link href={`/admin/users/${payment.user.id}`}>
+                    <FileText className="mr-2 h-4 w-4" aria-hidden />
+                    View full application
+                  </Link>
+                </Button>
+                <Button variant="adminOutline" className="justify-start" asChild>
+                  <a href={`mailto:${payment.user.email}`}>
+                    <Mail className="mr-2 h-4 w-4" aria-hidden />
+                    Email participant
+                  </a>
+                </Button>
+              </div>
             </div>
           </section>
         </aside>

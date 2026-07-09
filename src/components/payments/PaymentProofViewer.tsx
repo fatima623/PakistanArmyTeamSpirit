@@ -1,8 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { ExternalLink, Loader2, RefreshCw } from "lucide-react";
+import {
+  Download,
+  ExternalLink,
+  FileText,
+  Loader2,
+  Maximize2,
+  RefreshCw,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
+
+import { cn } from "@/lib/utils";
 
 type Props = {
   paymentId: string;
@@ -12,6 +23,8 @@ type Props = {
   fileName?: string | null;
   className?: string;
   imageMaxHeight?: string;
+  /** Render the premium media viewer chrome (zoom / fullscreen / open / download). */
+  withToolbar?: boolean;
 };
 
 function isImageMime(mime: string | null | undefined, fileName?: string | null) {
@@ -27,10 +40,13 @@ export function PaymentProofViewer({
   fileName,
   className,
   imageMaxHeight = "max-h-48",
+  withToolbar = false,
 }: Props) {
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [zoomed, setZoomed] = useState(false);
+  const mediaRef = useRef<HTMLElement>(null);
 
   const endpoint =
     access === "admin"
@@ -72,6 +88,14 @@ export function PaymentProofViewer({
     };
   }, [load]);
 
+  const goFullscreen = () => {
+    try {
+      void mediaRef.current?.requestFullscreen?.();
+    } catch {
+      window.open(objectUrl ?? "", "_blank", "noopener,noreferrer");
+    }
+  };
+
   if (loading) {
     return (
       <div className={`flex items-center gap-2 text-sm text-slate-500 ${className ?? ""}`}>
@@ -99,6 +123,89 @@ export function PaymentProofViewer({
 
   const showImage = isImageMime(mimeType, fileName);
 
+  // —— Premium media viewer (admin detail page) ——
+  if (withToolbar) {
+    return (
+      <figure ref={mediaRef} className={cn("admin-pay-media", className)}>
+        <div className="admin-pay-media__toolbar">
+          {showImage ? (
+            <>
+              <button
+                type="button"
+                className="admin-pay-media__btn"
+                onClick={() => setZoomed((z) => !z)}
+                title={zoomed ? "Zoom out" : "Zoom in"}
+                aria-label={zoomed ? "Zoom out" : "Zoom in"}
+              >
+                {zoomed ? (
+                  <ZoomOut className="h-4 w-4" aria-hidden />
+                ) : (
+                  <ZoomIn className="h-4 w-4" aria-hidden />
+                )}
+              </button>
+              <button
+                type="button"
+                className="admin-pay-media__btn"
+                onClick={goFullscreen}
+                title="Fullscreen"
+                aria-label="Fullscreen"
+              >
+                <Maximize2 className="h-4 w-4" aria-hidden />
+              </button>
+            </>
+          ) : null}
+          <a
+            href={objectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="admin-pay-media__btn"
+            title="Open in new tab"
+            aria-label="Open in new tab"
+          >
+            <ExternalLink className="h-4 w-4" aria-hidden />
+          </a>
+          <a
+            href={objectUrl}
+            download={fileName ?? "payment-proof"}
+            className="admin-pay-media__btn"
+            title="Download"
+            aria-label="Download"
+          >
+            <Download className="h-4 w-4" aria-hidden />
+          </a>
+        </div>
+
+        {showImage ? (
+          <Image
+            src={objectUrl}
+            alt="Payment proof"
+            width={640}
+            height={400}
+            unoptimized
+            onClick={() => setZoomed((z) => !z)}
+            className={cn(
+              "w-auto object-contain transition-all duration-200",
+              zoomed ? "max-h-[46rem] cursor-zoom-out" : imageMaxHeight,
+              !zoomed && "cursor-zoom-in"
+            )}
+          />
+        ) : (
+          <a
+            href={objectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-cp-ink shadow-sm transition hover:border-cp-olive"
+          >
+            <FileText className="h-4 w-4" aria-hidden />
+            View receipt (PDF)
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+          </a>
+        )}
+      </figure>
+    );
+  }
+
+  // —— Compact inline viewer (participant portal) ——
   return (
     <div className={className}>
       {showImage ? (
@@ -127,16 +234,6 @@ export function PaymentProofViewer({
           View receipt (PDF) <ExternalLink className="h-3.5 w-3.5" />
         </a>
       )}
-      <p className="mt-1 text-xs text-slate-500">
-        Private storage · session required
-        <button
-          type="button"
-          onClick={load}
-          className="ml-2 text-cp-olive-dark hover:underline"
-        >
-          Reload
-        </button>
-      </p>
     </div>
   );
 }

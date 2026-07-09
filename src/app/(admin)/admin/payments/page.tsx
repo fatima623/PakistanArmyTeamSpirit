@@ -112,21 +112,9 @@ export default async function AdminPaymentsPage({
   return (
     <div className={adminPaymentsPage}>
       <div className={adminPaymentsPanel}>
-        <div className="admin-payments-alert">
-          <strong>Manual verification only.</strong> Participant uploads are not
-          auto-approved. Review proof, then verify or reject each payment.
-        </div>
+  
 
-        <header className="admin-payments-page-header">
-          <div className="admin-payments-page-intro">
-            <p className="admin-payments-page-desc">
-              Review uploaded payment proofs and update verification status.
-            </p>
-            <span className="admin-payments-count-badge">
-              {totalCount} {totalCount === 1 ? "payment" : "payments"}
-            </span>
-          </div>
-        </header>
+      
 
         <section className={adminPaymentsControls}>
           <div className={adminPaymentsToolbarSearch}>
