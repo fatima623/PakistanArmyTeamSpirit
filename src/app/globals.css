@@ -22,7 +22,6 @@
 @import "./pats-responsive.css";
 @import "./tac-edition-timeline.css";
 @import "./admin-day-theme.css";
-@import "./pats-zebra.css";
 @import "./pats-section-spacing.css";
 @import "./pats-card-surface.css";
 @import "./pats-awards-showcase.css";
@@ -670,7 +669,7 @@
   }
 
   /* Admin type scale — re-homed from admin-typography.css when it was
-     retired. These keep !important only to outrank the legacy
+     retired. These keep the important flag only to outrank the legacy
      pats-refresh/portal-design bases; they die with those sheets in
      phase 3d. */
   .admin-theme :is(.ops-status-pill, .ops-status-badge) {
@@ -1580,12 +1579,69 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 /* ============================================================
+   ZEBRA STRIPING (ex pats-zebra.css, retired in phase 3d).
+   Theme-scoped vars + striped rows for .pats-data-table__row
+   (key-dates, awards) and the home schedule list. Dead selector
+   branches dropped: cp-keydate-row, tac-leaderboard-row,
+   tac-admin-table, tac-brief-classified tables — no markup
+   emits them (CMS content cannot carry classes). The important
+   flag is load-bearing: daylight-theme/pats-home-day row
+   catch-alls carry it too (their higher-specificity :hover
+   overlay is meant to win, and pats-awards-showcase's inverted
+   stripes at (0,3,0) deliberately beat these). Dies with the
+   theme sheets in phase 4.
+   ============================================================ */
+html:not(.light-theme):not([data-site-theme="day"])
+  :is(.army-site:not(.dashboard-day), .cinematic-site.army-site):not(.admin-theme) {
+  --pats-zebra-odd-bg: rgba(212, 175, 55, 0.07);
+  --pats-zebra-even-bg: rgba(255, 255, 255, 0.04);
+  --pats-zebra-row-border: rgba(255, 255, 255, 0.06);
+}
+
+html.light-theme :is(.army-site, .cinematic-site.army-site),
+html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
+.participant-portal,
+.dashboard-day {
+  --pats-zebra-odd-bg: #eef2e8;
+  --pats-zebra-even-bg: #ffffff;
+  --pats-zebra-row-border: rgba(0, 0, 0, 0.07);
+}
+
+:is(
+    .pats-data-table__row,
+    .pats-home-schedule__row,
+    .pats-home-schedule > li
+  ):nth-child(odd) {
+  background-color: var(--pats-zebra-odd-bg) !important;
+}
+
+:is(
+    .pats-data-table__row,
+    .pats-home-schedule__row,
+    .pats-home-schedule > li
+  ):nth-child(even) {
+  background-color: var(--pats-zebra-even-bg) !important;
+}
+
+:is(
+    .pats-data-table__row,
+    .pats-home-schedule__row,
+    .pats-home-schedule > li
+  ) {
+  border-bottom-color: var(--pats-zebra-row-border) !important;
+}
+
+.pats-data-table__row {
+  border-bottom: 1px solid var(--pats-zebra-row-border) !important;
+}
+
+/* ============================================================
    DRILL CARD (ex tac-mission-card.css, retired in phase 3d).
    Class names must stay in DrillCard.tsx markup: daylight-theme
    uses them in :not() guards, and pats-card-surface,
    pats-forest-cards and forest-card-carousel still style them.
    Night rules are the retired sheet's, verbatim. The sheet's
-   ~60 lines of day-mode !important rules (title #fff, desc
+   ~60 lines of day-mode important-flagged rules (title #fff, desc
    muted, badge/footer gold, hover-title gold, day palette
    remap) were dead: outranked by its own higher-specificity
    descendant catch-all, kept as the single day rule below.
@@ -1701,8 +1757,8 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 /* Day mode: all card text unifies to the forest-card text color.
-   !important because daylight-theme's card catch-alls are also
-   !important at lower specificity. */
+   Important-flagged because daylight-theme's card catch-alls are
+   important-flagged too, at lower specificity. */
 html.light-theme .cinematic-site.army-site .pats-section .tac-mission-card,
 html.light-theme .cinematic-site.army-site .pats-section .tac-mission-card :is(h1, h2, h3, h4, p, span, li, a, label),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-section .tac-mission-card,
