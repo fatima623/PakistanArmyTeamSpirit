@@ -31,10 +31,7 @@ export function DrillCard({ drill, index = 0, variant = "grid" }: Props) {
   const card = (
     <Link
       href={`/operations/${drill.id}`}
-      className={cn(
-        "tac-mission-card group h-full w-full min-h-0",
-        isPillar && "tac-mission-card--pillar"
-      )}
+      className="tac-mission-card group h-full w-full min-h-0"
     >
       <div className="tac-mission-card__veil" aria-hidden />
 

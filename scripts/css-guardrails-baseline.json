@@ -33,10 +33,9 @@
     "src/app/pats-zebra.css",
     "src/app/portal-design.css",
     "src/app/tac-edition-timeline.css",
-    "src/app/tac-mission-card.css",
     "src/app/team-members.css"
   ],
-  "importantCount": 1721,
+  "importantCount": 1714,
   "importantByFile": {
     "src/app/admin-day-theme.css": 230,
     "src/app/cinematic-tactical.css": 2,
@@ -44,7 +43,7 @@
     "src/app/event-support.css": 0,
     "src/app/exercise-contour.css": 80,
     "src/app/forest-card-carousel.css": 10,
-    "src/app/globals.css": 60,
+    "src/app/globals.css": 64,
     "src/app/paf-theme.css": 5,
     "src/app/participant-dashboard.css": 8,
     "src/app/participant-panel.css": 93,
@@ -71,7 +70,6 @@
     "src/app/pats-zebra.css": 4,
     "src/app/portal-design.css": 80,
     "src/app/tac-edition-timeline.css": 21,
-    "src/app/tac-mission-card.css": 11,
     "src/app/team-members.css": 29
   },
   "cssImports": [

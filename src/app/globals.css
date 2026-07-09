@@ -14,7 +14,6 @@
 @import "./pats-mission-showcase.css";
 @import "./pats-video-gallery.css";
 @import "./pats-section-panels.css";
-@import "./tac-mission-card.css";
 @import "./forest-card-carousel.css";
 @import "./pats-forest-cards.css";
 @import "./pats-site-chrome.css";
@@ -1578,6 +1577,137 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .cinematic-site:not(.dashboard-day) .cp-alert-warning .text-orange-700 a,
 .cinematic-site:not(.dashboard-day) .pats-form-notice--warn {
   color: #fbbf24 !important;
+}
+
+/* ============================================================
+   DRILL CARD (ex tac-mission-card.css, retired in phase 3d).
+   Class names must stay in DrillCard.tsx markup: daylight-theme
+   uses them in :not() guards, and pats-card-surface,
+   pats-forest-cards and forest-card-carousel still style them.
+   Night rules are the retired sheet's, verbatim. The sheet's
+   ~60 lines of day-mode !important rules (title #fff, desc
+   muted, badge/footer gold, hover-title gold, day palette
+   remap) were dead: outranked by its own higher-specificity
+   descendant catch-all, kept as the single day rule below.
+   These theme-war selectors die with daylight-theme in phase 4.
+   ============================================================ */
+.tac-mission-card {
+  --tac-card-bg: #1c2419;
+  --tac-card-bg-hover: #243028;
+  --tac-card-border: rgba(200, 168, 75, 0.28);
+  --tac-card-text: #e8e4d8;
+  --tac-card-muted: rgba(255, 255, 255, 0.78);
+  --tac-card-gold: #c9a84c;
+  --tac-card-gold-soft: #e8d4a8;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  color: var(--tac-card-text);
+  border: 1px solid var(--tac-card-border);
+  border-left: 4px solid var(--tac-card-gold);
+  border-radius: var(--pats-radius-card, 12px);
+  background: var(--tac-card-bg);
+  box-shadow: 0 12px 32px rgba(10, 18, 12, 0.22);
+  text-decoration: none;
+}
+
+.tac-mission-card:hover,
+.tac-mission-card:focus-visible {
+  border-color: rgba(200, 168, 75, 0.5);
+  background: var(--tac-card-bg-hover);
+  outline: none;
+}
+
+.tac-mission-card__veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    165deg,
+    rgba(26, 36, 27, 0.12) 0%,
+    rgba(20, 28, 22, 0.55) 100%
+  );
+}
+
+.tac-mission-card__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0.75rem;
+}
+
+.tac-mission-card__badge {
+  align-self: flex-start;
+  font-size: var(--pats-type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(200, 168, 75, 0.4);
+  border-radius: 4px;
+  background: rgba(200, 168, 75, 0.18);
+  color: var(--tac-card-gold-soft);
+}
+
+.tac-mission-card__title {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-title);
+  font-weight: 700;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.tac-mission-card__desc {
+  margin: 0;
+  flex: 1;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-body);
+  font-weight: 400;
+  line-height: var(--pats-type-line-body);
+  color: var(--tac-card-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.tac-mission-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tac-card-gold);
+}
+
+.tac-mission-card__footer svg {
+  color: var(--tac-card-gold);
+}
+
+/* Day mode: all card text unifies to the forest-card text color.
+   !important because daylight-theme's card catch-alls are also
+   !important at lower specificity. */
+html.light-theme .cinematic-site.army-site .pats-section .tac-mission-card,
+html.light-theme .cinematic-site.army-site .pats-section .tac-mission-card :is(h1, h2, h3, h4, p, span, li, a, label),
+html[data-site-theme="day"] .cinematic-site.army-site .pats-section .tac-mission-card,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-section .tac-mission-card :is(h1, h2, h3, h4, p, span, li, a, label) {
+  color: var(--tac-card-text) !important;
 }
 
 .cinematic-site .mb-6.rounded-xl {
