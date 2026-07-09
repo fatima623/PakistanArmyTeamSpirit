@@ -7,7 +7,6 @@ import {
   GalleryManager,
   type AdminGalleryImage,
 } from "@/components/admin/GalleryManager";
-import "@/app/admin-gallery.css";
 
 export const metadata: Metadata = {
   title: adminNavLabel("gallery"),

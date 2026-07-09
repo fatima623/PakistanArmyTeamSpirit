@@ -55,9 +55,9 @@ export function GalleryManager({
     });
 
   return (
-    <div className="admin-gallery-page">
-      <section className="admin-gallery-panel">
-        <header className="admin-gallery-header">
+    <div className="grid gap-5">
+      <section className="rounded-[14px] border border-brand-line bg-white px-[1.4rem] pb-6 pt-5 shadow-[0_1px_3px_rgba(20,26,20,0.06)]">
+        <header className="mb-4 flex flex-wrap items-center justify-between gap-3 [&_h2]:text-[1.05rem] [&_h2]:font-bold [&_h2]:text-brand-ink [&_p]:mt-0.5 [&_p]:text-[0.85rem] [&_p]:text-brand-ink-muted">
           <div>
             <h2>Gallery images</h2>
             <p>Lower order numbers appear first on the public gallery.</p>
@@ -78,7 +78,7 @@ export function GalleryManager({
         </header>
 
         {showForm ? (
-          <div className="admin-gallery-form-wrap">
+          <div className="mb-[1.35rem] border-b border-brand-line pb-[1.35rem]">
             <UploadForm
               onCreated={(img) => {
                 upsert(img);
@@ -90,14 +90,14 @@ export function GalleryManager({
         ) : null}
 
         {images.length === 0 ? (
-          <div className="admin-gallery-empty">
+          <div className="rounded-xl border border-dashed border-brand-line px-4 py-10 text-center text-brand-ink-muted">
             No images yet — click “Add image” to upload your first photo.
           </div>
         ) : (
-          <div className="admin-gallery-grid">
+          <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
             {images.map((img) => (
-              <article className="admin-gallery-card" key={img.id}>
-                <div className="admin-gallery-card__thumb">
+              <article className="flex flex-col overflow-hidden rounded-xl border border-brand-line bg-white transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,26,20,0.12)]" key={img.id}>
+                <div className="relative aspect-[4/3] overflow-hidden bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={imageUrl(img.imagePath, bust[img.id])}
@@ -105,23 +105,23 @@ export function GalleryManager({
                     loading="lazy"
                   />
                   <span
-                    className={`admin-gallery-card__badge admin-gallery-card__badge--${
-                      img.published ? "published" : "draft"
+                    className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[0.66rem] font-bold uppercase tracking-[0.04em] text-white backdrop-blur-[4px] ${
+                      img.published ? "bg-[rgba(46,107,79,0.9)]" : "bg-brand-ink-muted/85"
                     }`}
                   >
                     {img.published ? "Published" : "Draft"}
                   </span>
-                  <span className="admin-gallery-card__order">
+                  <span className="absolute right-2 top-2 rounded-md bg-brand-ink/70 px-[0.45rem] py-0.5 font-mono text-[0.66rem] text-white">
                     #{img.sortOrder}
                   </span>
                 </div>
-                <div className="admin-gallery-card__body">
-                  <div className="admin-gallery-card__title">{img.title}</div>
-                  <div className="admin-gallery-card__meta">
+                <div className="flex flex-1 flex-col gap-1.5 px-[0.9rem] pb-[0.9rem] pt-[0.8rem]">
+                  <div className="text-[0.92rem] font-bold leading-[1.25] text-brand-ink">{img.title}</div>
+                  <div className="text-xs text-brand-ink-muted">
                     {[img.category, img.year].filter(Boolean).join(" · ") ||
                       "Uncategorised"}
                   </div>
-                  <div className="admin-gallery-card__actions">
+                  <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-[0.6rem]">
                     <Button
                       size="sm"
                       variant="adminOutline"
@@ -242,12 +242,12 @@ function UploadForm({
   };
 
   return (
-    <div className="admin-gallery-form">
-      <div className="admin-gallery-upload">
-        <label className="admin-gallery-upload-label">Image *</label>
+    <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[260px_1fr] min-[820px]:items-start">
+      <div className="flex flex-col gap-1.5">
+        <label className="text-[0.8rem] font-semibold text-brand-ink">Image *</label>
         <button
           type="button"
-          className="admin-gallery-drop"
+          className="relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
           onClick={() => fileRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
@@ -261,10 +261,10 @@ function UploadForm({
           ) : (
             <>
               <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
-              <span className="admin-gallery-drop__hint">
+              <span className="text-[0.82rem] font-semibold text-brand-ink">
                 Click or drop to upload an image
               </span>
-              <span className="admin-gallery-drop__sub">
+              <span className="text-[0.72rem] text-brand-ink-muted">
                 JPG, PNG, WEBP or GIF · up to 8 MB
               </span>
             </>
@@ -280,8 +280,8 @@ function UploadForm({
       </div>
 
       <div>
-        <div className="admin-gallery-fields">
-          <div className="admin-gallery-field">
+        <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
             <label htmlFor="g-title">Title *</label>
             <Input
               id="g-title"
@@ -291,7 +291,7 @@ function UploadForm({
               placeholder="e.g. 5th International PATS — Opening"
             />
           </div>
-          <div className="admin-gallery-field">
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
             <label htmlFor="g-category">Category</label>
             <Input
               id="g-category"
@@ -301,7 +301,7 @@ function UploadForm({
               placeholder="e.g. Ceremony"
             />
           </div>
-          <div className="admin-gallery-field">
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
             <label htmlFor="g-year">Year</label>
             <Input
               id="g-year"
@@ -312,7 +312,7 @@ function UploadForm({
               placeholder="2022"
             />
           </div>
-          <div className="admin-gallery-field">
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
             <label htmlFor="g-order">Display order</label>
             <Input
               id="g-order"
@@ -322,7 +322,7 @@ function UploadForm({
               className="admin-input"
             />
           </div>
-          <div className="admin-gallery-field admin-gallery-field--wide">
+          <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
             <label htmlFor="g-caption">Caption</label>
             <Textarea
               id="g-caption"
@@ -335,7 +335,7 @@ function UploadForm({
           </div>
         </div>
 
-        <div className="admin-gallery-publish-row mt-3">
+        <div className="mt-3 flex items-center gap-3">
           <Switch
             id="g-published"
             checked={published}
@@ -557,8 +557,8 @@ function EditDialog({
         </DialogHeader>
 
         {image ? (
-          <div className="admin-gallery-dialog-fields">
-            <div className="admin-gallery-field admin-gallery-field--wide">
+          <div className="grid grid-cols-2 gap-[0.85rem]">
+            <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-title">Title *</label>
               <Input
                 id="e-title"
@@ -567,7 +567,7 @@ function EditDialog({
                 className="admin-input"
               />
             </div>
-            <div className="admin-gallery-field">
+            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-category">Category</label>
               <Input
                 id="e-category"
@@ -576,7 +576,7 @@ function EditDialog({
                 className="admin-input"
               />
             </div>
-            <div className="admin-gallery-field">
+            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-year">Year</label>
               <Input
                 id="e-year"
@@ -586,7 +586,7 @@ function EditDialog({
                 className="admin-input"
               />
             </div>
-            <div className="admin-gallery-field">
+            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-order">Display order</label>
               <Input
                 id="e-order"
@@ -596,7 +596,7 @@ function EditDialog({
                 className="admin-input"
               />
             </div>
-            <div className="admin-gallery-field">
+            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-replace">Replace image</label>
               <input
                 id="e-replace"
@@ -607,7 +607,7 @@ function EditDialog({
                 onChange={(e) => setReplaceFile(e.target.files?.[0] ?? null)}
               />
             </div>
-            <div className="admin-gallery-field admin-gallery-field--wide">
+            <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-caption">Caption</label>
               <Textarea
                 id="e-caption"

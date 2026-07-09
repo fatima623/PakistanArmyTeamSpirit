@@ -9,7 +9,7 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { adminInput, adminTextarea } from "@/lib/admin-ui";
+import { adminInput, adminTableActionsCenter, adminTextarea } from "@/lib/admin-ui";
 import { TOAST } from "@/lib/toast";
 
 type KeyDate = {
@@ -118,23 +118,23 @@ export function KeyDatesManager({
   const canAdd = addForm.label.trim().length > 0 && addForm.value.trim().length > 0;
 
   return (
-    <div className="admin-key-dates-page">
-      <section className="admin-key-dates-panel">
-        <header className="admin-key-dates-header">
-          <h2>Configured dates ({keyDates.length})</h2>
+    <div className="flex flex-col gap-6 pb-8">
+      <section className="admin-surface p-8">
+        <header className="mb-6 [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
+          <h2 className="text-[1.75rem] font-bold tracking-[-0.01em] text-brand-ink">Configured dates ({keyDates.length})</h2>
           <p>
             These entries appear on the public key dates page. Visitors see the
             label and value you enter below.
           </p>
         </header>
 
-        <div className="admin-key-dates-table-shell">
-          <table className="admin-key-dates-table">
+        <div className="overflow-x-auto rounded-[10px] border border-black/[0.06]">
+          <table className="admin-data-table">
             <colgroup>
-              <col className="admin-key-dates-col-label" />
-              <col className="admin-key-dates-col-value" />
-              <col className="admin-key-dates-col-order" />
-              <col className="admin-key-dates-col-actions" />
+              <col className="w-[18%]" />
+              <col className="w-[52%]" />
+              <col className="w-[10%]" />
+              <col className="w-[20%]" />
             </colgroup>
             <thead>
               <tr>
@@ -147,7 +147,7 @@ export function KeyDatesManager({
             <tbody>
               {keyDates.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="admin-key-dates-empty">
+                  <td colSpan={4} className="px-6 py-10 text-center text-muted-foreground">
                     No key dates yet. Add your first entry using the form below.
                   </td>
                 </tr>
@@ -199,7 +199,7 @@ export function KeyDatesManager({
                         </td>
                         <td>
                           <div
-                            className="admin-key-dates-row-actions"
+                            className={adminTableActionsCenter}
                             role="group"
                             aria-label="Save or cancel edit"
                           >
@@ -223,12 +223,12 @@ export function KeyDatesManager({
                       </>
                     ) : (
                       <>
-                        <td className="admin-key-dates-cell-label">{kd.label}</td>
-                        <td className="admin-key-dates-cell-value">{kd.value}</td>
-                        <td className="admin-key-dates-cell-order">{kd.sortOrder}</td>
+                        <td className="font-semibold text-brand-ink">{kd.label}</td>
+                        <td className="leading-[1.45] text-muted-foreground">{kd.value}</td>
+                        <td className="tabular-nums text-muted-foreground">{kd.sortOrder}</td>
                         <td>
                           <div
-                            className="admin-key-dates-row-actions"
+                            className={adminTableActionsCenter}
                             role="group"
                             aria-label="Row actions"
                           >
@@ -271,16 +271,16 @@ export function KeyDatesManager({
         </div>
       </section>
 
-      <section className="admin-key-dates-add-card" aria-labelledby="add-key-date-heading">
-        <h3 id="add-key-date-heading">Add a new key date</h3>
-        <p className="admin-key-dates-add-intro">
+      <section className="admin-surface p-8" aria-labelledby="add-key-date-heading">
+        <h3 id="add-key-date-heading" className="mb-1.5 text-lg font-bold text-brand-ink">Add a new key date</h3>
+        <p className="mb-6 max-w-[36rem] text-sm leading-[1.55] text-muted-foreground">
           Give each entry a short <strong>label</strong> (shown in the left column on
           the public page) and a <strong>value</strong> (the date or description
           shown beside it). Use <strong>display order</strong> to control sort
           position — lower numbers appear first.
         </p>
 
-        <div className="admin-key-dates-add-fields">
+        <div className="flex max-w-[40rem] flex-col gap-5">
           <FormFieldAdmin
             label="Label"
             required
@@ -315,7 +315,7 @@ export function KeyDatesManager({
           <FormFieldAdmin
             label="Display order"
             
-            className="admin-key-dates-order-field"
+            className="max-w-32"
           >
             <Input
               type="number"
@@ -332,7 +332,7 @@ export function KeyDatesManager({
           </FormFieldAdmin>
         </div>
 
-        <div className="admin-key-dates-add-actions">
+        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-6">
           <Button
             onClick={addKeyDate}
             disabled={saving || !canAdd}
@@ -341,7 +341,7 @@ export function KeyDatesManager({
             {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Add key date
           </Button>
-          <p className="admin-key-dates-add-hint-footer">
+          <p className="min-w-0 flex-[1_1_12rem] text-[0.8125rem] text-muted-foreground">
             Required: label and value. The new entry will appear in the table above
             after you save.
           </p>
