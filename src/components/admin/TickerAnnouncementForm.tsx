@@ -7,8 +7,8 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { adminInput } from "@/lib/admin-ui";
 import {
   EMPTY_TICKER_FORM,
   formFromTicker,
@@ -17,15 +17,6 @@ import {
   type TickerFormState,
 } from "@/lib/ticker-form-helpers";
 import { TOAST } from "@/lib/toast";
-import {
-  TICKER_PRIORITY,
-  TICKER_PRIORITY_LABELS,
-  TICKER_VISIBILITY,
-  TICKER_VISIBILITY_LABELS,
-  type TickerPriority,
-  type TickerVisibility,
-} from "@/lib/ticker";
-import { cn } from "@/lib/utils";
 
 export function TickerAnnouncementForm({
   announcementId,
@@ -45,11 +36,15 @@ export function TickerAnnouncementForm({
 
   const [form, setForm] = useState<TickerFormState>(() => {
     if (initial) return formFromTicker(initial);
-    return { ...EMPTY_TICKER_FORM, sortOrder: defaultSortOrder };
+    // New announcements go live immediately — the form no longer exposes a
+    // status control, so default to LIVE rather than a hidden draft.
+    return {
+      ...EMPTY_TICKER_FORM,
+      sortOrder: defaultSortOrder,
+      publishState: "LIVE",
+    };
   });
   const [submitting, setSubmitting] = useState(false);
-
-  const publishBadge = form.publishState;
 
   const handleSave = async () => {
     if (!form.message.trim()) {
@@ -95,7 +90,6 @@ export function TickerAnnouncementForm({
           <h1 className="admin-user-detail-name">
             {isNew ? "Add announcement" : "Edit announcement"}
           </h1>
-        
         </div>
       </header>
 
@@ -125,40 +119,39 @@ export function TickerAnnouncementForm({
           </div>
 
           <div className="admin-user-detail-grid admin-user-detail-grid--duo mt-4">
-          
-          </div>
-
-          <div className="admin-user-detail-field mt-4">
-            <span className="mb-2 block text-xs font-semibold uppercase tracking-wide text-[#0f172a]">
-              Status
-            </span>
-            <div
-              className="admin-ticker-publish-options"
-              role="group"
-              aria-label="Publishing status"
-            >
-              {(
-                [
-                  { value: "DRAFT", label: "Draft" },
-                  { value: "LIVE", label: "Live" },
-                  { value: "DISABLED", label: "Disabled" },
-                ] as const
-              ).map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  className={cn(
-                    "admin-ticker-publish-option",
-                    form.publishState === opt.value &&
-                      "admin-ticker-publish-option--active"
-                  )}
-                  onClick={() =>
-                    setForm((f) => ({ ...f, publishState: opt.value }))
-                  }
-                >
-                  {opt.label}
-                </button>
-              ))}
+            <div className="admin-user-detail-field">
+              <label htmlFor="ticker-expires">Expiry date</label>
+              <Input
+                id="ticker-expires"
+                type="datetime-local"
+                value={form.expiresAt}
+                onChange={(e) =>
+                  setForm((f) => ({ ...f, expiresAt: e.target.value }))
+                }
+                className="admin-input"
+              />
+              <p className="admin-user-detail-status-controls-hint">
+                Leave blank to run until you remove it.
+              </p>
+            </div>
+            <div className="admin-user-detail-field">
+              <label htmlFor="ticker-sort-order">Display order</label>
+              <Input
+                id="ticker-sort-order"
+                type="number"
+                min={0}
+                value={form.sortOrder}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    sortOrder: Number.parseInt(e.target.value, 10) || 0,
+                  }))
+                }
+                className="admin-input max-w-[8rem]"
+              />
+              <p className="admin-user-detail-status-controls-hint">
+                Lower numbers appear first.
+              </p>
             </div>
           </div>
 

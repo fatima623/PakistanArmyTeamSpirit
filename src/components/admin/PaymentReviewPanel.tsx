@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import {
+  CheckCircle2,
+  Image as ImageIcon,
+  Info,
+  Loader2,
+  Receipt,
+  ShieldCheck,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -44,6 +51,7 @@ import "@/app/payment-status-timeline.css";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
 import { PaymentProofViewer } from "@/components/payments/PaymentProofViewer";
 import { formatDateDisplay, formatDateShort, cn } from "@/lib/utils";
+import "@/app/admin-payment-detail.css";
 
 type Payment = {
   id: string;
@@ -70,21 +78,28 @@ type Payment = {
   };
 };
 
-function Field({
+function Stat({
   label,
   value,
   wide = false,
+  mono = false,
 }: {
   label: string;
   value: string;
   wide?: boolean;
+  mono?: boolean;
 }) {
   return (
-    <div
-      className={`admin-detail-field ${wide ? "admin-detail-field--wide" : ""}`.trim()}
-    >
-      <span className="admin-detail-field-label">{label}</span>
-      <span className="admin-detail-field-value">{value || "—"}</span>
+    <div className={cn("admin-pay-stat", wide && "admin-pay-stat--wide")}>
+      <span className="admin-pay-stat__label">{label}</span>
+      <span
+        className={cn(
+          "admin-pay-stat__value",
+          mono && "admin-pay-stat__value--mono"
+        )}
+      >
+        {value || "—"}
+      </span>
     </div>
   );
 }
@@ -210,108 +225,144 @@ export function PaymentReviewPanel({
       ? "Return and notify participant"
       : "Reject and notify participant";
 
+  const verificationResult = alreadyVerified
+    ? "Verified"
+    : isProofRejected
+      ? "Rejected"
+      : isReturned
+        ? "Returned"
+        : "Pending review";
+  const lastUpdated = formatDateShort(
+    payment.proofUploadedAt ?? payment.createdAt
+  );
+
   return (
-    <div className="admin-user-detail-stack">
-        <section className="admin-user-detail-card">
-          <div className="admin-user-detail-card-header">
-            <h3 className="admin-user-detail-card-title">Transaction details</h3>
-          </div>
-          <div className="admin-user-detail-card-body">
-            <div className="admin-detail-fields">
-              <Field
-                label="Amount"
-                value={formatRegistrationFee(payment.amount)}
-              />
-              <Field
-                label="Submitted"
-                value={formatDateShort(payment.createdAt)}
-              />
-              <Field
-                label="Payment date"
+    <>
+      <section className="admin-pay-card">
+        <div className="admin-pay-card__header">
+          <h3 className="admin-pay-card__title">
+            <Receipt className="h-4 w-4" aria-hidden />
+            Transaction details
+          </h3>
+        </div>
+        <div className="admin-pay-card__body">
+          <div className="admin-pay-stats">
+            <Stat
+              label="Amount"
+              value={formatRegistrationFee(payment.amount)}
+            />
+            <Stat
+              label="Submitted"
+              value={formatDateShort(payment.createdAt)}
+            />
+            <Stat
+              label="Payment date"
+              value={
+                payment.paymentDate
+                  ? formatDateDisplay(payment.paymentDate)
+                  : "—"
+              }
+            />
+            <Stat
+              label="Reference"
+              value={payment.transactionReference ?? "—"}
+              mono
+              wide
+            />
+            {payment.uploaderName ? (
+              <Stat
+                label="Uploaded by"
                 value={
-                  payment.paymentDate
-                    ? formatDateDisplay(payment.paymentDate)
-                    : "—"
+                  payment.uploaderEmail
+                    ? `${payment.uploaderName} · ${payment.uploaderEmail}`
+                    : payment.uploaderName
                 }
-              />
-              <Field
-                label="Reference"
-                value={payment.transactionReference ?? "—"}
                 wide
               />
-              {payment.uploaderName ? (
-                <Field
-                  label="Uploaded by"
-                  value={
-                    payment.uploaderEmail
-                      ? `${payment.uploaderName} · ${payment.uploaderEmail}`
-                      : payment.uploaderName
-                  }
-                  wide
-                />
-              ) : null}
-              {payment.proofUploadedAt ? (
-                <Field
-                  label="Proof uploaded"
-                  value={formatDateShort(payment.proofUploadedAt)}
-                />
-              ) : null}
-              {payment.proofFileSize != null ? (
-                <Field
-                  label="File size"
-                  value={`${(payment.proofFileSize / 1024).toFixed(1)} KB`}
-                />
-              ) : null}
-              {payment.proofOriginalFileName ? (
-                <Field
-                  label="Filename"
-                  value={payment.proofOriginalFileName}
-                  wide
-                />
-              ) : null}
-            </div>
+            ) : null}
+            {payment.proofUploadedAt ? (
+              <Stat
+                label="Upload date"
+                value={formatDateShort(payment.proofUploadedAt)}
+              />
+            ) : null}
+            {payment.proofFileSize != null ? (
+              <Stat
+                label="File size"
+                value={`${(payment.proofFileSize / 1024).toFixed(1)} KB`}
+              />
+            ) : null}
+            {payment.proofOriginalFileName ? (
+              <Stat
+                label="Filename"
+                value={payment.proofOriginalFileName}
+                wide
+              />
+            ) : null}
+          </div>
+        </div>
+      </section>
+
+      {hasProof ? (
+        <section className="admin-pay-card">
+          <div className="admin-pay-card__header">
+            <h3 className="admin-pay-card__title">
+              <ImageIcon className="h-4 w-4" aria-hidden />
+              Payment proof
+            </h3>
+          </div>
+          <div className="admin-pay-card__body">
+            <PaymentProofViewer
+              paymentId={payment.id}
+              access="admin"
+              mimeType={payment.proofMimeType}
+              fileName={
+                payment.proofOriginalFileName ??
+                payment.proofFileName ??
+                undefined
+              }
+              withToolbar
+              imageMaxHeight="max-h-[30rem]"
+            />
           </div>
         </section>
+      ) : null}
 
-        {hasProof ? (
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header">
-              <h3 className="admin-user-detail-card-title">Payment proof</h3>
-            </div>
-            <div className="admin-user-detail-card-body">
-              <div className="admin-user-detail-proof-frame">
-                <PaymentProofViewer
-                  paymentId={payment.id}
-                  access="admin"
-                  mimeType={payment.proofMimeType}
-                  fileName={
-                    payment.proofOriginalFileName ??
-                    payment.proofFileName ??
-                    undefined
-                  }
-                  imageMaxHeight="max-h-[28rem]"
-                />
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-header">
-          <h3 className="admin-user-detail-card-title">Verify payment</h3>
+      <section className="admin-pay-card">
+        <div className="admin-pay-card__header">
+          <h3 className="admin-pay-card__title">
+            <ShieldCheck className="h-4 w-4" aria-hidden />
+            Verification
+          </h3>
+          <PaymentStatusBadge status={payment.status} showPrefix={false} />
         </div>
-        <div className="admin-user-detail-card-body">
-          <div className="admin-user-detail-status-row">
-            <div className="admin-user-detail-status-item">
-              <label>Payment status</label>
-              <PaymentStatusBadge status={payment.status} showPrefix={false} />
-            </div>
-            <div className="admin-user-detail-status-item">
-              <label>Amount due</label>
-              <span className="text-sm font-medium text-cp-ink">
-                {formatRegistrationFee(payment.amount)}
+        <div className="admin-pay-card__body space-y-4">
+          {alreadyVerified ? (
+            <div className="admin-pay-success">
+              <CheckCircle2 className="h-4 w-4" aria-hidden />
+              <span>
+                Payment verified successfully. No further action is required.
               </span>
             </div>
+          ) : null}
+
+          <div className="admin-pay-verify-grid">
+            <div className="admin-pay-stat">
+              <span className="admin-pay-stat__label">Payment status</span>
+              <span>
+                <PaymentStatusBadge
+                  status={payment.status}
+                  showPrefix={false}
+                  density="table"
+                />
+              </span>
+            </div>
+            <Stat
+              label="Amount due"
+              value={formatRegistrationFee(payment.amount)}
+            />
+            <Stat label="Verification result" value={verificationResult} />
+            <Stat label="Last updated" value={lastUpdated} />
           </div>
 
           {statusHint ? (
@@ -323,13 +374,20 @@ export function PaymentReviewPanel({
             history={rejectionHistory}
           />
 
-          <div className="admin-user-detail-field mt-4">
-            <label htmlFor="payment-status">Update status</label>
+          <div className="admin-user-detail-field">
+            <label className="admin-pay-field-label" htmlFor="payment-status">
+              Update status
+            </label>
             <div
               className={cn(
                 statusControlsLocked &&
                   "admin-user-detail-status-controls--locked"
               )}
+              title={
+                !canDecide
+                  ? "Only the Management Team (MT) can change payment decisions."
+                  : undefined
+              }
             >
               <Select
                 value={selectedStatus}
@@ -351,7 +409,8 @@ export function PaymentReviewPanel({
               </Select>
             </div>
             {statusControlsLocked ? (
-              <p className="admin-user-detail-status-controls-hint">
+              <p className="admin-pay-locked-hint">
+                <Info className="h-3.5 w-3.5" aria-hidden />
                 {!canDecide
                   ? "View-only — payment decisions are made by the MT (Management Team)."
                   : "Payment has been verified. Reject proof to make changes."}
@@ -360,7 +419,7 @@ export function PaymentReviewPanel({
           </div>
 
           {canDecide ? (
-            <div className="admin-user-detail-actions mt-4">
+            <div className="admin-pay-actionbar">
               <ConfirmDialog
                 trigger={
                   <Button
@@ -459,6 +518,6 @@ export function PaymentReviewPanel({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }

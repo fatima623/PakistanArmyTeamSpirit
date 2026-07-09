@@ -161,7 +161,7 @@ export function TickerManager({
         <header className="admin-ticker-header">
           <div className="admin-ticker-header-text">
             <h2>Announcements</h2>
-            <p>Manage homepage operational announcements and scrolling alerts.</p>
+            
           </div>
           <Button type="button" variant="adminPrimary" asChild>
             <Link href="/admin/ticker/new">Add announcement</Link>

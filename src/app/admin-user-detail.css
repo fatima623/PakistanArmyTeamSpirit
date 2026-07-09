@@ -574,8 +574,30 @@
 .admin-theme .admin-user-detail-headline {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.4rem;
   margin-bottom: 0.15rem;
+}
+
+.admin-theme .admin-user-detail-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.admin-theme .admin-user-detail-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1e5a3a, #2d7a4f);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 /* —— Coloured card headers —— */
@@ -661,4 +683,289 @@
 .admin-theme .admin-user-detail-card--activity .admin-timeline {
   max-height: calc(100vh - 190px);
   min-height: 460px;
+}
+
+/* ======================================================================
+   Participation Request detail — premium enterprise redesign (admin-pr-*)
+   Isolated namespace that mirrors admin-pay-* so both detail pages read
+   as one product. Never restyles the shared base classes
+   (admin-user-detail-card / admin-detail-field / admin-timeline).
+   Light theme only (.admin-theme). 8px grid, 16px radii, green accent.
+   ====================================================================== */
+
+.admin-theme .admin-pr-page {
+  --pr-green: #15803d;
+  --pr-green-strong: #1e5a3a;
+  --pr-ink: #0f172a;
+  --pr-ink-soft: #475569;
+  --pr-muted: #64748b;
+  --pr-label: #94a3b8;
+  --pr-border: #e5e7eb;
+  --pr-surface: #ffffff;
+  --pr-surface-muted: #f8fafc;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-bottom: 1.5rem;
+}
+
+/* —— Summary header —— */
+.admin-theme .admin-pr-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--pr-border);
+  border-radius: 16px;
+  background: var(--pr-surface);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.admin-theme .admin-pr-summary__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1e5a3a, #2d7a4f);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.admin-theme .admin-pr-summary__id {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1 1 18rem;
+}
+
+.admin-theme .admin-pr-summary__name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--pr-ink);
+}
+
+.admin-theme .admin-pr-summary__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 0.8125rem;
+  color: var(--pr-ink-soft);
+}
+
+.admin-theme .admin-pr-summary__meta-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+/* —— Captioned inline status group (under the meta line) —— */
+.admin-theme .admin-pr-status-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 16px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--pr-border);
+}
+
+.admin-theme .admin-pr-status {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.admin-theme .admin-pr-status__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pr-label);
+}
+
+.admin-theme .admin-pr-status__sep {
+  align-self: stretch;
+  width: 1px;
+  margin: 2px 0;
+  background: var(--pr-border);
+}
+
+/* —— Reset control, docked top-right, alone so its inline form can expand —— */
+.admin-theme .admin-pr-summary__right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex: 0 1 auto;
+  min-width: 12rem;
+}
+
+.admin-theme .admin-pr-summary__right .admin-reset-form {
+  width: 100%;
+  min-width: 15rem;
+}
+
+/* —— Two-column layout (70/30, sticky aside) —— */
+.admin-theme .admin-pr-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .admin-theme .admin-pr-layout {
+    grid-template-columns: minmax(0, 1fr) 336px;
+    align-items: start;
+  }
+  .admin-theme .admin-pr-aside {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.admin-theme .admin-pr-main,
+.admin-theme .admin-pr-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* —— Premium neutral card (single green accent, hover elevation) —— */
+.admin-theme .admin-pr-card {
+  border: 1px solid var(--pr-border);
+  border-radius: 16px;
+  background: var(--pr-surface);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-theme .admin-pr-card:hover {
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.07);
+  transform: translateY(-1px);
+}
+
+.admin-theme .admin-pr-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--pr-border);
+  background: var(--pr-surface-muted);
+}
+
+.admin-theme .admin-pr-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--pr-ink);
+}
+
+.admin-theme .admin-pr-card__title svg {
+  color: var(--pr-green);
+  flex-shrink: 0;
+}
+
+.admin-theme .admin-pr-card__body {
+  padding: 18px;
+}
+
+/* —— Stat grid (mirrors admin-pay-stat for pixel parity) —— */
+.admin-theme .admin-pr-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.admin-theme .admin-pr-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--pr-border);
+  border-radius: 12px;
+  background: var(--pr-surface-muted);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.admin-theme .admin-pr-stat:hover {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.admin-theme .admin-pr-stat--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-theme .admin-pr-stat__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pr-label);
+}
+
+.admin-theme .admin-pr-stat__value {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--pr-ink);
+  word-break: break-word;
+}
+
+/* —— Timeline fills the sticky aside (reuses shared .admin-timeline) —— */
+.admin-theme .admin-pr-card--activity .admin-pr-card__body {
+  padding-bottom: 12px;
+}
+
+.admin-theme .admin-pr-card--activity .admin-timeline {
+  max-height: calc(100vh - 220px);
+  min-height: 320px;
+}
+
+/* —— Mobile: status group and reset stack full-width under the identity —— */
+@media (max-width: 640px) {
+  .admin-theme .admin-pr-summary__right {
+    margin-left: 0;
+    width: 100%;
+    min-width: 0;
+  }
+  .admin-theme .admin-pr-summary__right .admin-reset-form {
+    min-width: 0;
+  }
+  .admin-theme .admin-pr-status__sep {
+    display: none;
+  }
 }

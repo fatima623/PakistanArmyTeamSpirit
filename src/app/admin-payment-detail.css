@@ -1,0 +1,394 @@
+/**
+ * Payment Verification detail — premium enterprise dashboard styling.
+ * Neutral surfaces, 16px radii, thin borders, 8px spacing grid, green accent.
+ * Scoped under .admin-theme so it never leaks into the public portal.
+ */
+
+.admin-theme .admin-pay-page {
+  --pay-green: #15803d;
+  --pay-green-soft: #f0fdf4;
+  --pay-green-border: #bbf7d0;
+  --pay-ink: #0f172a;
+  --pay-ink-soft: #475569;
+  --pay-muted: #64748b;
+  --pay-label: #94a3b8;
+  --pay-border: #e5e7eb;
+  --pay-surface: #ffffff;
+  --pay-surface-muted: #f8fafc;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-bottom: 5.5rem;
+}
+
+@media (min-width: 1024px) {
+  .admin-theme .admin-pay-page {
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* —— Compact profile summary —— */
+.admin-theme .admin-pay-back {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pay-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.admin-theme .admin-pay-back:hover {
+  color: var(--pay-green);
+}
+
+.admin-theme .admin-pay-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--pay-border);
+  border-radius: 16px;
+  background: var(--pay-surface);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.admin-theme .admin-pay-summary__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1e5a3a, #2d7a4f);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.admin-theme .admin-pay-summary__id {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+
+.admin-theme .admin-pay-summary__name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--pay-ink);
+}
+
+.admin-theme .admin-pay-summary__email {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--pay-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-theme .admin-pay-summary__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--pay-ink-soft);
+}
+
+.admin-theme .admin-pay-summary__meta-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+.admin-theme .admin-pay-summary__amount {
+  font-weight: 700;
+  color: var(--pay-ink);
+}
+
+.admin-theme .admin-pay-summary__right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+/* —— Two-column layout —— */
+.admin-theme .admin-pay-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .admin-theme .admin-pay-layout {
+    grid-template-columns: minmax(0, 1fr) 336px;
+    align-items: start;
+  }
+  .admin-theme .admin-pay-aside {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.admin-theme .admin-pay-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.admin-theme .admin-pay-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* —— Premium card —— */
+.admin-theme .admin-pay-card {
+  border: 1px solid var(--pay-border);
+  border-radius: 16px;
+  background: var(--pay-surface);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.admin-theme .admin-pay-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--pay-border);
+  background: var(--pay-surface-muted);
+}
+
+.admin-theme .admin-pay-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--pay-ink);
+}
+
+.admin-theme .admin-pay-card__title svg {
+  color: var(--pay-green);
+}
+
+.admin-theme .admin-pay-card__body {
+  padding: 18px;
+}
+
+/* —— Transaction stat grid —— */
+.admin-theme .admin-pay-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.admin-theme .admin-pay-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 12px 14px;
+  border: 1px solid var(--pay-border);
+  border-radius: 12px;
+  background: var(--pay-surface-muted);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.admin-theme .admin-pay-stat:hover {
+  border-color: #cbd5e1;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.admin-theme .admin-pay-stat--wide {
+  grid-column: 1 / -1;
+}
+
+.admin-theme .admin-pay-stat__label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pay-label);
+}
+
+.admin-theme .admin-pay-stat__value {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--pay-ink);
+  word-break: break-word;
+}
+
+.admin-theme .admin-pay-stat__value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+}
+
+/* —— Media viewer —— */
+.admin-theme .admin-pay-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 16px;
+  border: 1px solid var(--pay-border);
+  border-radius: 14px;
+  background:
+    linear-gradient(45deg, #f1f5f9 25%, transparent 25%) -8px 0/16px 16px,
+    linear-gradient(-45deg, #f1f5f9 25%, transparent 25%) -8px 0/16px 16px,
+    linear-gradient(45deg, transparent 75%, #f1f5f9 75%) -8px 0/16px 16px,
+    linear-gradient(-45deg, transparent 75%, #f1f5f9 75%) -8px 0/16px 16px,
+    #f8fafc;
+  overflow: hidden;
+}
+
+.admin-theme .admin-pay-media__toolbar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--pay-border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
+}
+
+.admin-theme .admin-pay-media__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--pay-ink-soft);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.admin-theme .admin-pay-media__btn:hover {
+  background: var(--pay-green-soft);
+  color: var(--pay-green);
+}
+
+.admin-theme .admin-pay-media img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* —— Verification info grid + success alert —— */
+.admin-theme .admin-pay-verify-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.admin-theme .admin-pay-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--pay-green-border);
+  border-radius: 12px;
+  background: var(--pay-green-soft);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #14532d;
+}
+
+.admin-theme .admin-pay-success svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--pay-green);
+}
+
+.admin-theme .admin-pay-field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pay-ink-soft);
+}
+
+.admin-theme .admin-pay-locked-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--pay-muted);
+}
+
+.admin-theme .admin-pay-locked-hint svg {
+  color: var(--pay-label);
+}
+
+/* —— Sticky action panel —— */
+.admin-theme .admin-pay-actionbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 1023px) {
+  .admin-theme .admin-pay-actionbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    padding: 12px 16px;
+    border-top: 1px solid var(--pay-border);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+  }
+}
+
+/* —— Timeline polish (reuses AuditLogList markup where present) —— */
+.admin-theme .admin-pay-aside .admin-timeline {
+  max-height: calc(100vh - 220px);
+  min-height: 280px;
+}

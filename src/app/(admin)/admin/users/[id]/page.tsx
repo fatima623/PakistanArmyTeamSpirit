@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { Activity, Building2, User, Workflow } from "lucide-react";
 
 import "@/app/admin-user-detail.css";
 import { prisma } from "@/lib/prisma";
@@ -41,7 +40,7 @@ export async function generateMetadata({
   };
 }
 
-/** One labelled field block — laid out 2–3 per row inside a section grid. */
+/** One labelled stat tile — laid out in a responsive grid inside a section. */
 function Field({
   label,
   value,
@@ -52,11 +51,9 @@ function Field({
   wide?: boolean;
 }) {
   return (
-    <div
-      className={`admin-detail-field ${wide ? "admin-detail-field--wide" : ""}`.trim()}
-    >
-      <span className="admin-detail-field-label">{label}</span>
-      <span className="admin-detail-field-value">{value || "—"}</span>
+    <div className={`admin-pr-stat ${wide ? "admin-pr-stat--wide" : ""}`.trim()}>
+      <span className="admin-pr-stat__label">{label}</span>
+      <span className="admin-pr-stat__value">{value || "—"}</span>
     </div>
   );
 }
@@ -136,28 +133,86 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       : " — not finalized");
 
   return (
-    <div className="admin-user-detail-page admin-user-detail-page--compact">
-      <div className="admin-detail-layout">
-        <div className="admin-detail-layout-main">
-          <AdminBreadcrumbs
-            items={[
-              { label: "Dashboard", href: "/admin" },
-              { label: "Participation Requests", href: "/admin/users" },
-              { label: `${user.firstName} ${user.lastName}` },
-            ]}
-          />
+    <div className="admin-pr-page">
+      <AdminBreadcrumbs
+        items={[
+          { label: "Dashboard", href: "/admin" },
+          { label: "Participation Requests", href: "/admin/users" },
+          { label: `${user.firstName} ${user.lastName}` },
+        ]}
+      />
 
-          <div className="admin-user-detail-headline">
-            <Link href="/admin/users" className="admin-user-detail-back">
-              <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-              Back to participation requests
-            </Link>
-            <h1 className="admin-user-detail-name">
-              {user.firstName} {user.lastName}
-              {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
-            </h1>
+      <section className="admin-pr-summary">
+        <span className="admin-pr-summary__avatar" aria-hidden>
+          {`${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() ||
+            "–"}
+        </span>
+
+        <div className="admin-pr-summary__id">
+          <h1 className="admin-pr-summary__name">
+            {user.firstName} {user.lastName}
+            {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
+          </h1>
+
+          <div className="admin-pr-summary__meta">
+            {user.rank ? <span>{user.rank}</span> : null}
+            {user.gender ? (
+              <>
+                <span className="admin-pr-summary__meta-dot" aria-hidden />
+                <span>{user.gender}</span>
+              </>
+            ) : null}
+            <span className="admin-pr-summary__meta-dot" aria-hidden />
+            <span>{displayCountry(user.country)}</span>
+            <span className="admin-pr-summary__meta-dot" aria-hidden />
+            <span>Registered {formatDateShort(user.createdAt)}</span>
           </div>
 
+          <div
+            className="admin-pr-status-group"
+            role="group"
+            aria-label="Status"
+          >
+            <div className="admin-pr-status">
+              <span className="admin-pr-status__label">Participation</span>
+              <ApplicationStatusBadge
+                status={user.applicationStatus}
+                showPrefix={false}
+              />
+            </div>
+            <span className="admin-pr-status__sep" aria-hidden />
+            <div className="admin-pr-status">
+              <span className="admin-pr-status__label">Payment</span>
+              <PaymentStatusBadge
+                status={user.paymentStatus}
+                showPrefix={false}
+              />
+            </div>
+            <span className="admin-pr-status__sep" aria-hidden />
+            <div className="admin-pr-status">
+              <span className="admin-pr-status__label">Account</span>
+              <span
+                className={
+                  user.suspended
+                    ? "ops-status-badge ops-status-rejected"
+                    : "ops-status-badge ops-status-approved"
+                }
+              >
+                {user.suspended ? "Suspended" : "Active"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {canManageRoles ? (
+          <div className="admin-pr-summary__right">
+            <AdminResetPassword userId={user.id} />
+          </div>
+        ) : null}
+      </section>
+
+      <div className="admin-pr-layout">
+        <main className="admin-pr-main">
           {canApprove ? (
             <ApplicationReviewPanel
               userId={user.id}
@@ -168,44 +223,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             />
           ) : null}
 
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header admin-user-detail-card-header--sky">
-              <h3 className="admin-user-detail-card-title">Status</h3>
-            </div>
-            <div className="admin-user-detail-card-body">
-              <div className="admin-user-detail-status-grid">
-                <div className="admin-user-detail-status-item">
-                  <span className="admin-user-detail-status-label">
-                    Application
-                  </span>
-                  <ApplicationStatusBadge status={user.applicationStatus} />
-                </div>
-                <div className="admin-user-detail-status-item">
-                  <span className="admin-user-detail-status-label">Payment</span>
-                  <PaymentStatusBadge status={user.paymentStatus} />
-                </div>
-                <div className="admin-user-detail-status-item">
-                  <span className="admin-user-detail-status-label">Account</span>
-                  <span
-                    className={
-                      user.suspended
-                        ? "ops-status-pill ops-status-rejected"
-                        : "ops-status-pill ops-status-approved"
-                    }
-                  >
-                    {user.suspended ? "Suspended" : "Active"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header admin-user-detail-card-header--emerald">
-              <h3 className="admin-user-detail-card-title">Account</h3>
-            </div>
-            <div className="admin-user-detail-card-body">
-              <div className="admin-detail-fields">
+          <section className="admin-pr-card">
+            <header className="admin-pr-card__header">
+              <h3 className="admin-pr-card__title">
+                <User size={16} aria-hidden />
+                Account
+              </h3>
+            </header>
+            <div className="admin-pr-card__body">
+              <div className="admin-pr-stats">
                 <Field label="Rank" value={user.rank} />
                 <Field label="Gender" value={user.gender} />
                 <Field label="Country" value={displayCountry(user.country)} />
@@ -236,12 +262,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           </section>
 
           {user.unit ? (
-            <section className="admin-user-detail-card">
-              <div className="admin-user-detail-card-header admin-user-detail-card-header--amber">
-                <h3 className="admin-user-detail-card-title">Unit</h3>
-              </div>
-              <div className="admin-user-detail-card-body">
-                <div className="admin-detail-fields">
+            <section className="admin-pr-card">
+              <header className="admin-pr-card__header">
+                <h3 className="admin-pr-card__title">
+                  <Building2 size={16} aria-hidden />
+                  Unit
+                </h3>
+              </header>
+              <div className="admin-pr-card__body">
+                <div className="admin-pr-stats">
                   <Field label="Unit name" value={user.unit.unitName} />
                   <Field label="Type" value={user.unit.unitType} />
                   <Field label="Branch" value={user.unit.branch} />
@@ -251,12 +280,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             </section>
           ) : null}
 
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header admin-user-detail-card-header--violet">
-              <h3 className="admin-user-detail-card-title">Workflow progress</h3>
-            </div>
-            <div className="admin-user-detail-card-body">
-              <div className="admin-detail-fields">
+          <section className="admin-pr-card">
+            <header className="admin-pr-card__header">
+              <h3 className="admin-pr-card__title">
+                <Workflow size={16} aria-hidden />
+                Workflow progress
+              </h3>
+            </header>
+            <div className="admin-pr-card__body">
+              <div className="admin-pr-stats">
                 <Field
                   label="Participation confirmed"
                   value={participationValue}
@@ -267,25 +299,17 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
               </div>
             </div>
           </section>
+        </main>
 
-          {canManageRoles ? (
-            <section className="admin-user-detail-card">
-              <div className="admin-user-detail-card-header admin-user-detail-card-header--slate">
-                <h3 className="admin-user-detail-card-title">Security</h3>
-              </div>
-              <div className="admin-user-detail-card-body">
-                <AdminResetPassword userId={user.id} />
-              </div>
-            </section>
-          ) : null}
-        </div>
-
-        <aside className="admin-detail-layout-aside">
-          <section className="admin-user-detail-card admin-user-detail-card--activity">
-            <div className="admin-user-detail-card-header admin-user-detail-card-header--emerald">
-              <h3 className="admin-user-detail-card-title">Activity</h3>
-            </div>
-            <div className="admin-user-detail-card-body">
+        <aside className="admin-pr-aside">
+          <section className="admin-pr-card admin-pr-card--activity">
+            <header className="admin-pr-card__header">
+              <h3 className="admin-pr-card__title">
+                <Activity size={16} aria-hidden />
+                Activity
+              </h3>
+            </header>
+            <div className="admin-pr-card__body">
               <AuditLogList logs={auditLogs} />
             </div>
           </section>

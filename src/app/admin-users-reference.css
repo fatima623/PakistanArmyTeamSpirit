@@ -318,7 +318,7 @@
 
 .admin-theme .admin-users-panel .admin-users-table-shell {
   margin: 0;
-  overflow-x: auto;
+  overflow-x: hidden;
   border: 1px solid var(--au-border);
   border-radius: 12px;
   background: #ffffff;
@@ -327,10 +327,9 @@
 
 .admin-theme .admin-users-table {
   width: 100%;
-  min-width: 960px;
   border-collapse: separate;
   border-spacing: 0;
-  table-layout: auto;
+  table-layout: fixed;
   font-size: 0.875rem;
 }
 
@@ -359,7 +358,9 @@
   width: 10%;
 }
 .admin-theme .admin-users-col-num {
-  width: 5%;
+  /* Fixed table-layout enforces this width exactly, so give 2–3 digit row
+     numbers enough room (5% clipped them under fixed layout). */
+  width: 4rem;
 }
 
 .admin-theme .admin-users-th-num {
@@ -434,10 +435,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.375rem;
   width: 100%;
   min-width: 0;
+}
+
+/* Application & Payment badges sit on the same top line across the row so the
+   two columns read as aligned regardless of the app-date shown underneath.
+   Needs !important to beat the table-wide `vertical-align: middle !important`
+   in pats-refresh.css. */
+.admin-theme .admin-users-table tbody td.admin-users-cell-app-status,
+.admin-theme .admin-users-table tbody td.admin-users-cell-pay {
+  vertical-align: top !important;
 }
 
 .admin-theme .admin-users-table tbody tr {
@@ -492,19 +502,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.375rem;
   width: 100%;
   min-width: 0;
 }
 
-/* Status pills — CRM glow */
+/* Status pills — CRM glow. Uniform min-width + centred text so every status
+   ("Approved", "Verified", "In review"…) renders at a consistent size. */
 .admin-theme .admin-users-table .ops-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5.75rem;
+  max-width: 100%;
   border-radius: 999px !important;
   padding: 4px 12px !important;
   font-size: 12px !important;
   font-weight: 700 !important;
+  line-height: 1.25 !important;
   border: 1px solid transparent !important;
+  white-space: nowrap;
 }
 
 .admin-theme .admin-users-table .ops-status-approved {

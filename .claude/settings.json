@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless --disable-gpu --no-sandbox --virtual-time-budget=3000 --dump-dom \"file:///C:/Users/fatim/AppData/Local/Temp/claude/d--PakistanArmyTeamSpirit/f006030d-0493-41e9-bd6d-d4f0caf001b7/scratchpad/numtest.html\")"
+    ]
+  }
+}
