@@ -209,7 +209,7 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
             <span className="pats-nav__emblem-wrap" aria-hidden>
               <PatsLogo
                 size={isScrolled ? 48 : 96}
-                priority
+                priority={false}
                 variant="nav"
                 className="pats-nav__emblem"
               />

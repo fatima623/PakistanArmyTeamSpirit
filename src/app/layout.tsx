@@ -122,6 +122,7 @@ export default async function RootLayout({
     <html
       lang="en"
       data-site-theme={initialSiteTheme}
+      data-scroll-behavior="smooth"
       className={`${geist.variable} ${oswald.variable} ${barlow.variable} ${bebas.variable} ${inter.variable} ${robotoMono.variable} ${dmSans.variable} ${jetbrains.variable} ${dayThemeClass}`}
       suppressHydrationWarning
     >

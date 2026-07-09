@@ -43,21 +43,21 @@
   --pp-info-soft: #e9f2f9;
 
   /* sidebar (deep forest) ---------------------------------------------- */
-  --pp-nav-1: #18392a;
-  --pp-nav-2: #0f271d;
-  --pp-nav-text: rgba(255, 255, 255, 0.9);
+  --pp-nav-1: #203127;
+  --pp-nav-2: #16241c;
+  --pp-nav-text: rgba(255, 255, 255, 0.85);
   --pp-nav-text-strong: #ffffff;
-  --pp-nav-hover: rgba(255, 255, 255, 0.06);
-  --pp-nav-active: rgba(255, 255, 255, 0.1);
-  --pp-nav-accent: #d8b968;
+  --pp-nav-hover: rgba(255, 255, 255, 0.08);
+  --pp-nav-active: rgba(255, 255, 255, 0.12);
+  --pp-nav-accent: #e2c67a;
 
   /* geometry ----------------------------------------------------------- */
-  --pp-radius: 16px;
-  --pp-radius-sm: 11px;
-  --pp-radius-xs: 8px;
+  --pp-radius: 12px;
+  --pp-radius-sm: 8px;
+  --pp-radius-xs: 6px;
   --pp-radius-pill: 999px;
-  --pp-shadow: 0 1px 2px rgba(16, 32, 24, 0.04), 0 6px 20px rgba(16, 32, 24, 0.05);
-  --pp-shadow-sm: 0 1px 2px rgba(16, 32, 24, 0.05);
+  --pp-shadow: 0 1px 3px rgba(16, 32, 24, 0.05), 0 8px 24px rgba(16, 32, 24, 0.06);
+  --pp-shadow-sm: 0 1px 2px rgba(16, 32, 24, 0.06);
   --pp-shadow-lift: 0 2px 4px rgba(16, 32, 24, 0.05), 0 12px 30px rgba(16, 32, 24, 0.08);
   --pp-ring: 0 0 0 3px rgba(21, 97, 59, 0.14);
 
@@ -73,23 +73,46 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   background: var(--pp-canvas) !important;
 }
 
+/* Fix sticky positioning: `overflow-x: clip` on body breaks `position: sticky` */
+/* Lock window scroll for portal pages: only pp-main scrolls internally */
+html:has(.dashboard-day),
+html:has(.dashboard-day) body {
+  overflow: hidden !important;
+}
+
+/* Full-bleed portal wrapper — keep the sidebar fixed and let the dashboard pane scroll */
+.participant-portal.pp {
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--pp-canvas);
+  overflow: visible;
+}
+
 .pp .pp-shell {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: 0;
   width: 100%;
-  max-width: 88rem;
-  margin-inline: auto;
-  padding: 1.25rem;
+  min-height: auto;
   background: var(--pp-canvas);
+  position: relative;
+  overflow: visible;
 }
 
 @media (min-width: 1024px) {
+  /* Grid places sidebar + main side-by-side; window is locked so only
+     pp-main (the scroll container) scrolls — sidebar stays pinned. */
   .pp .pp-shell {
-    grid-template-columns: 16rem minmax(0, 1fr);
-    gap: 1.75rem;
-    padding: 1.75rem;
+    display: grid;
+    grid-template-columns: 15.5rem minmax(0, 1fr);
     align-items: start;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Hide the outer public site footer (portal footer is inside pp-main__scroll) */
+  .pats-site-body--portal-app .pats-site-footer {
+    display: none;
   }
 }
 
@@ -97,25 +120,84 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  padding: 2rem 2.25rem 1.75rem;
+  min-height: 0;
+  width: 100%;
+}
+
+.pp .pp-main__scroll {
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
+  min-height: 0;
+  overflow: visible;
+}
+
+@media (min-width: 1024px) {
+  /* pp-main IS the scroll container — window is locked, only this scrolls */
+  .pp .pp-main {
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(21, 97, 59, 0.22) transparent;
+  }
+
+  .pp .pp-main::-webkit-scrollbar { width: 5px; }
+  .pp .pp-main::-webkit-scrollbar-track { background: transparent; }
+  .pp .pp-main::-webkit-scrollbar-thumb {
+    background: rgba(21, 97, 59, 0.22);
+    border-radius: 999px;
+  }
+  .pp .pp-main::-webkit-scrollbar-thumb:hover {
+    background: rgba(21, 97, 59, 0.4);
+  }
+
+  .pp .pp-main__scroll {
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+.pats-site-body--portal-app .pp-shell {
+  min-height: auto;
+}
+
+.pats-site-body--portal-app .pp-main {
+  min-height: auto;
+}
+
+.pats-site-body--portal-app .pp-sidebar {
+  min-height: 100dvh;
 }
 
 /* ---------------------------------------------------------------- sidebar */
 .pp .pp-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
-  padding: 1rem 0.85rem;
-  border-radius: var(--pp-radius);
+  gap: 0.25rem;
+  padding: 1.75rem 1rem 1.1rem;
+  border-radius: 0;
   background: linear-gradient(180deg, var(--pp-nav-1) 0%, var(--pp-nav-2) 100%);
-  border: 1px solid rgba(216, 185, 104, 0.16);
-  box-shadow: var(--pp-shadow);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.18);
 }
 
 @media (min-width: 1024px) {
+  /* Sidebar stays in grid column — window scroll is locked so it never moves */
   .pp .pp-sidebar {
     position: sticky;
-    top: 1.75rem;
+    top: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    align-self: start;
+    overflow-y: auto;
+    scrollbar-width: none;
+    z-index: 20;
+  }
+  .pp .pp-sidebar::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -128,20 +210,21 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 .pp .pp-sidebar__brand {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.1rem 0.4rem 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 0.5rem;
+  padding: 0.1rem 0.25rem 0.4rem;
+  margin-bottom: 0.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .pp .pp-sidebar__mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 12px;
-  background: rgba(216, 185, 104, 0.16);
-  border: 1px solid rgba(216, 185, 104, 0.32);
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--pp-nav-accent) !important;
   flex-shrink: 0;
 }
@@ -165,7 +248,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 
 /* progress chip */
 .pp .pp-progress {
-  padding: 0.6rem 0.75rem;
+  padding: 0.5rem 0.6rem;
   border-radius: var(--pp-radius-sm);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -176,7 +259,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.35rem;
 }
 
 .pp .pp-progress__label {
@@ -217,11 +300,11 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 .pp .pp-nav__label {
   padding: 0 0.6rem;
   margin-bottom: 0.4rem;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
 .pp .pp-nav__list {
@@ -230,14 +313,14 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.1rem;
 }
 
 .pp .pp-nav__link {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  padding: 0.5rem 0.6rem;
+  padding: 0.4rem 0.6rem;
   border-radius: var(--pp-radius-xs);
   font-size: 0.875rem;
   font-weight: 500;
@@ -245,6 +328,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   border: 1px solid transparent;
   position: relative;
   transition: background 0.15s ease, color 0.15s ease;
+  color: #ffffff !important;
 }
 
 .pp .pp-nav__link:hover {
@@ -333,11 +417,12 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 
 /* --------------------------------------------------------------------- card */
 .pp .pp-card {
-  background: var(--pp-surface);
-  border: 1px solid var(--pp-border);
-  border-radius: var(--pp-radius);
-  box-shadow: var(--pp-shadow-sm);
-  padding: 1.35rem 1.4rem;
+  background: #ffffff;
+  border: 1px solid var(--pp-border-strong);
+  border-radius: 1rem;
+  box-shadow: var(--pp-shadow);
+  padding: 1.5rem 1.6rem;
+  overflow: clip;
 }
 
 .pp .pp-card__head {
@@ -366,26 +451,40 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 /* --------------------------------------------------------------------- hero */
 .pp .pp-hero {
   position: relative;
-  overflow: hidden;
+  /* clip instead of hidden: decorative pseudo-elements still clip but the
+     hero box grows freely with its content — no layout clipping ever. */
+  overflow: clip;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.85rem 1.25rem;
-  padding: 1.1rem 1.4rem;
+  gap: 1rem 1.5rem;
+  /* Enough room for two wrapped lines + breathing space */
+  min-height: 5.5rem;
+  padding: 1.4rem 1.6rem;
   border-radius: var(--pp-radius);
   color: #fff;
-  /* Glassy, lighter institutional green */
+  /* Premium muted institutional green */
   background: linear-gradient(
     135deg,
-    rgba(33, 128, 82, 0.93) 0%,
-    rgba(23, 96, 62, 0.94) 52%,
-    rgba(18, 76, 49, 0.95) 100%
+    rgba(38, 57, 45, 0.96) 0%,
+    rgba(26, 40, 31, 0.98) 52%,
+    rgba(20, 31, 24, 0.99) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: var(--pp-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--pp-shadow-lift), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* Left block must shrink freely so the aside never overflows */
+.pp .pp-hero > div:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.pp .pp-hero__aside {
+  flex-shrink: 0;
 }
 
 /* top sheen + brass corner glow = glass */
@@ -427,11 +526,13 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 
 .pp .pp-hero__title {
   margin-top: 0.35rem;
-  font-size: 1.6rem;
+  font-size: clamp(1.25rem, 4vw, 1.6rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.15;
   color: #fff;
+  /* Allow wrapping so long names show fully on small viewports */
+  word-break: break-word;
 }
 
 .pp .pp-hero__meta {
@@ -515,8 +616,14 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 .participant-portal.pp .pp-hero .pp-hero__team * {
   color: #ffffff !important;
 }
-.participant-portal.pp .pp-sidebar .pp-nav__link.is-active span,
-.participant-portal.pp .pp-sidebar .pp-nav__link:hover span {
+.participant-portal.pp .pp-sidebar,
+.participant-portal.pp .pp-sidebar :is(a, p, span, li, button, svg, svg *) {
+  color: var(--pp-nav-text) !important;
+}
+.participant-portal.pp .pp-sidebar .pp-nav__link.is-active,
+.participant-portal.pp .pp-sidebar .pp-nav__link.is-active :is(span, svg, svg *),
+.participant-portal.pp .pp-sidebar .pp-nav__link:hover,
+.participant-portal.pp .pp-sidebar .pp-nav__link:hover :is(span, svg, svg *) {
   color: #ffffff !important;
 }
 
@@ -537,9 +644,9 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.95rem 1rem;
-  background: var(--pp-surface);
-  border: 1px solid var(--pp-border);
+  padding: 1rem 1.15rem;
+  background: #ffffff;
+  border: 1px solid var(--pp-border-strong);
   border-radius: var(--pp-radius-sm);
   box-shadow: var(--pp-shadow-sm);
 }
@@ -574,11 +681,11 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
 
 /* ------------------------------------------------------------------ journey */
 .pp .pp-journey {
-  background: var(--pp-surface);
-  border: 1px solid var(--pp-border);
+  background: #ffffff;
+  border: 1px solid var(--pp-border-strong);
   border-radius: var(--pp-radius);
-  box-shadow: var(--pp-shadow-sm);
-  padding: 1.35rem 1.4rem;
+  box-shadow: var(--pp-shadow);
+  padding: 1.5rem 1.6rem;
 }
 
 .pp .pp-journey__head {
@@ -759,11 +866,11 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.15rem 1.35rem;
+  padding: 1.25rem 1.5rem;
   border-radius: var(--pp-radius);
-  border: 1px solid var(--pp-border);
-  background: var(--pp-surface);
-  box-shadow: var(--pp-shadow-sm);
+  border: 1px solid var(--pp-border-strong);
+  background: #ffffff;
+  box-shadow: var(--pp-shadow);
 }
 
 .pp .pp-status__main {
@@ -1123,6 +1230,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal.pp {
   border-radius: var(--pp-radius) !important;
   box-shadow: var(--pp-shadow-sm) !important;
   padding: 1.35rem 1.4rem !important;
+  margin-top: 0.5rem !important;
 }
 .pp .portal-card-muted {
   background: var(--pp-surface-2) !important;

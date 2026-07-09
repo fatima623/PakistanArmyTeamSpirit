@@ -194,7 +194,7 @@ export default async function EventDashboardPage() {
             unit={user.unit}
           />
 
-          <section className="pp-card">
+          <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
             <div className="pp-card__head">
               <div>
                 <p className="pp-eyebrow">Schedule</p>
@@ -225,7 +225,7 @@ export default async function EventDashboardPage() {
 
         <aside className="pp-grid__col">
           {timelineData.deadlines.length > 0 ? (
-            <section className="pp-card">
+            <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
               <div className="pp-card__head">
                 <div>
                   <p className="pp-eyebrow">Deadlines</p>
@@ -238,7 +238,7 @@ export default async function EventDashboardPage() {
             </section>
           ) : null}
 
-          <section className="pp-card" aria-labelledby="dashboard-news-heading">
+          <section className="pp-card" aria-labelledby="dashboard-news-heading" style={{ borderRadius: "1rem", overflow: "hidden" }}>
             <div className="pp-card__head">
               <div>
                 <p className="pp-eyebrow">Updates</p>

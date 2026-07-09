@@ -13,7 +13,9 @@ export default function DashboardLayout({
       <div className="pats-portal participant-portal dashboard-day pp w-full">
         <div className="pp-shell">
           <PatsPortalNavServer />
-          <main className="pp-main">{children}</main>
+          <main className="pp-main">
+            <div className="pp-main__scroll">{children}</div>
+          </main>
         </div>
       </div>
     </PublicLayout>

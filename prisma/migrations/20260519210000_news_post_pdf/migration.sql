@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE "NewsPost" ADD COLUMN "pdfPath" TEXT;
-ALTER TABLE "NewsPost" ADD COLUMN "pdfOriginalName" TEXT;
-ALTER TABLE "NewsPost" ADD COLUMN "pdfMimeType" TEXT;
-ALTER TABLE "NewsPost" ADD COLUMN "pdfFileSize" INTEGER;
+ALTER TABLE `NewsPost` ADD COLUMN `pdfPath` VARCHAR(191);
+ALTER TABLE `NewsPost` ADD COLUMN `pdfOriginalName` VARCHAR(191);
+ALTER TABLE `NewsPost` ADD COLUMN `pdfMimeType` VARCHAR(191);
+ALTER TABLE `NewsPost` ADD COLUMN `pdfFileSize` INTEGER;

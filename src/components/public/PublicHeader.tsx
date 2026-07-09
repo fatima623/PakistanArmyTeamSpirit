@@ -38,7 +38,7 @@ export function PublicHeader() {
 
           <div className="shrink-0 self-end sm:self-center">
             <div className="flex h-[112px] w-[112px] items-center justify-center rounded-sm border-2 border-cp-brass/40 bg-white/5 p-2 backdrop-blur-sm sm:h-[120px] sm:w-[120px]">
-              <PatsLogo size={104} variant="nav" priority />
+              <PatsLogo size={104} variant="nav" priority={false} />
             </div>
           </div>
         </div>

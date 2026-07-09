@@ -407,20 +407,20 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav-log
  * =================================================================== */
 
 /* Body / supporting text — readable slate */
-html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *) {
+html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #475569 !important;
 }
 
 /* Headings + strong emphasis — darker slate */
-html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-cp-ink):not([class*="text-red"]):not([class*="text-emerald"]),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-cp-ink):not([class*="text-red"]):not([class*="text-emerald"]) {
+html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-cp-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-cp-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #1e293b !important;
 }
 
 /* Eyebrows / subtitles / muted captions — soft slate */
-html.light-theme .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body) {
+html.light-theme .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #64748b !important;
 }
 
@@ -440,4 +440,56 @@ html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-portal-nav
 html.light-theme .participant-portal.pats-portal :is(a.portal-link, .portal-link, a.portal-back-link, .portal-back-link),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(a.portal-link, .portal-link, a.portal-back-link, .portal-back-link) {
   color: #2e7d32 !important;
+}
+
+/* ===================================================================
+ * PP SIDEBAR — FINAL COLOUR RESET (must stay LAST in this file)
+ * -------------------------------------------------------------------
+ * The catch-all rules above are too broad: CSS :not() with descendant
+ * selectors doesn't reliably exclude descendants in all browsers, so
+ * the slate colour bleeds into the dark sidebar. These rules re-assert
+ * white text for EVERY element inside .pp-sidebar at higher specificity
+ * (html + 3 classes vs html + 2 classes) so they always win.
+ * =================================================================== */
+html.light-theme .participant-portal.pats-portal .pp-sidebar,
+html.light-theme .participant-portal.pats-portal .pp-sidebar *,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar * {
+  color: var(--pp-nav-text) !important;
+}
+
+/* Brand title — full white */
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-title,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-title {
+  color: #ffffff !important;
+}
+
+/* Brand sub + nav accent (progress chip, mark icon) — brass gold */
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-sub,
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-sidebar__mark,
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-progress__step,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-sub,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-sidebar__mark,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-progress__step {
+  color: var(--pp-nav-accent) !important;
+}
+
+/* Active & hovered nav link — bright white */
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link.is-active,
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link.is-active *,
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link:hover,
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link:hover *,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-nav__link.is-active,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-nav__link.is-active *,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-nav__link:hover,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-nav__link:hover * {
+  color: #ffffff !important;
+}
+
+/* Logout hover — danger tint */
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-logout:hover,
+html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-logout:hover *,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-logout:hover,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-logout:hover * {
+  color: #ffd9d4 !important;
 }
