@@ -1,4 +1,4 @@
-/* —— PATS military-grade tactical design system —— */
+
 
 .cinematic-site {
   --tac-carbon: #0d0f0e;
@@ -19,215 +19,20 @@
   --cinematic-accent: var(--tac-khaki);
 }
 
-/* Semantic grid matrix over video / hero surfaces */
-.tac-semantic-grid {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background-image: var(--tac-grid-bg, linear-gradient(rgba(197, 168, 128, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(197, 168, 128, 0.05) 1px, transparent 1px));
-  background-size: 32px 32px;
-  opacity: 0.55;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.85) 100%);
-}
 
-.tac-hero-readability {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  background: linear-gradient(
-    to top,
-    rgba(13, 15, 14, 0.92) 0%,
-    rgba(13, 15, 14, 0.45) 38%,
-    transparent 72%
-  );
-}
 
-.tac-hero-readability--ltr {
-  background:
-    linear-gradient(
-      to right,
-      rgba(13, 15, 14, 0.9) 0%,
-      rgba(13, 15, 14, 0.55) 42%,
-      transparent 72%
-    ),
-    linear-gradient(
-      to top,
-      rgba(13, 15, 14, 0.88) 0%,
-      transparent 48%
-    );
-}
-
-/* Operational CTA — micro-border slide, no gross fill shift */
-.tac-btn-op {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  min-height: 3rem;
-  padding: 0.75rem 1.5rem;
-  font-family: var(--font-barlow), system-ui, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--tac-combat-white);
-  background: rgba(18, 22, 20, 0.72);
-  border: 1px solid rgba(197, 168, 128, 0.35);
-  border-radius: var(--tac-radius);
-  transition:
-    border-color 0.22s var(--tac-ease-mechanical),
-    transform 0.22s var(--tac-ease-mechanical);
-}
-
-.tac-btn-op::before {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border: 1px solid transparent;
-  border-radius: 1px;
-  transition:
-    border-color 0.22s var(--tac-ease-mechanical),
-    transform 0.22s var(--tac-ease-mechanical);
-  pointer-events: none;
-}
-
-.tac-btn-op:hover::before,
-.tac-btn-op:focus-visible::before {
-  border-color: rgba(197, 168, 128, 0.45);
-  /* Keep inner frame fixed — sliding border caused cramped, jittery hero buttons */
-  transform: none;
-}
-
-.tac-btn-op:hover,
-.tac-btn-op:focus-visible {
-  border-color: rgba(197, 168, 128, 0.65);
-  outline: none;
-}
-
-.tac-btn-op__chevron {
-  transition: transform 0.22s var(--tac-ease-mechanical);
-}
-
-.tac-btn-op:hover .tac-btn-op__chevron,
-.tac-btn-op:focus-visible .tac-btn-op__chevron {
-  transform: translateX(4px);
-}
-
-.tac-btn-op--primary {
-  background: rgba(42, 61, 40, 0.85);
-  border-color: rgba(197, 168, 128, 0.5);
-}
-
-/* Forest card carousel — forest-card-carousel.css */
-
-/* Documentary gallery */
-.tac-doc-feature {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--tac-radius);
-  background: var(--tac-carbon-raised);
-}
-
-.tac-doc-duration {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--tac-combat-gray);
-  background: rgba(13, 15, 14, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 0.2rem 0.45rem;
-  border-radius: var(--tac-radius);
-}
-
-.tac-doc-telemetry {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--tac-khaki-muted);
-}
-
-/* Awards split — leaderboard */
-.tac-leaderboard {
-  border: 1px solid rgba(197, 168, 128, 0.15);
-  border-radius: var(--tac-radius);
-  background: rgba(18, 22, 20, 0.65);
-}
-
-.tac-leaderboard-row {
-  display: grid;
-  grid-template-columns: 2.5rem 1fr auto;
-  gap: 0.75rem;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-}
-
-/* Admin command tables */
-.tac-admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.8125rem;
-}
-
-.tac-admin-table thead {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: #121614;
-}
-
-.tac-admin-table th {
-  text-align: left;
-  font-family: var(--font-barlow), sans-serif;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--tac-khaki);
-  padding: 0.65rem 0.75rem;
-  border-bottom: 1px solid rgba(197, 168, 128, 0.2);
-}
-
-.tac-admin-table td {
-  padding: 0.6rem 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  color: var(--tac-combat-gray);
-}
-
-.tac-admin-table tbody tr:hover {
-  background: rgba(197, 168, 128, 0.06);
-}
-
-.tac-admin-num {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Respect system reduced-motion — no on-page toggle required */
 @media (prefers-reduced-motion: reduce) {
   .cinematic-site video {
     display: none !important;
   }
 
-  .cinematic-site .tac-semantic-grid,
+
   .cinematic-site .tac-scan-overlay::after,
-  .cinematic-site .tac-award-podium::before,
-  .cinematic-site .tac-world-dot {
+.cinematic-site .tac-world-dot {
     animation: none !important;
   }
-
-  .cinematic-site .tac-mission-card:hover .tac-mission-card__media {
-    transform: none !important;
-  }
 }
+
 
 @keyframes tac-scan-sweep {
   0% {
@@ -293,6 +98,7 @@
   z-index: 2;
 }
 
+
 .tac-scan-overlay::after {
   content: "";
   position: absolute;
@@ -310,6 +116,7 @@
   animation: tac-scan-sweep 9s ease-in-out infinite;
 }
 
+
 .tac-hud-frame {
   pointer-events: none;
   position: absolute;
@@ -317,6 +124,7 @@
   z-index: 3;
   border: 1px solid rgba(201, 162, 39, 0.12);
 }
+
 
 .tac-hud-frame::before,
 .tac-hud-frame::after {
@@ -328,17 +136,20 @@
   border-style: solid;
 }
 
+
 .tac-hud-frame::before {
   top: -1px;
   left: -1px;
   border-width: 2px 0 0 2px;
 }
 
+
 .tac-hud-frame::after {
   bottom: -1px;
   right: -1px;
   border-width: 0 2px 2px 0;
 }
+
 
 .tac-hud-corner-tr,
 .tac-hud-corner-bl {
@@ -351,17 +162,20 @@
   z-index: 3;
 }
 
+
 .tac-hud-corner-tr {
   top: 1.25rem;
   right: 1.25rem;
   border-width: 2px 2px 0 0;
 }
 
+
 .tac-hud-corner-bl {
   bottom: 1.25rem;
   left: 1.25rem;
   border-width: 0 0 2px 2px;
 }
+
 
 .tac-meta-strip {
   display: flex;
@@ -375,11 +189,13 @@
   color: var(--tac-sand);
 }
 
+
 .tac-meta-strip span {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
+
 
 .tac-meta-strip span::before {
   content: "";
@@ -389,9 +205,11 @@
   opacity: 0.9;
 }
 
+
 .tac-meta-value {
   color: #fff;
 }
+
 
 .tac-ops-code {
   font-family: var(--font-barlow), monospace;
@@ -404,6 +222,7 @@
   padding: 0.2rem 0.55rem;
 }
 
+
 .tac-difficulty {
   font-size: 0.625rem;
   font-weight: 700;
@@ -413,11 +232,13 @@
   border: 1px solid;
 }
 
+
 .tac-difficulty--foundational {
   color: var(--tac-sand);
   border-color: rgba(196, 181, 154, 0.35);
   background: rgba(196, 181, 154, 0.08);
 }
+
 
 .tac-difficulty--intermediate {
   color: #9ec49a;
@@ -425,11 +246,13 @@
   background: rgba(42, 61, 40, 0.35);
 }
 
+
 .tac-difficulty--advanced {
   color: #d4b86a;
   border-color: rgba(201, 162, 39, 0.45);
   background: rgba(201, 162, 39, 0.1);
 }
+
 
 .tac-difficulty--elite {
   color: #f0e6c8;
@@ -441,23 +264,13 @@
   );
 }
 
-/* Base mission card layout/colors — tac-mission-card.css */
+
+
 .tac-mission-card:hover,
 .tac-mission-card:focus-within {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-.tac-mission-card__media {
-  position: absolute;
-  inset: 0;
-  opacity: 0.28;
-  transition: opacity 0.28s var(--tac-ease-mechanical);
-}
-
-.tac-mission-card:hover .tac-mission-card__media,
-.tac-mission-card:focus-within .tac-mission-card__media {
-  opacity: 0.28;
-}
 
 .tac-mission-card__veil {
   position: absolute;
@@ -470,44 +283,6 @@
   );
 }
 
-.tac-mission-card__meta-panel {
-  max-height: none;
-  opacity: 1;
-  overflow: visible;
-  transition: none;
-}
-
-.tac-mission-card:hover .tac-mission-card__meta-panel,
-.tac-mission-card:focus-within .tac-mission-card__meta-panel {
-  max-height: none;
-  opacity: 1;
-}
-
-.tac-mission-card__meta-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.625rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--tac-khaki-muted);
-}
-
-.tac-mission-card__meta-line span strong {
-  color: var(--tac-khaki);
-  font-weight: 600;
-}
-
-.tac-section-fog {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(61, 82, 48, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 0, 0, 0.35), transparent);
-  z-index: 1;
-}
 
 .tac-brief-classified {
   border: 1px solid rgba(201, 162, 39, 0.2);
@@ -521,6 +296,7 @@
     0 24px 60px rgba(0, 0, 0, 0.5);
 }
 
+
 .tac-brief-header {
   border-bottom: 1px solid rgba(201, 162, 39, 0.15);
   background: repeating-linear-gradient(
@@ -532,57 +308,11 @@
   );
 }
 
+
 .tac-route-node--steady {
   box-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.08);
 }
 
-.tac-gallery-masonry {
-  columns: 1;
-  column-gap: 1.25rem;
-}
-
-@media (min-width: 640px) {
-  .tac-gallery-masonry {
-    columns: 2;
-  }
-}
-
-@media (min-width: 1024px) {
-  .tac-gallery-masonry {
-    columns: 2;
-    column-gap: 1.5rem;
-  }
-}
-
-.tac-gallery-item {
-  break-inside: avoid;
-  margin-bottom: 1.25rem;
-}
-
-.tac-gallery-item button {
-  width: 100%;
-}
-
-.tac-award-podium {
-  position: relative;
-}
-
-.tac-award-podium::before {
-  content: "";
-  position: absolute;
-  top: -30%;
-  left: 50%;
-  width: 140%;
-  height: 80%;
-  transform: translateX(-50%);
-  background: radial-gradient(
-    ellipse at center,
-    rgba(201, 162, 39, 0.18) 0%,
-    transparent 70%
-  );
-  animation: tac-spotlight 5s ease-in-out infinite;
-  pointer-events: none;
-}
 
 .tac-world-map {
   position: relative;
@@ -595,6 +325,7 @@
   overflow: hidden;
 }
 
+
 .tac-world-dot {
   position: absolute;
   width: 8px;
@@ -605,33 +336,6 @@
   animation: tac-hud-pulse 3s ease-in-out infinite;
 }
 
-.tac-page-hero {
-  position: relative;
-  z-index: 1;
-  min-height: clamp(14rem, 32vh, 22rem);
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-}
-
-.tac-page-hero__bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.05);
-}
-
-.tac-page-hero__shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    rgba(8, 11, 10, 0.92) 0%,
-    rgba(8, 11, 10, 0.65) 45%,
-    rgba(8, 11, 10, 0.35) 100%
-  );
-}
 
 .tac-nation-chip {
   transition:
@@ -640,62 +344,26 @@
     box-shadow 0.3s ease;
 }
 
+
 .tac-nation-grid {
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
 
+
 .tac-nation-chip:hover {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-.cinematic-btn-primary {
-  position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
-}
-
-.cinematic-btn-primary::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.12) 50%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.cinematic-btn-primary:hover::after {
-  opacity: 1;
-  animation: tac-shimmer 1.2s ease-out;
-}
-
-.cinematic-glass {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 12px 40px rgba(0, 0, 0, 0.25);
-}
-
-.cinematic-home-flow > .cinematic-section {
-  position: relative;
-  isolation: isolate;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .tac-scan-overlay::after,
-  .tac-route-node--steady,
-  .tac-award-podium::before,
-  .tac-world-dot {
+.tac-route-node--steady,
+.tac-world-dot {
     animation: none;
   }
+
 
   .tac-mission-card:hover {
     transform: none;

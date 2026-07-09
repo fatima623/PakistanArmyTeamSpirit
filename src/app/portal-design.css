@@ -1,19 +1,18 @@
-/**
- * Portal UI — admin console + participant dashboard
- * Typography, buttons, tables, badges (does not change base parchment backgrounds).
- */
 
-/* Clickable dashboard stat cards (Link wrapper) */
+
+
 .admin-stat-card--link {
   text-decoration: none;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+
 .admin-stat-card--link:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) {
   --portal-primary: #2E7D32;
@@ -38,9 +37,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* —— Typography —— */
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-page-title,
-:is(.admin-theme, .participant-portal, .dashboard-day) .portal-h1 {
+
+
+:is(.admin-theme, .participant-portal, .dashboard-day) .admin-page-title {
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -48,14 +47,15 @@
   line-height: 1.25;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-section-title,
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-settings-card-title,
 :is(.admin-theme, .participant-portal, .dashboard-day) .portal-h2 {
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--portal-text-heading);
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-heading {
   font-size: 1rem;
@@ -64,16 +64,16 @@
   color: var(--portal-text-heading);
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-muted,
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-setting-hint,
 :is(.admin-theme, .participant-portal, .dashboard-day) .portal-body {
   font-size: 0.875rem;
   font-weight: 400;
   color: var(--portal-text-body);
 }
 
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-label,
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-setting-label {
+
+:is(.admin-theme, .participant-portal, .dashboard-day) .admin-label {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--portal-text-body);
@@ -81,18 +81,14 @@
   display: block;
 }
 
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-setting-hint {
-  font-size: 0.75rem;
-  color: #999999;
-  margin-top: 0.1875rem;
-}
 
 .participant-portal .portal-body,
 .participant-portal .portal-muted {
   font-size: 0.9rem;
 }
 
-/* Table headers — centered for column symmetry */
+
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(
     .admin-data-table,
@@ -111,15 +107,18 @@
   text-align: center;
 }
 
-/* —— Layout spacing —— */
+
+
 :is(.admin-theme) .admin-page-content {
   padding-top: 0;
   min-width: 0;
 }
 
+
 :is(.admin-theme) main.flex-1.overflow-y-auto {
   padding: 1.75rem 2rem;
 }
+
 
 @media (min-width: 1024px) {
   :is(.admin-theme) main.flex-1.overflow-y-auto {
@@ -127,23 +126,19 @@
   }
 }
 
-:is(.admin-theme) .admin-dashboard-stats {
-  position: relative;
-  z-index: 1;
-  gap: 1.25rem;
-  border-radius: 1rem;
-}
 
-/* —— Sidebar —— */
+
 :is(.admin-theme) .admin-sidebar {
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.06);
 }
+
 
 :is(.admin-theme) .admin-sidebar-brand {
   padding: 0;
   border-bottom-color: #E2E8F0 !important;
   background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
 }
+
 
 :is(.admin-theme) .admin-sidebar-brand-link {
   display: flex;
@@ -152,9 +147,11 @@
   transition: background-color 0.15s ease;
 }
 
+
 :is(.admin-theme) .admin-sidebar-brand-link:hover {
   background: rgba(240, 253, 244, 0.65);
 }
+
 
 :is(.admin-theme) .admin-sidebar-brand-mark {
   display: flex;
@@ -165,6 +162,7 @@
   height: 2.625rem;
   overflow: visible;
 }
+
 
 :is(.admin-theme) .admin-sidebar-brand-logo {
   display: block;
@@ -179,6 +177,7 @@
   transform: none;
 }
 
+
 :is(.admin-theme) .admin-sidebar-brand-text {
   display: flex;
   flex-direction: column;
@@ -186,9 +185,11 @@
   min-width: 0;
 }
 
+
 :is(.admin-theme) .admin-sidebar-brand .admin-icon-accent {
   color: #2E7D32;
 }
+
 
 :is(.admin-theme) .admin-sidebar-brand-title {
   font-size: 0.9375rem;
@@ -196,6 +197,7 @@
   letter-spacing: 0.04em;
   color: #1E293B;
 }
+
 
 :is(.admin-theme) .admin-sidebar-brand-subtitle {
   margin-top: 0.125rem;
@@ -205,9 +207,11 @@
   color: #64748B;
 }
 
+
 :is(.admin-theme) .admin-sidebar-nav {
   padding: 0.5rem;
 }
+
 
 :is(.admin-theme) .admin-sidebar-link {
   margin: 2px 8px;
@@ -220,10 +224,12 @@
   color: var(--portal-text-body);
 }
 
+
 :is(.admin-theme) .admin-sidebar-link:hover {
   background-color: #F8FAFC;
   color: var(--portal-text-value);
 }
+
 
 :is(.admin-theme) .admin-sidebar-link[data-active="true"] {
   background-color: #F0FDF4;
@@ -232,6 +238,7 @@
   font-weight: 600;
 }
 
+
 :is(.admin-theme) .admin-sidebar-link-icon {
   width: 18px;
   height: 18px;
@@ -239,10 +246,12 @@
   flex-shrink: 0;
 }
 
+
 :is(.admin-theme) .admin-sidebar-link:hover .admin-sidebar-link-icon,
 :is(.admin-theme) .admin-sidebar-link[data-active="true"] .admin-sidebar-link-icon {
   opacity: 1;
 }
+
 
 :is(.admin-theme) .admin-sidebar-logout {
   margin: 0;
@@ -257,12 +266,14 @@
   transition: color 0.2s ease;
 }
 
+
 :is(.admin-theme) .admin-sidebar-footer--logout:hover .admin-sidebar-logout,
 :is(.admin-theme)
   .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible)
   .admin-sidebar-logout {
   color: #b91c1c;
 }
+
 
 :is(.admin-theme) .admin-sidebar-footer--logout:hover .admin-sidebar-link-icon,
 :is(.admin-theme)
@@ -272,11 +283,13 @@
   color: #dc2626;
 }
 
+
 :is(.admin-theme) .admin-sidebar-logout:focus-visible {
   outline: none;
 }
 
-/* —— Header —— */
+
+
 :is(.admin-theme) .admin-header-bar {
   min-height: 60px;
   padding-top: 0;
@@ -285,26 +298,19 @@
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
 }
 
+
 :is(.admin-theme) .admin-header-bar .admin-heading {
   font-size: 1.125rem;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
-:is(.admin-theme) .admin-session-badge {
-  border-radius: 999px;
-  border: 1.5px solid #d0cfc8;
-  padding: 5px 14px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: #ffffff;
-  color: var(--portal-text-body);
-}
 
 :is(.admin-theme) .admin-header-actions {
   display: flex;
   align-items: center;
 }
+
 
 :is(.admin-theme) .admin-user-trigger {
   display: inline-flex;
@@ -323,10 +329,12 @@
     background-color 0.15s ease;
 }
 
+
 :is(.admin-theme) .admin-user-trigger:hover {
   border-color: #cbd5e1;
   background: #f8fafc;
 }
+
 
 :is(.admin-theme) .admin-user-trigger[data-open="true"] {
   border-color: rgba(46, 125, 50, 0.35);
@@ -334,12 +342,6 @@
   box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
 }
 
-:is(.admin-theme) .admin-user-trigger-label {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #1e293b;
-  line-height: 1.2;
-}
 
 :is(.admin-theme) .admin-user-trigger .admin-user-avatar {
   display: inline-flex;
@@ -356,9 +358,11 @@
   box-shadow: none;
 }
 
+
 :is(.admin-theme) .admin-dropdown-item--logout {
   color: #dc2626;
 }
+
 
 :is(.admin-theme) .admin-dropdown-item--logout:hover,
 :is(.admin-theme) .admin-dropdown-item--logout:focus-visible {
@@ -367,7 +371,8 @@
   box-shadow: inset 0 0 0 1px rgba(220, 38, 38, 0.2);
 }
 
-/* —— Buttons (portal scope) —— */
+
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn, .cp-btn-primary, .cp-btn-secondary) {
   border-radius: 8px;
@@ -378,11 +383,13 @@
   min-height: auto;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-btn-sm {
   padding: 7px 14px;
   font-size: 0.8rem;
   min-height: auto;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary) {
@@ -392,6 +399,7 @@
   box-shadow: var(--portal-shadow-sm);
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):hover:not(:disabled) {
   background: var(--portal-primary-hover);
@@ -400,26 +408,28 @@
   box-shadow: var(--portal-shadow-hover);
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):active:not(:disabled) {
   transform: translateY(0);
 }
 
-:is(.admin-theme, .participant-portal, .dashboard-day) .ops-btn-approve,
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-btn-approve {
+
+:is(.admin-theme, .participant-portal, .dashboard-day) .ops-btn-approve {
   background: var(--portal-approve);
   border: 1px solid var(--portal-approve);
   color: #ffffff;
   box-shadow: var(--portal-shadow-sm);
 }
 
-:is(.admin-theme, .participant-portal, .dashboard-day) .ops-btn-approve:hover:not(:disabled),
-:is(.admin-theme, .participant-portal, .dashboard-day) .admin-btn-approve:hover:not(:disabled) {
+
+:is(.admin-theme, .participant-portal, .dashboard-day) .ops-btn-approve:hover:not(:disabled) {
   background: var(--portal-approve-hover);
   border-color: var(--portal-approve-hover);
   transform: translateY(-1px);
   box-shadow: var(--portal-shadow-hover);
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-secondary, .cp-btn-secondary, .admin-btn-outline) {
@@ -430,6 +440,7 @@
   box-shadow: none;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-secondary, .cp-btn-secondary, .admin-btn-outline):hover:not(:disabled) {
   border-color: #aaaaaa;
@@ -438,6 +449,7 @@
   transform: none;
   box-shadow: none;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-danger, .admin-btn-destructive) {
@@ -448,6 +460,7 @@
   box-shadow: none;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.ops-btn-danger, .admin-btn-destructive):hover:not(:disabled) {
   background: #fdf0f0;
@@ -457,7 +470,8 @@
   box-shadow: none;
 }
 
-/* Filter pill group */
+
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .portal-filter-group {
   display: inline-flex;
   flex-wrap: wrap;
@@ -468,6 +482,7 @@
   border-radius: 999px;
   background: #ffffff;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day)
   .portal-filter-group
@@ -484,12 +499,14 @@
   box-shadow: none;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   .portal-filter-group
   :is(.ops-filter-chip, .admin-filter-chip):hover {
   background: rgba(0, 0, 0, 0.04);
   color: var(--portal-text-value);
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day)
   .portal-filter-group
@@ -499,7 +516,8 @@
   box-shadow: none;
 }
 
-/* —— Forms —— */
+
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-input,
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-textarea,
 :is(.admin-theme, .participant-portal, .dashboard-day) input.admin-input,
@@ -515,9 +533,11 @@
   min-height: 2.75rem;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-textarea {
   min-height: 5rem;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-input:focus-visible,
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-textarea:focus-visible {
@@ -526,37 +546,32 @@
   outline: none;
 }
 
+
 :is(.admin-theme) .admin-settings-card {
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-:is(.admin-theme) .admin-settings-card-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-:is(.admin-theme) .admin-settings-footer {
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #ffffff;
-}
 
 :is(.admin-theme, .participant-portal, .dashboard-day) [role="switch"] {
   border-radius: 999px;
   transition: background-color 0.2s ease;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) [role="switch"][data-state="checked"] {
   background-color: var(--portal-primary) !important;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) [role="switch"] span[data-state] {
   background: #ffffff !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* —— Stat cards —— */
+
+
 :is(.admin-theme) .portal-stat-card {
   display: flex;
   min-height: 7.75rem;
@@ -572,30 +587,12 @@
     border-color 0.2s ease;
 }
 
+
 :is(.admin-theme) .portal-stat-card:hover {
   transform: none;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
-:is(.admin-theme) .portal-stat-card--rose {
-  background: #fff0f0;
-  border-color: transparent;
-}
-
-:is(.admin-theme) .portal-stat-card--mint {
-  background: #f0fff4;
-  border-color: transparent;
-}
-
-:is(.admin-theme) .portal-stat-card--amber {
-  background: #fffbf0;
-  border-color: transparent;
-}
-
-:is(.admin-theme) .portal-stat-card--violet {
-  background: #f5f0ff;
-  border-color: transparent;
-}
 
 :is(.admin-theme) .portal-stat-label {
   min-height: 2.5rem;
@@ -608,14 +605,6 @@
   color: var(--portal-text-muted);
 }
 
-:is(.admin-theme) .portal-stat-card-footer {
-  display: flex;
-  margin-top: auto;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding-top: 0.75rem;
-}
 
 :is(.admin-theme) .portal-stat-value {
   margin: 0;
@@ -627,6 +616,7 @@
   color: var(--portal-text-value);
 }
 
+
 :is(.admin-theme) .portal-stat-icon-wrap {
   width: 2.5rem;
   height: 2.5rem;
@@ -637,32 +627,14 @@
   justify-content: center;
 }
 
-:is(.admin-theme) .portal-stat-card--rose .portal-stat-icon-wrap {
-  background: rgba(185, 28, 28, 0.16);
-  color: #b91c1c;
-}
-
-:is(.admin-theme) .portal-stat-card--mint .portal-stat-icon-wrap {
-  background: rgba(22, 101, 52, 0.14);
-  color: #15803d;
-}
-
-:is(.admin-theme) .portal-stat-card--amber .portal-stat-icon-wrap {
-  background: rgba(180, 83, 9, 0.16);
-  color: #b45309;
-}
-
-:is(.admin-theme) .portal-stat-card--violet .portal-stat-icon-wrap {
-  background: rgba(109, 40, 217, 0.14);
-  color: #7c3aed;
-}
 
 :is(.admin-theme) .portal-stat-icon-wrap svg {
   width: 1.5rem;
   height: 1.5rem;
 }
 
-/* —— Tables & surfaces —— */
+
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.admin-surface, .admin-data-table-shell) {
   border-radius: 12px;
@@ -672,21 +644,6 @@
   overflow: hidden;
 }
 
-:is(.admin-theme) .admin-users-panel {
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-}
-
-:is(.admin-theme) .admin-users-panel .admin-users-table-shell {
-  overflow-x: auto;
-  overflow-y: visible;
-}
-
-:is(.admin-theme) main.flex-1.overflow-y-auto:has(.admin-users-page) {
-  overflow-x: auto;
-}
 
 :is(.admin-theme)
   :is(
@@ -705,6 +662,7 @@
 :is(.admin-theme) .admin-table-head th {
   font-size: 0.8125rem;
 }
+
 
 :is(.participant-portal, .dashboard-day)
   :is(
@@ -729,7 +687,8 @@
   background: transparent;
 }
 
-/* Table cells — centered to align with headers */
+
+
 :is(.admin-theme)
   :is(
     .admin-payments-table,
@@ -745,6 +704,7 @@
   text-align: center;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.admin-data-table, .admin-users-table)
   tbody
@@ -754,12 +714,14 @@
   transition: background 0.15s ease;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day)
   :is(.admin-data-table, .admin-users-table)
   tbody
   tr:hover {
   background: #f1f5f9;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day)
   .admin-data-table
@@ -769,7 +731,8 @@
   color: var(--portal-text-body);
 }
 
-/* Participation requests table — cell padding lives in admin-users-reference.css */
+
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-form-panel {
   background: #f9f8f5;
@@ -777,7 +740,8 @@
   padding: 1.25rem;
 }
 
-/* —— Status pills (compact, consistent across admin + participant) —— */
+
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-badge {
   display: inline-flex;
   align-items: center;
@@ -798,9 +762,9 @@
   vertical-align: middle;
 }
 
-/* Fixed-width pills for tables and queues */
-:is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-pill,
-:is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-badge-table {
+
+
+:is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-pill {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -822,16 +786,19 @@
   flex-shrink: 0;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-pill--review {
   min-width: 6.75rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-approved {
   background: #e6f4ea;
   color: #2d6a2d;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-pending,
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-review {
@@ -839,216 +806,20 @@
   color: #856404;
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-rejected {
   background: #fde8e8;
   color: #8b1a1a;
 }
+
 
 :is(.admin-theme, .participant-portal, .dashboard-day) .ops-status-neutral {
   background: #f0eeea;
   color: #666666;
 }
 
-/* —— Admin list filter chips (uniform size, distinct tone per filter) —— */
-:is(.admin-theme) :is(.admin-users-filter-tabs, .admin-payments-filter-tabs) {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.625rem;
-  width: 100%;
-}
 
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  :is(.ops-filter-chip, .admin-filter-chip) {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 8.25rem;
-  max-width: 8.25rem;
-  min-width: 8.25rem;
-  min-height: 2.125rem;
-  padding: 0 0.375rem;
-  border: 1px solid transparent;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-shadow: none;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease;
-}
 
-/* — All — */
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="all"]:is(.ops-filter-chip-inactive, .admin-filter-chip-inactive) {
-  border-color: #c8d0e0;
-  background: #eef1f8;
-  color: #4a5568;
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="all"]:is(.ops-filter-chip-active, .admin-filter-chip-active) {
-  border-color: #8a9bb8;
-  background: #dce4f2;
-  color: #2c3548;
-  font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(138, 155, 184, 0.35);
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="all"]:is(.ops-filter-chip, .admin-filter-chip):hover {
-  border-color: #9aa8c0;
-  background: #e4eaf4;
-  color: #2c3548;
-}
-
-/* — Pending / Awaiting — */
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="pending"]:is(.ops-filter-chip-inactive, .admin-filter-chip-inactive) {
-  border-color: #f0dfa8;
-  background: #fff8e6;
-  color: #7a6520;
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="pending"]:is(.ops-filter-chip-active, .admin-filter-chip-active) {
-  border-color: #d4a82a;
-  background: #ffefc2;
-  color: #5c4a10;
-  font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(212, 168, 42, 0.35);
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="pending"]:is(.ops-filter-chip, .admin-filter-chip):hover {
-  border-color: #e0c070;
-  background: #fff3d4;
-  color: #5c4a10;
-}
-
-/* — Approved / Verified — */
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="approved"]:is(.ops-filter-chip-inactive, .admin-filter-chip-inactive) {
-  border-color: #b8dfc4;
-  background: #e8f5ec;
-  color: #2d6a2d;
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="approved"]:is(.ops-filter-chip-active, .admin-filter-chip-active) {
-  border-color: #6daa7e;
-  background: #d4edda;
-  color: #1e4d28;
-  font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(109, 170, 126, 0.35);
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="approved"]:is(.ops-filter-chip, .admin-filter-chip):hover {
-  border-color: #8ec49e;
-  background: #dff0e4;
-  color: #1e4d28;
-}
-
-/* — Rejected / Returned — */
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="rejected"]:is(.ops-filter-chip-inactive, .admin-filter-chip-inactive) {
-  border-color: #f0c4c4;
-  background: #fdeaea;
-  color: #8b1a1a;
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="rejected"]:is(.ops-filter-chip-active, .admin-filter-chip-active) {
-  border-color: #d66a6a;
-  background: #fad4d4;
-  color: #6b1212;
-  font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(214, 106, 106, 0.35);
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="rejected"]:is(.ops-filter-chip, .admin-filter-chip):hover {
-  border-color: #e09090;
-  background: #fce0e0;
-  color: #6b1212;
-}
-
-/* — Payment pending — */
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="payment"]:is(.ops-filter-chip-inactive, .admin-filter-chip-inactive) {
-  border-color: #b8d9ef;
-  background: #e8f4fc;
-  color: #1e5a7a;
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="payment"]:is(.ops-filter-chip-active, .admin-filter-chip-active) {
-  border-color: #5a9ec4;
-  background: #cce8f8;
-  color: #134a66;
-  font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(90, 158, 196, 0.35);
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="payment"]:is(.ops-filter-chip, .admin-filter-chip):hover {
-  border-color: #7ab8d8;
-  background: #dceef8;
-  color: #134a66;
-}
-
-/* — Admins — */
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="admins"]:is(.ops-filter-chip-inactive, .admin-filter-chip-inactive) {
-  border-color: #d4c8e8;
-  background: #f3eef9;
-  color: #5b4a78;
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="admins"]:is(.ops-filter-chip-active, .admin-filter-chip-active) {
-  border-color: #9a82c4;
-  background: #e6dcf4;
-  color: #3d2f58;
-  font-weight: 600;
-  box-shadow: 0 0 0 1px rgba(154, 130, 196, 0.35);
-}
-
-:is(.admin-theme)
-  :is(.admin-users-filter-tabs, .admin-payments-filter-tabs)
-  [data-filter-tone="admins"]:is(.ops-filter-chip, .admin-filter-chip):hover {
-  border-color: #b4a0d4;
-  background: #ebe4f6;
-  color: #3d2f58;
-}
-
-/* —— Admin table row actions (View / Delete / Verify / Edit) —— */
 :is(.admin-theme)
   :is(
     .admin-table-actions,
@@ -1068,6 +839,7 @@
   max-width: 100%;
 }
 
+
 :is(.admin-theme)
   :is(
     .admin-table-actions,
@@ -1082,6 +854,7 @@
   flex: 0 0 auto;
   margin: 0 !important;
 }
+
 
 :is(.admin-theme)
   :is(
@@ -1117,7 +890,8 @@
   flex-shrink: 0;
 }
 
-/* Square icon-only action buttons (pencil / eye / trash in table Actions cells). */
+
+
 :is(.admin-theme) .portal-table-action-btn--icon.portal-table-action-btn {
   width: 1.75rem !important;
   min-width: 1.75rem !important;
@@ -1125,6 +899,7 @@
   padding: 0 !important;
   gap: 0 !important;
 }
+
 
 :is(.admin-theme)
   :is(
@@ -1143,6 +918,7 @@
   background: #ffffff !important;
   color: #3d4538 !important;
 }
+
 
 :is(.admin-theme)
   :is(
@@ -1164,6 +940,7 @@
   color: #2d4a22 !important;
 }
 
+
 :is(.admin-theme)
   :is(
     .admin-table-actions,
@@ -1181,6 +958,7 @@
   background: #fff8f8 !important;
   color: #b91c1c !important;
 }
+
 
 :is(.admin-theme)
   :is(
@@ -1202,6 +980,7 @@
   color: #ffffff !important;
 }
 
+
 :is(.admin-theme)
   :is(
     .admin-table-actions,
@@ -1215,6 +994,7 @@
   color: #2d4a22 !important;
   font-weight: 600 !important;
 }
+
 
 :is(.admin-theme)
   :is(
@@ -1231,7 +1011,8 @@
   color: #ffffff !important;
 }
 
-/* Compact approve — status column + dashboard pending (matches View / Delete row actions) */
+
+
 :is(.admin-theme) .admin-approve-btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -1262,6 +1043,7 @@
     color 0.15s ease;
 }
 
+
 :is(.admin-theme) .admin-approve-btn:hover:not(:disabled) {
   border-color: #3d5230 !important;
   background: #4a6040 !important;
@@ -1269,6 +1051,7 @@
   transform: none !important;
   box-shadow: none !important;
 }
+
 
 :is(.admin-theme) .admin-approve-btn:disabled {
   opacity: 1 !important;
@@ -1279,17 +1062,8 @@
   color: #166534 !important;
 }
 
-:is(.admin-theme) .admin-users-app-status-cell .admin-approve-btn {
-  min-width: 4.5rem !important;
-  max-width: 100% !important;
-}
 
-:is(.admin-theme) .admin-dashboard-pending-item .admin-approve-btn {
-  flex-shrink: 0;
-  min-width: 4.75rem !important;
-}
 
-/* —— Banners —— */
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-alert-banner {
   border-radius: 10px;
   border: 1px solid rgba(74, 94, 58, 0.2);
@@ -1300,12 +1074,14 @@
   color: var(--portal-text-body);
 }
 
+
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-alert-banner strong {
   color: var(--portal-text-heading);
   font-weight: 600;
 }
 
-/* Quick actions */
+
+
 :is(.admin-theme) .portal-quick-action {
   width: 100%;
   border-radius: 8px;
@@ -1316,16 +1092,19 @@
   transition: all 0.2s ease;
 }
 
+
 :is(.admin-theme) .portal-quick-action:hover:not(:disabled) {
   border-color: #4a5e3a;
   background: #f0eeea;
   color: #4a5e3a;
 }
 
-/* Sidebar footer — whole logout band lifts/highlights on hover */
+
+
 :is(.admin-theme) .admin-sidebar-footer {
   margin-top: auto;
 }
+
 
 :is(.admin-theme) .admin-sidebar-footer--logout {
   margin: 0.5rem 0.625rem 0.75rem;
@@ -1341,10 +1120,12 @@
     transform 0.22s ease;
 }
 
+
 :is(.admin-theme) .admin-sidebar-footer-form {
   display: block;
   width: 100%;
 }
+
 
 :is(.admin-theme) .admin-sidebar-footer--logout:hover,
 :is(.admin-theme)
@@ -1355,20 +1136,12 @@
   transform: translateY(-3px);
 }
 
-/* Dashboard — Recent Registrations table */
-:is(.admin-theme) .admin-surface.admin-dashboard-recent-shell {
-  overflow: visible !important;
-}
-
-:is(.admin-theme) .admin-dashboard-recent-table-wrap {
-  width: 100%;
-  overflow: visible;
-}
 
 :is(.admin-theme) .admin-dashboard-recent-table {
   table-layout: fixed;
   width: 100%;
 }
+
 
 :is(.admin-theme) .admin-dashboard-recent-table thead th {
   padding-top: 0.625rem;
@@ -1377,6 +1150,7 @@
   text-align: center;
 }
 
+
 :is(.admin-theme) .admin-dashboard-recent-table tbody td {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -1384,46 +1158,14 @@
   text-align: center;
 }
 
+
 :is(.admin-theme) .admin-dashboard-recent-table th,
 :is(.admin-theme) .admin-dashboard-recent-table td {
   overflow: visible;
 }
 
-:is(.admin-theme) .admin-dashboard-recent-col-name {
-  width: 28%;
-}
 
-:is(.admin-theme) .admin-dashboard-recent-col-unit {
-  width: 24%;
-}
 
-:is(.admin-theme) .admin-dashboard-recent-col-registered {
-  width: 18%;
-}
-
-:is(.admin-theme) .admin-dashboard-recent-col-status {
-  width: 30%;
-  text-align: center;
-}
-
-/* Recent registrations uses global .ops-status-pill via StatusBadges density=table */
-
-:is(.admin-theme) .admin-dashboard-pending-shell {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-:is(.admin-theme) .admin-dashboard-pending-header .admin-heading {
-  margin-bottom: 0.125rem;
-}
-
-:is(.admin-theme) .admin-dashboard-pending-header .admin-muted {
-  font-size: 0.75rem;
-  line-height: 1.35;
-}
-
-/* Participant portal cards */
 .participant-portal .portal-card,
 .participant-portal .portal-form-card,
 .participant-portal .cp-form-card,
@@ -1433,12 +1175,13 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-.participant-portal .portal-h1,
+
 .participant-portal .cp-h1 {
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
+
 
 .participant-portal .portal-section-title,
 .participant-portal .portal-h2 {
@@ -1446,4 +1189,3 @@
   font-weight: 600;
   color: var(--portal-text-heading);
 }
-

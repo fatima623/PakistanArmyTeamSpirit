@@ -1,20 +1,16 @@
-/**
- * Light / day theme — DGDP-inspired institutional palette.
- * Mirrors night section rhythm: full-bleed alternating bands (see pats-section-panels.css).
- * Homepage hero untouched (night cinematic). Scoped to html.light-theme.
- */
+
 
 html.light-theme,
 html[data-site-theme="day"],
 html.site-theme-day {
-  /* Core — warm parchment (DGDP), not grey-green ghost */
+  
   --lt-parchment: #f4f1ea;
   --lt-white: #ffffff;
   --lt-warm: #f0ebe3;
   --lt-mist: #eef2f6;
   --lt-sage: #e8efe4;
   --lt-sage-deep: #dce8d6;
-  /* Legacy aliases used across this file */
+  
   --lt-canvas: var(--lt-parchment);
   --lt-canvas-top: var(--lt-parchment);
   --lt-canvas-bottom: var(--lt-warm);
@@ -32,7 +28,7 @@ html.site-theme-day {
   --lt-divider: #ddd8cc;
   --lt-sand-border: #d4cfc4;
   --lt-card-border: #e0dcd4;
-  /* Forest card surfaces — same as login panel */
+  
   --lt-forest-card: #1a241b;
   --lt-forest-card-hover: #243028;
   --lt-forest-card-border: rgba(200, 168, 75, 0.28);
@@ -72,6 +68,7 @@ html.site-theme-day {
   color: var(--lt-body);
 }
 
+
 html.light-theme body,
 html[data-site-theme="day"] body,
 html.site-theme-day body {
@@ -79,7 +76,8 @@ html.site-theme-day body {
   color: var(--lt-body);
 }
 
-/* —— Site tokens —— */
+
+
 html.light-theme .army-site,
 html[data-site-theme="day"] .army-site,
 html.site-theme-day .army-site {
@@ -115,7 +113,8 @@ html.site-theme-day .army-site {
   background-color: var(--lt-parchment);
 }
 
-/* Subtle grid texture (mirrors night site grain, parchment tone) */
+
+
 html.light-theme .army-site::before,
 html[data-site-theme="day"] .army-site::before {
   display: block;
@@ -128,8 +127,9 @@ html[data-site-theme="day"] .army-site::before {
   background-size: 28px 28px;
 }
 
-/* —— Navigation —— */
-/* Hero only: transparent nav bar (menu closed or open — no faded wash) */
+
+
+
 html.light-theme .army-site .pats-header--home:not(.pats-header--solid) .pats-nav,
 html.light-theme .army-site .pats-header--over-hero:not(.pats-header--solid) .pats-nav,
 html[data-site-theme="day"] .army-site .pats-header--home:not(.pats-header--solid) .pats-nav,
@@ -140,9 +140,10 @@ html[data-site-theme="day"] .army-site .pats-header--over-hero:not(.pats-header-
   box-shadow: none !important;
 }
 
-/* Solid nav bar — see pats-motion.css (rgba white + blur on scroll) */
 
-/* Hero + menu open: appearance toggle matches transparent nav (night-style on video) */
+
+
+
 html.light-theme .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__panel-links .pats-nav__theme,
 html.light-theme .army-site .pats-header--over-hero.pats-header--menu-open:not(.pats-header--solid) .pats-nav__panel-links .pats-nav__theme,
 html[data-site-theme="day"] .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__panel-links .pats-nav__theme,
@@ -150,7 +151,8 @@ html[data-site-theme="day"] .army-site .pats-header--over-hero.pats-header--menu
   border-left-color: rgba(255, 255, 255, 0.22);
 }
 
-/* Hero / menu open: keep theme switch high-contrast (same as night nav) */
+
+
 html.light-theme .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-switch,
 html.light-theme .army-site .pats-header--over-hero.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-switch,
 html[data-site-theme="day"] .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-switch,
@@ -168,6 +170,7 @@ html[data-site-theme="day"] .army-site .pats-header--over-hero:not(.pats-header-
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45)) !important;
 }
 
+
 html.light-theme .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-btn,
 html.light-theme .army-site .pats-header--over-hero.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-btn,
 html[data-site-theme="day"] .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-btn,
@@ -178,6 +181,7 @@ html[data-site-theme="day"] .army-site .pats-header--home:not(.pats-header--soli
 html[data-site-theme="day"] .army-site .pats-header--over-hero:not(.pats-header--solid) .pats-nav__theme-btn {
   color: rgba(255, 255, 255, 0.92) !important;
 }
+
 
 html.light-theme .army-site .pats-header--home.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-btn--active,
 html.light-theme .army-site .pats-header--over-hero.pats-header--menu-open:not(.pats-header--solid) .pats-nav__theme-btn--active,
@@ -190,9 +194,10 @@ html[data-site-theme="day"] .army-site .pats-header--over-hero:not(.pats-header-
   color: #0f1a28 !important;
 }
 
-/* Homepage hero: night cinematic nav + hero styling in pats-hero.css / pats-navigation.css */
 
-/* Scrolled / inner pages: dark links on white bar */
+
+
+
 html.light-theme .army-site .pats-header--solid .pats-nav__brand-title,
 html.light-theme .army-site .pats-header--solid .pats-nav__brand-subtitle,
 html.light-theme .army-site .pats-header--solid .pats-nav__link,
@@ -212,6 +217,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--soli
   filter: none;
 }
 
+
 html.light-theme .army-site .pats-header--solid .pats-nav__link:hover,
 html.light-theme .army-site .pats-header--solid .pats-nav__link--active,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__link:hover,
@@ -219,10 +225,12 @@ html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__link--acti
   color: var(--lt-olive);
 }
 
+
 html.light-theme .army-site .pats-header--solid .pats-nav__menu-line,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__menu-line {
   background: var(--lt-heading);
 }
+
 
 html.light-theme .army-site .pats-nav__dropdown,
 html[data-site-theme="day"] .army-site .pats-nav__dropdown {
@@ -231,10 +239,12 @@ html[data-site-theme="day"] .army-site .pats-nav__dropdown {
   box-shadow: var(--lt-shadow-md);
 }
 
+
 html.light-theme .army-site .pats-nav__dropdown-link,
 html[data-site-theme="day"] .army-site .pats-nav__dropdown-link {
   color: var(--lt-body);
 }
+
 
 html.light-theme .army-site .pats-nav__dropdown-link:hover,
 html[data-site-theme="day"] .army-site .pats-nav__dropdown-link:hover {
@@ -242,18 +252,21 @@ html[data-site-theme="day"] .army-site .pats-nav__dropdown-link:hover {
   background: var(--lt-band);
 }
 
-/* Appearance toggle — day colors only (layout in pats-navigation.css) */
+
+
 html.light-theme .army-site .pats-nav__panel-links .pats-nav__theme,
 html[data-site-theme="day"] .army-site .pats-nav__panel-links .pats-nav__theme {
   border-left-color: var(--lt-nav-bar-border);
 }
+
 
 html.light-theme .army-site .pats-header--solid .pats-nav__panel-links .pats-nav__theme,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__panel-links .pats-nav__theme {
   border-left-color: var(--lt-divider);
 }
 
-/* Menu open + scrolled — same compact track as solid bar (not hero dark pill) */
+
+
 html.light-theme .army-site .pats-header--menu-open.pats-header--solid .pats-nav__theme-switch,
 html.light-theme .army-site .pats-header--menu-open.pats-header--compact .pats-nav__theme-switch,
 html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--solid .pats-nav__theme-switch,
@@ -266,6 +279,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   filter: none !important;
 }
 
+
 html.light-theme .army-site .pats-header--menu-open.pats-header--solid .pats-nav__theme-btn,
 html.light-theme .army-site .pats-header--menu-open.pats-header--compact .pats-nav__theme-btn,
 html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--solid .pats-nav__theme-btn,
@@ -274,6 +288,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   background: transparent !important;
 }
 
+
 html.light-theme .army-site .pats-header--menu-open.pats-header--solid .pats-nav__theme-btn--active,
 html.light-theme .army-site .pats-header--menu-open.pats-header--compact .pats-nav__theme-btn--active,
 html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--solid .pats-nav__theme-btn--active,
@@ -281,7 +296,8 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   color: #0f1a28 !important;
 }
 
-/* Scrolled / solid white bar only — lighter track */
+
+
 html.light-theme .army-site .pats-header--solid .pats-nav__theme-switch,
 html.light-theme .army-site .pats-header--compact .pats-nav__theme-switch,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__theme-switch,
@@ -294,12 +310,14 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-sw
   filter: none;
 }
 
+
 html.light-theme .army-site .pats-header--solid .pats-nav__theme-btn,
 html.light-theme .army-site .pats-header--compact .pats-nav__theme-btn,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__theme-btn,
 html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-btn {
   color: rgba(42, 61, 82, 0.55);
 }
+
 
 html.light-theme .army-site .pats-header--solid .pats-nav__theme-btn:hover,
 html.light-theme .army-site .pats-header--compact .pats-nav__theme-btn:hover,
@@ -308,6 +326,7 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-bt
   color: rgba(42, 61, 82, 0.9);
 }
 
+
 html.light-theme .army-site .pats-header--solid .pats-nav__theme-btn--active,
 html.light-theme .army-site .pats-header--compact .pats-nav__theme-btn--active,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav__theme-btn--active,
@@ -315,13 +334,15 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-bt
   color: #0f1a28;
 }
 
-/* Homepage hero: night cinematic look; register CTA stays white on video */
+
+
 html.light-theme .army-site .pats-hero,
 html[data-site-theme="day"] .army-site .pats-hero {
   --gold: #c8a84b;
   --pats-gold: #c8a84b;
   --pats-gold-light: #e0c06a;
 }
+
 
 html.light-theme .army-site .pats-hero .pats-hero__cta,
 html.light-theme .army-site .pats-hero .pats-hero__cta.hero-register-btn,
@@ -332,6 +353,7 @@ html[data-site-theme="day"] .army-site .pats-hero .pats-hero__cta.hero-register-
   background: transparent !important;
 }
 
+
 html.light-theme .army-site .pats-hero .pats-hero__cta:hover,
 html.light-theme .army-site .pats-hero .pats-hero__cta.hero-register-btn:hover,
 html[data-site-theme="day"] .army-site .pats-hero .pats-hero__cta:hover,
@@ -341,17 +363,14 @@ html[data-site-theme="day"] .army-site .pats-hero .pats-hero__cta.hero-register-
   background: rgba(255, 255, 255, 0.1) !important;
 }
 
+
 html.light-theme .army-site .pats-section__backdrop-shade,
 html[data-site-theme="day"] .army-site .pats-section__backdrop-shade {
   background: transparent !important;
 }
 
-html.light-theme .army-site .tac-section-fog,
-html[data-site-theme="day"] .army-site .tac-section-fog {
-  display: none;
-}
 
-/* Section bands — pats-section-panels.css */
+
 
 html.light-theme .army-site .pats-section--stats::before,
 html.light-theme .army-site .pats-section--mission::before,
@@ -362,7 +381,8 @@ html[data-site-theme="day"] .army-site .pats-section--mission::after {
   display: none;
 }
 
-/* Participation band — soft wash over photo watermark */
+
+
 html.light-theme .army-site .pats-section--light.pats-section--has-bg .pats-section__backdrop-shade--light,
 html[data-site-theme="day"] .army-site .pats-section--light.pats-section--has-bg .pats-section__backdrop-shade--light {
   background: linear-gradient(
@@ -372,12 +392,14 @@ html[data-site-theme="day"] .army-site .pats-section--light.pats-section--has-bg
   ) !important;
 }
 
+
 html.light-theme .army-site .pats-section--light.pats-section--has-bg .pats-section__backdrop-image--contain,
 html[data-site-theme="day"] .army-site .pats-section--light.pats-section--has-bg .pats-section__backdrop-image--contain {
   opacity: 0.14 !important;
 }
 
-/* Stats — gold numbers like night theme */
+
+
 html.light-theme .army-site .pats-stats,
 html[data-site-theme="day"] .army-site .pats-stats {
   display: grid;
@@ -392,22 +414,26 @@ html[data-site-theme="day"] .army-site .pats-stats {
   box-shadow: none;
 }
 
+
 @media (min-width: 1024px) {
   html.light-theme .army-site .pats-stats,
-  html[data-site-theme="day"] .army-site .pats-stats {
+html[data-site-theme="day"] .army-site .pats-stats {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
 
 html.light-theme .army-site .pats-stat,
 html[data-site-theme="day"] .army-site .pats-stat {
   border-right-color: rgba(255, 255, 255, 0.1);
 }
 
+
 html.light-theme .army-site .pats-stat:hover,
 html[data-site-theme="day"] .army-site .pats-stat:hover {
   background: rgba(200, 168, 75, 0.12);
 }
+
 
 html.light-theme .army-site .pats-stat__value,
 html[data-site-theme="day"] .army-site .pats-stat__value {
@@ -416,6 +442,7 @@ html[data-site-theme="day"] .army-site .pats-stat__value {
   color: var(--lt-gold-bright) !important;
 }
 
+
 html.light-theme .army-site .pats-stat__label,
 html[data-site-theme="day"] .army-site .pats-stat__label {
   font-size: 10px !important;
@@ -423,13 +450,11 @@ html[data-site-theme="day"] .army-site .pats-stat__label {
   color: rgba(255, 255, 255, 0.55) !important;
 }
 
-/* —— Forest card surfaces (login-panel green) sitewide —— */
+
+
 html.light-theme .army-site .pats-highlight-cell,
 html.light-theme .army-site .tac-mission-card,
-html.light-theme .army-site .paf-card,
-html.light-theme .army-site .paf-value-card,
 html.light-theme .army-site .pats-rule-card,
-html.light-theme .army-site .pats-doc-card,
 html.light-theme .army-site .pats-panel,
 html.light-theme
   .army-site
@@ -441,10 +466,7 @@ html.light-theme .army-site .pats-section--elevated article[class*="border"],
 html.light-theme .army-site .pats-section--elevated li > a[class*="border"],
 html[data-site-theme="day"] .army-site .pats-highlight-cell,
 html[data-site-theme="day"] .army-site .tac-mission-card,
-html[data-site-theme="day"] .army-site .paf-card,
-html[data-site-theme="day"] .army-site .paf-value-card,
 html[data-site-theme="day"] .army-site .pats-rule-card,
-html[data-site-theme="day"] .army-site .pats-doc-card,
 html[data-site-theme="day"] .army-site .pats-panel,
 html[data-site-theme="day"]
   .army-site
@@ -459,6 +481,7 @@ html[data-site-theme="day"] .army-site .pats-section--elevated li > a[class*="bo
   box-shadow: var(--lt-drill-card-shadow) !important;
   color: var(--lt-forest-card-text) !important;
 }
+
 
 html.light-theme .army-site :is(
     .tac-mission-card,
@@ -506,23 +529,27 @@ html[data-site-theme="day"] .army-site :is(
   border-color: rgba(200, 168, 75, 0.45) !important;
 }
 
+
 html.light-theme .army-site .pats-highlight-cell__label,
 html[data-site-theme="day"] .army-site .pats-highlight-cell__label {
   color: var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .pats-highlight-cell__value,
 html[data-site-theme="day"] .army-site .pats-highlight-cell__value {
   color: #ffffff !important;
 }
 
-/* Typography — override night .army-site:not(.dashboard-day) white text */
+
+
 html.light-theme .army-site:not(.dashboard-day) .pats-eyebrow,
 html.light-theme .army-site .pats-eyebrow,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-eyebrow,
 html[data-site-theme="day"] .army-site .pats-eyebrow {
   color: var(--lt-eyebrow) !important;
 }
+
 
 html.light-theme .army-site .pats-section-heading .pats-eyebrow,
 html.light-theme .army-site .pats-page-hero .pats-eyebrow,
@@ -532,6 +559,7 @@ html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow {
   font-size: var(--pats-type-section-eyebrow, 1.0625rem) !important;
   font-weight: 700 !important;
 }
+
 
 html.light-theme .army-site:not(.dashboard-day) .pats-section-title,
 html.light-theme .army-site:not(.dashboard-day) .pats-section-title--display,
@@ -550,6 +578,7 @@ html[data-site-theme="day"] .army-site .pats-mission__quote {
   text-shadow: none;
 }
 
+
 html.light-theme .army-site:not(.dashboard-day) .pats-body,
 html.light-theme .army-site:not(.dashboard-day) .pats-body--bright,
 html.light-theme .army-site .pats-body,
@@ -562,6 +591,7 @@ html[data-site-theme="day"] .army-site .pats-body,
 html[data-site-theme="day"] .army-site ul.pats-body span {
   color: var(--lt-body) !important;
 }
+
 
 html.light-theme .army-site:not(.dashboard-day) .pats-gold-rule,
 html.light-theme .army-site .pats-gold-rule,
@@ -582,14 +612,14 @@ html[data-site-theme="day"] .army-site .pats-gold-rule--center {
   opacity: 1 !important;
 }
 
-/* Competition overview & list accents */
+
+
 html.light-theme .army-site .pats-section--dark strong,
-html.light-theme .army-site .pats-section--dark strong.text-\[var\(--pats-white\)\],
 html.light-theme .army-site .pats-section--dark li strong,
-html[data-site-theme="day"] .army-site .pats-section--dark strong,
-html[data-site-theme="day"] .army-site .army-home strong.text-\[var\(--pats-white\)\] {
+html[data-site-theme="day"] .army-site .pats-section--dark strong {
   color: var(--lt-heading) !important;
 }
+
 
 html.light-theme .army-site .pats-section--dark li .opacity-80,
 html.light-theme .army-site ul.pats-body .opacity-80,
@@ -598,21 +628,25 @@ html[data-site-theme="day"] .army-site .pats-section--dark li .opacity-80 {
   opacity: 1 !important;
 }
 
+
 html.light-theme .army-site .pats-section--dark li[class*="border-l"],
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-gold)]"],
 html[data-site-theme="day"] .army-site .pats-section--dark li[class*="border-l"] {
   border-left-color: var(--lt-olive) !important;
 }
 
+
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border-gold)]"],
 html[data-site-theme="day"] .army-site .pats-section--dark [class*="border-[var(--pats-border-gold)]"] {
   border-color: var(--lt-card-border) !important;
 }
 
+
 html.light-theme .army-site .pats-section--mission.pats-section--has-bg,
 html[data-site-theme="day"] .army-site .pats-section--mission.pats-section--has-bg {
   background: var(--lt-white) !important;
 }
+
 
 html.light-theme .army-site .pats-section--mission .pats-logo-watermark-bg,
 html.light-theme .army-site .pats-section--mission .pats-section__backdrop-layer--logo-watermark,
@@ -626,23 +660,27 @@ html[data-site-theme="day"] .army-site .pats-section--mission .pats-section__bac
   filter: grayscale(0.12) contrast(0.96);
 }
 
+
 html.light-theme .army-site .pats-section--mission .pats-eyebrow,
 html[data-site-theme="day"] .army-site .pats-section--mission .pats-eyebrow {
   color: var(--lt-eyebrow);
 }
 
-/* (pats-gold-rule set in typography block above) */
+
+
 
 html.light-theme .army-site .pats-section--mission .pats-mission [class*="text-[var(--pats-gold)]"],
 html[data-site-theme="day"] .army-site .pats-section--mission .pats-mission [class*="text-[var(--pats-gold)]"] {
   color: var(--lt-gold) !important;
 }
 
-/* What PATS tests — pillar cards (forest surface typography) */
+
+
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] svg,
 html[data-site-theme="day"] .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] svg {
   color: var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] h3,
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] [class*="text-[var(--pats-gold)]"],
@@ -650,6 +688,7 @@ html[data-site-theme="day"] .army-site .pats-section--dark [class*="border-[var(
 html[data-site-theme="day"] .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] [class*="text-[var(--pats-gold)]"] {
   color: var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] .pats-eyebrow,
 html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border)]"] p,
@@ -660,7 +699,8 @@ html[data-site-theme="day"] .army-site .pats-section--dark [class*="border-[var(
   color: var(--lt-forest-card-muted) !important;
 }
 
-/* Night-mode white text → dark on light sections */
+
+
 html.light-theme .army-site .pats-section--elevated .text-white:not(.tac-mission-card):not(.tac-mission-card *):not(.pats-home-featured-news):not(.pats-home-featured-news *):not(.tac-edition-row):not(.tac-edition-row *):not(.tac-edition-row__title):not(.tac-edition-row__meta):not(.tac-edition-flag):not(.tac-nation-chip):not(.tac-nation-chip *),
 html.light-theme .army-site .pats-section--dark .text-white:not(.tac-mission-card):not(.tac-mission-card *),
 html.light-theme .army-site .pats-section--navy .text-white:not(.tac-mission-card):not(.tac-mission-card *),
@@ -678,6 +718,7 @@ html[data-site-theme="day"] .army-site .pats-section--elevated h3.text-white:not
   color: var(--lt-heading) !important;
 }
 
+
 html.light-theme .army-site .quaid-quote-strip,
 html.light-theme .army-site .quaid-quote-strip .quote-slide,
 html.light-theme .army-site .quaid-strip-attribution,
@@ -687,10 +728,12 @@ html[data-site-theme="day"] .army-site .quaid-strip-attribution {
   color: #ffffff !important;
 }
 
+
 html.light-theme .army-site .quaid-strip-attribution,
 html[data-site-theme="day"] .army-site .quaid-strip-attribution {
   color: #c9a84c !important;
 }
+
 
 html.light-theme .army-site .army-home [class*="bg-white/"],
 html.light-theme .army-site .pats-inner-page-shell [class*="bg-white/"],
@@ -706,20 +749,24 @@ html[data-site-theme="day"]
   backdrop-filter: none !important;
 }
 
+
 html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) [class*="text-[var(--pats-gold)]"]:not(.pats-btn):not(:is(.pats-pillar-card *, .tac-mission-card *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *)),
 html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) [class*="text-[var(--pats-gold)]"]:not(.pats-btn):not(:is(.pats-pillar-card *, .tac-mission-card *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *)) {
   color: var(--lt-olive) !important;
 }
+
 
 html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.tac-mission-card):not(.pats-page-hero__crumb a),
 html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.tac-mission-card):not(.pats-page-hero__crumb a) {
   color: var(--lt-olive);
 }
 
+
 html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.pats-page-hero__crumb a):hover,
 html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.pats-page-hero__crumb a):hover {
   color: var(--lt-olive-dark);
 }
+
 
 html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) .prose-invert,
 html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) .prose-invert p,
@@ -730,38 +777,33 @@ html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) .
   color: var(--lt-body) !important;
 }
 
-html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) strong.text-\[var\(--pats-white\)\],
-html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) strong.text-\[var\(--pats-white\)\] {
-  color: var(--lt-heading) !important;
-}
 
 html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a[class*="hover:text-white"]:hover,
 html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a[class*="hover:text-white"]:hover {
   color: var(--lt-olive) !important;
 }
 
-html.light-theme .army-site .army-home .divide-\[var\(--pats-border\)\] > li,
+
 html.light-theme .army-site .army-home ul.divide-y,
-html[data-site-theme="day"] .army-site .army-home .divide-\[var\(--pats-border\)\] > li,
 html[data-site-theme="day"] .army-site .army-home ul.divide-y {
   border-color: rgba(255, 255, 255, 0.12);
   background: var(--lt-forest-card);
 }
+
 
 html.light-theme .army-site .army-home ul.divide-y > li:hover,
 html[data-site-theme="day"] .army-site .army-home ul.divide-y > li:hover {
   background: var(--lt-forest-card-hover) !important;
 }
 
-/* Forest cards — warm text on green tiles (overrides section .text-white remap) */
+
+
 html.light-theme .army-site .tac-mission-card,
 html.light-theme .army-site .tac-mission-card h3,
 html.light-theme .army-site .tac-mission-card .text-white,
 html.light-theme .army-site .tac-mission-card .cinematic-body,
 html.light-theme .army-site .pats-highlight-cell,
-html.light-theme .army-site .paf-card,
 html.light-theme .army-site .pats-rule-card,
-html.light-theme .army-site .pats-doc-card,
 html.light-theme .army-site .pats-panel,
 html.light-theme .army-site .army-home article,
 html.light-theme .army-site .army-home article h3,
@@ -776,9 +818,7 @@ html[data-site-theme="day"] .army-site .tac-mission-card h3,
 html[data-site-theme="day"] .army-site .tac-mission-card .text-white,
 html[data-site-theme="day"] .army-site .tac-mission-card .cinematic-body,
 html[data-site-theme="day"] .army-site .pats-highlight-cell,
-html[data-site-theme="day"] .army-site .paf-card,
 html[data-site-theme="day"] .army-site .pats-rule-card,
-html[data-site-theme="day"] .army-site .pats-doc-card,
 html[data-site-theme="day"] .army-site .pats-panel,
 html[data-site-theme="day"] .army-site .army-home article,
 html[data-site-theme="day"] .army-site .army-home article h3,
@@ -791,6 +831,7 @@ html[data-site-theme="day"] .army-site .pats-section--elevated li > a .text-whit
   color: var(--lt-forest-card-text) !important;
 }
 
+
 html.light-theme .army-site .army-home article .pats-body,
 html.light-theme .army-site .army-home article p,
 html.light-theme .army-site .army-home li > a p,
@@ -802,12 +843,14 @@ html[data-site-theme="day"] .army-site .pats-section--elevated article:not(.tac-
   color: var(--lt-forest-card-muted) !important;
 }
 
+
 html.light-theme .army-site .army-home article [class*="text-[var(--pats-gold)]"],
 html.light-theme .army-site .army-home li > a [class*="text-[var(--pats-gold)]"],
 html[data-site-theme="day"] .army-site .army-home article [class*="text-[var(--pats-gold)]"],
 html[data-site-theme="day"] .army-site .army-home li > a [class*="text-[var(--pats-gold)]"] {
   color: var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .pats-section--elevated article a[class*="text-[var(--pats-gold)]"],
 html.light-theme .army-site .pats-section--elevated li > a:hover,
@@ -816,11 +859,13 @@ html[data-site-theme="day"] .army-site .pats-section--elevated li > a[class*="bo
   border-color: rgba(200, 168, 75, 0.45) !important;
 }
 
-/* Drill / mission cards — forest green (login panel) */
+
+
 html.light-theme .army-site .tac-mission-card,
 html[data-site-theme="day"] .army-site .tac-mission-card {
   border-left: 3px solid var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .tac-mission-card .tac-difficulty,
 html[data-site-theme="day"] .army-site .tac-mission-card .tac-difficulty {
@@ -828,6 +873,7 @@ html[data-site-theme="day"] .army-site .tac-mission-card .tac-difficulty {
   border-color: rgba(200, 168, 75, 0.45) !important;
   color: #e8d4a8 !important;
 }
+
 
 html.light-theme .army-site .tac-mission-card__veil,
 html[data-site-theme="day"] .army-site .tac-mission-card__veil {
@@ -839,10 +885,12 @@ html[data-site-theme="day"] .army-site .tac-mission-card__veil {
   ) !important;
 }
 
+
 html.light-theme .army-site .tac-mission-card [class*="text-white/"],
 html[data-site-theme="day"] .army-site .tac-mission-card [class*="text-white/"] {
   color: var(--lt-forest-card-muted) !important;
 }
+
 
 html.light-theme .army-site .tac-mission-card .text-brand-brass,
 html.light-theme .army-site .tac-mission-card .tac-ops-code,
@@ -853,27 +901,14 @@ html[data-site-theme="day"] .army-site .tac-mission-card .tac-ops-code {
   background: rgba(0, 0, 0, 0.2) !important;
 }
 
+
 html.light-theme .army-site .tac-mission-card .text-brand-sand-dim,
 html[data-site-theme="day"] .army-site .tac-mission-card .text-brand-sand-dim {
   color: var(--lt-forest-card-muted) !important;
 }
 
-html.light-theme .army-site .tac-mission-card__meta-line,
-html[data-site-theme="day"] .army-site .tac-mission-card__meta-line {
-  color: var(--lt-forest-card-muted) !important;
-}
 
-html.light-theme .army-site .tac-mission-card__meta-line span strong,
-html[data-site-theme="day"] .army-site .tac-mission-card__meta-line span strong {
-  color: #ffffff !important;
-}
 
-html.light-theme .army-site .tac-mission-card .border-white\/10,
-html[data-site-theme="day"] .army-site .tac-mission-card .border-white\/10 {
-  border-color: rgba(255, 255, 255, 0.12) !important;
-}
-
-/* Carousel arrows — bare icons, no background */
 html.light-theme .army-site :is(.forest-carousel__arrow, .tac-mission-carousel__arrow),
 html[data-site-theme="day"] .army-site :is(.forest-carousel__arrow, .tac-mission-carousel__arrow) {
   color: #000000 !important;
@@ -883,11 +918,13 @@ html[data-site-theme="day"] .army-site :is(.forest-carousel__arrow, .tac-mission
   border-radius: 0 !important;
 }
 
+
 html.light-theme .army-site :is(.forest-carousel__arrow, .tac-mission-carousel__arrow) svg,
 html[data-site-theme="day"] .army-site :is(.forest-carousel__arrow, .tac-mission-carousel__arrow) svg {
   stroke: #000000;
   color: #000000;
 }
+
 
 html.light-theme .army-site :is(.forest-carousel__arrow, .tac-mission-carousel__arrow):hover,
 html[data-site-theme="day"] .army-site :is(.forest-carousel__arrow, .tac-mission-carousel__arrow):hover {
@@ -897,34 +934,25 @@ html[data-site-theme="day"] .army-site :is(.forest-carousel__arrow, .tac-mission
   opacity: 0.65;
 }
 
-html.light-theme .army-site .tac-mission-track,
-html[data-site-theme="day"] .army-site .tac-mission-track {
-  scrollbar-color: var(--lt-olive) transparent;
-}
 
-/* Media overlays (on photos only) — titles stay white/gold, never section ink */
+
 html.light-theme .army-site .pats-image-card__title,
 html.light-theme .army-site .pats-image-card__tag,
-html.light-theme .army-site .pats-video-card__title,
-html.light-theme .army-site .pats-video-card__category,
 html.light-theme .army-site .pats-video-gallery__card-title,
 html.light-theme .army-site .pats-video-gallery__card-category,
 html.light-theme .cinematic-site.army-site .pats-image-card__title,
-html.light-theme .cinematic-site.army-site .pats-video-card__title,
 html.light-theme .cinematic-site.army-site .pats-video-gallery__card-title,
 html.light-theme .cinematic-site.army-site .pats-video-gallery__card-category,
 html[data-site-theme="day"] .army-site .pats-image-card__title,
 html[data-site-theme="day"] .army-site .pats-image-card__tag,
-html[data-site-theme="day"] .army-site .pats-video-card__title,
-html[data-site-theme="day"] .army-site .pats-video-card__category,
 html[data-site-theme="day"] .army-site .pats-video-gallery__card-title,
 html[data-site-theme="day"] .army-site .pats-video-gallery__card-category,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-image-card__title,
-html[data-site-theme="day"] .cinematic-site.army-site .pats-video-card__title,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__card-title,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__card-category {
   color: #ffffff !important;
 }
+
 
 html.light-theme .army-site .pats-video-gallery__title,
 html.light-theme .army-site .pats-video-gallery__title-line,
@@ -937,12 +965,14 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__title
   color: #000000 !important;
 }
 
+
 html.light-theme .army-site .pats-video-gallery__subtitle,
 html.light-theme .cinematic-site.army-site .pats-video-gallery__subtitle,
 html[data-site-theme="day"] .army-site .pats-video-gallery__subtitle,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__subtitle {
   color: #3d3d3d !important;
 }
+
 
 html.light-theme .army-site .pats-video-gallery__more,
 html.light-theme .cinematic-site.army-site .pats-video-gallery__more,
@@ -952,6 +982,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__more 
   border-color: #1a1a1a !important;
 }
 
+
 html.light-theme .army-site .pats-video-gallery__card-category,
 html.light-theme .cinematic-site.army-site .pats-video-gallery__card-category,
 html[data-site-theme="day"] .army-site .pats-video-gallery__card-category,
@@ -959,34 +990,20 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__card-
   color: rgba(255, 255, 255, 0.78) !important;
 }
 
+
 html.light-theme .cinematic-site.army-site .pats-image-card__title,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-image-card__title {
   color: var(--lt-gold-bright, #c8a84b) !important;
 }
+
 
 html.light-theme .army-site .pats-section--light .pats-image-card__overlay,
 html[data-site-theme="day"] .army-site .pats-section--light .pats-image-card__overlay {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%) !important;
 }
 
-html.light-theme .army-site .pats-video-card__shade,
-html[data-site-theme="day"] .army-site .pats-video-card__shade {
-  background: rgba(0, 0, 0, 0.35);
-}
 
-html.light-theme .army-site .pats-video-card__play,
-html[data-site-theme="day"] .army-site .pats-video-card__play {
-  border-color: var(--lt-olive) !important;
-  background: var(--lt-olive) !important;
-  color: #ffffff !important;
-}
 
-html.light-theme .army-site .pats-video-sidebar__title,
-html[data-site-theme="day"] .army-site .pats-video-sidebar__title {
-  color: var(--lt-heading) !important;
-}
-
-/* Ghost buttons — Read more, Full schedule, etc. */
 html.light-theme .army-site .pats-btn,
 html[data-site-theme="day"] .army-site .pats-btn {
   border: 2px solid var(--lt-olive) !important;
@@ -996,12 +1013,14 @@ html[data-site-theme="day"] .army-site .pats-btn {
   transition: all 0.25s ease;
 }
 
+
 html.light-theme .army-site .pats-btn:hover,
 html[data-site-theme="day"] .army-site .pats-btn:hover {
   background: var(--lt-olive) !important;
   border-color: var(--lt-olive) !important;
   color: #ffffff !important;
 }
+
 
 html.light-theme .army-site .pats-btn--gold,
 html[data-site-theme="day"] .army-site .pats-btn--gold {
@@ -1010,125 +1029,15 @@ html[data-site-theme="day"] .army-site .pats-btn--gold {
   color: #ffffff !important;
 }
 
+
 html.light-theme .army-site .pats-btn--gold:hover,
 html[data-site-theme="day"] .army-site .pats-btn--gold:hover {
   background: #9a8863 !important;
   border-color: #9a8863 !important;
 }
 
-/* Prefooter CTA — forest green in day theme (not night blue) */
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter {
-  position: relative;
-  z-index: 2;
-  isolation: isolate;
-  background: linear-gradient(
-    180deg,
-    #243028 0%,
-    var(--pats-auth-panel-bg, #1a241b) 55%,
-    #1a241b 100%
-  ) !important;
-  border-top: 2px solid rgba(201, 168, 75, 0.45) !important;
-  border-bottom: none !important;
-}
 
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter__motto,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter h2,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter .paf-body,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter p,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter .text-white,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter__motto,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter h2,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter .paf-body,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter p,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter .text-white {
-  color: #ffffff !important;
-}
 
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter__lead,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter .paf-body,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter__lead,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter .paf-body {
-  color: rgba(255, 255, 255, 0.92) !important;
-}
-
-/* Disable night-theme ::after sweep (causes double border on light prefooter) */
-html.light-theme .army-site .paf-prefooter .army-btn::after,
-html.light-theme .army-site .paf-prefooter .army-btn--gold::after,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn::after,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold::after {
-  display: none !important;
-  content: none !important;
-}
-
-/* Prefooter buttons — ghost gold / white on forest green */
-html.light-theme .army-site .paf-prefooter .army-btn:not(.army-btn--gold),
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn:not(.army-btn--gold) {
-  border: 2px solid rgba(255, 255, 255, 0.85) !important;
-  color: #ffffff !important;
-  background: transparent !important;
-  letter-spacing: 0.06em;
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn:not(.army-btn--gold) > span,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn:not(.army-btn--gold) > span {
-  color: #ffffff !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn:not(.army-btn--gold):hover,
-html.light-theme .army-site .paf-prefooter .army-btn:not(.army-btn--gold):focus-visible,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn:not(.army-btn--gold):hover,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn:not(.army-btn--gold):focus-visible {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-color: #ffffff !important;
-  color: #ffffff !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn:not(.army-btn--gold):hover > span,
-html.light-theme .army-site .paf-prefooter .army-btn:not(.army-btn--gold):focus-visible > span,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn:not(.army-btn--gold):hover > span,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn:not(.army-btn--gold):focus-visible > span {
-  color: #ffffff !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn--gold,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold {
-  border: 2px solid #c9a84c !important;
-  background: transparent !important;
-  color: #c9a84c !important;
-  letter-spacing: 0.06em;
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn--gold > span,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold > span {
-  color: #c9a84c !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn--gold:hover,
-html.light-theme .army-site .paf-prefooter .army-btn--gold:focus-visible,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold:hover,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold:focus-visible {
-  background: rgba(201, 168, 75, 0.2) !important;
-  border-color: #c9a84c !important;
-  color: #e8d4a8 !important;
-}
-
-html.light-theme .army-site .paf-prefooter .army-btn--gold:hover > span,
-html.light-theme .army-site .paf-prefooter .army-btn--gold:focus-visible > span,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold:hover > span,
-html[data-site-theme="day"] .army-site .paf-prefooter .army-btn--gold:focus-visible > span {
-  color: #e8d4a8 !important;
-}
-
-/* Footer — forest bookend (symmetrical with prefooter); photo 28 watermark retained */
 html.light-theme .army-site .paf-footer,
 html.light-theme .army-site .paf-footer--photo28,
 html[data-site-theme="day"] .army-site .paf-footer,
@@ -1141,6 +1050,7 @@ html[data-site-theme="day"] .army-site .paf-footer--photo28 {
   ) !important;
   border-top: 2px solid rgba(200, 168, 75, 0.45) !important;
 }
+
 
 html.light-theme .army-site .paf-footer__photo,
 html[data-site-theme="day"] .army-site .paf-footer__photo {
@@ -1155,6 +1065,7 @@ html[data-site-theme="day"] .army-site .paf-footer__photo {
   background-size: min(92%, 1100px) auto !important;
 }
 
+
 html.light-theme .army-site .paf-footer__shade,
 html[data-site-theme="day"] .army-site .paf-footer__shade {
   background: linear-gradient(
@@ -1166,12 +1077,14 @@ html[data-site-theme="day"] .army-site .paf-footer__shade {
   opacity: 1 !important;
 }
 
+
 html.light-theme .army-site .paf-footer [class*="border-white"],
 html.light-theme .army-site .paf-footer [class*="border-t"],
 html[data-site-theme="day"] .army-site .paf-footer [class*="border-white"],
 html[data-site-theme="day"] .army-site .paf-footer [class*="border-t"] {
   border-color: rgba(255, 255, 255, 0.14) !important;
 }
+
 
 html.light-theme .army-site .pats-footer-col h4,
 html.light-theme .army-site .paf-footer h4,
@@ -1181,23 +1094,21 @@ html[data-site-theme="day"] .army-site .paf-footer h4 {
   letter-spacing: 0.12em;
 }
 
+
 html.light-theme .army-site .pats-footer-col a,
 html.light-theme .army-site .paf-footer a,
-html.light-theme .army-site .paf-footer-meta,
 html.light-theme .army-site .paf-footer p,
 html.light-theme .army-site .paf-footer span,
 html.light-theme .army-site .paf-footer .text-white,
 html.light-theme .army-site .paf-footer [class*="text-white"],
-html.light-theme .army-site .paf-footer .paf-body,
 html[data-site-theme="day"] .army-site .paf-footer a:not(:hover),
-html[data-site-theme="day"] .army-site .paf-footer-meta,
 html[data-site-theme="day"] .army-site .paf-footer p,
 html[data-site-theme="day"] .army-site .paf-footer span,
 html[data-site-theme="day"] .army-site .paf-footer .text-white,
-html[data-site-theme="day"] .army-site .paf-footer .paf-body,
 html[data-site-theme="day"] .army-site .pats-footer-col a:not(:hover) {
   color: rgba(255, 255, 255, 0.88) !important;
 }
+
 
 html.light-theme .army-site .paf-footer a:hover,
 html.light-theme .army-site .pats-footer-col a:hover,
@@ -1206,12 +1117,14 @@ html[data-site-theme="day"] .army-site .pats-footer-col a:hover {
   color: var(--lt-gold-bright) !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[class*="border-white"],
 html[data-site-theme="day"] .army-site .paf-footer a[class*="border-white"] {
   border: 2px solid rgba(255, 255, 255, 0.75) !important;
   color: #ffffff !important;
   background: transparent !important;
 }
+
 
 html.light-theme .army-site .paf-footer a[class*="border-white"]:hover,
 html[data-site-theme="day"] .army-site .paf-footer a[class*="border-white"]:hover {
@@ -1220,10 +1133,12 @@ html[data-site-theme="day"] .army-site .paf-footer a[class*="border-white"]:hove
   color: #ffffff !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[class*="hover:bg-white"],
 html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:bg-white"] {
   transition: all 0.2s ease;
 }
+
 
 html.light-theme .army-site .paf-footer a[class*="hover:text-black"]:hover,
 html.light-theme .army-site .paf-footer a[class*="hover:text-brand-night"]:hover,
@@ -1232,21 +1147,25 @@ html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:text-brand-ni
   color: #ffffff !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[class*="border-white/"],
 html[data-site-theme="day"] .army-site .paf-footer a[class*="border-white/"] {
   border-color: rgba(255, 255, 255, 0.75) !important;
   color: #ffffff !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[class*="hover:border-white"]:hover,
 html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:border-white"]:hover {
   border-color: var(--lt-gold-bright) !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[class*="text-white"],
 html[data-site-theme="day"] .army-site .paf-footer a[class*="text-white"] {
   color: rgba(255, 255, 255, 0.88) !important;
 }
+
 
 html.light-theme .army-site .paf-footer a.flex[class*="border"],
 html[data-site-theme="day"] .army-site .paf-footer a.flex[class*="border"] {
@@ -1254,11 +1173,13 @@ html[data-site-theme="day"] .army-site .paf-footer a.flex[class*="border"] {
   color: #ffffff !important;
 }
 
+
 html.light-theme .army-site .paf-footer a.flex[class*="border"]:hover,
 html[data-site-theme="day"] .army-site .paf-footer a.flex[class*="border"]:hover {
   background: rgba(255, 255, 255, 0.1) !important;
   color: #ffffff !important;
 }
+
 
 html.light-theme .army-site .paf-footer a[aria-label] svg,
 html.light-theme .army-site .paf-footer svg,
@@ -1268,12 +1189,14 @@ html[data-site-theme="day"] .army-site .paf-footer svg {
   color: rgba(255, 255, 255, 0.88) !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[aria-label]:hover svg,
 html.light-theme .army-site .paf-footer a:hover svg,
 html[data-site-theme="day"] .army-site .paf-footer a:hover svg {
   fill: var(--lt-gold-bright) !important;
   stroke: var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .paf-footer a[aria-label],
 html[data-site-theme="day"] .army-site .paf-footer a[aria-label] {
@@ -1282,21 +1205,13 @@ html[data-site-theme="day"] .army-site .paf-footer a[aria-label] {
   color: rgba(255, 255, 255, 0.9) !important;
 }
 
+
 html.light-theme .army-site .paf-footer a[aria-label]:hover,
 html[data-site-theme="day"] .army-site .paf-footer a[aria-label]:hover {
   border-color: var(--lt-gold-bright) !important;
   color: var(--lt-gold-bright) !important;
 }
 
-/* Beat night-theme prefooter/footer colors from paf-theme.css */
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter p,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter .paf-body,
-html.light-theme .army-site:not(.dashboard-day) .paf-prefooter h2,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter p,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter .paf-body,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-prefooter h2 {
-  color: rgba(255, 255, 255, 0.92) !important;
-}
 
 html.light-theme .army-site:not(.dashboard-day) .paf-footer p,
 html.light-theme .army-site:not(.dashboard-day) .paf-footer span,
@@ -1313,7 +1228,8 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .paf-footer h4 {
   color: rgba(255, 255, 255, 0.88) !important;
 }
 
-/* Ticker below nav */
+
+
 html.light-theme .army-site .announcement-ticker:not(.pats-hero-ticker),
 html[data-site-theme="day"] .army-site .announcement-ticker:not(.pats-hero-ticker) {
   background: var(--lt-band) !important;
@@ -1321,11 +1237,13 @@ html[data-site-theme="day"] .army-site .announcement-ticker:not(.pats-hero-ticke
   color: var(--lt-heading) !important;
 }
 
+
 html.light-theme .army-site .announcement-ticker:not(.pats-hero-ticker) *,
 html[data-site-theme="day"] .army-site .announcement-ticker:not(.pats-hero-ticker) * {
   color: var(--lt-body) !important;
   text-shadow: none !important;
 }
+
 
 html.light-theme .army-site .announcement-ticker:not(.pats-hero-ticker) span[class*="tactical-brass"],
 html[data-site-theme="day"] .army-site .announcement-ticker:not(.pats-hero-ticker) span[class*="accent-gold"],
@@ -1333,12 +1251,14 @@ html[data-site-theme="day"] .army-site .announcement-ticker:not(.pats-hero-ticke
   color: var(--lt-gold) !important;
 }
 
-/* Scroll reveal */
+
+
 html.light-theme .army-site .reveal,
 html[data-site-theme="day"] .army-site .reveal {
   opacity: 1;
   transform: translateY(0);
 }
+
 
 html.reveal-active html.light-theme .army-site .reveal:not(.visible),
 html.reveal-active html[data-site-theme="day"] .army-site .reveal:not(.visible) {
@@ -1346,13 +1266,15 @@ html.reveal-active html[data-site-theme="day"] .army-site .reveal:not(.visible) 
   transform: translateY(28px);
 }
 
+
 html.reveal-active html.light-theme .army-site .reveal.visible,
 html.reveal-active html[data-site-theme="day"] .army-site .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Forms + inner pages (auth login flow uses forest green panels separately) */
+
+
 html.light-theme .army-site .cp-form-card:not(.pats-login-card),
 html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) {
   background: var(--lt-white);
@@ -1361,7 +1283,8 @@ html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) {
   box-shadow: var(--lt-shadow);
 }
 
-/* Prose / legal — open layout in section band (no nested white card) */
+
+
 html.light-theme .army-site .pats-prose-panel,
 html[data-site-theme="day"] .army-site .pats-prose-panel {
   max-width: 100%;
@@ -1373,6 +1296,7 @@ html[data-site-theme="day"] .army-site .pats-prose-panel {
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .pats-prose-panel .pats-body,
 html.light-theme .army-site .pats-prose-panel p,
 html.light-theme .army-site .pats-prose-panel li,
@@ -1382,29 +1306,32 @@ html[data-site-theme="day"] .army-site .pats-prose-panel li {
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .pats-prose-panel a,
 html[data-site-theme="day"] .army-site .pats-prose-panel a {
   color: var(--lt-olive) !important;
 }
+
 
 html.light-theme .army-site .pats-prose-panel a:hover,
 html[data-site-theme="day"] .army-site .pats-prose-panel a:hover {
   color: var(--lt-olive-dark) !important;
 }
 
+
 html.light-theme .army-site .cp-h1,
-html.light-theme .army-site .cp-h2,
-html[data-site-theme="day"] .army-site .cp-h1,
-html[data-site-theme="day"] .army-site .cp-h2 {
+html[data-site-theme="day"] .army-site .cp-h1 {
   color: var(--lt-heading);
   border-color: var(--lt-gold);
 }
+
 
 html.light-theme .cinematic-site,
 html[data-site-theme="day"] .cinematic-site {
   background-color: var(--lt-band);
   color: var(--lt-body);
 }
+
 
 html.light-theme .participant-portal .cp-form-card,
 html.light-theme .participant-portal .cp-page,
@@ -1415,12 +1342,14 @@ html[data-site-theme="day"] .participant-portal .cp-page {
   color: var(--lt-body);
 }
 
+
 html.light-theme .bg-brand-parchment,
 html.light-theme .bg-brand-black,
 html[data-site-theme="day"] .bg-brand-parchment,
 html[data-site-theme="day"] .bg-brand-black {
   background-color: var(--lt-band) !important;
 }
+
 
 html.light-theme .army-site .pats-page-hero__overlay,
 html[data-site-theme="day"] .army-site .pats-page-hero__overlay {
@@ -1434,12 +1363,14 @@ html[data-site-theme="day"] .army-site .pats-page-hero__overlay {
     linear-gradient(to right, rgba(26, 26, 24, 0.4) 0%, transparent 55%);
 }
 
+
 html.light-theme .army-site .pats-page-hero__title,
 html[data-site-theme="day"] .army-site .pats-page-hero__title {
   color: #ffffff !important;
 }
 
-/* Inner page hero breadcrumb — readable on dark banner (all pages except homepage) */
+
+
 html.light-theme .army-site .pats-page-hero__crumb,
 html.light-theme .army-site .pats-page-hero__crumb a,
 html.light-theme .army-site .pats-page-hero__crumb span,
@@ -1454,17 +1385,20 @@ html[data-site-theme="day"] .army-site .pats-page-hero__crumb span {
   text-transform: uppercase !important;
 }
 
+
 html.light-theme .army-site .pats-page-hero__crumb a:hover,
 html[data-site-theme="day"] .army-site .pats-page-hero__crumb a:hover {
   color: var(--lt-gold-bright, #c8a84b) !important;
 }
+
 
 html.light-theme .army-site .pats-page-hero__crumb span[aria-hidden],
 html[data-site-theme="day"] .army-site .pats-page-hero__crumb span[aria-hidden] {
   color: rgba(255, 255, 255, 0.55) !important;
 }
 
-/* Inner page hero — meta strip matches homepage stats band (no seam line) */
+
+
 html.light-theme .army-site .pats-page-hero,
 html[data-site-theme="day"] .army-site .pats-page-hero {
   display: flex;
@@ -1475,10 +1409,12 @@ html[data-site-theme="day"] .army-site .pats-page-hero {
   background: transparent;
 }
 
+
 html.light-theme .army-site .pats-page-hero__stage,
 html[data-site-theme="day"] .army-site .pats-page-hero__stage {
   margin: 0;
 }
+
 
 html.light-theme .army-site .pats-page-hero__meta,
 html[data-site-theme="day"] .army-site .pats-page-hero__meta {
@@ -1495,10 +1431,12 @@ html[data-site-theme="day"] .army-site .pats-page-hero__meta {
   box-shadow: none !important;
 }
 
+
 html.light-theme .army-site .pats-page-hero__meta > div,
 html[data-site-theme="day"] .army-site .pats-page-hero__meta > div {
   border-right-color: rgba(255, 255, 255, 0.12) !important;
 }
+
 
 html.light-theme .army-site .pats-page-hero__meta dt,
 html[data-site-theme="day"] .army-site .pats-page-hero__meta dt {
@@ -1506,6 +1444,7 @@ html[data-site-theme="day"] .army-site .pats-page-hero__meta dt {
   font-size: 11px !important;
   letter-spacing: 0.18em !important;
 }
+
 
 html.light-theme .army-site .pats-page-hero__meta dd,
 html[data-site-theme="day"] .army-site .pats-page-hero__meta dd {
@@ -1515,7 +1454,8 @@ html[data-site-theme="day"] .army-site .pats-page-hero__meta dd {
   font-weight: 400 !important;
 }
 
-/* No inset rule between hero block and first section */
+
+
 html.light-theme
   .army-site
   .pats-inner-page-shell
@@ -1541,7 +1481,8 @@ html[data-site-theme="day"]
   box-shadow: none;
 }
 
-/* Form controls — override night white borders (pats-inner-pages !important) */
+
+
 html.light-theme .army-site input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
 html.light-theme .army-site textarea,
 html.light-theme .army-site select,
@@ -1558,12 +1499,14 @@ html[data-site-theme="day"] .army-site button[role="combobox"] {
   box-shadow: inset 0 1px 2px rgba(26, 26, 22, 0.07) !important;
 }
 
+
 html.light-theme .army-site input:not([type="checkbox"]):not([type="radio"])::placeholder,
 html.light-theme .army-site textarea::placeholder,
 html[data-site-theme="day"] .army-site input:not([type="checkbox"]):not([type="radio"])::placeholder,
 html[data-site-theme="day"] .army-site textarea::placeholder {
   color: var(--lt-eyebrow) !important;
 }
+
 
 html.light-theme .army-site input:not([type="checkbox"]):not([type="radio"]):focus,
 html.light-theme .army-site input:not([type="checkbox"]):not([type="radio"]):focus-visible,
@@ -1586,6 +1529,7 @@ html[data-site-theme="day"] .army-site [role="combobox"]:focus-visible {
     inset 0 1px 2px rgba(26, 26, 22, 0.07) !important;
 }
 
+
 html.light-theme .army-site [role="option"],
 html.light-theme [role="listbox"] [role="option"],
 html[data-site-theme="day"] .army-site [role="option"],
@@ -1593,7 +1537,8 @@ html[data-site-theme="day"] [role="listbox"] [role="option"] {
   color: var(--lt-body) !important;
 }
 
-/* Radix select portal renders outside .army-site */
+
+
 html.light-theme [role="listbox"],
 html.light-theme [data-radix-select-viewport],
 html[data-site-theme="day"] [role="listbox"],
@@ -1604,6 +1549,7 @@ html[data-site-theme="day"] [data-radix-select-viewport] {
   box-shadow: var(--lt-shadow) !important;
 }
 
+
 html.light-theme .army-site button[role="checkbox"],
 html.light-theme .army-site button[role="radio"],
 html[data-site-theme="day"] .army-site button[role="checkbox"],
@@ -1612,6 +1558,7 @@ html[data-site-theme="day"] .army-site button[role="radio"] {
   background-color: var(--lt-white) !important;
 }
 
+
 html.light-theme .army-site .pats-page-hero .pats-body--bright,
 html.light-theme .army-site .pats-page-hero .pats-eyebrow,
 html[data-site-theme="day"] .army-site .pats-page-hero .pats-body--bright,
@@ -1619,7 +1566,8 @@ html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow {
   color: #ffffff !important;
 }
 
-/* —— Inner pages: full-bleed bands (no floating ghost cards) —— */
+
+
 html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell {
   display: block !important;
@@ -1629,15 +1577,17 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell > .space-y-0,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell > .space-y-0 {
   display: block !important;
   gap: 0 !important;
 }
 
-/* Inner page section cards — pats-section-panels.css */
 
-/* Register / public forms */
+
+
+
 html.light-theme .army-site .pats-form-section,
 html[data-site-theme="day"] .army-site .pats-form-section {
   background: var(--lt-white) !important;
@@ -1645,11 +1595,13 @@ html[data-site-theme="day"] .army-site .pats-form-section {
   box-shadow: none !important;
 }
 
+
 html.light-theme .army-site .pats-form-section-title,
 html[data-site-theme="day"] .army-site .pats-form-section-title {
   color: var(--lt-gold) !important;
   border-bottom-color: var(--lt-divider) !important;
 }
+
 
 html.light-theme .army-site .pats-form-notice,
 html[data-site-theme="day"] .army-site .pats-form-notice {
@@ -1659,25 +1611,30 @@ html[data-site-theme="day"] .army-site .pats-form-notice {
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .pats-form-notice strong,
 html[data-site-theme="day"] .army-site .pats-form-notice strong {
   color: var(--lt-heading) !important;
 }
+
 
 html.light-theme .army-site .pats-form-notice a,
 html[data-site-theme="day"] .army-site .pats-form-notice a {
   color: var(--lt-olive) !important;
 }
 
+
 html.light-theme .army-site .pats-form-notice a:hover,
 html[data-site-theme="day"] .army-site .pats-form-notice a:hover {
   color: var(--lt-olive-dark) !important;
 }
 
+
 html.light-theme .army-site .pats-form-notice .pats-form-notice--warn,
 html[data-site-theme="day"] .army-site .pats-form-notice .pats-form-notice--warn {
   color: #9a6b00 !important;
 }
+
 
 html.light-theme .army-site .pats-form-label,
 html.light-theme .army-site .pats-form-page label,
@@ -1692,11 +1649,13 @@ html[data-site-theme="day"] .army-site .pats-form-section label.font-normal {
   color: var(--lt-heading) !important;
 }
 
+
 html.light-theme .army-site .pats-form-hint,
 html[data-site-theme="day"] .army-site .pats-form-hint {
   color: var(--lt-eyebrow) !important;
   font-weight: 400;
 }
+
 
 html.light-theme .army-site .pats-form-page .text-slate-500,
 html.light-theme .army-site .pats-form-page .text-slate-600,
@@ -1711,17 +1670,20 @@ html[data-site-theme="day"] .army-site .pats-form-page span:not([class*="text-re
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .pats-form-page .text-red-500,
 html[data-site-theme="day"] .army-site .pats-form-page .text-red-500 {
   color: #b91c1c !important;
 }
+
 
 html.light-theme .army-site .pats-form-page .text-brand-red,
 html[data-site-theme="day"] .army-site .pats-form-page .text-brand-red {
   color: #b91c1c !important;
 }
 
-/* Auth flow — left intro forest green; right login card white */
+
+
 html.light-theme .army-site .pats-auth-shell__intro,
 html[data-site-theme="day"] .army-site .pats-auth-shell__intro {
   background: var(--pats-auth-panel-bg, #1a241b) !important;
@@ -1732,6 +1694,7 @@ html[data-site-theme="day"] .army-site .pats-auth-shell__intro {
   color: #e8e4d8 !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell .pats-login-card,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card {
   background: var(--lt-white, #ffffff) !important;
@@ -1740,15 +1703,18 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card {
   color: var(--lt-body, #4a5248) !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell__intro .pats-eyebrow,
 html[data-site-theme="day"] .army-site .pats-auth-shell__intro .pats-eyebrow {
   color: #c9a84c !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell__intro .pats-section-title,
 html[data-site-theme="day"] .army-site .pats-auth-shell__intro .pats-section-title {
   color: #ffffff !important;
 }
+
 
 html.light-theme .army-site .pats-auth-shell__intro .pats-body,
 html.light-theme .army-site .pats-auth-shell .pats-auth-shell__checklist li,
@@ -1757,10 +1723,12 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-auth-shell__checkl
   color: rgba(255, 255, 255, 0.92) !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell .pats-auth-shell__checklist li::before,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-auth-shell__checklist li::before {
   background: #c9a84c !important;
 }
+
 
 html.light-theme .army-site .pats-auth-shell .pats-login-card__title,
 html.light-theme .cinematic-site.army-site .pats-auth-shell .pats-login-card h2.pats-login-card__title,
@@ -1769,12 +1737,14 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-auth-shell .pats-log
   color: var(--lt-heading, #1a1a16) !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell .pats-login-card__description,
 html.light-theme .army-site .pats-auth-shell .pats-login-card .pats-eyebrow,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card__description,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .pats-eyebrow {
   color: var(--lt-olive, #4a6741) !important;
 }
+
 
 html.light-theme .army-site .pats-auth-shell .pats-login-card .pats-form-label,
 html.light-theme .army-site .pats-auth-shell .pats-login-card .pats-form-choice,
@@ -1783,10 +1753,12 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .pats-f
   color: var(--lt-olive-dark, #3d5230) !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell .pats-login-card__header,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card__header {
   border-bottom-color: var(--lt-divider, rgba(26, 36, 27, 0.1)) !important;
 }
+
 
 html.light-theme .army-site .pats-auth-shell .pats-login-card__hint,
 html.light-theme .army-site .pats-auth-shell .pats-login-card .login-form-footer,
@@ -1795,6 +1767,7 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .login-
   color: var(--lt-body, #4a5248) !important;
   border-top-color: var(--lt-divider, rgba(26, 36, 27, 0.1)) !important;
 }
+
 
 html.light-theme .army-site .pats-auth-shell .pats-login-card .login-form-link,
 html.light-theme .army-site .pats-auth-shell .pats-login-card .text-brand-olive,
@@ -1805,10 +1778,12 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card a.text-
   color: var(--lt-gold, #8b6914) !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell .pats-login-card .login-form-link:hover,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .login-form-link:hover {
   color: var(--lt-olive, #4a6741) !important;
 }
+
 
 html.light-theme .army-site .pats-auth-shell .pats-login-card p,
 html.light-theme .army-site .pats-auth-shell .pats-login-card span:not([class*="text-red"]),
@@ -1819,6 +1794,7 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .login-
   color: var(--lt-body, #4a5248) !important;
 }
 
+
 html.light-theme .army-site .pats-auth-shell .pats-login-card .cp-alert-error,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .cp-alert-error {
   background: rgba(185, 28, 28, 0.08) !important;
@@ -1826,7 +1802,8 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .cp-ale
   color: #991b1b !important;
 }
 
-/* Override global cp-form-card rules for auth shell only */
+
+
 html.light-theme .army-site .cp-form-card:not(.pats-login-card) .text-slate-600,
 html.light-theme .army-site .cp-form-card:not(.pats-login-card) .text-slate-500,
 html.light-theme .army-site .cp-form-card:not(.pats-login-card) .text-slate-700,
@@ -1842,12 +1819,14 @@ html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) .logi
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .cp-form-card:not(.pats-login-card) .text-brand-olive,
 html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) .text-brand-olive {
   color: var(--lt-gold) !important;
 }
 
-/* —— Public site-wide: beat night white text / alerts (exclude heroes) —— */
+
+
 html.light-theme .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *)),
 html.light-theme .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *)),
 html.light-theme .cinematic-site.army-site .pats-form-page :is(p, li, span, label):not([class*="text-red"]),
@@ -1861,6 +1840,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .cp-form-card:not(.pats-lo
   color: var(--lt-body);
 }
 
+
 html.light-theme .cinematic-site.army-site .pats-section .pats-section-heading .pats-section-title,
 html.light-theme .cinematic-site.army-site .pats-section h2:not(:is(.pats-auth-shell__intro *, .pats-login-card *, .pats-video-gallery__title)),
 html.light-theme .cinematic-site.army-site .pats-section h3:not(:is(.tac-mission-card__title, .pats-pillar-card__title, .pats-pillar-card h3, .pats-home-featured-news__title, .pats-home-featured-news h3, .pats-image-card__title, .pats-video-card__title, .paf-card h3, .pats-rule-card h3, .pats-doc-card h3, .pats-panel .pats-section-title, .pats-panel .pats-panel__label, .pats-panel h3, .tac-edition-row__title, .pats-awards-hero-card__name)),
@@ -1872,34 +1852,35 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-prose-panel h2 {
   color: var(--lt-heading) !important;
 }
 
+
 html.light-theme .cinematic-site.army-site .pats-auth-shell__intro h2.pats-section-title,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-auth-shell__intro h2.pats-section-title {
   color: #ffffff !important;
 }
 
+
 html.light-theme .cinematic-site.army-site .cp-body,
-html.light-theme .cinematic-site.army-site .cp-lead,
 html.light-theme .cinematic-site.army-site .cp-link,
 html[data-site-theme="day"] .cinematic-site.army-site .cp-body,
-html[data-site-theme="day"] .cinematic-site.army-site .cp-lead,
 html[data-site-theme="day"] .cinematic-site.army-site .cp-link {
   color: var(--lt-body) !important;
 }
+
 
 html.light-theme .cinematic-site.army-site .cp-link:hover,
 html[data-site-theme="day"] .cinematic-site.army-site .cp-link:hover {
   color: var(--lt-olive) !important;
 }
 
+
 html.light-theme .cinematic-site.army-site .cp-alert-success,
 html.light-theme .cinematic-site.army-site .cp-alert-error,
-html.light-theme .cinematic-site.army-site .cp-alert-warning,
 html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-success,
-html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-error,
-html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-warning {
+html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-error {
   border-width: 1px;
   border-style: solid;
 }
+
 
 html.light-theme .cinematic-site.army-site .cp-alert-success,
 html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-success {
@@ -1908,6 +1889,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-success {
   color: var(--lt-olive-dark) !important;
 }
 
+
 html.light-theme .cinematic-site.army-site .cp-alert-error,
 html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-error {
   background: rgba(185, 28, 28, 0.08) !important;
@@ -1915,23 +1897,16 @@ html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-error {
   color: #991b1b !important;
 }
 
-html.light-theme .cinematic-site.army-site .cp-alert-warning,
-html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-warning {
-  background: var(--lt-band) !important;
-  border-color: var(--lt-gold) !important;
-  color: var(--lt-heading) !important;
-}
 
 html.light-theme .cinematic-site.army-site .cp-alert-success :is(p, li, span),
 html.light-theme .cinematic-site.army-site .cp-alert-error :is(p, li, span),
-html.light-theme .cinematic-site.army-site .cp-alert-warning :is(p, li, span),
 html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-success :is(p, li, span),
-html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-error :is(p, li, span),
-html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-warning :is(p, li, span) {
+html[data-site-theme="day"] .cinematic-site.army-site .cp-alert-error :is(p, li, span) {
   color: inherit !important;
 }
 
-/* Operations — checkpoint route + glossary (Layout of events) */
+
+
 html.light-theme .army-site .operational-map__route,
 html[data-site-theme="day"] .army-site .operational-map__route {
   background: #ffffff !important;
@@ -1941,12 +1916,6 @@ html[data-site-theme="day"] .army-site .operational-map__route {
   color: var(--lt-body) !important;
 }
 
-html.light-theme .army-site .operational-map__route .tac-section-fog,
-html.light-theme .army-site .operational-map__route .bg-tac-brief-grid,
-html[data-site-theme="day"] .army-site .operational-map__route .tac-section-fog,
-html[data-site-theme="day"] .army-site .operational-map__route .bg-tac-brief-grid {
-  display: none !important;
-}
 
 html.light-theme .army-site .operational-map__route > p,
 html.light-theme .army-site .operational-map__glossary > p,
@@ -1958,6 +1927,7 @@ html[data-site-theme="day"] .army-site .operational-map__glossary > p {
   letter-spacing: 0.18em !important;
 }
 
+
 html.light-theme .army-site .operational-map__route h4,
 html.light-theme .army-site .operational-map__route li,
 html.light-theme .army-site .operational-map__route [class*="text-white"],
@@ -1967,11 +1937,13 @@ html[data-site-theme="day"] .army-site .operational-map__route [class*="text-whi
   color: var(--lt-heading) !important;
 }
 
+
 html.light-theme .army-site .operational-map__route li,
 html[data-site-theme="day"] .army-site .operational-map__route li {
   color: var(--lt-body) !important;
   font-size: var(--pats-type-body) !important;
 }
+
 
 html.light-theme .army-site .operational-map__route [class*="text-brand-sand"],
 html.light-theme .army-site .operational-map__route [class*="text-brand-brass"],
@@ -1980,12 +1952,14 @@ html[data-site-theme="day"] .army-site .operational-map__route [class*="text-bra
   color: var(--lt-olive) !important;
 }
 
+
 html.light-theme .army-site .operational-map__route [class*="border-brand-brass"],
 html.light-theme .army-site .operational-map__route [class*="border-l-2"],
 html[data-site-theme="day"] .army-site .operational-map__route [class*="border-brand-brass"],
 html[data-site-theme="day"] .army-site .operational-map__route [class*="border-l-2"] {
   border-color: rgba(200, 168, 75, 0.35) !important;
 }
+
 
 html.light-theme .army-site .operational-map__route [class*="rounded-full"],
 html[data-site-theme="day"] .army-site .operational-map__route [class*="rounded-full"] {
@@ -1994,11 +1968,13 @@ html[data-site-theme="day"] .army-site .operational-map__route [class*="rounded-
   color: var(--lt-olive-dark) !important;
 }
 
+
 html.light-theme .army-site .operational-map__route .group:hover,
 html[data-site-theme="day"] .army-site .operational-map__route .group:hover {
   background: rgba(200, 168, 75, 0.08) !important;
   border-left-color: var(--lt-gold-bright) !important;
 }
+
 
 html.light-theme .army-site .operational-map__route .group:hover h4,
 html.light-theme .army-site .operational-map__route .group:hover li,
@@ -2009,12 +1985,14 @@ html[data-site-theme="day"] .army-site .operational-map__route .group:hover [cla
   color: var(--lt-olive-dark) !important;
 }
 
+
 html.light-theme .army-site .operational-map__route .group:hover [class*="rounded-full"],
 html[data-site-theme="day"] .army-site .operational-map__route .group:hover [class*="rounded-full"] {
   border-color: var(--lt-gold-bright) !important;
   background: rgba(200, 168, 75, 0.15) !important;
   color: var(--lt-olive-dark) !important;
 }
+
 
 html.light-theme .army-site .operational-map__term,
 html[data-site-theme="day"] .army-site .operational-map__term {
@@ -2024,11 +2002,13 @@ html[data-site-theme="day"] .army-site .operational-map__term {
   box-shadow: var(--lt-shadow) !important;
 }
 
+
 html.light-theme .army-site .operational-map__term dt,
 html[data-site-theme="day"] .army-site .operational-map__term dt {
   color: var(--lt-gold-bright) !important;
   font-size: var(--pats-type-title) !important;
 }
+
 
 html.light-theme .army-site .operational-map__term dd,
 html[data-site-theme="day"] .army-site .operational-map__term dd {
@@ -2036,13 +2016,15 @@ html[data-site-theme="day"] .army-site .operational-map__term dd {
   font-size: var(--pats-type-body) !important;
 }
 
+
 html.light-theme .army-site .operational-map__term:hover,
 html[data-site-theme="day"] .army-site .operational-map__term:hover {
   border-color: var(--lt-olive) !important;
   box-shadow: var(--lt-shadow-md) !important;
 }
 
-/* International — nation grid & edition timeline (no black / carbon panels) */
+
+
 html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip,
 html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip {
   background: #ffffff !important;
@@ -2052,11 +2034,13 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip {
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip:hover,
 html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip:hover {
   border-color: var(--lt-olive) !important;
   box-shadow: var(--lt-shadow-md) !important;
 }
+
 
 html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip .text-white,
 html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-white/"],
@@ -2065,15 +2049,18 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [
   color: var(--lt-heading) !important;
 }
 
+
 html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-khaki"],
 html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-khaki"] {
   color: var(--lt-gold-bright) !important;
 }
 
+
 html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-sand"],
 html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-sand"] {
   color: var(--lt-olive) !important;
 }
+
 
 html.light-theme .army-site .pats-inner-page-shell [class*="bg-brand-night"],
 html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-brand-night"] {
@@ -2081,6 +2068,7 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-brand-
   border-color: var(--lt-card-border) !important;
   color: var(--lt-body) !important;
 }
+
 
 html.light-theme .army-site .pats-inner-page-shell .tac-edition-row,
 html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-edition-row {
@@ -2092,7 +2080,8 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-edition-row {
   color: var(--lt-forest-card-text) !important;
 }
 
-/* Edition timeline typography — tac-edition-timeline.css (loads after this file) */
+
+
 
 html.light-theme .army-site .tac-contingent-drawer,
 html[data-site-theme="day"] .army-site .tac-contingent-drawer {
@@ -2102,12 +2091,14 @@ html[data-site-theme="day"] .army-site .tac-contingent-drawer {
   box-shadow: var(--lt-shadow-lg) !important;
 }
 
+
 html.light-theme .army-site .tac-contingent-drawer .text-white,
 html.light-theme .army-site .tac-contingent-drawer [class*="text-white/"],
 html[data-site-theme="day"] .army-site .tac-contingent-drawer .text-white,
 html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-white/"] {
   color: var(--lt-heading) !important;
 }
+
 
 html.light-theme .army-site .tac-contingent-drawer [class*="text-brand-khaki"],
 html.light-theme .army-site .tac-contingent-drawer [class*="text-brand-sand"],
@@ -2116,25 +2107,30 @@ html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-bran
   color: var(--lt-olive) !important;
 }
 
+
 html.light-theme .army-site .tac-contingent-drawer [class*="border-white"],
 html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="border-white"] {
   border-color: var(--lt-divider) !important;
 }
+
 
 html.light-theme .army-site .tac-contingent-drawer [class*="text-white/65"],
 html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-white/65"] {
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .tac-contingent-drawer > button,
 html[data-site-theme="day"] .army-site .tac-contingent-drawer > button {
   color: var(--lt-olive) !important;
 }
 
+
 html.light-theme .army-site .tac-contingent-drawer > button:hover,
 html[data-site-theme="day"] .army-site .tac-contingent-drawer > button:hover {
   color: var(--lt-heading) !important;
 }
+
 
 html.light-theme .army-site .tac-world-map .text-white,
 html.light-theme .army-site .tac-world-map [class*="text-white/"],
@@ -2142,6 +2138,7 @@ html[data-site-theme="day"] .army-site .tac-world-map .text-white,
 html[data-site-theme="day"] .army-site .tac-world-map [class*="text-white/"] {
   color: var(--lt-olive) !important;
 }
+
 
 html.light-theme .army-site .tac-world-map .tac-world-dot [class*="bg-brand-night"],
 html[data-site-theme="day"] .army-site .tac-world-map .tac-world-dot [class*="bg-brand-night"] {
@@ -2151,9 +2148,10 @@ html[data-site-theme="day"] .army-site .tac-world-map .tac-world-dot [class*="bg
   box-shadow: var(--lt-shadow) !important;
 }
 
-/* Inner page section cards — pats-section-panels.css */
 
-/* —— Light theme: no black panels (Quaid strip on home is the only dark band) —— */
+
+
+
 html.light-theme .army-site .tac-brief-classified,
 html[data-site-theme="day"] .army-site .tac-brief-classified {
   background: var(--lt-white) !important;
@@ -2161,11 +2159,13 @@ html[data-site-theme="day"] .army-site .tac-brief-classified {
   box-shadow: var(--lt-shadow-md) !important;
 }
 
+
 html.light-theme .army-site .tac-brief-header,
 html[data-site-theme="day"] .army-site .tac-brief-header {
   background: var(--lt-warm) !important;
   border-bottom-color: var(--lt-divider) !important;
 }
+
 
 html.light-theme .army-site .tac-brief-classified .text-white,
 html.light-theme .army-site .tac-brief-classified [class*="text-white/"],
@@ -2177,6 +2177,7 @@ html[data-site-theme="day"] .army-site .tac-brief-classified .cinematic-heading,
 html[data-site-theme="day"] .army-site .tac-brief-classified .cinematic-body {
   color: var(--lt-heading) !important;
 }
+
 
 html.light-theme .army-site .tac-brief-classified .cinematic-body,
 html.light-theme .army-site .tac-brief-classified [class*="text-white/75"],
@@ -2191,6 +2192,7 @@ html[data-site-theme="day"] .army-site .tac-brief-classified [class*="text-white
   color: var(--lt-body) !important;
 }
 
+
 html.light-theme .army-site .tac-brief-classified [class*="border-white"],
 html.light-theme .army-site .tac-brief-classified [class*="bg-white/"],
 html[data-site-theme="day"] .army-site .tac-brief-classified [class*="border-white"],
@@ -2198,6 +2200,7 @@ html[data-site-theme="day"] .army-site .tac-brief-classified [class*="bg-white/"
   background: var(--lt-white) !important;
   border-color: var(--lt-card-border) !important;
 }
+
 
 html.light-theme .army-site .tac-brief-classified tr,
 html.light-theme .army-site .tac-brief-classified td,
@@ -2209,48 +2212,26 @@ html[data-site-theme="day"] .army-site .tac-brief-classified th {
   border-color: var(--lt-divider) !important;
 }
 
+
 html.light-theme .army-site .operational-map__route[class*="bg-brand-night"],
 html[data-site-theme="day"] .army-site .operational-map__route[class*="bg-brand-night"] {
   background: var(--lt-white) !important;
 }
+
 
 html.light-theme .army-site .operational-map__term[class*="from-white"],
 html[data-site-theme="day"] .army-site .operational-map__term[class*="from-white"] {
   background: var(--lt-white) !important;
 }
 
-html.light-theme .army-site .tac-doc-feature,
-html.light-theme .army-site .tac-leaderboard,
+
 html.light-theme .army-site .tac-world-map,
-html[data-site-theme="day"] .army-site .tac-doc-feature,
-html[data-site-theme="day"] .army-site .tac-leaderboard,
 html[data-site-theme="day"] .army-site .tac-world-map {
   background: var(--lt-white) !important;
   border-color: var(--lt-card-border) !important;
   box-shadow: var(--lt-shadow) !important;
 }
 
-html.light-theme .army-site .tac-leaderboard-row,
-html[data-site-theme="day"] .army-site .tac-leaderboard-row {
-  color: var(--lt-body) !important;
-}
-
-html.light-theme .army-site .tac-admin-table thead,
-html[data-site-theme="day"] .army-site .tac-admin-table thead {
-  background: var(--lt-sage-deep) !important;
-}
-
-html.light-theme .army-site .tac-admin-table th,
-html[data-site-theme="day"] .army-site .tac-admin-table th {
-  color: var(--lt-olive-dark) !important;
-  border-bottom-color: var(--lt-divider) !important;
-}
-
-html.light-theme .army-site .tac-admin-table td,
-html[data-site-theme="day"] .army-site .tac-admin-table td {
-  color: var(--lt-body) !important;
-  border-bottom-color: var(--lt-divider) !important;
-}
 
 html.light-theme .army-site .pats-inner-page-shell .text-white:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
 html.light-theme .army-site .pats-inner-page-shell [class*="text-white/"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
@@ -2258,6 +2239,7 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .text-white:not(:i
 html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)) {
   color: var(--lt-heading) !important;
 }
+
 
 html.light-theme .army-site .pats-inner-page-shell [class*="text-white/65"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
 html.light-theme .army-site .pats-inner-page-shell [class*="text-white/70"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
@@ -2271,6 +2253,7 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-whit
 html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/85"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)) {
   color: var(--lt-body) !important;
 }
+
 
 html.light-theme
   .army-site
@@ -2301,49 +2284,24 @@ html[data-site-theme="day"]
   color: var(--lt-forest-card-text) !important;
 }
 
+
 html.light-theme .army-site .pats-rule-card .text-white,
-html.light-theme .army-site .pats-doc-card .text-white,
 html.light-theme .army-site .pats-panel .text-white,
 html.light-theme .army-site .pats-panel .pats-panel__label,
-html.light-theme .army-site .paf-card .text-white,
 html.light-theme .army-site .pats-rule-card h3,
-html.light-theme .army-site .pats-doc-card h3,
-html.light-theme .army-site .paf-card h3,
 html[data-site-theme="day"] .army-site .pats-rule-card .text-white,
-html[data-site-theme="day"] .army-site .pats-doc-card .text-white,
 html[data-site-theme="day"] .army-site .pats-panel .text-white,
 html[data-site-theme="day"] .army-site .pats-panel .pats-panel__label,
-html[data-site-theme="day"] .army-site .paf-card .text-white,
-html[data-site-theme="day"] .army-site .pats-rule-card h3,
-html[data-site-theme="day"] .army-site .pats-doc-card h3,
-html[data-site-theme="day"] .army-site .paf-card h3 {
+html[data-site-theme="day"] .army-site .pats-rule-card h3 {
   color: var(--lt-forest-card-text) !important;
 }
 
+
 html.light-theme .army-site .pats-rule-card .pats-body,
-html.light-theme .army-site .pats-doc-card .pats-body,
 html.light-theme .army-site .pats-panel .pats-body,
 html.light-theme .army-site .pats-panel p,
-html.light-theme .army-site .paf-card .pats-body,
-html.light-theme .army-site .paf-card p,
 html[data-site-theme="day"] .army-site .pats-rule-card .pats-body,
-html[data-site-theme="day"] .army-site .pats-doc-card .pats-body,
 html[data-site-theme="day"] .army-site .pats-panel .pats-body,
-html[data-site-theme="day"] .army-site .pats-panel p,
-html[data-site-theme="day"] .army-site .paf-card .pats-body,
-html[data-site-theme="day"] .army-site .paf-card p {
+html[data-site-theme="day"] .army-site .pats-panel p {
   color: var(--lt-forest-card-muted) !important;
-}
-
-html.light-theme .army-site .army-btn:not(.army-btn--gold),
-html[data-site-theme="day"] .army-site .army-btn:not(.army-btn--gold) {
-  border-color: var(--lt-olive) !important;
-  color: var(--lt-olive) !important;
-  background: transparent !important;
-}
-
-html.light-theme .army-site .army-btn:not(.army-btn--gold):hover,
-html[data-site-theme="day"] .army-site .army-btn:not(.army-btn--gold):hover {
-  background: var(--lt-olive) !important;
-  color: #ffffff !important;
 }

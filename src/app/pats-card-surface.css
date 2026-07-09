@@ -1,7 +1,4 @@
-/**
- * LOCKED — Global forest / mission / pillar card layout + 3D lift hover.
- * Homepage pillar cards define the reference; all surfaces match this file.
- */
+
 
 .army-site:not(.dashboard-day) {
   --pats-card-lift-y: -8px;
@@ -10,7 +7,8 @@
   --pats-card-lift-duration: 0.3s;
 }
 
-/* —— Equal-height rows —— */
+
+
 .army-site:not(.dashboard-day) :is(
     .forest-card-grid,
     .pats-highlight-grid,
@@ -21,7 +19,8 @@
   align-items: stretch;
 }
 
-/* —— Card layout: flex column, min height, padding, clip —— */
+
+
 .army-site:not(.dashboard-day) :is(
     .tac-mission-card,
     .pats-pillar-card,
@@ -47,7 +46,8 @@
   text-align: left;
 }
 
-/* Operations rules — compact boxes sized to copy (not mission-card 280px tiles) */
+
+
 .army-site:not(.dashboard-day) .pats-rule-card,
 .army-site:not(.dashboard-day) .pats-rule-card.hover-lift-card {
   min-height: 0 !important;
@@ -58,16 +58,19 @@
   width: 100%;
 }
 
+
 .army-site:not(.dashboard-day) .pats-rule-card .pats-body {
   margin: 0;
   flex: 0 0 auto;
 }
 
+
 .army-site:not(.dashboard-day) .pats-rules-grid {
   align-items: start;
 }
 
-/* Orientation / label tiles — single-line chips, not 280px mission cards */
+
+
 .army-site:not(.dashboard-day) .pats-panel--tile,
 .army-site:not(.dashboard-day) .pats-panel--tile.hover-lift-card {
   min-height: 0 !important;
@@ -80,13 +83,16 @@
   align-items: flex-start;
 }
 
+
 .army-site:not(.dashboard-day) .pats-panel--tile .pats-panel__label {
   margin: 0;
 }
 
+
 .army-site:not(.dashboard-day) .pats-orientation-grid {
   align-items: start;
 }
+
 
 .army-site:not(.dashboard-day) .tac-mission-card__inner {
   display: flex;
@@ -100,18 +106,8 @@
   gap: 0.75rem;
 }
 
-.army-site:not(.dashboard-day) .pats-pillar-card .pats-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
-  margin: 0;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
-}
 
-/* —— LOCKED 3D lift hover (no scale) —— */
+
 .army-site:not(.dashboard-day) :is(
     .tac-mission-card,
     .pats-pillar-card,
@@ -137,6 +133,7 @@
     border-color 0.25s ease,
     background 0.25s ease;
 }
+
 
 @media (hover: hover) {
   .army-site:not(.dashboard-day) :is(
@@ -167,6 +164,7 @@
   }
 }
 
+
 @media (prefers-reduced-motion: reduce) {
   .army-site:not(.dashboard-day) :is(
       .tac-mission-card:hover,
@@ -181,7 +179,8 @@
   }
 }
 
-/* —— Homepage: Participation + Video Gallery (spacing / containment) —— */
+
+
 .army-site:not(.dashboard-day) .army-home #careers.pats-section--has-bg {
   overflow: clip !important;
   isolation: isolate;
@@ -189,9 +188,11 @@
   z-index: 0;
 }
 
+
 .army-site:not(.dashboard-day) .army-home #careers .pats-section__backdrop-layer.parallax-bg {
   inset: 0 !important;
 }
+
 
 .army-site:not(.dashboard-day) .army-home #careers .pats-image-grid {
   gap: 32px !important;
@@ -201,11 +202,13 @@
   overflow: visible;
 }
 
+
 @media (min-width: 768px) {
   .army-site:not(.dashboard-day) .army-home #careers .pats-image-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
+
 
 .army-site:not(.dashboard-day) .army-home #careers .pats-image-card {
   position: relative;
@@ -213,12 +216,14 @@
   min-width: 0;
 }
 
+
 @media (hover: hover) {
   .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:hover,
-  .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
+.army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
     z-index: 2;
   }
 }
+
 
 .army-site:not(.dashboard-day) .army-home .pats-section--navy {
   overflow: clip !important;
@@ -227,63 +232,10 @@
   z-index: 1;
 }
 
+
 .army-site:not(.dashboard-day) .army-home .pats-section--navy .pats-section__inner {
   overflow: clip !important;
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0;
-}
-
-.army-site:not(.dashboard-day) .army-home .pats-home-video-gallery {
-  overflow: clip !important;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-.army-site:not(.dashboard-day) .army-home .pats-video-section {
-  overflow: clip !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0;
-}
-
-@media (min-width: 1024px) {
-  .army-site:not(.dashboard-day) .army-home .pats-video-section {
-    grid-template-columns: minmax(0, 17.5rem) minmax(0, 1fr) !important;
-  }
-}
-
-.army-site:not(.dashboard-day) .army-home .pats-video-sidebar {
-  min-width: 0;
-}
-
-.army-site:not(.dashboard-day) .army-home .pats-video-grid {
-  gap: 24px !important;
-  column-gap: 24px !important;
-  row-gap: 24px !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  overflow: clip !important;
-  isolation: isolate;
-}
-
-@media (min-width: 640px) {
-  .army-site:not(.dashboard-day) .army-home .pats-video-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-.army-site:not(.dashboard-day) .army-home .pats-video-card {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-}
-
-@media (hover: hover) {
-  .army-site:not(.dashboard-day) .army-home .pats-video-card:hover,
-  .army-site:not(.dashboard-day) .army-home .pats-video-card:focus-visible {
-    z-index: 2;
-  }
 }

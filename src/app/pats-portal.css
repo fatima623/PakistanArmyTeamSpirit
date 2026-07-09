@@ -1,4 +1,4 @@
-/* Participant + admin dashboards — DESIGN_SPEC permanent Day Theme for admin */
+
 
 .pats-portal {
   min-height: 100vh;
@@ -7,6 +7,7 @@
   font-family: var(--font-barlow), system-ui, sans-serif;
 }
 
+
 .admin-theme.pats-dashboard {
   min-height: 100vh;
   background: #f4f1ea;
@@ -14,44 +15,25 @@
   font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
 }
 
-/* Scrollable main area stays transparent so photo 28 watermark shows through */
-.admin-theme.pats-dashboard .admin-main-canvas {
-  background: transparent;
-}
 
 .pats-portal * {
   border-radius: 0 !important;
 }
 
-.pats-portal .pats-portal-shell,
+
 .admin-theme.pats-dashboard .admin-page-content {
   padding: 1.5rem;
 }
 
+
 @media (min-width: 640px) {
-  .pats-portal .pats-portal-shell,
   .admin-theme.pats-dashboard .admin-page-content {
     padding: 2rem;
   }
 }
 
-/* Portal header band */
-.pats-portal-header {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--pats-border);
-}
 
-.pats-portal-header h1 {
-  font-family: var(--font-barlow), system-ui, sans-serif;
-  font-size: var(--pats-type-display);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--pats-white);
-}
 
-/* Cards / panels */
 .pats-portal .pats-panel {
   background: var(--pats-bg-overlay, #243f58) !important;
   border: 1px solid var(--pats-border) !important;
@@ -59,16 +41,15 @@
   color: var(--pats-text);
 }
 
-.admin-theme.pats-dashboard .pats-panel:not(.portal-stat-card),
-.admin-theme.pats-dashboard .admin-panel,
-.admin-theme.pats-dashboard .admin-users-panel,
-.admin-theme.pats-dashboard .admin-settings-panel {
+
+.admin-theme.pats-dashboard .pats-panel:not(.portal-stat-card) {
   background: #ffffff !important;
   border: 1px solid #e8e8e8 !important;
   border-radius: 16px !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
   color: #4b5563;
 }
+
 
 .pats-portal .pats-panel h2,
 .pats-portal .pats-panel h3 {
@@ -79,14 +60,8 @@
   color: var(--pats-white);
 }
 
-.admin-theme.pats-dashboard .admin-panel h2 {
-  font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #1E293B;
-}
 
-/* Form fields on dark */
+
 .pats-portal input,
 .pats-portal select,
 .pats-portal textarea {
@@ -97,14 +72,16 @@
   box-sizing: border-box;
 }
 
+
 @media (max-width: 639px) {
   .pats-portal input:not([type="checkbox"]):not([type="radio"]),
-  .pats-portal select,
-  .pats-portal textarea {
+.pats-portal select,
+.pats-portal textarea {
     width: 100%;
     font-size: 16px;
   }
 }
+
 
 .admin-theme.pats-dashboard input:not([type="checkbox"]):not([type="radio"]),
 .admin-theme.pats-dashboard select,
@@ -114,6 +91,7 @@
   color: #1E293B !important;
 }
 
+
 .pats-portal input:focus,
 .pats-portal select:focus,
 .pats-portal textarea:focus {
@@ -121,12 +99,14 @@
   outline: none;
 }
 
+
 .admin-theme.pats-dashboard input:focus,
 .admin-theme.pats-dashboard select:focus,
 .admin-theme.pats-dashboard textarea:focus {
   border-color: #2E7D32 !important;
   outline: none;
 }
+
 
 .pats-portal label {
   font-size: var(--pats-type-eyebrow);
@@ -136,6 +116,7 @@
   color: #ffffff;
 }
 
+
 .admin-theme.pats-dashboard label {
   font-size: 0.8rem;
   font-weight: 600;
@@ -143,33 +124,38 @@
   color: #475569;
 }
 
-/* Admin shell light theme */
+
+
 .admin-theme.pats-dashboard .admin-sidebar,
 .admin-theme.pats-dashboard aside[class*="sidebar"] {
   background: #FFFFFF !important;
   border-color: #E2E8F0 !important;
 }
 
-.admin-theme.pats-dashboard .admin-header,
+
 .admin-theme.pats-dashboard header[class*="admin"] {
   background: #FFFFFF !important;
   border-bottom: 1px solid #E2E8F0 !important;
   color: #1E293B;
 }
 
+
 .admin-theme.pats-dashboard .admin-sidebar a,
 .admin-theme.pats-dashboard .admin-sidebar button {
   color: #475569;
 }
+
 
 .admin-theme.pats-dashboard .admin-sidebar a:hover,
 .admin-theme.pats-dashboard .admin-sidebar [aria-current="page"] {
   color: #2E7D32 !important;
 }
 
+
 .admin-theme.pats-dashboard table {
   color: #475569;
 }
+
 
 .admin-theme.pats-dashboard th {
   font-size: 0.7rem;
@@ -180,94 +166,32 @@
   border-color: #E2E8F0 !important;
 }
 
+
 .admin-theme.pats-dashboard td {
   border-color: #E2E8F0 !important;
 }
+
 
 .admin-theme.pats-dashboard tr:hover td {
   background: #F8FAFC;
 }
 
-/* Status chips stay readable */
+
+
 .pats-portal .ops-btn-primary {
   background: transparent !important;
   border: 1px solid var(--pats-gold) !important;
   color: var(--pats-gold) !important;
 }
 
+
 .pats-portal .ops-btn-primary:hover {
   background: rgba(200, 168, 75, 0.15) !important;
   color: var(--pats-white) !important;
 }
 
-/* Participant layout */
-.pats-portal-layout {
-  display: grid;
-  gap: 2rem;
-}
 
-@media (min-width: 1024px) {
-  .pats-portal-layout {
-    grid-template-columns: 14rem minmax(0, 1fr);
-    align-items: start;
-  }
-}
 
-.pats-portal-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.pats-portal-nav a {
-  display: block;
-  padding: 0.65rem 0;
-  border-bottom: 1px solid var(--pats-border);
-  font-family: var(--font-barlow), system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.55);
-  transition: color 0.3s ease;
-}
-
-.pats-portal-nav a:hover,
-.pats-portal-nav a.is-active {
-  color: var(--pats-gold);
-}
-
-/* Log out — pinned below the nav links at the bottom of the sidebar */
-.pats-portal-nav-logout {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--pats-border);
-}
-
-.pats-portal-logout {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: none;
-  border: 0;
-  padding: 0.4rem 0;
-  cursor: pointer;
-  font-family: var(--font-barlow), system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  transition: color 0.3s ease;
-}
-
-.pats-portal-logout:hover {
-  color: var(--pats-gold);
-}
-
-/* Map legacy portal classes */
-.pats-portal .portal-h1,
 .pats-portal .portal-h2,
 .pats-portal .portal-section-title {
   font-family: var(--font-barlow), system-ui, sans-serif;
@@ -277,33 +201,32 @@
   color: var(--pats-white) !important;
 }
 
-.pats-portal .portal-h1 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-}
 
 .pats-portal .portal-body,
 .pats-portal .portal-muted {
   color: var(--pats-text-muted) !important;
 }
 
+
 .pats-portal .portal-link {
   color: var(--pats-gold) !important;
   text-decoration: none;
 }
 
+
 .pats-portal .portal-link:hover {
   color: var(--pats-white) !important;
 }
 
-.pats-portal .portal-card,
-.pats-portal .portal-card-accent-amber,
-.pats-portal .portal-card-accent-sky {
+
+.pats-portal .portal-card {
   background: var(--pats-bg-overlay) !important;
   border: 1px solid var(--pats-border) !important;
   box-shadow: none !important;
   color: var(--pats-text);
   padding: 1.25rem 1.5rem;
 }
+
 
 .pats-portal .portal-alert-warning {
   border: 1px solid rgba(200, 168, 75, 0.45);
@@ -312,58 +235,50 @@
   padding: 1rem 1.25rem;
 }
 
+
 .pats-portal .portal-alert-error {
   border: 1px solid rgba(220, 80, 70, 0.45);
   background: rgba(80, 20, 18, 0.25);
   color: var(--pats-text);
 }
 
-.pats-portal .portal-alert-success,
-.pats-portal .portal-journey-banner--approved {
+
+.pats-portal .portal-alert-success {
   border: 1px solid rgba(126, 201, 160, 0.45);
   background: rgba(30, 80, 55, 0.22);
   color: var(--pats-text);
   padding: 1rem 1.25rem;
 }
 
-.pats-portal .portal-journey-banner--confirmed {
-  border: 1px solid rgba(126, 201, 160, 0.55);
-  background: rgba(30, 80, 55, 0.28);
-  color: var(--pats-text);
-  padding: 1rem 1.25rem;
-}
-
-.pats-portal .portal-card-accent-amber .portal-subtitle {
-  color: var(--pats-gold);
-}
-
-.pats-portal .portal-card-accent-amber .portal-body {
-  color: var(--pats-text) !important;
-}
 
 .pats-portal .text-brand-ink,
 .pats-portal .text-brand-ink-muted {
   color: var(--pats-text) !important;
 }
 
+
 .pats-portal .border-brand-line {
   border-color: var(--pats-border) !important;
 }
+
 
 .pats-portal .text-red-700,
 .pats-portal .text-red-600 {
   color: #e88a7a !important;
 }
 
+
 .pats-portal .text-emerald-700 {
   color: #7ec9a0 !important;
 }
 
-/* Admin stat cards — base sizing; tonal backgrounds live in portal-design + globals */
+
+
 .admin-theme.pats-dashboard .portal-stat-card {
   border-radius: 14px;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
 }
+
 
 .admin-theme.pats-dashboard .portal-stat-label {
   font-size: 0.75rem;
@@ -371,28 +286,17 @@
   text-transform: uppercase;
 }
 
+
 .admin-theme.pats-dashboard .portal-stat-value {
   font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
   font-size: 2.125rem;
   font-weight: 700;
 }
 
+
 .admin-theme.pats-dashboard .admin-page-title {
   font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #1E293B;
-}
-
-/* Command banner + stats tray — see admin-day-theme.css */
-
-.admin-theme.pats-dashboard .admin-command-banner h1,
-.admin-theme.pats-dashboard .admin-command-banner p {
-  color: #1E293B;
-}
-
-.admin-theme.pats-dashboard .admin-table-wrap,
-.admin-theme.pats-dashboard .admin-users-table-wrap {
-  background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
 }

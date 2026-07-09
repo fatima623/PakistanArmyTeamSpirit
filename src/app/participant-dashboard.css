@@ -1,302 +1,6 @@
-/* Participant dashboard — layout and task cards */
 
-.participant-dashboard {
-  width: 100%;
-}
 
-/* Vertical rhythm between the welcome strip, an optional notice, and the grid. */
-.participant-dashboard > * + * {
-  margin-top: 1.25rem;
-}
 
-.participant-dashboard__layout {
-  display: grid;
-  gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .participant-dashboard__layout {
-    grid-template-columns: minmax(0, 1fr) 20rem;
-    align-items: start;
-  }
-}
-
-.participant-dashboard__main {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  min-width: 0;
-}
-
-/* Right rail — keeps the timeline, data periods and news beside the long left
-   column so the previously empty right side now carries real content. */
-.participant-dashboard__side {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  min-width: 0;
-}
-
-@media (min-width: 1024px) {
-  .participant-dashboard__side {
-    position: sticky;
-    top: 1.5rem;
-  }
-}
-
-/* Slightly tighter card padding on the dashboard for a sleeker, denser layout
-   (scoped so other portal pages keep their roomier default). */
-.participant-dashboard .portal-card,
-.participant-dashboard .pats-panel {
-  padding: 1.15rem 1.35rem;
-}
-
-.participant-dash-welcome {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
-  padding: 0.95rem 1.35rem;
-  border: 1px solid var(--portal-border-soft, #e2e8f0);
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-}
-
-.participant-dash-welcome__label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin-bottom: 0.35rem;
-}
-
-.participant-dash-welcome__name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #1e293b;
-  line-height: 1.3;
-}
-
-.participant-dash-welcome__meta {
-  font-size: 0.875rem;
-  color: #64748b;
-  margin-top: 0.25rem;
-}
-
-.participant-dash-welcome__chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #166534;
-  background: #dcfce7;
-  border: 1px solid #bbf7d0;
-  border-radius: 999px;
-}
-
-.participant-dash-welcome__chip--pending {
-  color: #b45309;
-  background: #fef3c7;
-  border-color: #fde68a;
-}
-
-/* Welcome strip right-hand controls: status chip + clickable team count. */
-.participant-dash-welcome__aside {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.participant-dash-welcome__team {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.7rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #e2e8f0;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.participant-dash-welcome__team:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.28);
-}
-
-html.light-theme .participant-portal .participant-dash-welcome__team,
-html[data-site-theme="day"] .participant-portal .participant-dash-welcome__team {
-  color: #334155;
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-}
-
-html.light-theme .participant-portal .participant-dash-welcome__team:hover,
-html[data-site-theme="day"] .participant-portal .participant-dash-welcome__team:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
-}
-
-/* ===================================================================
- * Dashboard status bar — compact application status + primary payment CTA
- * pinned to the top of the dashboard. Self-contained colours (night base +
- * day overrides) so it reads correctly in both themes without fighting the
- * portal's text catch-alls.
- * =================================================================== */
-.dashboard-status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.85rem 1.25rem;
-  padding: 1.05rem 1.3rem;
-  border: 1px solid var(--pats-border, rgba(255, 255, 255, 0.12));
-  border-left: 4px solid #f59e0b;
-  border-radius: 14px;
-  background: var(--pats-bg-overlay, #243f58);
-}
-
-.dashboard-status__main {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.85rem;
-  min-width: 0;
-}
-
-.dashboard-status__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 11px;
-  background: rgba(245, 158, 11, 0.16);
-  color: #fbbf24;
-}
-
-.dashboard-status__title {
-  font-size: 1rem !important;
-  font-weight: 700;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: #f8fafc;
-  font-family: var(--font-inter), system-ui, sans-serif !important;
-  text-transform: none !important;
-}
-
-.dashboard-status__text {
-  margin-top: 0.2rem;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: #cbd5e1;
-}
-
-.dashboard-status__meta {
-  margin-top: 0.35rem;
-  font-size: 0.72rem;
-  color: #94a3b8;
-}
-
-.dashboard-status__action,
-.dashboard-status__cta {
-  flex-shrink: 0;
-}
-
-.dashboard-status__verified {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-shrink: 0;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #34d399;
-}
-
-/* Accent per status variant (icon chip + left border). */
-.dashboard-status--approved,
-.dashboard-status--confirmed {
-  border-left-color: #16a34a;
-}
-
-.dashboard-status--approved .dashboard-status__icon,
-.dashboard-status--confirmed .dashboard-status__icon {
-  background: rgba(22, 163, 74, 0.16);
-  color: #4ade80;
-}
-
-/* ---- Day / light theme ---- */
-html.light-theme .participant-portal .dashboard-status,
-html[data-site-theme="day"] .participant-portal .dashboard-status {
-  background: #ffffff;
-  border-color: #e2e8f0;
-  border-left-color: #d97706;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-}
-
-html.light-theme .participant-portal .dashboard-status--approved,
-html.light-theme .participant-portal .dashboard-status--confirmed,
-html[data-site-theme="day"] .participant-portal .dashboard-status--approved,
-html[data-site-theme="day"] .participant-portal .dashboard-status--confirmed {
-  border-left-color: #16a34a;
-}
-
-html.light-theme .participant-portal .dashboard-status__icon,
-html[data-site-theme="day"] .participant-portal .dashboard-status__icon {
-  background: #fffbeb;
-  color: #b45309;
-}
-
-html.light-theme .participant-portal .dashboard-status--approved .dashboard-status__icon,
-html.light-theme .participant-portal .dashboard-status--confirmed .dashboard-status__icon,
-html[data-site-theme="day"] .participant-portal .dashboard-status--approved .dashboard-status__icon,
-html[data-site-theme="day"] .participant-portal .dashboard-status--confirmed .dashboard-status__icon {
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-html.light-theme .participant-portal.pats-portal .dashboard-status .dashboard-status__title,
-html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .dashboard-status__title {
-  color: #1e293b !important;
-}
-
-html.light-theme .participant-portal.pats-portal .dashboard-status .dashboard-status__text,
-html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .dashboard-status__text {
-  color: #64748b !important;
-}
-
-html.light-theme .participant-portal.pats-portal .dashboard-status .dashboard-status__meta,
-html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .dashboard-status__meta {
-  color: #94a3b8 !important;
-}
-
-html.light-theme .participant-portal.pats-portal .dashboard-status .dashboard-status__verified,
-html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .dashboard-status__verified {
-  color: #15803d !important;
-}
-
-.participant-dash-section-title {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin: 0 0 0.75rem;
-}
-
-/* Back-to-dashboard link (edit pages). Base colour suits the dark night portal;
-   participant-portal-day.css recolours it for light/day mode. */
 .portal-back-link {
   display: inline-flex;
   align-items: center;
@@ -309,335 +13,57 @@ html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .d
   transition: color 0.2s ease;
 }
 
+
 .portal-back-link:hover {
   color: var(--pats-white, #ffffff);
   text-decoration: underline;
 }
 
-/* ===================================================================
- * Participant portal sidebar. The dashboard is always a LIGHT surface, but the
- * base portal nav uses white text (meant for the dark night marketing portal),
- * which is invisible here. Force readable slate text for the eyebrow, links and
- * the logout button, regardless of the active site theme.
- * =================================================================== */
-.participant-portal .pats-portal-nav .pats-eyebrow {
-  color: #94a3b8 !important;
-}
 
-.participant-portal .pats-portal-nav a,
-.participant-portal .pats-portal-logout {
-  color: #475569 !important;
-  border-bottom-color: #e2e8f0;
-}
 
-.participant-portal .pats-portal-nav a:hover,
-.participant-portal .pats-portal-nav a.is-active,
-.participant-portal .pats-portal-logout:hover {
-  color: #2e7d32 !important;
-}
-
-.participant-portal .pats-portal-nav-logout {
-  border-top-color: #e2e8f0;
-}
-
-/* ===================================================================
- * Edit-form pages (unit info, privacy). `.portal-form-card` is always a
- * WHITE surface (it @applies `portal-card` → `bg-white`) in both day and
- * night themes. In night mode `.pats-portal` sets the inherited text colour
- * to white (--pats-text: #fff), so any control WITHOUT an explicit colour —
- * the Radix <Select> trigger value, plain radio labels, section headings and
- * `.text-brand-ink` values — renders white-on-white and disappears. Text
- * <Input>s carry their own dark colour, which is why only the dropdowns and
- * labels vanish. Force readable dark text on the white card for every theme.
- * =================================================================== */
 .participant-portal .portal-form-card {
   background: #ffffff;
   color: #334155;
 }
 
+
 .participant-portal .portal-form-card .portal-section-title {
   color: #1e293b !important;
 }
+
 
 .participant-portal .portal-form-card :is(label, .pats-form-label) {
   color: #334155 !important;
 }
 
+
 .participant-portal .portal-form-card .pats-form-hint {
   color: #64748b !important;
 }
+
 
 .participant-portal .portal-form-card .text-brand-ink {
   color: #1e293b !important;
 }
 
+
 .participant-portal .portal-form-card .portal-subtitle {
   color: #64748b !important;
 }
+
 
 .participant-portal .portal-form-card .portal-muted {
   color: #94a3b8 !important;
 }
 
-/* Radix <Select> trigger: a <button> whose value/placeholder text would
- * otherwise inherit the portal's white night colour. Pin it (and its inner
- * <span>) dark explicitly so the chosen value AND the placeholder are legible. */
+
+
 .participant-portal .portal-form-card [role="combobox"],
 .participant-portal .portal-form-card [role="combobox"] span {
   color: #1e293b !important;
 }
 
+
 .participant-portal .portal-form-card [role="combobox"] span[data-placeholder] {
   color: #94a3b8 !important;
-}
-
-.participant-dash-tasks {
-  padding: 1.25rem 1.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-}
-
-.participant-dash-tasks__intro {
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: #64748b;
-  margin: 0 0 1rem;
-}
-
-.participant-dash-tasks__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.participant-dash-task {
-  display: flex;
-  align-items: center;
-  gap: 0.875rem;
-  padding: 0.75rem 0.875rem;
-  border-radius: 10px;
-  border: 1px solid #f1f5f9;
-  background: #f8fafc;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.participant-dash-task:hover {
-  background: #f1f5f9;
-  border-color: #e2e8f0;
-}
-
-.participant-dash-task__icon {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-}
-
-.participant-dash-task__icon--done {
-  color: #15803d;
-  border-color: #bbf7d0;
-  background: #f0fdf4;
-}
-
-.participant-dash-task__icon--todo {
-  color: #dc2626;
-  border-color: #fecaca;
-  background: #fef2f2;
-}
-
-.participant-dash-task__label {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.participant-dash-task__label a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.participant-dash-task__label a:hover {
-  color: #2e7d32;
-}
-
-.participant-dash-task__hint {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: #94a3b8;
-}
-
-/* Full-row status colouring (replaces the per-item status boxes). */
-.participant-dash-task--done {
-  background: #f0fdf4 !important;
-  border-color: #86efac !important;
-}
-
-.participant-dash-task--done:hover {
-  background: #dcfce7 !important;
-}
-
-.participant-dash-task--todo {
-  background: #fef2f2 !important;
-  border-color: #fca5a5 !important;
-}
-
-.participant-dash-task--todo:hover {
-  background: #fee2e2 !important;
-}
-
-.participant-dash-task--done .participant-dash-task__label,
-.participant-dash-task--done .participant-dash-task__label a {
-  color: #14532d !important;
-}
-
-.participant-dash-task--todo .participant-dash-task__label,
-.participant-dash-task--todo .participant-dash-task__label a,
-.participant-dash-task--todo .participant-dash-task__hint {
-  color: #7f1d1d !important;
-}
-
-.participant-dashboard__news {
-  padding: 1.15rem 1.35rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-}
-
-/* Data entry periods — compact date/label rows for the right rail. */
-.participant-dashboard__dates {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-}
-
-.participant-dashboard__dates li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid #eef2f6;
-}
-
-.participant-dashboard__dates li:last-child {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
-.participant-dashboard__dates-date {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #1e293b;
-}
-
-.participant-dashboard__dates-label {
-  font-size: 0.8rem;
-  line-height: 1.4;
-  color: #64748b;
-}
-
-.participant-dashboard__news h3 {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin: 0 0 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.participant-dashboard__news ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.participant-dashboard__news a {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #1e293b;
-  text-decoration: none;
-}
-
-.participant-dashboard__news a:hover {
-  color: #2e7d32;
-}
-
-.participant-dashboard__news time,
-.participant-dashboard__news .participant-dashboard__news-date {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.75rem;
-  color: #94a3b8;
-}
-
-/* Dark portal (night theme) — same structure, tactical surfaces */
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dash-welcome,
-html[data-site-theme="night"] .participant-portal .participant-dash-welcome {
-  background: var(--pats-bg-overlay, #243f58);
-  border-color: var(--pats-border);
-  box-shadow: none;
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dash-welcome__name,
-html[data-site-theme="night"] .participant-portal .participant-dash-welcome__name {
-  color: var(--pats-white);
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dash-tasks,
-html[data-site-theme="night"] .participant-portal .participant-dash-tasks {
-  background: var(--pats-bg-overlay, #243f58);
-  border-color: var(--pats-border);
-  box-shadow: none;
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dash-task,
-html[data-site-theme="night"] .participant-portal .participant-dash-task {
-  background: rgba(0, 0, 0, 0.12);
-  border-color: var(--pats-border);
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dash-task__label,
-html[data-site-theme="night"] .participant-portal .participant-dash-task__label {
-  color: var(--pats-text);
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dashboard__news,
-html[data-site-theme="night"] .participant-portal .participant-dashboard__news {
-  background: var(--pats-bg-overlay, #243f58);
-  border-color: var(--pats-border);
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dashboard__dates li,
-html[data-site-theme="night"] .participant-portal .participant-dashboard__dates li {
-  border-bottom-color: var(--pats-border);
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dashboard__dates-date,
-html[data-site-theme="night"] .participant-portal .participant-dashboard__dates-date {
-  color: var(--pats-white);
-}
-
-html:not(.light-theme):not(.site-theme-day) .participant-portal .participant-dashboard__dates-label,
-html[data-site-theme="night"] .participant-portal .participant-dashboard__dates-label {
-  color: var(--pats-text-muted, #9aa6b2);
 }

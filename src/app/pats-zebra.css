@@ -1,15 +1,13 @@
-/**
- * Global zebra / alternating row colors.
- * Odd and even must contrast with each other and the section background.
- */
 
-/* —— Theme tokens —— */
+
+
 html:not(.light-theme):not([data-site-theme="day"])
   :is(.army-site:not(.dashboard-day), .cinematic-site.army-site):not(.admin-theme) {
   --pats-zebra-odd-bg: rgba(212, 175, 55, 0.07);
   --pats-zebra-even-bg: rgba(255, 255, 255, 0.04);
   --pats-zebra-row-border: rgba(255, 255, 255, 0.06);
 }
+
 
 html.light-theme :is(.army-site, .cinematic-site.army-site),
 html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
@@ -20,7 +18,8 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
   --pats-zebra-row-border: rgba(0, 0, 0, 0.07);
 }
 
-/* —— Shared row targets —— */
+
+
 :is(
     .pats-data-table__row,
     .pats-home-schedule__row,
@@ -34,6 +33,7 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
   background-color: var(--pats-zebra-odd-bg) !important;
 }
 
+
 :is(
     .pats-data-table__row,
     .pats-home-schedule__row,
@@ -46,6 +46,7 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
   ):nth-child(even) {
   background-color: var(--pats-zebra-even-bg) !important;
 }
+
 
 :is(
     .pats-data-table__row,
@@ -61,14 +62,7 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
   border-bottom-color: var(--pats-zebra-row-border) !important;
 }
 
-.pats-data-table__row,
-.cp-keydate-row,
-.tac-leaderboard-row {
+
+.pats-data-table__row {
   border-bottom: 1px solid var(--pats-zebra-row-border) !important;
 }
-
-.tac-admin-table td {
-  border-bottom: 1px solid var(--pats-zebra-row-border) !important;
-}
-
-/* Admin table zebra + hover — admin-day-theme.css only */

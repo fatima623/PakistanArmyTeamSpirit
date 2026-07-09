@@ -1,6 +1,4 @@
-/**
- * Admin console — modern CRM / SaaS light theme (all /admin pages).
- */
+
 
 .admin-theme,
 .admin-theme.pats-dashboard {
@@ -12,7 +10,7 @@
   --admin-heading: #0f172a;
   --admin-body: #0f172a;
   --admin-muted: #0f172a;
-  /* Military command palette — deep forest green primary, emerald accent, gold highlight */
+  
   --admin-accent: #3d5230;
   --admin-accent-strong: #2f4025;
   --admin-accent-light: #4d6340;
@@ -36,15 +34,18 @@
   color: var(--admin-body) !important;
 }
 
+
 .admin-theme.pats-dashboard {
   min-height: 100vh;
 }
 
-/* —— Shell layout (fixed sidebar + header) —— */
+
+
 .admin-theme .admin-layout {
   min-height: 100vh;
   background: var(--admin-bg-gradient) !important;
 }
+
 
 .admin-theme .admin-layout-sidebar {
   position: fixed;
@@ -57,15 +58,18 @@
   transition: transform 0.2s ease;
 }
 
+
 @media (min-width: 1024px) {
   .admin-theme .admin-layout-sidebar {
     transform: translateX(0);
   }
 }
 
+
 .admin-theme .admin-layout-sidebar--open {
   transform: translateX(0);
 }
+
 
 .admin-theme .admin-layout-backdrop {
   position: fixed;
@@ -76,6 +80,7 @@
   cursor: pointer;
 }
 
+
 .admin-theme .admin-layout-main {
   display: flex;
   min-height: 100vh;
@@ -85,11 +90,13 @@
   background: var(--admin-bg-gradient) !important;
 }
 
+
 @media (min-width: 1024px) {
   .admin-theme .admin-layout-main {
     margin-left: var(--admin-sidebar-width);
   }
 }
+
 
 .admin-theme .admin-layout-content {
   flex: 1 1 auto;
@@ -99,19 +106,18 @@
   background: var(--admin-bg-gradient) !important;
 }
 
-.admin-theme.pats-dashboard .admin-dashboard__photo28 {
-  display: none !important;
-}
 
 .admin-theme .admin-page-content {
   padding: 24px !important;
 }
 
+
 .admin-theme .admin-layout .admin-sidebar {
   height: 100vh;
 }
 
-/* —— Sidebar 220px (light, black text) —— */
+
+
 .admin-theme .admin-sidebar {
   width: var(--admin-sidebar-width) !important;
   min-width: var(--admin-sidebar-width) !important;
@@ -121,11 +127,13 @@
   box-shadow: 2px 0 12px rgba(15, 23, 42, 0.06) !important;
 }
 
+
 .admin-theme .admin-sidebar-brand {
   background: transparent !important;
   border-bottom: 1px solid var(--admin-border) !important;
   padding: 18px 16px 16px !important;
 }
+
 
 .admin-theme .admin-sidebar-brand-link {
   display: flex !important;
@@ -135,7 +143,8 @@
   text-decoration: none !important;
 }
 
-/* Clean circular logo — no square border, subtle shadow, elegant hover */
+
+
 .admin-theme .admin-sidebar-brand-mark {
   display: flex;
   align-items: center;
@@ -154,6 +163,7 @@
     box-shadow 0.2s ease;
 }
 
+
 .admin-theme .admin-sidebar-brand-link:hover .admin-sidebar-brand-mark {
   transform: translateY(-1px);
   box-shadow:
@@ -161,16 +171,19 @@
     0 0 0 1px rgba(47, 64, 37, 0.1);
 }
 
+
 .admin-theme .admin-sidebar-brand-logo {
   width: 30px !important;
   height: auto !important;
   border-radius: 50%;
 }
 
+
 .admin-theme .admin-sidebar-brand-text {
   min-width: 0;
   line-height: 1.2;
 }
+
 
 .admin-theme .admin-sidebar-brand-title {
   font-size: 17px !important;
@@ -179,6 +192,7 @@
   letter-spacing: 0.02em !important;
   line-height: 1.15 !important;
 }
+
 
 .admin-theme .admin-sidebar-brand-subtitle {
   margin-top: 1px;
@@ -190,27 +204,32 @@
   line-height: 1.3 !important;
 }
 
+
 .admin-theme .admin-sidebar-nav {
   padding: 6px 0 !important;
   overflow-y: auto;
   scrollbar-width: none;
 }
 
+
 .admin-theme .admin-sidebar-nav::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-/* Tighten group spacing so the full nav fits without a scrollbar */
+
+
 .admin-theme .admin-sidebar-group-label {
   padding-top: 12px !important;
   padding-bottom: 2px !important;
   color: #94a3b8 !important;
 }
 
+
 .admin-theme .admin-sidebar-group:first-child .admin-sidebar-group-label {
   padding-top: 6px !important;
 }
+
 
 .admin-theme .admin-sidebar-link {
   position: relative;
@@ -228,18 +247,21 @@
     transform 0.18s ease;
 }
 
+
 .admin-theme .admin-sidebar-link:hover {
   background: #f1f5f0 !important;
   color: var(--admin-accent-strong) !important;
   transform: translateX(2px);
 }
 
-/* Left-side accent indicator for the active page */
+
+
 .admin-theme .admin-sidebar-link[data-active="true"] {
   background: var(--admin-accent-soft) !important;
   color: var(--admin-accent-strong) !important;
   font-weight: 650 !important;
 }
+
 
 .admin-theme .admin-sidebar-link[data-active="true"]::before {
   content: "";
@@ -253,6 +275,7 @@
   background: linear-gradient(180deg, var(--admin-accent-light), var(--admin-accent-strong));
 }
 
+
 .admin-theme .admin-sidebar-link-icon {
   width: 1.1rem !important;
   height: 1.1rem !important;
@@ -261,15 +284,18 @@
   transition: color 0.18s ease;
 }
 
+
 .admin-theme .admin-sidebar-link:hover .admin-sidebar-link-icon {
   color: var(--admin-accent) !important;
 }
+
 
 .admin-theme .admin-sidebar-link[data-active="true"] .admin-sidebar-link-icon {
   color: var(--admin-accent) !important;
 }
 
-/* Nav count chips echo the accent */
+
+
 .admin-theme .admin-sidebar-count {
   margin-left: auto;
   min-width: 20px;
@@ -283,10 +309,12 @@
   line-height: 1.5;
 }
 
+
 .admin-theme .admin-sidebar-link[data-active="true"] .admin-sidebar-count {
   background: var(--admin-accent);
   color: #ffffff;
 }
+
 
 .admin-theme .admin-sidebar-footer--logout {
   margin-top: auto !important;
@@ -295,12 +323,14 @@
   padding: 10px 10px 14px !important;
 }
 
+
 .admin-theme .admin-sidebar-footer-form {
   margin: 0;
   padding: 0;
   border: none !important;
   background: transparent !important;
 }
+
 
 .admin-theme .admin-sidebar-logout {
   display: flex !important;
@@ -320,16 +350,19 @@
   transition: background 0.15s ease, color 0.15s ease;
 }
 
+
 .admin-theme .admin-sidebar-logout .admin-sidebar-link-icon {
   color: #f87171 !important;
 }
+
 
 .admin-theme .admin-sidebar-logout:hover {
   background: rgba(248, 113, 113, 0.1) !important;
   color: #fca5a5 !important;
 }
 
-/* —— Header 64px (premium) —— */
+
+
 .admin-theme .admin-header-bar,
 .admin-theme .admin-layout-header {
   position: sticky;
@@ -345,6 +378,7 @@
     0 4px 16px rgba(0, 0, 0, 0.04) !important;
 }
 
+
 .admin-theme .admin-header-bar .admin-heading {
   font-size: 20px !important;
   font-weight: 700 !important;
@@ -352,60 +386,8 @@
   letter-spacing: -0.02em !important;
 }
 
-/* Breadcrumb */
-.admin-theme .admin-header-crumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #94a3b8;
-  margin-bottom: 1px;
-}
 
-.admin-theme .admin-header-crumb-home {
-  color: #94a3b8;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
 
-.admin-theme .admin-header-crumb-home:hover {
-  color: var(--admin-accent);
-}
-
-.admin-theme .admin-header-crumb-sep {
-  color: #cbd5e1;
-}
-
-.admin-theme .admin-header-crumb-current {
-  color: #475569;
-  font-weight: 600;
-}
-
-/* Mobile menu toggle */
-.admin-theme .admin-header-menu-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 10px;
-  color: var(--admin-accent-strong);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.admin-theme .admin-header-menu-btn:hover {
-  background: var(--admin-accent-soft);
-}
-
-.admin-theme .admin-header-menu-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--admin-accent-ring);
-}
-
-/* Header icon buttons (notifications, settings) */
 .admin-theme .admin-header-iconbtn {
   position: relative;
   display: inline-flex;
@@ -425,6 +407,7 @@
     transform 0.15s ease;
 }
 
+
 .admin-theme .admin-header-iconbtn:hover {
   background: var(--admin-accent-soft);
   border-color: rgba(61, 82, 48, 0.28);
@@ -432,10 +415,12 @@
   transform: translateY(-1px);
 }
 
+
 .admin-theme .admin-header-iconbtn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--admin-accent-ring);
 }
+
 
 .admin-theme .admin-header-iconbtn-dot {
   position: absolute;
@@ -448,12 +433,14 @@
   box-shadow: 0 0 0 2px #ffffff;
 }
 
+
 .admin-theme .admin-header-divider {
   width: 1px;
   height: 24px;
   background: var(--admin-border);
   margin: 0 4px;
 }
+
 
 .admin-theme .admin-user-trigger {
   display: inline-flex !important;
@@ -470,16 +457,19 @@
     box-shadow 0.15s ease;
 }
 
+
 .admin-theme .admin-user-trigger:hover {
   background: #f8fafc !important;
   border-color: #cbd5e1 !important;
 }
+
 
 .admin-theme .admin-user-trigger[data-open="true"] {
   border-color: rgba(61, 82, 48, 0.35) !important;
   background: #f8fafc !important;
   box-shadow: 0 0 0 3px var(--admin-accent-ring) !important;
 }
+
 
 .admin-theme .admin-user-avatar {
   width: 32px !important;
@@ -492,6 +482,7 @@
   box-shadow: 0 2px 6px rgba(47, 64, 37, 0.3);
 }
 
+
 .admin-theme .admin-user-trigger-text {
   display: flex;
   flex-direction: column;
@@ -501,6 +492,7 @@
   min-width: 0;
 }
 
+
 .admin-theme .admin-user-trigger-name-row {
   display: flex;
   flex-wrap: wrap;
@@ -508,6 +500,7 @@
   gap: 6px;
   max-width: 200px;
 }
+
 
 .admin-theme .admin-user-trigger-name {
   font-size: 13px !important;
@@ -519,6 +512,7 @@
   text-overflow: ellipsis;
   max-width: 140px;
 }
+
 
 .admin-theme .admin-user-role-badge {
   display: inline-block;
@@ -534,6 +528,7 @@
   text-transform: uppercase;
 }
 
+
 .admin-theme .admin-dropdown-panel {
   border: 1px solid var(--admin-border) !important;
   border-radius: 12px !important;
@@ -541,27 +536,18 @@
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* —— Cards & surfaces —— */
+
+
 .admin-theme .admin-surface,
 .admin-theme .admin-data-table-shell,
-.admin-theme .admin-users-panel,
-.admin-theme .admin-table-wrap,
-.admin-theme .admin-users-table-wrap,
 .admin-theme .admin-settings-card,
-.admin-theme .admin-settings-footer,
-.admin-theme .portal-card,
-.admin-theme .admin-dashboard-recent-shell,
-.admin-theme .admin-dashboard-pending-shell,
-.admin-theme .admin-dashboard-lower > .admin-surface {
+.admin-theme .portal-card {
   background: #ffffff !important;
   border: 1px solid var(--admin-border) !important;
   border-radius: 16px !important;
   box-shadow: var(--admin-shadow-card) !important;
 }
 
-.admin-theme .admin-command-banner {
-  display: none !important;
-}
 
 .admin-theme .portal-stat-card {
   border: none !important;
@@ -572,58 +558,12 @@
   transition: box-shadow 0.2s ease !important;
 }
 
+
 .admin-theme .portal-stat-card:hover {
   transform: none !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
 }
 
-.admin-theme .portal-stat-card--rose {
-  background: #fff0f0 !important;
-}
-
-.admin-theme .portal-stat-card--mint {
-  background: #f0fff4 !important;
-}
-
-.admin-theme .portal-stat-card--amber {
-  background: #fffbf0 !important;
-}
-
-.admin-theme .portal-stat-card--violet {
-  background: #f5f0ff !important;
-}
-
-.admin-theme .portal-stat-card--rose .portal-stat-label {
-  color: #be123c !important;
-}
-
-.admin-theme .portal-stat-card--rose .portal-stat-value {
-  color: #9f1239 !important;
-}
-
-.admin-theme .portal-stat-card--mint .portal-stat-label {
-  color: #15803d !important;
-}
-
-.admin-theme .portal-stat-card--mint .portal-stat-value {
-  color: #166534 !important;
-}
-
-.admin-theme .portal-stat-card--amber .portal-stat-label {
-  color: #b45309 !important;
-}
-
-.admin-theme .portal-stat-card--amber .portal-stat-value {
-  color: #92400e !important;
-}
-
-.admin-theme .portal-stat-card--violet .portal-stat-label {
-  color: #7c3aed !important;
-}
-
-.admin-theme .portal-stat-card--violet .portal-stat-value {
-  color: #5b21b6 !important;
-}
 
 .admin-theme .portal-stat-icon-wrap {
   background: #ffffff !important;
@@ -633,35 +573,6 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* —— Dashboard panels —— */
-.admin-theme .admin-dashboard-split {
-  display: grid;
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
-@media (min-width: 1280px) {
-  .admin-theme .admin-dashboard-split {
-    grid-template-columns: 1.4fr 1fr;
-  }
-}
-
-.admin-theme .admin-dashboard-recent-header,
-.admin-theme .admin-dashboard-pending-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 20px 20px 16px !important;
-  background: transparent !important;
-  border-bottom: 1px solid #f0f0f0 !important;
-}
-
-.admin-theme .admin-dashboard-recent-header .admin-heading,
-.admin-theme .admin-dashboard-pending-header .admin-heading {
-  font-size: 16px !important;
-  font-weight: 700 !important;
-}
 
 .admin-theme .admin-link {
   color: var(--admin-link) !important;
@@ -669,13 +580,11 @@
   text-decoration: none !important;
 }
 
+
 .admin-theme .admin-link:hover {
   text-decoration: underline !important;
 }
 
-.admin-theme .admin-dashboard-recent-table-wrap {
-  padding: 0 8px 8px;
-}
 
 .admin-theme .admin-dashboard-recent-table thead th {
   background: #fafafa !important;
@@ -688,17 +597,20 @@
   padding: 12px 16px !important;
 }
 
+
 .admin-theme .admin-dashboard-recent-table tbody td {
   padding: 14px 16px !important;
   font-size: 14px !important;
   vertical-align: middle !important;
 }
 
+
 .admin-theme .admin-dashboard-recent-table tbody tr {
   border-top: none !important;
 }
 
-/* Admin-only zebra (CRM: white / #f9f9f9) — not public-site #eef2e8 */
+
+
 .admin-theme
   :is(
     .admin-data-table,
@@ -717,6 +629,7 @@
   background: #ffffff !important;
 }
 
+
 .admin-theme
   :is(
     .admin-data-table,
@@ -734,6 +647,7 @@
   tr:nth-child(even) {
   background: #f9f9f9 !important;
 }
+
 
 .admin-theme
   :is(
@@ -754,59 +668,15 @@
   background: #f3f4f6 !important;
 }
 
-.admin-theme .admin-dashboard-pending-list {
-  padding: 4px 0 8px;
-}
-
-.admin-theme .admin-dashboard-pending-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 0 !important;
-  border-bottom: 1px solid #f1f5f9 !important;
-  border-radius: 0 !important;
-}
-
-.admin-theme .admin-dashboard-pending-item:last-child {
-  border-bottom: none !important;
-  padding-bottom: 0 !important;
-}
-
-.admin-theme .admin-dashboard-pending-item:hover {
-  background: transparent !important;
-}
-
-.admin-theme .admin-pending-details {
-  min-width: 0;
-}
-
-.admin-theme .admin-dashboard-pending-review {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 4px;
-  color: var(--admin-accent);
-  font-weight: 600;
-  font-size: 13px;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: gap 0.15s ease, color 0.15s ease;
-}
-
-.admin-theme .admin-dashboard-pending-review:hover {
-  gap: 7px;
-  color: var(--admin-accent-strong);
-}
 
 
-/* —— Status pills —— */
+
 .admin-theme .ops-status-pill.ops-status-pending {
   background: #fef3c7 !important;
   color: #b45309 !important;
   border: none !important;
 }
+
 
 .admin-theme .ops-status-pill.ops-status-approved {
   background: #dcfce7 !important;
@@ -814,21 +684,17 @@
   border: none !important;
 }
 
+
 .admin-theme .ops-status-pill.ops-status-rejected {
   background: #fee2e2 !important;
   color: #b91c1c !important;
   border: none !important;
 }
 
-/* —— Tables (all admin pages) —— */
+
+
 .admin-theme .admin-data-table thead th,
-.admin-theme .admin-users-table thead th,
-.admin-theme .admin-payments-table thead th,
-.admin-theme .admin-table-head th,
-.admin-theme .admin-key-dates-table thead th,
-.admin-theme .admin-news-table thead th,
-.admin-theme .admin-ticker-table thead th,
-.admin-theme .admin-units-table thead th {
+.admin-theme .admin-table-head th {
   background: #fafafa !important;
   color: #0f172a !important;
   font-size: 0.8125rem !important;
@@ -839,7 +705,8 @@
   border-bottom: 1px solid var(--admin-border) !important;
 }
 
-/* —— Typography —— */
+
+
 .admin-theme .admin-heading,
 .admin-theme .admin-page-title,
 .admin-theme h1,
@@ -848,16 +715,19 @@
   color: var(--admin-heading) !important;
 }
 
+
 .admin-theme .text-brand-ink {
   color: var(--admin-heading) !important;
 }
+
 
 .admin-theme .text-brand-ink-muted,
 .admin-theme .admin-muted {
   color: var(--admin-muted) !important;
 }
 
-/* No grey utility text in admin — use near-black */
+
+
 .admin-theme :is(
   .text-gray-400,
   .text-gray-500,
@@ -870,6 +740,7 @@
   color: #0f172a !important;
 }
 
+
 .admin-theme :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]) {
   background: #ffffff !important;
   border-color: var(--admin-border) !important;
@@ -877,30 +748,14 @@
   border-radius: 8px !important;
 }
 
+
 .admin-theme :is(input, textarea, select):focus-visible {
   border-color: #c4c4c4 !important;
   outline-color: rgba(184, 150, 12, 0.35);
 }
 
-/* Remove military / parchment overrides on sub-pages */
-.admin-theme .admin-dashboard-stats {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
 
-.admin-theme .admin-dashboard-recent-shell,
-.admin-theme .admin-dashboard-pending-shell {
-  border-top: none !important;
-}
 
-.admin-theme .admin-dashboard-lower > .admin-surface:first-child,
-.admin-theme .admin-dashboard-lower > .admin-surface:last-child {
-  border-top: none !important;
-}
-
-/* —— CRM dashboard stat cards —— */
 .admin-theme .admin-crm-stats {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -908,17 +763,20 @@
   margin-bottom: 24px;
 }
 
+
 @media (min-width: 640px) {
   .admin-theme .admin-crm-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
+
 @media (min-width: 1024px) {
   .admin-theme .admin-crm-stats {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
 
 .admin-theme .admin-stat-card {
   display: flex;
@@ -934,14 +792,11 @@
     box-shadow 0.2s ease;
 }
 
+
 .admin-theme .admin-stat-card:hover {
   transform: translateY(-2px);
 }
 
-.admin-theme .admin-stat-card-body {
-  min-width: 0;
-  flex: 1 1 auto;
-}
 
 .admin-theme .admin-stat-card-label {
   margin: 0 0 6px;
@@ -952,6 +807,7 @@
   opacity: 0.9;
 }
 
+
 .admin-theme .admin-stat-card-value {
   margin: 0;
   font-size: 32px;
@@ -960,6 +816,7 @@
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
+
 
 .admin-theme .admin-stat-card-icon {
   display: flex;
@@ -972,83 +829,105 @@
   color: #ffffff;
 }
 
+
 .admin-theme .admin-stat-card-icon svg {
   color: #ffffff !important;
 }
+
 
 .admin-theme .admin-stat-card--rose {
   background: linear-gradient(135deg, #f5f8f2 0%, #e9f0e3 100%);
   border: 1px solid #d5e1cc;
   box-shadow: 0 4px 20px rgba(61, 82, 48, 0.12);
 }
+
 .admin-theme .admin-stat-card--rose:hover {
   box-shadow: 0 10px 28px rgba(61, 82, 48, 0.2);
 }
+
 .admin-theme .admin-stat-card--rose .admin-stat-card-label {
   color: #3d5230;
 }
+
 .admin-theme .admin-stat-card--rose .admin-stat-card-value {
   color: #1c2119;
 }
+
 .admin-theme .admin-stat-card-icon--rose {
   background: linear-gradient(135deg, #4d6340, #2f4025);
 }
+
 
 .admin-theme .admin-stat-card--mint {
   background: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
   border: 1px solid #bbf7d0;
   box-shadow: 0 4px 20px rgba(22, 163, 74, 0.15);
 }
+
 .admin-theme .admin-stat-card--mint:hover {
   box-shadow: 0 8px 28px rgba(22, 163, 74, 0.22);
 }
+
 .admin-theme .admin-stat-card--mint .admin-stat-card-label {
   color: #16a34a;
 }
+
 .admin-theme .admin-stat-card--mint .admin-stat-card-value {
   color: #0f172a;
 }
+
 .admin-theme .admin-stat-card-icon--mint {
   background: linear-gradient(135deg, #22c55e, #16a34a);
 }
+
 
 .admin-theme .admin-stat-card--amber {
   background: linear-gradient(135deg, #fdfaef 0%, #f7efd6 100%);
   border: 1px solid #ecdca6;
   box-shadow: 0 4px 20px rgba(184, 148, 31, 0.14);
 }
+
 .admin-theme .admin-stat-card--amber:hover {
   box-shadow: 0 10px 28px rgba(184, 148, 31, 0.22);
 }
+
 .admin-theme .admin-stat-card--amber .admin-stat-card-label {
   color: #9a7a14;
 }
+
 .admin-theme .admin-stat-card--amber .admin-stat-card-value {
   color: #1c2119;
 }
+
 .admin-theme .admin-stat-card-icon--amber {
   background: linear-gradient(135deg, #d4b24a, #b8941f);
 }
+
 
 .admin-theme .admin-stat-card--violet {
   background: linear-gradient(135deg, #f3f6f9 0%, #e5edf4 100%);
   border: 1px solid #cedbe8;
   box-shadow: 0 4px 20px rgba(51, 78, 104, 0.13);
 }
+
 .admin-theme .admin-stat-card--violet:hover {
   box-shadow: 0 10px 28px rgba(51, 78, 104, 0.2);
 }
+
 .admin-theme .admin-stat-card--violet .admin-stat-card-label {
   color: #3f5a74;
 }
+
 .admin-theme .admin-stat-card--violet .admin-stat-card-value {
   color: #1c2119;
 }
+
 .admin-theme .admin-stat-card-icon--violet {
   background: linear-gradient(135deg, #4f7096, #33506a);
 }
 
-/* —— CRM chart + table cards —— */
+
+
 .admin-theme .admin-crm-charts-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -1056,27 +935,18 @@
   margin-bottom: 16px;
 }
 
+
 @media (min-width: 768px) {
   .admin-theme .admin-crm-charts-row {
     grid-template-columns: 3fr 2fr;
   }
 }
 
+
 .admin-theme .admin-crm-card--chart {
   overflow: hidden;
 }
 
-.admin-theme .admin-crm-tables-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media (min-width: 1024px) {
-  .admin-theme .admin-crm-tables-row {
-    grid-template-columns: 3fr 2fr;
-  }
-}
 
 .admin-theme .admin-crm-card {
   background: #ffffff;
@@ -1088,6 +958,7 @@
   border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
+
 .admin-theme .admin-crm-card-header {
   display: flex;
   align-items: center;
@@ -1096,10 +967,6 @@
   margin-bottom: 12px;
 }
 
-.admin-theme .admin-crm-card-header--stack {
-  flex-direction: column;
-  align-items: flex-start;
-}
 
 .admin-theme .admin-crm-card-title {
   margin: 0;
@@ -1109,15 +976,11 @@
   letter-spacing: -0.01em;
 }
 
+
 .admin-theme .admin-crm-card-title--solo {
   margin-bottom: 16px;
 }
 
-.admin-theme .admin-crm-card-subtitle {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: #0f172a;
-}
 
 .admin-theme .admin-crm-view-all {
   font-size: 14px;
@@ -1126,9 +989,11 @@
   text-decoration: none;
 }
 
+
 .admin-theme .admin-crm-view-all:hover {
   text-decoration: underline;
 }
+
 
 .admin-theme .admin-crm-range-toggle {
   display: inline-flex;
@@ -1137,6 +1002,7 @@
   border-radius: 10px;
   background: #f1f5f9;
 }
+
 
 .admin-theme .admin-crm-range-btn {
   border: none;
@@ -1153,11 +1019,13 @@
     box-shadow 0.15s ease;
 }
 
+
 .admin-theme .admin-crm-range-btn--active {
   background: var(--admin-accent);
   color: #ffffff;
   box-shadow: 0 2px 8px rgba(61, 82, 48, 0.35);
 }
+
 
 .admin-theme .admin-crm-chart-wrap {
   width: 100%;
@@ -1168,10 +1036,12 @@
   transition: opacity 0.2s ease;
 }
 
+
 .admin-theme .admin-crm-chart-wrap--loading {
   opacity: 0.45;
   pointer-events: none;
 }
+
 
 .admin-theme .admin-crm-chart-placeholder {
   height: 180px;
@@ -1182,12 +1052,14 @@
   animation: admin-crm-shimmer 1.2s ease-in-out infinite;
 }
 
+
 .admin-theme .admin-crm-chart-placeholder--donut {
   height: 180px;
   max-height: 180px;
   max-width: 180px;
   margin-inline: auto;
 }
+
 
 .admin-theme .admin-crm-card--chart .admin-crm-pipeline {
   display: flex;
@@ -1201,6 +1073,7 @@
   overflow: hidden;
 }
 
+
 .admin-theme .admin-crm-pipeline-chart {
   position: relative;
   flex: 0 0 auto;
@@ -1209,6 +1082,7 @@
   max-height: 180px;
   min-height: 0;
 }
+
 
 .admin-theme .admin-crm-pipeline-center {
   position: absolute;
@@ -1220,6 +1094,7 @@
   pointer-events: none;
 }
 
+
 .admin-theme .admin-crm-pipeline-total {
   font-size: 22px;
   font-weight: 700;
@@ -1227,11 +1102,13 @@
   line-height: 1;
 }
 
+
 .admin-theme .admin-crm-pipeline-total-label {
   font-size: 12px;
   color: #0f172a;
   font-weight: 600;
 }
+
 
 .admin-theme .admin-crm-pipeline-legend {
   list-style: none;
@@ -1243,12 +1120,14 @@
   min-width: 160px;
 }
 
+
 .admin-theme .admin-crm-pipeline-legend li {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
 }
+
 
 .admin-theme .admin-crm-pipeline-swatch {
   width: 10px;
@@ -1257,20 +1136,24 @@
   flex-shrink: 0;
 }
 
+
 .admin-theme .admin-crm-pipeline-legend-label {
   flex: 1 1 auto;
   color: #0f172a;
 }
+
 
 .admin-theme .admin-crm-pipeline-legend-count {
   font-weight: 700;
   color: #1a202c;
 }
 
+
 .admin-theme .admin-crm-table-wrap {
   margin: 0 -8px -8px;
   overflow-x: auto;
 }
+
 
 .admin-theme .admin-crm-empty {
   display: flex;
@@ -1284,6 +1167,7 @@
   color: #0f172a;
   font-size: 14px;
 }
+
 
 .admin-theme .admin-crm-retry-btn {
   display: inline-flex;
@@ -1299,9 +1183,11 @@
   cursor: pointer;
 }
 
+
 .admin-theme .admin-crm-retry-btn:hover {
   background: #f8fafc;
 }
+
 
 .admin-theme .admin-crm-skeleton {
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
@@ -1309,6 +1195,7 @@
   animation: admin-crm-shimmer 1.2s ease-in-out infinite;
   border-radius: 6px;
 }
+
 
 @keyframes admin-crm-shimmer {
   0% {
@@ -1319,24 +1206,7 @@
   }
 }
 
-.admin-theme .admin-pending-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #0f172a;
-  margin: 0 0 4px;
-  line-height: 1.3;
-  word-break: break-word;
-}
 
-.admin-theme .admin-pending-meta {
-  font-size: 12px;
-  color: #0f172a;
-  margin: 0;
-  line-height: 1.4;
-  word-break: break-all;
-}
-
-/* CRM table header + zebra */
 .admin-theme .admin-dashboard-recent-table thead th {
   background: #f8fafc !important;
   color: #0f172a !important;
@@ -1347,14 +1217,17 @@
   text-transform: uppercase !important;
 }
 
+
 .admin-theme .admin-dashboard-recent-table tbody tr {
   border-bottom: 1px solid #f1f5f9 !important;
   transition: background 0.2s ease;
 }
 
+
 .admin-theme .admin-dashboard-recent-table tbody tr:hover {
   background: #f8faff !important;
 }
+
 
 .admin-theme
   .admin-dashboard-recent-table
@@ -1363,6 +1236,7 @@
   background: #f9fafb !important;
 }
 
+
 .admin-theme
   .admin-dashboard-recent-table
   tbody
@@ -1370,9 +1244,11 @@
   background: #f8faff !important;
 }
 
+
 .admin-theme .admin-dashboard-recent-table tbody td {
   padding: 14px 16px !important;
 }
+
 
 .admin-theme .admin-dashboard-recent-table tbody td.font-semibold,
 .admin-theme .admin-dashboard-recent-table tbody td:first-child {
@@ -1380,12 +1256,14 @@
   color: #0f172a !important;
 }
 
+
 .admin-theme .admin-dashboard-recent-table tbody .text-brand-ink-muted {
   color: #0f172a !important;
   font-size: 14px !important;
 }
 
-/* CRM status pills (glowing) */
+
+
 .admin-theme .ops-status-pill.ops-status-approved {
   background: #dcfce7 !important;
   color: #16a34a !important;
@@ -1396,6 +1274,7 @@
   font-size: 12px !important;
   font-weight: 700 !important;
 }
+
 
 .admin-theme .ops-status-pill.ops-status-pending,
 .admin-theme .ops-status-pill.ops-status-review {
@@ -1409,6 +1288,7 @@
   font-weight: 700 !important;
 }
 
+
 .admin-theme .ops-status-pill.ops-status-rejected {
   background: #fee2e2 !important;
   color: #dc2626 !important;
@@ -1420,6 +1300,7 @@
   font-weight: 700 !important;
 }
 
+
 .admin-theme .ops-status-pill.ops-status-neutral {
   background: #f1f5f9 !important;
   color: #0f172a !important;
@@ -1430,65 +1311,8 @@
   font-weight: 700 !important;
 }
 
-/* Approve / reject — balanced outline buttons */
-.admin-theme .admin-dashboard-pending-actions .admin-approve-btn,
-.admin-theme .admin-dashboard-pending-actions .admin-reject-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  min-width: 0 !important;
-  height: 36px !important;
-  min-height: 36px !important;
-  padding: 0 12px !important;
-  border-radius: 8px !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  line-height: 1 !important;
-  white-space: nowrap !important;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease !important;
-}
 
-.admin-theme .admin-dashboard-pending-actions .admin-approve-btn {
-  border: 1px solid #86efac !important;
-  background: #ffffff !important;
-  color: #16a34a !important;
-  box-shadow: none !important;
-}
 
-.admin-theme .admin-dashboard-pending-actions .admin-approve-btn:hover:not(:disabled) {
-  background: #f0fdf4 !important;
-  border-color: #22c55e !important;
-  color: #15803d !important;
-  transform: none;
-}
-
-.admin-theme .admin-dashboard-pending-actions .admin-approve-btn:disabled {
-  opacity: 0.65;
-  background: #f0fdf4 !important;
-}
-
-.admin-theme .admin-dashboard-pending-actions .admin-reject-btn {
-  border: 1px solid #fca5a5 !important;
-  background: #ffffff !important;
-  color: #dc2626 !important;
-}
-
-.admin-theme .admin-dashboard-pending-actions .admin-reject-btn:hover:not(:disabled) {
-  background: #fef2f2 !important;
-  border-color: #f87171 !important;
-  color: #b91c1c !important;
-  transform: none;
-}
-
-.admin-theme .admin-dashboard-pending-actions .admin-reject-btn:disabled {
-  opacity: 0.65;
-}
-
-/* —— Micro animations —— */
 @keyframes admin-fade-in-up {
   from {
     opacity: 0;
@@ -1505,44 +1329,48 @@
   animation: admin-fade-in-up 0.4s ease forwards;
 }
 
+
 .admin-theme .admin-stat-card--delay-0,
 .admin-theme .admin-fade-in-up--delay-0 {
   animation-delay: 0s;
 }
+
 
 .admin-theme .admin-stat-card--delay-1,
 .admin-theme .admin-fade-in-up--delay-1 {
   animation-delay: 0.1s;
 }
 
+
 .admin-theme .admin-stat-card--delay-2,
 .admin-theme .admin-fade-in-up--delay-2 {
   animation-delay: 0.2s;
 }
+
 
 .admin-theme .admin-stat-card--delay-3,
 .admin-theme .admin-fade-in-up--delay-3 {
   animation-delay: 0.3s;
 }
 
+
 .admin-theme .admin-fade-in-up--delay-4 {
   animation-delay: 0.4s;
 }
+
 
 .admin-theme .admin-fade-in-up--delay-5 {
   animation-delay: 0.5s;
 }
 
+
 .admin-theme .admin-fade-in-up--delay-6 {
   animation-delay: 0.55s;
 }
 
-/* All admin list pages — CRM card shell */
-.admin-theme .admin-users-panel,
+
+
 .admin-theme .admin-data-table-shell,
-.admin-theme .admin-table-wrap,
-.admin-theme .admin-payments-page .admin-surface,
-.admin-theme .admin-news-page .admin-surface,
 .admin-theme .admin-settings-card {
   border-radius: 16px !important;
   padding: 24px !important;

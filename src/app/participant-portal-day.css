@@ -1,6 +1,4 @@
-/**
- * Participant portal — respects site light/day theme (matches admin dashboard daylight).
- */
+
 
 html.light-theme .participant-portal.pats-portal,
 html[data-site-theme="day"] .participant-portal.pats-portal {
@@ -9,36 +7,11 @@ html[data-site-theme="day"] .participant-portal.pats-portal {
   font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
 }
 
-html.light-theme .participant-portal .pats-portal-header,
-html[data-site-theme="day"] .participant-portal .pats-portal-header {
-  border-bottom-color: #e2e8f0;
-}
-
-html.light-theme .participant-portal .pats-portal-header h1,
-html[data-site-theme="day"] .participant-portal .pats-portal-header h1 {
-  color: #1e293b;
-  font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
-  letter-spacing: -0.02em;
-  text-transform: none;
-}
-
-html.light-theme .participant-portal .pats-portal-header .pats-body,
-html.light-theme .participant-portal .pats-portal-header .pats-eyebrow,
-html[data-site-theme="day"] .participant-portal .pats-portal-header .pats-body,
-html[data-site-theme="day"] .participant-portal .pats-portal-header .pats-eyebrow {
-  color: #64748b;
-}
 
 html.light-theme .participant-portal .pats-panel,
 html.light-theme .participant-portal .portal-card,
-html.light-theme .participant-portal .portal-card-accent-amber,
-html.light-theme .participant-portal .portal-card-accent-sky,
-html.light-theme .participant-portal .portal-journey-banner,
 html[data-site-theme="day"] .participant-portal .pats-panel,
-html[data-site-theme="day"] .participant-portal .portal-card,
-html[data-site-theme="day"] .participant-portal .portal-card-accent-amber,
-html[data-site-theme="day"] .participant-portal .portal-card-accent-sky,
-html[data-site-theme="day"] .participant-portal .portal-journey-banner {
+html[data-site-theme="day"] .participant-portal .portal-card {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 14px !important;
@@ -46,29 +19,6 @@ html[data-site-theme="day"] .participant-portal .portal-journey-banner {
   color: #475569;
 }
 
-html.light-theme .participant-portal .portal-card-accent-amber,
-html[data-site-theme="day"] .participant-portal .portal-card-accent-amber {
-  border-left: 4px solid #d97706 !important;
-  background: #fffbeb !important;
-}
-
-html.light-theme .participant-portal .portal-card-accent-sky,
-html[data-site-theme="day"] .participant-portal .portal-card-accent-sky {
-  border-left: 4px solid #0284c7 !important;
-  background: #f0f9ff !important;
-}
-
-html.light-theme .participant-portal .portal-journey-banner--approved,
-html[data-site-theme="day"] .participant-portal .portal-journey-banner--approved {
-  border-left: 4px solid #16a34a !important;
-  background: #f0fdf4 !important;
-}
-
-html.light-theme .participant-portal .portal-journey-banner--confirmed,
-html[data-site-theme="day"] .participant-portal .portal-journey-banner--confirmed {
-  border-left: 4px solid #16a34a !important;
-  background: #ecfdf5 !important;
-}
 
 html.light-theme .participant-portal .pats-panel h2,
 html.light-theme .participant-portal .pats-panel h3,
@@ -84,6 +34,7 @@ html[data-site-theme="day"] .participant-portal .portal-section-title {
   text-transform: none;
 }
 
+
 html.light-theme .participant-portal .portal-body,
 html.light-theme .participant-portal .portal-muted,
 html[data-site-theme="day"] .participant-portal .portal-body,
@@ -91,41 +42,18 @@ html[data-site-theme="day"] .participant-portal .portal-muted {
   color: #64748b !important;
 }
 
-html.light-theme .participant-portal .portal-card-accent-amber .portal-subtitle,
-html[data-site-theme="day"] .participant-portal .portal-card-accent-amber .portal-subtitle {
-  color: #b45309 !important;
-  font-weight: 700;
-}
-
-html.light-theme .participant-portal .portal-card-accent-amber .portal-body,
-html[data-site-theme="day"] .participant-portal .portal-card-accent-amber .portal-body {
-  color: #78350f !important;
-}
 
 html.light-theme .participant-portal .portal-link,
 html[data-site-theme="day"] .participant-portal .portal-link {
   color: #2e7d32 !important;
 }
 
+
 html.light-theme .participant-portal .portal-link:hover,
 html[data-site-theme="day"] .participant-portal .portal-link:hover {
   color: #1b5e20 !important;
 }
 
-html.light-theme .participant-portal .pats-portal-nav a,
-html[data-site-theme="day"] .participant-portal .pats-portal-nav a {
-  border-bottom-color: #e2e8f0;
-  color: #64748b;
-  font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
-  letter-spacing: 0.04em;
-}
-
-html.light-theme .participant-portal .pats-portal-nav a:hover,
-html.light-theme .participant-portal .pats-portal-nav a.is-active,
-html[data-site-theme="day"] .participant-portal .pats-portal-nav a:hover,
-html[data-site-theme="day"] .participant-portal .pats-portal-nav a.is-active {
-  color: #2e7d32;
-}
 
 html.light-theme .participant-portal .portal-alert-warning,
 html[data-site-theme="day"] .participant-portal .portal-alert-warning {
@@ -135,6 +63,7 @@ html[data-site-theme="day"] .participant-portal .portal-alert-warning {
   border-radius: 12px !important;
 }
 
+
 html.light-theme .participant-portal .portal-alert-error,
 html[data-site-theme="day"] .participant-portal .portal-alert-error {
   border: 1px solid #fecaca;
@@ -142,6 +71,7 @@ html[data-site-theme="day"] .participant-portal .portal-alert-error {
   color: #991b1b;
   border-radius: 12px !important;
 }
+
 
 html.light-theme .participant-portal .portal-alert-success,
 html[data-site-theme="day"] .participant-portal .portal-alert-success {
@@ -151,15 +81,18 @@ html[data-site-theme="day"] .participant-portal .portal-alert-success {
   border-radius: 12px !important;
 }
 
+
 html.light-theme .participant-portal .text-brand-ink,
 html[data-site-theme="day"] .participant-portal .text-brand-ink {
   color: #1e293b !important;
 }
 
+
 html.light-theme .participant-portal .text-emerald-700,
 html[data-site-theme="day"] .participant-portal .text-emerald-700 {
   color: #15803d !important;
 }
+
 
 html.light-theme .participant-portal .text-red-700,
 html.light-theme .participant-portal .text-red-600,
@@ -168,289 +101,121 @@ html[data-site-theme="day"] .participant-portal .text-red-600 {
   color: #dc2626 !important;
 }
 
+
 html.light-theme .participant-portal label,
 html[data-site-theme="day"] .participant-portal label {
   color: #475569;
 }
+
 
 html.light-theme .participant-portal .border-brand-line,
 html[data-site-theme="day"] .participant-portal .border-brand-line {
   border-color: #e2e8f0 !important;
 }
 
-/* ===================================================================
- * Day-mode dashboard cards must use the LIGHT surface, not the sitewide
- * forest-green cards. The dashboard renders inside `.army-site`
- * (PublicLayout), so daylight-theme.css `.army-site .pats-panel` rules
- * win the specificity tie by load order, leaving unreadable dark text on
- * a dark-green card. Scoping to the compound `.participant-portal.pats-portal`
- * wrapper adds one class, outranking `.army-site` regardless of import order.
- * =================================================================== */
 
-/* Card surfaces — white base */
+
+
+
 html.light-theme .participant-portal.pats-portal .pats-panel,
 html.light-theme .participant-portal.pats-portal .portal-card,
-html.light-theme .participant-portal.pats-portal .portal-card-accent-amber,
-html.light-theme .participant-portal.pats-portal .portal-card-accent-sky,
-html.light-theme .participant-portal.pats-portal .portal-journey-banner,
 html[data-site-theme="day"] .participant-portal.pats-portal .pats-panel,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-amber,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-sky,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-journey-banner {
+html[data-site-theme="day"] .participant-portal.pats-portal .portal-card {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
   color: #475569 !important;
 }
 
-/* Accent tints (keep the coloured left border + soft wash) */
-html.light-theme .participant-portal.pats-portal .portal-card-accent-amber,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-amber {
-  border-left: 4px solid #d97706 !important;
-  background: #fffbeb !important;
-}
 
-html.light-theme .participant-portal.pats-portal .portal-card-accent-sky,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-sky {
-  border-left: 4px solid #0284c7 !important;
-  background: #f0f9ff !important;
-}
 
-html.light-theme .participant-portal.pats-portal .portal-journey-banner--approved,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-journey-banner--approved {
-  border-left: 4px solid #16a34a !important;
-  background: #f0fdf4 !important;
-}
-
-html.light-theme .participant-portal.pats-portal .portal-journey-banner--confirmed,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-journey-banner--confirmed {
-  border-left: 4px solid #16a34a !important;
-  background: #ecfdf5 !important;
-}
-
-/* Generic card text — readable dark default for every text node */
 html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body) {
   color: #475569 !important;
 }
 
-/* Headings + emphasised values — strong slate */
+
+
 html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(h2, h3, .portal-h2, .portal-section-title, .participant-dash-section-title, .text-brand-ink),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(h2, h3, .portal-h2, .portal-section-title, .participant-dash-section-title, .text-brand-ink) {
   color: #1e293b !important;
 }
 
-/* Semantic accents — must win, so they come last */
-html.light-theme .participant-portal.pats-portal .portal-card-accent-amber .portal-subtitle,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-amber .portal-subtitle {
-  color: #b45309 !important;
-}
-
-html.light-theme .participant-portal.pats-portal .portal-card-accent-amber .portal-body,
-html.light-theme .participant-portal.pats-portal .portal-card-accent-amber p,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-amber .portal-body,
-html[data-site-theme="day"] .participant-portal.pats-portal .portal-card-accent-amber p {
-  color: #78350f !important;
-}
 
 html.light-theme .participant-portal.pats-portal :is([class*="text-red-7"], [class*="text-red-6"]),
 html[data-site-theme="day"] .participant-portal.pats-portal :is([class*="text-red-7"], [class*="text-red-6"]) {
   color: #dc2626 !important;
 }
 
+
 html.light-theme .participant-portal.pats-portal .portal-link,
 html[data-site-theme="day"] .participant-portal.pats-portal .portal-link {
   color: #2e7d32 !important;
 }
+
 
 html.light-theme .participant-portal.pats-portal .portal-link:hover,
 html[data-site-theme="day"] .participant-portal.pats-portal .portal-link:hover {
   color: #1b5e20 !important;
 }
 
+
 html.light-theme .participant-portal.pats-portal :is(.text-emerald-700, .text-emerald-600),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(.text-emerald-700, .text-emerald-600) {
   color: #15803d !important;
 }
 
-/* Catch-all safety net: in day mode no card text may be white/forest-light.
- * Every descendant defaults to readable slate; semantic accents (links, red,
- * emerald) and self-coloured status pills are excluded so they keep their hue. */
+
+
 html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *) {
   color: #475569 !important;
 }
 
-/* ---------------------------------------------------------------------------
- * Dashboard's own welcome + checklist cards (.participant-dash-*). These are
- * NOT .pats-panel/.portal-card, so the rules above don't reach them, and an
- * ungated .pats-portal text rule turns their text white in day mode. Re-assert
- * the light-theme colours from participant-dashboard.css at winning specificity.
- * ------------------------------------------------------------------------- */
-html.light-theme .participant-portal.pats-portal .participant-dash-welcome,
-html.light-theme .participant-portal.pats-portal .participant-dash-tasks,
-html.light-theme .participant-portal.pats-portal .participant-dashboard__news,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-welcome,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-tasks,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dashboard__news {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
-}
-
-html.light-theme .participant-portal.pats-portal .participant-dash-welcome__name,
-html.light-theme .participant-portal.pats-portal .participant-dash-task__label,
-html.light-theme .participant-portal.pats-portal .participant-dash-task__label a,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-welcome__name,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-task__label,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-task__label a {
-  color: #1e293b !important;
-}
-
-html.light-theme .participant-portal.pats-portal .participant-dash-welcome__label,
-html.light-theme .participant-portal.pats-portal .participant-dash-welcome__meta,
-html.light-theme .participant-portal.pats-portal .participant-dash-section-title,
-html.light-theme .participant-portal.pats-portal .participant-dash-tasks__intro,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-welcome__label,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-welcome__meta,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-section-title,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-tasks__intro {
-  color: #64748b !important;
-}
-
-html.light-theme .participant-portal.pats-portal .participant-dash-task__hint,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-task__hint {
-  color: #94a3b8 !important;
-}
 
 html.light-theme .participant-portal.pats-portal .portal-back-link,
 html[data-site-theme="day"] .participant-portal.pats-portal .portal-back-link {
   color: #2e7d32 !important;
 }
 
+
 html.light-theme .participant-portal.pats-portal .portal-back-link:hover,
 html[data-site-theme="day"] .participant-portal.pats-portal .portal-back-link:hover {
   color: #1b5e20 !important;
 }
 
-html.light-theme .participant-portal.pats-portal .participant-dash-task,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-task {
-  background: #f8fafc !important;
-  border: 1px solid #f1f5f9 !important;
-}
 
-html.light-theme .participant-portal.pats-portal .participant-dash-task__label a:hover,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dash-task__label a:hover {
-  color: #2e7d32 !important;
-}
 
-html.light-theme .participant-portal.pats-portal .participant-dashboard__news a,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dashboard__news a {
-  color: #1e293b !important;
-}
 
-html.light-theme .participant-portal.pats-portal .participant-dashboard__news h3,
-html.light-theme .participant-portal.pats-portal .participant-dashboard__news time,
-html.light-theme .participant-portal.pats-portal .participant-dashboard__news-date,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dashboard__news h3,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dashboard__news time,
-html[data-site-theme="day"] .participant-portal.pats-portal .participant-dashboard__news-date {
-  color: #64748b !important;
-}
 
-/* ===================================================================
- * Sidebar nav in day mode. The base portal nav uses white text (for the
- * dark night sidebar); on the light day surface that's invisible. Force
- * readable slate for the eyebrow, links, and the logout button.
- * =================================================================== */
-html.light-theme .participant-portal.pats-portal .pats-portal-nav .pats-eyebrow,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav .pats-eyebrow {
-  color: #94a3b8 !important;
-}
-
-html.light-theme .participant-portal.pats-portal .pats-portal-nav a,
-html.light-theme .participant-portal.pats-portal .pats-portal-logout,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav a,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-logout {
-  color: #475569 !important;
-  border-bottom-color: #e2e8f0 !important;
-}
-
-html.light-theme .participant-portal.pats-portal .pats-portal-nav a:hover,
-html.light-theme .participant-portal.pats-portal .pats-portal-nav a.is-active,
-html.light-theme .participant-portal.pats-portal .pats-portal-logout:hover,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav a:hover,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav a.is-active,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-logout:hover {
-  color: #2e7d32 !important;
-}
-
-html.light-theme .participant-portal.pats-portal .pats-portal-nav-logout,
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav-logout {
-  border-top-color: #e2e8f0 !important;
-}
-
-/* ===================================================================
- * PORTAL-WIDE DAY-MODE TEXT SAFETY NET
- * -------------------------------------------------------------------
- * Root cause: globals.css paints `.cinematic-site:not(.dashboard-day)
- * :is(span,p,li,label)` WHITE and is NOT theme-gated. Its day counterpart
- * (`.cinematic-site.dashboard-day …`) never matches because `dashboard-day`
- * lives on a nested portal div, not the `.cinematic-site` <body>. So in day
- * mode every text node OUTSIDE the card catch-all above (sidebar nav,
- * payment-method blocks, checklist rows, etc.) renders white-on-light and is
- * invisible. These rules re-assert readable colours across the WHOLE portal in
- * day/light mode only (night mode is untouched). Semantic accents — links,
- * red/emerald/amber text, and self-coloured status pills/badges — are excluded
- * so they keep their hue, and the card accent rules above stay more specific.
- * =================================================================== */
-
-/* Body / supporting text — readable slate */
 html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #475569 !important;
 }
 
-/* Headings + strong emphasis — darker slate */
+
+
 html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #1e293b !important;
 }
 
-/* Eyebrows / subtitles / muted captions — soft slate */
+
+
 html.light-theme .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #64748b !important;
 }
 
-/* Sidebar nav links + logout — the <a> already recolours, but the sitewide
- * white rule also hits the inner <span>, so target both. */
-html.light-theme .participant-portal.pats-portal :is(.pats-portal-nav a, .pats-portal-nav a span, .pats-portal-logout, .pats-portal-logout span),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-portal-nav a, .pats-portal-nav a span, .pats-portal-logout, .pats-portal-logout span) {
-  color: #475569 !important;
-}
 
-html.light-theme .participant-portal.pats-portal :is(.pats-portal-nav a:hover, .pats-portal-nav a:hover span, .pats-portal-nav a.is-active, .pats-portal-nav a.is-active span, .pats-portal-logout:hover, .pats-portal-logout:hover span),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-portal-nav a:hover, .pats-portal-nav a:hover span, .pats-portal-nav a.is-active, .pats-portal-nav a.is-active span, .pats-portal-logout:hover, .pats-portal-logout:hover span) {
-  color: #2e7d32 !important;
-}
 
-/* Links keep their green even when the body-text net would catch them */
 html.light-theme .participant-portal.pats-portal :is(a.portal-link, .portal-link, a.portal-back-link, .portal-back-link),
 html[data-site-theme="day"] .participant-portal.pats-portal :is(a.portal-link, .portal-link, a.portal-back-link, .portal-back-link) {
   color: #2e7d32 !important;
 }
 
-/* ===================================================================
- * PP SIDEBAR — FINAL COLOUR RESET (must stay LAST in this file)
- * -------------------------------------------------------------------
- * The catch-all rules above are too broad: CSS :not() with descendant
- * selectors doesn't reliably exclude descendants in all browsers, so
- * the slate colour bleeds into the dark sidebar. These rules re-assert
- * white text for EVERY element inside .pp-sidebar at higher specificity
- * (html + 3 classes vs html + 2 classes) so they always win.
- * =================================================================== */
+
+
 html.light-theme .participant-portal.pats-portal .pp-sidebar,
 html.light-theme .participant-portal.pats-portal .pp-sidebar *,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar,
@@ -458,13 +223,15 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar * {
   color: var(--pp-nav-text) !important;
 }
 
-/* Brand title — full white */
+
+
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-title,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-title {
   color: #ffffff !important;
 }
 
-/* Brand sub + nav accent (progress chip, mark icon) — brass gold */
+
+
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-sidebar__brand-sub,
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-sidebar__mark,
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-progress__step,
@@ -474,7 +241,8 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-prog
   color: var(--pp-nav-accent) !important;
 }
 
-/* Active & hovered nav link — bright white */
+
+
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link.is-active,
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link.is-active *,
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-nav__link:hover,
@@ -486,7 +254,8 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-nav_
   color: #ffffff !important;
 }
 
-/* Logout hover — danger tint */
+
+
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-logout:hover,
 html.light-theme .participant-portal.pats-portal .pp-sidebar .pp-logout:hover *,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-logout:hover,

@@ -1,61 +1,31 @@
-/* =============================================================================
-   pats-refresh.css  —  PATS institutional design refresh
-   -----------------------------------------------------------------------------
-   Re-skins the admin console (and gives the participant portal parity) to the
-   conceived paf.gov.pk-inspired look: sage canvas, white cards, olive-green
-   primary, brass accents, dark institutional sidebar.
 
-   HOW IT WORKS
-   ------------
-   The shipped admin theme (src/app/admin-day-theme.css) is an indigo/slate
-   "CRM SaaS" skin that uses `!important` almost everywhere. This file targets
-   the SAME class names your components already emit (.admin-sidebar-link,
-   .admin-stat-card--*, .ops-status-pill, .admin-users-table, …) and overrides
-   them — so the whole admin surface changes look with ZERO component/prop edits.
 
-   INSTALL  (one line — must load LAST)
-   ------------------------------------
-   In src/app/globals.css, add this AFTER every other @import
-   (i.e. after "./participant-portal-day.css" and the admin CSS imports):
 
-       @import "./pats-refresh.css";
-
-   Because it loads last and matches specificity, its overrides win.
-   Optional but recommended: apply the Tailwind token diff in
-   README-HANDOFF.md so `cp-*` / `portal-*` utility classes shift too.
-   ============================================================================= */
-
-/* -----------------------------------------------------------------------------
-   1. TOKENS  — retune the CSS variables admin-day-theme.css already consumes.
-   Overriding these re-skins every rule that reads them (bg, borders, surfaces,
-   links, muted text, shadows) for free. Hardcoded indigo/slate is handled in
-   the explicit sections below.
-   -------------------------------------------------------------------------- */
 .admin-theme,
 .admin-theme.pats-dashboard {
-  /* canvas + surfaces */
+  
   --admin-bg: #eef0eb;
   --admin-bg-gradient: linear-gradient(180deg, #eff1ec 0%, #e9ece5 100%);
   --admin-surface: #ffffff;
   --admin-border: #e4e7e0;
   --admin-border-strong: #e0e3db;
 
-  /* ink */
+  
   --admin-heading: #18221c;
   --admin-body: #2a332a;
   --admin-muted: #5a655c;
   --admin-faint: #9aa298;
   --cp-ink-muted: #5a655c;
 
-  /* brand */
-  --admin-accent: #1e5a3a; /* olive-green primary */
+  
+  --admin-accent: #1e5a3a; 
   --admin-accent-strong: #17492f;
   --admin-accent-soft: #f4f8f4;
   --admin-brass: #c9a84c;
   --admin-brass-ink: #9a6711;
   --admin-link: #1e5a3a;
 
-  /* effects */
+  
   --admin-shadow-card: 0 1px 2px rgba(20, 30, 24, 0.05);
   --admin-shadow-hover: 0 8px 22px rgba(20, 30, 24, 0.09);
   --admin-focus-ring: 0 0 0 3px rgba(201, 168, 76, 0.14);
@@ -64,20 +34,21 @@
   color: var(--admin-body) !important;
 }
 
-/* -----------------------------------------------------------------------------
-   2. SIDEBAR  — flip from white to the dark institutional command rail.
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme .admin-sidebar {
   background: linear-gradient(178deg, #16271c 0%, #101d15 62%, #0d1812 100%) !important;
   border-right: 1px solid rgba(0, 0, 0, 0.25) !important;
   box-shadow: 2px 0 14px rgba(13, 24, 18, 0.28) !important;
 }
 
+
 .admin-theme .admin-sidebar-brand {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Clean circular logo — no square border, subtle shadow, elegant hover */
+
+
 .admin-theme .admin-sidebar-brand-mark {
   border-radius: 50% !important;
   background: radial-gradient(circle at 32% 28%, #1c3325, #0c140e) !important;
@@ -90,6 +61,7 @@
     box-shadow 0.22s ease !important;
 }
 
+
 .admin-theme .admin-sidebar-brand-link:hover .admin-sidebar-brand-mark {
   transform: translateY(-1px);
   box-shadow:
@@ -98,14 +70,17 @@
     0 0 0 4px rgba(201, 168, 76, 0.12) !important;
 }
 
+
 .admin-theme .admin-sidebar-brand-logo {
   border-radius: 50%;
 }
+
 
 .admin-theme .admin-sidebar-brand-title {
   color: #f4f1e6 !important;
   letter-spacing: 0.04em !important;
 }
+
 
 .admin-theme .admin-sidebar-brand-subtitle {
   color: rgba(201, 168, 76, 0.85) !important;
@@ -114,10 +89,12 @@
   font-weight: 600 !important;
 }
 
+
 .admin-theme .admin-sidebar-group-label {
   color: rgba(255, 255, 255, 0.6) !important;
   letter-spacing: 0.13em !important;
 }
+
 
 .admin-theme .admin-sidebar-link {
   position: relative;
@@ -133,11 +110,13 @@
     transform 0.18s ease !important;
 }
 
+
 .admin-theme .admin-sidebar-link:hover {
   background: rgba(255, 255, 255, 0.07) !important;
   color: #ffffff !important;
   transform: translateX(2px);
 }
+
 
 .admin-theme .admin-sidebar-link[data-active="true"] {
   background: linear-gradient(
@@ -149,7 +128,8 @@
   font-weight: 650 !important;
 }
 
-/* Left-side accent indicator for the active page */
+
+
 .admin-theme .admin-sidebar-link[data-active="true"]::before {
   content: "";
   position: absolute;
@@ -163,19 +143,23 @@
   box-shadow: 0 0 8px rgba(201, 168, 76, 0.5);
 }
 
+
 .admin-theme .admin-sidebar-link-icon {
   color: rgba(233, 238, 233, 0.65) !important;
 }
+
 
 .admin-theme .admin-sidebar-link:hover .admin-sidebar-link-icon {
   color: #f4f1e6 !important;
 }
 
+
 .admin-theme .admin-sidebar-link[data-active="true"] .admin-sidebar-link-icon {
   color: #d8b549 !important;
 }
 
-/* count badge on nav rows (if present as trailing element) */
+
+
 .admin-theme .admin-sidebar-link [data-nav-count],
 .admin-theme .admin-sidebar-link .admin-sidebar-count {
   margin-left: auto;
@@ -188,33 +172,40 @@
   font-variant-numeric: tabular-nums;
 }
 
+
 .admin-theme .admin-sidebar-footer--logout {
   border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
 }
+
 
 .admin-theme .admin-sidebar-logout {
   color: rgba(240, 169, 158, 0.9) !important;
 }
 
+
 .admin-theme .admin-sidebar-logout .admin-sidebar-link-icon {
   color: rgba(240, 169, 158, 0.9) !important;
 }
+
 
 .admin-theme .admin-sidebar-logout:hover {
   background: rgba(224, 80, 61, 0.16) !important;
   color: #f0a99e !important;
 }
 
-/* Sidebar never shows its own scrollbar; tighten spacing so the nav fits */
+
+
 .admin-theme .admin-sidebar-nav {
   padding: 4px 0 !important;
   scrollbar-width: none !important;
 }
 
+
 .admin-theme .admin-sidebar-nav::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
 }
+
 
 .admin-theme .admin-sidebar-group-label {
   padding-top: 12px !important;
@@ -223,23 +214,25 @@
   color: rgba(201, 168, 76, 0.62) !important;
 }
 
+
 .admin-theme .admin-sidebar-group:first-child .admin-sidebar-group-label {
   padding-top: 6px !important;
 }
+
 
 .admin-theme .admin-sidebar-brand {
   padding: 16px 16px 14px !important;
 }
 
-/* -----------------------------------------------------------------------------
-   3. HEADER  — sage/white bar with brass focus + brass user avatar.
-   -------------------------------------------------------------------------- */
-/* Header icon buttons (notifications, settings) + breadcrumb — brass language */
+
+
+
 .admin-theme .admin-header-iconbtn {
   color: #4a5750 !important;
   background: #ffffff !important;
   border: 1px solid #e0e3db !important;
 }
+
 
 .admin-theme .admin-header-iconbtn:hover {
   background: #faf9f3 !important;
@@ -247,22 +240,16 @@
   color: #17492f !important;
 }
 
+
 .admin-theme .admin-header-iconbtn:focus-visible {
   box-shadow: var(--admin-focus-ring) !important;
 }
+
 
 .admin-theme .admin-header-iconbtn-dot {
   background: #c9a84c !important;
 }
 
-.admin-theme .admin-header-menu-btn:hover {
-  background: #faf9f3 !important;
-  color: #17492f !important;
-}
-
-.admin-theme .admin-header-crumb-home:hover {
-  color: #1e5a3a !important;
-}
 
 .admin-theme .admin-header-bar,
 .admin-theme .admin-layout-header {
@@ -273,12 +260,14 @@
   box-shadow: 0 1px 0 #e2e5de !important;
 }
 
+
 .admin-theme .admin-header-bar .admin-heading {
   color: #18221c !important;
   letter-spacing: -0.01em !important;
 }
 
-/* header search input → mockup treatment */
+
+
 .admin-theme .admin-header-actions input[type="search"],
 .admin-theme .admin-header-actions input[name="search"] {
   background: #f6f7f3 !important;
@@ -287,6 +276,7 @@
   color: #18221c !important;
 }
 
+
 .admin-theme .admin-header-actions input[type="search"]:focus,
 .admin-theme .admin-header-actions input[name="search"]:focus {
   border-color: #c9a84c !important;
@@ -294,17 +284,20 @@
   box-shadow: var(--admin-focus-ring) !important;
 }
 
-/* user chip: indigo→brass */
+
+
 .admin-theme .admin-user-avatar {
   background: linear-gradient(135deg, #e6cf7f, #c9a84c) !important;
   color: #16271c !important;
   box-shadow: 0 2px 6px rgba(201, 168, 76, 0.32) !important;
 }
 
+
 .admin-theme .admin-user-trigger:hover {
   border-color: #c9a84c !important;
   background: #faf9f3 !important;
 }
+
 
 .admin-theme .admin-user-trigger[data-open="true"] {
   border-color: rgba(201, 168, 76, 0.5) !important;
@@ -312,30 +305,26 @@
   box-shadow: var(--admin-focus-ring) !important;
 }
 
+
 .admin-theme .admin-user-role-badge {
   background: #e9f5ed !important;
   color: #15803d !important;
 }
 
-/* -----------------------------------------------------------------------------
-   4. STAT / KPI CARDS  — kill the rose/mint/amber/violet gradients; use clean
-   white cards with soft tinted icon tiles (matches the mockup KPI row).
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme .admin-stat-card,
 .admin-theme .portal-stat-card,
 .admin-theme .admin-stat-card--rose,
 .admin-theme .admin-stat-card--mint,
 .admin-theme .admin-stat-card--amber,
-.admin-theme .admin-stat-card--violet,
-.admin-theme .portal-stat-card--rose,
-.admin-theme .portal-stat-card--mint,
-.admin-theme .portal-stat-card--amber,
-.admin-theme .portal-stat-card--violet {
+.admin-theme .admin-stat-card--violet {
   background: #ffffff !important;
   border: 1px solid #e4e7e0 !important;
   border-radius: 14px !important;
   box-shadow: var(--admin-shadow-card) !important;
 }
+
 
 .admin-theme .admin-stat-card:hover,
 .admin-theme .portal-stat-card:hover {
@@ -343,112 +332,93 @@
   box-shadow: var(--admin-shadow-hover) !important;
 }
 
+
 .admin-theme .admin-stat-card-label,
 .admin-theme .portal-stat-label,
 .admin-theme .admin-stat-card--rose .admin-stat-card-label,
 .admin-theme .admin-stat-card--mint .admin-stat-card-label,
 .admin-theme .admin-stat-card--amber .admin-stat-card-label,
-.admin-theme .admin-stat-card--violet .admin-stat-card-label,
-.admin-theme .portal-stat-card--rose .portal-stat-label,
-.admin-theme .portal-stat-card--mint .portal-stat-label,
-.admin-theme .portal-stat-card--amber .portal-stat-label,
-.admin-theme .portal-stat-card--violet .portal-stat-label {
+.admin-theme .admin-stat-card--violet .admin-stat-card-label {
   color: #7c857a !important;
 }
+
 
 .admin-theme .admin-stat-card-value,
 .admin-theme .portal-stat-value,
 .admin-theme .admin-stat-card--rose .admin-stat-card-value,
 .admin-theme .admin-stat-card--mint .admin-stat-card-value,
 .admin-theme .admin-stat-card--amber .admin-stat-card-value,
-.admin-theme .admin-stat-card--violet .admin-stat-card-value,
-.admin-theme .portal-stat-card--rose .portal-stat-value,
-.admin-theme .portal-stat-card--mint .portal-stat-value,
-.admin-theme .portal-stat-card--amber .portal-stat-value,
-.admin-theme .portal-stat-card--violet .portal-stat-value {
+.admin-theme .admin-stat-card--violet .admin-stat-card-value {
   color: #18221c !important;
 }
 
-/* soft tinted icon tiles (was solid gradient) */
+
+
 .admin-theme .admin-stat-card-icon {
   border-radius: 10px !important;
 }
+
 .admin-theme .admin-stat-card-icon--rose {
   background: #fcebe9 !important;
 }
+
 .admin-theme .admin-stat-card-icon--rose svg {
   color: #e0503d !important;
 }
+
 .admin-theme .admin-stat-card-icon--mint {
   background: #e9f5ed !important;
 }
+
 .admin-theme .admin-stat-card-icon--mint svg {
   color: #22a35b !important;
 }
+
 .admin-theme .admin-stat-card-icon--amber {
   background: #fbf2e0 !important;
 }
+
 .admin-theme .admin-stat-card-icon--amber svg {
   color: #df9a2c !important;
 }
+
 .admin-theme .admin-stat-card-icon--violet {
   background: #f4f8f4 !important;
 }
+
 .admin-theme .admin-stat-card-icon--violet svg {
   color: #1e5a3a !important;
 }
 
-/* portal stat icon wrap parity */
-.admin-theme .portal-stat-card--rose .portal-stat-icon-wrap svg {
-  color: #e0503d !important;
-}
-.admin-theme .portal-stat-card--mint .portal-stat-icon-wrap svg {
-  color: #22a35b !important;
-}
-.admin-theme .portal-stat-card--amber .portal-stat-icon-wrap svg {
-  color: #df9a2c !important;
-}
-.admin-theme .portal-stat-card--violet .portal-stat-icon-wrap svg {
-  color: #1e5a3a !important;
-}
 
-/* -----------------------------------------------------------------------------
-   5. DASHBOARD PANELS, CHARTS & LINKS  — indigo → olive/brass.
-   -------------------------------------------------------------------------- */
-.admin-theme .admin-crm-card,
-.admin-theme .admin-dashboard-recent-shell,
-.admin-theme .admin-dashboard-pending-shell {
+
+.admin-theme .admin-crm-card {
   border: 1px solid #e4e7e0 !important;
   border-radius: 16px !important;
   box-shadow: var(--admin-shadow-card) !important;
 }
 
-.admin-theme .admin-crm-card-title,
-.admin-theme .admin-dashboard-recent-header .admin-heading,
-.admin-theme .admin-dashboard-pending-header .admin-heading {
+
+.admin-theme .admin-crm-card-title {
   color: #18221c !important;
 }
 
+
 .admin-theme .admin-link,
-.admin-theme .admin-crm-view-all,
-.admin-theme .admin-dashboard-pending-review {
+.admin-theme .admin-crm-view-all {
   color: #1e5a3a !important;
 }
 
-.admin-theme .admin-dashboard-pending-review {
-  font-weight: 600 !important;
-}
 
-/* range toggle: indigo pill → olive */
+
 .admin-theme .admin-crm-range-btn--active {
   background: #1e5a3a !important;
   color: #ffffff !important;
   box-shadow: 0 2px 8px rgba(30, 90, 58, 0.3) !important;
 }
 
-/* -----------------------------------------------------------------------------
-   6. TABLES  — header, zebra, hover, borders to mockup values.
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme :is(
   .admin-data-table,
   .admin-users-table,
@@ -470,7 +440,8 @@
   border-bottom: 1px solid #edeee9 !important;
 }
 
-/* zebra: white / faint sage */
+
+
 .admin-theme :is(
   .admin-data-table,
   .admin-users-table,
@@ -485,6 +456,7 @@
 ) tbody tr:nth-child(even) {
   background: #fafbf8 !important;
 }
+
 
 .admin-theme :is(
   .admin-data-table,
@@ -502,59 +474,50 @@
   background: #f4f6f1 !important;
 }
 
+
 .admin-theme :is(.admin-data-table, .admin-users-table, .admin-payments-table) tbody tr {
   border-top: 1px solid #f0f1ec !important;
 }
 
-/* -----------------------------------------------------------------------------
-   7. STATUS PILLS  — exact mockup palette (soft bg + colored ink).
-   Applies to PaymentStatusBadge / application status cells via .ops-status-*.
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme .ops-status-badge,
-.admin-theme .ops-status-pill,
-.admin-theme .ops-status-badge-table,
-.admin-theme .portal-badge {
+.admin-theme .ops-status-pill {
   border: none !important;
 }
 
-.admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-approved,
-.admin-theme :is(.ops-status-pill, .ops-status-badge).ops-status-verified,
-.admin-theme :is(.ops-status-pill, .ops-status-badge).ops-status-resolved,
-.admin-theme :is(.ops-status-pill, .ops-status-badge).ops-status-active {
+
+.admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-approved {
   background: #e9f5ed !important;
   color: #15803d !important;
 }
 
-.admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-pending,
-.admin-theme :is(.ops-status-pill, .ops-status-badge).ops-status-inprogress {
+
+.admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-pending {
   background: #fbf2e0 !important;
   color: #9a6711 !important;
 }
+
 
 .admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-review {
   background: #e9f0fd !important;
   color: #1d4ed8 !important;
 }
 
-.admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-rejected,
-.admin-theme :is(.ops-status-pill, .ops-status-badge).ops-status-returned {
+
+.admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-rejected {
   background: #fcebe9 !important;
   color: #b42318 !important;
 }
 
-.admin-theme :is(.ops-status-pill, .ops-status-badge).ops-status-required {
-  background: #f8f1d9 !important;
-  color: #8a6d12 !important;
-}
 
 .admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-neutral {
   background: #f0f1ec !important;
   color: #5a655c !important;
 }
 
-/* -----------------------------------------------------------------------------
-   8. BUTTONS  — primary solid olive; filter chips olive-active; brass focus.
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary) {
   background: #1e5a3a !important;
   border-color: #194e32 !important;
@@ -562,16 +525,19 @@
   box-shadow: 0 1px 2px rgba(20, 30, 24, 0.12) !important;
 }
 
+
 .admin-theme :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):hover:not(:disabled) {
   background: #17492f !important;
   border-color: #143f28 !important;
   box-shadow: 0 2px 8px rgba(20, 30, 24, 0.16) !important;
 }
 
+
 .admin-theme :is(.ops-btn-approve, .admin-btn-approve) {
   background: #1e5a3a !important;
   border-color: #194e32 !important;
 }
+
 
 .admin-theme :is(.admin-filter-chip-active, .ops-filter-chip-active) {
   background: #1e5a3a !important;
@@ -579,20 +545,21 @@
   color: #ffffff !important;
 }
 
+
 .admin-theme :is(.ops-btn, .cp-btn-primary, .cp-btn-secondary,
   .admin-btn-primary, .admin-btn-outline, .admin-btn-destructive, .admin-btn-reject) {
   --tw-ring-color: rgba(201, 168, 76, 0.35) !important;
   --tw-ring-offset-color: #eef0eb !important;
 }
 
-/* -----------------------------------------------------------------------------
-   9. INPUTS & FOCUS  — brass focus ring, 10px radius.
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]) {
   border-color: #e0e3db !important;
   border-radius: 10px !important;
   color: #18221c !important;
 }
+
 
 .admin-theme :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):focus-visible,
 .admin-theme :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]):focus {
@@ -601,30 +568,18 @@
   box-shadow: var(--admin-focus-ring) !important;
 }
 
-/* warm the forced near-black utility text slightly toward ink */
+
+
 .admin-theme :is(.text-gray-500, .text-gray-600, .text-slate-500, .text-slate-600) {
   color: #5a655c !important;
 }
 
-/* -----------------------------------------------------------------------------
-   10. COMMENT #1 FIX  — "coordinating officer" name column alignment.
-   The Participation Requests table (.admin-users-table) rendered the officer
-   NAME cell with an internal inline layout while sibling cells fell back to
-   default vertical-align, and long names/emails had no truncation — so the
-   column read as misaligned/ragged. Normalise vertical rhythm + truncation.
-   -------------------------------------------------------------------------- */
-.admin-theme .admin-users-table td,
-.admin-theme .admin-users-table th {
-  vertical-align: middle !important;
-}
 
-/* Name + Email columns are left-aligned and truncate cleanly */
-.admin-theme .admin-users-th-primary,
-.admin-theme .admin-users-th-email,
-.admin-theme .admin-users-cell-primary,
-.admin-theme .admin-users-cell-email {
+
+.admin-theme .admin-users-th-primary {
   text-align: left !important;
 }
+
 
 .admin-theme .admin-users-cell-inner {
   display: block;
@@ -635,29 +590,8 @@
   white-space: nowrap;
 }
 
-/* the name line keeps the INTL badge inline and vertically centred with text */
-.admin-theme .admin-users-cell-primary .admin-users-name {
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 600;
-  color: #18221c;
-}
 
-.admin-theme .admin-users-cell-primary .admin-users-name :is(.intl-badge, [class*="intl"]) {
-  display: inline-flex;
-  vertical-align: middle;
-  margin-left: 6px;
-}
 
-/* -----------------------------------------------------------------------------
-   11. PARTICIPANT PORTAL PARITY  — retune shared portal tokens + surfaces so
-   the participant side matches the same institutional palette. Lighter-touch;
-   the portal already uses the cp/portal token classes.
-   -------------------------------------------------------------------------- */
 :root {
   --portal-primary: #1e5a3a;
   --portal-primary-hover: #17492f;
@@ -665,6 +599,7 @@
   --portal-approve-hover: #17492f;
   --portal-destructive: #b42318;
 }
+
 
 .participant-portal .portal-card,
 .pats-portal .portal-card {
@@ -675,76 +610,60 @@
   box-shadow: 0 1px 4px rgba(20, 30, 24, 0.05);
 }
 
+
 .participant-portal .portal-subtitle,
 .pats-portal .portal-subtitle {
   color: #9a6711;
 }
+
 
 .participant-portal :is(.portal-h1, .portal-h2),
 .pats-portal :is(.portal-h1, .portal-h2) {
   color: #18221c;
 }
 
-/* -----------------------------------------------------------------------------
-   12. SCOPED cp-* UTILITY REMAP  — shift the Tailwind `cp` utility palette to
-   the mockup values, but ONLY inside the admin console and participant portal.
-   (Applied here instead of editing tailwind.config.ts, so the PUBLIC marketing
-   site — which also uses cp-* on its header/footer/nav/register — is untouched.)
-   Mirrors tailwind.config.tokens.md; khaki/alert intentionally unchanged.
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme .text-brand-ink,
 .participant-portal .text-brand-ink,
 .pats-portal .text-brand-ink {
   color: #18221c !important;
 }
+
 .admin-theme .text-brand-ink-muted,
 .participant-portal .text-brand-ink-muted,
 .pats-portal .text-brand-ink-muted {
   color: #5a655c !important;
 }
+
 .admin-theme .border-brand-line,
 .participant-portal .border-brand-line,
 .pats-portal .border-brand-line {
   border-color: #e0e3db !important;
 }
+
 .admin-theme .bg-brand-parchment,
 .participant-portal .bg-brand-parchment,
 .pats-portal .bg-brand-parchment {
   background-color: #eef0eb !important;
 }
-.admin-theme .bg-brand-olive,
-.participant-portal .bg-brand-olive,
-.pats-portal .bg-brand-olive {
-  background-color: #1e5a3a !important;
-}
+
 .admin-theme .text-brand-olive,
 .participant-portal .text-brand-olive,
 .pats-portal .text-brand-olive {
   color: #1e5a3a !important;
 }
+
 .admin-theme .text-brand-olive-dark,
 .participant-portal .text-brand-olive-dark,
 .pats-portal .text-brand-olive-dark {
   color: #17492f !important;
 }
-.admin-theme .border-brand-olive,
-.participant-portal .border-brand-olive,
-.pats-portal .border-brand-olive {
-  border-color: #1e5a3a !important;
-}
-.admin-theme .ring-brand-olive,
-.participant-portal .ring-brand-olive,
-.pats-portal .ring-brand-olive {
-  --tw-ring-color: #1e5a3a !important;
-}
 
-/* -----------------------------------------------------------------------------
-   13. MOCKUP POLISH MARKUP  — styles for the small structural additions that
-   bring the shell to 1:1 mockup fidelity (sidebar role badge + nav counts,
-   header breadcrumb, "Live" status pill, notifications bell).
-   -------------------------------------------------------------------------- */
 
-/* sidebar: role identity strip below the brand */
+
+
+
 .admin-theme .admin-sidebar-role {
   display: flex;
   align-items: center;
@@ -755,6 +674,7 @@
   background: rgba(255, 255, 255, 0.04) !important;
   border: 1px solid rgba(201, 168, 76, 0.14) !important;
 }
+
 .admin-theme .admin-sidebar-role-dot {
   width: 7px;
   height: 7px;
@@ -763,11 +683,13 @@
   box-shadow: 0 0 0 3px rgba(216, 181, 73, 0.18);
   flex: none;
 }
+
 .admin-theme .admin-sidebar-role-label {
   font-size: 11.5px;
   font-weight: 600;
   color: #e8e3d2 !important;
 }
+
 .admin-theme .admin-sidebar-role-access {
   margin-left: auto;
   font-size: 9px;
@@ -777,280 +699,93 @@
   color: rgba(233, 238, 233, 0.45) !important;
 }
 
-/* header: breadcrumb above the page title */
+
+
 .admin-theme .admin-header-titlewrap {
   display: flex;
   flex-direction: column;
   min-width: 0;
   gap: 1px;
 }
-.admin-theme .admin-header-crumb {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #9aa298 !important;
-  line-height: 1;
-}
-.admin-theme .admin-header-crumb-sep {
-  color: #c4cbc0 !important;
-}
 
-/* header: "Live" status pill */
-.admin-theme .admin-header-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid #e0e3db !important;
-  background: #f6f7f3 !important;
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #2f8a56 !important;
-}
-.admin-theme .admin-header-live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #2ba45f;
-  box-shadow: 0 0 0 3px rgba(43, 164, 95, 0.16);
-}
 
-/* header: notifications bell button */
-.admin-theme .admin-header-bell {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  width: 36px;
-  border-radius: 10px;
-  border: 1px solid #e0e3db !important;
-  background: #f6f7f3 !important;
-  color: #5a655c !important;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-.admin-theme .admin-header-bell:hover {
-  background: #ffffff !important;
-  border-color: #c9a84c !important;
-  color: #18221c !important;
-}
 
-/* -----------------------------------------------------------------------------
-   14. SPECIFICITY HARDENING  — beat pats-portal.css's "Admin shell light theme"
-   block (`.admin-theme.pats-dashboard aside[class*="sidebar"]`, spec 0,3,1),
-   which the drop-in layer above (spec 0,2,0) could not override, leaving the
-   sidebar white. These mirror those exact selectors so — loading later — they
-   win the cascade and restore the dark institutional rail.
-   -------------------------------------------------------------------------- */
 .admin-theme.pats-dashboard .admin-sidebar,
 .admin-theme.pats-dashboard aside[class*="sidebar"] {
   background: linear-gradient(178deg, #16271c 0%, #101d15 62%, #0d1812 100%) !important;
   border-color: rgba(0, 0, 0, 0.25) !important;
 }
 
-/* the outer positioning aside must not paint white behind the rail */
+
+
 .admin-theme.pats-dashboard .admin-layout-sidebar {
   background: transparent !important;
 }
 
-/* sidebar link text: white on the dark rail (base / hover / active) */
+
+
 .admin-theme.pats-dashboard .admin-sidebar a,
 .admin-theme.pats-dashboard .admin-sidebar button {
   color: #ffffff !important;
 }
+
 .admin-theme.pats-dashboard .admin-sidebar a:hover {
   color: #fbfbf8 !important;
 }
+
 .admin-theme.pats-dashboard .admin-sidebar a[data-active="true"] {
   color: #ffffff !important;
 }
+
 .admin-theme.pats-dashboard .admin-sidebar .admin-sidebar-logout {
   color: rgba(240, 169, 158, 0.9) !important;
 }
 
-/* header border → sage (day-theme block tints it slate) */
+
+
 .admin-theme.pats-dashboard .admin-header-bar,
 .admin-theme.pats-dashboard header[class*="admin"] {
   border-bottom-color: #e2e5de !important;
 }
 
-/* -----------------------------------------------------------------------------
-   15. PARTICIPANT PORTAL — light institutional look (mockup).
-   The portal now renders in day mode (forced in SiteThemeProvider), so its
-   tested light theme is active: sage canvas, white cards, ink text. These rules
-   push it the rest of the way to the mockup: the exact sage canvas tone and a
-   DARK institutional sidebar rail (matching the admin console + the mockup).
-   Selectors mirror participant-portal-day.css's high-specificity nav rules and,
-   loading later, win the cascade.
-   -------------------------------------------------------------------------- */
 
-/* sage canvas (mockup #eef0eb) */
+
+
+
 html[data-site-theme="day"] .participant-portal.pats-portal,
 html.light-theme .participant-portal.pats-portal {
   background: #eef0eb !important;
 }
 
-/* dark institutional sidebar rail */
-html[data-site-theme="day"] .participant-portal .pats-portal-nav,
-html.light-theme .participant-portal .pats-portal-nav {
-  background: linear-gradient(178deg, #16271c 0%, #101d15 62%, #0d1812 100%) !important;
-  border: 1px solid rgba(201, 168, 76, 0.14) !important;
-  border-radius: 14px !important;
-  padding: 20px 16px !important;
-  box-shadow: 0 10px 26px rgba(13, 24, 18, 0.14) !important;
-}
-@media (min-width: 1024px) {
-  html[data-site-theme="day"] .participant-portal .pats-portal-nav,
-  html.light-theme .participant-portal .pats-portal-nav {
-    position: sticky;
-    top: 24px;
-  }
-}
 
-/* nav eyebrow / "PORTAL" label → brass */
-html[data-site-theme="day"] .participant-portal.pats-portal .pats-portal-nav :is(.pats-eyebrow, .pats-portal-nav-brand, .pats-portal-nav-title),
-html.light-theme .participant-portal.pats-portal .pats-portal-nav :is(.pats-eyebrow, .pats-portal-nav-brand, .pats-portal-nav-title) {
-  color: rgba(201, 168, 76, 0.85) !important;
-}
 
-/* nav links → light on the dark rail (mirror day-nav specificity to win) */
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-portal-nav a, .pats-portal-nav a span, .pats-portal-logout, .pats-portal-logout span),
-html.light-theme .participant-portal.pats-portal :is(.pats-portal-nav a, .pats-portal-nav a span, .pats-portal-logout, .pats-portal-logout span) {
-  color: #ffffff !important;
-}
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-portal-nav a:hover, .pats-portal-nav a:hover span, .pats-portal-nav a.is-active, .pats-portal-nav a.is-active span, .pats-portal-logout:hover, .pats-portal-logout:hover span),
-html.light-theme .participant-portal.pats-portal :is(.pats-portal-nav a:hover, .pats-portal-nav a:hover span, .pats-portal-nav a.is-active, .pats-portal-nav a.is-active span, .pats-portal-logout:hover, .pats-portal-logout:hover span) {
-  color: #e6cf7f !important;
-}
-
-/* separators + icons on the dark rail */
-html[data-site-theme="day"] .participant-portal .pats-portal-nav a,
-html.light-theme .participant-portal .pats-portal-nav a {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
-}
-html[data-site-theme="day"] .participant-portal .pats-portal-nav a svg,
-html.light-theme .participant-portal .pats-portal-nav a svg {
-  color: rgba(233, 238, 233, 0.6) !important;
-}
-html[data-site-theme="day"] .participant-portal .pats-portal-nav a.is-active svg,
-html.light-theme .participant-portal .pats-portal-nav a.is-active svg {
-  color: #d8b549 !important;
-}
-html[data-site-theme="day"] .participant-portal .pats-portal-nav-logout,
-html.light-theme .participant-portal .pats-portal-nav-logout {
-  border-top-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-/* Participant sidebar sits on a dark green rail in every theme, so the nav
-   labels + logout must always be white for clear visibility. Theme-independent
-   (no day/light gate) and high-specificity (html + .dashboard-day, which the
-   portal layout always sets) so it wins over both the day-gated and the
-   ungated slate rules regardless of the active theme. */
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav a,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav a span,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-logout,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-logout span {
-  color: #ffffff !important;
-}
-
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav a:hover,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav a:hover span,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav a.is-active,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav a.is-active span,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-logout:hover,
-html .participant-portal.pats-portal.dashboard-day .pats-portal-logout:hover span {
-  color: #e6cf7f !important;
-}
-
-/* Keep the "PORTAL" eyebrow legible on the dark rail too. */
-html .participant-portal.pats-portal.dashboard-day .pats-portal-nav .pats-eyebrow {
-  color: rgba(230, 207, 127, 0.9) !important;
-}
-
-/* card headings → institutional ink */
 html[data-site-theme="day"] .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, h3),
 html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, h3) {
   color: #18221c !important;
 }
 
-/* header "Participant view" button (mockup) */
-.admin-theme .admin-header-pview {
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid #e0e3db !important;
-  background: #ffffff !important;
-  color: #2a332a !important;
-  font-size: 12.5px;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-.admin-theme .admin-header-pview:hover {
-  border-color: #c9a84c !important;
-  background: #faf9f3 !important;
-  color: #18221c !important;
-}
-.admin-theme .admin-header-pview svg {
-  color: #5a655c !important;
-}
 
-/* KPI card sparkline + "new this month" delta (mockup) */
-.admin-theme .admin-stat-card-delta {
-  margin-left: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #22a35b;
-  vertical-align: middle;
-}
-.admin-theme .admin-stat-card-spark {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 26px;
-  margin-top: 12px;
-}
-.admin-theme .admin-stat-card-spark > span {
-  flex: 1 1 0;
-  min-height: 2px;
-  border-radius: 2px 2px 0 0;
-  background: rgba(28, 33, 25, 0.14);
-  transition: background 0.2s ease;
-}
-.admin-theme .admin-stat-card-spark > span:last-child {
-  background: #2f4025;
-}
-.admin-theme .admin-stat-card:hover .admin-stat-card-spark > span {
-  background: rgba(28, 33, 25, 0.2);
-}
-.admin-theme .admin-stat-card:hover .admin-stat-card-spark > span:last-child {
-  background: #3d5230;
-}
 
-/* -----------------------------------------------------------------------------
-   17. PARTICIPATION REQUESTS TABLE — mockup 5-column layout
-   PARTICIPANT (avatar + name + email) · UNIT (name + rank·country) ·
-   APPLICATION (status + date) · PAYMENT (pill) · ACTIONS.
-   -------------------------------------------------------------------------- */
 .admin-theme .admin-users-col-participant { width: auto; }
+
 .admin-theme .admin-users-col-unit { width: 22%; }
+
 .admin-theme .admin-users-col-app { width: 17%; }
+
 .admin-theme .admin-users-col-pay { width: 14%; }
+
 .admin-theme .admin-users-col-actions { width: 104px; }
 
+
 .admin-theme .admin-users-cell-participant { padding: 11px 20px !important; }
+
 
 .admin-theme .admin-users-participant {
   display: flex;
   align-items: center;
   gap: 11px;
 }
+
 .admin-theme .admin-users-avatar {
   flex: none;
   width: 34px;
@@ -1065,9 +800,11 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   background: #eaf1ea;
   border: 1px solid #dbe6dc;
 }
+
 .admin-theme .admin-users-participant-text {
   min-width: 0;
 }
+
 .admin-theme .admin-users-participant-name {
   display: flex;
   align-items: center;
@@ -1078,6 +815,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .admin-theme .admin-users-participant-sub {
   font-size: 11.5px;
   color: #9aa298;
@@ -1085,6 +823,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .admin-theme .admin-users-unit-name {
   font-size: 12.5px;
   color: #2a332a;
@@ -1093,6 +832,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .admin-theme .admin-users-unit-sub {
   font-size: 11px;
   color: #9aa298;
@@ -1101,6 +841,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   text-overflow: ellipsis;
   margin-top: 3px;
 }
+
 .admin-theme .admin-users-app-date {
   font-size: 10.5px;
   color: #9aa298;
@@ -1109,7 +850,8 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   font-variant-numeric: tabular-nums;
 }
 
-/* Participation Requests: panel heading + Export button (mockup) */
+
+
 .admin-theme .admin-users-panel-title {
   font-size: 15px;
   font-weight: 700;
@@ -1117,6 +859,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   letter-spacing: -0.01em;
   margin-bottom: 2px;
 }
+
 .admin-theme .admin-btn-export {
   height: 36px;
   padding: 0 14px;
@@ -1130,33 +873,38 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   margin-left: auto;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
+
 .admin-theme .admin-btn-export:hover:not(:disabled) {
   border-color: #c9a84c !important;
   background: #faf9f3 !important;
   color: #18221c !important;
 }
+
 .admin-theme .admin-btn-export:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .admin-theme .admin-btn-export svg {
   color: #5a655c !important;
 }
 
-/* -----------------------------------------------------------------------------
-   18. PARTICIPATING TEAMS — card grid (mockup)
-   -------------------------------------------------------------------------- */
+
+
 .admin-theme .admin-team-grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 16px;
 }
+
 @media (min-width: 700px) {
   .admin-theme .admin-team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
 @media (min-width: 1080px) {
   .admin-theme .admin-team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
 .admin-theme .admin-team-card {
   background: #ffffff;
   border: 1px solid #e4e7e0;
@@ -1168,31 +916,38 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   gap: 14px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+
 .admin-theme .admin-team-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(20, 30, 24, 0.09);
 }
+
 .admin-theme .admin-team-card--clickable {
   cursor: pointer;
 }
+
 .admin-theme .admin-team-card--clickable:hover {
   border-color: #c9a84c;
   box-shadow: 0 12px 26px rgba(20, 30, 24, 0.13);
 }
+
 .admin-theme .admin-team-card--clickable:focus-visible {
   outline: none;
   border-color: #1e5a3a;
   box-shadow: 0 0 0 3px rgba(30, 90, 58, 0.18);
 }
+
 .admin-theme .admin-team-card--clickable:hover .admin-team-card-link {
   color: #17492f;
 }
+
 .admin-theme .admin-team-card-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
 }
+
 .admin-theme .admin-team-card-name {
   font-size: 14.5px;
   font-weight: 700;
@@ -1201,11 +956,13 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .admin-theme .admin-team-card-sub {
   font-size: 11.5px;
   color: #9aa298;
   margin-top: 2px;
 }
+
 .admin-theme .admin-team-card-status {
   flex: none;
   display: inline-flex;
@@ -1218,8 +975,11 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
 .admin-theme .admin-team-card-status--active { background: #e9f5ed; color: #15803d; }
+
 .admin-theme .admin-team-card-status--pending { background: #fbf2e0; color: #9a6711; }
+
 .admin-theme .admin-team-card-captain {
   display: flex;
   align-items: center;
@@ -1229,7 +989,9 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   background: #fafbf8;
   border: 1px solid #eef0ea;
 }
+
 .admin-theme .admin-team-card-captain-text { min-width: 0; flex: 1 1 auto; }
+
 .admin-theme .admin-team-card-captain-name {
   display: flex;
   align-items: center;
@@ -1240,17 +1002,20 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .admin-theme .admin-team-card-captain-role {
   font-size: 10.5px;
   color: #9aa298;
   margin-top: 1px;
 }
+
 .admin-theme .admin-team-card-country {
   flex: none;
   font-size: 10.5px;
   color: #8a6d12;
   font-weight: 600;
 }
+
 .admin-theme .admin-team-card-foot {
   display: flex;
   align-items: center;
@@ -1259,11 +1024,13 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   padding-top: 11px;
   border-top: 1px solid #f0f1ec;
 }
+
 .admin-theme .admin-team-card-members {
   font-size: 11.5px;
   color: #5a655c;
   font-variant-numeric: tabular-nums;
 }
+
 .admin-theme .admin-team-card-link {
   font-size: 12px;
   font-weight: 600;
@@ -1273,7 +1040,9 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   cursor: pointer;
   white-space: nowrap;
 }
+
 .admin-theme .admin-team-card-link:hover { color: #17492f; }
+
 .admin-theme .admin-team-empty {
   padding: 40px;
   text-align: center;
@@ -1283,158 +1052,17 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   border-radius: 14px;
 }
 
-/* payments table: keep the 6 columns within the panel (Actions was clipping) */
-.admin-theme .admin-payments-table { width: 100%; table-layout: auto; }
-.admin-theme .admin-users-col-actions,
-.admin-theme .admin-payments-col-actions { width: 96px; }
+.admin-theme .admin-users-col-actions { width: 96px; }
 
-/* -----------------------------------------------------------------------------
-   19. PORTAL JOURNEY STEPPER (Application → Payment → Confirmed) — mockup
-   -------------------------------------------------------------------------- */
-.participant-portal .portal-stepper,
-.pats-portal .portal-stepper {
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1px solid #e4e7e0;
-  border-top: 2px solid rgba(201, 168, 76, 0.5);
-  border-radius: 12px;
-  padding: 18px 22px;
-  margin-bottom: 18px;
-}
-.participant-portal .portal-stepper__step,
-.pats-portal .portal-stepper__step {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  flex: none;
-}
-.participant-portal .portal-stepper__dot,
-.pats-portal .portal-stepper__dot {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  background: #f0f1ec;
-  color: #9aa298;
-  border: 1px solid #e4e7e0;
-}
-.participant-portal .portal-stepper__step--done .portal-stepper__dot,
-.pats-portal .portal-stepper__step--done .portal-stepper__dot {
-  background: #1e5a3a;
-  color: #ffffff;
-  border-color: #1e5a3a;
-}
-.participant-portal .portal-stepper__step--current .portal-stepper__dot,
-.pats-portal .portal-stepper__step--current .portal-stepper__dot {
-  background: #fbf2e0;
-  color: #9a6711;
-  border-color: #e6cf7f;
-}
-.participant-portal .portal-stepper__text,
-.pats-portal .portal-stepper__text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-.participant-portal .portal-stepper__label,
-.pats-portal .portal-stepper__label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #18221c !important;
-}
-.participant-portal .portal-stepper__sub,
-.pats-portal .portal-stepper__sub {
-  font-size: 11px;
-  color: #5a655c !important;
-  margin-top: 2px;
-}
-.participant-portal .portal-stepper__step--current .portal-stepper__sub,
-.pats-portal .portal-stepper__step--current .portal-stepper__sub {
-  color: #9a6711 !important;
-  font-weight: 600;
-}
-.participant-portal .portal-stepper__step--upcoming .portal-stepper__label,
-.pats-portal .portal-stepper__step--upcoming .portal-stepper__label {
-  color: #5a655c !important;
-}
-.participant-portal .portal-stepper__line,
-.pats-portal .portal-stepper__line {
-  flex: 1 1 auto;
-  height: 2px;
-  min-width: 24px;
-  margin: 0 14px;
-  background: #e4e7e0;
-  border-radius: 2px;
-}
-.participant-portal .portal-stepper__line--filled,
-.pats-portal .portal-stepper__line--filled {
-  background: #1e5a3a;
-}
-@media (max-width: 620px) {
-  .participant-portal .portal-stepper,
-  .pats-portal .portal-stepper { flex-wrap: wrap; gap: 12px; }
-  .participant-portal .portal-stepper__line,
-  .pats-portal .portal-stepper__line { display: none; }
-}
 
-/* portal sidebar stage chip — "Payment required · Step 2/3" (mockup) */
-.participant-portal .pats-portal-stage-chip,
-.pats-portal .pats-portal-stage-chip {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin: 0 0 14px;
-  padding: 8px 10px;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(201, 168, 76, 0.2) !important;
-}
-.participant-portal .pats-portal-stage-dot,
-.pats-portal .pats-portal-stage-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex: none;
-}
-.participant-portal .pats-portal-stage-chip--pending .pats-portal-stage-dot,
-.pats-portal .pats-portal-stage-chip--pending .pats-portal-stage-dot {
-  background: #e6cf7f;
-  box-shadow: 0 0 0 3px rgba(230, 207, 127, 0.16);
-}
-.participant-portal .pats-portal-stage-chip--confirmed .pats-portal-stage-dot,
-.pats-portal .pats-portal-stage-chip--confirmed .pats-portal-stage-dot {
-  background: #6fce97;
-  box-shadow: 0 0 0 3px rgba(111, 206, 151, 0.16);
-}
-.participant-portal .pats-portal-stage-label,
-.pats-portal .pats-portal-stage-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: #e8e3d2 !important;
-  letter-spacing: 0.02em;
-}
-.participant-portal .pats-portal-stage-step,
-.pats-portal .pats-portal-stage-step {
-  margin-left: auto;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(233, 238, 233, 0.45) !important;
-}
 
-/* Team Members table — avatar member cell (mockup) */
 .participant-portal .team-members__member,
 .pats-portal .team-members__member {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .participant-portal .team-members__avatar,
 .pats-portal .team-members__avatar {
   flex: none;
@@ -1450,21 +1078,22 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   background: #eaf1ea;
   border: 1px solid #dbe6dc;
 }
+
 .participant-portal .team-members__member-name,
 .pats-portal .team-members__member-name {
   font-weight: 600;
   color: #18221c !important;
 }
 
-/* -----------------------------------------------------------------------------
-   20. PORTAL VERTICAL TIMELINE (Timeline & deadlines page) — mockup
-   -------------------------------------------------------------------------- */
+
+
 .participant-portal .portal-timeline,
 .pats-portal .portal-timeline {
   list-style: none;
   margin: 0;
   padding: 4px 0;
 }
+
 .participant-portal .portal-timeline__item,
 .pats-portal .portal-timeline__item {
   position: relative;
@@ -1473,11 +1102,13 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   gap: 14px;
   padding-bottom: 22px;
 }
+
 .participant-portal .portal-timeline__item:last-child,
 .pats-portal .portal-timeline__item:last-child {
   padding-bottom: 0;
 }
-/* connecting line through the marker column */
+
+
 .participant-portal .portal-timeline__item::before,
 .pats-portal .portal-timeline__item::before {
   content: "";
@@ -1488,16 +1119,19 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   width: 2px;
   background: #e4e7e0;
 }
+
 .participant-portal .portal-timeline__item:last-child::before,
 .pats-portal .portal-timeline__item:last-child::before {
   display: none;
 }
+
 .participant-portal .portal-timeline__date,
 .pats-portal .portal-timeline__date {
   text-align: right;
   line-height: 1.15;
   padding-top: 1px;
 }
+
 .participant-portal .portal-timeline__day,
 .pats-portal .portal-timeline__day {
   display: block;
@@ -1506,12 +1140,14 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #18221c !important;
   white-space: nowrap;
 }
+
 .participant-portal .portal-timeline__year,
 .pats-portal .portal-timeline__year {
   display: block;
   font-size: 11px;
   color: #9aa298 !important;
 }
+
 .participant-portal .portal-timeline__marker,
 .pats-portal .portal-timeline__marker {
   justify-self: center;
@@ -1524,17 +1160,20 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   position: relative;
   z-index: 1;
 }
+
 .participant-portal .portal-timeline__item--completed .portal-timeline__marker,
 .pats-portal .portal-timeline__item--completed .portal-timeline__marker {
   background: #1e5a3a;
   border-color: #1e5a3a;
   box-shadow: 0 0 0 3px rgba(30, 90, 58, 0.14);
 }
+
 .participant-portal .portal-timeline__item--upcoming .portal-timeline__marker,
 .pats-portal .portal-timeline__item--upcoming .portal-timeline__marker {
   border-color: #c9a84c;
   box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.16);
 }
+
 .participant-portal .portal-timeline__head,
 .pats-portal .portal-timeline__head {
   display: flex;
@@ -1542,18 +1181,21 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   gap: 10px;
   flex-wrap: wrap;
 }
+
 .participant-portal .portal-timeline__title,
 .pats-portal .portal-timeline__title {
   font-size: 14px;
   font-weight: 600;
   color: #18221c !important;
 }
+
 .participant-portal .portal-timeline__desc,
 .pats-portal .portal-timeline__desc {
   font-size: 12.5px;
   color: #5a655c !important;
   margin-top: 3px;
 }
+
 .participant-portal .portal-timeline__pill,
 .pats-portal .portal-timeline__pill {
   display: inline-flex;
@@ -1565,6 +1207,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   font-weight: 700;
   white-space: nowrap;
 }
+
 .participant-portal .portal-timeline__pill::before,
 .pats-portal .portal-timeline__pill::before {
   content: "";
@@ -1573,14 +1216,18 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   border-radius: 50%;
   background: currentColor;
 }
+
 .participant-portal .portal-timeline__pill--completed,
 .pats-portal .portal-timeline__pill--completed { background: #e9f5ed; color: #15803d; }
+
 .participant-portal .portal-timeline__pill--upcoming,
 .pats-portal .portal-timeline__pill--upcoming { background: #fbf2e0; color: #9a6711; }
+
 .participant-portal .portal-timeline__pill--scheduled,
 .pats-portal .portal-timeline__pill--scheduled { background: #f0f1ec; color: #5a655c; }
 
-/* Support ticket row: leading icon (mockup) */
+
+
 .participant-portal .support-ticket__icon,
 .pats-portal .support-ticket__icon {
   flex: none;
@@ -1594,114 +1241,15 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #1e5a3a !important;
   border: 1px solid #dbe6dc !important;
 }
+
 .participant-portal .support-ticket__body,
 .pats-portal .support-ticket__body {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-/* -----------------------------------------------------------------------------
-   21. ADMIN SUPPORT TICKETS — card/row list (mockup)
-   -------------------------------------------------------------------------- */
-.admin-theme .admin-tickets-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.admin-theme .admin-ticket-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 13px 16px;
-  border: 1px solid #e4e7e0;
-  border-radius: 12px;
-  background: #ffffff;
-  text-decoration: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.admin-theme .admin-ticket-row:hover {
-  border-color: #d8ddd3;
-  box-shadow: 0 6px 18px rgba(20, 30, 24, 0.07);
-}
-.admin-theme .admin-ticket-row__main {
-  min-width: 0;
-  flex: 1 1 auto;
-}
-.admin-theme .admin-ticket-row__head {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  flex-wrap: wrap;
-}
-.admin-theme .admin-ticket-row__ref {
-  font-size: 11px;
-  font-weight: 700;
-  color: #9aa298;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
-.admin-theme .admin-ticket-row__subject {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #18221c;
-}
-.admin-theme .admin-ticket-row__priority {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 1px 8px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.admin-theme .admin-ticket-row__priority::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
-}
-.admin-theme .admin-ticket-row__priority--high { background: #fcebe9; color: #b42318; }
-.admin-theme .admin-ticket-row__priority--normal { background: #f0f1ec; color: #5a655c; }
-.admin-theme .admin-ticket-row__priority--low { background: #e9f0fd; color: #1d4ed8; }
-.admin-theme .admin-ticket-row__cat {
-  margin-top: 3px;
-  font-size: 11.5px;
-  color: #9aa298;
-}
-.admin-theme .admin-ticket-row__aside {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: none;
-}
-.admin-theme .admin-ticket-row__who {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  line-height: 1.25;
-}
-.admin-theme .admin-ticket-row__name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #2a332a;
-  white-space: nowrap;
-}
-.admin-theme .admin-ticket-row__metaline {
-  font-size: 10.5px;
-  color: #9aa298;
-  font-variant-numeric: tabular-nums;
-}
 
-/* -----------------------------------------------------------------------------
-   22. USER MANAGEMENT — role pill + account status pill (mockup)
-   -------------------------------------------------------------------------- */
+
 .admin-theme .admin-role-pill,
 .admin-theme .admin-account-status {
   display: inline-flex;
@@ -1715,10 +1263,15 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
+
 .admin-theme .admin-role-pill--admin { background: #f8f1d9; color: #8a6d12; }
+
 .admin-theme .admin-role-pill--mtd { background: #e9f5ed; color: #15803d; }
+
 .admin-theme .admin-role-pill--sdbs { background: #f0f1ec; color: #5a655c; }
+
 .admin-theme .admin-role-pill--user { background: #e9f0fd; color: #1d4ed8; }
+
 .admin-theme .admin-account-status::before {
   content: "";
   width: 6px;
@@ -1726,128 +1279,15 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   border-radius: 50%;
   background: currentColor;
 }
+
 .admin-theme .admin-account-status--active { background: #e9f5ed; color: #15803d; }
+
 .admin-theme .admin-account-status--suspended { background: #fcebe9; color: #b42318; }
 
-/* -----------------------------------------------------------------------------
-   23. NEWS MANAGEMENT — card/row list (mockup)
-   -------------------------------------------------------------------------- */
-.admin-theme .admin-news-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.admin-theme .admin-news-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 13px 16px;
-  border: 1px solid #e4e7e0;
-  border-radius: 12px;
-  background: #ffffff;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.admin-theme .admin-news-row:hover {
-  border-color: #d8ddd3;
-  box-shadow: 0 6px 18px rgba(20, 30, 24, 0.07);
-}
-.admin-theme .admin-news-row__icon {
-  flex: none;
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #f4f8f4;
-  color: #1e5a3a;
-  border: 1px solid #e2ebe3;
-}
-.admin-theme .admin-news-row__main {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-.admin-theme .admin-news-row__title {
-  font-size: 13.5px;
-  font-weight: 600;
-  color: #18221c;
-}
-.admin-theme .admin-news-row__meta {
-  margin-top: 3px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11.5px;
-  color: #9aa298;
-}
-.admin-theme .admin-news-row__meta .admin-news-pdf-none {
-  color: #b42318;
-  font-weight: 600;
-}
-.admin-theme .admin-news-row__aside {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.admin-theme .admin-news-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 10px;
-  border-radius: 999px;
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.admin-theme .admin-news-status::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-.admin-theme .admin-news-status--published { background: #e9f5ed; color: #15803d; }
-.admin-theme .admin-news-status--draft { background: #f0f1ec; color: #5a655c; }
 
-/* -----------------------------------------------------------------------------
-   24. ANNOUNCEMENTS — "Live preview" ticker bar (mockup)
-   -------------------------------------------------------------------------- */
-.admin-theme .admin-ticker-live-preview {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 18px;
-  padding: 8px 8px 8px 16px;
-  border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid #e4e7e0;
-  box-shadow: var(--admin-shadow-card, 0 1px 2px rgba(20, 30, 24, 0.05));
-}
-.admin-theme .admin-ticker-live-preview__label {
-  flex: none;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #9a6711;
-}
-.admin-theme .admin-ticker-live-preview .admin-ticker-preview {
-  flex: 1 1 auto;
-  min-width: 0;
-}
 
-/* =============================================================================
-   18. FINTECH KPI ROW  — green hero card + white cards with icon tiles &
-   delta pills, an "Overview" section header, and refreshed quick-action cards.
-   Inspired by modern finance/SaaS dashboards; on-brand olive + brass.
-   ============================================================================= */
 
-/* —— Overview section header —— */
+
 .admin-theme .admin-overview-head {
   display: flex;
   align-items: center;
@@ -1856,43 +1296,6 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   margin-bottom: 14px;
 }
 
-.admin-theme .admin-overview-title {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #18221c;
-}
-
-.admin-theme .admin-overview-sub {
-  margin: 3px 0 0;
-  font-size: 13px;
-  color: #6b746a;
-}
-
-.admin-theme .admin-overview-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  flex-shrink: 0;
-  padding: 6px 13px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid #e0e3db;
-  box-shadow: 0 1px 2px rgba(20, 30, 24, 0.05);
-  font-size: 12px;
-  font-weight: 600;
-  color: #1e5a3a;
-}
-
-.admin-theme .admin-overview-chip-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #22a35b;
-  box-shadow: 0 0 0 3px rgba(34, 163, 91, 0.16);
-  animation: admin-pulse-dot 1.8s ease-in-out infinite;
-}
 
 @keyframes admin-pulse-dot {
   0%,
@@ -1904,13 +1307,14 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   }
 }
 
-/* Tighter KPI grid so the whole dashboard fits without scrolling */
+
 .admin-theme .admin-crm-stats {
   gap: 16px !important;
   margin-bottom: 16px !important;
 }
 
-/* —— Compact vertical KPI card layout (overrides the old row layout) —— */
+
+
 .admin-theme .admin-crm-stats .admin-stat-card {
   display: flex !important;
   flex-direction: column !important;
@@ -1923,12 +1327,14 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   text-decoration: none;
 }
 
+
 .admin-theme .admin-stat-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
+
 
 .admin-theme .admin-stat-card-icon {
   display: flex;
@@ -1940,10 +1346,6 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   flex-shrink: 0;
 }
 
-.admin-theme .admin-stat-head {
-  min-width: 0;
-  flex: 1 1 auto;
-}
 
 .admin-theme .admin-stat-card .admin-stat-card-label {
   margin: 0;
@@ -1954,12 +1356,6 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #6b746a !important;
 }
 
-.admin-theme .admin-stat-sub {
-  margin: 2px 0 0;
-  font-size: 11.5px;
-  color: #9aa298;
-  line-height: 1.3;
-}
 
 .admin-theme .admin-stat-card .admin-stat-card-value {
   margin: 0;
@@ -1971,7 +1367,8 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   font-variant-numeric: tabular-nums;
 }
 
-/* delta pills */
+
+
 .admin-theme .admin-stat-pill {
   display: inline-flex;
   align-items: center;
@@ -1985,22 +1382,20 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   white-space: nowrap;
 }
 
+
 .admin-theme .admin-stat-pill--up {
   background: #e7f6ec;
   color: #17954a;
 }
+
 
 .admin-theme .admin-stat-pill--down {
   background: #fdeceb;
   color: #d4503b;
 }
 
-/* default-card sparkline pinned to the bottom */
-.admin-theme .admin-stat-card .admin-stat-card-spark {
-  margin-top: auto;
-}
 
-/* —— Feature (hero) card — filled olive-green —— */
+
 .admin-theme .admin-crm-stats .admin-stat-card--feature {
   background:
     radial-gradient(120% 120% at 85% 0%, rgba(255, 255, 255, 0.14), transparent 60%),
@@ -2010,32 +1405,34 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #ffffff !important;
 }
 
+
 .admin-theme .admin-crm-stats .admin-stat-card--feature:hover {
   box-shadow: 0 16px 38px rgba(23, 73, 47, 0.36) !important;
 }
+
 
 .admin-theme .admin-stat-card--feature .admin-stat-card-icon {
   background: rgba(255, 255, 255, 0.16) !important;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
+
 .admin-theme .admin-stat-card--feature .admin-stat-card-icon svg {
   color: #ffffff !important;
 }
+
 
 .admin-theme .admin-stat-card--feature .admin-stat-card-label {
   color: rgba(255, 255, 255, 0.92) !important;
   font-weight: 700 !important;
 }
 
-.admin-theme .admin-stat-card--feature .admin-stat-sub {
-  color: rgba(255, 255, 255, 0.62) !important;
-}
 
 .admin-theme .admin-stat-card--feature .admin-stat-card-value {
   color: #ffffff !important;
   font-size: 28px !important;
 }
+
 
 .admin-theme .admin-stat-card--feature .admin-stat-pill {
   align-self: flex-start;
@@ -2043,112 +1440,8 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #ffffff !important;
 }
 
-.admin-theme .admin-stat-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.92);
-  transition: gap 0.16s ease;
-}
 
-.admin-theme .admin-stat-card--feature:hover .admin-stat-more {
-  gap: 9px;
-}
 
-/* —— Quick-action cards —— */
-.admin-theme .admin-quick-grid {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-@media (min-width: 640px) {
-  .admin-theme .admin-quick-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .admin-theme .admin-quick-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-.admin-theme .admin-quick-card {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 15px 16px;
-  border-radius: 14px;
-  background: #ffffff;
-  border: 1px solid #e4e7e0;
-  box-shadow: 0 1px 2px rgba(20, 30, 24, 0.05);
-  text-decoration: none;
-  transition:
-    transform 0.16s ease,
-    box-shadow 0.16s ease,
-    border-color 0.16s ease;
-}
-
-.admin-theme .admin-quick-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(201, 168, 76, 0.55);
-  box-shadow: 0 10px 24px rgba(20, 30, 24, 0.1);
-}
-
-.admin-theme .admin-quick-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  flex-shrink: 0;
-  border-radius: 12px;
-  background: #eef4ea;
-  color: #1e5a3a;
-  transition: background 0.16s ease, color 0.16s ease;
-}
-
-.admin-theme .admin-quick-card:hover .admin-quick-icon {
-  background: #1e5a3a;
-  color: #ffffff;
-}
-
-.admin-theme .admin-quick-body {
-  min-width: 0;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.admin-theme .admin-quick-label {
-  font-size: 13.5px;
-  font-weight: 650;
-  color: #18221c;
-  line-height: 1.25;
-}
-
-.admin-theme .admin-quick-hint {
-  font-size: 11.5px;
-  color: #8a9387;
-}
-
-.admin-theme .admin-quick-count {
-  flex-shrink: 0;
-  font-size: 22px;
-  font-weight: 800;
-  color: #18221c;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-
-/* —— Shared sleek empty state (olive-tinted, on theme) —— */
 .admin-theme .admin-empty-state {
   display: flex;
   flex-direction: column;
@@ -2161,6 +1454,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   border-radius: 16px;
   box-shadow: 0 1px 3px rgba(20, 30, 24, 0.05);
 }
+
 
 .admin-theme .admin-empty-state-icon {
   display: flex;
@@ -2175,10 +1469,12 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   box-shadow: 0 0 0 6px rgba(30, 90, 58, 0.06);
 }
 
+
 .admin-theme .admin-empty-state-icon svg {
   width: 26px;
   height: 26px;
 }
+
 
 .admin-theme .admin-empty-state-title {
   margin: 0;
@@ -2186,6 +1482,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   font-weight: 700;
   color: #18221c;
 }
+
 
 .admin-theme .admin-empty-state-desc {
   margin: 0;
@@ -2195,7 +1492,8 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #5a655c;
 }
 
-/* —— Tickets table —— */
+
+
 .admin-theme .admin-tickets-table-wrap {
   overflow-x: auto;
   border: 1px solid #e4e7e0;
@@ -2204,16 +1502,19 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   box-shadow: 0 1px 3px rgba(20, 30, 24, 0.05);
 }
 
+
 .admin-theme .admin-tickets-table {
   border-collapse: collapse;
   min-width: 720px;
   font-size: 13px;
 }
 
+
 .admin-theme .admin-tickets-table tbody td {
   padding: 11px 14px !important;
   vertical-align: middle;
 }
+
 
 .admin-theme .admin-tickets-ref {
   font-family: ui-monospace, "SFMono-Regular", "Menlo", monospace;
@@ -2223,43 +1524,31 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   white-space: nowrap;
 }
 
+
 .admin-theme .admin-tickets-subject {
   font-weight: 650;
   color: #18221c;
   text-decoration: none;
 }
 
+
 .admin-theme .admin-tickets-subject:hover {
   color: #1e5a3a;
   text-decoration: underline;
 }
+
 
 .admin-theme .admin-tickets-muted {
   color: #5a655c;
   white-space: nowrap;
 }
 
+
 .admin-theme .admin-tickets-requester {
   color: #18221c;
   white-space: nowrap;
 }
 
-/* Tickets toolbar: capped search + filters aligned on one row */
-.admin-theme .admin-tickets-controls {
-  align-items: center;
-}
-
-.admin-theme .admin-tickets-controls .admin-unit-search-field {
-  flex: 0 1 320px;
-  min-width: 220px;
-}
-
-.admin-theme .admin-tickets-controls nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-}
 
 .admin-theme .admin-tag-priority {
   display: inline-flex;
@@ -2272,6 +1561,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   white-space: nowrap;
 }
 
+
 .admin-theme .admin-tag-priority::before {
   content: "";
   width: 6px;
@@ -2280,22 +1570,26 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   background: currentColor;
 }
 
+
 .admin-theme .admin-tag-priority--high {
   background: #fcebe9;
   color: #b42318;
 }
+
 
 .admin-theme .admin-tag-priority--normal {
   background: #f0f1ec;
   color: #5a655c;
 }
 
+
 .admin-theme .admin-tag-priority--low {
   background: #e9f0fd;
   color: #1d4ed8;
 }
 
-/* —— Flights table (paginated) —— */
+
+
 .admin-theme .admin-flights-wrap {
   overflow-x: auto;
   border: 1px solid #e4e7e0;
@@ -2304,34 +1598,25 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   box-shadow: 0 1px 3px rgba(20, 30, 24, 0.05);
 }
 
+
 .admin-theme .admin-flights-table {
   border-collapse: collapse;
   min-width: 900px;
   font-size: 12.5px;
 }
 
+
 .admin-theme .admin-flights-table tbody td {
   padding: 9px 14px !important;
   vertical-align: middle;
 }
 
-.admin-theme .admin-flights-pname {
-  display: block;
-  font-weight: 650;
-  color: #18221c;
-}
-
-.admin-theme .admin-flights-punit {
-  display: block;
-  margin-top: 1px;
-  font-size: 11px;
-  color: #9aa298;
-}
 
 .admin-theme .admin-flights-strong {
   color: #18221c;
   font-weight: 500;
 }
+
 
 .admin-theme .admin-flights-mono {
   font-family: ui-monospace, "SFMono-Regular", "Menlo", monospace;
@@ -2340,11 +1625,6 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   white-space: nowrap;
 }
 
-.admin-theme .admin-flights-muted {
-  font-size: 11.5px;
-  color: #5a655c;
-  white-space: nowrap;
-}
 
 .admin-theme .admin-flights-doc {
   display: inline-flex;
@@ -2356,14 +1636,17 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   text-decoration: none;
 }
 
+
 .admin-theme .admin-flights-doc:hover {
   text-decoration: underline;
 }
+
 
 .admin-theme .admin-flights-doc--missing {
   color: #b07d18;
   font-weight: 600;
 }
+
 
 .admin-theme .admin-flights-status {
   display: inline-flex;
@@ -2372,21 +1655,25 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   white-space: nowrap;
 }
 
-/* Green-tinted header + rows for the flights table */
+
+
 .admin-theme .admin-flights-table thead th {
   background: #edf3ea !important;
   color: #2f4025 !important;
 }
 
+
 .admin-theme .admin-flights-table tbody tr:nth-child(even) {
   background: #f6faf4 !important;
 }
+
 
 .admin-theme .admin-flights-table tbody tr:hover {
   background: #eaf3e6 !important;
 }
 
-/* Compact icon-only finalize / unlock control */
+
+
 .admin-theme .admin-flights-fin {
   display: inline-flex;
   align-items: center;
@@ -2401,16 +1688,19 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
     color 0.15s ease;
 }
 
+
 .admin-theme .admin-flights-fin--lock {
   background: #1e5a3a;
   border: 1px solid #1e5a3a;
   color: #ffffff;
 }
 
+
 .admin-theme .admin-flights-fin--lock:hover:not(:disabled) {
   background: #17492f;
   border-color: #17492f;
 }
+
 
 .admin-theme .admin-flights-fin--unlock {
   background: #ffffff;
@@ -2418,16 +1708,19 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #5a655c;
 }
 
+
 .admin-theme .admin-flights-fin--unlock:hover:not(:disabled) {
   background: #f4f6f1;
   border-color: #c9a84c;
   color: #17492f;
 }
 
+
 .admin-theme .admin-flights-fin:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 
 .admin-theme .admin-flights-foot {
   display: flex;
@@ -2438,17 +1731,13 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   padding: 0 2px;
 }
 
-.admin-theme .admin-flights-count {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #5a655c;
-}
 
 .admin-theme .admin-flights-pager {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
+
 
 .admin-theme .admin-flights-pager-btn {
   display: inline-flex;
@@ -2464,15 +1753,18 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
+
 .admin-theme .admin-flights-pager-btn:hover:not(:disabled) {
   background: #f4f6f1;
   border-color: #c9a84c;
 }
 
+
 .admin-theme .admin-flights-pager-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
 
 .admin-theme .admin-flights-pager-label {
   font-size: 12.5px;
@@ -2481,13 +1773,15 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   font-variant-numeric: tabular-nums;
 }
 
-/* —— Ticket detail — compact hero + two-column (thread + manage sidebar) —— */
+
+
 .admin-theme .admin-ticket-detail {
   display: flex;
   flex-direction: column;
   gap: 14px;
   padding-bottom: 0.5rem;
 }
+
 
 .admin-theme .admin-ticket-detail-hero {
   display: flex;
@@ -2502,6 +1796,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   box-shadow: 0 1px 3px rgba(20, 30, 24, 0.05);
 }
 
+
 .admin-theme .admin-ticket-detail-subject {
   margin: 0;
   font-size: 1.05rem;
@@ -2510,6 +1805,7 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   line-height: 1.25;
   color: #18221c;
 }
+
 
 .admin-theme .admin-ticket-detail-meta {
   display: flex;
@@ -2521,9 +1817,11 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   color: #5a655c;
 }
 
+
 .admin-theme .admin-ticket-detail-dot {
   color: #c7cdc2;
 }
+
 
 .admin-theme .admin-ticket-detail-badges {
   display: flex;
@@ -2532,22 +1830,26 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   flex-shrink: 0;
 }
 
+
 .admin-theme .admin-ticket-detail-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 14px;
 }
 
+
 @media (min-width: 1024px) {
   .admin-theme .admin-ticket-detail-grid {
     grid-template-columns: minmax(0, 1fr) 300px;
     align-items: start;
   }
+
   .admin-theme .admin-ticket-detail-aside {
     position: sticky;
     top: 80px;
   }
 }
+
 
 .admin-theme .admin-ticket-detail-main {
   display: flex;
@@ -2556,9 +1858,11 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   min-width: 0;
 }
 
+
 .admin-theme .admin-ticket-detail-aside {
   min-width: 0;
 }
+
 
 .admin-theme .admin-ticket-reply {
   display: flex;
@@ -2566,11 +1870,13 @@ html.light-theme .participant-portal :is(.portal-card, .pats-panel) :is(h1, h2, 
   gap: 10px;
 }
 
+
 .admin-theme .admin-ticket-manage {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
+
 
 .admin-theme .admin-ticket-assign {
   display: flex;
