@@ -58,7 +58,6 @@ export default auth((req) => {
     pathname.startsWith("/event/edit") ||
     pathname.startsWith("/event/payment") ||
     pathname.startsWith("/event/tickets") ||
-    pathname.startsWith("/event/timeline") ||
     pathname.startsWith("/event/team");
   const isAdmin = pathname.startsWith("/admin");
   const isRegisterPage = pathname === "/event/register";
@@ -102,7 +101,6 @@ export const config = {
     "/event/edit/:path*",
     "/event/payment/:path*",
     "/event/tickets/:path*",
-    "/event/timeline/:path*",
     "/event/team/:path*",
     "/event/login",
     "/event/register",

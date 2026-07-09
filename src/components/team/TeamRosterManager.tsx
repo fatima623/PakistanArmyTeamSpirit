@@ -432,7 +432,7 @@ export function TeamRosterManager({
           </div>
           <Button
             size="lg"
-            className="bg-emerald-700 text-white hover:bg-emerald-800"
+            className="bg-emerald-700 text-white hover:bg-emerald-800 disabled:!opacity-100 disabled:!bg-slate-200 disabled:!text-slate-500 disabled:!shadow-none"
             disabled={!canRegister || busy !== null}
             onClick={registerTeam}
             title={

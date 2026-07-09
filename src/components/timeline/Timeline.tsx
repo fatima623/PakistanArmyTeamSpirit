@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { formatDateDisplay, formatDateTime } from "@/lib/utils";
 import type { TimelineData } from "@/lib/timeline";
 
@@ -104,12 +102,6 @@ export function Timeline({
             </ul>
           )}
         </div>
-      )}
-
-      {compact && (
-        <Link href="/event/timeline" className="portal-link text-sm">
-          View full timeline →
-        </Link>
       )}
     </div>
   );

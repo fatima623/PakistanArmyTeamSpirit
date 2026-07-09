@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
-  CalendarClock,
   ClipboardList,
   CreditCard,
   Home,
@@ -13,7 +12,6 @@ import {
   LogOut,
   Plane,
   Shield,
-  ShieldCheck,
   Users,
 } from "lucide-react";
 
@@ -34,9 +32,7 @@ const BASE_LINKS: {
   { href: "/event/payment", label: "Payment", Icon: CreditCard, gate: "payment" },
   { href: "/event/flights", label: "Flight Details", Icon: Plane, gate: "flights" },
   { href: "/event/host-info", label: "Host Information", Icon: Home, gate: "hostInfo" },
-  { href: "/event/timeline", label: "Timeline", Icon: CalendarClock, gate: "always" },
   { href: "/event/tickets", label: "Support", Icon: LifeBuoy, gate: "always" },
-  { href: "/event/edit/privacy", label: "Privacy policy", Icon: ShieldCheck, gate: "always" },
 ];
 
 export function PatsPortalNav({

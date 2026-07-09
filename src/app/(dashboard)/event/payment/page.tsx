@@ -51,7 +51,10 @@ export default async function PaymentPage() {
   const approved =
     (user.applicationStatus === APPLICATION_STATUS.APPROVED || user.approved) &&
     !user.suspended;
-  const paymentData = approved && !isPaymentVerified(user.paymentStatus)
+  // Fetch payment data for every approved participant — including those whose
+  // payment is already verified, so the form can render its read-only
+  // "payment verified" receipt view instead of a blank page.
+  const paymentData = approved
     ? await getParticipantPaymentData(session.user.id)
     : null;
   const deadlinePassed =
@@ -87,11 +90,26 @@ export default async function PaymentPage() {
         <div className="space-y-6">
           <PatsPortalHeader
             title="Payment"
-            subtitle="Send the registration fee using the methods below, then upload your proof for PATS verification."
+            subtitle={
+              isPaymentVerified(user.paymentStatus)
+                ? "Your registration payment has been verified by PATS — no further action is required."
+                : "Send the registration fee using the methods below, then upload your proof for PATS verification."
+            }
           />
           <PaymentSubmissionForm initialData={paymentData} />
         </div>
-      ) : null}
+      ) : (
+        <div className="portal-form-card pats-panel">
+          <PatsPortalHeader title="Payment" />
+          <p className="portal-body mb-4">
+            No payment information is available for your account yet. Please
+            return to the dashboard and try again shortly.
+          </p>
+          <Link href="/event/dashboard" className="portal-link">
+            Return to dashboard
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -5736,22 +5736,22 @@ html[data-site-theme="day"] .participant-portal.pats-portal .portal-back-link:ho
 
 
 
-html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *) {
+html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *) {
   color: #475569 !important;
 }
 
 
 
-html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *) {
+html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *) {
   color: #1e293b !important;
 }
 
 
 
-html.light-theme .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *) {
+html.light-theme .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-eyebrow, .portal-subtitle, .portal-muted, .pats-body):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *) {
   color: #64748b !important;
 }
 
@@ -7291,6 +7291,30 @@ html[data-site-theme="day"]
 
 
 .admin-theme :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-neutral {
+  background: #f0f1ec !important;
+  color: #5a655c !important;
+}
+
+/* Participant-portal ops-status badge colours — mirror of the .admin-theme
+   block above. Without these, badges on the participant pages inherited white
+   text (e.g. "Payment Verified" was white-on-light-green, ~1.1:1). */
+.participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-approved {
+  background: #e9f5ed !important;
+  color: #12722f !important;
+}
+.participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-pending {
+  background: #fbf2e0 !important;
+  color: #9a6711 !important;
+}
+.participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-review {
+  background: #e9f0fd !important;
+  color: #1d4ed8 !important;
+}
+.participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-rejected {
+  background: #fcebe9 !important;
+  color: #b42318 !important;
+}
+.participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-neutral {
   background: #f0f1ec !important;
   color: #5a655c !important;
 }
@@ -9490,7 +9514,8 @@ html:has(.dashboard-day) body {
   margin-top: 0.15rem;
   font-size: 0.75rem;
   line-height: 1.45;
-  color: var(--pp-muted);
+  /* Darkened from --pp-muted to clear WCAG AA (4.5:1) on the tinted step cards. */
+  color: #4d5a50;
 }
 
 /* step states */

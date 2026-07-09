@@ -6,7 +6,6 @@ const PARTICIPANT_PORTAL_PREFIXES = [
   "/event/edit/",
   "/event/team",
   "/event/tickets",
-  "/event/timeline",
 ] as const;
 
 export function pathnameIsParticipantPortalApp(pathname: string): boolean {
