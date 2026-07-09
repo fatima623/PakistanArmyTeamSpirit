@@ -489,7 +489,7 @@ export function NewsPostForm({
 
   return (
 
-    <div className="admin-user-detail-page admin-news-edit-page">
+    <div className="admin-user-detail-page">
 
       <header className="admin-user-detail-hero">
 
@@ -521,11 +521,11 @@ export function NewsPostForm({
 
             {published ? (
 
-              <span className="admin-news-published-label">Published</span>
+              <span className="inline-block rounded bg-emerald-50 px-2 py-0.5 text-xs font-bold uppercase tracking-[0.06em] text-green-800">Published</span>
 
             ) : (
 
-              <span className="admin-news-draft-label">Draft</span>
+              <span className="inline-block rounded bg-brand-parchment-2/60 px-2 py-0.5 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground">Draft</span>
 
             )}
 
@@ -636,13 +636,13 @@ export function NewsPostForm({
 
             className={cn(
 
-              "admin-news-form-publish-row",
+              "rounded-[10px] border border-slate-200 bg-slate-50 px-[1.125rem] py-4",
 
               published
 
-                ? "admin-news-form-publish-row--live"
+                ? "border-green-200 bg-green-50"
 
-                : "admin-news-form-publish-row--draft"
+                : "border-amber-200 bg-amber-50"
 
             )}
 
@@ -732,7 +732,7 @@ export function NewsPostForm({
 
           <div
 
-            className="admin-news-pdf-drop"
+            className="flex flex-col items-center justify-center gap-2.5 rounded-[10px] border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition-colors focus-within:border-brand-olive-dark focus-within:bg-brand-olive/5 hover:border-brand-olive-dark hover:bg-brand-olive/5"
 
             onDragOver={(e) => e.preventDefault()}
 
@@ -748,15 +748,15 @@ export function NewsPostForm({
 
           >
 
-            <Upload className="admin-news-pdf-drop-icon" aria-hidden />
+            <Upload className="h-9 w-9 text-brand-olive-dark opacity-85" aria-hidden />
 
-            <p className="admin-news-pdf-drop-label">
+            <p className="text-[0.9375rem] font-semibold text-slate-800">
 
               Drag and drop a PDF, or browse
 
             </p>
 
-            <p className="admin-news-pdf-drop-hint">PDF only · up to 10 MB</p>
+            <p className="text-[0.8125rem] text-slate-900">PDF only · up to 10 MB</p>
 
             <input
 
@@ -802,15 +802,15 @@ export function NewsPostForm({
 
                 attachedSize != null && attachedSize <= MIN_NEWS_PDF_BYTES
 
-                  ? "admin-news-pdf-current admin-news-pdf-current--invalid"
+                  ? "mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[10px] border border-amber-300 bg-amber-50 px-4 py-3.5"
 
-                  : "admin-news-pdf-current"
+                  : "mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[10px] border border-slate-200 bg-slate-50 px-4 py-3.5"
 
               }
 
             >
 
-              <div className="admin-news-pdf-current-info">
+              <div className="flex min-w-0 flex-wrap items-center gap-2 text-[0.8125rem] text-slate-800">
 
                 <FileText className="h-4 w-4 shrink-0 text-brand-olive" />
 
@@ -828,7 +828,7 @@ export function NewsPostForm({
 
                 {attachedSize != null && attachedSize <= MIN_NEWS_PDF_BYTES ? (
 
-                  <span className="admin-news-pdf-warning">
+                  <span className="flex-[1_0_100%] text-[0.8125rem] font-semibold text-amber-700">
 
                     Invalid file — re-upload a valid PDF
 
@@ -844,7 +844,7 @@ export function NewsPostForm({
 
               </div>
 
-              <div className="admin-news-pdf-current-actions">
+              <div className="flex flex-wrap gap-2">
 
                 {postId &&
                 hasExistingPdf &&
@@ -930,7 +930,7 @@ export function NewsPostForm({
 
           </div>
 
-          <div className="admin-news-content-tabs" role="tablist">
+          <div className="inline-flex gap-1 rounded-[10px] border border-slate-200 bg-slate-50 p-1" role="tablist">
 
             <button
 
@@ -942,9 +942,9 @@ export function NewsPostForm({
 
               className={cn(
 
-                "admin-news-content-tab",
+                "inline-flex cursor-pointer items-center gap-1.5 rounded-[7px] border-none bg-transparent px-3 py-1.5 text-[0.8125rem] font-semibold text-slate-900 transition-colors hover:text-slate-800",
 
-                contentView === "write" && "admin-news-content-tab--active"
+                contentView === "write" && "bg-white text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
 
               )}
 
@@ -968,9 +968,9 @@ export function NewsPostForm({
 
               className={cn(
 
-                "admin-news-content-tab",
+                "inline-flex cursor-pointer items-center gap-1.5 rounded-[7px] border-none bg-transparent px-3 py-1.5 text-[0.8125rem] font-semibold text-slate-900 transition-colors hover:text-slate-800",
 
-                contentView === "preview" && "admin-news-content-tab--active"
+                contentView === "preview" && "bg-white text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.06)]"
 
               )}
 
@@ -1010,7 +1010,7 @@ export function NewsPostForm({
 
                 rows={12}
 
-                className="admin-input text-sm leading-relaxed"
+                className="admin-input min-h-[14rem] resize-y text-sm leading-relaxed"
 
                 placeholder="Write your announcement here. Separate paragraphs with a blank line."
 
@@ -1022,7 +1022,7 @@ export function NewsPostForm({
 
             <div
 
-              className="admin-news-content-preview"
+              className="rounded-[10px] border border-slate-200 bg-slate-50 px-5 py-[1.125rem] text-[0.9375rem] leading-[1.65] text-slate-700 [&_a]:text-brand-olive-dark [&_a]:underline [&_ol]:mb-3.5 [&_ol]:pl-5 [&_p:last-child]:mb-0 [&_p]:mb-3.5 [&_ul]:mb-3.5 [&_ul]:pl-5"
 
               dangerouslySetInnerHTML={{ __html: previewHtml }}
 

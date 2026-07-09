@@ -9,9 +9,8 @@ import { DeletePostButton } from "@/components/admin/DeletePostButton";
 import { NewsPdfOpenLink } from "@/components/admin/NewsPdfOpenLink";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import { Button } from "@/components/ui/button";
-import { adminUsersPagination } from "@/lib/admin-ui";
+import { adminTableActionsCenter, adminUsersPagination } from "@/lib/admin-ui";
 import { adminNavLabel } from "@/lib/admin-navigation";
-import "@/app/admin-news-reference.css";
 import "@/app/admin-users-reference.css";
 
 export const metadata: Metadata = {
@@ -53,10 +52,10 @@ export default async function AdminNewsPage({
   );
 
   return (
-    <div className="admin-news-page">
-      <div className="admin-news-panel">
-        <header className="admin-news-header">
-          <div className="admin-news-header-text">
+    <div className="pb-8">
+      <div className="admin-surface flex flex-col gap-7 p-8">
+        <header className="flex flex-wrap items-start justify-between gap-4">
+          <div className="[&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[36rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
             <h2>News posts</h2>
             <p>Manage public announcements and PDF downloads for visitors.</p>
           </div>
@@ -66,20 +65,20 @@ export default async function AdminNewsPage({
         </header>
 
         {posts.length === 0 ? (
-          <p className="admin-news-empty">
+          <p className="px-6 py-12 text-center text-muted-foreground">
             No news posts yet. Create your first announcement.
           </p>
         ) : (
           <>
-            <div className="admin-news-table-shell">
-              <table className="admin-news-table">
+            <div className="overflow-x-auto rounded-[10px] border border-black/[0.06]">
+              <table className="admin-data-table min-w-[36rem]">
                 <colgroup>
-                  <col className="admin-news-col-num" />
-                  <col className="admin-news-col-title" />
-                  <col className="admin-news-col-pdf" />
-                  <col className="admin-news-col-date" />
-                  <col className="admin-news-col-status" />
-                  <col className="admin-news-col-actions" />
+                  <col className="w-[6%]" />
+                  <col className="w-[32%]" />
+                  <col className="w-[18%]" />
+                  <col className="w-[14%]" />
+                  <col className="w-[12%]" />
+                  <col className="w-[18%]" />
                 </colgroup>
                 <thead>
                   <tr>
@@ -94,18 +93,18 @@ export default async function AdminNewsPage({
                 <tbody>
                   {posts.map((post, i) => (
                     <tr key={post.id}>
-                      <td className="admin-news-cell-num">
+                      <td className="font-semibold tabular-nums text-muted-foreground">
                         {(page - 1) * PAGE_SIZE + i + 1}
                       </td>
-                      <td className="admin-news-cell-title">
-                        <div className="admin-news-title-cell">
-                          <span className="admin-news-title-text">
+                      <td>
+                        <div className="flex max-w-full flex-col items-center gap-1">
+                          <span className="font-semibold leading-[1.4] text-brand-ink">
                             {post.title}
                           </span>
                         </div>
                       </td>
                       <td>
-                        <div className="admin-news-pdf-cell">
+                        <div className="flex items-center justify-center">
                           {pdfReadableById.get(post.id) ? (
                             <NewsPdfOpenLink
                               postId={post.id}
@@ -113,25 +112,25 @@ export default async function AdminNewsPage({
                             />
                           ) : post.pdfPath ? (
                             <span
-                              className="admin-news-pdf-none"
+                              className="text-[0.8125rem] text-muted-foreground/70"
                               title="PDF record exists but file is missing on server — edit post to re-upload"
                             >
                               File missing
                             </span>
                           ) : (
-                            <span className="admin-news-pdf-none">—</span>
+                            <span className="text-[0.8125rem] text-muted-foreground/70">—</span>
                           )}
                         </div>
                       </td>
-                      <td className="admin-news-cell-date">
+                      <td className="tabular-nums">
                         {formatDateShort(post.publishedAt)}
                       </td>
                       <td>
                         <span
                           className={
                             post.published
-                              ? "admin-news-published-label"
-                              : "admin-news-draft-label"
+                              ? "inline-block rounded bg-emerald-50 px-2 py-0.5 text-xs font-bold uppercase tracking-[0.06em] text-green-800"
+                              : "inline-block rounded bg-brand-parchment-2/60 px-2 py-0.5 text-xs font-bold uppercase tracking-[0.06em] text-muted-foreground"
                           }
                         >
                           {post.published ? "Published" : "Draft"}
@@ -139,7 +138,7 @@ export default async function AdminNewsPage({
                       </td>
                       <td>
                         <div
-                          className="admin-news-row-actions"
+                          className={adminTableActionsCenter}
                           role="group"
                           aria-label="Post actions"
                         >

@@ -1,7 +1,6 @@
 {
   "cssFiles": [
     "src/app/admin-day-theme.css",
-    "src/app/admin-news-reference.css",
     "src/app/admin-payment-detail.css",
     "src/app/admin-payments-reference.css",
     "src/app/admin-ticker-reference.css",
@@ -46,10 +45,9 @@
     "src/app/tac-mission-card.css",
     "src/app/team-members.css"
   ],
-  "importantCount": 2352,
+  "importantCount": 2344,
   "importantByFile": {
     "src/app/admin-day-theme.css": 289,
-    "src/app/admin-news-reference.css": 8,
     "src/app/admin-payment-detail.css": 0,
     "src/app/admin-payments-reference.css": 86,
     "src/app/admin-ticker-reference.css": 24,
@@ -96,11 +94,8 @@
   },
   "cssImports": [
     "src/app/(admin)/admin/layout.tsx -> @/app/admin-typography.css",
-    "src/app/(admin)/admin/news/[id]/edit/page.tsx -> @/app/admin-news-reference.css",
     "src/app/(admin)/admin/news/[id]/edit/page.tsx -> @/app/admin-user-detail.css",
-    "src/app/(admin)/admin/news/new/page.tsx -> @/app/admin-news-reference.css",
     "src/app/(admin)/admin/news/new/page.tsx -> @/app/admin-user-detail.css",
-    "src/app/(admin)/admin/news/page.tsx -> @/app/admin-news-reference.css",
     "src/app/(admin)/admin/news/page.tsx -> @/app/admin-users-reference.css",
     "src/app/(admin)/admin/payments/[id]/page.tsx -> @/app/admin-payment-detail.css",
     "src/app/(admin)/admin/payments/[id]/page.tsx -> @/app/admin-user-detail.css",

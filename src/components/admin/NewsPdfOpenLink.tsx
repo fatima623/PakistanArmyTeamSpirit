@@ -27,7 +27,7 @@ export function NewsPdfOpenLink({
       title={title}
       className={cn(
         portalTableActionView,
-        "admin-news-pdf-btn ops-btn ops-btn-secondary",
+        "ops-btn ops-btn-secondary max-w-[7.5rem] gap-[0.35rem] no-underline hover:no-underline",
         className
       )}
     >
