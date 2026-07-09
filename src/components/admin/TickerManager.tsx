@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { adminInput } from "@/lib/admin-ui";
+import { adminInput, adminTableActionsCenter } from "@/lib/admin-ui";
 import {
   formatTickerExpiry,
   priorityBadgeClass,
@@ -156,10 +156,10 @@ export function TickerManager({
   };
 
   return (
-    <div className="admin-ticker-page">
-      <div className="admin-ticker-panel">
-        <header className="admin-ticker-header">
-          <div className="admin-ticker-header-text">
+    <div className="pb-8">
+      <div className="admin-surface flex flex-col gap-6 p-8">
+        <header className="flex flex-wrap items-start justify-between gap-4">
+          <div className="[&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground [&_strong]:font-semibold [&_strong]:text-brand-olive-dark">
             <h2>Announcements</h2>
             
           </div>
@@ -168,8 +168,8 @@ export function TickerManager({
           </Button>
         </header>
 
-        <div className="admin-ticker-toolbar-row">
-          <div className="admin-ticker-toolbar-search">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="min-w-0 flex-[1_1_18rem] [&_.admin-input]:w-full">
             <Input
               type="search"
               placeholder="Search messages…"
@@ -179,7 +179,7 @@ export function TickerManager({
               aria-label="Search announcements"
             />
           </div>
-          <div className="admin-ticker-toolbar-filters">
+          <div className="flex flex-shrink-0 flex-wrap items-center gap-3 [&_.admin-input]:min-w-[11rem]">
             <select
               id="announcement-filter-status"
               className={adminInput}
@@ -209,30 +209,30 @@ export function TickerManager({
           </div>
         </div>
 
-        <div className="admin-ticker-table-shell">
-          <table className="admin-ticker-table">
+        <div className="overflow-x-auto rounded-[10px] border border-black/[0.06]">
+          <table className="admin-data-table min-w-[56rem]">
             <colgroup>
-              <col className="admin-ticker-col-order" />
-              <col className="admin-ticker-col-message" />
-              <col className="admin-ticker-col-priority" />
-              <col className="admin-ticker-col-status" />
-              <col className="admin-ticker-col-visibility" />
-              <col className="admin-ticker-col-expiry" />
-              <col className="admin-ticker-col-actions" />
+              <col className="w-[5.5rem]" />
+              <col className="w-auto" />
+              <col className="w-[6.75rem]" />
+              <col className="w-[6.75rem]" />
+              <col className="w-[6.5rem]" />
+              <col className="w-[10.5rem]" />
+              <col className="w-[11.5rem]" />
             </colgroup>
             <thead>
               <tr>
                 <th scope="col">Order</th>
-                <th scope="col" className="admin-ticker-th-message">
+                <th scope="col" className="!px-5">
                   Message
                 </th>
                 <th scope="col">Priority</th>
                 <th scope="col">Status</th>
                 <th scope="col">Visibility</th>
-                <th scope="col" className="admin-ticker-th-expiry">
+                <th scope="col" className="!pr-6">
                   Expiry
                 </th>
-                <th scope="col" className="admin-ticker-th-actions">
+                <th scope="col" className="!pl-6">
                   Actions
                 </th>
               </tr>
@@ -240,8 +240,8 @@ export function TickerManager({
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="admin-ticker-empty">
-                    <div className="admin-ticker-empty-inner">
+                  <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
+                    <div className="flex flex-col items-center gap-4">
                       <p>
                         {tickers.length === 0
                           ? "No announcements yet."
@@ -268,18 +268,18 @@ export function TickerManager({
                   return (
                     <tr
                       key={t.id}
-                      className="admin-ticker-row"
+                      className="cursor-pointer"
                       onClick={() => goToEdit(t.id)}
                     >
                       <td
-                        className="admin-ticker-cell-order"
+                        className="tabular-nums"
                         onClick={stopRowClick}
                       >
-                        <div className="admin-ticker-order-manual">
+                        <div className="flex justify-center">
                           <Input
                             type="number"
                             min={0}
-                            className={cn(adminInput, "admin-ticker-order-input")}
+                            className={cn(adminInput, "!w-[4.25rem] !min-h-9 !px-2 text-center font-semibold tabular-nums")}
                             value={orderValueForRow(t)}
                             disabled={orderSavingId === t.id}
                             aria-label="Display order for announcement"
@@ -299,17 +299,17 @@ export function TickerManager({
                           />
                         </div>
                       </td>
-                      <td className="admin-ticker-cell-message">
-                        <div className="admin-ticker-message-cell">
+                      <td className="max-w-0 !px-5 text-brand-ink">
+                        <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1.5">
                           <span
-                            className="admin-ticker-message-text"
+                            className="min-w-0 truncate font-medium leading-[1.35]"
                             title={t.message}
                           >
                             {t.message}
                           </span>
                           {showUrgentDot ? (
                             <span
-                              className="admin-ticker-urgent-dot"
+                              className="h-2 w-2 flex-shrink-0 rounded-full bg-orange-600 ring-2 ring-orange-50"
                               title="Urgent"
                               aria-label="Urgent"
                             />
@@ -318,7 +318,7 @@ export function TickerManager({
                       </td>
                       <td>
                         <span
-                          className={`admin-ticker-badge ${priorityBadgeClass(t.priority)}`}
+                          className={`inline-flex items-center justify-center whitespace-nowrap rounded-full border px-2 py-[0.2rem] text-[0.8125rem] font-semibold ${priorityBadgeClass(t.priority)}`}
                         >
                           {TICKER_PRIORITY_LABELS[t.priority as TickerPriority] ??
                             t.priority}
@@ -326,26 +326,26 @@ export function TickerManager({
                       </td>
                       <td>
                         <span
-                          className={`admin-ticker-badge ${statusBadgeClass(effective)}`}
+                          className={`inline-flex items-center justify-center whitespace-nowrap rounded-full border px-2 py-[0.2rem] text-[0.8125rem] font-semibold ${statusBadgeClass(effective)}`}
                         >
                           {TICKER_STATUS_LABELS[effective]}
                         </span>
                       </td>
-                      <td className="admin-ticker-cell-visibility">
+                      <td className="text-[0.8125rem]">
                         {VISIBILITY_SHORT[t.visibility as TickerVisibility] ??
                           t.visibility}
                       </td>
                       <td
                         className={cn(
-                          "admin-ticker-cell-expiry",
-                          !t.expiresAt && "admin-ticker-cell-expiry--none"
+                          "whitespace-nowrap !pr-6 text-[0.8125rem] tabular-nums",
+                          !t.expiresAt && "text-muted-foreground/50"
                         )}
                       >
                         {formatTickerExpiry(t.expiresAt)}
                       </td>
                       <td onClick={stopRowClick}>
                         <div
-                          className="admin-ticker-row-actions"
+                          className={adminTableActionsCenter}
                           role="group"
                           aria-label="Announcement actions"
                         >

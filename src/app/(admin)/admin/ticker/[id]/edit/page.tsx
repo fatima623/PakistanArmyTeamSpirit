@@ -8,7 +8,6 @@ import { syncExpiredTickerStatuses } from "@/lib/ticker-data";
 import { serializeTickerRow } from "@/lib/ticker-form-helpers";
 import { getTickerPreviewContext } from "@/lib/ticker-settings";
 import "@/app/admin-user-detail.css";
-import "@/app/admin-ticker-reference.css";
 
 type PageProps = { params: Promise<{ id: string }> };
 

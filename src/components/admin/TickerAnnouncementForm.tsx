@@ -80,7 +80,7 @@ export function TickerAnnouncementForm({
   };
 
   return (
-    <div className="admin-user-detail-page admin-ticker-edit-page">
+    <div className="admin-user-detail-page mx-auto max-w-[52rem] pb-8">
       <header className="admin-user-detail-hero">
         <div className="admin-user-detail-hero-main">
           <Link href="/admin/ticker" className="admin-user-detail-back">

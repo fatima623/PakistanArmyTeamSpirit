@@ -161,26 +161,26 @@ export function tickerPayloadFromRow(t: SerializedTicker, sortOrder: number) {
 export function priorityBadgeClass(priority: string) {
   switch (priority) {
     case TICKER_PRIORITY.CRITICAL:
-      return "admin-ticker-badge-priority-critical";
+      return "border-red-200 bg-red-50 text-red-800";
     case TICKER_PRIORITY.HIGH:
-      return "admin-ticker-badge-priority-high";
+      return "border-orange-200 bg-orange-50 text-orange-800";
     case TICKER_PRIORITY.MEDIUM:
-      return "admin-ticker-badge-priority-medium";
+      return "border-yellow-300 bg-yellow-50 text-yellow-800";
     default:
-      return "admin-ticker-badge-priority-normal";
+      return "border-black/[0.08] bg-brand-parchment/60 text-brand-ink-muted";
   }
 }
 
 export function statusBadgeClass(status: TickerStatus) {
   switch (status) {
     case TICKER_STATUS.ACTIVE:
-      return "admin-ticker-badge-status-active";
+      return "border-green-200 bg-green-50 text-green-800";
     case TICKER_STATUS.DRAFT:
-      return "admin-ticker-badge-status-draft";
+      return "border-black/[0.08] bg-brand-parchment/60 text-brand-ink-muted";
     case TICKER_STATUS.DISABLED:
-      return "admin-ticker-badge-status-disabled";
+      return "border-gray-200 bg-gray-50 text-slate-900";
     default:
-      return "admin-ticker-badge-status-expired";
+      return "border-red-200 bg-red-50 text-red-900";
   }
 }
 
