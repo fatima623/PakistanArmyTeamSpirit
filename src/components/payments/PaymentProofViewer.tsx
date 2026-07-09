@@ -126,13 +126,13 @@ export function PaymentProofViewer({
   // —— Premium media viewer (admin detail page) ——
   if (withToolbar) {
     return (
-      <figure ref={mediaRef} className={cn("admin-pay-media", className)}>
-        <div className="admin-pay-media__toolbar">
+      <figure ref={mediaRef} className={cn("relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-[14px] border border-gray-200 p-4 [background:linear-gradient(45deg,theme(colors.slate.100)_25%,transparent_25%)_-8px_0/16px_16px,linear-gradient(-45deg,theme(colors.slate.100)_25%,transparent_25%)_-8px_0/16px_16px,linear-gradient(45deg,transparent_75%,theme(colors.slate.100)_75%)_-8px_0/16px_16px,linear-gradient(-45deg,transparent_75%,theme(colors.slate.100)_75%)_-8px_0/16px_16px,theme(colors.slate.50)] [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg", className)}>
+        <div className="absolute right-2.5 top-2.5 z-[2] inline-flex items-center gap-1 rounded-[10px] border border-gray-200 bg-white/90 p-1 shadow-[0_2px_8px_rgba(15,23,42,0.1)] backdrop-blur-[6px]">
           {showImage ? (
             <>
               <button
                 type="button"
-                className="admin-pay-media__btn"
+                className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
                 onClick={() => setZoomed((z) => !z)}
                 title={zoomed ? "Zoom out" : "Zoom in"}
                 aria-label={zoomed ? "Zoom out" : "Zoom in"}
@@ -145,7 +145,7 @@ export function PaymentProofViewer({
               </button>
               <button
                 type="button"
-                className="admin-pay-media__btn"
+                className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
                 onClick={goFullscreen}
                 title="Fullscreen"
                 aria-label="Fullscreen"
@@ -158,7 +158,7 @@ export function PaymentProofViewer({
             href={objectUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="admin-pay-media__btn"
+            className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
             title="Open in new tab"
             aria-label="Open in new tab"
           >
@@ -167,7 +167,7 @@ export function PaymentProofViewer({
           <a
             href={objectUrl}
             download={fileName ?? "payment-proof"}
-            className="admin-pay-media__btn"
+            className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
             title="Download"
             aria-label="Download"
           >

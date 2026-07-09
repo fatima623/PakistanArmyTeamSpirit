@@ -51,7 +51,6 @@ import "@/app/payment-status-timeline.css";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
 import { PaymentProofViewer } from "@/components/payments/PaymentProofViewer";
 import { formatDateDisplay, formatDateShort, cn } from "@/lib/utils";
-import "@/app/admin-payment-detail.css";
 
 type Payment = {
   id: string;
@@ -90,12 +89,12 @@ function Stat({
   mono?: boolean;
 }) {
   return (
-    <div className={cn("admin-pay-stat", wide && "admin-pay-stat--wide")}>
-      <span className="admin-pay-stat__label">{label}</span>
+    <div className={cn("flex flex-col gap-[5px] rounded-xl border border-gray-200 bg-slate-50 px-3.5 py-3 transition-colors hover:border-slate-300 hover:bg-white hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)]", wide && "col-span-full")}>
+      <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">{label}</span>
       <span
         className={cn(
-          "admin-pay-stat__value",
-          mono && "admin-pay-stat__value--mono"
+          "break-words text-[0.9375rem] font-semibold text-slate-900",
+          mono && "font-mono text-sm"
         )}
       >
         {value || "—"}
@@ -238,15 +237,15 @@ export function PaymentReviewPanel({
 
   return (
     <>
-      <section className="admin-pay-card">
-        <div className="admin-pay-card__header">
-          <h3 className="admin-pay-card__title">
+      <section className="rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden transition-[box-shadow,transform] duration-200">
+        <div className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+          <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:text-green-700">
             <Receipt className="h-4 w-4" aria-hidden />
             Transaction details
           </h3>
         </div>
-        <div className="admin-pay-card__body">
-          <div className="admin-pay-stats">
+        <div className="p-[18px]">
+          <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
             <Stat
               label="Amount"
               value={formatRegistrationFee(payment.amount)}
@@ -304,14 +303,14 @@ export function PaymentReviewPanel({
       </section>
 
       {hasProof ? (
-        <section className="admin-pay-card">
-          <div className="admin-pay-card__header">
-            <h3 className="admin-pay-card__title">
+        <section className="rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden transition-[box-shadow,transform] duration-200">
+          <div className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+            <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:text-green-700">
               <ImageIcon className="h-4 w-4" aria-hidden />
               Payment proof
             </h3>
           </div>
-          <div className="admin-pay-card__body">
+          <div className="p-[18px]">
             <PaymentProofViewer
               paymentId={payment.id}
               access="admin"
@@ -328,17 +327,17 @@ export function PaymentReviewPanel({
         </section>
       ) : null}
 
-      <section className="admin-pay-card">
-        <div className="admin-pay-card__header">
-          <h3 className="admin-pay-card__title">
+      <section className="rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden transition-[box-shadow,transform] duration-200">
+        <div className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+          <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:text-green-700">
             <ShieldCheck className="h-4 w-4" aria-hidden />
             Verification
           </h3>
           <PaymentStatusBadge status={payment.status} showPrefix={false} />
         </div>
-        <div className="admin-pay-card__body space-y-4">
+        <div className="space-y-4 p-[18px]">
           {alreadyVerified ? (
-            <div className="admin-pay-success">
+            <div className="flex items-start gap-2.5 rounded-xl border border-green-200 bg-green-50 px-3.5 py-3 text-sm leading-[1.45] text-green-900 [&_svg]:mt-px [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
               <CheckCircle2 className="h-4 w-4" aria-hidden />
               <span>
                 Payment verified successfully. No further action is required.
@@ -346,9 +345,9 @@ export function PaymentReviewPanel({
             </div>
           ) : null}
 
-          <div className="admin-pay-verify-grid">
-            <div className="admin-pay-stat">
-              <span className="admin-pay-stat__label">Payment status</span>
+          <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))]">
+            <div className="flex flex-col gap-[5px] rounded-xl border border-gray-200 bg-slate-50 px-3.5 py-3 transition-colors hover:border-slate-300 hover:bg-white hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)]">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Payment status</span>
               <span>
                 <PaymentStatusBadge
                   status={payment.status}
@@ -375,7 +374,7 @@ export function PaymentReviewPanel({
           />
 
           <div className="admin-user-detail-field">
-            <label className="admin-pay-field-label" htmlFor="payment-status">
+            <label className="mb-1.5 block text-xs font-semibold text-slate-600" htmlFor="payment-status">
               Update status
             </label>
             <div
@@ -409,7 +408,7 @@ export function PaymentReviewPanel({
               </Select>
             </div>
             {statusControlsLocked ? (
-              <p className="admin-pay-locked-hint">
+              <p className="mt-2 inline-flex items-center gap-1.5 text-[0.78rem] text-slate-500 [&_svg]:text-slate-400">
                 <Info className="h-3.5 w-3.5" aria-hidden />
                 {!canDecide
                   ? "View-only — payment decisions are made by the MT (Management Team)."
@@ -419,7 +418,7 @@ export function PaymentReviewPanel({
           </div>
 
           {canDecide ? (
-            <div className="admin-pay-actionbar">
+            <div className="flex flex-wrap items-center gap-2.5 max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-30 max-lg:border-t max-lg:border-gray-200 max-lg:bg-white/95 max-lg:px-4 max-lg:py-3 max-lg:shadow-[0_-4px_16px_rgba(15,23,42,0.08)] max-lg:backdrop-blur-lg">
               <ConfirmDialog
                 trigger={
                   <Button
