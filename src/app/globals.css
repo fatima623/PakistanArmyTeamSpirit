@@ -459,11 +459,16 @@
   }
 
   .admin-heading {
-    @apply font-bold;
+    @apply text-[1.0625rem] font-bold;
     color: #1c2119;
   }
 
+  .admin-header-bar .admin-heading {
+    @apply text-xl;
+  }
+
   .admin-muted {
+    @apply text-[0.9375rem] leading-[1.55];
     color: #4a5245;
   }
 
@@ -490,12 +495,12 @@
   }
 
   .admin-page-title {
-    @apply mb-6 text-xl font-bold tracking-tight;
+    @apply mb-6 text-[1.625rem] font-bold tracking-tight;
     color: #1c2119;
   }
 
   .admin-section-title {
-    @apply mb-4 border-b border-brand-line pb-3 text-lg font-bold tracking-tight;
+    @apply mb-4 border-b border-brand-line pb-3 text-[1.0625rem] font-bold tracking-tight;
     color: #1c2119;
   }
 
@@ -509,7 +514,7 @@
   }
 
   .admin-table-head {
-    @apply bg-brand-parchment-2 text-xs font-semibold uppercase tracking-wide;
+    @apply bg-brand-parchment-2 text-[0.8125rem] font-semibold uppercase tracking-[0.06em];
     color: #4a5245;
   }
 
@@ -666,6 +671,40 @@
     min-width: 0 !important;
   }
 
+  /* Admin type scale — re-homed from admin-typography.css when it was
+     retired. These keep !important only to outrank the legacy
+     pats-refresh/portal-design bases; they die with those sheets in
+     phase 3d. */
+  .admin-theme :is(.ops-status-pill, .ops-status-badge) {
+    font-size: 0.8125rem !important;
+    min-height: 1.875rem !important;
+    padding: 0.375rem 0.875rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .admin-theme .ops-status-pill--review {
+    min-width: 7.25rem !important;
+  }
+
+  .admin-theme
+    .admin-table-actions
+    :is(.portal-table-action-btn, .ops-btn, button, a) {
+    font-size: 0.8125rem !important;
+    min-height: 2rem !important;
+    max-height: 2rem !important;
+    padding: 0 0.625rem !important;
+  }
+
+  .admin-theme .admin-approve-btn {
+    font-size: 0.8125rem !important;
+    min-height: 2rem !important;
+    max-height: 2rem !important;
+  }
+
+  .admin-theme .admin-sidebar-link {
+    font-size: 14px !important;
+  }
+
   .admin-table-actions-stack > form,
   .admin-table-actions-stack > div {
     @apply w-full;
@@ -694,7 +733,7 @@
   }
 
   .admin-data-table thead th {
-    @apply px-4 py-3 text-center align-middle text-xs font-semibold uppercase tracking-wide text-brand-ink-muted;
+    @apply px-4 py-3 text-center align-middle text-[0.8125rem] font-semibold uppercase leading-[1.35] tracking-[0.06em] text-brand-ink-muted;
   }
 
   .admin-data-table tbody tr {
@@ -706,7 +745,7 @@
   }
 
   .admin-data-table td {
-    @apply px-4 py-3.5 align-middle text-center text-sm text-brand-ink;
+    @apply px-4 py-3.5 text-center align-middle text-[0.9375rem] leading-[1.5] text-brand-ink;
   }
 
   .admin-data-table td.admin-td-muted {

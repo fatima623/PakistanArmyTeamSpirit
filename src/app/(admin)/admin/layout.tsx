@@ -1,4 +1,3 @@
-import "@/app/admin-typography.css";
 
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { getAdminInitials, getAdminRole } from "@/lib/admin-session";
