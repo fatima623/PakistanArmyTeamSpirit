@@ -15,7 +15,7 @@ export const UserManagementRowActions = memo(function UserManagementRowActions({
 }) {
   return (
     <div
-      className="admin-users-row-actions"
+      className="inline-flex max-w-full flex-nowrap items-center justify-center gap-1.5"
       role="group"
       aria-label="Row actions"
     >

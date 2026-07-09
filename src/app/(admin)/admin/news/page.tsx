@@ -11,7 +11,6 @@ import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import { Button } from "@/components/ui/button";
 import { adminTableActionsCenter, adminUsersPagination } from "@/lib/admin-ui";
 import { adminNavLabel } from "@/lib/admin-navigation";
-import "@/app/admin-users-reference.css";
 
 export const metadata: Metadata = {
   title: adminNavLabel("news"),
@@ -167,7 +166,7 @@ export default async function AdminNewsPage({
 
             {totalPages > 1 ? (
               <footer className={adminUsersPagination}>
-                <p className="admin-users-pagination-page">
+                <p className="m-0 text-sm font-medium text-slate-900">
                   Page {page} of {totalPages}
                 </p>
                 <AdminUsersPagination

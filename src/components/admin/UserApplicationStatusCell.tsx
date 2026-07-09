@@ -19,7 +19,7 @@ export function UserApplicationStatusCell({
   const isPending = applicationStatus === APPLICATION_STATUS.PENDING;
 
   return (
-    <div className="admin-users-app-status-cell">
+    <div className="flex w-full min-w-0 flex-col items-center justify-start gap-1.5">
       {isPending && canApprove ? (
         <ApproveButton userId={userId} />
       ) : (

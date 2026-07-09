@@ -39,18 +39,18 @@ export function AdminUsersPagination({
   const pages = visiblePages(page, totalPages);
 
   return (
-    <nav className="admin-users-page-nav" aria-label="Pagination">
+    <nav className="inline-flex flex-nowrap items-center gap-1.5" aria-label="Pagination">
       {page > 1 ? (
         <Link
           href={pageHref(basePath, page - 1, filter, search, filterParam)}
-          className="admin-users-page-btn admin-users-page-btn--icon"
+          className="inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800"
           aria-label="Previous page"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden />
         </Link>
       ) : (
         <span
-          className="admin-users-page-btn admin-users-page-btn--icon admin-users-page-btn--disabled"
+          className="inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800 cursor-not-allowed opacity-40 hover:border-brand-line/60 hover:bg-white hover:text-slate-900"
           aria-disabled="true"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -63,15 +63,16 @@ export function AdminUsersPagination({
         return (
           <span key={p} className="inline-flex items-center gap-1.5">
             {showEllipsis ? (
-              <span className="admin-users-page-ellipsis" aria-hidden>
+              <span className="px-1 text-sm text-slate-900/50" aria-hidden>
                 …
               </span>
             ) : null}
             <Link
               href={pageHref(basePath, p, filter, search, filterParam)}
               className={cn(
-                "admin-users-page-btn admin-users-page-num",
-                p === page && "admin-users-page-num--active"
+                "inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800 text-sm font-semibold",
+                p === page &&
+                  "border-green-800 bg-green-800 text-white shadow-[0_2px_8px_rgba(22,101,52,0.3)] hover:border-green-900 hover:bg-green-900 hover:text-white"
               )}
               aria-current={p === page ? "page" : undefined}
             >
@@ -84,14 +85,14 @@ export function AdminUsersPagination({
       {page < totalPages ? (
         <Link
           href={pageHref(basePath, page + 1, filter, search, filterParam)}
-          className="admin-users-page-btn admin-users-page-btn--icon"
+          className="inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800"
           aria-label="Next page"
         >
           <ChevronRight className="h-4 w-4" aria-hidden />
         </Link>
       ) : (
         <span
-          className="admin-users-page-btn admin-users-page-btn--icon admin-users-page-btn--disabled"
+          className="inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800 cursor-not-allowed opacity-40 hover:border-brand-line/60 hover:bg-white hover:text-slate-900"
           aria-disabled="true"
         >
           <ChevronRight className="h-4 w-4" aria-hidden />

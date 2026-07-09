@@ -4,7 +4,11 @@ import { Pencil } from "lucide-react";
 import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
 import { Button } from "@/components/ui/button";
 import { ROLE_LABELS } from "@/lib/auth-routes";
-import { portalTableActionIconView } from "@/lib/admin-ui";
+import { portalTableActionIconView,
+  adminApproveBtnStyles,
+  adminTableActionsCenter,
+  adminTablePillStyles,
+} from "@/lib/admin-ui";
 import { formatDateShort } from "@/lib/utils";
 
 export type UserAccountRow = {
@@ -36,41 +40,41 @@ export function UserAccountsTable({
 }) {
   if (users.length === 0) {
     return (
-      <div className="admin-users-table-shell">
-        <p className="admin-users-empty">No users found</p>
+      <div className="overflow-x-hidden rounded-xl border border-brand-line/60 bg-white">
+        <p className="px-6 py-14 text-center text-[0.9375rem] font-medium text-slate-900/70">No users found</p>
       </div>
     );
   }
 
   return (
-    <section className="admin-users-table-shell" aria-label="User accounts table">
-      <table className="admin-users-table">
+    <section className="overflow-x-hidden rounded-xl border border-brand-line/60 bg-white" aria-label="User accounts table">
+      <table className={`admin-data-table ${adminTablePillStyles} ${adminApproveBtnStyles} [&>tbody>tr:nth-child(even)]:bg-neutral-50 [&>tbody>tr:hover]:bg-slate-50`}>
         <colgroup>
-          <col className="admin-users-col-num" />
+          <col className="w-16" />
           <col className="admin-users-col-participant" />
-          <col className="admin-users-col-unit" />
+          <col className="admin-users-col-unit !w-[13%]" />
           <col className="admin-users-col-app" />
-          <col className="admin-users-col-unit" />
-          <col className="admin-users-col-actions" />
+          <col className="admin-users-col-unit !w-[13%]" />
+          <col className="admin-users-col-actions !w-[10%]" />
         </colgroup>
-        <thead className="admin-users-thead">
+        <thead>
           <tr>
-            <th scope="col" className="admin-users-th-num">
+            <th scope="col">
               #
             </th>
             <th scope="col" className="admin-users-th-primary">
               User
             </th>
-            <th scope="col" className="admin-users-th-status">
+            <th scope="col">
               Role
             </th>
-            <th scope="col" className="admin-users-th-status">
+            <th scope="col">
               Status
             </th>
-            <th scope="col" className="admin-users-th-date">
+            <th scope="col">
               Last active
             </th>
-            <th scope="col" className="admin-users-th-actions">
+            <th scope="col">
               Actions
             </th>
           </tr>
@@ -78,7 +82,7 @@ export function UserAccountsTable({
         <tbody>
           {users.map((u, i) => (
             <tr key={u.id} className="admin-users-row">
-              <td className="admin-users-cell-num">{startIndex + i + 1}</td>
+              <td className="font-semibold tabular-nums text-slate-500">{startIndex + i + 1}</td>
               <td className="admin-users-cell-participant">
                 <div className="admin-users-participant">
                   <span className="admin-users-avatar" aria-hidden>
@@ -92,12 +96,12 @@ export function UserAccountsTable({
                   </div>
                 </div>
               </td>
-              <td className="admin-users-cell-badge">
+              <td>
                 <span className={`admin-role-pill admin-role-pill--${u.role}`}>
                   {ROLE_LABELS[u.role] ?? u.role}
                 </span>
               </td>
-              <td className="admin-users-cell-badge">
+              <td>
                 <span
                   className={`admin-account-status admin-account-status--${
                     u.suspended ? "suspended" : "active"
@@ -106,14 +110,14 @@ export function UserAccountsTable({
                   {u.suspended ? "Suspended" : "Active"}
                 </span>
               </td>
-              <td className="admin-users-cell-meta admin-users-cell-date">
-                <span className="admin-users-cell-inner">
+              <td>
+                <span className="admin-users-cell-inner truncate text-[0.8125rem] leading-[1.4] text-slate-900">
                   {formatDateShort(u.updatedAt)}
                 </span>
               </td>
-              <td className="admin-users-cell-actions">
+              <td>
                 <div
-                  className="admin-users-row-actions"
+                  className={adminTableActionsCenter}
                   role="group"
                   aria-label="Row actions"
                 >

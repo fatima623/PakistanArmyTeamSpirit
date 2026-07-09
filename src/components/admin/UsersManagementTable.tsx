@@ -7,6 +7,10 @@ import {
 import { UserApplicationStatusCell } from "@/components/admin/UserApplicationStatusCell";
 import { UserManagementRowActions } from "@/components/admin/UserManagementRowActions";
 import { formatDateShort } from "@/lib/utils";
+import {
+  adminApproveBtnStyles,
+  adminTablePillStyles,
+} from "@/lib/admin-ui";
 
 export type UserManagementRow = {
   id: string;
@@ -37,40 +41,40 @@ export function UsersManagementTable({
 }) {
   if (users.length === 0) {
     return (
-      <div className="admin-users-table-shell">
-        <p className="admin-users-empty">No users found</p>
+      <div className="overflow-x-hidden rounded-xl border border-brand-line/60 bg-white">
+        <p className="px-6 py-14 text-center text-[0.9375rem] font-medium text-slate-900/70">No users found</p>
       </div>
     );
   }
 
   return (
     <section
-      className="admin-users-table-shell"
+      className="overflow-x-hidden rounded-xl border border-brand-line/60 bg-white"
       aria-label="Participation requests table"
     >
-      <table className="admin-users-table">
+      <table className={`admin-data-table ${adminTablePillStyles} ${adminApproveBtnStyles} [&>tbody>tr:nth-child(even)]:bg-neutral-50 [&>tbody>tr:hover]:bg-slate-50`}>
         <colgroup>
           <col className="admin-users-col-participant" />
-          <col className="admin-users-col-unit" />
+          <col className="admin-users-col-unit !w-[13%]" />
           <col className="admin-users-col-app" />
           <col className="admin-users-col-pay" />
-          <col className="admin-users-col-actions" />
+          <col className="admin-users-col-actions !w-[10%]" />
         </colgroup>
-        <thead className="admin-users-thead">
+        <thead>
           <tr>
             <th scope="col" className="admin-users-th-primary">
               Participant
             </th>
-            <th scope="col" className="admin-users-th-unit">
+            <th scope="col">
               Unit
             </th>
-            <th scope="col" className="admin-users-th-status">
+            <th scope="col">
               Application
             </th>
-            <th scope="col" className="admin-users-th-status">
+            <th scope="col">
               Payment
             </th>
-            <th scope="col" className="admin-users-th-actions">
+            <th scope="col">
               Actions
             </th>
           </tr>
@@ -97,7 +101,7 @@ export function UsersManagementTable({
                     </div>
                   </div>
                 </td>
-                <td className="admin-users-cell-unit">
+                <td>
                   <div className="admin-users-unit-name">
                     {u.unit?.unitName ?? "—"}
                   </div>
@@ -105,7 +109,7 @@ export function UsersManagementTable({
                     <div className="admin-users-unit-sub">{unitSub}</div>
                   ) : null}
                 </td>
-                <td className="admin-users-cell-badge admin-users-cell-app-status">
+                <td>
                   <UserApplicationStatusCell
                     userId={u.id}
                     applicationStatus={u.applicationStatus}
@@ -116,8 +120,8 @@ export function UsersManagementTable({
                     {formatDateShort(u.createdAt)}
                   </div>
                 </td>
-                <td className="admin-users-cell-badge admin-users-cell-pay">
-                  <div className="admin-users-badge-cell">
+                <td>
+                  <div className="flex w-full min-w-0 flex-col items-center justify-start gap-1.5">
                     <PaymentStatusBadge
                       status={u.paymentStatus}
                       showPrefix={false}
@@ -126,7 +130,7 @@ export function UsersManagementTable({
                     />
                   </div>
                 </td>
-                <td className="admin-users-cell-actions">
+                <td>
                   <UserManagementRowActions userId={u.id} />
                 </td>
               </tr>

@@ -25,7 +25,6 @@ import {
 } from "@/lib/constants";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
-import "@/app/admin-users-reference.css";
 
 export const metadata: Metadata = {
   title: adminNavLabel("tickets"),
@@ -206,7 +205,7 @@ export default async function AdminTicketsPage({
           </div>
 
           <footer className={adminUsersPagination}>
-            <p className="admin-users-pagination-page">
+            <p className="m-0 text-sm font-medium text-slate-900">
               Page {page} of {totalPages}
             </p>
             <AdminUsersPagination

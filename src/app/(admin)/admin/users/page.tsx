@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "@/app/admin-users-reference.css";
 import Link from "next/link";
 import { Prisma } from "@prisma/client";
 
@@ -14,11 +13,8 @@ import { cn } from "@/lib/utils";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { APPLICATION_STATUS } from "@/lib/constants";
 import {
-  adminFilterChip,
-  adminFilterChipActive,
-  adminFilterChipInactive,
-  filterChipToneProps,
   adminUsersFilterTabs,
+  segmentedChipClasses,
   adminUsersControls,
   adminUsersPage,
   adminUsersPagination,
@@ -140,9 +136,9 @@ export default async function AdminUsersPage({
                 paramName="search"
                 placeholder="Search name or email..."
                 ariaLabel="Search users"
-                className="admin-users-search-field"
-                inputClassName="admin-input admin-users-search-input"
-                iconClassName="admin-users-search-icon"
+                className="relative min-w-0"
+                inputClassName="h-11 w-full rounded-[10px] bg-white pl-10 pr-3.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-900/40 focus-visible:border-brand-olive/40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-olive/15 focus-visible:ring-offset-0"
+                iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-slate-900 opacity-45"
               />
               <AdminExportButton
                 rows={exportRows}
@@ -164,13 +160,7 @@ export default async function AdminUsersPage({
                 <Link
                   key={f}
                   href={`/admin/users?filter=${f}&search=${encodeURIComponent(search)}&page=1`}
-                  {...filterChipToneProps(f)}
-                  className={cn(
-                    adminFilterChip,
-                    filter === f
-                      ? adminFilterChipActive
-                      : adminFilterChipInactive
-                  )}
+                  className={segmentedChipClasses(f, filter === f)}
                 >
                   {FILTER_LABELS[f] ?? f}
                 </Link>
@@ -184,7 +174,7 @@ export default async function AdminUsersPage({
           />
 
           <footer className={adminUsersPagination}>
-            <p className="admin-users-pagination-page">
+            <p className="m-0 text-sm font-medium text-slate-900">
               Page {page} of {totalPages}
             </p>
             <AdminUsersPagination

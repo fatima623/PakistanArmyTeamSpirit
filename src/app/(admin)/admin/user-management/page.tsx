@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "@/app/admin-users-reference.css";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
@@ -81,10 +80,10 @@ export default async function AdminUserManagementPage({
   return (
     <div className={cn(adminUsersPage, "admin-fade-in-up")}>
       <div className={adminUsersPanel}>
-        <header className="admin-users-page-header flex items-start justify-between gap-4">
-          <div className="admin-users-page-intro min-w-0">
+        <header className="flex w-full items-start justify-between gap-4">
+          <div className="flex min-w-0 w-full flex-row flex-wrap items-center justify-between gap-x-5 gap-y-3 border-b border-brand-line/60 pb-1">
             <h2 className="admin-users-panel-title">Accounts &amp; roles</h2>
-            <p className="admin-users-page-desc">
+            <p className="m-0 min-w-0 max-w-[42rem] flex-[1_1_auto] text-[0.9375rem] leading-[1.55] text-slate-900">
               Manage staff roles, access levels, and account status.
             </p>
           </div>
@@ -101,9 +100,9 @@ export default async function AdminUserManagementPage({
               paramName="search"
               placeholder="Search name or email..."
               ariaLabel="Search users"
-              className="admin-users-search-field"
-              inputClassName="admin-input admin-users-search-input"
-              iconClassName="admin-users-search-icon"
+              className="relative min-w-0"
+              inputClassName="h-11 w-full rounded-[10px] bg-white pl-10 pr-3.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-900/40 focus-visible:border-brand-olive/40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-olive/15 focus-visible:ring-offset-0"
+              iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-slate-900 opacity-45"
             />
           </div>
         </section>
@@ -111,7 +110,7 @@ export default async function AdminUserManagementPage({
         <UserAccountsTable users={users} startIndex={(page - 1) * PAGE_SIZE} />
 
         <footer className={adminUsersPagination}>
-          <p className="admin-users-pagination-page">
+          <p className="m-0 text-sm font-medium text-slate-900">
             Page {page} of {totalPages}
           </p>
           <AdminUsersPagination
