@@ -26,7 +26,7 @@ export function FormFieldAdmin({
         {required && <span className="ml-1 text-red-600">*</span>}
       </label>
       {children}
-      {hint && <p className="text-xs text-cp-ink-muted">{hint}</p>}
+      {hint && <p className="text-xs text-brand-ink-muted">{hint}</p>}
       {error && (
         <p className="text-xs text-red-600" role="alert">
           {error}

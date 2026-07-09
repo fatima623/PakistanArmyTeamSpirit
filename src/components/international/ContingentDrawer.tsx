@@ -31,18 +31,18 @@ export function ContingentDrawer({
       <SheetContent
         side="right"
         className={cn(
-          "tac-contingent-drawer w-full border-l border-tactical-brass/25 bg-tactical-carbon-raised text-white sm:max-w-md",
+          "tac-contingent-drawer w-full border-l border-brand-brass/25 bg-brand-night-2 text-white sm:max-w-md",
           "[&>button]:text-white/70 [&>button]:hover:text-white"
         )}
       >
         <SheetHeader className="border-b border-white/10 pb-4 text-left">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-tactical-khaki">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-khaki">
             Contingent dossier
           </p>
           <SheetTitle className="font-display text-lg font-bold uppercase tracking-wide text-white">
             {contingent.label}
           </SheetTitle>
-          <SheetDescription className="font-condensed text-sm text-tactical-sand">
+          <SheetDescription className="font-condensed text-sm text-brand-sand">
             {flag} {COUNTRY_NAMES[contingent.code]} · International PATS participation
           </SheetDescription>
         </SheetHeader>
@@ -59,10 +59,10 @@ export function ContingentDrawer({
             mono
           />
           <div>
-            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-tactical-khaki">
+            <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-khaki">
               PATS record
             </dt>
-            <dd className="mt-2 text-tactical-sand">
+            <dd className="mt-2 text-brand-sand">
               {contingent.editions.join(" · ")}
             </dd>
           </div>
@@ -88,7 +88,7 @@ function MetricRow({
 }) {
   return (
     <div className="flex items-baseline justify-between gap-4 border-b border-white/5 pb-3">
-      <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-tactical-khaki">
+      <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-khaki">
         {label}
       </dt>
       <dd

@@ -125,7 +125,7 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl">
       <div className={section}>
-        <h2 className="admin-section-title border-b border-cp-border pb-3">
+        <h2 className="admin-section-title border-b border-brand-line pb-3">
           Personal details
         </h2>
         <FormFieldAdmin label="First name" required error={errors.firstName?.message}>
@@ -140,7 +140,7 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
       </div>
 
       <div className={section}>
-        <h2 className="admin-section-title border-b border-cp-border pb-3">
+        <h2 className="admin-section-title border-b border-brand-line pb-3">
           Unit details
         </h2>
         <FormFieldAdmin label="Unit type" required error={errors.unitType?.message}>
@@ -150,7 +150,7 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
             className="flex flex-wrap gap-4"
           >
             {(["Regular", "Reserve"] as const).map((opt) => (
-              <div key={opt} className="flex items-center gap-2 text-cp-ink">
+              <div key={opt} className="flex items-center gap-2 text-brand-ink">
                 <RadioGroupItem value={opt} id={`a-unitType-${opt}`} />
                 <label htmlFor={`a-unitType-${opt}`}>{opt}</label>
               </div>
@@ -190,7 +190,7 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
       </div>
 
       <div className={section}>
-        <h2 className="admin-section-title border-b border-cp-border pb-3">
+        <h2 className="admin-section-title border-b border-brand-line pb-3">
           Phase allocation (admin)
         </h2>
         <FormFieldAdmin label="Preferred phase" error={errors.preferredPhase?.message}>

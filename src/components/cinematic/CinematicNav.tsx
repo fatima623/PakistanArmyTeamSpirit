@@ -54,9 +54,9 @@ export function CinematicNav({
       className={cn(
         "fixed inset-x-0 top-0 z-50 flex flex-col transition-[background-color,backdrop-filter,box-shadow] duration-300 ease-mechanical",
         dayTheme
-          ? "border-b border-cp-border bg-white/95 shadow-sm backdrop-blur-md"
+          ? "border-b border-brand-line bg-white/95 shadow-sm backdrop-blur-md"
           : solid
-            ? "bg-tactical-void/92 shadow-lg backdrop-blur-lg"
+            ? "bg-brand-night/92 shadow-lg backdrop-blur-lg"
             : "bg-transparent"
       )}
     >
@@ -65,15 +65,15 @@ export function CinematicNav({
         scrollDurationSec={tickerScrollDurationSec}
         className={cn(
           solid
-            ? "bg-tactical-void/95"
-            : "bg-tactical-void/75 backdrop-blur-sm"
+            ? "bg-brand-night/95"
+            : "bg-brand-night/75 backdrop-blur-sm"
         )}
       />
       <div
         className={cn(
           "border-b transition-[border-color] duration-500",
           dayTheme
-            ? "border-cp-border"
+            ? "border-brand-line"
             : solid
               ? "border-white/15"
               : "border-transparent"
@@ -84,7 +84,7 @@ export function CinematicNav({
           <span
             className={cn(
               "cinematic-nav-brand font-display font-extrabold uppercase",
-              dayTheme ? "text-cp-ink" : "cinematic-heading text-white"
+              dayTheme ? "text-brand-ink" : "cinematic-heading text-white"
             )}
           >
             {NAV_BRAND_TITLE}
@@ -120,8 +120,8 @@ export function CinematicNav({
           className={cn(
             "rounded-sm p-2 transition-colors active:scale-95 md:hidden",
             dayTheme
-              ? "text-cp-ink hover:text-cp-olive-dark"
-              : "text-white hover:text-tactical-brass"
+              ? "text-brand-ink hover:text-brand-olive-dark"
+              : "text-white hover:text-brand-brass"
           )}
           onClick={mobileOpen ? closeMobile : openMobile}
           aria-expanded={mobileOpen}
@@ -139,8 +139,8 @@ export function CinematicNav({
             className={cn(
               "cinematic-mobile-nav-panel overflow-hidden border-t backdrop-blur-xl md:hidden",
               dayTheme
-                ? "border-cp-border bg-white"
-                : "border-white/10 bg-tactical-void/95"
+                ? "border-brand-line bg-white"
+                : "border-white/10 bg-brand-night/95"
             )}
           >
             <div className="space-y-1 px-4 py-4">
@@ -150,14 +150,14 @@ export function CinematicNav({
                   href={item.href}
                   className={cn(
                     "block rounded-sm px-3 py-3.5 font-condensed text-lg font-bold uppercase tracking-[0.1em] transition-colors",
-                    dayTheme ? "active:bg-cp-parchment-dark" : "active:bg-white/10",
+                    dayTheme ? "active:bg-brand-parchment-2" : "active:bg-white/10",
                     isActive(pathname, item.href)
                       ? dayTheme
-                        ? "text-cp-olive-dark"
-                        : "text-tactical-brass"
+                        ? "text-brand-olive-dark"
+                        : "text-brand-brass"
                       : dayTheme
-                        ? "text-cp-ink hover:text-cp-olive-dark"
-                        : "text-white hover:text-tactical-brass"
+                        ? "text-brand-ink hover:text-brand-olive-dark"
+                        : "text-white hover:text-brand-brass"
                   )}
                 >
                   {item.label}

@@ -847,11 +847,11 @@
   color: var(--admin-heading) !important;
 }
 
-.admin-theme .text-cp-ink {
+.admin-theme .text-brand-ink {
   color: var(--admin-heading) !important;
 }
 
-.admin-theme .text-cp-ink-muted,
+.admin-theme .text-brand-ink-muted,
 .admin-theme .admin-muted {
   color: var(--admin-muted) !important;
 }
@@ -1379,7 +1379,7 @@
   color: #0f172a !important;
 }
 
-.admin-theme .admin-dashboard-recent-table tbody .text-cp-ink-muted {
+.admin-theme .admin-dashboard-recent-table tbody .text-brand-ink-muted {
   color: #0f172a !important;
   font-size: 14px !important;
 }

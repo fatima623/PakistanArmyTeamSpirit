@@ -426,7 +426,7 @@ export function RegisterForm({
                 href="/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-cp-olive hover:underline"
+                className="text-brand-olive hover:underline"
               >
                 privacy policy
               </Link>

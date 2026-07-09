@@ -7,7 +7,7 @@ export type Crumb = { label: string; href?: string };
 export function AdminBreadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-4">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-cp-ink-muted">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-brand-ink-muted">
         {items.map((crumb, i) => {
           const last = i === items.length - 1;
           return (
@@ -18,7 +18,7 @@ export function AdminBreadcrumbs({ items }: { items: Crumb[] }) {
                 </Link>
               ) : (
                 <span
-                  className={last ? "font-semibold text-cp-ink" : undefined}
+                  className={last ? "font-semibold text-brand-ink" : undefined}
                   aria-current={last ? "page" : undefined}
                 >
                   {crumb.label}

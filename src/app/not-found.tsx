@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <PublicLayout>
       <article className="cp-page cp-page-inner py-12 text-center">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-cp-khaki">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-brand-khaki-warm">
           404
         </p>
         <h1 className="cp-h1 mb-4">Page not found</h1>

@@ -40,8 +40,8 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor={htmlFor} className="text-cp-ink">
-        {label} <span className="text-cp-alert">*</span>
+      <Label htmlFor={htmlFor} className="text-brand-ink">
+        {label} <span className="text-brand-red">*</span>
       </Label>
       {children}
       {error ? (
@@ -104,10 +104,10 @@ export function TeamMemberFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md border-cp-border bg-white text-cp-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
+      <DialogContent className="max-w-md border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
         <DialogHeader>
-          <DialogTitle className="text-cp-ink">Add team member</DialogTitle>
-          <DialogDescription className="text-cp-ink-muted">
+          <DialogTitle className="text-brand-ink">Add team member</DialogTitle>
+          <DialogDescription className="text-brand-ink-muted">
             Add a member participating in the event. You can edit your team at any
             time from the Participant Panel.
           </DialogDescription>
@@ -170,7 +170,7 @@ export function TeamMemberFormDialog({
                   <RadioGroupItem value={g} id={`tm-gender-${g}`} />
                   <Label
                     htmlFor={`tm-gender-${g}`}
-                    className="font-normal text-cp-ink"
+                    className="font-normal text-brand-ink"
                   >
                     {g}
                   </Label>

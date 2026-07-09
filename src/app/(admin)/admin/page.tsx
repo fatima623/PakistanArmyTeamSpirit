@@ -135,19 +135,19 @@ export default async function AdminOverviewPage() {
               <tbody>
                 {recentRegistrations.map((u) => (
                   <tr key={u.id} className="admin-row-hover">
-                    <td className="font-semibold text-cp-ink">
+                    <td className="font-semibold text-brand-ink">
                       {u.firstName} {u.lastName}
                     </td>
-                    <td className="text-sm text-cp-ink-muted">
+                    <td className="text-sm text-brand-ink-muted">
                       {u.unit?.unitName ?? "—"}
                     </td>
-                    <td className="text-sm text-cp-ink-muted">
+                    <td className="text-sm text-brand-ink-muted">
                       {displayCountry(u.country)}
                       {isInternationalParticipant(u.country) ? (
                         <IntlBadge />
                       ) : null}
                     </td>
-                    <td className="text-sm text-cp-ink-muted">
+                    <td className="text-sm text-brand-ink-muted">
                       {formatDateShort(u.createdAt)}
                     </td>
                     <td>

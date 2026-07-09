@@ -341,12 +341,12 @@
   color: var(--pats-text) !important;
 }
 
-.pats-portal .text-cp-ink,
-.pats-portal .text-cp-ink-muted {
+.pats-portal .text-brand-ink,
+.pats-portal .text-brand-ink-muted {
   color: var(--pats-text) !important;
 }
 
-.pats-portal .border-cp-border {
+.pats-portal .border-brand-line {
   border-color: var(--pats-border) !important;
 }
 

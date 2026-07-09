@@ -151,8 +151,8 @@ html[data-site-theme="day"] .participant-portal .portal-alert-success {
   border-radius: 12px !important;
 }
 
-html.light-theme .participant-portal .text-cp-ink,
-html[data-site-theme="day"] .participant-portal .text-cp-ink {
+html.light-theme .participant-portal .text-brand-ink,
+html[data-site-theme="day"] .participant-portal .text-brand-ink {
   color: #1e293b !important;
 }
 
@@ -173,8 +173,8 @@ html[data-site-theme="day"] .participant-portal label {
   color: #475569;
 }
 
-html.light-theme .participant-portal .border-cp-border,
-html[data-site-theme="day"] .participant-portal .border-cp-border {
+html.light-theme .participant-portal .border-brand-line,
+html[data-site-theme="day"] .participant-portal .border-brand-line {
   border-color: #e2e8f0 !important;
 }
 
@@ -230,14 +230,14 @@ html[data-site-theme="day"] .participant-portal.pats-portal .portal-journey-bann
 }
 
 /* Generic card text — readable dark default for every text node */
-html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-cp-ink-muted, .pats-body),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-cp-ink-muted, .pats-body) {
+html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body) {
   color: #475569 !important;
 }
 
 /* Headings + emphasised values — strong slate */
-html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(h2, h3, .portal-h2, .portal-section-title, .participant-dash-section-title, .text-cp-ink),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(h2, h3, .portal-h2, .portal-section-title, .participant-dash-section-title, .text-cp-ink) {
+html.light-theme .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(h2, h3, .portal-h2, .portal-section-title, .participant-dash-section-title, .text-brand-ink),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, .portal-card, .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(h2, h3, .portal-h2, .portal-section-title, .participant-dash-section-title, .text-brand-ink) {
   color: #1e293b !important;
 }
 
@@ -413,8 +413,8 @@ html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, lab
 }
 
 /* Headings + strong emphasis — darker slate */
-html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-cp-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-cp-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *) {
+html.light-theme .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(h1, h2, h3, h4, h5, strong, b, .portal-section-title, .portal-h1, .portal-h2, .participant-dash-section-title, .text-brand-ink):not([class*="text-red"]):not([class*="text-emerald"]):not(.pp-sidebar):not(.pp-sidebar *) {
   color: #1e293b !important;
 }
 

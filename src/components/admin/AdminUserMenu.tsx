@@ -82,11 +82,11 @@ export function AdminUserMenu({ userInitials }: { userInitials: string }) {
           className="admin-dropdown-panel"
         >
           <div className="admin-dropdown-header" role="none">
-            <p className="text-sm font-semibold text-cp-ink">{displayName}</p>
+            <p className="text-sm font-semibold text-brand-ink">{displayName}</p>
             {email ? (
-              <p className="mt-0.5 truncate text-xs text-cp-ink-muted">{email}</p>
+              <p className="mt-0.5 truncate text-xs text-brand-ink-muted">{email}</p>
             ) : null}
-            <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-cp-olive/30 bg-cp-olive/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-cp-olive-dark">
+            <p className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-brand-olive/30 bg-brand-olive/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wide text-brand-olive-dark">
               <ShieldCheck className="h-3 w-3" aria-hidden />
               {roleLabel}
             </p>

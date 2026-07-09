@@ -112,7 +112,7 @@ export function PaymentProofViewer({
         <button
           type="button"
           onClick={load}
-          className="inline-flex items-center gap-1 text-cp-olive-dark hover:underline"
+          className="inline-flex items-center gap-1 text-brand-olive-dark hover:underline"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           Retry
@@ -194,7 +194,7 @@ export function PaymentProofViewer({
             href={objectUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-cp-ink shadow-sm transition hover:border-cp-olive"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-brand-ink shadow-sm transition hover:border-brand-olive"
           >
             <FileText className="h-4 w-4" aria-hidden />
             View receipt (PDF)

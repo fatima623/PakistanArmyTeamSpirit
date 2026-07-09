@@ -692,49 +692,49 @@
    site — which also uses cp-* on its header/footer/nav/register — is untouched.)
    Mirrors tailwind.config.tokens.md; khaki/alert intentionally unchanged.
    -------------------------------------------------------------------------- */
-.admin-theme .text-cp-ink,
-.participant-portal .text-cp-ink,
-.pats-portal .text-cp-ink {
+.admin-theme .text-brand-ink,
+.participant-portal .text-brand-ink,
+.pats-portal .text-brand-ink {
   color: #18221c !important;
 }
-.admin-theme .text-cp-ink-muted,
-.participant-portal .text-cp-ink-muted,
-.pats-portal .text-cp-ink-muted {
+.admin-theme .text-brand-ink-muted,
+.participant-portal .text-brand-ink-muted,
+.pats-portal .text-brand-ink-muted {
   color: #5a655c !important;
 }
-.admin-theme .border-cp-border,
-.participant-portal .border-cp-border,
-.pats-portal .border-cp-border {
+.admin-theme .border-brand-line,
+.participant-portal .border-brand-line,
+.pats-portal .border-brand-line {
   border-color: #e0e3db !important;
 }
-.admin-theme .bg-cp-parchment,
-.participant-portal .bg-cp-parchment,
-.pats-portal .bg-cp-parchment {
+.admin-theme .bg-brand-parchment,
+.participant-portal .bg-brand-parchment,
+.pats-portal .bg-brand-parchment {
   background-color: #eef0eb !important;
 }
-.admin-theme .bg-cp-olive,
-.participant-portal .bg-cp-olive,
-.pats-portal .bg-cp-olive {
+.admin-theme .bg-brand-olive,
+.participant-portal .bg-brand-olive,
+.pats-portal .bg-brand-olive {
   background-color: #1e5a3a !important;
 }
-.admin-theme .text-cp-olive,
-.participant-portal .text-cp-olive,
-.pats-portal .text-cp-olive {
+.admin-theme .text-brand-olive,
+.participant-portal .text-brand-olive,
+.pats-portal .text-brand-olive {
   color: #1e5a3a !important;
 }
-.admin-theme .text-cp-olive-dark,
-.participant-portal .text-cp-olive-dark,
-.pats-portal .text-cp-olive-dark {
+.admin-theme .text-brand-olive-dark,
+.participant-portal .text-brand-olive-dark,
+.pats-portal .text-brand-olive-dark {
   color: #17492f !important;
 }
-.admin-theme .border-cp-olive,
-.participant-portal .border-cp-olive,
-.pats-portal .border-cp-olive {
+.admin-theme .border-brand-olive,
+.participant-portal .border-brand-olive,
+.pats-portal .border-brand-olive {
   border-color: #1e5a3a !important;
 }
-.admin-theme .ring-cp-olive,
-.participant-portal .ring-cp-olive,
-.pats-portal .ring-cp-olive {
+.admin-theme .ring-brand-olive,
+.participant-portal .ring-brand-olive,
+.pats-portal .ring-brand-olive {
   --tw-ring-color: #1e5a3a !important;
 }
 

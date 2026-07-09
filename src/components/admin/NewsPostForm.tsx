@@ -662,11 +662,11 @@ export function NewsPostForm({
 
                   onCheckedChange={setPublished}
 
-                  className="data-[state=checked]:bg-cp-olive"
+                  className="data-[state=checked]:bg-brand-olive"
 
                 />
 
-                <span className="text-sm text-cp-ink-muted">
+                <span className="text-sm text-brand-ink-muted">
 
                   {published
 
@@ -812,13 +812,13 @@ export function NewsPostForm({
 
               <div className="admin-news-pdf-current-info">
 
-                <FileText className="h-4 w-4 shrink-0 text-cp-olive" />
+                <FileText className="h-4 w-4 shrink-0 text-brand-olive" />
 
                 <span className="truncate font-medium">{attachedName}</span>
 
                 {attachedSize != null ? (
 
-                  <span className="text-cp-ink-muted">
+                  <span className="text-brand-ink-muted">
 
                     ({formatFileSize(attachedSize)})
 
@@ -838,7 +838,7 @@ export function NewsPostForm({
 
                 {pdfFile ? (
 
-                  <span className="text-xs text-cp-olive">(new upload)</span>
+                  <span className="text-xs text-brand-olive">(new upload)</span>
 
                 ) : null}
 

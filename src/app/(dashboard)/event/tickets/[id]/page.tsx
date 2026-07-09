@@ -77,7 +77,7 @@ export default async function ParticipantTicketDetailPage({
       </div>
 
       <div className="portal-form-card">
-        <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-cp-border pb-4">
+        <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-brand-line pb-4">
           <TicketStatusBadge status={ticket.status} />
           <TicketPriorityTag priority={ticket.priority} />
         </div>

@@ -51,7 +51,7 @@ export function VideoParallaxBackdrop({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden bg-tactical-void",
+        "relative w-full overflow-hidden bg-brand-night",
         variant === "full"
           ? "min-h-[100svh]"
           : "min-h-[clamp(15rem,30vh,20rem)]",
@@ -102,7 +102,7 @@ export function VideoParallaxBackdrop({
         >
           <div className="absolute inset-0 bg-cinematic-hero-ltr opacity-90" />
           <div className="absolute inset-0 bg-cinematic-hero-bottom" />
-          <div className="absolute inset-0 bg-tactical-vignette opacity-25" />
+          <div className="absolute inset-0 bg-brand-vignette opacity-25" />
         </motion.div>
       )}
 

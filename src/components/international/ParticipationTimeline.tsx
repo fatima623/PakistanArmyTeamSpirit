@@ -23,9 +23,9 @@ export function ParticipationTimeline() {
       {INTERNATIONAL_EDITIONS.map((ed) => (
         <article
           key={ed.year}
-          className="tac-edition-row group relative overflow-hidden rounded-sm border border-white/10 bg-tactical-navy/40 p-5 backdrop-blur-md transition-colors hover:border-tactical-brass/30 sm:p-6"
+          className="tac-edition-row group relative overflow-hidden rounded-sm border border-white/10 bg-brand-night-2/40 p-5 backdrop-blur-md transition-colors hover:border-brand-brass/30 sm:p-6"
         >
-          <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-tactical-brass/80 to-transparent opacity-60 transition-opacity group-hover:opacity-100" />
+          <div className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-brand-brass/80 to-transparent opacity-60 transition-opacity group-hover:opacity-100" />
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h3 className="tac-edition-row__title font-display text-lg font-bold uppercase">
               {ed.edition}

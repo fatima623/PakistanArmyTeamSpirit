@@ -102,7 +102,7 @@ export function CountrySelect({
       </datalist>
       {open && filtered.length > 0 ? (
         <ul
-          className="absolute z-50 mt-1 max-h-56 w-full overflow-y-auto rounded-md border border-cp-border bg-white py-1 shadow-md"
+          className="absolute z-50 mt-1 max-h-56 w-full overflow-y-auto rounded-md border border-brand-line bg-white py-1 shadow-md"
           role="listbox"
         >
           {filtered.map((country) => (
@@ -110,8 +110,8 @@ export function CountrySelect({
               <button
                 type="button"
                 className={cn(
-                  "w-full px-3 py-2 text-left text-sm hover:bg-cp-surface-muted",
-                  country === value && "bg-cp-surface-muted font-medium"
+                  "w-full px-3 py-2 text-left text-sm hover:bg-brand-parchment-2/60",
+                  country === value && "bg-brand-parchment-2 font-medium"
                 )}
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => selectCountry(country)}

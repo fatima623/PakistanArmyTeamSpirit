@@ -10,60 +10,30 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "bg-base": "var(--bg-base, #0A0A0A)",
-        "bg-surface": "var(--bg-surface, #111111)",
-        "bg-card": "var(--bg-card, #161616)",
-        "accent-primary": "var(--accent-primary, #2D5A1B)",
-        "accent-gold": "var(--accent-gold, #C9A84C)",
-        "text-label": "var(--text-label, #C9A84C)",
-        army: {
-          green: "#01411C",
-          olive: "#1A2A1A",
-          charcoal: "#0D1117",
-          steel: "#1E2A35",
-          gold: "#C9A84C",
-          cream: "#F5F0E8",
-        },
-        tactical: {
-          void: "#0D0F0E",
-          carbon: "#0D0F0E",
-          "carbon-raised": "#121614",
-          navy: "#121614",
-          slate: "#161d19",
-          panel: "#1a221e",
-          green: "#2a3d28",
-          olive: "#3d5230",
-          brass: "#C5A880",
-          "brass-dim": "#8B9676",
-          khaki: "#8B9676",
-          sand: "#EBEBEB",
-          "sand-dim": "#8a8272",
-          "ops-red": "#8b3a2a",
-          alert: "#B8860B",
-          mist: "#EBEBEB",
-        },
-        portal: {
-          primary: "var(--portal-primary, #4a5e3a)",
-          "primary-hover": "var(--portal-primary-hover, #3d4f30)",
-          approve: "var(--portal-approve, #2e6b4f)",
-          "approve-hover": "var(--portal-approve-hover, #245a40)",
-          destructive: "var(--portal-destructive, #c0392b)",
-        },
-        cp: {
-          gunmetal: "#141a14",
-          "gunmetal-light": "#1e2720",
-          olive: "#3d5230",
-          "olive-dark": "#2f4025",
-          "olive-light": "#4d6340",
-          brass: "#b8941f",
-          "brass-light": "#d4b24a",
-          khaki: "#8a9478",
-          parchment: "#f3efe6",
-          "parchment-dark": "#e6e0d4",
-          ink: "#1c2119",
-          "ink-muted": "#4a5245",
-          border: "#c8c2b4",
-          alert: "#8b3a2a",
+        // Fixed brand palette — ONE namespace, backed by the --brand-* scale
+        // in globals.css :root (single source of truth; Phase 1 of
+        // REMEDIATION-PLAN.md). RGB-triplet vars so /opacity modifiers work.
+        brand: {
+          night: "rgb(var(--brand-night) / <alpha-value>)",
+          "night-2": "rgb(var(--brand-night-2) / <alpha-value>)",
+          olive: "rgb(var(--brand-olive) / <alpha-value>)",
+          "olive-dark": "rgb(var(--brand-olive-dark) / <alpha-value>)",
+          brass: "rgb(var(--brand-brass) / <alpha-value>)",
+          khaki: "rgb(var(--brand-khaki) / <alpha-value>)",
+          "khaki-warm": "rgb(var(--brand-khaki-warm) / <alpha-value>)",
+          sand: "rgb(var(--brand-sand) / <alpha-value>)",
+          "sand-dim": "rgb(var(--brand-sand-dim) / <alpha-value>)",
+          red: "rgb(var(--brand-red) / <alpha-value>)",
+          ink: "rgb(var(--brand-ink) / <alpha-value>)",
+          "ink-muted": "rgb(var(--brand-ink-muted) / <alpha-value>)",
+          line: "rgb(var(--brand-line) / <alpha-value>)",
+          parchment: "rgb(var(--brand-parchment) / <alpha-value>)",
+          "parchment-2": "rgb(var(--brand-parchment-2) / <alpha-value>)",
+          black: "rgb(var(--brand-black) / <alpha-value>)",
+          "brass-deep": "rgb(var(--brand-brass-deep) / <alpha-value>)",
+          gunmetal: "rgb(var(--brand-gunmetal) / <alpha-value>)",
+          "gunmetal-2": "rgb(var(--brand-gunmetal-2) / <alpha-value>)",
+          panel: "rgb(var(--brand-panel) / <alpha-value>)",
         },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -126,58 +96,26 @@ const config: Config = {
         ],
         mono: ["var(--font-jetbrains)", "var(--font-mono)", "ui-monospace", "monospace"],
       },
-      letterSpacing: {
-        military: "0.14em",
-        "wide-xl": "0.2em",
-      },
       transitionTimingFunction: {
         mechanical: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
       backgroundImage: {
-        "cp-hero":
-          "linear-gradient(135deg, rgba(20,26,20,0.92) 0%, rgba(61,82,48,0.75) 50%, rgba(20,26,20,0.88) 100%)",
-        "cp-stripe":
-          "repeating-linear-gradient(-45deg, transparent, transparent 4px, rgba(184,148,31,0.06) 4px, rgba(184,148,31,0.06) 8px)",
-        "tactical-grid":
+        "brand-grid":
           "linear-gradient(rgba(201,162,39,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.04) 1px, transparent 1px)",
-        "tactical-vignette":
+        "brand-vignette":
           "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.65) 100%)",
-        "tactical-hero":
-          "linear-gradient(180deg, rgba(8,11,10,0.72) 0%, rgba(8,11,10,0.88) 40%, rgba(8,11,10,0.97) 100%)",
         "cinematic-hero-ltr":
           "linear-gradient(to right, rgba(13,15,14,0.88) 0%, rgba(13,15,14,0.5) 45%, rgba(13,15,14,0.15) 70%, transparent 100%)",
         "cinematic-hero-bottom":
           "linear-gradient(to top, rgba(13,15,14,0.9) 0%, rgba(13,15,14,0.35) 40%, transparent 72%)",
-        "tac-semantic-grid":
-          "linear-gradient(rgba(197,168,128,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(197,168,128,0.06) 1px, transparent 1px)",
-        "tac-fog-radial":
-          "radial-gradient(ellipse 90% 60% at 50% -10%, rgba(61,82,48,0.2), transparent 55%)",
-        "tac-brief-grid":
-          "linear-gradient(rgba(201,162,39,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(201,162,39,0.05) 1px, transparent 1px)",
       },
       backgroundSize: {
         "grid-48": "48px 48px",
-        "brief-24": "24px 24px",
-      },
-      keyframes: {
-        "tac-scan": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(100vh)" },
-        },
-        "tac-glow": {
-          "0%, 100%": { opacity: "0.4" },
-          "50%": { opacity: "1" },
-        },
-      },
-      animation: {
-        "tac-scan": "tac-scan 9s ease-in-out infinite",
-        "tac-glow": "tac-glow 3s ease-in-out infinite",
       },
       boxShadow: {
-        "tac-glow": "0 0 40px rgba(201, 162, 39, 0.15)",
-        "tac-card": "0 20px 50px rgba(0, 0, 0, 0.45)",
-        cp: "0 1px 3px rgba(20, 26, 20, 0.08), 0 8px 24px rgba(20, 26, 20, 0.06)",
-        "cp-lg": "0 4px 24px rgba(20, 26, 20, 0.12)",
+        "brand-soft":
+          "0 1px 3px rgba(20, 26, 20, 0.08), 0 8px 24px rgba(20, 26, 20, 0.06)",
+        "brand-soft-lg": "0 4px 24px rgba(20, 26, 20, 0.12)",
       },
       borderRadius: {
         lg: "var(--radius)",

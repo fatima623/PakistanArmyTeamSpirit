@@ -61,7 +61,7 @@ export function Timeline({
                 style={{ borderColor: "#e2e8f0", background: "#ffffff" }}
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold text-cp-ink">{d.label}</p>
+                  <p className="text-sm font-semibold text-brand-ink">{d.label}</p>
                   <p className="portal-muted text-xs" style={{ color: "#64748b" }}>
                     {formatDateTime(d.date)}
                   </p>
@@ -90,7 +90,7 @@ export function Timeline({
                   className="flex items-center justify-between gap-3 rounded-lg border p-3"
                   style={{ borderColor: "#e2e8f0", background: "#ffffff" }}
                 >
-                  <span className="text-sm font-semibold text-cp-ink">
+                  <span className="text-sm font-semibold text-brand-ink">
                     {k.label}
                   </span>
                   <span

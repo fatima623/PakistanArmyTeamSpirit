@@ -147,11 +147,11 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
       </div>
 
       <Dialog open={!!viewUnit} onOpenChange={() => setViewUnit(null)}>
-        <DialogContent className="admin-unit-dialog max-h-[85vh] max-w-2xl overflow-y-auto border-cp-border bg-white text-cp-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
+        <DialogContent className="admin-unit-dialog max-h-[85vh] max-w-2xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
           {viewUnit && (
             <>
               <DialogHeader>
-                <DialogTitle className="text-cp-olive-dark">
+                <DialogTitle className="text-brand-olive-dark">
                   {viewUnit.unitName}
                 </DialogTitle>
               </DialogHeader>

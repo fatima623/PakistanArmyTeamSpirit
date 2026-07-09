@@ -42,8 +42,8 @@ export function NationsWall() {
             viewport={{ once: true, margin: "-30px" }}
             transition={{ ...mechanicalTransition, duration: 0.45, delay: (i % 9) * 0.04 }}
             className={cn(
-              "tac-nation-chip rounded-sm border border-white/10 bg-tactical-carbon-raised/80 px-4 py-3 text-left",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-brass"
+              "tac-nation-chip rounded-sm border border-white/10 bg-brand-night-2/80 px-4 py-3 text-left",
+              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-brass"
             )}
           >
             <div className="flex items-start gap-3">
@@ -51,13 +51,13 @@ export function NationsWall() {
                 {countryFlag(c.code)}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-tactical-khaki">
+                <p className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-brand-khaki">
                   {c.label.split("—")[0]?.trim()}
                 </p>
                 <p className="mt-1 font-display text-sm font-bold uppercase leading-snug text-white">
                   {c.designation}
                 </p>
-                <p className="mt-2 font-mono text-[10px] tabular-nums text-tactical-sand-dim">
+                <p className="mt-2 font-mono text-[10px] tabular-nums text-brand-sand-dim">
                   {c.appearances} ED · LAST {c.lastEdition}
                 </p>
               </div>

@@ -103,7 +103,7 @@ export function NewTicketForm({
 
   return (
     <form onSubmit={handleSubmit} className="portal-form-card mb-6 space-y-5">
-      <h2 className="portal-section-title border-b border-cp-border pb-3">
+      <h2 className="portal-section-title border-b border-brand-line pb-3">
         Raise a support ticket
       </h2>
 

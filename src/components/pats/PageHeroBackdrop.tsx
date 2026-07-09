@@ -19,7 +19,7 @@ export function PageHeroBackdrop({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden bg-tactical-void",
+        "relative w-full overflow-hidden bg-brand-night",
         className
       )}
       aria-hidden={alt === ""}

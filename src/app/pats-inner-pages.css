@@ -387,8 +387,8 @@ html:not(.light-theme):not([data-site-theme="day"])
   color: #6b7568;
 }
 
-.army-site:not(.dashboard-day) .pats-login-card .text-cp-olive,
-.army-site:not(.dashboard-day) .pats-login-card a.text-cp-olive {
+.army-site:not(.dashboard-day) .pats-login-card .text-brand-olive,
+.army-site:not(.dashboard-day) .pats-login-card a.text-brand-olive {
   color: #8b6914 !important;
 }
 
@@ -415,7 +415,7 @@ html:not(.light-theme):not([data-site-theme="day"])
 .army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-slate-600,
 .army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-slate-500,
 .army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-slate-700,
-.army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-cp-ink-muted,
+.army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-brand-ink-muted,
 .army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .login-form-footer,
 .army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) p,
 .army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) span:not([class*="text-red"]) {
@@ -424,8 +424,8 @@ html:not(.light-theme):not([data-site-theme="day"])
   line-height: 1.55;
 }
 
-.army-site:not(.dashboard-day) .pats-form-page .text-cp-olive,
-.army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-cp-olive {
+.army-site:not(.dashboard-day) .pats-form-page .text-brand-olive,
+.army-site:not(.dashboard-day) .cp-form-card:not(.pats-login-card) .text-brand-olive {
   color: var(--pats-gold, #c8a84b) !important;
 }
 

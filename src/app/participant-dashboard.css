@@ -346,7 +346,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .d
  * night themes. In night mode `.pats-portal` sets the inherited text colour
  * to white (--pats-text: #fff), so any control WITHOUT an explicit colour —
  * the Radix <Select> trigger value, plain radio labels, section headings and
- * `.text-cp-ink` values — renders white-on-white and disappears. Text
+ * `.text-brand-ink` values — renders white-on-white and disappears. Text
  * <Input>s carry their own dark colour, which is why only the dropdowns and
  * labels vanish. Force readable dark text on the white card for every theme.
  * =================================================================== */
@@ -367,7 +367,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal .dashboard-status .d
   color: #64748b !important;
 }
 
-.participant-portal .portal-form-card .text-cp-ink {
+.participant-portal .portal-form-card .text-brand-ink {
   color: #1e293b !important;
 }
 

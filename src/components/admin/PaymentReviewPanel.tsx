@@ -473,10 +473,10 @@ export function PaymentReviewPanel({
           }
         }}
       >
-        <DialogContent className="border-cp-border bg-white text-cp-ink sm:max-w-md">
+        <DialogContent className="border-brand-line bg-white text-brand-ink sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{reasonDialogTitle}</DialogTitle>
-            <DialogDescription className="text-cp-ink-muted">
+            <DialogDescription className="text-brand-ink-muted">
               {reasonDialogDescription}
             </DialogDescription>
           </DialogHeader>

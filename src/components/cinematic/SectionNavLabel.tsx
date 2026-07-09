@@ -16,7 +16,7 @@ export function SectionNavLabel({ label, href, className }: Props) {
     <>
       <span className="relative z-[1]">{label}</span>
       <span
-        className="absolute bottom-0 left-2 right-2 h-0.5 bg-tactical-brass transition-opacity group-hover:opacity-100"
+        className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-brass transition-opacity group-hover:opacity-100"
         aria-hidden
       />
     </>

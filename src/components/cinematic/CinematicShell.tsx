@@ -19,7 +19,7 @@ export function CinematicShell({
       className={cn(
         "cinematic-site army-site page-shell min-h-screen min-h-[100dvh]",
         !fullBleed && "cinematic-layout-standard",
-        dayTheme ? "army-site--day text-cp-ink" : "bg-bg-base text-white"
+        dayTheme ? "army-site--day text-brand-ink" : "bg-brand-black text-white"
       )}
     >
       <PafScrollObserver />

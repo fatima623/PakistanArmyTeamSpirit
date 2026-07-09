@@ -127,7 +127,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body
-        className={`${inter.className} min-h-screen bg-cp-parchment font-sans antialiased`}
+        className={`${inter.className} min-h-screen bg-brand-parchment font-sans antialiased`}
       >
         <script
           dangerouslySetInnerHTML={{

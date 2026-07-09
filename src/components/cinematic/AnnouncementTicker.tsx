@@ -23,13 +23,13 @@ function TickerItems({ items }: { items: PublicTickerItem[] }) {
           item.priority === TICKER_PRIORITY.CRITICAL || item.isUrgent;
         return (
           <span key={item.id} className="inline-flex shrink-0 items-center">
-            <span className="mx-2 text-tactical-brass sm:mx-3 md:mx-4" aria-hidden>
+            <span className="mx-2 text-brand-brass sm:mx-3 md:mx-4" aria-hidden>
               ◆
             </span>
             <span
               className={cn(
                 "whitespace-nowrap",
-                isHighlighted && "text-tactical-brass"
+                isHighlighted && "text-brand-brass"
               )}
             >
               {item.message}
@@ -64,7 +64,7 @@ export function AnnouncementTicker({
         "announcement-ticker relative",
         isOverlay
           ? "border-0 bg-transparent shadow-none"
-          : "border-b border-tactical-brass/20 bg-tactical-void/95",
+          : "border-b border-brand-brass/20 bg-brand-night/95",
         className
       )}
       role="region"
@@ -100,7 +100,7 @@ export function AnnouncementTicker({
 
       {!isOverlay && (
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-tactical-brass/40 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand-brass/40 to-transparent"
           aria-hidden
         />
       )}

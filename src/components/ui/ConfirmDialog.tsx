@@ -34,12 +34,12 @@ export function ConfirmDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
-      <AlertDialogContent className="border-cp-border bg-white text-cp-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
+      <AlertDialogContent className="border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
         <AlertDialogHeader>
-          <AlertDialogTitle className="uppercase tracking-wide text-cp-ink">
+          <AlertDialogTitle className="uppercase tracking-wide text-brand-ink">
             {title}
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-cp-ink-muted">
+          <AlertDialogDescription className="text-brand-ink-muted">
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>

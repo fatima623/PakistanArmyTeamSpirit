@@ -28,7 +28,7 @@ export function TicketThread({
             }}
           >
             <div className="mb-1 flex items-center justify-between gap-3">
-              <span className="text-sm font-semibold text-cp-ink">
+              <span className="text-sm font-semibold text-brand-ink">
                 {m.authorName}
                 {staff ? (
                   <span
@@ -50,7 +50,7 @@ export function TicketThread({
               </span>
             </div>
             <p
-              className="whitespace-pre-wrap text-sm text-cp-ink"
+              className="whitespace-pre-wrap text-sm text-brand-ink"
               style={{ color: "#1e293b" }}
             >
               {m.body}

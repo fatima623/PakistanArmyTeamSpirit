@@ -160,7 +160,7 @@ export function LoginForm() {
           required
           disabled={loading}
           className={cn(
-            "h-12 text-base transition-shadow focus-visible:ring-2 focus-visible:ring-tactical-brass/50",
+            "h-12 text-base transition-shadow focus-visible:ring-2 focus-visible:ring-brand-brass/50",
             error && "border-red-400/70 focus-visible:ring-red-400/40"
           )}
         />
@@ -184,7 +184,7 @@ export function LoginForm() {
           required
           disabled={loading}
           className={cn(
-            "h-12 text-base transition-shadow focus-visible:ring-2 focus-visible:ring-tactical-brass/50",
+            "h-12 text-base transition-shadow focus-visible:ring-2 focus-visible:ring-brand-brass/50",
             error && "border-red-400/70 focus-visible:ring-red-400/40"
           )}
         />

@@ -174,7 +174,7 @@ function SettingToggle({
         <Switch
           checked={checked}
           onCheckedChange={onCheckedChange}
-          className="shrink-0 data-[state=checked]:bg-cp-olive"
+          className="shrink-0 data-[state=checked]:bg-brand-olive"
         />
       </label>
     </div>

@@ -260,7 +260,7 @@ function UploadForm({
             <img src={preview} alt="Preview" />
           ) : (
             <>
-              <ImagePlus className="h-8 w-8 text-cp-olive" aria-hidden />
+              <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
               <span className="admin-gallery-drop__hint">
                 Click or drop to upload an image
               </span>
@@ -340,9 +340,9 @@ function UploadForm({
             id="g-published"
             checked={published}
             onCheckedChange={setPublished}
-            className="data-[state=checked]:bg-cp-olive"
+            className="data-[state=checked]:bg-brand-olive"
           />
-          <label htmlFor="g-published" className="text-sm text-cp-ink-muted">
+          <label htmlFor="g-published" className="text-sm text-brand-ink-muted">
             {published ? "Published — visible on the public gallery" : "Draft — hidden"}
           </label>
         </div>

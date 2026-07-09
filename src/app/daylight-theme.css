@@ -844,17 +844,17 @@ html[data-site-theme="day"] .army-site .tac-mission-card [class*="text-white/"] 
   color: var(--lt-forest-card-muted) !important;
 }
 
-html.light-theme .army-site .tac-mission-card .text-tactical-brass,
+html.light-theme .army-site .tac-mission-card .text-brand-brass,
 html.light-theme .army-site .tac-mission-card .tac-ops-code,
-html[data-site-theme="day"] .army-site .tac-mission-card .text-tactical-brass,
+html[data-site-theme="day"] .army-site .tac-mission-card .text-brand-brass,
 html[data-site-theme="day"] .army-site .tac-mission-card .tac-ops-code {
   color: #c9a84c !important;
   border-color: rgba(200, 168, 75, 0.35) !important;
   background: rgba(0, 0, 0, 0.2) !important;
 }
 
-html.light-theme .army-site .tac-mission-card .text-tactical-sand-dim,
-html[data-site-theme="day"] .army-site .tac-mission-card .text-tactical-sand-dim {
+html.light-theme .army-site .tac-mission-card .text-brand-sand-dim,
+html[data-site-theme="day"] .army-site .tac-mission-card .text-brand-sand-dim {
   color: var(--lt-forest-card-muted) !important;
 }
 
@@ -1226,9 +1226,9 @@ html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:bg-white"] {
 }
 
 html.light-theme .army-site .paf-footer a[class*="hover:text-black"]:hover,
-html.light-theme .army-site .paf-footer a[class*="hover:text-tactical-void"]:hover,
+html.light-theme .army-site .paf-footer a[class*="hover:text-brand-night"]:hover,
 html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:text-black"]:hover,
-html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:text-tactical-void"]:hover {
+html[data-site-theme="day"] .army-site .paf-footer a[class*="hover:text-brand-night"]:hover {
   color: #ffffff !important;
 }
 
@@ -1415,10 +1415,10 @@ html[data-site-theme="day"] .participant-portal .cp-page {
   color: var(--lt-body);
 }
 
-html.light-theme .bg-cp-parchment,
-html.light-theme .bg-bg-base,
-html[data-site-theme="day"] .bg-cp-parchment,
-html[data-site-theme="day"] .bg-bg-base {
+html.light-theme .bg-brand-parchment,
+html.light-theme .bg-brand-black,
+html[data-site-theme="day"] .bg-brand-parchment,
+html[data-site-theme="day"] .bg-brand-black {
   background-color: var(--lt-band) !important;
 }
 
@@ -1716,8 +1716,8 @@ html[data-site-theme="day"] .army-site .pats-form-page .text-red-500 {
   color: #b91c1c !important;
 }
 
-html.light-theme .army-site .pats-form-page .text-cp-alert,
-html[data-site-theme="day"] .army-site .pats-form-page .text-cp-alert {
+html.light-theme .army-site .pats-form-page .text-brand-red,
+html[data-site-theme="day"] .army-site .pats-form-page .text-brand-red {
   color: #b91c1c !important;
 }
 
@@ -1797,11 +1797,11 @@ html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .login-
 }
 
 html.light-theme .army-site .pats-auth-shell .pats-login-card .login-form-link,
-html.light-theme .army-site .pats-auth-shell .pats-login-card .text-cp-olive,
-html.light-theme .army-site .pats-auth-shell .pats-login-card a.text-cp-olive,
+html.light-theme .army-site .pats-auth-shell .pats-login-card .text-brand-olive,
+html.light-theme .army-site .pats-auth-shell .pats-login-card a.text-brand-olive,
 html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .login-form-link,
-html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .text-cp-olive,
-html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card a.text-cp-olive {
+html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card .text-brand-olive,
+html[data-site-theme="day"] .army-site .pats-auth-shell .pats-login-card a.text-brand-olive {
   color: var(--lt-gold, #8b6914) !important;
 }
 
@@ -1842,8 +1842,8 @@ html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) .logi
   color: var(--lt-body) !important;
 }
 
-html.light-theme .army-site .cp-form-card:not(.pats-login-card) .text-cp-olive,
-html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) .text-cp-olive {
+html.light-theme .army-site .cp-form-card:not(.pats-login-card) .text-brand-olive,
+html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) .text-brand-olive {
   color: var(--lt-gold) !important;
 }
 
@@ -1973,16 +1973,16 @@ html[data-site-theme="day"] .army-site .operational-map__route li {
   font-size: var(--pats-type-body) !important;
 }
 
-html.light-theme .army-site .operational-map__route [class*="text-tactical-sand"],
-html.light-theme .army-site .operational-map__route [class*="text-tactical-brass"],
-html[data-site-theme="day"] .army-site .operational-map__route [class*="text-tactical-sand"],
-html[data-site-theme="day"] .army-site .operational-map__route [class*="text-tactical-brass"] {
+html.light-theme .army-site .operational-map__route [class*="text-brand-sand"],
+html.light-theme .army-site .operational-map__route [class*="text-brand-brass"],
+html[data-site-theme="day"] .army-site .operational-map__route [class*="text-brand-sand"],
+html[data-site-theme="day"] .army-site .operational-map__route [class*="text-brand-brass"] {
   color: var(--lt-olive) !important;
 }
 
-html.light-theme .army-site .operational-map__route [class*="border-tactical-brass"],
+html.light-theme .army-site .operational-map__route [class*="border-brand-brass"],
 html.light-theme .army-site .operational-map__route [class*="border-l-2"],
-html[data-site-theme="day"] .army-site .operational-map__route [class*="border-tactical-brass"],
+html[data-site-theme="day"] .army-site .operational-map__route [class*="border-brand-brass"],
 html[data-site-theme="day"] .army-site .operational-map__route [class*="border-l-2"] {
   border-color: rgba(200, 168, 75, 0.35) !important;
 }
@@ -2065,18 +2065,18 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [
   color: var(--lt-heading) !important;
 }
 
-html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-tactical-khaki"],
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-tactical-khaki"] {
+html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-khaki"],
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-khaki"] {
   color: var(--lt-gold-bright) !important;
 }
 
-html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-tactical-sand"],
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-tactical-sand"] {
+html.light-theme .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-sand"],
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .tac-nation-chip [class*="text-brand-sand"] {
   color: var(--lt-olive) !important;
 }
 
-html.light-theme .army-site .pats-inner-page-shell [class*="bg-tactical-carbon"],
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-tactical-carbon"] {
+html.light-theme .army-site .pats-inner-page-shell [class*="bg-brand-night"],
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-brand-night"] {
   background: #ffffff !important;
   border-color: var(--lt-card-border) !important;
   color: var(--lt-body) !important;
@@ -2109,10 +2109,10 @@ html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-whit
   color: var(--lt-heading) !important;
 }
 
-html.light-theme .army-site .tac-contingent-drawer [class*="text-tactical-khaki"],
-html.light-theme .army-site .tac-contingent-drawer [class*="text-tactical-sand"],
-html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-tactical-khaki"],
-html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-tactical-sand"] {
+html.light-theme .army-site .tac-contingent-drawer [class*="text-brand-khaki"],
+html.light-theme .army-site .tac-contingent-drawer [class*="text-brand-sand"],
+html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-brand-khaki"],
+html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-brand-sand"] {
   color: var(--lt-olive) !important;
 }
 
@@ -2143,8 +2143,8 @@ html[data-site-theme="day"] .army-site .tac-world-map [class*="text-white/"] {
   color: var(--lt-olive) !important;
 }
 
-html.light-theme .army-site .tac-world-map .tac-world-dot [class*="bg-tactical-void"],
-html[data-site-theme="day"] .army-site .tac-world-map .tac-world-dot [class*="bg-tactical-void"] {
+html.light-theme .army-site .tac-world-map .tac-world-dot [class*="bg-brand-night"],
+html[data-site-theme="day"] .army-site .tac-world-map .tac-world-dot [class*="bg-brand-night"] {
   background: var(--lt-white) !important;
   border-color: var(--lt-card-border) !important;
   color: var(--lt-heading) !important;
@@ -2209,8 +2209,8 @@ html[data-site-theme="day"] .army-site .tac-brief-classified th {
   border-color: var(--lt-divider) !important;
 }
 
-html.light-theme .army-site .operational-map__route[class*="bg-tactical-void"],
-html[data-site-theme="day"] .army-site .operational-map__route[class*="bg-tactical-void"] {
+html.light-theme .army-site .operational-map__route[class*="bg-brand-night"],
+html[data-site-theme="day"] .army-site .operational-map__route[class*="bg-brand-night"] {
   background: var(--lt-white) !important;
 }
 
@@ -2275,27 +2275,27 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-whit
 html.light-theme
   .army-site
   .pats-inner-page-shell
-  [class*="bg-tactical-navy"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+  [class*="bg-brand-night-2"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
 html.light-theme
   .army-site
   .pats-inner-page-shell
-  [class*="bg-tactical-void"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+  [class*="bg-brand-night"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
 html.light-theme
   .army-site
   .pats-inner-page-shell
-  [class*="bg-tactical-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+  [class*="bg-brand-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
 html[data-site-theme="day"]
   .army-site
   .pats-inner-page-shell
-  [class*="bg-tactical-navy"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+  [class*="bg-brand-night-2"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
 html[data-site-theme="day"]
   .army-site
   .pats-inner-page-shell
-  [class*="bg-tactical-void"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+  [class*="bg-brand-night"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
 html[data-site-theme="day"]
   .army-site
   .pats-inner-page-shell
-  [class*="bg-tactical-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip) {
+  [class*="bg-brand-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip) {
   background: var(--lt-forest-card) !important;
   border-color: var(--lt-forest-card-border) !important;
   color: var(--lt-forest-card-text) !important;

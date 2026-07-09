@@ -81,18 +81,18 @@ export function CinematicFooter({ social }: Props) {
   return (
     <footer
       id="contact"
-      className="cinematic-footer relative overflow-hidden border-t border-white/10 bg-tactical-void"
+      className="cinematic-footer relative overflow-hidden border-t border-white/10 bg-brand-night"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-tactical-brass/55 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-brass/55 to-transparent"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-tactical-navy/30 via-tactical-void to-black/40"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-brand-night-2/30 via-brand-night to-black/40"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-tactical-grid bg-grid-48 opacity-[0.07]"
+        className="pointer-events-none absolute inset-0 bg-brand-grid bg-grid-48 opacity-[0.07]"
         aria-hidden
       />
       <div
@@ -113,7 +113,7 @@ export function CinematicFooter({ social }: Props) {
               {FOOTER_BRAND_DESCRIPTION}
             </p>
             <div
-              className="mt-4 h-px w-12 bg-gradient-to-r from-tactical-brass to-transparent"
+              className="mt-4 h-px w-12 bg-gradient-to-r from-brand-brass to-transparent"
               aria-hidden
             />
           </div>

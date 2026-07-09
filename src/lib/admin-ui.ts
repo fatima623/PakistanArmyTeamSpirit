@@ -69,11 +69,11 @@ export const adminDataTableShell = "admin-data-table-shell";
 export const adminDataTable = "admin-data-table";
 export const adminTableShell = "admin-data-table-shell";
 export const adminTableHead = "admin-table-head";
-export const adminTableRow = "border-t border-cp-border/80";
-export const adminTableCell = "px-4 py-3.5 text-sm text-cp-ink";
+export const adminTableRow = "border-t border-brand-line/80";
+export const adminTableCell = "px-4 py-3.5 text-sm text-brand-ink";
 export const adminTableCellMuted = "admin-td-muted";
 export const adminTableCellMeta = "admin-td-meta";
-export const adminTableEmpty = "px-4 py-12 text-center text-cp-ink-muted";
+export const adminTableEmpty = "px-4 py-12 text-center text-brand-ink-muted";
 
 /** Forms */
 export const adminInput = "admin-input";
@@ -84,7 +84,7 @@ export const adminFormGrid = "admin-form-grid";
 export const adminSettingsLayout = "admin-settings-layout";
 export const adminSettingsCard = "admin-settings-card";
 export const adminDialogContent =
-  "border-cp-border bg-white text-cp-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]";
+  "border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]";
 export const adminAlertBanner = "admin-alert-banner";
 
 /** Metrics */

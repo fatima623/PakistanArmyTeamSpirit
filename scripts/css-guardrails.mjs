@@ -66,7 +66,26 @@ for (const f of tsFiles.filter((f) => f.endsWith(".tsx"))) {
   hexInTsx += (read(f).match(hexRe) ?? []).length;
 }
 
-const snapshot = { cssFiles, importantCount, importantByFile, cssImports, hexInTsx };
+// legacy color namespaces were removed in Phase 1 — any utility usage is a regression
+const legacyRe =
+  /(?:bg|text|border|ring|from|to|via|fill|stroke|divide|outline|shadow|placeholder|decoration)-(?:army|tactical|portal|cp)-[a-z-]+/g;
+const legacyHits = [];
+for (const f of tsFiles) {
+  const m = read(f).match(legacyRe);
+  if (m) legacyHits.push(`${f}: ${[...new Set(m)].join(", ")}`);
+}
+
+// tailwind.config.ts must not re-accumulate raw hex colors (tokens live in globals.css)
+const hexInTailwindConfig = (read("tailwind.config.ts").match(hexRe) ?? []).length;
+
+const snapshot = {
+  cssFiles,
+  importantCount,
+  importantByFile,
+  cssImports,
+  hexInTsx,
+  hexInTailwindConfig,
+};
 
 // ---- update mode ------------------------------------------------------------
 
@@ -125,6 +144,23 @@ if (hexInTsx > baseline.hexInTsx) {
   failures.push(
     `RAW HEX COLORS IN TSX INCREASED (${baseline.hexInTsx} -> ${hexInTsx}). ` +
       `Colors must come from design tokens (tailwind.config.ts / CSS vars).`
+  );
+}
+
+// 5. dead namespaces stay dead (removed in Phase 1)
+if (legacyHits.length > 0) {
+  failures.push(
+    `LEGACY COLOR NAMESPACE USED (army-/tactical-/portal-/cp-) — these were ` +
+      `deleted in Phase 1. Use brand-* or the semantic tokens instead:\n` +
+      legacyHits.map((h) => `    ${h}`).join("\n")
+  );
+}
+
+// 6. tailwind.config.ts hex ratchet
+if (hexInTailwindConfig > (baseline.hexInTailwindConfig ?? Infinity)) {
+  failures.push(
+    `RAW HEX IN tailwind.config.ts INCREASED (${baseline.hexInTailwindConfig} -> ` +
+      `${hexInTailwindConfig}). Add tokens to the --brand-* scale in globals.css instead.`
   );
 }
 

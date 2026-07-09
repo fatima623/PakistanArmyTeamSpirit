@@ -119,7 +119,7 @@ export function UnitEditForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-0">
       <div className="portal-form-card mb-6">
-        <h2 className="portal-section-title mb-6 border-b border-cp-border pb-3">
+        <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
           Personal details
         </h2>
         <div className={gridClass}>
@@ -136,7 +136,7 @@ export function UnitEditForm({
       </div>
 
       <div className="portal-form-card mb-6">
-        <h2 className="portal-section-title mb-6 border-b border-cp-border pb-3">
+        <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
           Unit details
         </h2>
         <div className={gridClass}>
@@ -239,7 +239,7 @@ export function UnitEditForm({
       </div>
 
       <div className="portal-form-card mb-6">
-        <h2 className="portal-section-title mb-6 border-b border-cp-border pb-3">
+        <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
           CO / 2IC details
         </h2>
         <div className={gridClass}>

@@ -43,7 +43,7 @@ export function FormField({
       <div className={cn("flex min-w-0 flex-col gap-1.5", className)}>
         <label className="pats-form-label">
           {label}
-          {required && <span className="ml-1 text-cp-alert">*</span>}
+          {required && <span className="ml-1 text-brand-red">*</span>}
         </label>
         <div className="flex flex-col gap-1">{body}</div>
       </div>
@@ -54,7 +54,7 @@ export function FormField({
     <div className={cn("contents", className)}>
       <label className="pats-form-label pt-2">
         {label}
-        {required && <span className="ml-1 text-cp-alert">*</span>}
+        {required && <span className="ml-1 text-brand-red">*</span>}
       </label>
       <div className="flex flex-col gap-1">{body}</div>
     </div>

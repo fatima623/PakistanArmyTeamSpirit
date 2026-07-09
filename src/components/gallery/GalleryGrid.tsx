@@ -60,7 +60,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <ImageOff className="h-8 w-8 text-tactical-brass" aria-hidden />
+        <ImageOff className="h-8 w-8 text-brand-brass" aria-hidden />
         <p className="font-condensed text-sm uppercase tracking-wider text-white/60">
           The gallery is being updated. Check back soon.
         </p>
@@ -97,7 +97,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
             viewport={{ once: true }}
             transition={{ ...mechanicalTransition, duration: 0.45, delay: Math.min(i, 8) * 0.04 }}
             onClick={() => setActiveIndex(i)}
-            className="group relative aspect-[4/3] overflow-hidden border border-white/10 bg-tactical-carbon-raised/50 text-left transition-all duration-300 ease-mechanical hover:-translate-y-1 hover:border-tactical-brass/60 hover:shadow-[0_14px_34px_rgba(0,0,0,0.5)]"
+            className="group relative aspect-[4/3] overflow-hidden border border-white/10 bg-brand-night-2/50 text-left transition-all duration-300 ease-mechanical hover:-translate-y-1 hover:border-brand-brass/60 hover:shadow-[0_14px_34px_rgba(0,0,0,0.5)]"
             style={{ borderRadius: "10px" }}
           >
             <Image
@@ -108,14 +108,14 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               loading={i < 3 ? "eager" : "lazy"}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-tactical-carbon via-tactical-carbon/25 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-night via-brand-night/25 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-4">
               {metaLine(item) ? (
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-tactical-brass">
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-brass">
                   {metaLine(item)}
                 </p>
               ) : null}
-              <h3 className="mt-1 font-display text-sm font-bold uppercase tracking-wide text-white group-hover:text-tactical-brass">
+              <h3 className="mt-1 font-display text-sm font-bold uppercase tracking-wide text-white group-hover:text-brand-brass">
                 {item.title}
               </h3>
             </div>
@@ -130,7 +130,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-tactical-carbon/95 p-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-night/95 p-4"
             role="dialog"
             aria-modal
             aria-label={active.title}
@@ -138,7 +138,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
           >
             <button
               type="button"
-              className="absolute right-4 top-4 p-2 text-white hover:text-tactical-brass"
+              className="absolute right-4 top-4 p-2 text-white hover:text-brand-brass"
               onClick={() => setActiveIndex(null)}
               aria-label="Close"
             >
@@ -149,7 +149,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
               <>
                 <button
                   type="button"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2 text-white/80 hover:text-tactical-brass"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2 text-white/80 hover:text-brand-brass"
                   onClick={(e) => {
                     e.stopPropagation();
                     step(-1);
@@ -160,7 +160,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                 </button>
                 <button
                   type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-white/80 hover:text-tactical-brass"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-white/80 hover:text-brand-brass"
                   onClick={(e) => {
                     e.stopPropagation();
                     step(1);
@@ -182,7 +182,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
               onClick={(e) => e.stopPropagation()}
             >
               <div
-                className="overflow-hidden border border-tactical-brass/25"
+                className="overflow-hidden border border-brand-brass/25"
                 style={{ borderRadius: "2px" }}
               >
                 <Image
@@ -194,7 +194,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                 />
               </div>
               {metaLine(active) ? (
-                <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-tactical-khaki">
+                <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-brand-khaki">
                   {metaLine(active)}
                 </p>
               ) : null}
@@ -202,7 +202,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                 {active.title}
               </p>
               {active.caption ? (
-                <p className="mx-auto mt-1 max-w-2xl text-center font-condensed text-sm text-tactical-sand">
+                <p className="mx-auto mt-1 max-w-2xl text-center font-condensed text-sm text-brand-sand">
                   {active.caption}
                 </p>
               ) : null}
@@ -230,8 +230,8 @@ function FilterChip({
       className={cn(
         "rounded-full border px-4 py-1.5 font-condensed text-xs font-bold uppercase tracking-wider transition-all duration-200",
         active
-          ? "border-tactical-brass/70 bg-tactical-brass/15 text-tactical-brass"
-          : "border-white/15 text-white/60 hover:border-tactical-brass/40 hover:text-white"
+          ? "border-brand-brass/70 bg-brand-brass/15 text-brand-brass"
+          : "border-white/15 text-white/60 hover:border-brand-brass/40 hover:text-white"
       )}
     >
       {children}

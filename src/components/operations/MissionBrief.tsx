@@ -32,7 +32,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
         <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
           <div>
             <span className="tac-ops-code">{code}</span>
-            <p className="mt-3 font-condensed text-xs font-bold uppercase tracking-[0.28em] text-tactical-brass">
+            <p className="mt-3 font-condensed text-xs font-bold uppercase tracking-[0.28em] text-brand-brass">
               Classified operational brief
             </p>
             <h1 className="cinematic-heading mt-2 font-display text-2xl font-bold uppercase text-white sm:text-4xl">
@@ -43,7 +43,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
             <p className="font-condensed text-[10px] uppercase tracking-widest text-white/45">
               Total marks
             </p>
-            <p className="font-display text-3xl font-bold text-tactical-brass sm:text-4xl">
+            <p className="font-display text-3xl font-bold text-brand-brass sm:text-4xl">
               {drill.marks}
             </p>
           </div>
@@ -68,7 +68,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
         variants={stagger}
       >
         <motion.section variants={fadeUp}>
-          <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-tactical-brass">
+          <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
             Mission objective
           </h2>
           <p className="cinematic-body mt-3 max-w-3xl font-sans text-lg leading-relaxed text-white/90">
@@ -77,7 +77,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
         </motion.section>
 
         <motion.section variants={fadeUp}>
-          <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-tactical-brass">
+          <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
             Operational objectives
           </h2>
           <ul className="mt-4 space-y-3">
@@ -86,7 +86,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
                 key={o}
                 className="flex gap-4 rounded-sm border border-white/8 bg-white/[0.02] px-4 py-3 font-condensed text-base leading-relaxed text-white/85"
               >
-                <span className="font-display text-sm font-bold text-tactical-brass">
+                <span className="font-display text-sm font-bold text-brand-brass">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 {o}
@@ -97,10 +97,10 @@ export function MissionBrief({ drill, opIndex }: Props) {
 
         {drill.scoring && drill.scoring.length > 0 && (
           <motion.section variants={fadeUp}>
-            <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-tactical-brass">
+            <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
               Scoring matrix
             </h2>
-            <div className="mt-4 overflow-hidden rounded-sm border border-tactical-brass/20">
+            <div className="mt-4 overflow-hidden rounded-sm border border-brand-brass/20">
               {drill.scoring.map((line, i) => {
                 const pct = Math.round((line.marks / drill.marks) * 100);
                 return (
@@ -108,18 +108,18 @@ export function MissionBrief({ drill, opIndex }: Props) {
                     key={line.label}
                     className={cn(
                       "px-5 py-4",
-                      i % 2 === 1 && "bg-tactical-navy/50"
+                      i % 2 === 1 && "bg-brand-night-2/50"
                     )}
                   >
                     <div className="flex justify-between gap-4 font-condensed text-sm">
                       <span className="text-white/90">{line.label}</span>
-                      <span className="font-bold text-tactical-brass">
+                      <span className="font-bold text-brand-brass">
                         {line.marks} mks
                       </span>
                     </div>
                     <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
                       <div
-                        className="h-full bg-gradient-to-r from-tactical-olive to-tactical-brass transition-all duration-700"
+                        className="h-full bg-gradient-to-r from-brand-olive to-brand-brass transition-all duration-700"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -133,9 +133,9 @@ export function MissionBrief({ drill, opIndex }: Props) {
         {drill.rules && (
           <motion.section
             variants={fadeUp}
-            className="group rounded-sm border border-white/8 bg-white/[0.03] p-5 transition-colors duration-150 hover:border-tactical-ops-red/50 hover:bg-tactical-ops-red/10"
+            className="group rounded-sm border border-white/8 bg-white/[0.03] p-5 transition-colors duration-150 hover:border-brand-red/50 hover:bg-brand-red/10"
           >
-            <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-tactical-brass transition-colors duration-150 group-hover:text-red-200">
+            <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass transition-colors duration-150 group-hover:text-red-200">
               Critical notice
             </h2>
             <ul className="mt-3 space-y-2 font-condensed text-base text-white/80 transition-colors duration-150 group-hover:text-red-100/90">
@@ -147,14 +147,14 @@ export function MissionBrief({ drill, opIndex }: Props) {
         )}
 
         <motion.section variants={fadeUp}>
-          <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-tactical-brass">
+          <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
             Tactical skills
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {drill.skills.map((s) => (
               <span
                 key={s}
-                className="rounded-sm border border-tactical-olive/40 bg-tactical-olive/15 px-3 py-1.5 font-condensed text-xs font-semibold uppercase tracking-wide text-tactical-sand"
+                className="rounded-sm border border-brand-olive/40 bg-brand-olive/15 px-3 py-1.5 font-condensed text-xs font-semibold uppercase tracking-wide text-brand-sand"
               >
                 {s}
               </span>

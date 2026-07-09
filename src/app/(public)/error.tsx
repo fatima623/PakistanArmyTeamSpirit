@@ -11,10 +11,10 @@ export default function PublicError({
 }) {
   return (
     <div className="py-16 text-center">
-      <h2 className="mb-2 text-2xl font-bold text-cp-ink">
+      <h2 className="mb-2 text-2xl font-bold text-brand-ink">
         Something went wrong
       </h2>
-      <p className="mb-6 text-sm text-cp-ink-muted">
+      <p className="mb-6 text-sm text-brand-ink-muted">
         {process.env.NODE_ENV === "development"
           ? error.message
           : "Please try again."}

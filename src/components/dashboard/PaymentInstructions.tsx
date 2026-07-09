@@ -22,7 +22,7 @@ function DetailRow({ label, value, mono, scrollable }: DetailRowProps) {
       <p className="portal-subtitle mb-1 text-[11px]">{label}</p>
       <p
         className={cn(
-          "text-base font-semibold leading-snug text-cp-ink",
+          "text-base font-semibold leading-snug text-brand-ink",
           mono && "font-mono tracking-wide tabular-nums",
           scrollable
             ? "max-w-full overflow-x-auto whitespace-nowrap [-webkit-overflow-scrolling:touch]"
@@ -44,7 +44,7 @@ function PaymentMethodCard({
 }) {
   return (
     <article className="portal-card-muted flex h-full min-w-0 flex-col">
-      <h4 className="portal-subtitle mb-4 border-b border-cp-border pb-3">{title}</h4>
+      <h4 className="portal-subtitle mb-4 border-b border-brand-line pb-3">{title}</h4>
       <div className="flex flex-1 flex-col gap-4">{children}</div>
     </article>
   );
@@ -69,9 +69,9 @@ export function PaymentInstructions({ settings, compact }: Props) {
         </p>
       </header>
 
-      <div className="portal-card border-t-cp-brass/50">
+      <div className="portal-card border-t-brand-brass-deep/50">
         <p className="portal-subtitle">Registration fee</p>
-        <p className="mt-2 font-display text-3xl font-bold tracking-tight text-cp-ink sm:text-4xl">
+        <p className="mt-2 font-display text-3xl font-bold tracking-tight text-brand-ink sm:text-4xl">
           {fee}
         </p>
         <p className="portal-muted mt-2 max-w-prose">
@@ -113,7 +113,7 @@ export function PaymentInstructions({ settings, compact }: Props) {
       </div>
 
       <div className="portal-alert-warning">
-        <p className="mb-3 text-sm font-bold text-cp-ink">Steps to complete payment</p>
+        <p className="mb-3 text-sm font-bold text-brand-ink">Steps to complete payment</p>
         <ol className="list-decimal space-y-2.5 pl-5 text-sm leading-relaxed marker:font-semibold">
           <li>Send the registration fee using one of the methods above.</li>
           <li>Save your payment screenshot or receipt.</li>

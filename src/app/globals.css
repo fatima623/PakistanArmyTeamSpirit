@@ -87,6 +87,33 @@
   }
 
   :root {
+    /* ============================================================
+       BRAND SCALE — the single source of truth for fixed brand
+       colors (Phase 1, REMEDIATION-PLAN.md). RGB triplets so
+       Tailwind opacity modifiers work (bg-brand-night/50).
+       Change a value here -> every usage app-wide follows.
+       ============================================================ */
+    --brand-night: 13 15 14;         /* #0d0f0e  darkest surface (ex tactical-void/carbon) */
+    --brand-night-2: 18 22 20;       /* #121614  raised dark surface (ex carbon-raised/navy) */
+    --brand-olive: 61 82 48;         /* #3d5230  primary brand green (ex tactical-olive + cp-olive) */
+    --brand-olive-dark: 47 64 37;    /* #2f4025  (ex cp-olive-dark) */
+    --brand-brass: 197 168 128;      /* #c5a880  metallic accent (ex tactical-brass) */
+    --brand-khaki: 139 150 118;      /* #8b9676  muted accent on dark (ex tactical-khaki) */
+    --brand-khaki-warm: 138 148 120; /* #8a9478  muted accent on light (ex cp-khaki) */
+    --brand-sand: 235 235 235;       /* #ebebeb  light text on dark (ex tactical-sand/mist) */
+    --brand-sand-dim: 138 130 114;   /* #8a8272  dim text on dark (ex tactical-sand-dim) */
+    --brand-red: 139 58 42;          /* #8b3a2a  alert/destructive (ex tactical-ops-red + cp-alert) */
+    --brand-ink: 28 33 25;           /* #1c2119  text on light (ex cp-ink) */
+    --brand-ink-muted: 74 82 69;     /* #4a5245  muted text on light (ex cp-ink-muted) */
+    --brand-line: 200 194 180;       /* #c8c2b4  borders on light (ex cp-border) */
+    --brand-parchment: 243 239 230;  /* #f3efe6  light surface (ex cp-parchment) */
+    --brand-parchment-2: 230 224 212;/* #e6e0d4  light surface alt (ex cp-parchment-dark) */
+    --brand-black: 10 10 10;         /* #0a0a0a  page base (ex bg-base) */
+    --brand-brass-deep: 184 148 31;  /* #b8941f  deep metallic on light (ex cp-brass) */
+    --brand-gunmetal: 20 26 20;      /* #141a14  dark panel on light pages (ex cp-gunmetal) */
+    --brand-gunmetal-2: 30 39 32;    /* #1e2720  raised gunmetal (ex cp-gunmetal-light) */
+    --brand-panel: 26 34 30;         /* #1a221e  dark panel surface (ex tactical-panel) */
+
     --cp-green: #3d5230;
     --cp-navy: #141a14;
     --cp-slate: #1e2720;
@@ -133,7 +160,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-cp-parchment antialiased;
+    @apply bg-brand-parchment antialiased;
     color: #1c2119;
     font-family: var(--font-inter), var(--font-dm), system-ui, "Segoe UI",
       sans-serif;
@@ -142,11 +169,11 @@
 
 @layer components {
   .cp-institutional-bar {
-    @apply border-b border-cp-brass/30 bg-cp-gunmetal text-[11px] font-medium uppercase tracking-[0.2em] text-cp-khaki;
+    @apply border-b border-brand-brass-deep/30 bg-brand-gunmetal text-[11px] font-medium uppercase tracking-[0.2em] text-brand-khaki-warm;
   }
 
   .cp-page {
-    @apply rounded-sm border border-cp-border bg-white shadow-cp;
+    @apply rounded-sm border border-brand-line bg-white shadow-brand-soft;
   }
 
   .cp-page-inner {
@@ -154,17 +181,17 @@
   }
 
   .cp-h1 {
-    @apply border-l-[3px] border-cp-brass pl-4 text-3xl font-bold tracking-tight sm:text-4xl;
+    @apply border-l-[3px] border-brand-brass-deep pl-4 text-3xl font-bold tracking-tight sm:text-4xl;
     color: #1c2119;
   }
 
   .cp-h2 {
-    @apply border-l-[3px] border-cp-olive pl-4 text-xl font-bold tracking-tight sm:text-2xl;
+    @apply border-l-[3px] border-brand-olive pl-4 text-xl font-bold tracking-tight sm:text-2xl;
     color: #1c2119;
   }
 
   .cp-section {
-    @apply border-t border-cp-border/80 pt-10 mt-10 first:border-t-0 first:pt-0 first:mt-0;
+    @apply border-t border-brand-line/80 pt-10 mt-10 first:border-t-0 first:pt-0 first:mt-0;
   }
 
   .cp-lead {
@@ -178,7 +205,7 @@
   }
 
   .cp-link {
-    @apply font-medium text-cp-olive underline-offset-2 transition-colors hover:text-cp-olive-dark hover:underline;
+    @apply font-medium text-brand-olive underline-offset-2 transition-colors hover:text-brand-olive-dark hover:underline;
   }
 
   /* —— Unified tactical operations button system (admin + participant) —— */
@@ -189,7 +216,7 @@
   .admin-btn-outline,
   .admin-btn-destructive,
   .admin-btn-reject {
-    @apply inline-flex cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-md border font-medium leading-none tracking-[0.01em] transition-[border-color,background-color,color,box-shadow,transform] duration-100 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cp-olive/35 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-55 disabled:shadow-none disabled:hover:translate-y-0 active:translate-y-0 active:duration-75;
+    @apply inline-flex cursor-pointer select-none items-center justify-center gap-2 whitespace-nowrap rounded-md border font-medium leading-none tracking-[0.01em] transition-[border-color,background-color,color,box-shadow,transform] duration-100 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/35 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-55 disabled:shadow-none disabled:hover:translate-y-0 active:translate-y-0 active:duration-75;
     touch-action: manipulation;
     min-height: 2.75rem;
     padding: 0.625rem 1.25rem;
@@ -338,7 +365,7 @@
   }
 
   .ops-filter-chip {
-    @apply inline-flex min-h-[2.5rem] cursor-pointer items-center justify-center rounded-md border border-cp-border bg-white px-4 py-2 text-sm font-medium tracking-wide transition-all duration-200 hover:border-cp-olive/25 hover:bg-cp-parchment-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cp-olive/25;
+    @apply inline-flex min-h-[2.5rem] cursor-pointer items-center justify-center rounded-md border border-brand-line bg-white px-4 py-2 text-sm font-medium tracking-wide transition-all duration-200 hover:border-brand-olive/25 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25;
     color: #4a5245;
   }
 
@@ -354,27 +381,27 @@
   }
 
   .ops-filter-chip-inactive {
-    @apply border-cp-border bg-white text-cp-ink-muted;
+    @apply border-brand-line bg-white text-brand-ink-muted;
   }
 
   .ops-filter-chip-inactive:hover {
-    @apply border-cp-olive/25 bg-cp-parchment-dark text-cp-ink;
+    @apply border-brand-olive/25 bg-brand-parchment-2 text-brand-ink;
   }
 
   .cp-btn-ghost {
-    @apply inline-flex items-center text-sm font-semibold uppercase tracking-wide text-cp-olive transition-colors hover:text-cp-brass;
+    @apply inline-flex items-center text-sm font-semibold uppercase tracking-wide text-brand-olive transition-colors hover:text-brand-brass-deep;
   }
 
   .cp-badge-open {
-    @apply inline-flex items-center gap-1.5 rounded-sm border border-cp-olive/30 bg-cp-olive/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-cp-olive;
+    @apply inline-flex items-center gap-1.5 rounded-sm border border-brand-olive/30 bg-brand-olive/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-brand-olive;
   }
 
   .cp-alert-success {
-    @apply rounded-sm border border-cp-olive/25 bg-cp-olive/5 px-4 py-3 text-sm text-cp-olive-dark;
+    @apply rounded-sm border border-brand-olive/25 bg-brand-olive/5 px-4 py-3 text-sm text-brand-olive-dark;
   }
 
   .cp-alert-warning {
-    @apply rounded-sm border-l-[3px] border-cp-brass bg-amber-50/80 px-4 py-3 text-sm text-amber-950;
+    @apply rounded-sm border-l-[3px] border-brand-brass-deep bg-amber-50/80 px-4 py-3 text-sm text-amber-950;
   }
 
   .cp-alert-error {
@@ -382,21 +409,21 @@
   }
 
   .cp-form-card {
-    @apply rounded-sm border border-cp-border bg-white p-6 shadow-cp sm:p-8;
+    @apply rounded-sm border border-brand-line bg-white p-6 shadow-brand-soft sm:p-8;
   }
 
   .cp-form-section-title {
-    @apply mb-6 border-b border-cp-border pb-3 text-lg font-bold uppercase tracking-wide;
+    @apply mb-6 border-b border-brand-line pb-3 text-lg font-bold uppercase tracking-wide;
     color: #1c2119;
   }
 
   .cp-nav-active {
-    @apply relative bg-cp-gunmetal-light after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-cp-brass;
+    @apply relative bg-brand-gunmetal-2 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-brand-brass-deep;
     color: #ffffff;
   }
 
   .cp-nav-inactive {
-    @apply text-cp-khaki transition-colors hover:bg-cp-gunmetal-light/80;
+    @apply text-brand-khaki-warm transition-colors hover:bg-brand-gunmetal-2/80;
   }
 
   .cp-nav-inactive:hover {
@@ -404,31 +431,31 @@
   }
 
   .cp-prose {
-    @apply prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-cp-olive prose-a:no-underline hover:prose-a:underline;
+    @apply prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-olive prose-a:no-underline hover:prose-a:underline;
   }
 
   .cp-feature-panel {
-    @apply rounded-sm border border-cp-brass/20 bg-cp-gunmetal p-6 text-center shadow-cp-lg;
+    @apply rounded-sm border border-brand-brass-deep/20 bg-brand-gunmetal p-6 text-center shadow-brand-soft-lg;
     color: #ffffff;
   }
 
   .cp-table-header {
-    @apply bg-cp-parchment-dark text-xs font-semibold uppercase tracking-wider;
+    @apply bg-brand-parchment-2 text-xs font-semibold uppercase tracking-wider;
     color: #4a5245;
   }
 
   /* Admin panel — day / institutional light theme */
   .admin-theme {
-    @apply bg-cp-parchment;
+    @apply bg-brand-parchment;
     color: #1c2119;
   }
 
   .admin-surface {
-    @apply rounded-2xl border border-cp-border bg-white shadow-[0_1px_4px_rgba(28,33,25,0.08)];
+    @apply rounded-2xl border border-brand-line bg-white shadow-[0_1px_4px_rgba(28,33,25,0.08)];
   }
 
   .admin-surface-muted {
-    @apply bg-cp-parchment-dark;
+    @apply bg-brand-parchment-2;
   }
 
   .admin-heading {
@@ -446,7 +473,7 @@
   }
 
   .admin-input {
-    @apply min-h-[2.75rem] rounded-md border-cp-border bg-white px-3 py-2 text-sm shadow-sm placeholder:text-slate-400 focus-visible:border-cp-olive/45 focus-visible:ring-2 focus-visible:ring-cp-olive/20;
+    @apply min-h-[2.75rem] rounded-md border-brand-line bg-white px-3 py-2 text-sm shadow-sm placeholder:text-slate-400 focus-visible:border-brand-olive/45 focus-visible:ring-2 focus-visible:ring-brand-olive/20;
     color: #1c2119;
   }
 
@@ -455,11 +482,11 @@
   }
 
   .admin-link {
-    @apply font-medium text-cp-olive-dark underline-offset-2 transition-colors hover:text-cp-olive hover:underline;
+    @apply font-medium text-brand-olive-dark underline-offset-2 transition-colors hover:text-brand-olive hover:underline;
   }
 
   .admin-icon-accent {
-    @apply text-cp-olive-dark;
+    @apply text-brand-olive-dark;
   }
 
   .admin-page-title {
@@ -468,7 +495,7 @@
   }
 
   .admin-section-title {
-    @apply mb-4 border-b border-cp-border pb-3 text-lg font-bold tracking-tight;
+    @apply mb-4 border-b border-brand-line pb-3 text-lg font-bold tracking-tight;
     color: #1c2119;
   }
 
@@ -482,7 +509,7 @@
   }
 
   .admin-table-head {
-    @apply bg-cp-parchment-dark text-xs font-semibold uppercase tracking-wide;
+    @apply bg-brand-parchment-2 text-xs font-semibold uppercase tracking-wide;
     color: #4a5245;
   }
 
@@ -491,31 +518,31 @@
   }
 
   .admin-row-hover {
-    @apply transition-colors hover:bg-cp-parchment/80;
+    @apply transition-colors hover:bg-brand-parchment/80;
   }
 
   .admin-dropdown-panel {
-    @apply absolute right-0 top-full z-50 mt-2 w-60 origin-top-right overflow-hidden rounded-lg border border-cp-border bg-white py-1 shadow-[0_8px_24px_rgba(28,33,25,0.12)];
+    @apply absolute right-0 top-full z-50 mt-2 w-60 origin-top-right overflow-hidden rounded-lg border border-brand-line bg-white py-1 shadow-[0_8px_24px_rgba(28,33,25,0.12)];
   }
 
   .admin-dropdown-header {
-    @apply border-b border-cp-border px-4 py-3;
+    @apply border-b border-brand-line px-4 py-3;
   }
 
   .admin-dropdown-item {
-    @apply flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-cp-ink transition-colors hover:bg-cp-parchment-dark focus-visible:bg-cp-parchment-dark focus-visible:outline-none;
+    @apply flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-brand-ink transition-colors hover:bg-brand-parchment-2 focus-visible:bg-brand-parchment-2 focus-visible:outline-none;
   }
 
   .admin-user-trigger {
-    @apply flex items-center gap-1.5 rounded-lg border border-cp-border bg-white py-1 pl-1 pr-2 shadow-sm transition-colors hover:border-cp-olive/30 hover:bg-cp-parchment-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cp-olive/30;
+    @apply flex items-center gap-1.5 rounded-lg border border-brand-line bg-white py-1 pl-1 pr-2 shadow-sm transition-colors hover:border-brand-olive/30 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/30;
   }
 
   .admin-user-trigger[data-open="true"] {
-    @apply border-cp-olive/35 bg-cp-parchment-dark;
+    @apply border-brand-olive/35 bg-brand-parchment-2;
   }
 
   .admin-session-badge {
-    @apply flex items-center gap-2 rounded-md border border-cp-olive/20 bg-cp-olive/10 px-2.5 py-1.5 text-xs font-medium text-cp-olive-dark sm:px-3;
+    @apply flex items-center gap-2 rounded-md border border-brand-olive/20 bg-brand-olive/10 px-2.5 py-1.5 text-xs font-medium text-brand-olive-dark sm:px-3;
   }
 
   /* Compact operational status badges — layout in portal-design.css */
@@ -540,7 +567,7 @@
   }
 
   .ops-status-neutral {
-    @apply border-cp-border bg-cp-parchment-dark text-cp-ink-muted;
+    @apply border-brand-line bg-brand-parchment-2 text-brand-ink-muted;
   }
 
   /* Table pills: portal-design.css (.ops-status-pill) */
@@ -567,11 +594,11 @@
   }
 
   .admin-users-card-email {
-    @apply mt-0.5 break-words text-xs leading-relaxed text-cp-ink-muted;
+    @apply mt-0.5 break-words text-xs leading-relaxed text-brand-ink-muted;
   }
 
   .admin-users-card-date {
-    @apply text-[0.6875rem] tabular-nums text-cp-ink-muted;
+    @apply text-[0.6875rem] tabular-nums text-brand-ink-muted;
   }
 
   .admin-users-card-meta {
@@ -579,11 +606,11 @@
   }
 
   .admin-users-card-meta dt {
-    @apply text-[0.625rem] font-semibold uppercase tracking-[0.06em] text-cp-ink-muted;
+    @apply text-[0.625rem] font-semibold uppercase tracking-[0.06em] text-brand-ink-muted;
   }
 
   .admin-users-card-meta dd {
-    @apply mt-0.5 text-xs font-medium text-cp-ink;
+    @apply mt-0.5 text-xs font-medium text-brand-ink;
   }
 
   .admin-users-card-badges {
@@ -595,11 +622,11 @@
   }
 
   .admin-sidebar {
-    @apply border-cp-border bg-white;
+    @apply border-brand-line bg-white;
   }
 
   .admin-header-bar {
-    @apply border-b border-cp-border bg-white;
+    @apply border-b border-brand-line bg-white;
   }
 
   .admin-btn-primary,
@@ -667,27 +694,27 @@
   }
 
   .admin-data-table thead th {
-    @apply px-4 py-3 text-center align-middle text-xs font-semibold uppercase tracking-wide text-cp-ink-muted;
+    @apply px-4 py-3 text-center align-middle text-xs font-semibold uppercase tracking-wide text-brand-ink-muted;
   }
 
   .admin-data-table tbody tr {
-    @apply border-t border-cp-border/70 transition-colors;
+    @apply border-t border-brand-line/70 transition-colors;
   }
 
   .admin-data-table tbody tr:hover {
-    @apply bg-cp-parchment/65;
+    @apply bg-brand-parchment/65;
   }
 
   .admin-data-table td {
-    @apply px-4 py-3.5 align-middle text-center text-sm text-cp-ink;
+    @apply px-4 py-3.5 align-middle text-center text-sm text-brand-ink;
   }
 
   .admin-data-table td.admin-td-muted {
-    @apply text-cp-ink-muted;
+    @apply text-brand-ink-muted;
   }
 
   .admin-data-table td.admin-td-meta {
-    @apply text-xs tabular-nums text-cp-ink-muted;
+    @apply text-xs tabular-nums text-brand-ink-muted;
   }
 
   .admin-data-table .admin-td-truncate {
@@ -707,11 +734,11 @@
   }
 
   .admin-dashboard-recent-header {
-    @apply flex items-center justify-between border-b border-cp-border px-4 py-3.5 sm:px-5;
+    @apply flex items-center justify-between border-b border-brand-line px-4 py-3.5 sm:px-5;
   }
 
   .admin-dashboard-pending-header {
-    @apply border-b border-cp-border px-4 py-3 sm:px-5;
+    @apply border-b border-brand-line px-4 py-3 sm:px-5;
   }
 
   .admin-dashboard-pending-list {
@@ -719,15 +746,15 @@
   }
 
   .admin-dashboard-pending-item {
-    @apply flex items-center justify-between gap-3 border-b border-cp-border/75 py-2.5 last:border-0;
+    @apply flex items-center justify-between gap-3 border-b border-brand-line/75 py-2.5 last:border-0;
   }
 
   .admin-form-panel {
-    @apply border-t border-cp-border bg-cp-parchment/40 p-5 sm:p-6;
+    @apply border-t border-brand-line bg-brand-parchment/40 p-5 sm:p-6;
   }
 
   .admin-form-panel-title {
-    @apply mb-4 text-base font-bold text-cp-ink;
+    @apply mb-4 text-base font-bold text-brand-ink;
   }
 
   .admin-form-grid {
@@ -747,19 +774,19 @@
   }
 
   .admin-settings-card {
-    @apply overflow-hidden rounded-xl border border-cp-border/80 bg-white shadow-[0_1px_3px_rgba(28,33,25,0.06)];
+    @apply overflow-hidden rounded-xl border border-brand-line/80 bg-white shadow-[0_1px_3px_rgba(28,33,25,0.06)];
   }
 
   .admin-settings-card-header {
-    @apply border-b border-cp-border/70 bg-cp-parchment/40 px-4 py-2.5 sm:px-5;
+    @apply border-b border-brand-line/70 bg-brand-parchment/40 px-4 py-2.5 sm:px-5;
   }
 
   .admin-settings-card-title {
-    @apply text-[0.9375rem] font-semibold tracking-tight text-cp-ink;
+    @apply text-[0.9375rem] font-semibold tracking-tight text-brand-ink;
   }
 
   .admin-settings-card-desc {
-    @apply mt-0.5 text-xs leading-snug text-cp-ink-muted;
+    @apply mt-0.5 text-xs leading-snug text-brand-ink-muted;
   }
 
   .admin-settings-card-body {
@@ -779,15 +806,15 @@
   }
 
   .admin-setting-field-toggle {
-    @apply flex items-center justify-between gap-3 rounded-lg border border-cp-border/55 bg-cp-parchment/35 px-3 py-2;
+    @apply flex items-center justify-between gap-3 rounded-lg border border-brand-line/55 bg-brand-parchment/35 px-3 py-2;
   }
 
   .admin-setting-label {
-    @apply text-xs font-semibold text-cp-ink;
+    @apply text-xs font-semibold text-brand-ink;
   }
 
   .admin-setting-hint {
-    @apply text-[0.6875rem] leading-snug text-cp-ink-muted;
+    @apply text-[0.6875rem] leading-snug text-brand-ink-muted;
   }
 
   .admin-setting-control {
@@ -799,11 +826,11 @@
   }
 
   .admin-settings-payment-group {
-    @apply rounded-lg border border-cp-border/60 bg-cp-parchment/25 p-3;
+    @apply rounded-lg border border-brand-line/60 bg-brand-parchment/25 p-3;
   }
 
   .admin-settings-payment-group-title {
-    @apply mb-2.5 border-b border-cp-border/50 pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.07em] text-cp-ink-muted;
+    @apply mb-2.5 border-b border-brand-line/50 pb-2 text-[0.6875rem] font-semibold uppercase tracking-[0.07em] text-brand-ink-muted;
   }
 
   .admin-settings-payment-group .admin-settings-grid {
@@ -811,22 +838,22 @@
   }
 
   .admin-settings-footer {
-    @apply flex flex-col gap-3 rounded-xl border border-cp-border/80 bg-white px-4 py-3 shadow-[0_1px_3px_rgba(28,33,25,0.06)] sm:flex-row sm:items-center sm:justify-between;
+    @apply flex flex-col gap-3 rounded-xl border border-brand-line/80 bg-white px-4 py-3 shadow-[0_1px_3px_rgba(28,33,25,0.06)] sm:flex-row sm:items-center sm:justify-between;
   }
 
   .admin-settings-footer-note {
-    @apply text-xs text-cp-ink-muted;
+    @apply text-xs text-brand-ink-muted;
   }
 
   .admin-alert-banner {
-    @apply mb-5 rounded-md border border-cp-olive/20 bg-cp-olive/5 px-4 py-3 text-sm text-cp-ink;
+    @apply mb-5 rounded-md border border-brand-olive/20 bg-brand-olive/5 px-4 py-3 text-sm text-brand-ink;
   }
 
   .admin-alert-banner strong {
-    @apply font-semibold text-cp-olive-dark;
+    @apply font-semibold text-brand-olive-dark;
   }
 
-  .admin-theme :is(.text-cp-brass-light, .text-cp-brass) {
+  .admin-theme :is(.text-brand-brass-bright, .text-brand-brass-deep) {
     color: #3d5230;
   }
 
@@ -839,7 +866,7 @@
   }
 
   :is(.admin-filter-chip, .ops-filter-chip) {
-    @apply inline-flex min-h-[2.5rem] cursor-pointer items-center justify-center rounded-md border border-cp-border bg-white px-4 py-2 text-sm font-medium tracking-wide transition-all duration-200 hover:border-cp-olive/25 hover:bg-cp-parchment-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cp-olive/25;
+    @apply inline-flex min-h-[2.5rem] cursor-pointer items-center justify-center rounded-md border border-brand-line bg-white px-4 py-2 text-sm font-medium tracking-wide transition-all duration-200 hover:border-brand-olive/25 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25;
     color: #4a5245;
   }
 
@@ -861,26 +888,26 @@
 
   /* —— Participant operations portal (day theme) —— */
   .portal-card {
-    @apply rounded-sm border border-cp-border bg-white p-5 shadow-[0_1px_4px_rgba(28,33,25,0.08)] sm:p-6;
+    @apply rounded-sm border border-brand-line bg-white p-5 shadow-[0_1px_4px_rgba(28,33,25,0.08)] sm:p-6;
     border-top: 2px solid rgba(201, 162, 39, 0.45);
   }
 
   .portal-card-muted {
-    @apply rounded-sm border border-cp-border bg-cp-parchment-dark p-4 sm:p-5;
+    @apply rounded-sm border border-brand-line bg-brand-parchment-2 p-4 sm:p-5;
   }
 
   .portal-card-accent-amber {
-    @apply rounded-sm border border-cp-border border-l-[3px] border-l-cp-brass bg-amber-50/80 p-5 shadow-[0_1px_4px_rgba(28,33,25,0.06)] sm:p-6;
+    @apply rounded-sm border border-brand-line border-l-[3px] border-l-brand-brass-deep bg-amber-50/80 p-5 shadow-[0_1px_4px_rgba(28,33,25,0.06)] sm:p-6;
     border-top: 2px solid rgba(201, 162, 39, 0.45);
   }
 
   .portal-card-accent-sky {
-    @apply rounded-sm border border-cp-border border-l-[3px] border-l-sky-500 bg-sky-50/70 p-5 shadow-[0_1px_4px_rgba(28,33,25,0.06)] sm:p-6;
+    @apply rounded-sm border border-brand-line border-l-[3px] border-l-sky-500 bg-sky-50/70 p-5 shadow-[0_1px_4px_rgba(28,33,25,0.06)] sm:p-6;
     border-top: 2px solid rgba(201, 162, 39, 0.35);
   }
 
   .portal-card-accent-olive {
-    @apply rounded-sm border border-cp-olive/25 bg-cp-olive/5 p-5 sm:p-6;
+    @apply rounded-sm border border-brand-olive/25 bg-brand-olive/5 p-5 sm:p-6;
     border-left: 3px solid rgba(61, 82, 48, 0.65);
   }
 
@@ -890,7 +917,7 @@
   }
 
   .portal-subtitle {
-    @apply text-xs font-bold uppercase tracking-[0.14em] text-cp-olive-dark;
+    @apply text-xs font-bold uppercase tracking-[0.14em] text-brand-olive-dark;
   }
 
   .portal-body {
@@ -904,7 +931,7 @@
   }
 
   .portal-link {
-    @apply font-semibold text-cp-olive underline-offset-2 transition-colors hover:text-cp-olive-dark hover:underline;
+    @apply font-semibold text-brand-olive underline-offset-2 transition-colors hover:text-brand-olive-dark hover:underline;
   }
 
   .portal-alert-warning {
@@ -928,16 +955,16 @@
   }
 
   .portal-divider {
-    @apply border-cp-border;
+    @apply border-brand-line;
   }
 
   .portal-table-head {
-    @apply border-b border-cp-border pb-2 text-left text-xs font-semibold uppercase tracking-wider;
+    @apply border-b border-brand-line pb-2 text-left text-xs font-semibold uppercase tracking-wider;
     color: #4a5245;
   }
 
   .portal-table-row {
-    @apply border-b border-cp-border/80 transition-colors hover:bg-cp-parchment/60;
+    @apply border-b border-brand-line/80 transition-colors hover:bg-brand-parchment/60;
   }
 
   .portal-table-row td {
@@ -945,20 +972,20 @@
   }
 
   .portal-badge {
-    @apply inline-flex max-w-full items-center rounded-sm border border-cp-border bg-cp-parchment-dark px-2 py-0.5 text-xs font-semibold capitalize leading-tight;
+    @apply inline-flex max-w-full items-center rounded-sm border border-brand-line bg-brand-parchment-2 px-2 py-0.5 text-xs font-semibold capitalize leading-tight;
     color: #1c2119;
   }
 
   .portal-divider-line {
-    @apply border-cp-border;
+    @apply border-brand-line;
   }
 
   .portal-emphasis {
-    @apply font-semibold text-cp-ink;
+    @apply font-semibold text-brand-ink;
   }
 
   .portal-value {
-    @apply font-semibold tabular-nums text-cp-ink;
+    @apply font-semibold tabular-nums text-brand-ink;
   }
 
   .portal-form-card {
@@ -966,7 +993,7 @@
   }
 
   .portal-h1 {
-    @apply border-l-[3px] border-cp-brass pl-4 text-3xl font-bold tracking-tight sm:text-4xl;
+    @apply border-l-[3px] border-brand-brass-deep pl-4 text-3xl font-bold tracking-tight sm:text-4xl;
     color: #1c2119;
   }
 
@@ -1145,7 +1172,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-section-label {
-  @apply relative inline-flex items-center px-3 py-1.5 font-condensed text-sm font-bold uppercase tracking-[0.1em] transition-colors duration-200 hover:text-tactical-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tactical-brass;
+  @apply relative inline-flex items-center px-3 py-1.5 font-condensed text-sm font-bold uppercase tracking-[0.1em] transition-colors duration-200 hover:text-brand-brass focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-brass;
   color: #ffffff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
 }
@@ -1155,17 +1182,17 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-footer-label {
-  @apply mb-3 font-condensed text-xs font-bold uppercase tracking-[0.22em] text-tactical-brass;
+  @apply mb-3 font-condensed text-xs font-bold uppercase tracking-[0.22em] text-brand-brass;
 }
 
 .cinematic-footer-link {
-  @apply cinematic-body relative inline-block w-fit font-condensed text-base transition-colors duration-200 hover:text-tactical-brass;
+  @apply cinematic-body relative inline-block w-fit font-condensed text-base transition-colors duration-200 hover:text-brand-brass;
   color: #ffffff;
 }
 
 .cinematic-footer-link::after {
   content: "";
-  @apply absolute -bottom-0.5 left-0 h-px w-0 bg-tactical-brass transition-all duration-300 ease-out;
+  @apply absolute -bottom-0.5 left-0 h-px w-0 bg-brand-brass transition-all duration-300 ease-out;
 }
 
 .cinematic-footer-link:hover::after {
@@ -1173,7 +1200,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-footer-social {
-  @apply inline-flex h-10 w-10 items-center justify-center rounded-sm border border-white/15 bg-white/[0.03] transition-all duration-300 hover:-translate-y-0.5 hover:border-tactical-brass/50 hover:text-tactical-brass hover:shadow-[0_0_18px_rgba(201,162,39,0.22)];
+  @apply inline-flex h-10 w-10 items-center justify-center rounded-sm border border-white/15 bg-white/[0.03] transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-brass/50 hover:text-brand-brass hover:shadow-[0_0_18px_rgba(201,162,39,0.22)];
   color: #ffffff;
 }
 
@@ -1353,7 +1380,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-link {
-  @apply font-semibold text-tactical-brass underline-offset-4 transition-colors hover:underline;
+  @apply font-semibold text-brand-brass underline-offset-4 transition-colors hover:underline;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
@@ -1362,7 +1389,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-prose {
-  @apply prose prose-invert max-w-none prose-lg prose-headings:font-display prose-headings:uppercase prose-headings:tracking-tight prose-p:font-condensed prose-a:text-tactical-brass prose-a:font-semibold;
+  @apply prose prose-invert max-w-none prose-lg prose-headings:font-display prose-headings:uppercase prose-headings:tracking-tight prose-p:font-condensed prose-a:text-brand-brass prose-a:font-semibold;
   --tw-prose-headings: #ffffff;
   --tw-prose-body: #ffffff;
   --tw-prose-bold: #ffffff;
@@ -1379,7 +1406,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 .cinematic-site:not(.dashboard-day) .cp-form-card,
 .cinematic-site:not(.dashboard-day) .cp-page {
-  @apply border-white/10 bg-tactical-panel/95 backdrop-blur-md;
+  @apply border-white/10 bg-brand-panel/95 backdrop-blur-md;
   box-shadow: none;
   color: #ffffff;
 }
@@ -1387,7 +1414,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .cinematic-site:not(.dashboard-day) .cp-h1,
 .cinematic-site:not(.dashboard-day) .cp-h2,
 .cinematic-site:not(.dashboard-day) .cp-form-section-title {
-  @apply border-tactical-brass;
+  @apply border-brand-brass;
   color: #ffffff;
 }
 
@@ -1417,7 +1444,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-site:not(.dashboard-day) .cp-link {
-  @apply font-semibold text-tactical-brass;
+  @apply font-semibold text-brand-brass;
 }
 
 .cinematic-site:not(.dashboard-day) .cp-link:hover {
@@ -1482,7 +1509,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .cinematic-site.dashboard-day input,
 .cinematic-site.dashboard-day textarea,
 .cinematic-site.dashboard-day select {
-  @apply border-cp-border bg-white placeholder:text-slate-400;
+  @apply border-brand-line bg-white placeholder:text-slate-400;
   color: #1c2119;
 }
 
@@ -1536,7 +1563,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 /* Fallback: lift any legacy muted tactical text inside public shell */
-.cinematic-site .text-tactical-khaki,
+.cinematic-site .text-brand-khaki,
 .cinematic-site .text-tactical-mist {
   color: var(--cinematic-text-body);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
@@ -1578,13 +1605,13 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-site.dashboard-day .cinematic-nav-link {
-  @apply hover:text-cp-olive-dark;
+  @apply hover:text-brand-olive-dark;
   color: #1c2119;
   text-shadow: none;
 }
 
 .cinematic-site.dashboard-day .cinematic-nav-link-active {
-  @apply text-cp-olive-dark;
+  @apply text-brand-olive-dark;
 }
 
 /* Announcement ticker: dark bar on inner pages; hero ticker is transparent overlay */
@@ -1604,7 +1631,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-site.dashboard-day .cinematic-footer {
-  @apply border-cp-border bg-white;
+  @apply border-brand-line bg-white;
   color: #1c2119;
 }
 
@@ -1621,42 +1648,42 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-site.dashboard-day .cinematic-footer-label {
-  @apply text-cp-olive-dark;
+  @apply text-brand-olive-dark;
 }
 
 .cinematic-site.dashboard-day .cinematic-footer-link {
-  @apply hover:text-cp-olive-dark;
+  @apply hover:text-brand-olive-dark;
   color: #1c2119;
   text-shadow: none;
 }
 
 .cinematic-site.dashboard-day .cinematic-footer-social {
-  @apply border-cp-border bg-cp-parchment hover:border-cp-brass hover:text-cp-olive-dark;
+  @apply border-brand-line bg-brand-parchment hover:border-brand-brass-deep hover:text-brand-olive-dark;
   color: #1c2119;
 }
 
 .participant-portal .cp-form-card,
 .participant-portal .cp-page {
-  @apply rounded-sm border border-cp-border bg-white shadow-[0_1px_4px_rgba(28,33,25,0.08)];
+  @apply rounded-sm border border-brand-line bg-white shadow-[0_1px_4px_rgba(28,33,25,0.08)];
   border-top: 2px solid rgba(201, 162, 39, 0.45);
   color: #1c2119;
 }
 
 .participant-portal .cp-h1,
 .participant-portal .cp-h2 {
-  @apply border-cp-brass;
+  @apply border-brand-brass-deep;
   color: #1c2119;
 }
 
 .participant-portal input,
 .participant-portal textarea,
 .participant-portal select {
-  @apply border-cp-border bg-white placeholder:text-slate-400;
+  @apply border-brand-line bg-white placeholder:text-slate-400;
   color: #1c2119;
 }
 
 .participant-portal .cp-link {
-  @apply font-semibold text-cp-olive hover:text-cp-olive-dark hover:underline;
+  @apply font-semibold text-brand-olive hover:text-brand-olive-dark hover:underline;
 }
 
 .participant-portal label {
@@ -1665,7 +1692,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 .participant-portal .border-white\/10,
 .participant-portal .border-white\/20 {
-  @apply border-cp-border;
+  @apply border-brand-line;
 }
 
 .participant-portal .text-white,
@@ -1844,10 +1871,10 @@ body:has(.dashboard-day) [role="alertdialog"] {
   color: #1a1a16 !important;
 }
 
-.admin-theme [class*="bg-cp-gunmetal"],
-.admin-theme [class*="from-cp-gunmetal"],
-.admin-theme [class*="to-cp-gunmetal"],
-.admin-theme [class*="via-cp-olive-dark"],
+.admin-theme [class*="bg-brand-gunmetal"],
+.admin-theme [class*="from-brand-gunmetal"],
+.admin-theme [class*="to-brand-gunmetal"],
+.admin-theme [class*="via-brand-olive-dark"],
 .admin-theme [class*="bg-black"],
 .admin-theme [class*="bg-slate-9"] {
   background: #fffcf7 !important;

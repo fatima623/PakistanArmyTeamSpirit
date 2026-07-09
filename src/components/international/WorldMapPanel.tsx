@@ -55,8 +55,8 @@ export function WorldMapPanel() {
         }}
         aria-hidden
       />
-      <div className="absolute inset-0 bg-tactical-grid bg-grid-48 opacity-20" />
-      <p className="absolute left-4 top-4 z-10 font-condensed text-[10px] font-bold uppercase tracking-[0.3em] text-tactical-brass">
+      <div className="absolute inset-0 bg-brand-grid bg-grid-48 opacity-20" />
+      <p className="absolute left-4 top-4 z-10 font-condensed text-[10px] font-bold uppercase tracking-[0.3em] text-brand-brass">
         Global participation — active nations
       </p>
       {nations.map((code, i) => {
@@ -73,7 +73,7 @@ export function WorldMapPanel() {
             }}
             title={COUNTRY_NAMES[code]}
           >
-            <span className="pointer-events-none absolute -top-8 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-sm border border-white/15 bg-tactical-void/95 px-2 py-0.5 font-condensed text-[10px] uppercase tracking-wide text-white group-hover/dot:block">
+            <span className="pointer-events-none absolute -top-8 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-sm border border-white/15 bg-brand-night/95 px-2 py-0.5 font-condensed text-[10px] uppercase tracking-wide text-white group-hover/dot:block">
               {COUNTRY_NAMES[code]}
             </span>
           </span>

@@ -112,7 +112,7 @@ export function PaymentSubmissionForm({
               <li key={p.id} className="portal-card-muted">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <p className="font-semibold text-cp-ink">
+                    <p className="font-semibold text-brand-ink">
                       {formatRegistrationFee(p.amount, paymentSettings.currency)}{" "}
                       — ref. {p.transactionReference ?? "—"}
                     </p>
@@ -130,7 +130,7 @@ export function PaymentSubmissionForm({
                   history={p.rejectionHistory}
                 />
                 {(p.internalFilePath || p.proofFileName) && (
-                  <div className="mt-4 border-t border-cp-border pt-4">
+                  <div className="mt-4 border-t border-brand-line pt-4">
                     <p className="portal-subtitle mb-2">Uploaded proof</p>
                     <PaymentProofViewer
                       paymentId={p.id}
@@ -152,12 +152,12 @@ export function PaymentSubmissionForm({
         <form onSubmit={handleSubmit} className="portal-form-card">
           <h2 className="portal-section-title">Submit payment proof</h2>
           <p className="portal-muted">
-            After sending <strong className="text-cp-ink">{feeLabel}</strong> via bank
+            After sending <strong className="text-brand-ink">{feeLabel}</strong> via bank
             wire transfer, Wise, a mobile wallet, or Remitly, upload your screenshot
             or receipt and transaction reference. Accepted: PNG, JPG, JPEG, PDF (max 5MB).
           </p>
           <div className="portal-card-accent-olive text-sm">
-            Amount to report: <strong className="text-cp-ink">{feeLabel}</strong>
+            Amount to report: <strong className="text-brand-ink">{feeLabel}</strong>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -213,7 +213,7 @@ export function PaymentSubmissionForm({
                 <img
                   src={proofPreview}
                   alt="Selected proof preview"
-                  className="max-h-40 rounded border border-cp-border object-contain"
+                  className="max-h-40 rounded border border-brand-line object-contain"
                 />
               </div>
             )}
