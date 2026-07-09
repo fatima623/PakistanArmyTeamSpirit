@@ -19,7 +19,6 @@
 @import "./pats-motion.css";
 @import "./pats-responsive.css";
 @import "./admin-day-theme.css";
-@import "./pats-section-spacing.css";
 @import "./pats-card-surface.css";
 @import "./pats-awards-showcase.css";
 /* Loads last: dashboard day theme must win over the sitewide forest-card
@@ -2164,6 +2163,121 @@ html.light-theme .cinematic-site.army-site .pats-section .tac-edition-flag,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-section .tac-edition-flag {
   color: var(--lt-heading, #1a1a16) !important;
   background: #ffffff !important;
+}
+
+/* ============================================================
+   SECTION SPACING LOCK (ex pats-section-spacing.css, retired in
+   phase 3d). Uniform inter-section rhythm: py-12 / md:py-16,
+   capped grid gaps, safe-area horizontal insets. All decls are
+   important-flagged — they exist to defeat pats-design-system
+   paddings and stray mt-/mb- utilities in markup. The one rule
+   that used to beat this sheet by import order (awards-showcase
+   __inner 80px inset) now outranks it by specificity instead.
+   Dies when the pats-* design sheets are consolidated.
+   ============================================================ */
+.army-site:not(.dashboard-day) {
+  --pats-section-pad-y: 3rem;
+  --pats-section-pad-x: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .army-site:not(.dashboard-day) {
+    --pats-section-pad-y: 4rem;
+    --pats-section-pad-x: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) {
+    --pats-section-pad-x: 2rem;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) {
+  padding-top: var(--pats-section-pad-y) !important;
+  padding-bottom: var(--pats-section-pad-y) !important;
+}
+
+html.light-theme
+  .army-site:not(.dashboard-day)
+  .pats-section:not(.pats-section--stats),
+html[data-site-theme="day"]
+  .army-site:not(.dashboard-day)
+  .pats-section:not(.pats-section--stats) {
+  padding-top: var(--pats-section-pad-y) !important;
+  padding-bottom: var(--pats-section-pad-y) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-section--mission:not(.pats-section--stats) {
+  padding-top: var(--pats-section-pad-y) !important;
+  padding-bottom: var(--pats-section-pad-y) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-section {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.army-site:not(.dashboard-day) .pats-inner-page-shell,
+.army-site:not(.dashboard-day) .pats-inner-page-shell > .space-y-0,
+html:not(.light-theme):not([data-site-theme="day"])
+  .army-site:not(.dashboard-day)
+  .pats-inner-page-shell,
+html:not(.light-theme):not([data-site-theme="day"])
+  .army-site:not(.dashboard-day)
+  .pats-inner-page-shell
+  > .space-y-0 {
+  gap: 0 !important;
+}
+
+.cinematic-site.army-site .cinematic-section {
+  padding-top: var(--pats-section-pad-y, 3rem) !important;
+  padding-bottom: var(--pats-section-pad-y, 3rem) !important;
+}
+
+.army-site:not(.dashboard-day) :is(.pats-section, .cinematic-section)[class*="mt-"],
+.army-site:not(.dashboard-day) :is(.pats-section, .cinematic-section)[class*="mb-"] {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.army-site:not(.dashboard-day) .pats-section__inner[class*="gap-"]:not([class*="gap-0"]) {
+  gap: min(2rem, 32px) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-section__inner {
+  box-sizing: border-box;
+  padding-left: max(
+    var(--pats-section-pad-x),
+    env(safe-area-inset-left, 0px)
+  ) !important;
+  padding-right: max(
+    var(--pats-section-pad-x),
+    env(safe-area-inset-right, 0px)
+  ) !important;
+}
+
+html.light-theme
+  .army-site:not(.dashboard-day)
+  .pats-inner-page-shell
+  .pats-section:not(.pats-section--stats),
+html[data-site-theme="day"]
+  .army-site:not(.dashboard-day)
+  .pats-inner-page-shell
+  .pats-section:not(.pats-section--stats) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.army-site:not(.dashboard-day) :is(
+    .pats-highlight-grid,
+    .pats-stats,
+    .forest-card-grid,
+    .forest-carousel
+  ) {
+  overflow: visible !important;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .cinematic-site .mb-6.rounded-xl {

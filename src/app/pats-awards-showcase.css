@@ -18,14 +18,17 @@
 }
 
 
-.army-site .pats-awards-page-section .pats-section__inner {
+/* :not(.dashboard-day) is semantically inert here (awards pages are never
+   dashboard) — it lifts specificity to (0,4,0) so this beats the retired
+   spacing-lock's __inner rule by specificity instead of import order. */
+.army-site:not(.dashboard-day) .pats-awards-page-section .pats-section__inner {
   padding-left: max(1.25rem, env(safe-area-inset-left, 0px)) !important;
   padding-right: max(1.25rem, env(safe-area-inset-right, 0px)) !important;
 }
 
 
 @media (min-width: 768px) {
-  .army-site .pats-awards-page-section .pats-section__inner {
+  .army-site:not(.dashboard-day) .pats-awards-page-section .pats-section__inner {
     padding-left: 80px !important;
     padding-right: 80px !important;
   }
