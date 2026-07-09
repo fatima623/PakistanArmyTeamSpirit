@@ -14,7 +14,6 @@
     "src/app/pats-portal.css",
     "src/app/pats-refresh.css",
     "src/app/pats-section-panels.css",
-    "src/app/pats-site-chrome.css",
     "src/app/pats-typography.css",
     "src/app/portal-design.css"
   ],
@@ -23,7 +22,7 @@
     "src/app/admin-day-theme.css": 230,
     "src/app/cinematic-tactical.css": 2,
     "src/app/daylight-theme.css": 366,
-    "src/app/globals.css": 378,
+    "src/app/globals.css": 390,
     "src/app/paf-theme.css": 5,
     "src/app/participant-panel.css": 93,
     "src/app/pats-design-system.css": 12,
@@ -34,7 +33,6 @@
     "src/app/pats-portal.css": 39,
     "src/app/pats-refresh.css": 225,
     "src/app/pats-section-panels.css": 55,
-    "src/app/pats-site-chrome.css": 12,
     "src/app/pats-typography.css": 33,
     "src/app/portal-design.css": 80
   },
