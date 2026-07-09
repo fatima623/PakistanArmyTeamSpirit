@@ -15,12 +15,12 @@
     "src/app/pats-typography.css",
     "src/app/portal-design.css"
   ],
-  "importantCount": 1680,
+  "importantCount": 1690,
   "importantByFile": {
     "src/app/admin-day-theme.css": 230,
     "src/app/cinematic-tactical.css": 2,
     "src/app/daylight-theme.css": 366,
-    "src/app/globals.css": 708,
+    "src/app/globals.css": 718,
     "src/app/paf-theme.css": 5,
     "src/app/pats-design-system.css": 12,
     "src/app/pats-hero.css": 6,
