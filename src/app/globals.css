@@ -7,7 +7,6 @@
 @import "./pats-typography.css";
 @import "./pats-inner-pages.css";
 @import "./pats-portal.css";
-@import "./participant-dashboard.css";
 /* Day/light overrides must load after pats-design-system (night typography) */
 @import "./daylight-theme.css";
 @import "./pats-home-day.css";
@@ -1567,6 +1566,69 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .cinematic-site:not(.dashboard-day) .cp-alert-warning .text-orange-700 a,
 .cinematic-site:not(.dashboard-day) .pats-form-notice--warn {
   color: #fbbf24 !important;
+}
+
+/* ============================================================
+   PORTAL BACK-LINK + FORM CARD INK (ex participant-dashboard.css,
+   retired in phase 3d). Gold back-link and the white form-card
+   day ink locks. Order-free vs the later portal sheets:
+   participant-portal-day outranks by specificity, and
+   participant-panel's card surface is important-flagged where
+   this sheet is not. Dies with the portal skins.
+   ============================================================ */
+.portal-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--pats-gold, #c8a84b);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.portal-back-link:hover {
+  color: var(--pats-white, #ffffff);
+  text-decoration: underline;
+}
+
+.participant-portal .portal-form-card {
+  background: #ffffff;
+  color: #334155;
+}
+
+.participant-portal .portal-form-card .portal-section-title {
+  color: #1e293b !important;
+}
+
+.participant-portal .portal-form-card :is(label, .pats-form-label) {
+  color: #334155 !important;
+}
+
+.participant-portal .portal-form-card .pats-form-hint {
+  color: #64748b !important;
+}
+
+.participant-portal .portal-form-card .text-brand-ink {
+  color: #1e293b !important;
+}
+
+.participant-portal .portal-form-card .portal-subtitle {
+  color: #64748b !important;
+}
+
+.participant-portal .portal-form-card .portal-muted {
+  color: #94a3b8 !important;
+}
+
+.participant-portal .portal-form-card [role="combobox"],
+.participant-portal .portal-form-card [role="combobox"] span {
+  color: #1e293b !important;
+}
+
+.participant-portal .portal-form-card [role="combobox"] span[data-placeholder] {
+  color: #94a3b8 !important;
 }
 
 /* ============================================================
