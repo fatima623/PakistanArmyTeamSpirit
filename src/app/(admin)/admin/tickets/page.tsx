@@ -4,18 +4,15 @@ import { Prisma } from "@prisma/client";
 import { LifeBuoy } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { cn } from "@/lib/utils";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import {
-  adminFilterChip,
-  adminFilterChipActive,
-  adminFilterChipInactive,
   adminPaymentsControls,
   adminPaymentsFilterTabs,
   adminPaymentsToolbarSearch,
   adminUsersPagination,
+  filterChipClasses,
 } from "@/lib/admin-ui";
 import {
   TICKET_CATEGORY_LABELS,
@@ -28,7 +25,6 @@ import {
 } from "@/lib/constants";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
-import "@/app/admin-payments-reference.css";
 import "@/app/admin-users-reference.css";
 
 export const metadata: Metadata = {
@@ -125,9 +121,9 @@ export default async function AdminTicketsPage({
             paramName="search"
             placeholder="Search subject, name, email…"
             ariaLabel="Search tickets"
-            className="admin-payments-search-field"
-            inputClassName="admin-input admin-payments-search-input"
-            iconClassName="admin-payments-search-icon"
+            className="relative min-w-0"
+            inputClassName="h-11 w-full rounded-lg bg-white pl-10 pr-3.5 text-sm text-slate-800 shadow-none placeholder:text-muted-foreground/70 focus-visible:border-brand-olive/40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-olive/15 focus-visible:ring-offset-0"
+            iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-muted-foreground/70"
           />
         </div>
         <nav className={adminPaymentsFilterTabs} aria-label="Filter tickets">
@@ -137,11 +133,7 @@ export default async function AdminTicketsPage({
               href={`/admin/tickets?status=${f}&search=${encodeURIComponent(
                 search
               )}&page=1`}
-              data-filter-tone={FILTER_TONE[f] ?? "all"}
-              className={cn(
-                adminFilterChip,
-                status === f ? adminFilterChipActive : adminFilterChipInactive
-              )}
+              className={filterChipClasses(FILTER_TONE[f] ?? "all", status === f)}
             >
               {f === "all" ? "All" : TICKET_STATUS_LABELS[f]}
             </Link>

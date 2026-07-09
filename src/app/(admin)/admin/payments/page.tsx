@@ -4,20 +4,17 @@ import { Prisma } from "@prisma/client";
 import { Eye } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { formatDateShort, cn } from "@/lib/utils";
+import { formatDateShort } from "@/lib/utils";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
 import { Button } from "@/components/ui/button";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
 import {
-  adminFilterChip,
-  adminFilterChipActive,
-  adminFilterChipInactive,
   adminPaymentsControls,
   adminPaymentsFilterTabs,
   adminPaymentsPage,
   adminPaymentsPanel,
   adminPaymentsToolbarSearch,
-  filterChipToneProps,
+  filterChipClasses,
 } from "@/lib/admin-ui";
 import {
   PAYMENT_STATUS,
@@ -31,7 +28,6 @@ import {
   isInternationalParticipant,
 } from "@/lib/participant-country";
 import { formatRegistrationFee } from "@/lib/payment-settings";
-import "@/app/admin-payments-reference.css";
 
 export const metadata: Metadata = {
   title: adminNavLabel("payments"),
@@ -122,9 +118,9 @@ export default async function AdminPaymentsPage({
               paramName="search"
               placeholder="Search reference, name, email..."
               ariaLabel="Search payments"
-              className="admin-payments-search-field"
-              inputClassName="admin-input admin-payments-search-input"
-              iconClassName="admin-payments-search-icon"
+              className="relative min-w-0"
+              inputClassName="h-11 w-full rounded-lg bg-white pl-10 pr-3.5 text-sm text-slate-800 shadow-none placeholder:text-muted-foreground/70 focus-visible:border-brand-olive/40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-olive/15 focus-visible:ring-offset-0"
+              iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-muted-foreground/70"
             />
           </div>
           <nav
@@ -135,11 +131,7 @@ export default async function AdminPaymentsPage({
               <Link
                 key={f}
                 href={`/admin/payments?status=${f}&search=${encodeURIComponent(search)}`}
-                {...filterChipToneProps(f)}
-                className={cn(
-                  adminFilterChip,
-                  status === f ? adminFilterChipActive : adminFilterChipInactive
-                )}
+                className={filterChipClasses(f, status === f)}
               >
                 {PAYMENT_STATUS_FILTER_LABELS[f] ?? f}
               </Link>
@@ -147,15 +139,15 @@ export default async function AdminPaymentsPage({
           </nav>
         </section>
 
-        <div className="admin-payments-table-shell">
-          <table className="admin-payments-table admin-users-table">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table className="admin-data-table min-w-[44rem]">
             <colgroup>
-              <col className="admin-users-col-participant" />
-              <col className="admin-payments-col-unit" />
-              <col className="admin-payments-col-amount" />
-              <col className="admin-payments-col-ref" />
-              <col className="admin-payments-col-pay-status" />
-              <col className="admin-users-col-actions" />
+              <col className="w-[28%]" />
+              <col className="w-[15%]" />
+              <col className="w-[10%]" />
+              <col className="w-[15%]" />
+              <col className="w-[20%]" />
+              <col className="w-[12%]" />
             </colgroup>
             <thead>
               <tr>
@@ -170,7 +162,7 @@ export default async function AdminPaymentsPage({
             <tbody>
               {payments.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="admin-payments-empty">
+                  <td colSpan={6} className="px-6 py-16 text-center text-sm text-slate-600">
                     No payments found
                   </td>
                 </tr>
@@ -200,7 +192,7 @@ export default async function AdminPaymentsPage({
                           </div>
                         </div>
                       </td>
-                      <td className="admin-payments-cell-muted">
+                      <td className="text-sm text-slate-600">
                         <div className="admin-users-unit-name">
                           {p.user.unit?.unitName ?? "—"}
                         </div>
@@ -208,14 +200,14 @@ export default async function AdminPaymentsPage({
                           <div className="admin-users-unit-sub">{country}</div>
                         ) : null}
                       </td>
-                      <td className="admin-payments-cell-amount">
+                      <td className="whitespace-nowrap text-[0.8125rem] text-slate-600">
                         {formatRegistrationFee(p.amount)}
                       </td>
-                      <td className="admin-payments-cell-ref">
+                      <td className="break-all font-mono text-[0.8125rem] text-slate-900">
                         {p.transactionReference ?? "—"}
                       </td>
-                      <td className="admin-payments-cell-badge">
-                        <div className="admin-payments-badge-wrap">
+                      <td className="!overflow-visible !px-1.5">
+                        <div className="flex w-full min-w-0 items-center justify-center">
                           <PaymentStatusBadge
                             status={p.status}
                             showPrefix={false}
@@ -226,7 +218,7 @@ export default async function AdminPaymentsPage({
                           {formatDateShort(p.createdAt)}
                         </div>
                       </td>
-                      <td className="admin-payments-cell-actions">
+                      <td>
                         <div className="admin-table-actions admin-table-actions--center">
                           <Button
                             size="sm"

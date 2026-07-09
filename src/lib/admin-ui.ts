@@ -18,7 +18,7 @@ export const adminFilterChipActive = "ops-filter-chip-active";
 export const adminFilterChipInactive = "ops-filter-chip-inactive";
 export const adminFilterGroup = "portal-filter-group";
 
-export { filterChipTone, filterChipToneProps } from "@/lib/filter-chip-tones";
+export { filterChipClasses, filterChipTone, filterChipToneProps } from "@/lib/filter-chip-tones";
 
 /** Compact table row actions (View / Delete / Verify / Edit) */
 export const portalTableActionBtn = "portal-table-action-btn";
@@ -47,11 +47,11 @@ export const adminUsersFilterTabs = "admin-users-filter-tabs";
 export const adminUsersPagination = "admin-users-pagination";
 
 /** Payment verification */
-export const adminPaymentsPage = "admin-payments-page";
-export const adminPaymentsPanel = "admin-payments-panel";
-export const adminPaymentsControls = "admin-payments-controls";
-export const adminPaymentsToolbarSearch = "admin-payments-toolbar-search";
-export const adminPaymentsFilterTabs = "admin-payments-filter-tabs";
+export const adminPaymentsPage = "flex w-full flex-col pb-6";
+export const adminPaymentsPanel = "admin-surface flex w-full flex-col gap-5 p-6 shadow-[0_2px_12px_rgba(15,23,42,0.05)]";
+export const adminPaymentsControls = "flex flex-col gap-3.5 rounded-xl border border-slate-200 bg-slate-50 px-[1.125rem] py-4";
+export const adminPaymentsToolbarSearch = "grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5";
+export const adminPaymentsFilterTabs = "flex w-full flex-wrap items-center gap-2.5";
 
 /** Surfaces & typography */
 export const adminSurface = "admin-surface";
