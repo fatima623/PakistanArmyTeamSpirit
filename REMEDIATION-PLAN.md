@@ -126,7 +126,22 @@ freeze enforced.
 
 ---
 
-## Phase 1 — Collapse to one token system (1–2 days) — **blocks Phases 2–4**
+## Phase 1 — Collapse to one token system ✅ IMPLEMENTED
+
+Done: `--brand-*` scale (20 RGB-triplet tokens) defined once in
+`globals.css :root`; all six legacy namespaces (`army`, `tactical`, `portal`,
+`cp`, `bg-*/accent-*`, plus unused images/shadows/animations) deleted from
+`tailwind.config.ts`; 440 usages codemodded across 51+ files (tsx + css
+selectors + `@apply` lines + compound prefixes like `border-l-`),
+exact-duplicate colors merged (tactical-olive ≡ cp-olive → `brand-olive`;
+ops-red ≡ cp-alert → `brand-red`; void ≡ carbon → `brand-night`;
+carbon-raised ≡ navy → `brand-night-2`). Used shadows kept as
+`shadow-brand-soft(-lg)`. Guardrails extended: legacy namespace usage now
+fails the build; tailwind.config hex count ratchets. Also fixed in passing: a
+never-working hover/selected highlight in `ui/CountrySelect` that referenced
+a class (`bg-cp-surface-muted`) defined nowhere. Original notes below.
+
+### Original plan (superseded by implementation)
 
 Today `tailwind.config.ts` defines **six** color namespaces for one green/gold/
 parchment identity: `army.*`, `tactical.*`, `portal.*`, `cp.*`, the
@@ -158,7 +173,14 @@ app; `tailwind.config.ts` has a single color namespace.
 
 ---
 
-## Phase 2 — Declare the single-source-of-truth components (2–3 days)
+## Phase 2 — Declare the single-source-of-truth components ✅ DECLARED
+
+`docs/COMPONENTS.md` now lists the canonical component per concept and the
+token layers. Physical consolidation of the remaining rivals (CinematicNav /
+CinematicFooter / HeroSlider each have 1 legacy usage) happens alongside the
+Phase 3 page migrations that touch them. Original table below.
+
+### Original plan (superseded by docs/COMPONENTS.md)
 
 Stand up (mostly by promoting the already-active one and deleting rivals) exactly
 one canonical component per concept, each built from `src/components/ui/*` (shadcn)

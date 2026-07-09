@@ -2,9 +2,9 @@ STYLING FREEZE — non-negotiable (see REMEDIATION-PLAN.md, enforced by `npm run
 1. NEVER create a new .css file. Style with Tailwind utility classes and the components in src/components/ui/.
 2. NEVER add `!important`. If a style doesn't apply, fix the selector/cascade or migrate the element to Tailwind.
 3. NEVER add a new `import "*.css"` in a .ts/.tsx file.
-4. NEVER hardcode hex colors in components — use the design tokens in tailwind.config.ts / CSS variables.
-5. NEVER add a new color namespace to tailwind.config.ts.
-6. Before styling anything, check REMEDIATION-PLAN.md Phase 2 for the canonical component to use (one nav, one footer, one hero, one card, one button, one table).
+4. NEVER hardcode hex colors in components — use the --brand-* tokens (globals.css :root) via the brand-* Tailwind classes, or the semantic theme tokens (bg-background, text-foreground, ...).
+5. NEVER use the deleted legacy namespaces: army-*, tactical-*, portal-*, cp-* utility classes fail the build.
+6. Before styling anything, check docs/COMPONENTS.md for the canonical component to use (one nav, one footer, one hero, one card, one button, one table).
 
 Existing global stylesheets in src/app/*.css are legacy: they may only shrink or be deleted, never grow. After reducing CSS/!important, run `npm run guardrails:update` and commit the baseline.
 
