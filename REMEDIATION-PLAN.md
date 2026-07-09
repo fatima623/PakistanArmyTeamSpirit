@@ -277,18 +277,24 @@ except the toggle itself.
 
 ---
 
-## Phase 5 — Guardrails so it can't regress (½ day, do the checks in Phase 0)
+## Phase 5 — Guardrails so it can't regress ✅ IMPLEMENTED
 
-Add to CI (`npm run lint` / a check script) so the freeze is mechanically enforced:
+Implemented as `scripts/css-guardrails.mjs` + committed baseline
+(`scripts/css-guardrails-baseline.json`). Runs automatically at the front of
+`npm run dev`, `npm run build`, and `npm run lint` — a violation stops all three.
 
-1. **Ban new global CSS:** fail the build if the count of `src/app/*.css` files
-   increases, or if any `import "..*.css"` is added outside `globals.css`.
-2. **Ban `!important`:** stylelint `declaration-no-important` (allow a shrinking
-   grandfathered count via a baseline that can only go down).
-3. **Ban dead namespaces:** grep-fail on `army-`, `tactical-`, `portal-`, `cp-`
-   Tailwind classes after Phase 1.
-4. **Ban raw hex in components:** stylelint/eslint rule — colors come from tokens.
-5. Keep `strict: true` and the current zero-`any` discipline (already good).
+Rules enforced (ratchet: numbers may only go DOWN):
+1. **No new `.css` file** anywhere under `src/` (baseline file list).
+2. **No new `!important`** (total count vs baseline, offending files named).
+3. **No new `import "*.css"`** in any `.ts`/`.tsx` (baseline import pairs).
+4. **No new raw hex colors** in `.tsx` (count vs baseline).
+
+Workflow: after deleting CSS / removing `!important`, run
+`npm run guardrails:update` and commit the shrunken baseline to lock in the win.
+
+Still to add after Phase 1: grep-fail on the dead Tailwind namespaces
+(`army-`, `tactical-`, `portal-`, `cp-`). Keep `strict: true` / zero-`any`
+discipline (already good).
 
 ---
 

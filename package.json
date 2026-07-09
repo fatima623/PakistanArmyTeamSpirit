@@ -6,11 +6,13 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "node scripts/setup-uploads.mjs && next dev",
-    "build": "node scripts/setup-uploads.mjs && node scripts/prisma-generate-safe.mjs && next build",
+    "dev": "node scripts/css-guardrails.mjs && node scripts/setup-uploads.mjs && next dev",
+    "build": "node scripts/css-guardrails.mjs && node scripts/setup-uploads.mjs && node scripts/prisma-generate-safe.mjs && next build",
     "postinstall": "node scripts/setup-uploads.mjs && prisma generate",
     "start": "node scripts/setup-uploads.mjs && next start",
-    "lint": "next lint",
+    "lint": "node scripts/css-guardrails.mjs && next lint",
+    "guardrails": "node scripts/css-guardrails.mjs",
+    "guardrails:update": "node scripts/css-guardrails.mjs --update-baseline",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",

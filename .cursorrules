@@ -1,1 +1,11 @@
-Always follow DESIGN_SPEC.md for all design, styling, layout, typography, color, and spacing decisions. Never deviate from it. When building any component or page, check DESIGN_SPEC.md first. Dark backgrounds only. No white sections. No rounded corners. Bebas Neue and Barlow Condensed fonts only. All-caps everywhere. Gold accent #c8a84b only.
+STYLING FREEZE — non-negotiable (see REMEDIATION-PLAN.md, enforced by `npm run guardrails`):
+1. NEVER create a new .css file. Style with Tailwind utility classes and the components in src/components/ui/.
+2. NEVER add `!important`. If a style doesn't apply, fix the selector/cascade or migrate the element to Tailwind.
+3. NEVER add a new `import "*.css"` in a .ts/.tsx file.
+4. NEVER hardcode hex colors in components — use the design tokens in tailwind.config.ts / CSS variables.
+5. NEVER add a new color namespace to tailwind.config.ts.
+6. Before styling anything, check REMEDIATION-PLAN.md Phase 2 for the canonical component to use (one nav, one footer, one hero, one card, one button, one table).
+
+Existing global stylesheets in src/app/*.css are legacy: they may only shrink or be deleted, never grow. After reducing CSS/!important, run `npm run guardrails:update` and commit the baseline.
+
+For visual identity (colors, typography, spacing) consult DESIGN_SPEC.md, but note the codebase now has day+night themes; the "dark backgrounds only" rule in that spec is superseded.
