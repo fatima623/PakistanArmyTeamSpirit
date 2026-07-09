@@ -57,10 +57,16 @@ function Field({
 }) {
   return (
     <div
-      className={`admin-unit-field ${wide ? "admin-unit-field--wide" : ""}`.trim()}
+      className={`flex min-w-0 flex-col gap-0.5 rounded-[9px] border border-input bg-muted/40 px-2.5 py-2 ${
+        wide ? "col-span-full" : ""
+      }`.trim()}
     >
-      <span className="admin-unit-field-label">{label}</span>
-      <span className="admin-unit-field-value">{value || "—"}</span>
+      <span className="text-[10px] font-bold uppercase tracking-[0.05em] text-muted-foreground">
+        {label}
+      </span>
+      <span className="break-words text-[13px] font-semibold text-brand-ink">
+        {value || "—"}
+      </span>
     </div>
   );
 }
@@ -147,7 +153,7 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
       </div>
 
       <Dialog open={!!viewUnit} onOpenChange={() => setViewUnit(null)}>
-        <DialogContent className="admin-unit-dialog max-h-[85vh] max-w-2xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
+        <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
           {viewUnit && (
             <>
               <DialogHeader>
@@ -156,10 +162,10 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                 </DialogTitle>
               </DialogHeader>
 
-              <div className="admin-unit-detail">
-                <section className="admin-unit-section">
-                  <h4 className="admin-unit-section-title">Team &amp; captain</h4>
-                  <div className="admin-unit-fields">
+              <div className="mt-0.5 flex flex-col gap-3.5">
+                <section>
+                  <h4 className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-brand-olive-dark">Team &amp; captain</h4>
+                  <div className="grid grid-cols-2 gap-2 min-[560px]:grid-cols-3">
                     <Field
                       label="Team members"
                       value={String(viewUnit.user._count.teamMembers)}
@@ -182,9 +188,9 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                   </div>
                 </section>
 
-                <section className="admin-unit-section">
-                  <h4 className="admin-unit-section-title">Unit details</h4>
-                  <div className="admin-unit-fields">
+                <section>
+                  <h4 className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-brand-olive-dark">Unit details</h4>
+                  <div className="grid grid-cols-2 gap-2 min-[560px]:grid-cols-3">
                     <Field label="Unit type" value={viewUnit.unitType} />
                     <Field label="Branch" value={viewUnit.branch} />
                     <Field label="Arm" value={viewUnit.arm} />
@@ -206,9 +212,9 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                   </div>
                 </section>
 
-                <section className="admin-unit-section">
-                  <h4 className="admin-unit-section-title">CO / 2IC</h4>
-                  <div className="admin-unit-fields">
+                <section>
+                  <h4 className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-brand-olive-dark">CO / 2IC</h4>
+                  <div className="grid grid-cols-2 gap-2 min-[560px]:grid-cols-3">
                     <Field label="CO name" value={viewUnit.coName} />
                     <Field label="CO email" value={viewUnit.coEmail} />
                     <Field label="CO phone" value={viewUnit.coPhone} />
@@ -216,7 +222,7 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                 </section>
               </div>
 
-              <div className="admin-unit-dialog-foot">
+              <div className="mt-3.5 flex justify-end border-t border-input pt-3">
                 <Button
                   size="sm"
                   variant="adminPrimary"

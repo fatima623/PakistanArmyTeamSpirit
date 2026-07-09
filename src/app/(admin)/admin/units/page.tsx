@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "@/app/admin-units-reference.css";
 
 import { Prisma } from "@prisma/client";
 
@@ -71,17 +70,17 @@ export default async function AdminUnitsPage({
   }));
 
   return (
-    <div className="admin-units-page admin-fade-in-up">
-      <section className="admin-units-controls">
+    <div className="admin-fade-in-up">
+      <section className="mb-4 flex flex-wrap items-center gap-3">
         <LiveSearchInput
           paramName="search"
           placeholder="Search teams or units..."
           ariaLabel="Search teams"
-          className="admin-unit-search-field"
-          inputClassName="admin-input admin-unit-search-input"
-          iconClassName="admin-unit-search-icon"
+          className="relative min-w-[220px] flex-[1_1_260px]"
+          inputClassName="h-11 w-full rounded-[10px] bg-white pl-10 pr-3.5 text-sm font-medium text-brand-ink shadow-sm placeholder:text-slate-400 focus-visible:border-brand-olive/40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-olive/15 focus-visible:ring-offset-0"
+          iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[18px] w-[18px] -translate-y-1/2 text-muted-foreground opacity-50"
         />
-        <span className="admin-units-count">
+        <span className="whitespace-nowrap px-0.5 text-[0.78rem] font-semibold text-muted-foreground">
           {units.length} {units.length === 1 ? "team" : "teams"}
         </span>
         <AdminExportButton
