@@ -13,7 +13,6 @@ import {
   shouldShowPaymentStatusTimeline,
 } from "@/lib/payment-rejection-history";
 import { formatDateTime, cn } from "@/lib/utils";
-import "@/app/payment-status-timeline.css";
 
 type Props = {
   status: string;
@@ -34,40 +33,40 @@ export function PaymentStatusTimeline({ status, history, className }: Props) {
   const [mostRecent, ...older] = history;
 
   return (
-    <div className={cn("payment-status-timeline", className)}>
-      <div className="payment-status-timeline__current">
-        <span className="payment-status-timeline__current-label">
+    <div className={cn("mt-4 rounded-lg border border-amber-200 border-l-4 border-l-amber-500 bg-amber-50 px-[1.125rem] py-4 text-amber-900", className)}>
+      <div className="text-sm leading-[1.45]">
+        <span className="font-semibold text-amber-800">
           Current Status:
         </span>{" "}
-        <span className="payment-status-timeline__current-value">
+        <span className="font-semibold text-amber-950">
           {statusLabel}
         </span>
       </div>
 
-      <div className="payment-status-timeline__divider" aria-hidden />
+      <div className="my-3.5 border-t border-amber-300" aria-hidden />
 
       {collapsible ? (
         <button
           type="button"
-          className="payment-status-timeline__toggle"
+          className="mb-3 flex w-full cursor-pointer items-center justify-between gap-2 border-0 bg-transparent p-0 text-left text-[0.8125rem] font-semibold tracking-[0.02em] text-amber-800 hover:text-amber-900"
           aria-expanded={expanded}
           onClick={() => setExpanded((open) => !open)}
         >
           <span>Rejection History ({history.length})</span>
           <ChevronDown
             className={cn(
-              "payment-status-timeline__chevron",
-              expanded && "payment-status-timeline__chevron--open"
+              "h-4 w-4 flex-shrink-0 transition-transform duration-200",
+              expanded && "rotate-180"
             )}
             aria-hidden
           />
         </button>
       ) : (
-        <p className="payment-status-timeline__heading">Rejection History</p>
+        <p className="mb-3 text-[0.8125rem] font-semibold tracking-[0.02em] text-amber-800">Rejection History</p>
       )}
 
       {(!collapsible || expanded) && (
-        <ol className="payment-status-timeline__list">
+        <ol className="m-0 list-none p-0">
           {mostRecent ? (
             <TimelineEntry entry={mostRecent} isMostRecent />
           ) : null}
@@ -88,20 +87,20 @@ function TimelineEntry({
   isMostRecent?: boolean;
 }) {
   return (
-    <li className="payment-status-timeline__item">
+    <li className="relative pb-4 pl-[1.125rem] before:absolute before:left-0 before:top-[0.35rem] before:h-2 before:w-2 before:rounded-full before:bg-amber-500 before:ring-2 before:ring-amber-50 before:content-[''] last:pb-0 [&:not(:last-child)]:after:absolute [&:not(:last-child)]:after:bottom-0 [&:not(:last-child)]:after:left-[0.1875rem] [&:not(:last-child)]:after:top-[0.85rem] [&:not(:last-child)]:after:w-0.5 [&:not(:last-child)]:after:bg-amber-300 [&:not(:last-child)]:after:content-['']">
       <span
         className={cn(
-          "payment-status-timeline__date",
-          isMostRecent && "payment-status-timeline__date--recent"
+          "block text-[0.8125rem] leading-[1.4] text-amber-800",
+          isMostRecent && "font-bold text-amber-950"
         )}
       >
         {formatDateTime(entry.createdAt)}
       </span>
-      <span className="payment-status-timeline__type">
+      <span className="mt-0.5 block text-[0.8125rem] font-semibold text-amber-900">
         {rejectionHistoryTypeLabel(entry.type)}
       </span>
-      <p className="payment-status-timeline__reason">
-        <span className="payment-status-timeline__reason-label">Reason:</span>{" "}
+      <p className="mt-1 text-[0.8125rem] leading-normal text-amber-900">
+        <span className="font-semibold text-amber-800">Reason:</span>{" "}
         {entry.reason}
       </p>
     </li>

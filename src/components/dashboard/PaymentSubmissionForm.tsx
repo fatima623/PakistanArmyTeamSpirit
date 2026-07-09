@@ -19,7 +19,6 @@ import type { ParticipantPaymentData } from "@/lib/participant-payment-data";
 import { PaymentProofViewer } from "@/components/payments/PaymentProofViewer";
 import { PaymentStatusTimeline } from "@/components/payments/PaymentStatusTimeline";
 import { TOAST } from "@/lib/toast";
-import "@/app/payment-status-timeline.css";
 import { formatDateShort } from "@/lib/utils";
 
 export function PaymentSubmissionForm({

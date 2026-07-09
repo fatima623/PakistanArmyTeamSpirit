@@ -47,7 +47,6 @@ import {
 import { requiresPaymentRejectionReason } from "@/components/payments/PaymentRejectionReasonBox";
 import { PaymentStatusTimeline } from "@/components/payments/PaymentStatusTimeline";
 import type { PaymentRejectionHistoryEntry } from "@/lib/payment-rejection-history";
-import "@/app/payment-status-timeline.css";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
 import { PaymentProofViewer } from "@/components/payments/PaymentProofViewer";
 import { formatDateDisplay, formatDateShort, cn } from "@/lib/utils";

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import "@/app/payment-status-timeline.css";
 import { prisma } from "@/lib/prisma";
 import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { APPLICATION_STATUS, isPaymentVerified } from "@/lib/constants";

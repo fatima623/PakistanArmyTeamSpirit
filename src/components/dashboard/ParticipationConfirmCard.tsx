@@ -14,7 +14,6 @@ import { toast } from "sonner";
 
 import { logoutAction } from "@/lib/actions/auth";
 import { TOAST } from "@/lib/toast";
-import "@/app/participation-confirm.css";
 
 type CountdownParts = {
   days: number;
@@ -41,11 +40,11 @@ function computeCountdown(deadlineMs: number, nowMs: number): CountdownParts {
 
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
-    <div className="pconfirm__unit">
-      <div className="pconfirm__unit-value">
+    <div className="min-w-[3.75rem] rounded-[10px] border border-slate-200 bg-white px-2.5 py-2 text-center shadow-[0_1px_2px_rgba(15,23,42,0.05)]">
+      <div className="text-[1.375rem] font-bold leading-[1.2] tabular-nums !text-slate-900">
         {String(value).padStart(2, "0")}
       </div>
-      <div className="pconfirm__unit-label">{label}</div>
+      <div className="mt-0.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] !text-slate-400">{label}</div>
     </div>
   );
 }
@@ -144,29 +143,29 @@ export function ParticipationConfirmCard({
   return (
     <div className="mx-auto flex min-h-[70vh] w-full max-w-2xl items-center justify-center px-2 py-8">
       <section
-        className="pconfirm"
+        className="relative w-full overflow-hidden !rounded-2xl !border !border-slate-200 !bg-white !shadow-[0_1px_3px_rgba(15,23,42,0.08),0_12px_32px_rgba(15,23,42,0.14)] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-green-900 before:via-green-700 before:to-yellow-600 before:content-['']"
         role="alertdialog"
         aria-labelledby="participation-title"
         aria-describedby="participation-desc"
       >
-        <div className="pconfirm__header">
-          <span className="pconfirm__icon">
+        <div className="flex items-center gap-3.5 border-b border-slate-100 bg-slate-50/60 px-7 pb-5 pt-[1.375rem]">
+          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 !text-green-700 [&_svg]:!text-green-700">
             <ShieldCheck className="h-6 w-6" aria-hidden />
           </span>
           <div className="min-w-0">
-            <div className="pconfirm__eyebrow">Action required</div>
-            <h1 id="participation-title" className="pconfirm__title">
+            <div className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] !text-slate-400">Action required</div>
+            <h1 id="participation-title" className="mt-0.5 text-xl font-bold leading-[1.3] tracking-[-0.01em] !text-slate-900">
               Confirm your participation
             </h1>
-            <div className="pconfirm__meta">
+            <div className="mt-1 text-sm font-medium !text-slate-500">
               {firstName} {lastName}
               {unitName ? ` · ${unitName}` : ""}
             </div>
           </div>
         </div>
 
-        <div className="pconfirm__body">
-          <p id="participation-desc" className="pconfirm__desc">
+        <div className="grid gap-[1.125rem] px-7 pb-[1.625rem] pt-6 [&_p]:!text-slate-600">
+          <p id="participation-desc" className="text-[0.9rem] leading-[1.65] !text-slate-600">
             Before entering the Participant Dashboard, please confirm whether
             your team will be available to participate in the exercise.
             Confirming grants access to the next registration stages. Rejecting
@@ -175,7 +174,7 @@ export function ParticipationConfirmCard({
           </p>
 
           {previouslyDeclined && !expired ? (
-            <div className="pconfirm__notice pconfirm__notice--warn">
+            <div className="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-sm leading-[1.55] !text-amber-800 [&_div]:!text-amber-800 [&_svg]:mt-0.5 [&_svg]:flex-shrink-0 [&_svg]:!text-amber-600">
               <AlertTriangle className="h-4 w-4" aria-hidden />
               <div>
                 You previously rejected the registration. You can still confirm
@@ -184,16 +183,16 @@ export function ParticipationConfirmCard({
             </div>
           ) : null}
 
-          <div className="pconfirm__deadline">
-            <div className="pconfirm__deadline-head">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-[1.125rem] pb-[1.125rem] pt-4">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.1em] !text-slate-500 [&_svg]:!text-green-700">
               <CalendarClock className="h-4 w-4" aria-hidden />
               Confirmation deadline
             </div>
             {deadlineIso ? (
               <>
-                <div className="pconfirm__deadline-date">{deadlineLabel}</div>
+                <div className="mt-2 text-[0.95rem] font-semibold !text-slate-800">{deadlineLabel}</div>
                 {expired ? (
-                  <div className="pconfirm__notice pconfirm__notice--error mt-3">
+                  <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3.5 text-sm font-semibold leading-[1.55] !text-red-700 [&_div]:!text-red-700 [&_svg]:mt-0.5 [&_svg]:flex-shrink-0 [&_svg]:!text-red-600">
                     <XCircle className="h-5 w-5" aria-hidden />
                     <div>
                       The confirmation deadline has passed. Confirmation is no
@@ -203,34 +202,34 @@ export function ParticipationConfirmCard({
                   </div>
                 ) : countdown ? (
                   <div
-                    className="pconfirm__count"
+                    className="mt-3.5 flex flex-wrap items-center gap-2"
                     aria-label="Time remaining to confirm"
                   >
                     <CountdownUnit value={countdown.days} label="Days" />
                     <CountdownUnit value={countdown.hours} label="Hours" />
                     <CountdownUnit value={countdown.minutes} label="Min" />
                     <CountdownUnit value={countdown.seconds} label="Sec" />
-                    <div className="pconfirm__count-caption">remaining</div>
+                    <div className="text-xs font-medium !text-slate-400">remaining</div>
                   </div>
                 ) : null}
               </>
             ) : (
-              <div className="pconfirm__deadline-date">
+              <div className="mt-2 text-[0.95rem] font-semibold !text-slate-800">
                 To be announced by the organizers.
               </div>
             )}
           </div>
 
           {confirmingReject && !expired ? (
-            <div className="pconfirm__reject-panel">
-              <div className="pconfirm__reject-msg">
+            <div className="rounded-xl border border-red-200 bg-red-50 px-[1.125rem] py-4">
+              <div className="mb-3 text-sm font-medium leading-[1.55] !text-red-800">
                 Reject registration and sign out? You can log back in and
                 confirm later, as long as the deadline has not expired.
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  className="pconfirm-btn pconfirm-btn--danger-solid pconfirm-btn--sm"
+                  className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 flex-none px-3.5 py-2 text-[0.8125rem] !border !border-red-800 !bg-red-600 !text-white hover:!bg-red-700"
                   disabled={submitting !== null}
                   onClick={() => submit("decline")}
                 >
@@ -243,7 +242,7 @@ export function ParticipationConfirmCard({
                 </button>
                 <button
                   type="button"
-                  className="pconfirm-btn pconfirm-btn--neutral pconfirm-btn--sm"
+                  className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 flex-none px-3.5 py-2 text-[0.8125rem] !border !border-slate-300 !bg-white !text-slate-600 hover:!bg-slate-50"
                   disabled={submitting !== null}
                   onClick={() => setConfirmingReject(false)}
                 >
@@ -252,10 +251,10 @@ export function ParticipationConfirmCard({
               </div>
             </div>
           ) : (
-            <div className="pconfirm__actions">
+            <div className="flex flex-col gap-2.5 sm:flex-row">
               <button
                 type="button"
-                className="pconfirm-btn pconfirm-btn--primary"
+                className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 !border !border-green-900 !bg-gradient-to-b !from-green-700 !to-green-800 !text-white shadow-[0_1px_2px_rgba(22,101,52,0.35)] hover:!from-green-800 hover:!to-green-900"
                 disabled={submitting !== null || expired}
                 onClick={() => submit("confirm")}
                 title={
@@ -273,7 +272,7 @@ export function ParticipationConfirmCard({
               </button>
               <button
                 type="button"
-                className="pconfirm-btn pconfirm-btn--danger"
+                className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 !border !border-red-300 !bg-white !text-red-700 hover:!border-red-400 hover:!bg-red-50"
                 disabled={submitting !== null}
                 onClick={() =>
                   expired
@@ -289,7 +288,7 @@ export function ParticipationConfirmCard({
             </div>
           )}
 
-          <div className="pconfirm__foot">
+          <div className="mt-0.5 border-t border-slate-100 pt-3.5 text-xs leading-[1.6] !text-slate-400">
             Your decision is recorded with a timestamp for the organizing
             staff. Need help? Contact support from the login page.
           </div>

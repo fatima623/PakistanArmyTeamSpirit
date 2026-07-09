@@ -1,7 +1,6 @@
 {
   "cssFiles": [
     "src/app/admin-day-theme.css",
-    "src/app/army-design.css",
     "src/app/cinematic-tactical.css",
     "src/app/daylight-theme.css",
     "src/app/event-support.css",
@@ -12,7 +11,6 @@
     "src/app/participant-dashboard.css",
     "src/app/participant-panel.css",
     "src/app/participant-portal-day.css",
-    "src/app/participation-confirm.css",
     "src/app/pats-awards-showcase.css",
     "src/app/pats-card-surface.css",
     "src/app/pats-design-system.css",
@@ -33,16 +31,14 @@
     "src/app/pats-typography.css",
     "src/app/pats-video-gallery.css",
     "src/app/pats-zebra.css",
-    "src/app/payment-status-timeline.css",
     "src/app/portal-design.css",
     "src/app/tac-edition-timeline.css",
     "src/app/tac-mission-card.css",
     "src/app/team-members.css"
   ],
-  "importantCount": 2045,
+  "importantCount": 2004,
   "importantByFile": {
     "src/app/admin-day-theme.css": 289,
-    "src/app/army-design.css": 0,
     "src/app/cinematic-tactical.css": 3,
     "src/app/daylight-theme.css": 416,
     "src/app/event-support.css": 0,
@@ -53,7 +49,6 @@
     "src/app/participant-dashboard.css": 26,
     "src/app/participant-panel.css": 93,
     "src/app/participant-portal-day.css": 75,
-    "src/app/participation-confirm.css": 41,
     "src/app/pats-awards-showcase.css": 25,
     "src/app/pats-card-surface.css": 32,
     "src/app/pats-design-system.css": 13,
@@ -74,21 +69,13 @@
     "src/app/pats-typography.css": 34,
     "src/app/pats-video-gallery.css": 11,
     "src/app/pats-zebra.css": 5,
-    "src/app/payment-status-timeline.css": 0,
     "src/app/portal-design.css": 84,
     "src/app/tac-edition-timeline.css": 21,
     "src/app/tac-mission-card.css": 12,
     "src/app/team-members.css": 29
   },
   "cssImports": [
-    "src/app/(admin)/admin/payments/[id]/page.tsx -> @/app/payment-status-timeline.css",
-    "src/app/(dashboard)/event/dashboard/page.tsx -> @/app/payment-status-timeline.css",
-    "src/app/(dashboard)/event/payment/page.tsx -> @/app/payment-status-timeline.css",
     "src/app/layout.tsx -> ./globals.css",
-    "src/components/admin/PaymentReviewPanel.tsx -> @/app/payment-status-timeline.css",
-    "src/components/dashboard/ParticipationConfirmCard.tsx -> @/app/participation-confirm.css",
-    "src/components/dashboard/PaymentSubmissionForm.tsx -> @/app/payment-status-timeline.css",
-    "src/components/payments/PaymentStatusTimeline.tsx -> @/app/payment-status-timeline.css",
     "src/css.d.ts -> @/app/foo.css"
   ],
   "hexInTsx": 95,

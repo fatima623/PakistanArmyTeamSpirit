@@ -8,7 +8,6 @@ import {
   Users,
 } from "lucide-react";
 
-import "@/app/payment-status-timeline.css";
 import { prisma } from "@/lib/prisma";
 import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
