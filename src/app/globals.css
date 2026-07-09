@@ -19,7 +19,6 @@
 @import "./pats-refresh.css";
 /* Participant Panel design system v2 (refined institutional). Scoped to `.pp`
    with fresh class names, so it wins without fighting the legacy cascade. */
-@import "./participant-panel.css";
 
 @tailwind base;
 @tailwind components;
@@ -6754,4 +6753,1416 @@ html[data-site-theme="day"]
   font-size: 0.95rem;
   line-height: 1.65;
   color: var(--ec-sand) !important;
+}
+
+/* ============================================================
+   PARTICIPANT PANEL v2 (ex participant-panel.css, retired in
+   phase 3d). The pp-* component system: portal shell + fixed
+   sidebar, journey stepper, cards, tables, badges. Appended
+   last - it was the final import (position 41), so end-of-file
+   preserves its cascade position exactly. Its only (0,1,0) rule
+   (.pp custom props + typography) shares no properties with the
+   w-full utility on the same element, so crossing the utilities
+   layer is inert. Two emerald utility-name selectors rewritten
+   as [class~=] to dodge the @apply circular-dependency landmine
+   (matching + specificity identical). Verified via 77 live
+   signature hashes on /event/dashboard.
+   ============================================================ */
+/* ==========================================================================
+ * Participant Panel — design system v2 ("Refined institutional")
+ *
+ * A clean, self-contained SaaS-grade layer for the logged-in participant
+ * experience. Everything is scoped under `.pp` and uses NEW class names, so
+ * the legacy portal CSS (which targets .portal-card / .pats-panel /
+ * .pats-portal-nav …) does not collide with it. Loaded LAST in globals.css.
+ *
+ * Identity: deep institutional green + brass on a light, airy canvas.
+ * Roll this out page-by-page by swapping legacy markup for .pp-* components.
+ * ========================================================================== */
+
+.pp {
+  /* palette ------------------------------------------------------------- */
+  --pp-canvas: #f4f6f2;
+  --pp-surface: #ffffff;
+  --pp-surface-2: #f7f9f5;
+  --pp-surface-3: #eef2ea;
+  --pp-border: #e5e9e0;
+  --pp-border-strong: #d6dccd;
+
+  --pp-primary: #15613b;
+  --pp-primary-hover: #114d2f;
+  --pp-primary-soft: #e7f1ea;
+  --pp-primary-ink: #0f3d26;
+
+  --pp-brass: #a9812a;
+  --pp-brass-strong: #8a6716;
+  --pp-brass-soft: #f5edd8;
+
+  --pp-ink: #16231c;
+  --pp-body: #3c473f;
+  --pp-muted: #6a756c;
+  --pp-faint: #97a09a;
+
+  --pp-success: #157347;
+  --pp-success-soft: #e7f2eb;
+  --pp-warning: #b45309;
+  --pp-warning-soft: #fbf0df;
+  --pp-danger: #b42318;
+  --pp-danger-soft: #fbeceb;
+  --pp-info: #1f6091;
+  --pp-info-soft: #e9f2f9;
+
+  /* sidebar (deep forest) ---------------------------------------------- */
+  --pp-nav-1: #203127;
+  --pp-nav-2: #16241c;
+  --pp-nav-text: rgba(255, 255, 255, 0.85);
+  --pp-nav-text-strong: #ffffff;
+  --pp-nav-hover: rgba(255, 255, 255, 0.08);
+  --pp-nav-active: rgba(255, 255, 255, 0.12);
+  --pp-nav-accent: #e2c67a;
+
+  /* geometry ----------------------------------------------------------- */
+  --pp-radius: 12px;
+  --pp-radius-sm: 8px;
+  --pp-radius-xs: 6px;
+  --pp-radius-pill: 999px;
+  --pp-shadow: 0 1px 3px rgba(16, 32, 24, 0.05), 0 8px 24px rgba(16, 32, 24, 0.06);
+  --pp-shadow-sm: 0 1px 2px rgba(16, 32, 24, 0.06);
+  --pp-shadow-lift: 0 2px 4px rgba(16, 32, 24, 0.05), 0 12px 30px rgba(16, 32, 24, 0.08);
+  --pp-ring: 0 0 0 3px rgba(21, 97, 59, 0.14);
+
+  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--pp-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------------ shell */
+/* Paint the new canvas edge-to-edge. The legacy sage background sets an
+   !important bg on the same wrapper; out-specify it (…​.pp adds a class). */
+html[data-site-theme="day"] .participant-portal.pats-portal.pp {
+  background: var(--pp-canvas) !important;
+}
+
+/* Fix sticky positioning: `overflow-x: clip` on body breaks `position: sticky` */
+/* Lock window scroll for portal pages: only pp-main scrolls internally */
+html:has(.dashboard-day),
+html:has(.dashboard-day) body {
+  overflow: hidden !important;
+}
+
+/* Full-bleed portal wrapper — keep the sidebar fixed and let the dashboard pane scroll */
+.participant-portal.pp {
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--pp-canvas);
+  overflow: visible;
+}
+
+.pp .pp-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  width: 100%;
+  min-height: auto;
+  background: var(--pp-canvas);
+  position: relative;
+  overflow: visible;
+}
+
+@media (min-width: 1024px) {
+  /* Grid places sidebar + main side-by-side; window is locked so only
+     pp-main (the scroll container) scrolls — sidebar stays pinned. */
+  .pp .pp-shell {
+    display: grid;
+    grid-template-columns: 15.5rem minmax(0, 1fr);
+    align-items: start;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* Hide the outer public site footer (portal footer is inside pp-main__scroll) */
+  .pats-site-body--portal-app .pats-site-footer {
+    display: none;
+  }
+}
+
+.pp .pp-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 2.25rem 1.75rem;
+  min-height: 0;
+  width: 100%;
+}
+
+.pp .pp-main__scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 0;
+  overflow: visible;
+}
+
+@media (min-width: 1024px) {
+  /* pp-main IS the scroll container — window is locked, only this scrolls */
+  .pp .pp-main {
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(21, 97, 59, 0.22) transparent;
+  }
+
+  .pp .pp-main::-webkit-scrollbar { width: 5px; }
+  .pp .pp-main::-webkit-scrollbar-track { background: transparent; }
+  .pp .pp-main::-webkit-scrollbar-thumb {
+    background: rgba(21, 97, 59, 0.22);
+    border-radius: 999px;
+  }
+  .pp .pp-main::-webkit-scrollbar-thumb:hover {
+    background: rgba(21, 97, 59, 0.4);
+  }
+
+  .pp .pp-main__scroll {
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+.pats-site-body--portal-app .pp-shell {
+  min-height: auto;
+}
+
+.pats-site-body--portal-app .pp-main {
+  min-height: auto;
+}
+
+.pats-site-body--portal-app .pp-sidebar {
+  min-height: 100dvh;
+}
+
+/* ---------------------------------------------------------------- sidebar */
+.pp .pp-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.75rem 1rem 1.1rem;
+  border-radius: 0;
+  background: linear-gradient(180deg, var(--pp-nav-1) 0%, var(--pp-nav-2) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.18);
+}
+
+@media (min-width: 1024px) {
+  /* Sidebar stays in grid column — window scroll is locked so it never moves */
+  .pp .pp-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    align-self: start;
+    overflow-y: auto;
+    scrollbar-width: none;
+    z-index: 20;
+  }
+  .pp .pp-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Beat the global `.dashboard-day :where(p,span,li)` dark-text rule (0,3,0). */
+.pp .pp-sidebar,
+.pp .pp-sidebar :is(a, p, span, li, button) {
+  color: var(--pp-nav-text) !important;
+}
+
+.pp .pp-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.1rem 0.25rem 0.4rem;
+  margin-bottom: 0.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pp .pp-sidebar__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--pp-nav-accent) !important;
+  flex-shrink: 0;
+}
+
+.pp .pp-sidebar__brand-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--pp-nav-text-strong) !important;
+  line-height: 1.2;
+}
+
+.pp .pp-sidebar__brand-sub {
+  margin-top: 0.15rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pp-nav-accent) !important;
+}
+
+/* progress chip */
+.pp .pp-progress {
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--pp-radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pp .pp-progress__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.pp .pp-progress__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.86) !important;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pp .pp-progress__step {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--pp-radius-pill);
+  background: rgba(216, 185, 104, 0.18);
+  color: var(--pp-nav-accent) !important;
+}
+
+.pp .pp-progress__track {
+  height: 5px;
+  border-radius: var(--pp-radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.pp .pp-progress__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2f8a57, var(--pp-nav-accent));
+  transition: width 0.4s ease;
+}
+
+/* nav */
+.pp .pp-nav__label {
+  padding: 0 0.6rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.pp .pp-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.pp .pp-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--pp-radius-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  position: relative;
+  transition: background 0.15s ease, color 0.15s ease;
+  color: #ffffff !important;
+}
+
+.pp .pp-nav__link:hover {
+  background: var(--pp-nav-hover);
+  color: var(--pp-nav-text-strong) !important;
+}
+
+.pp .pp-nav__link.is-active {
+  background: var(--pp-nav-active);
+  border-color: rgba(216, 185, 104, 0.2);
+  color: var(--pp-nav-text-strong) !important;
+}
+
+.pp .pp-nav__link.is-active::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 1.35rem;
+  border-radius: 0 3px 3px 0;
+  background: var(--pp-nav-accent);
+}
+
+.pp .pp-nav__icon {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.pp .pp-nav__link.is-active .pp-nav__icon {
+  color: var(--pp-nav-accent) !important;
+  opacity: 1;
+}
+
+.pp .pp-sidebar__foot {
+  margin-top: 0.35rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pp .pp-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.6rem 0.65rem;
+  border-radius: var(--pp-radius-xs);
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.pp .pp-logout:hover {
+  background: rgba(180, 35, 24, 0.16);
+  color: #ffd9d4 !important;
+}
+
+/* -------------------------------------------------------------- typography */
+.pp .pp-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pp-brass-strong);
+}
+
+.pp .pp-h2 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--pp-ink);
+  line-height: 1.3;
+}
+
+.pp .pp-muted {
+  color: var(--pp-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+/* --------------------------------------------------------------------- card */
+.pp .pp-card {
+  background: #ffffff;
+  border: 1px solid var(--pp-border-strong);
+  border-radius: 1rem;
+  box-shadow: var(--pp-shadow);
+  padding: 1.5rem 1.6rem;
+  overflow: clip;
+}
+
+.pp .pp-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+.pp .pp-card__title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--pp-ink);
+  line-height: 1.3;
+}
+
+.pp .pp-card__desc {
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  color: var(--pp-muted);
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------- hero */
+.pp .pp-hero {
+  position: relative;
+  /* clip instead of hidden: decorative pseudo-elements still clip but the
+     hero box grows freely with its content — no layout clipping ever. */
+  overflow: clip;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  /* Enough room for two wrapped lines + breathing space */
+  min-height: 5.5rem;
+  padding: 1.4rem 1.6rem;
+  border-radius: var(--pp-radius);
+  color: #fff;
+  /* Premium muted institutional green */
+  background: linear-gradient(
+    135deg,
+    rgba(38, 57, 45, 0.96) 0%,
+    rgba(26, 40, 31, 0.98) 52%,
+    rgba(20, 31, 24, 0.99) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--pp-shadow-lift), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* Left block must shrink freely so the aside never overflows */
+.pp .pp-hero > div:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.pp .pp-hero__aside {
+  flex-shrink: 0;
+}
+
+/* top sheen + brass corner glow = glass */
+.pp .pp-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 34%
+  );
+  pointer-events: none;
+}
+.pp .pp-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 150% at 100% 0%,
+    rgba(216, 185, 104, 0.2),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.pp .pp-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pp .pp-hero__eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pp-nav-accent);
+}
+
+.pp .pp-hero__title {
+  margin-top: 0.35rem;
+  font-size: clamp(1.25rem, 4vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #fff;
+  /* Allow wrapping so long names show fully on small viewports */
+  word-break: break-word;
+}
+
+.pp .pp-hero__meta {
+  margin-top: 0.4rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.75);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp .pp-hero__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.pp .pp-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--pp-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.pp .pp-hero__chip--pending {
+  background: rgba(216, 185, 104, 0.16);
+  border-color: rgba(216, 185, 104, 0.35);
+  color: #f2e2b6;
+}
+
+.pp .pp-hero__team {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--pp-radius-pill);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: background 0.15s ease;
+}
+
+.pp .pp-hero__team:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Dark-ground text guards ------------------------------------------------
+ * The hero sits on a dark green ground, but `participant-portal-day.css` has
+ * `!important` heading/text rules at high specificity (e.g. `html[data-site-
+ * theme="day"] .participant-portal … h2`). Match/beat them: `.participant-
+ * portal.pp .pp-hero <el>` = specificity (0,4,0), which out-ranks those, and
+ * this file loads last. Keeps hero copy crisp white regardless. */
+.participant-portal.pp .pp-hero .pp-hero__eyebrow {
+  color: var(--pp-nav-accent) !important;
+}
+.participant-portal.pp .pp-hero .pp-hero__title {
+  color: #ffffff !important;
+}
+.participant-portal.pp .pp-hero .pp-hero__meta {
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+.participant-portal.pp .pp-hero .pp-hero__chip,
+.participant-portal.pp .pp-hero .pp-hero__chip * {
+  color: #ffffff !important;
+}
+.participant-portal.pp .pp-hero .pp-hero__chip--pending,
+.participant-portal.pp .pp-hero .pp-hero__chip--pending * {
+  color: #f2e2b6 !important;
+}
+.participant-portal.pp .pp-hero .pp-hero__team,
+.participant-portal.pp .pp-hero .pp-hero__team * {
+  color: #ffffff !important;
+}
+.participant-portal.pp .pp-sidebar,
+.participant-portal.pp .pp-sidebar :is(a, p, span, li, button, svg, svg *) {
+  color: var(--pp-nav-text) !important;
+}
+.participant-portal.pp .pp-sidebar .pp-nav__link.is-active,
+.participant-portal.pp .pp-sidebar .pp-nav__link.is-active :is(span, svg, svg *),
+.participant-portal.pp .pp-sidebar .pp-nav__link:hover,
+.participant-portal.pp .pp-sidebar .pp-nav__link:hover :is(span, svg, svg *) {
+  color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------------- stats */
+.pp .pp-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (min-width: 720px) {
+  .pp .pp-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.pp .pp-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.15rem;
+  background: #ffffff;
+  border: 1px solid var(--pp-border-strong);
+  border-radius: var(--pp-radius-sm);
+  box-shadow: var(--pp-shadow-sm);
+}
+
+.pp .pp-stat__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 11px;
+  background: var(--pp-primary-soft);
+  color: var(--pp-primary);
+  flex-shrink: 0;
+}
+
+.pp .pp-stat__label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pp-muted);
+}
+
+.pp .pp-stat__value {
+  margin-top: 0.15rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pp-ink);
+  line-height: 1.2;
+}
+
+/* ------------------------------------------------------------------ journey */
+.pp .pp-journey {
+  background: #ffffff;
+  border: 1px solid var(--pp-border-strong);
+  border-radius: var(--pp-radius);
+  box-shadow: var(--pp-shadow);
+  padding: 1.5rem 1.6rem;
+}
+
+.pp .pp-journey__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.pp .pp-journey__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pp-muted);
+}
+
+.pp .pp-journey__count-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--pp-primary);
+}
+
+.pp .pp-journey__bar {
+  height: 8px;
+  border-radius: var(--pp-radius-pill);
+  background: var(--pp-surface-3);
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.pp .pp-journey__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--pp-primary), #2f9160);
+  transition: width 0.5s ease;
+}
+
+.pp .pp-journey__grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.7rem;
+}
+
+@media (min-width: 640px) {
+  .pp .pp-journey__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .pp .pp-journey__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.pp .pp-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  height: 100%;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--pp-radius-sm);
+  border: 1px solid var(--pp-border);
+  background: var(--pp-surface-2);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.pp a .pp-step {
+  cursor: pointer;
+}
+
+.pp a:hover .pp-step {
+  border-color: var(--pp-border-strong);
+  box-shadow: var(--pp-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.pp .pp-step__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: #fff;
+  border: 1.5px solid var(--pp-border-strong);
+  color: var(--pp-muted);
+}
+
+.pp .pp-step__dot svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.pp .pp-step__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pp-ink);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.pp .pp-step__name svg {
+  width: 0.85rem;
+  height: 0.85rem;
+  color: var(--pp-faint);
+}
+
+.pp .pp-step__sub {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--pp-muted);
+}
+
+/* step states */
+.pp .pp-step--done {
+  background: var(--pp-primary-soft);
+  border-color: rgba(21, 97, 59, 0.2);
+}
+.pp .pp-step--done .pp-step__dot {
+  background: var(--pp-primary);
+  border-color: var(--pp-primary);
+  color: #fff;
+}
+
+.pp .pp-step--current {
+  background: #fff;
+  border-color: rgba(21, 97, 59, 0.45);
+  box-shadow: 0 0 0 3px rgba(21, 97, 59, 0.1);
+}
+.pp .pp-step--current .pp-step__dot {
+  background: var(--pp-primary);
+  border-color: var(--pp-primary);
+  color: #fff;
+}
+
+.pp .pp-step--attention {
+  background: var(--pp-warning-soft);
+  border-color: rgba(180, 83, 9, 0.28);
+}
+.pp .pp-step--attention .pp-step__dot {
+  background: #fff;
+  border-color: var(--pp-warning);
+  color: var(--pp-warning);
+}
+.pp .pp-step--attention .pp-step__name {
+  color: #7c3a06;
+}
+
+.pp .pp-step--locked {
+  opacity: 0.75;
+}
+.pp .pp-step--locked .pp-step__dot {
+  background: var(--pp-surface-3);
+  border-color: var(--pp-border-strong);
+  color: var(--pp-faint);
+}
+.pp .pp-step--locked .pp-step__name {
+  color: var(--pp-muted);
+}
+
+/* ------------------------------------------------------------------- status */
+.pp .pp-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--pp-radius);
+  border: 1px solid var(--pp-border-strong);
+  background: #ffffff;
+  box-shadow: var(--pp-shadow);
+}
+
+.pp .pp-status__main {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.pp .pp-status__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: var(--pp-surface-3);
+  color: var(--pp-muted);
+}
+
+.pp .pp-status__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--pp-ink);
+  line-height: 1.3;
+}
+
+.pp .pp-status__text {
+  margin-top: 0.2rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--pp-body);
+}
+
+.pp .pp-status__meta {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pp-muted);
+}
+
+.pp .pp-status--confirmed {
+  background: var(--pp-success-soft);
+  border-color: rgba(21, 115, 71, 0.24);
+}
+.pp .pp-status--confirmed .pp-status__icon {
+  background: rgba(21, 115, 71, 0.14);
+  color: var(--pp-success);
+}
+.pp .pp-status--approved {
+  background: var(--pp-brass-soft);
+  border-color: rgba(169, 129, 42, 0.3);
+}
+.pp .pp-status--approved .pp-status__icon {
+  background: rgba(169, 129, 42, 0.16);
+  color: var(--pp-brass-strong);
+}
+.pp .pp-status--attention {
+  background: var(--pp-danger-soft);
+  border-color: rgba(180, 35, 24, 0.24);
+}
+.pp .pp-status--attention .pp-status__icon {
+  background: rgba(180, 35, 24, 0.12);
+  color: var(--pp-danger);
+}
+
+.pp .pp-status__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--pp-success);
+}
+
+/* -------------------------------------------------------------------- alert */
+.pp .pp-alert {
+  border-radius: var(--pp-radius-sm);
+  padding: 0.9rem 1.1rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  border: 1px solid var(--pp-border);
+  border-left: 3px solid var(--pp-muted);
+  background: var(--pp-surface-2);
+  color: var(--pp-body);
+}
+
+.pp .pp-alert--warning {
+  background: var(--pp-warning-soft);
+  border-color: rgba(180, 83, 9, 0.2);
+  border-left-color: var(--pp-brass);
+  color: #6b3f08;
+}
+
+.pp .pp-alert strong {
+  color: inherit;
+  font-weight: 700;
+}
+
+/* ----------------------------------------------------------------- content */
+.pp .pp-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .pp .pp-grid {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.pp .pp-grid__col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+/* definition list */
+.pp .pp-dl {
+  display: grid;
+  gap: 1rem 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 560px) {
+  .pp .pp-dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pp .pp-dl__term {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pp-muted);
+}
+
+.pp .pp-dl__desc {
+  margin-top: 0.3rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--pp-ink);
+  word-break: break-word;
+}
+
+/* data-entry dates */
+.pp .pp-dates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pp .pp-dates__item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--pp-radius-xs);
+  border: 1px solid var(--pp-border);
+  background: var(--pp-surface-2);
+}
+
+.pp .pp-dates__date {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--pp-primary-ink);
+  min-width: 6.5rem;
+}
+
+.pp .pp-dates__label {
+  font-size: 0.8125rem;
+  color: var(--pp-body);
+}
+
+.pp .pp-note {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pp-danger);
+}
+
+/* news list */
+.pp .pp-news {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pp .pp-news__item {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--pp-border);
+}
+.pp .pp-news__item:last-child {
+  border-bottom: none;
+}
+.pp .pp-news__item:first-child {
+  padding-top: 0;
+}
+
+.pp .pp-news__link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pp-ink);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.pp .pp-news__link:hover {
+  color: var(--pp-primary);
+}
+
+.pp .pp-news__date {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.75rem;
+  color: var(--pp-muted);
+}
+
+/* buttons */
+.pp .pp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--pp-radius-xs);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.pp .pp-btn--primary {
+  background: var(--pp-primary);
+  color: #fff !important;
+  border-color: var(--pp-primary);
+  box-shadow: var(--pp-shadow-sm);
+}
+.pp .pp-btn--primary:hover {
+  background: var(--pp-primary-hover);
+  border-color: var(--pp-primary-hover);
+  transform: translateY(-1px);
+}
+
+.pp .pp-btn--ghost {
+  background: var(--pp-surface);
+  color: var(--pp-ink) !important;
+  border-color: var(--pp-border-strong);
+}
+.pp .pp-btn--ghost:hover {
+  background: var(--pp-surface-2);
+}
+
+/* link */
+.pp .pp-link {
+  font-weight: 600;
+  color: var(--pp-primary);
+  text-decoration: none;
+}
+.pp .pp-link:hover {
+  color: var(--pp-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* badges */
+.pp .pp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--pp-radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.pp .pp-badge--success {
+  background: var(--pp-success-soft);
+  color: var(--pp-success);
+  border-color: rgba(21, 115, 71, 0.22);
+}
+.pp .pp-badge--warning {
+  background: var(--pp-warning-soft);
+  color: #7c3a06;
+  border-color: rgba(180, 83, 9, 0.24);
+}
+.pp .pp-badge--neutral {
+  background: var(--pp-surface-3);
+  color: var(--pp-muted);
+  border-color: var(--pp-border);
+}
+
+/* ==========================================================================
+ * Page header (PatsPortalHeader v2) + back link
+ * ======================================================================== */
+.pp .pp-page-header {
+  margin-bottom: 1rem;
+}
+.pp .pp-page-title {
+  margin: 0.4rem 0 0;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--pp-ink) !important;
+}
+.pp .pp-page-sub {
+  margin: 0.45rem 0 0;
+  max-width: 46rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--pp-muted) !important;
+}
+
+/* ==========================================================================
+ * Legacy page reskin — the rest of the participant panel still uses the old
+ * portal classes. Scoped to `.pp` and loaded last (unlayered), these adopt
+ * the new look until each page's markup is migrated. `!important` is used to
+ * out-rank the !important-heavy legacy refresh layer (pats-refresh.css).
+ * ======================================================================== */
+
+/* back link ("← Back to dashboard") */
+.pp .portal-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pp-primary) !important;
+  text-decoration: none;
+}
+.pp .portal-back-link:hover {
+  color: var(--pp-primary-hover) !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* cards / panels */
+.pp .portal-card,
+.pp .pats-panel,
+.pp .portal-form-card {
+  background: var(--pp-surface) !important;
+  border: 1px solid var(--pp-border) !important;
+  border-top: 1px solid var(--pp-border) !important;
+  border-radius: var(--pp-radius) !important;
+  box-shadow: var(--pp-shadow-sm) !important;
+  padding: 1.35rem 1.4rem !important;
+  margin-top: 0.5rem !important;
+}
+.pp .portal-card-muted {
+  background: var(--pp-surface-2) !important;
+  border: 1px solid var(--pp-border) !important;
+  border-radius: var(--pp-radius-sm) !important;
+}
+
+/* headings & text */
+.pp .portal-h1 {
+  border: 0 !important;
+  padding: 0 !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  color: var(--pp-ink) !important;
+}
+.pp .portal-h2 {
+  font-size: 1.0625rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--pp-ink) !important;
+}
+.pp .portal-section-title,
+.pp .participant-dash-section-title {
+  font-size: 1.0625rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: var(--pp-ink) !important;
+}
+.pp .portal-subtitle {
+  font-size: 0.625rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--pp-muted) !important;
+}
+.pp .portal-muted {
+  color: var(--pp-muted) !important;
+}
+.pp .portal-body {
+  color: var(--pp-body) !important;
+}
+.pp .portal-link {
+  color: var(--pp-primary) !important;
+  font-weight: 600 !important;
+}
+.pp .portal-link:hover {
+  color: var(--pp-primary-hover) !important;
+}
+
+/* alerts */
+.pp .portal-alert-warning,
+.pp .portal-alert-success,
+.pp .portal-alert-info,
+.pp .portal-alert-error {
+  border-radius: var(--pp-radius-sm) !important;
+  border: 1px solid var(--pp-border) !important;
+  border-left-width: 3px !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.55 !important;
+}
+.pp .portal-alert-warning {
+  background: var(--pp-warning-soft) !important;
+  border-left-color: var(--pp-brass) !important;
+  color: #6b3f08 !important;
+}
+.pp .portal-alert-success {
+  background: var(--pp-success-soft) !important;
+  border-left-color: var(--pp-success) !important;
+  color: #14532d !important;
+}
+.pp .portal-alert-info {
+  background: var(--pp-info-soft) !important;
+  border-left-color: var(--pp-info) !important;
+  color: #0f4c6b !important;
+}
+.pp .portal-alert-error {
+  background: var(--pp-danger-soft) !important;
+  border-left-color: var(--pp-danger) !important;
+  color: #8a1c14 !important;
+}
+
+/* form fields (leave checkbox/radio/file to their own controls) */
+.pp input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.pp textarea,
+.pp select {
+  border-radius: var(--pp-radius-xs) !important;
+  border: 1px solid var(--pp-border-strong) !important;
+  background: #ffffff !important;
+  color: var(--pp-ink) !important;
+}
+.pp input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus-visible,
+.pp textarea:focus-visible,
+.pp select:focus-visible {
+  border-color: var(--pp-primary) !important;
+  box-shadow: var(--pp-ring) !important;
+  outline: none !important;
+}
+
+/* form primitives (shared across migrated pages) */
+.pp .pp-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pp-body);
+}
+.pp .pp-file {
+  display: block;
+  width: 100%;
+  font-size: 0.8125rem;
+  color: var(--pp-muted);
+}
+.pp .pp-file::file-selector-button {
+  margin-right: 0.75rem;
+  border: 0;
+  border-radius: 6px;
+  background: var(--pp-primary-soft);
+  color: var(--pp-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+.pp .pp-file::file-selector-button:hover {
+  background: #d8e6dd;
+}
+.pp .pp-doc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--pp-border);
+  background: var(--pp-surface-2);
+  border-radius: var(--pp-radius-xs);
+}
+.pp .pp-doc__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pp-ink);
+}
+.pp .pp-doc__name {
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  color: var(--pp-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pp .pp-badge--success a,
+.pp a.pp-badge--success {
+  text-decoration: none;
+}
+
+/* align emerald primary buttons (used by migrated managers) to the brand green */
+.pp [class~="bg-emerald-700"] {
+  background-color: var(--pp-primary) !important;
+}
+.pp .hover\:bg-emerald-800:hover {
+  background-color: var(--pp-primary-hover) !important;
+}
+.pp [class~="text-emerald-700"] {
+  color: var(--pp-primary) !important;
 }
