@@ -55,7 +55,7 @@ export const PATS_CROP = {
   /** MEDIA PATS/28 — processed transparent; parallax / admin watermark only */
   photo28: `${BASE}/crops/bg-28-logos.webp`,
   /** MEDIA PATS/28 — transparent footer mark (green left disk, no paper matte) */
-  photo28Footer: `${BASE}/crops/photo-28-footer.webp`,
+  photo28Footer: `${BASE}/crops/photo-28-footer.webp?v=2`,
   /** MEDIA PATS/28 — full-color source (archival; has white paper) */
   photo28Full: `${BASE}/crops/photo-28.webp`,
   /** MEDIA PATS/Awards.png — 2×2 medal / certificate sprite (1480×1062) */

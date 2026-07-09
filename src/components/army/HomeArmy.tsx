@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HeroSlider } from "@/components/army/HeroSlider";
-import { QuaidQuoteSection } from "@/components/army/QuaidQuoteSection";
 import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { StatsBar } from "@/components/army/StatsBar";
 import { PatsImageGrid } from "@/components/pats/PatsImageGrid";
@@ -172,8 +171,6 @@ export function HomeArmy({
           <PatsVideoGallery videos={PATS_HOME_VIDEOS} />
         </ScrollReveal>
       </PatsSection>
-
-      <QuaidQuoteSection />
 
       {featured && featuredHtml && (
         <PatsSection id="updates" variant="elevated">
