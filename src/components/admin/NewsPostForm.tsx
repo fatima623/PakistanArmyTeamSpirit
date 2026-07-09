@@ -489,13 +489,13 @@ export function NewsPostForm({
 
   return (
 
-    <div className="admin-user-detail-page">
+    <div className="flex w-full flex-col gap-[0.85rem] pb-2">
 
-      <header className="admin-user-detail-hero">
+      <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
-        <div className="admin-user-detail-hero-main">
+        <div className="min-w-0 flex-[1_1_16rem]">
 
-          <Link href="/admin/news" className="admin-user-detail-back">
+          <Link href="/admin/news" className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800">
 
             <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
 
@@ -503,13 +503,13 @@ export function NewsPostForm({
 
           </Link>
 
-          <h1 className="admin-user-detail-name">
+          <h1 className="m-0 flex flex-wrap items-center gap-2 text-[1.15rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
 
             {isNew ? "Create news post" : "Edit news post"}
 
           </h1>
 
-          <p className="admin-user-detail-subline">
+          <p className="mt-1 text-[0.8125rem] text-muted-foreground">
 
             Publish updates to the public site. An optional PDF appears as a
 
@@ -517,7 +517,7 @@ export function NewsPostForm({
 
           </p>
 
-          <div className="admin-user-detail-badges">
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
 
             {published ? (
 
@@ -537,13 +537,13 @@ export function NewsPostForm({
 
 
 
-      <section className="admin-user-detail-card">
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
-        <div className="admin-user-detail-card-header">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
 
-          <h3 className="admin-user-detail-card-title">Details</h3>
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Details</h3>
 
-          <p className="admin-user-detail-card-desc">
+          <p className="mt-1 text-xs leading-[1.4] text-muted-foreground">
 
             Title and URL slug shown on the public news pages.
 
@@ -551,10 +551,10 @@ export function NewsPostForm({
 
         </div>
 
-        <div className="admin-user-detail-card-body">
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
 
-          <div className="admin-user-detail-stack">
-            <div className="admin-user-detail-field">
+          <div className="flex flex-col gap-[0.85rem]">
+            <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
               <label htmlFor="news-title">
                 Title <span className="text-red-600">*</span>
               </label>
@@ -575,7 +575,7 @@ export function NewsPostForm({
 
             </div>
 
-            <div className="admin-user-detail-field">
+            <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
               <label htmlFor="news-slug">
                 Slug <span className="text-red-600">*</span>
               </label>
@@ -600,7 +600,7 @@ export function NewsPostForm({
 
               />
 
-              <p className="admin-user-detail-status-controls-hint">
+              <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900">
 
                 URL path on the public site. Auto-generated from title.
 
@@ -616,13 +616,13 @@ export function NewsPostForm({
 
 
 
-      <section className="admin-user-detail-card">
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
-        <div className="admin-user-detail-card-header">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
 
-          <h3 className="admin-user-detail-card-title">Publishing</h3>
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Publishing</h3>
 
-          <p className="admin-user-detail-card-desc">
+          <p className="mt-1 text-xs leading-[1.4] text-muted-foreground">
 
             Control visibility and the date shown on the public site.
 
@@ -630,7 +630,7 @@ export function NewsPostForm({
 
         </div>
 
-        <div className="admin-user-detail-card-body">
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
 
           <div
 
@@ -648,7 +648,7 @@ export function NewsPostForm({
 
           >
 
-            <div className="admin-user-detail-field">
+            <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
 
               <label htmlFor="news-published">Visible on public site</label>
 
@@ -682,7 +682,7 @@ export function NewsPostForm({
 
           </div>
 
-          <div className="admin-user-detail-field mt-4">
+          <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y mt-4">
 
             <label htmlFor="news-published-at">
 
@@ -712,13 +712,13 @@ export function NewsPostForm({
 
 
 
-      <section className="admin-user-detail-card">
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
-        <div className="admin-user-detail-card-header">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
 
-          <h3 className="admin-user-detail-card-title">PDF attachment</h3>
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">PDF attachment</h3>
 
-          <p className="admin-user-detail-card-desc">
+          <p className="mt-1 text-xs leading-[1.4] text-muted-foreground">
 
             Optional file shown as a download link on the public article. Max 10
 
@@ -728,7 +728,7 @@ export function NewsPostForm({
 
         </div>
 
-        <div className="admin-user-detail-card-body">
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
 
           <div
 
@@ -912,15 +912,15 @@ export function NewsPostForm({
 
 
 
-      <section className="admin-user-detail-card">
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
-        <div className="admin-user-detail-card-header admin-user-detail-card-header-row">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem] flex flex-wrap items-center justify-between gap-3">
 
           <div>
 
-            <h3 className="admin-user-detail-card-title">Article body</h3>
+            <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Article body</h3>
 
-            <p className="admin-user-detail-card-desc">
+            <p className="mt-1 text-xs leading-[1.4] text-muted-foreground">
 
               Write in plain text — paragraphs are formatted automatically.
 
@@ -988,11 +988,11 @@ export function NewsPostForm({
 
         </div>
 
-        <div className="admin-user-detail-card-body">
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
 
           {contentView === "write" ? (
 
-            <div className="admin-user-detail-field">
+            <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
 
               <label htmlFor="news-content" className="sr-only">
 
@@ -1030,7 +1030,7 @@ export function NewsPostForm({
 
           ) : (
 
-            <p className="admin-user-detail-empty">
+            <p className="m-0 text-[0.8125rem] text-muted-foreground">
 
               Nothing to preview yet — add some text in Write mode.
 
@@ -1044,11 +1044,11 @@ export function NewsPostForm({
 
 
 
-      <section className="admin-user-detail-card">
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
-        <div className="admin-user-detail-card-body">
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
 
-          <div className="admin-user-detail-actions">
+          <div className="mt-[0.9rem] flex flex-wrap gap-2 [&_.ops-btn-approve]:!border-[var(--portal-approve)] [&_.ops-btn-approve]:!bg-[var(--portal-approve)] [&_.ops-btn-approve]:!text-white [&_.ops-btn-approve:hover]:!border-[var(--portal-approve-hover)] [&_.ops-btn-approve:hover]:!bg-[var(--portal-approve-hover)] [&_.ops-btn-approve:disabled]:!border-slate-300 [&_.ops-btn-approve:disabled]:!bg-slate-200 [&_.ops-btn-approve:disabled]:!text-slate-900 [&_.ops-btn-approve:disabled]:!opacity-100 [&_.ops-btn-secondary]:!border-gray-300 [&_.ops-btn-secondary]:!bg-white [&_.ops-btn-secondary]:!text-slate-600">
 
             <Button
 

@@ -365,7 +365,7 @@ export function PaymentReviewPanel({
           </div>
 
           {statusHint ? (
-            <p className="admin-user-detail-callout">{statusHint}</p>
+            <p className="mt-[0.85rem] rounded-lg border border-sky-200 bg-sky-50 px-[0.9rem] py-[0.7rem] text-[0.8rem] leading-[1.4] text-sky-900">{statusHint}</p>
           ) : null}
 
           <PaymentStatusTimeline
@@ -373,14 +373,14 @@ export function PaymentReviewPanel({
             history={rejectionHistory}
           />
 
-          <div className="admin-user-detail-field">
+          <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
             <label className="mb-1.5 block text-xs font-semibold text-slate-600" htmlFor="payment-status">
               Update status
             </label>
             <div
               className={cn(
                 statusControlsLocked &&
-                  "admin-user-detail-status-controls--locked"
+                  "pointer-events-none cursor-not-allowed opacity-50"
               )}
               title={
                 !canDecide
@@ -450,7 +450,7 @@ export function PaymentReviewPanel({
                   disabled={loading || statusControlsLocked}
                   className={cn(
                     statusControlsLocked &&
-                      "admin-user-detail-status-controls--locked"
+                      "pointer-events-none cursor-not-allowed opacity-50"
                   )}
                   onClick={() => void handleApplyStatus()}
                 >
@@ -479,7 +479,7 @@ export function PaymentReviewPanel({
               {reasonDialogDescription}
             </DialogDescription>
           </DialogHeader>
-          <div className="admin-user-detail-field">
+          <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
             <label htmlFor="payment-reject-reason">
               Reason for participant <span className="text-red-600">*</span>
             </label>

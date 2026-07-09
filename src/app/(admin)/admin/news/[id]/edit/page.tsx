@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { isAdminNewsPdfReadable } from "@/lib/serve-admin-news-pdf";
 import { NewsPostForm } from "@/components/admin/admin-dynamic";
 import { adminNavLabel } from "@/lib/admin-navigation";
-import "@/app/admin-user-detail.css";
 
 type PageProps = { params: Promise<{ id: string }> };
 

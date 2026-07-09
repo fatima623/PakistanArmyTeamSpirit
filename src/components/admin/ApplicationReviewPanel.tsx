@@ -71,27 +71,27 @@ export function ApplicationReviewPanel({
   };
 
   return (
-    <section className="admin-user-detail-card">
-      <div className="admin-user-detail-card-header">
-        <h3 className="admin-user-detail-card-title">
+    <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+      <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+        <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
           Registration verification (SD)
         </h3>
       </div>
-      <div className="admin-user-detail-card-body">
-        <div className="admin-user-detail-status-row">
-          <div className="admin-user-detail-status-item">
+      <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
+        <div className="flex flex-wrap gap-x-5 gap-y-3 rounded-[10px] border border-brand-line/60 bg-muted/40 px-[0.9rem] py-3">
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.72rem] [&>label]:font-semibold [&>label]:uppercase [&>label]:tracking-[0.07em] [&>label]:text-muted-foreground">
             <label>Registration status</label>
             <ApplicationStatusBadge
               status={applicationStatus}
               showPrefix={false}
             />
           </div>
-          <div className="admin-user-detail-status-item">
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.72rem] [&>label]:font-semibold [&>label]:uppercase [&>label]:tracking-[0.07em] [&>label]:text-muted-foreground">
             <label>Payment status</label>
             <PaymentStatusBadge status={paymentStatus} showPrefix={false} />
           </div>
           {suspended ? (
-            <div className="admin-user-detail-status-item">
+            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.72rem] [&>label]:font-semibold [&>label]:uppercase [&>label]:tracking-[0.07em] [&>label]:text-muted-foreground">
               <label>Account</label>
               <span
                 className="ops-status-pill ops-status-rejected"
@@ -103,7 +103,7 @@ export function ApplicationReviewPanel({
           ) : null}
         </div>
 
-        <div className="admin-user-detail-actions">
+        <div className="mt-[0.9rem] flex flex-wrap gap-2 [&_.ops-btn-approve]:!border-[var(--portal-approve)] [&_.ops-btn-approve]:!bg-[var(--portal-approve)] [&_.ops-btn-approve]:!text-white [&_.ops-btn-approve:hover]:!border-[var(--portal-approve-hover)] [&_.ops-btn-approve:hover]:!bg-[var(--portal-approve-hover)] [&_.ops-btn-approve:disabled]:!border-slate-300 [&_.ops-btn-approve:disabled]:!bg-slate-200 [&_.ops-btn-approve:disabled]:!text-slate-900 [&_.ops-btn-approve:disabled]:!opacity-100 [&_.ops-btn-secondary]:!border-gray-300 [&_.ops-btn-secondary]:!bg-white [&_.ops-btn-secondary]:!text-slate-600">
           <Button
             size="sm"
             variant="adminApprove"
@@ -178,7 +178,7 @@ export function ApplicationReviewPanel({
           </Button>
         </div>
 
-        <div className="admin-user-detail-field mt-4">
+        <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y mt-4">
           <label htmlFor="reject-reason">
             Reason (required to return or reject)
           </label>

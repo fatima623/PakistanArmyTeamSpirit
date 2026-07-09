@@ -18,7 +18,7 @@ export default async function AdminCreateUserPage() {
   }
 
   return (
-    <div className="admin-user-detail-page">
+    <div className="flex w-full flex-col gap-[0.85rem] pb-2">
       <AdminBreadcrumbs
         items={[
           { label: "Dashboard", href: "/admin" },
@@ -26,10 +26,10 @@ export default async function AdminCreateUserPage() {
           { label: "Create user" },
         ]}
       />
-      <header className="admin-user-detail-hero">
-        <div className="admin-user-detail-hero-main">
-          <h1 className="admin-user-detail-name">Create user</h1>
-          <p className="admin-user-detail-subline">
+      <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="min-w-0 flex-[1_1_16rem]">
+          <h1 className="m-0 flex flex-wrap items-center gap-2 text-[1.15rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">Create user</h1>
+          <p className="mt-1 text-[0.8125rem] text-muted-foreground">
             Add a participant or a back-office team member (SDBS / MTD / Admin).
           </p>
         </div>

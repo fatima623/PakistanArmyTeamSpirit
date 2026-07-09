@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Activity, Building2, User, Workflow } from "lucide-react";
 
-import "@/app/admin-user-detail.css";
 import { prisma } from "@/lib/prisma";
 import { formatDateDisplay, formatDateShort } from "@/lib/utils";
 import { AUDIT_ENTITY } from "@/lib/constants";
@@ -51,9 +50,9 @@ function Field({
   wide?: boolean;
 }) {
   return (
-    <div className={`admin-pr-stat ${wide ? "admin-pr-stat--wide" : ""}`.trim()}>
-      <span className="admin-pr-stat__label">{label}</span>
-      <span className="admin-pr-stat__value">{value || "—"}</span>
+    <div className={`flex min-w-0 flex-col gap-[5px] rounded-xl border border-gray-200 bg-slate-50 px-3.5 py-3 transition-colors hover:border-slate-300 hover:bg-white hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)] ${wide ? "col-span-full" : ""}`.trim()}>
+      <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">{label}</span>
+      <span className="break-words text-[0.9375rem] font-semibold text-slate-900">{value || "—"}</span>
     </div>
   );
 }
@@ -133,7 +132,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       : " — not finalized");
 
   return (
-    <div className="admin-pr-page">
+    <div className="flex w-full flex-col gap-4 pb-6">
       <AdminBreadcrumbs
         items={[
           { label: "Dashboard", href: "/admin" },
@@ -142,55 +141,55 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
         ]}
       />
 
-      <section className="admin-pr-summary">
-        <span className="admin-pr-summary__avatar" aria-hidden>
+      <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <span className="inline-flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-olive-dark to-brand-olive text-[1.05rem] font-bold tracking-[0.02em] text-white" aria-hidden>
           {`${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() ||
             "–"}
         </span>
 
-        <div className="admin-pr-summary__id">
-          <h1 className="admin-pr-summary__name">
+        <div className="flex min-w-0 flex-[1_1_18rem] flex-col gap-1.5">
+          <h1 className="flex flex-wrap items-center gap-2 text-xl font-bold leading-tight tracking-[-0.01em] text-slate-900">
             {user.firstName} {user.lastName}
             {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
           </h1>
 
-          <div className="admin-pr-summary__meta">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[0.8125rem] text-slate-600">
             {user.rank ? <span>{user.rank}</span> : null}
             {user.gender ? (
               <>
-                <span className="admin-pr-summary__meta-dot" aria-hidden />
+                <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
                 <span>{user.gender}</span>
               </>
             ) : null}
-            <span className="admin-pr-summary__meta-dot" aria-hidden />
+            <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
             <span>{displayCountry(user.country)}</span>
-            <span className="admin-pr-summary__meta-dot" aria-hidden />
+            <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
             <span>Registered {formatDateShort(user.createdAt)}</span>
           </div>
 
           <div
-            className="admin-pr-status-group"
+            className="mt-1 flex flex-wrap items-start gap-x-4 gap-y-3 border-t border-gray-200 pt-2.5"
             role="group"
             aria-label="Status"
           >
-            <div className="admin-pr-status">
-              <span className="admin-pr-status__label">Participation</span>
+            <div className="flex min-w-0 flex-col gap-[5px]">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Participation</span>
               <ApplicationStatusBadge
                 status={user.applicationStatus}
                 showPrefix={false}
               />
             </div>
-            <span className="admin-pr-status__sep" aria-hidden />
-            <div className="admin-pr-status">
-              <span className="admin-pr-status__label">Payment</span>
+            <span className="my-0.5 w-px self-stretch bg-gray-200" aria-hidden />
+            <div className="flex min-w-0 flex-col gap-[5px]">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Payment</span>
               <PaymentStatusBadge
                 status={user.paymentStatus}
                 showPrefix={false}
               />
             </div>
-            <span className="admin-pr-status__sep" aria-hidden />
-            <div className="admin-pr-status">
-              <span className="admin-pr-status__label">Account</span>
+            <span className="my-0.5 w-px self-stretch bg-gray-200" aria-hidden />
+            <div className="flex min-w-0 flex-col gap-[5px]">
+              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Account</span>
               <span
                 className={
                   user.suspended
@@ -205,14 +204,14 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
         </div>
 
         {canManageRoles ? (
-          <div className="admin-pr-summary__right">
+          <div className="ml-auto flex flex-wrap items-center gap-3">
             <AdminResetPassword userId={user.id} />
           </div>
         ) : null}
       </section>
 
-      <div className="admin-pr-layout">
-        <main className="admin-pr-main">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_336px] lg:items-start">
+        <main className="flex min-w-0 flex-col gap-4">
           {canApprove ? (
             <ApplicationReviewPanel
               userId={user.id}
@@ -223,15 +222,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             />
           ) : null}
 
-          <section className="admin-pr-card">
-            <header className="admin-pr-card__header">
-              <h3 className="admin-pr-card__title">
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
+            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <User size={16} aria-hidden />
                 Account
               </h3>
             </header>
-            <div className="admin-pr-card__body">
-              <div className="admin-pr-stats">
+            <div className="p-[18px]">
+              <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
                 <Field label="Rank" value={user.rank} />
                 <Field label="Gender" value={user.gender} />
                 <Field label="Country" value={displayCountry(user.country)} />
@@ -262,15 +261,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           </section>
 
           {user.unit ? (
-            <section className="admin-pr-card">
-              <header className="admin-pr-card__header">
-                <h3 className="admin-pr-card__title">
+            <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
+              <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+                <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                   <Building2 size={16} aria-hidden />
                   Unit
                 </h3>
               </header>
-              <div className="admin-pr-card__body">
-                <div className="admin-pr-stats">
+              <div className="p-[18px]">
+                <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
                   <Field label="Unit name" value={user.unit.unitName} />
                   <Field label="Type" value={user.unit.unitType} />
                   <Field label="Branch" value={user.unit.branch} />
@@ -280,15 +279,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             </section>
           ) : null}
 
-          <section className="admin-pr-card">
-            <header className="admin-pr-card__header">
-              <h3 className="admin-pr-card__title">
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
+            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <Workflow size={16} aria-hidden />
                 Workflow progress
               </h3>
             </header>
-            <div className="admin-pr-card__body">
-              <div className="admin-pr-stats">
+            <div className="p-[18px]">
+              <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
                 <Field
                   label="Participation confirmed"
                   value={participationValue}
@@ -301,15 +300,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           </section>
         </main>
 
-        <aside className="admin-pr-aside">
-          <section className="admin-pr-card admin-pr-card--activity">
-            <header className="admin-pr-card__header">
-              <h3 className="admin-pr-card__title">
+        <aside className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-20">
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)] [&>*:last-child]:!pb-3">
+            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <Activity size={16} aria-hidden />
                 Activity
               </h3>
             </header>
-            <div className="admin-pr-card__body">
+            <div className="p-[18px]">
               <AuditLogList logs={auditLogs} />
             </div>
           </section>

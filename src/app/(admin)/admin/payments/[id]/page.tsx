@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Activity, FileText, Mail } from "lucide-react";
 
-import "@/app/admin-user-detail.css";
 import "@/app/payment-status-timeline.css";
 import { prisma } from "@/lib/prisma";
 import { AUDIT_ENTITY, PAYMENT_STATUS } from "@/lib/constants";

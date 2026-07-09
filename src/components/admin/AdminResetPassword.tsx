@@ -51,12 +51,12 @@ export function AdminResetPassword({ userId }: { userId: string }) {
   }
 
   return (
-    <div className="admin-reset-form">
-      <div className="admin-reset-form-head">
-        <span className="admin-reset-form-title">Reset password</span>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <span className="text-[12.5px] font-bold text-brand-ink">Reset password</span>
         <button
           type="button"
-          className="admin-reset-form-cancel"
+          className="cursor-pointer border-none bg-transparent text-xs font-semibold text-muted-foreground hover:text-green-800"
           onClick={() => {
             setOpen(false);
             setPassword("");
@@ -65,7 +65,7 @@ export function AdminResetPassword({ userId }: { userId: string }) {
           Cancel
         </button>
       </div>
-      <div className="admin-user-detail-reset-row">
+      <div className="flex flex-wrap items-end gap-2.5 [&_.admin-input]:min-w-0 [&_.admin-input]:max-w-[20rem] [&_.admin-input]:flex-[1_1_12rem]">
         <Input
           type="password"
           placeholder="New password"

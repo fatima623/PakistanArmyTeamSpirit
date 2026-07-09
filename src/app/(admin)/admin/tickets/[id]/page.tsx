@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import "@/app/admin-user-detail.css";
 import { prisma } from "@/lib/prisma";
 import { getCachedSession } from "@/lib/cached-auth";
 import { formatDateTime } from "@/lib/utils";
@@ -110,31 +109,31 @@ export default async function AdminTicketDetailPage({ params }: PageProps) {
 
       <div className="admin-ticket-detail-grid">
         <div className="admin-ticket-detail-main">
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header">
-              <h3 className="admin-user-detail-card-title">Conversation</h3>
+          <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+            <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+              <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Conversation</h3>
             </div>
-            <div className="admin-user-detail-card-body">
+            <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
               <TicketThread messages={ticket.messages} />
             </div>
           </section>
 
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header">
-              <h3 className="admin-user-detail-card-title">Reply</h3>
+          <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+            <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+              <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Reply</h3>
             </div>
-            <div className="admin-user-detail-card-body">
+            <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
               <TicketReplyForm ticketId={ticket.id} />
             </div>
           </section>
         </div>
 
         <aside className="admin-ticket-detail-aside">
-          <section className="admin-user-detail-card">
-            <div className="admin-user-detail-card-header">
-              <h3 className="admin-user-detail-card-title">Manage</h3>
+          <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+            <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+              <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Manage</h3>
             </div>
-            <div className="admin-user-detail-card-body">
+            <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
               <TicketManagePanel
                 ticketId={ticket.id}
                 status={ticket.status}

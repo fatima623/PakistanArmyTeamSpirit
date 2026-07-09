@@ -80,25 +80,25 @@ export function TickerAnnouncementForm({
   };
 
   return (
-    <div className="admin-user-detail-page mx-auto max-w-[52rem] pb-8">
-      <header className="admin-user-detail-hero">
-        <div className="admin-user-detail-hero-main">
-          <Link href="/admin/ticker" className="admin-user-detail-back">
+    <div className="flex w-full flex-col gap-[0.85rem] pb-2 mx-auto max-w-[52rem] pb-8">
+      <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="min-w-0 flex-[1_1_16rem]">
+          <Link href="/admin/ticker" className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800">
             <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
             Back to announcements
           </Link>
-          <h1 className="admin-user-detail-name">
+          <h1 className="m-0 flex flex-wrap items-center gap-2 text-[1.15rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
             {isNew ? "Add announcement" : "Edit announcement"}
           </h1>
         </div>
       </header>
 
-      <section className="admin-user-detail-card">
-        <div className="admin-user-detail-card-header">
-          <h3 className="admin-user-detail-card-title">Announcement</h3>
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Announcement</h3>
         </div>
-        <div className="admin-user-detail-card-body">
-          <div className="admin-user-detail-field">
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
+          <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
             <label htmlFor="ticker-message">
               Message <span className="text-red-600">*</span>
             </label>
@@ -113,13 +113,13 @@ export function TickerAnnouncementForm({
               maxLength={500}
               placeholder="Operational announcement text…"
             />
-            <p className="admin-user-detail-status-controls-hint text-right">
+            <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900 text-right">
               {form.message.length}/500
             </p>
           </div>
 
-          <div className="admin-user-detail-grid admin-user-detail-grid--duo mt-4">
-            <div className="admin-user-detail-field">
+          <div className="grid grid-cols-1 gap-[0.85rem] lg:grid-cols-2 mt-4">
+            <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
               <label htmlFor="ticker-expires">Expiry date</label>
               <Input
                 id="ticker-expires"
@@ -130,11 +130,11 @@ export function TickerAnnouncementForm({
                 }
                 className="admin-input"
               />
-              <p className="admin-user-detail-status-controls-hint">
+              <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900">
                 Leave blank to run until you remove it.
               </p>
             </div>
-            <div className="admin-user-detail-field">
+            <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
               <label htmlFor="ticker-sort-order">Display order</label>
               <Input
                 id="ticker-sort-order"
@@ -149,13 +149,13 @@ export function TickerAnnouncementForm({
                 }
                 className="admin-input max-w-[8rem]"
               />
-              <p className="admin-user-detail-status-controls-hint">
+              <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900">
                 Lower numbers appear first.
               </p>
             </div>
           </div>
 
-          <div className="admin-user-detail-actions">
+          <div className="mt-[0.9rem] flex flex-wrap gap-2 [&_.ops-btn-approve]:!border-[var(--portal-approve)] [&_.ops-btn-approve]:!bg-[var(--portal-approve)] [&_.ops-btn-approve]:!text-white [&_.ops-btn-approve:hover]:!border-[var(--portal-approve-hover)] [&_.ops-btn-approve:hover]:!bg-[var(--portal-approve-hover)] [&_.ops-btn-approve:disabled]:!border-slate-300 [&_.ops-btn-approve:disabled]:!bg-slate-200 [&_.ops-btn-approve:disabled]:!text-slate-900 [&_.ops-btn-approve:disabled]:!opacity-100 [&_.ops-btn-secondary]:!border-gray-300 [&_.ops-btn-secondary]:!bg-white [&_.ops-btn-secondary]:!text-slate-600">
             <Button
               type="button"
               variant="adminPrimary"

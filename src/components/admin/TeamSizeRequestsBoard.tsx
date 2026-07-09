@@ -121,22 +121,22 @@ export function TeamSizeRequestsBoard({
       ) : null}
 
       {requests.map((r) => (
-        <section key={r.id} className="admin-user-detail-card">
-          <div className="admin-user-detail-card-header">
+        <section key={r.id} className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+          <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="min-w-0">
-                <h3 className="admin-user-detail-card-title">
+                <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
                   {r.user.name}
                   {r.user.unitName ? ` · ${r.user.unitName}` : ""}
                 </h3>
-                <p className="admin-user-detail-card-desc">
+                <p className="mt-1 text-xs leading-[1.4] text-muted-foreground">
                   {r.user.email} · submitted {fmt(r.createdAt)}
                 </p>
               </div>
               <StatusPill status={r.status} />
             </div>
           </div>
-          <div className="admin-user-detail-card-body space-y-3">
+          <div className="px-[1.1rem] pb-4 pt-[0.9rem] space-y-3">
             <div className="flex flex-wrap gap-4 text-sm">
               <span>
                 <strong className="font-semibold">Current roster:</strong>{" "}

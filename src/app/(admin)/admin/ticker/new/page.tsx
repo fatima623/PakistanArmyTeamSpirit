@@ -5,7 +5,6 @@ import { adminNavLabel } from "@/lib/admin-navigation";
 import { listAllTickerAnnouncements } from "@/lib/ticker-data";
 import { nextTickerSortOrder } from "@/lib/ticker-form-helpers";
 import { getTickerPreviewContext } from "@/lib/ticker-settings";
-import "@/app/admin-user-detail.css";
 
 export const metadata: Metadata = {
   title: adminNavLabel("ticker"),

@@ -41,7 +41,7 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="admin-user-detail-field">
+    <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
       <label className="text-sm font-semibold text-[#0f172a]">{label}</label>
       {children}
       {error ? (
