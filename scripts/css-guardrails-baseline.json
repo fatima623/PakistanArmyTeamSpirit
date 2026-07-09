@@ -31,10 +31,9 @@
     "src/app/pats-typography.css",
     "src/app/pats-video-gallery.css",
     "src/app/portal-design.css",
-    "src/app/tac-edition-timeline.css",
     "src/app/team-members.css"
   ],
-  "importantCount": 1710,
+  "importantCount": 1709,
   "importantByFile": {
     "src/app/admin-day-theme.css": 230,
     "src/app/cinematic-tactical.css": 2,
@@ -42,7 +41,7 @@
     "src/app/event-support.css": 0,
     "src/app/exercise-contour.css": 80,
     "src/app/forest-card-carousel.css": 10,
-    "src/app/globals.css": 64,
+    "src/app/globals.css": 84,
     "src/app/paf-theme.css": 5,
     "src/app/participant-dashboard.css": 8,
     "src/app/participant-panel.css": 93,
@@ -67,7 +66,6 @@
     "src/app/pats-typography.css": 33,
     "src/app/pats-video-gallery.css": 9,
     "src/app/portal-design.css": 80,
-    "src/app/tac-edition-timeline.css": 21,
     "src/app/team-members.css": 29
   },
   "cssImports": [
