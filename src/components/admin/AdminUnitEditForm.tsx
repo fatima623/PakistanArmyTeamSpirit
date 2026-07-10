@@ -128,15 +128,17 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
         <h2 className="admin-section-title border-b border-brand-line pb-3">
           Personal details
         </h2>
-        <FormFieldAdmin label="First name" required error={errors.firstName?.message}>
-          <Input className="admin-input" {...register("firstName")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Last name" required error={errors.lastName?.message}>
-          <Input className="admin-input" {...register("lastName")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Rank" required error={errors.rank?.message}>
-          <Input className="admin-input" {...register("rank")} />
-        </FormFieldAdmin>
+        <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
+          <FormFieldAdmin label="First name" required error={errors.firstName?.message}>
+            <Input className="admin-input" {...register("firstName")} />
+          </FormFieldAdmin>
+          <FormFieldAdmin label="Last name" required error={errors.lastName?.message}>
+            <Input className="admin-input" {...register("lastName")} />
+          </FormFieldAdmin>
+          <FormFieldAdmin label="Rank" required error={errors.rank?.message}>
+            <Input className="admin-input" {...register("rank")} />
+          </FormFieldAdmin>
+        </div>
       </div>
 
       <div className={section}>
@@ -157,60 +159,64 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
             ))}
           </RadioGroup>
         </FormFieldAdmin>
-        <FormFieldAdmin label="Unit name" required error={errors.unitName?.message}>
-          <Select value={watch("unitName")} onValueChange={(v) => setValue("unitName", v)}>
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {unitNames.map((n) => (
-                <SelectItem key={n} value={n}>{n}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Arm" required error={errors.arm?.message}>
-          <Select value={watch("arm")} onValueChange={(v) => setValue("arm", v)}>
-            <SelectTrigger className="admin-input">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {ARM_OPTIONS.map((o) => (
-                <SelectItem key={o} value={o}>{o}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormFieldAdmin>
-        <FormFieldAdmin label="CO name" required error={errors.coName?.message}>
-          <Input className="admin-input" {...register("coName")} />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="CO email" required error={errors.coEmail?.message}>
-          <Input type="email" className="admin-input" {...register("coEmail")} />
-        </FormFieldAdmin>
+        <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
+          <FormFieldAdmin label="Unit name" required error={errors.unitName?.message}>
+            <Select value={watch("unitName")} onValueChange={(v) => setValue("unitName", v)}>
+              <SelectTrigger className="admin-input">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {unitNames.map((n) => (
+                  <SelectItem key={n} value={n}>{n}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldAdmin>
+          <FormFieldAdmin label="Arm" required error={errors.arm?.message}>
+            <Select value={watch("arm")} onValueChange={(v) => setValue("arm", v)}>
+              <SelectTrigger className="admin-input">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ARM_OPTIONS.map((o) => (
+                  <SelectItem key={o} value={o}>{o}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormFieldAdmin>
+          <FormFieldAdmin label="CO name" required error={errors.coName?.message}>
+            <Input className="admin-input" {...register("coName")} />
+          </FormFieldAdmin>
+          <FormFieldAdmin label="CO email" required error={errors.coEmail?.message}>
+            <Input type="email" className="admin-input" {...register("coEmail")} />
+          </FormFieldAdmin>
+        </div>
       </div>
 
       <div className={section}>
         <h2 className="admin-section-title border-b border-brand-line pb-3">
           Phase allocation (admin)
         </h2>
-        <FormFieldAdmin label="Preferred phase" error={errors.preferredPhase?.message}>
-          <Input
-            className="admin-input"
-            placeholder="e.g. Phase 1"
-            value={watch("preferredPhase") ?? ""}
-            onChange={(e) =>
-              setValue("preferredPhase", e.target.value.trim() || null)
-            }
-          />
-        </FormFieldAdmin>
-        <FormFieldAdmin label="Patrols requested" error={errors.patrolsRequested?.message}>
-          <Input
-            type="number"
-            min={1}
-            className="w-32 admin-input"
-            {...register("patrolsRequested", { valueAsNumber: true })}
-          />
-        </FormFieldAdmin>
+        <div className="grid grid-cols-1 gap-x-5 gap-y-4 sm:grid-cols-2">
+          <FormFieldAdmin label="Preferred phase" error={errors.preferredPhase?.message}>
+            <Input
+              className="admin-input"
+              placeholder="e.g. Phase 1"
+              value={watch("preferredPhase") ?? ""}
+              onChange={(e) =>
+                setValue("preferredPhase", e.target.value.trim() || null)
+              }
+            />
+          </FormFieldAdmin>
+          <FormFieldAdmin label="Patrols requested" error={errors.patrolsRequested?.message}>
+            <Input
+              type="number"
+              min={1}
+              className="admin-input"
+              {...register("patrolsRequested", { valueAsNumber: true })}
+            />
+          </FormFieldAdmin>
+        </div>
       </div>
 
       <Button type="submit" disabled={submitting} variant="adminPrimary">
