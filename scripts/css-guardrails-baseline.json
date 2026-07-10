@@ -10,7 +10,6 @@
     "src/app/pats-inner-pages.css",
     "src/app/pats-navigation.css",
     "src/app/pats-portal.css",
-    "src/app/pats-section-panels.css",
     "src/app/pats-typography.css",
     "src/app/portal-design.css"
   ],
@@ -18,7 +17,7 @@
   "importantByFile": {
     "src/app/cinematic-tactical.css": 2,
     "src/app/daylight-theme.css": 366,
-    "src/app/globals.css": 948,
+    "src/app/globals.css": 1003,
     "src/app/paf-theme.css": 5,
     "src/app/pats-design-system.css": 12,
     "src/app/pats-hero.css": 6,
@@ -26,7 +25,6 @@
     "src/app/pats-inner-pages.css": 46,
     "src/app/pats-navigation.css": 25,
     "src/app/pats-portal.css": 39,
-    "src/app/pats-section-panels.css": 55,
     "src/app/pats-typography.css": 33,
     "src/app/portal-design.css": 80
   },
