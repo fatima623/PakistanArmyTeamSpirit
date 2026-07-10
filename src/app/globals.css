@@ -4,7 +4,6 @@
 @import "./pats-navigation.css";
 @import "./pats-hero.css";
 @import "./pats-design-system.css";
-@import "./pats-typography.css";
 /* Day/light overrides must load after pats-design-system (night typography) */
 /* Loads last: dashboard day theme must win over the sitewide forest-card
    day rules in daylight-theme.css / pats-forest-cards.css for .participant-portal. */
@@ -1551,6 +1550,255 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .cinematic-site:not(.dashboard-day) .cp-alert-warning .text-orange-700 a,
 .cinematic-site:not(.dashboard-day) .pats-form-notice--warn {
   color: #fbbf24 !important;
+}
+
+/* ============================================================
+   TYPOGRAPHY (ex pats-typography.css, retired in phase 3d).
+   The --pats-type-* / --pats-radius-* scale, base font, pats-
+   type-* classes, and the .text-xs..3xl utility-lie size
+   overrides. Slotted at canonical import position 7 (before the
+   INNER PAGES block). Seven text-size utility selectors rewritten
+   as [class~=] for the @apply landmine. Verified via synthetic
+   hashing of 28 element specs + :root type-scale variables.
+   ============================================================ */
+
+
+:root {
+  --pats-radius-btn: 8px;
+  --pats-radius-card: 12px;
+  --pats-radius-media: 12px;
+  --pats-type-brand: 1.5rem; 
+  --pats-type-display: clamp(1.5rem, 4vw + 0.5rem, 2.75rem); 
+  --pats-type-feature: 1.375rem; 
+  --pats-type-title: 1.25rem; 
+  --pats-type-body: 1.125rem; 
+  --pats-type-caption: 1.125rem;
+  --pats-type-eyebrow: 0.875rem; 
+  --pats-type-section-eyebrow: 1.0625rem; 
+  --pats-type-body-sm: 1rem; 
+  --pats-type-ui-sm: 1rem;
+  --pats-type-form-label: 1rem;
+  --pats-type-form-helper: 1rem;
+  --pats-type-form-section: 1.125rem;
+  --pats-type-stat-value: clamp(1.75rem, 3.5vw, 2.5rem);
+  --pats-type-stat-label: 10px;
+  --pats-type-quote: clamp(1.25rem, 3vw, 1.75rem); 
+  --pats-type-quote-credit: 0.875rem; 
+  --pats-type-btn: 1rem;
+  --pats-type-line-body: 1.65;
+  --pats-type-line-title: 1.35;
+  --pats-type-line-tight: 1.12;
+}
+
+
+.army-site:not(.dashboard-day),
+.pats-portal,
+.admin-theme.pats-dashboard {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-body);
+  line-height: var(--pats-type-line-body);
+}
+
+
+.pats-type-title {
+  font-size: var(--pats-type-title);
+  font-weight: 700;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+
+.pats-type-body {
+  font-size: var(--pats-type-body);
+  font-weight: 400;
+  line-height: var(--pats-type-line-body);
+}
+
+
+.pats-type-eyebrow {
+  font-size: var(--pats-type-eyebrow);
+  font-weight: 600;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+
+.pats-feature-title {
+  display: block;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-feature);
+  font-weight: 700;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.02em;
+}
+
+
+
+.army-site:not(.dashboard-day) .pats-panel__label {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-title);
+  font-weight: 600;
+  line-height: var(--pats-type-line-title);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+
+.army-site:not(.dashboard-day) .pats-btn,
+.army-site:not(.dashboard-day) a.pats-btn,
+.army-site:not(.dashboard-day) button.pats-btn {
+  border-radius: var(--pats-radius-btn) !important;
+}
+
+
+.army-site:not(.dashboard-day) .paf-footer a.flex[class*="border"] {
+  border-radius: var(--pats-radius-btn) !important;
+}
+
+
+.army-site:not(.dashboard-day) .tac-mission-card,
+.army-site:not(.dashboard-day) .pats-rule-card {
+  border-radius: var(--pats-radius-card) !important;
+}
+
+
+.pats-portal .pats-btn,
+.pats-portal button.pats-btn {
+  border-radius: var(--pats-radius-btn) !important;
+}
+
+
+
+.army-site:not(.dashboard-day) [class~="text-xs"],
+.army-site:not(.dashboard-day) [class~="text-sm"] {
+  font-size: var(--pats-type-body-sm) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+
+.army-site:not(.dashboard-day) [class~="text-base"] {
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+
+.army-site:not(.dashboard-day) [class~="text-lg"] {
+  font-size: var(--pats-type-title) !important;
+  line-height: var(--pats-type-line-title) !important;
+}
+
+
+.army-site:not(.dashboard-day) [class~="text-xl"] {
+  font-size: var(--pats-type-feature) !important;
+  line-height: var(--pats-type-line-title) !important;
+}
+
+
+.army-site:not(.dashboard-day) [class~="text-2xl"],
+.army-site:not(.dashboard-day) [class~="text-3xl"] {
+  font-size: var(--pats-type-display) !important;
+  line-height: var(--pats-type-line-tight) !important;
+}
+
+
+.army-site:not(.dashboard-day) .pats-hero [class~="text-xs"],
+.army-site:not(.dashboard-day) .pats-hero [class~="text-sm"],
+.army-site:not(.dashboard-day) .pats-hero [class~="text-base"],
+.army-site:not(.dashboard-day) .pats-hero [class~="text-lg"],
+.army-site:not(.dashboard-day) .pats-hero [class~="text-xl"],
+.army-site:not(.dashboard-day) .pats-hero [class~="text-2xl"],
+.army-site:not(.dashboard-day) .pats-hero [class~="text-3xl"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-xs"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-sm"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-base"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-lg"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-xl"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-2xl"],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class~="text-3xl"] {
+  font-size: revert !important;
+  line-height: revert !important;
+}
+
+
+.army-site:not(.dashboard-day) [class*="text-[10px]"],
+.army-site:not(.dashboard-day) [class*="text-[11px]"],
+.army-site:not(.dashboard-day) [class*="text-[12px]"],
+.army-site:not(.dashboard-day) [class*="text-[13px]"],
+.army-site:not(.dashboard-day) [class*="text-[14px]"] {
+  font-size: var(--pats-type-eyebrow) !important;
+  line-height: var(--pats-type-line-title) !important;
+}
+
+
+
+.army-site:not(.dashboard-day) .pats-section-title,
+.army-site:not(.dashboard-day) .pats-section-title--display {
+  font-size: var(--pats-type-display) !important;
+  line-height: var(--pats-type-line-tight) !important;
+}
+
+
+.army-site:not(.dashboard-day) .pats-body,
+.army-site:not(.dashboard-day) .pats-footer-col a {
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+
+.army-site:not(.dashboard-day) .pats-eyebrow {
+  font-size: var(--pats-type-eyebrow) !important;
+}
+
+
+.army-site:not(.dashboard-day) .pats-section-heading .pats-eyebrow,
+.army-site:not(.dashboard-day) .pats-page-hero .pats-eyebrow {
+  font-size: var(--pats-type-section-eyebrow) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+}
+
+
+.army-site:not(.dashboard-day) .pats-footer-col h4 {
+  font-size: var(--pats-type-title) !important;
+}
+
+
+.army-site:not(.dashboard-day) .pats-hero [class*="text-["],
+.army-site:not(.dashboard-day) .scroll-deck__hero [class*="text-["] {
+  font-size: revert !important;
+  line-height: revert !important;
+}
+
+
+
+.pats-portal [class~="text-xs"],
+.pats-portal [class~="text-sm"],
+.pats-portal [class~="text-base"],
+.admin-theme.pats-dashboard [class~="text-xs"],
+.admin-theme.pats-dashboard [class~="text-sm"],
+.admin-theme.pats-dashboard [class~="text-base"] {
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+}
+
+
+.pats-portal [class~="text-lg"],
+.admin-theme.pats-dashboard [class~="text-lg"] {
+  font-size: var(--pats-type-title) !important;
+}
+
+
+.pats-portal [class~="text-xl"],
+.pats-portal [class~="text-2xl"],
+.pats-portal [class~="text-3xl"],
+.admin-theme.pats-dashboard [class~="text-xl"],
+.admin-theme.pats-dashboard [class~="text-2xl"],
+.admin-theme.pats-dashboard [class~="text-3xl"] {
+  font-size: var(--pats-type-display) !important;
 }
 
 /* ============================================================
