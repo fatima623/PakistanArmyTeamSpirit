@@ -1,7 +1,6 @@
 {
   "cssFiles": [
     "src/app/cinematic-tactical.css",
-    "src/app/daylight-theme.css",
     "src/app/globals.css",
     "src/app/paf-theme.css",
     "src/app/pats-design-system.css",
@@ -15,8 +14,7 @@
   "importantCount": 1690,
   "importantByFile": {
     "src/app/cinematic-tactical.css": 2,
-    "src/app/daylight-theme.css": 366,
-    "src/app/globals.css": 1076,
+    "src/app/globals.css": 1442,
     "src/app/paf-theme.css": 5,
     "src/app/pats-design-system.css": 12,
     "src/app/pats-hero.css": 6,
