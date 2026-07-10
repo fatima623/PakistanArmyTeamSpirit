@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ImagePlus, Loader2, Pencil, Upload } from "lucide-react";
+import { Eye, EyeOff, ImagePlus, Loader2, Pencil, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -121,15 +121,15 @@ export function GalleryManager({
                     {[img.category, img.year].filter(Boolean).join(" · ") ||
                       "Uncategorised"}
                   </div>
-                  <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-[0.6rem]">
-                    <Button
-                      size="sm"
-                      variant="adminOutline"
+                  <div className="mt-auto flex items-center gap-1.5 border-t border-brand-line/70 pt-2.5">
+                    <button
+                      type="button"
                       onClick={() => setEditing(img)}
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-[0.42rem] text-[0.8rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
                     >
-                      <Pencil className="mr-1 h-3.5 w-3.5" />
+                      <Pencil className="h-3.5 w-3.5" aria-hidden />
                       Edit
-                    </Button>
+                    </button>
                     <PublishToggle image={img} onChange={upsert} />
                     <DeleteImageButton
                       image={img}
@@ -407,21 +407,22 @@ function PublishToggle({
     }
   };
   return (
-    <Button
-      size="sm"
-      variant="adminOutline"
+    <button
+      type="button"
       onClick={toggle}
       disabled={busy}
       title={image.published ? "Unpublish" : "Publish"}
+      aria-label={image.published ? "Unpublish" : "Publish"}
+      className="inline-flex h-[2.1rem] w-[2.1rem] shrink-0 items-center justify-center rounded-lg border border-brand-line bg-white text-brand-ink-muted transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 hover:text-brand-ink disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
     >
       {busy ? (
-        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
       ) : image.published ? (
-        "Unpublish"
+        <EyeOff className="h-4 w-4" aria-hidden />
       ) : (
-        "Publish"
+        <Eye className="h-4 w-4" aria-hidden />
       )}
-    </Button>
+    </button>
   );
 }
 
@@ -437,9 +438,14 @@ function DeleteImageButton({
   return (
     <ConfirmDialog
       trigger={
-        <Button size="sm" variant="adminDestructive">
-          Delete
-        </Button>
+        <button
+          type="button"
+          title="Delete"
+          aria-label="Delete"
+          className="inline-flex h-[2.1rem] w-[2.1rem] shrink-0 items-center justify-center rounded-lg border border-brand-line bg-white text-brand-ink-muted transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400/30"
+        >
+          <Trash2 className="h-4 w-4" aria-hidden />
+        </button>
       }
       title="Delete image?"
       description="This permanently removes the image from the gallery."

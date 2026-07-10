@@ -316,7 +316,7 @@ export function SettingsForm() {
 
   if (loading) {
     return (
-      <div className="mx-auto flex max-w-[52rem] justify-center py-16">
+      <div className="mx-auto flex max-w-[64rem] justify-center py-16">
         <Loader2 className="h-7 w-7 animate-spin text-[#1e5a3a]" />
       </div>
     );
@@ -325,7 +325,7 @@ export function SettingsForm() {
   const currency = (form.paymentCurrency || "PKR").toUpperCase();
 
   return (
-    <div className="mx-auto flex max-w-[52rem] flex-col gap-4 pb-8">
+    <div className="mx-auto flex max-w-[64rem] flex-col gap-4 pb-8">
       <header className="rounded-[14px] border border-[#e4e7e0] bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
         <h1 className="text-[1.15rem] font-extrabold tracking-tight text-[#18221c]">
           Site settings
@@ -693,19 +693,18 @@ export function SettingsForm() {
               </SettingField>
             </PaymentMethodCard>
           </div>
-        </div>
-      </SettingsCard>
 
-      <section className={CARD}>
-        <div className={CARD_BODY}>
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 border-t border-black/[0.08] pt-5">
             <Button onClick={handleSave} disabled={saving} variant="adminPrimary">
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {saved ? "Saved" : "Save settings"}
             </Button>
+            <p className="min-w-0 flex-[1_1_14rem] text-[0.8rem] leading-snug text-muted-foreground">
+              Saves every section on this page.
+            </p>
           </div>
         </div>
-      </section>
+      </SettingsCard>
     </div>
   );
 }

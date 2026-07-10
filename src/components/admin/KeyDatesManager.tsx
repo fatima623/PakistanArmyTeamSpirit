@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Pencil, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { FormFieldAdmin } from "@/components/admin/FormFieldAdmin";
@@ -30,6 +30,7 @@ export function KeyDatesManager({
   initialKeyDates: KeyDate[];
 }) {
   const [keyDates, setKeyDates] = useState(initialKeyDates);
+  const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ label: "", value: "", sortOrder: 0 });
   const [addForm, setAddForm] = useState({
@@ -104,6 +105,7 @@ export function KeyDatesManager({
           value: "",
           sortOrder: nextSortOrder(updated),
         });
+        setShowAddForm(false);
         toast.success(TOAST.SAVE_SUCCESS);
       } else {
         toast.error(TOAST.GENERIC_ERROR);
@@ -120,12 +122,31 @@ export function KeyDatesManager({
   return (
     <div className="flex flex-col gap-6 pb-8">
       <section className="admin-surface p-8">
-        <header className="mb-6 [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
-          <h2 className="text-[1.75rem] font-bold tracking-[-0.01em] text-brand-ink">Configured dates ({keyDates.length})</h2>
-          <p>
-            These entries appear on the public key dates page. Visitors see the
-            label and value you enter below.
-          </p>
+        <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
+          <div className="[&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
+            <h2 className="text-[1.75rem] font-bold tracking-[-0.01em] text-brand-ink">Configured dates ({keyDates.length})</h2>
+            <p>
+              These entries appear on the public key dates page. Visitors see the
+              label and value you enter.
+            </p>
+          </div>
+          <Button
+            variant="adminPrimary"
+            onClick={() => setShowAddForm((v) => !v)}
+            aria-expanded={showAddForm}
+          >
+            {showAddForm ? (
+              <>
+                <X className="mr-2 h-4 w-4" aria-hidden />
+                Close
+              </>
+            ) : (
+              <>
+                <Plus className="mr-2 h-4 w-4" aria-hidden />
+                Add key date
+              </>
+            )}
+          </Button>
         </header>
 
         <div className="overflow-x-auto rounded-[10px] border border-black/[0.06]">
@@ -148,7 +169,7 @@ export function KeyDatesManager({
               {keyDates.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="px-6 py-10 text-center text-muted-foreground">
-                    No key dates yet. Add your first entry using the form below.
+                    No key dates yet. Click “Add key date” to create your first entry.
                   </td>
                 </tr>
               ) : (
@@ -271,6 +292,7 @@ export function KeyDatesManager({
         </div>
       </section>
 
+      {showAddForm ? (
       <section className="admin-surface p-8" aria-labelledby="add-key-date-heading">
         <h3 id="add-key-date-heading" className="mb-1.5 text-lg font-bold text-brand-ink">Add a new key date</h3>
         <p className="mb-6 max-w-[36rem] text-sm leading-[1.55] text-muted-foreground">
@@ -341,12 +363,21 @@ export function KeyDatesManager({
             {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Add key date
           </Button>
+          <Button
+            type="button"
+            variant="adminOutline"
+            onClick={() => setShowAddForm(false)}
+            disabled={saving}
+          >
+            Cancel
+          </Button>
           <p className="min-w-0 flex-[1_1_12rem] text-[0.8125rem] text-muted-foreground">
             Required: label and value. The new entry will appear in the table above
             after you save.
           </p>
         </div>
       </section>
+      ) : null}
     </div>
   );
 }

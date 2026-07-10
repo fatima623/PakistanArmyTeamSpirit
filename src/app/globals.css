@@ -2670,15 +2670,9 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 :is(.admin-theme) .admin-sidebar-footer--logout {
   margin: 0.5rem 0.625rem 0.75rem;
   padding: 0.375rem;
-  border: 1px solid rgba(221, 216, 204, 0.9);
-  border-radius: 10px;
-  background: rgba(255, 252, 247, 0.72);
-  box-shadow: 0 1px 3px rgba(26, 32, 24, 0.04);
   transition:
     background-color 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease,
-    transform 0.22s ease;
+    color 0.22s ease;
 }
 
 
@@ -2691,10 +2685,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 :is(.admin-theme) .admin-sidebar-footer--logout:hover,
 :is(.admin-theme)
   .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible) {
-  background: linear-gradient(180deg, #fff5f5 0%, #fef2f2 100%);
-  border-color: rgba(220, 38, 38, 0.28);
-  box-shadow: 0 8px 20px rgba(185, 28, 28, 0.14);
-  transform: translateY(-3px);
+  background: transparent;
 }
 
 
