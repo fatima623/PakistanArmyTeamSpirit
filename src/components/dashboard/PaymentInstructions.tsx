@@ -149,7 +149,7 @@ export function PaymentInstructions({ settings }: Props) {
                   <span
                     className={cn(
                       "text-[0.8125rem] font-semibold",
-                      isSel ? "text-emerald-800" : "text-slate-700"
+                      isSel ? "!text-emerald-800" : "text-slate-700"
                     )}
                   >
                     {m.title}
