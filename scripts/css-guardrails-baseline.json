@@ -1,13 +1,11 @@
 {
   "cssFiles": [
-    "src/app/cinematic-tactical.css",
     "src/app/globals.css",
     "src/app/portal-design.css"
   ],
   "importantCount": 1690,
   "importantByFile": {
-    "src/app/cinematic-tactical.css": 2,
-    "src/app/globals.css": 1608,
+    "src/app/globals.css": 1610,
     "src/app/portal-design.css": 80
   },
   "cssImports": [
