@@ -1,13 +1,13 @@
-import { formatDateDisplay, formatDateTime } from "@/lib/utils";
+import { cn, formatDateDisplay, formatDateTime } from "@/lib/utils";
 import type { TimelineData } from "@/lib/timeline";
 
 function DeadlinePill({ passed, days }: { passed: boolean; days: number }) {
   const urgent = !passed && days <= 7;
-  const style = passed
-    ? { bg: "#f1f5f9", fg: "#475569", border: "#e2e8f0" }
+  const tone = passed
+    ? "border-slate-200 bg-slate-100 text-slate-600"
     : urgent
-      ? { bg: "#fef2f2", fg: "#b91c1c", border: "#fecaca" }
-      : { bg: "#f0fdf4", fg: "#15803d", border: "#bbf7d0" };
+      ? "border-red-200 bg-red-50 text-red-700"
+      : "border-emerald-200 bg-emerald-50 text-emerald-700";
   const text = passed
     ? "Closed"
     : days <= 0
@@ -15,18 +15,10 @@ function DeadlinePill({ passed, days }: { passed: boolean; days: number }) {
       : `${days} day${days === 1 ? "" : "s"} left`;
   return (
     <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        padding: "0.15rem 0.6rem",
-        borderRadius: "999px",
-        fontSize: "0.72rem",
-        fontWeight: 700,
-        background: style.bg,
-        color: style.fg,
-        border: `1px solid ${style.border}`,
-        whiteSpace: "nowrap",
-      }}
+      className={cn(
+        "inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-[0.72rem] font-bold",
+        tone
+      )}
     >
       {text}
     </span>
@@ -52,21 +44,33 @@ export function Timeline({
         <div>
           <h3 className="portal-section-title mb-3 text-sm">Deadlines</h3>
           <ul className="space-y-2">
-            {deadlines.map((d) => (
-              <li
-                key={d.key}
-                className="flex items-center justify-between gap-3 rounded-lg border p-3"
-                style={{ borderColor: "#e2e8f0", background: "#ffffff" }}
-              >
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-brand-ink">{d.label}</p>
-                  <p className="portal-muted text-xs" style={{ color: "#64748b" }}>
-                    {formatDateTime(d.date)}
-                  </p>
-                </div>
-                <DeadlinePill passed={d.passed} days={d.daysRemaining} />
-              </li>
-            ))}
+            {deadlines.map((d) => {
+              const urgent = !d.passed && d.daysRemaining <= 7;
+              const accent = d.passed
+                ? "border-l-slate-300"
+                : urgent
+                  ? "border-l-red-400"
+                  : "border-l-emerald-400";
+              return (
+                <li
+                  key={d.key}
+                  className={cn(
+                    "flex items-center justify-between gap-3 rounded-xl border border-l-[3px] border-slate-200 bg-white p-3 transition-colors hover:border-slate-300",
+                    accent
+                  )}
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-brand-ink">
+                      {d.label}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {formatDateTime(d.date)}
+                    </p>
+                  </div>
+                  <DeadlinePill passed={d.passed} days={d.daysRemaining} />
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : (
@@ -85,16 +89,12 @@ export function Timeline({
               {keyDates.map((k) => (
                 <li
                   key={k.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border p-3"
-                  style={{ borderColor: "#e2e8f0", background: "#ffffff" }}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3"
                 >
                   <span className="text-sm font-semibold text-brand-ink">
                     {k.label}
                   </span>
-                  <span
-                    className="text-sm"
-                    style={{ color: "#475569", textAlign: "right" }}
-                  >
+                  <span className="text-right text-sm text-slate-600">
                     {k.date ? formatDateDisplay(k.date) : k.value}
                   </span>
                 </li>
