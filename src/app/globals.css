@@ -9,7 +9,6 @@
 @import "./pats-portal.css";
 /* Day/light overrides must load after pats-design-system (night typography) */
 @import "./daylight-theme.css";
-@import "./pats-home-day.css";
 /* Loads last: dashboard day theme must win over the sitewide forest-card
    day rules in daylight-theme.css / pats-forest-cards.css for .participant-portal. */
 /* Institutional design refresh (olive / brass / sage). MUST load last so it
@@ -1618,6 +1617,366 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 .participant-portal .portal-form-card [role="combobox"] span[data-placeholder] {
   color: #94a3b8 !important;
+}
+
+/* ============================================================
+   HOME DAY THEME (ex pats-home-day.css, retired in phase 3d).
+   Homepage day/light typography + colour: section titles,
+   eyebrows, gold rules, mission quote/motto, featured-news red
+   treatment, news links, schedule, careers grid. Slotted at
+   canonical import position 12 (between PORTAL-BACKLINK and
+   SHOWCASE blocks). Verified live in day mode on the homepage
+   (24 elements).
+   ============================================================ */
+
+
+
+
+
+html.light-theme .army-home .pats-section-title,
+html.light-theme .army-site .pats-inner-page-shell .pats-section-heading .pats-section-title,
+html[data-site-theme="day"] .army-home .pats-section-title,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section-heading .pats-section-title {
+  font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif;
+  font-size: var(--pats-type-display) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em !important;
+  line-height: var(--pats-type-line-tight) !important;
+  color: var(--lt-heading) !important;
+}
+
+
+html.light-theme .army-home .pats-section__inner > div > .pats-body,
+html.light-theme .army-site .pats-inner-page-shell .pats-section__inner > div > .pats-body,
+html[data-site-theme="day"] .army-home .pats-section__inner > div > .pats-body,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inner > div > .pats-body {
+  font-size: var(--pats-type-body) !important;
+}
+
+
+html.light-theme .army-home .pats-feature-title,
+html.light-theme .army-site .pats-inner-page-shell .pats-feature-title,
+html[data-site-theme="day"] .army-home .pats-feature-title,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-feature-title {
+  font-size: var(--pats-type-feature) !important;
+  color: var(--lt-heading) !important;
+}
+
+
+html.light-theme .army-home .pats-eyebrow,
+html.light-theme .army-site .pats-inner-page-shell .pats-eyebrow,
+html[data-site-theme="day"] .army-home .pats-eyebrow,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-eyebrow {
+  color: var(--lt-olive) !important;
+  letter-spacing: 0.2em;
+}
+
+
+html.light-theme .army-home .pats-section__inner,
+html.light-theme .army-site .pats-inner-page-shell .pats-section__inner,
+html[data-site-theme="day"] .army-home .pats-section__inner,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inner {
+  max-width: min(96rem, 100%);
+}
+
+
+html.light-theme .army-home .pats-section-heading .pats-eyebrow,
+html.light-theme .army-home .pats-mission > .pats-eyebrow,
+html.light-theme .army-site .pats-inner-page-shell .pats-section-heading .pats-eyebrow,
+html[data-site-theme="day"] .army-home .pats-section-heading .pats-eyebrow,
+html[data-site-theme="day"] .army-home .pats-mission > .pats-eyebrow,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section-heading .pats-eyebrow {
+  font-size: var(--pats-type-section-eyebrow, 1.0625rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  color: var(--lt-olive) !important;
+}
+
+
+html.light-theme .army-home .pats-gold-rule,
+html.light-theme .army-home .pats-gold-rule--center,
+html.light-theme .army-site .pats-inner-page-shell .pats-gold-rule,
+html.light-theme .army-site .pats-inner-page-shell .pats-gold-rule--center,
+html[data-site-theme="day"] .army-home .pats-gold-rule,
+html[data-site-theme="day"] .army-home .pats-gold-rule--center,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule--center {
+  width: 3.5rem !important;
+  height: 3px !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 1rem !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--lt-gold-bright) 20%,
+    var(--lt-gold-bright) 80%,
+    transparent
+  ) !important;
+}
+
+
+
+html.light-theme .army-home .pats-mission__quote,
+html[data-site-theme="day"] .army-home .pats-mission__quote {
+  font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.6vw, 2rem) !important;
+  font-weight: 400 !important;
+  line-height: var(--pats-type-line-tight) !important;
+  color: var(--lt-olive-dark) !important;
+  max-width: 28ch;
+}
+
+
+html.light-theme .army-home .pats-mission .pats-body,
+html[data-site-theme="day"] .army-home .pats-mission .pats-body {
+  font-size: var(--pats-type-body) !important;
+}
+
+
+html.light-theme .army-home .pats-mission__motto,
+html[data-site-theme="day"] .army-home .pats-mission__motto {
+  font-size: var(--pats-type-eyebrow) !important;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--lt-gold-bright) !important;
+}
+
+
+html.light-theme .army-home .pats-section--mission .pats-logo-watermark-bg,
+html.light-theme .army-home .pats-section--mission .pats-section__backdrop-layer--logo-watermark,
+html[data-site-theme="day"] .army-home .pats-section--mission .pats-logo-watermark-bg,
+html[data-site-theme="day"] .army-home .pats-section--mission .pats-section__backdrop-layer--logo-watermark {
+  opacity: 0.1 !important;
+}
+
+
+
+.army-site:not(.dashboard-day) .army-home #careers .pats-image-grid {
+  gap: 32px !important;
+  column-gap: 32px !important;
+  row-gap: 32px !important;
+  isolation: isolate;
+}
+
+
+.army-site:not(.dashboard-day) .army-home #careers .pats-image-card {
+  position: relative;
+  z-index: 1;
+}
+
+
+@media (hover: hover) {
+  .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:hover,
+.army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
+    z-index: 2;
+  }
+}
+
+
+
+html.light-theme .army-home .forest-card-grid,
+html[data-site-theme="day"] .army-home .forest-card-grid {
+  width: 100%;
+  max-width: min(96rem, 100%);
+  margin-inline: auto;
+}
+
+
+html.light-theme .army-home #operations .pats-btn,
+html[data-site-theme="day"] .army-home #operations .pats-btn {
+  border-color: var(--lt-olive) !important;
+  color: var(--lt-olive) !important;
+}
+
+
+html.light-theme .army-home #operations .pats-btn:hover,
+html[data-site-theme="day"] .army-home #operations .pats-btn:hover {
+  background: var(--lt-olive) !important;
+  color: #ffffff !important;
+}
+
+
+
+html.light-theme .army-home .pats-home-feature-image,
+html[data-site-theme="day"] .army-home .pats-home-feature-image {
+  border: 2px solid rgba(200, 168, 75, 0.55) !important;
+  border-radius: var(--pats-radius-media) !important;
+  box-shadow:
+    0 12px 36px rgba(26, 32, 24, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+
+html.light-theme .army-home .pats-image-card,
+html.light-theme .army-home .pats-home-featured-news,
+html.light-theme .army-home .pats-home-news-link,
+html.light-theme .army-home .pats-home-schedule,
+html[data-site-theme="day"] .army-home .pats-image-card,
+html[data-site-theme="day"] .army-home .pats-home-featured-news,
+html[data-site-theme="day"] .army-home .pats-home-news-link,
+html[data-site-theme="day"] .army-home .pats-home-schedule {
+  border-radius: var(--pats-radius-card) !important;
+  overflow: hidden;
+}
+
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-featured-news,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-featured-news {
+  background: var(--lt-forest-card) !important;
+  border: 1px solid var(--lt-forest-card-border) !important;
+  border-left: 4px solid var(--lt-gold-bright) !important;
+  box-shadow: var(--lt-drill-card-shadow) !important;
+  color: #dc2626 !important;
+}
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-featured-news__title,
+html.light-theme .cinematic-site.army-site .army-home .pats-home-featured-news h3,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-featured-news__title,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-featured-news h3 {
+  color: #dc2626 !important;
+  font-size: var(--pats-type-title) !important;
+  font-weight: 700 !important;
+}
+
+
+html.light-theme .army-home .pats-home-featured-news .pats-eyebrow,
+html[data-site-theme="day"] .army-home .pats-home-featured-news .pats-eyebrow {
+  color: #dc2626 !important;
+}
+
+
+html.light-theme .army-home .pats-home-news-link,
+html[data-site-theme="day"] .army-home .pats-home-news-link {
+  background: #ffffff !important;
+  border: 1px solid var(--lt-card-border) !important;
+  box-shadow: var(--lt-shadow) !important;
+  color: var(--lt-heading) !important;
+}
+
+
+html.light-theme .army-home .pats-home-news-link:hover,
+html[data-site-theme="day"] .army-home .pats-home-news-link:hover {
+  border-color: var(--lt-olive) !important;
+  box-shadow: var(--lt-shadow-md) !important;
+  background: #ffffff !important;
+}
+
+
+html.light-theme .army-home .pats-home-news-link .pats-eyebrow,
+html[data-site-theme="day"] .army-home .pats-home-news-link .pats-eyebrow {
+  color: var(--lt-olive) !important;
+}
+
+
+html.light-theme .army-home .pats-home-news-link p,
+html[data-site-theme="day"] .army-home .pats-home-news-link p {
+  color: var(--lt-heading) !important;
+}
+
+
+html.light-theme .army-home .pats-home-featured-news .pats-body,
+html.light-theme .army-home .pats-home-featured-news .prose-invert,
+html.light-theme .army-home .pats-home-featured-news .prose-invert p,
+html.light-theme .army-home .pats-home-featured-news .prose-invert a,
+html[data-site-theme="day"] .army-home .pats-home-featured-news .pats-body,
+html[data-site-theme="day"] .army-home .pats-home-featured-news .prose-invert p,
+html[data-site-theme="day"] .army-home .pats-home-featured-news .prose-invert a {
+  color: #dc2626 !important;
+}
+
+
+html.light-theme .army-home .pats-home-featured-news .pats-home-read-more,
+html[data-site-theme="day"] .army-home .pats-home-featured-news .pats-home-read-more {
+  color: #dc2626 !important;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+
+html.light-theme .army-home .pats-home-featured-news .pats-home-read-more:hover,
+html[data-site-theme="day"] .army-home .pats-home-featured-news .pats-home-read-more:hover {
+  color: #b91c1c !important;
+}
+
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule {
+  background: #ffffff !important;
+  border: 1px solid var(--lt-card-border) !important;
+  box-shadow: var(--lt-shadow-md) !important;
+  color: var(--lt-heading) !important;
+}
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule__row,
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule > li,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule__row,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule > li {
+  color: var(--lt-heading) !important;
+}
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule__row:hover,
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule > li:hover,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule__row:hover,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule > li:hover {
+  background: rgba(200, 168, 75, 0.06) !important;
+}
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule .pats-schedule-label,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule .pats-schedule-label {
+  color: var(--lt-olive) !important;
+  font-size: var(--pats-type-eyebrow) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+}
+
+
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule .pats-schedule-value,
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule .pats-schedule-value {
+  color: var(--lt-heading) !important;
+  font-size: var(--pats-type-body) !important;
+  line-height: var(--pats-type-line-body) !important;
+  font-weight: 400 !important;
+}
+
+
+html.light-theme .army-home .pats-section--dark li[class*="border-l"],
+html.light-theme .army-site .pats-inner-page-shell .pats-section--dark li[class*="border-l"],
+html[data-site-theme="day"] .army-home .pats-section--dark li[class*="border-l"],
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section--dark li[class*="border-l"] {
+  border-left-width: 3px !important;
+  border-left-color: var(--lt-gold-bright) !important;
+  padding-left: 1rem;
+}
+
+
+
+html.light-theme .army-site .pats-inner-page-shell .forest-card-grid,
+html.light-theme .army-site .pats-inner-page-shell .forest-carousel,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .forest-card-grid,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .forest-carousel {
+  width: 100%;
+  max-width: min(96rem, 100%);
+  margin-inline: auto;
+}
+
+
+
+.army-site:not(.dashboard-day) .army-home .pats-section--navy {
+  overflow: hidden;
+}
+
+
+.army-site:not(.dashboard-day) .army-home .pats-section--navy .pats-section__inner {
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ============================================================
