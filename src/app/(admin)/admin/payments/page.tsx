@@ -151,10 +151,10 @@ export default async function AdminPaymentsPage({
             </colgroup>
             <thead>
               <tr>
-                <th scope="col">Participant</th>
+                <th scope="col" className="!text-left">Participant</th>
                 <th scope="col">Unit</th>
                 <th scope="col">Amount</th>
-                <th scope="col">Reference</th>
+                <th scope="col" className="!text-left">Reference</th>
                 <th scope="col">Payment</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -203,7 +203,7 @@ export default async function AdminPaymentsPage({
                       <td className="whitespace-nowrap text-[0.8125rem] text-slate-600">
                         {formatRegistrationFee(p.amount)}
                       </td>
-                      <td className="break-all font-mono text-[0.8125rem] text-slate-900">
+                      <td className="!text-left break-all font-mono text-[0.8125rem] text-slate-900">
                         {p.transactionReference ?? "—"}
                       </td>
                       <td className="!overflow-visible !px-1.5">
