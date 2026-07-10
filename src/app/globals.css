@@ -3202,13 +3202,16 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-.army-site:not(.dashboard-day) [class~="rounded-sm"],
-.army-site:not(.dashboard-day) [class~="rounded-md"],
-.army-site:not(.dashboard-day) [class~="rounded-lg"],
-.army-site:not(.dashboard-day) button,
-.army-site:not(.dashboard-day) input,
-.army-site:not(.dashboard-day) select,
-.army-site:not(.dashboard-day) textarea {
+/* Night-site tactical square-off. Excludes `.dashboard-day` subtrees so it does
+   NOT leak into the day participant portal (which nests under this night
+   `.army-site` shell) — the portal keeps its designed rounded corners. */
+.army-site:not(.dashboard-day) [class~="rounded-sm"]:not(.dashboard-day *),
+.army-site:not(.dashboard-day) [class~="rounded-md"]:not(.dashboard-day *),
+.army-site:not(.dashboard-day) [class~="rounded-lg"]:not(.dashboard-day *),
+.army-site:not(.dashboard-day) button:not(.dashboard-day *),
+.army-site:not(.dashboard-day) input:not(.dashboard-day *),
+.army-site:not(.dashboard-day) select:not(.dashboard-day *),
+.army-site:not(.dashboard-day) textarea:not(.dashboard-day *) {
   border-radius: 0 !important;
 }
 
@@ -6627,9 +6630,11 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 }
 
 
-.pats-portal * {
-  border-radius: 0 !important;
-}
+/* NOTE: a legacy tactical-theme reset here used to force every
+   `.pats-portal *` to border-radius 0 (important-flagged), squaring off every
+   card, button, chip and badge in the participant portal and suppressing the
+   intended `.pp` design-system radii (hero var(--pp-radius), buttons, chips,
+   etc.). Removed so the portal renders with its designed rounded corners. */
 
 
 .admin-theme.pats-dashboard .admin-page-content {

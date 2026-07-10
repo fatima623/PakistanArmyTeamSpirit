@@ -33,18 +33,18 @@ export default async function EditUnitPage() {
   }
 
   return (
-    <>
+    <div className="mx-auto w-full max-w-3xl">
       <Link href="/event/dashboard" className="portal-back-link mb-4">
         <ArrowLeft className="h-4 w-4" aria-hidden />
         Back to dashboard
       </Link>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6">
         <PatsPortalHeader
           title="Unit information"
           subtitle="Update the details of your registration below."
         />
       </div>
       <UnitEditForm user={user} unitNames={[...UNIT_NAMES]} />
-    </>
+    </div>
   );
 }

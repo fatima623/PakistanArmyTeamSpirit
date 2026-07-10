@@ -114,33 +114,33 @@ export function UnitEditForm({
   };
 
   const gridClass =
-    "grid grid-cols-1 items-start gap-x-6 gap-y-5 md:grid-cols-[220px_1fr]";
+    "grid grid-cols-1 items-start gap-x-5 gap-y-4 sm:grid-cols-2";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-0">
-      <div className="portal-form-card mb-6">
+      <div className="portal-form-card mb-6 rounded-2xl">
         <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
           Personal details
         </h2>
         <div className={gridClass}>
-          <FormField label="First name" required error={errors.firstName?.message}>
+          <FormField stacked label="First name" required error={errors.firstName?.message}>
             <Input {...register("firstName")} />
           </FormField>
-          <FormField label="Last name" required error={errors.lastName?.message}>
+          <FormField stacked label="Last name" required error={errors.lastName?.message}>
             <Input {...register("lastName")} />
           </FormField>
-          <FormField label="Rank" required error={errors.rank?.message}>
+          <FormField stacked label="Rank" required error={errors.rank?.message}>
             <Input {...register("rank")} />
           </FormField>
         </div>
       </div>
 
-      <div className="portal-form-card mb-6">
+      <div className="portal-form-card mb-6 rounded-2xl">
         <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
           Unit details
         </h2>
         <div className={gridClass}>
-          <FormField label="Unit type" required error={errors.unitType?.message}>
+          <FormField stacked label="Unit type" required error={errors.unitType?.message}>
             <RadioGroup
               value={watch("unitType")}
               onValueChange={(v) =>
@@ -159,7 +159,7 @@ export function UnitEditForm({
             </RadioGroup>
           </FormField>
 
-          <FormField label="Branch" required error={errors.branch?.message}>
+          <FormField stacked label="Branch" required error={errors.branch?.message}>
             <RadioGroup
               value={watch("branch")}
               onValueChange={(v) =>
@@ -178,7 +178,7 @@ export function UnitEditForm({
             </RadioGroup>
           </FormField>
 
-          <FormField label="Unit name" required error={errors.unitName?.message}>
+          <FormField stacked label="Unit name" required error={errors.unitName?.message}>
             <Controller
               name="unitName"
               control={control}
@@ -199,7 +199,7 @@ export function UnitEditForm({
             />
           </FormField>
 
-          <FormField label="Arm" required error={errors.arm?.message}>
+          <FormField stacked label="Arm" required error={errors.arm?.message}>
             <Controller
               name="arm"
               control={control}
@@ -220,16 +220,19 @@ export function UnitEditForm({
             />
           </FormField>
 
-          <FormField label="2nd POC email" error={errors.secondPocEmail?.message}>
+          <FormField stacked label="2nd POC email" error={errors.secondPocEmail?.message}>
             <Input type="email" {...register("secondPocEmail")} />
           </FormField>
           <FormField
+            stacked
             label="3rd POC email (optional)"
             error={errors.thirdPocEmail?.message}
           >
             <Input type="email" {...register("thirdPocEmail")} />
           </FormField>
           <FormField
+            stacked
+            className="sm:col-span-2"
             label="Additional info (optional)"
             error={errors.additionalInfo?.message}
           >
@@ -238,18 +241,18 @@ export function UnitEditForm({
         </div>
       </div>
 
-      <div className="portal-form-card mb-6">
+      <div className="portal-form-card mb-6 rounded-2xl">
         <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
           CO / 2IC details
         </h2>
         <div className={gridClass}>
-          <FormField label="CO name" required error={errors.coName?.message}>
+          <FormField stacked label="CO name" required error={errors.coName?.message}>
             <Input {...register("coName")} />
           </FormField>
-          <FormField label="CO email" required error={errors.coEmail?.message}>
+          <FormField stacked label="CO email" required error={errors.coEmail?.message}>
             <Input type="email" {...register("coEmail")} />
           </FormField>
-          <FormField label="CO phone" required error={errors.coPhone?.message}>
+          <FormField stacked label="CO phone" required error={errors.coPhone?.message}>
             <Input {...register("coPhone")} />
           </FormField>
         </div>

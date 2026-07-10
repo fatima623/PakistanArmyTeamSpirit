@@ -36,18 +36,5 @@ export default async function ParticipantTicketsPage() {
     updatedLabel: formatDateShort(t.lastReplyAt),
   }));
 
-  return (
-    <div>
-      <header className="mb-5">
-        <h1 className="text-[1.5rem] font-bold leading-[1.2] tracking-[-0.02em] text-slate-800">
-          Support
-        </h1>
-        <div className="mt-[0.3rem] text-[0.875rem] !text-slate-600">
-          Raise a ticket and our team will get back to you.
-        </div>
-      </header>
-
-      <SupportTicketsPanel tickets={items} />
-    </div>
-  );
+  return <SupportTicketsPanel tickets={items} />;
 }

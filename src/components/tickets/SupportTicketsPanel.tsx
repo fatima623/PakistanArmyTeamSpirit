@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronRight, MessageSquare } from "lucide-react";
+import { ChevronRight, MessageSquare, Plus } from "lucide-react";
 
 import { NewTicketForm } from "@/components/tickets/NewTicketForm";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
+import { Button } from "@/components/ui/button";
 
 export type SupportTicketListItem = {
   id: string;
@@ -29,7 +30,27 @@ export function SupportTicketsPanel({
   const [creating, setCreating] = useState(false);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
+      {!creating ? (
+        <header className="flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="text-[1.5rem] font-bold leading-[1.2] tracking-[-0.02em] text-slate-800">
+              Support
+            </h1>
+            <div className="mt-[0.3rem] text-[0.875rem] !text-slate-600">
+              Raise a ticket and our team will get back to you.
+            </div>
+          </div>
+          <Button
+            className="cp-btn-primary shrink-0 !rounded-lg"
+            onClick={() => setCreating(true)}
+          >
+            <Plus className="mr-2 h-4 w-4" aria-hidden />
+            New ticket
+          </Button>
+        </header>
+      ) : null}
+
       <NewTicketForm open={creating} onOpenChange={setCreating} />
 
       {!creating ? (
@@ -46,7 +67,7 @@ export function SupportTicketsPanel({
               <li key={t.id}>
                 <Link
                   href={`/event/tickets/${t.id}`}
-                  className="group flex items-center justify-between gap-4 border border-slate-200 bg-white px-[1.1rem] py-[0.8rem] no-underline shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-[border-color,box-shadow,background] duration-150 hover:border-slate-300 hover:shadow-[0_3px_12px_rgba(15,23,42,0.09)]"
+                  className="group flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-[1.1rem] py-[0.8rem] no-underline shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-[border-color,box-shadow,background] duration-150 hover:border-slate-300 hover:shadow-[0_3px_12px_rgba(15,23,42,0.09)]"
                 >
                   <span className="support-ticket__icon" aria-hidden>
                     <MessageSquare className="h-4 w-4" />

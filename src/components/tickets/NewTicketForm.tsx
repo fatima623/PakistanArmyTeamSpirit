@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { FormField } from "@/components/ui/FormField";
@@ -93,16 +93,14 @@ export function NewTicketForm({
   };
 
   if (!open) {
-    return (
-      <Button className="cp-btn-primary" onClick={() => setOpen(true)}>
-        <Plus className="mr-2 h-4 w-4" />
-        New ticket
-      </Button>
-    );
+    return null;
   }
 
   return (
-    <form onSubmit={handleSubmit} className="portal-form-card mb-6 space-y-5">
+    <form
+      onSubmit={handleSubmit}
+      className="portal-form-card mx-auto w-full max-w-xl space-y-5 !rounded-2xl"
+    >
       <h2 className="portal-section-title border-b border-brand-line pb-3">
         Raise a support ticket
       </h2>
@@ -158,10 +156,11 @@ export function NewTicketForm({
         />
       </FormField>
 
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-3 border-t border-brand-line pt-5">
         <Button
           type="button"
           variant="outline"
+          className="!rounded-lg border-slate-300 text-slate-600 hover:bg-slate-50"
           onClick={() => {
             reset();
             setOpen(false);
@@ -170,7 +169,11 @@ export function NewTicketForm({
         >
           Cancel
         </Button>
-        <Button type="submit" className="cp-btn-primary px-6" disabled={submitting}>
+        <Button
+          type="submit"
+          className="cp-btn-primary !rounded-lg px-6"
+          disabled={submitting}
+        >
           {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Submit ticket
         </Button>
