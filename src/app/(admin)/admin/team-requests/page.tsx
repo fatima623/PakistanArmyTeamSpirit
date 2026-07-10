@@ -41,9 +41,12 @@ export default async function AdminTeamRequestsPage() {
 
   return (
     <div className="admin-fade-in-up">
-      <header className="mb-5 flex items-start justify-between gap-4">
-       
-      
+      <header className="mb-5 [&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
+        <h2>Team size requests</h2>
+        <p>
+          Review requests to exceed the team-member cap and approve or reject
+          each one.
+        </p>
       </header>
 
       <TeamSizeRequestsBoard

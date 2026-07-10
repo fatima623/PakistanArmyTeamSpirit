@@ -43,6 +43,14 @@ export default async function AdminFlightsPage() {
 
   return (
     <div className="admin-fade-in-up">
+      <header className="mb-5 [&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
+        <h2>Flight review</h2>
+        <p>
+          Review submitted passports and tickets, then finalize each
+          participant&apos;s records to lock them.
+        </p>
+      </header>
+
       <FlightReviewBoard
         canFinalize={canManageSystem(role)}
         participants={participants.map((p) => ({
