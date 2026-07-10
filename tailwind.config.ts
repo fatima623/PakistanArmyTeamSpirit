@@ -6,6 +6,11 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    // Class-string helpers (admin-ui.ts, filter-chip-tones.ts, …) build
+    // Tailwind class lists used across the admin. Without this glob their
+    // unique utilities (e.g. bg-slate-600, p-1.5, min-h-[2.125rem]) are never
+    // generated, silently collapsing filter-chip padding and active states.
+    "./src/lib/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {

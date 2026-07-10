@@ -51,7 +51,7 @@ export const adminUsersToolbar = adminUsersControls;
 export const adminUsersToolbarSearch =
   "grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5";
 export const adminUsersFilterTabs =
-  "flex w-full flex-wrap items-center gap-2 rounded-xl bg-slate-100 p-1.5";
+  "flex w-full flex-wrap items-center gap-2 rounded-xl bg-slate-100 p-2";
 export const adminUsersPagination =
   "flex flex-row flex-wrap items-center justify-between gap-4 border-t border-brand-line/60 pt-2";
 

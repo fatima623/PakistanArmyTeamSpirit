@@ -537,6 +537,8 @@ export function NewsPostForm({
 
 
 
+      <div className="grid grid-cols-1 items-start gap-[0.85rem] lg:grid-cols-2">
+
       <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 
         <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
@@ -709,6 +711,8 @@ export function NewsPostForm({
         </div>
 
       </section>
+
+      </div>
 
 
 

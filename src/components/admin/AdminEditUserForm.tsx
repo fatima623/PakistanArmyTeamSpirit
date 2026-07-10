@@ -133,7 +133,7 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
   };
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="grid max-w-5xl grid-cols-1 items-start gap-6 lg:grid-cols-2">
       <form onSubmit={handleSubmit} className="admin-surface space-y-5 p-6">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Field label="First name" error={errors.firstName}>
@@ -217,6 +217,7 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
         </div>
       </form>
 
+      <div className="space-y-6">
       <div className="admin-surface space-y-4 p-6">
         <div>
           <h2 className="text-sm font-semibold text-[#0f172a]">
@@ -256,6 +257,7 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
           </p>
         </div>
         <DeleteUserButton userId={user.id} />
+      </div>
       </div>
     </div>
   );
