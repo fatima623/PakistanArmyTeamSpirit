@@ -6,7 +6,6 @@
 @import "./pats-design-system.css";
 @import "./pats-typography.css";
 @import "./pats-inner-pages.css";
-@import "./pats-portal.css";
 /* Day/light overrides must load after pats-design-system (night typography) */
 /* Loads last: dashboard day theme must win over the sitewide forest-card
    day rules in daylight-theme.css / pats-forest-cards.css for .participant-portal. */
@@ -1553,6 +1552,319 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .cinematic-site:not(.dashboard-day) .cp-alert-warning .text-orange-700 a,
 .cinematic-site:not(.dashboard-day) .pats-form-notice--warn {
   color: #fbbf24 !important;
+}
+
+/* ============================================================
+   PARTICIPANT PORTAL BASE (ex pats-portal.css, retired in phase
+   3d). Night portal + admin dashboard base skins: panels,
+   inputs, labels, sidebar, tables, portal cards/alerts/stats.
+   .pats-portal and .admin-theme.pats-dashboard scoped (no
+   html-prefix). Slotted at canonical import position 9 (before
+   the PORTAL-BACKLINK block). Six utility-name selectors
+   rewritten as [class~=] for the @apply landmine. Verified via
+   synthetic hashing of 36 portal/admin element specs.
+   ============================================================ */
+
+
+.pats-portal {
+  min-height: 100vh;
+  background: var(--pats-bg-deepest, #0f1923);
+  color: var(--pats-text, #e8e4d8);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+}
+
+
+.admin-theme.pats-dashboard {
+  min-height: 100vh;
+  background: #f4f1ea;
+  color: #3a3a30;
+  font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
+}
+
+
+.pats-portal * {
+  border-radius: 0 !important;
+}
+
+
+.admin-theme.pats-dashboard .admin-page-content {
+  padding: 1.5rem;
+}
+
+
+@media (min-width: 640px) {
+  .admin-theme.pats-dashboard .admin-page-content {
+    padding: 2rem;
+  }
+}
+
+
+
+.pats-portal .pats-panel {
+  background: var(--pats-bg-overlay, #243f58) !important;
+  border: 1px solid var(--pats-border) !important;
+  box-shadow: none !important;
+  color: var(--pats-text);
+}
+
+
+.admin-theme.pats-dashboard .pats-panel:not(.portal-stat-card) {
+  background: #ffffff !important;
+  border: 1px solid #e8e8e8 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  color: #4b5563;
+}
+
+
+.pats-portal .pats-panel h2,
+.pats-portal .pats-panel h3 {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pats-white);
+}
+
+
+
+.pats-portal input,
+.pats-portal select,
+.pats-portal textarea {
+  background: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  color: #0a0f08 !important;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+@media (max-width: 639px) {
+  .pats-portal input:not([type="checkbox"]):not([type="radio"]),
+.pats-portal select,
+.pats-portal textarea {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+
+
+.admin-theme.pats-dashboard input:not([type="checkbox"]):not([type="radio"]),
+.admin-theme.pats-dashboard select,
+.admin-theme.pats-dashboard textarea {
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  color: #1E293B !important;
+}
+
+
+.pats-portal input:focus,
+.pats-portal select:focus,
+.pats-portal textarea:focus {
+  border-color: var(--pats-gold) !important;
+  outline: none;
+}
+
+
+.admin-theme.pats-dashboard input:focus,
+.admin-theme.pats-dashboard select:focus,
+.admin-theme.pats-dashboard textarea:focus {
+  border-color: #2E7D32 !important;
+  outline: none;
+}
+
+
+.pats-portal label {
+  font-size: var(--pats-type-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+
+.admin-theme.pats-dashboard label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #475569;
+}
+
+
+
+.admin-theme.pats-dashboard .admin-sidebar,
+.admin-theme.pats-dashboard aside[class*="sidebar"] {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+}
+
+
+.admin-theme.pats-dashboard header[class*="admin"] {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  color: #1E293B;
+}
+
+
+.admin-theme.pats-dashboard .admin-sidebar a,
+.admin-theme.pats-dashboard .admin-sidebar button {
+  color: #475569;
+}
+
+
+.admin-theme.pats-dashboard .admin-sidebar a:hover,
+.admin-theme.pats-dashboard .admin-sidebar [aria-current="page"] {
+  color: #2E7D32 !important;
+}
+
+
+.admin-theme.pats-dashboard table {
+  color: #475569;
+}
+
+
+.admin-theme.pats-dashboard th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748B;
+  border-color: #E2E8F0 !important;
+}
+
+
+.admin-theme.pats-dashboard td {
+  border-color: #E2E8F0 !important;
+}
+
+
+.admin-theme.pats-dashboard tr:hover td {
+  background: #F8FAFC;
+}
+
+
+
+.pats-portal .ops-btn-primary {
+  background: transparent !important;
+  border: 1px solid var(--pats-gold) !important;
+  color: var(--pats-gold) !important;
+}
+
+
+.pats-portal .ops-btn-primary:hover {
+  background: rgba(200, 168, 75, 0.15) !important;
+  color: var(--pats-white) !important;
+}
+
+
+
+.pats-portal .portal-h2,
+.pats-portal .portal-section-title {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pats-white) !important;
+}
+
+
+.pats-portal .portal-body,
+.pats-portal .portal-muted {
+  color: var(--pats-text-muted) !important;
+}
+
+
+.pats-portal .portal-link {
+  color: var(--pats-gold) !important;
+  text-decoration: none;
+}
+
+
+.pats-portal .portal-link:hover {
+  color: var(--pats-white) !important;
+}
+
+
+.pats-portal .portal-card {
+  background: var(--pats-bg-overlay) !important;
+  border: 1px solid var(--pats-border) !important;
+  box-shadow: none !important;
+  color: var(--pats-text);
+  padding: 1.25rem 1.5rem;
+}
+
+
+.pats-portal .portal-alert-warning {
+  border: 1px solid rgba(200, 168, 75, 0.45);
+  background: rgba(200, 168, 75, 0.08);
+  color: var(--pats-text);
+  padding: 1rem 1.25rem;
+}
+
+
+.pats-portal .portal-alert-error {
+  border: 1px solid rgba(220, 80, 70, 0.45);
+  background: rgba(80, 20, 18, 0.25);
+  color: var(--pats-text);
+}
+
+
+.pats-portal .portal-alert-success {
+  border: 1px solid rgba(126, 201, 160, 0.45);
+  background: rgba(30, 80, 55, 0.22);
+  color: var(--pats-text);
+  padding: 1rem 1.25rem;
+}
+
+
+.pats-portal [class~="text-brand-ink"],
+.pats-portal [class~="text-brand-ink-muted"] {
+  color: var(--pats-text) !important;
+}
+
+
+.pats-portal [class~="border-brand-line"] {
+  border-color: var(--pats-border) !important;
+}
+
+
+.pats-portal [class~="text-red-700"],
+.pats-portal [class~="text-red-600"] {
+  color: #e88a7a !important;
+}
+
+
+.pats-portal [class~="text-emerald-700"] {
+  color: #7ec9a0 !important;
+}
+
+
+
+.admin-theme.pats-dashboard .portal-stat-card {
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.06);
+}
+
+
+.admin-theme.pats-dashboard .portal-stat-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+
+.admin-theme.pats-dashboard .portal-stat-value {
+  font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
+  font-size: 2.125rem;
+  font-weight: 700;
+}
+
+
+.admin-theme.pats-dashboard .admin-page-title {
+  font-family: var(--font-inter), "DM Sans", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1E293B;
 }
 
 /* ============================================================
