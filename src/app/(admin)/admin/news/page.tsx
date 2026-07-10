@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
+import { Pencil, Plus } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 import { isAdminNewsPdfReadable } from "@/lib/serve-admin-news-pdf";
@@ -59,7 +59,10 @@ export default async function AdminNewsPage({
             <p>Manage public announcements and PDF downloads for visitors.</p>
           </div>
           <Link href="/admin/news/new">
-            <Button variant="adminPrimary">New post</Button>
+            <Button variant="adminPrimary">
+              <Plus className="mr-2 h-4 w-4" aria-hidden />
+              New post
+            </Button>
           </Link>
         </header>
 
@@ -82,7 +85,7 @@ export default async function AdminNewsPage({
                 <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Title</th>
+                    <th scope="col" className="!text-left">Title</th>
                     <th scope="col">PDF</th>
                     <th scope="col">Date</th>
                     <th scope="col">Status</th>
@@ -95,12 +98,13 @@ export default async function AdminNewsPage({
                       <td className="font-semibold tabular-nums text-muted-foreground">
                         {(page - 1) * PAGE_SIZE + i + 1}
                       </td>
-                      <td>
-                        <div className="flex max-w-full flex-col items-center gap-1">
-                          <span className="font-semibold leading-[1.4] text-brand-ink">
-                            {post.title}
-                          </span>
-                        </div>
+                      <td className="!text-left">
+                        <Link
+                          href={`/admin/news/${post.id}/edit`}
+                          className="font-semibold leading-[1.4] text-brand-ink no-underline transition-colors hover:text-green-800 hover:underline"
+                        >
+                          {post.title}
+                        </Link>
                       </td>
                       <td>
                         <div className="flex items-center justify-center">

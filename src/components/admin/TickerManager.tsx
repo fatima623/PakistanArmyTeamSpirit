@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -164,7 +164,10 @@ export function TickerManager({
             
           </div>
           <Button type="button" variant="adminPrimary" asChild>
-            <Link href="/admin/ticker/new">Add announcement</Link>
+            <Link href="/admin/ticker/new">
+              <Plus className="mr-2 h-4 w-4" aria-hidden />
+              Add announcement
+            </Link>
           </Button>
         </header>
 
@@ -223,7 +226,7 @@ export function TickerManager({
             <thead>
               <tr>
                 <th scope="col">Order</th>
-                <th scope="col" className="!px-5">
+                <th scope="col" className="!px-5 !text-left">
                   Message
                 </th>
                 <th scope="col">Priority</th>
@@ -300,7 +303,7 @@ export function TickerManager({
                         </div>
                       </td>
                       <td className="max-w-0 !px-5 text-brand-ink">
-                        <div className="flex min-w-0 flex-nowrap items-center justify-center gap-1.5">
+                        <div className="flex min-w-0 flex-nowrap items-center justify-start gap-1.5">
                           <span
                             className="min-w-0 truncate font-medium leading-[1.35]"
                             title={t.message}

@@ -80,7 +80,7 @@ export function TickerAnnouncementForm({
   };
 
   return (
-    <div className="flex w-full flex-col gap-[0.85rem] pb-2 mx-auto max-w-[52rem] pb-8">
+    <div className="mx-auto flex w-full max-w-[52rem] flex-col gap-[0.85rem] pb-8">
       <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
         <div className="min-w-0 flex-[1_1_16rem]">
           <Link href="/admin/ticker" className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800">
