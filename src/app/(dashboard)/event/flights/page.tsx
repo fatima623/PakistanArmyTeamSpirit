@@ -69,7 +69,7 @@ export default async function FlightDetailsPage() {
         subtitle="Submit your team's travel information and passport / ticket documents in a single submission."
       />
       {!rosterDone ? (
-        <section className="portal-card pats-panel">
+        <section className="portal-card pats-panel rounded-2xl">
           <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 ring-1 ring-slate-200">
               <Lock className="h-6 w-6 text-slate-500" aria-hidden />

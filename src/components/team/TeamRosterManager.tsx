@@ -10,6 +10,7 @@ import {
   ClipboardCheck,
   Loader2,
   Lock,
+  Pencil,
   Save,
   Trash2,
   UserPlus,
@@ -483,9 +484,11 @@ export function TeamRosterManager({
           <div>
             <h2 className="portal-h2 mb-0.5">Team Members</h2>
             <p className="text-sm text-slate-600">
-              {filledCount} of {limit} members
-              {rosterCompleted ? " · roster completed" : ""}
-              {dirty ? " · unsaved changes" : ""}
+              {rosterCompleted
+                ? "Roster completed"
+                : dirty
+                  ? "You have unsaved changes"
+                  : "Enter each team member's details below."}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -533,7 +536,7 @@ export function TeamRosterManager({
                   ) : (
                     <Save className="h-4 w-4" aria-hidden />
                   )}
-                  Save roster
+                  Save
                 </Button>
                 {rosterCompleted ? (
                   <Button
@@ -542,7 +545,8 @@ export function TeamRosterManager({
                     disabled={busy !== null}
                     onClick={() => setComplete(false)}
                   >
-                    Reopen roster
+                    <Pencil className="h-4 w-4" aria-hidden />
+                    Edit
                   </Button>
                 ) : (
                   <Button
@@ -712,11 +716,7 @@ export function TeamRosterManager({
         </div>
 
         {pageCount > 1 ? (
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-slate-500">
-              Showing {startIdx + 1}–
-              {Math.min(startIdx + pageSize, rows.length)} of {rows.length} rows
-            </p>
+          <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
