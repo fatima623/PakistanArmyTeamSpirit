@@ -10,9 +10,13 @@ import {
   Maximize2,
   RefreshCw,
   ZoomIn,
-  ZoomOut,
 } from "lucide-react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -22,8 +26,12 @@ type Props = {
   mimeType?: string | null;
   fileName?: string | null;
   className?: string;
+  /** Height classes for the inline preview (e.g. `h-80` for the admin cover
+   *  preview, `max-h-48` for the participant inline view). */
   imageMaxHeight?: string;
-  /** Render the premium media viewer chrome (zoom / fullscreen / open / download). */
+  /** Render the media viewer chrome (view full / fullscreen / open / download).
+   *  The inline image becomes a cover-cropped preview; clicking it opens the
+   *  full-size proof in a lightbox. */
   withToolbar?: boolean;
 };
 
@@ -45,7 +53,7 @@ export function PaymentProofViewer({
   const [objectUrl, setObjectUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [zoomed, setZoomed] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const mediaRef = useRef<HTMLElement>(null);
 
   const endpoint =
@@ -123,85 +131,102 @@ export function PaymentProofViewer({
 
   const showImage = isImageMime(mimeType, fileName);
 
-  // —— Premium media viewer (admin detail page) ——
+  // —— Media viewer (admin detail page): cover preview + lightbox ——
   if (withToolbar) {
     return (
-      <figure ref={mediaRef} className={cn("relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-[14px] border border-gray-200 p-4 [background:linear-gradient(45deg,theme(colors.slate.100)_25%,transparent_25%)_-8px_0/16px_16px,linear-gradient(-45deg,theme(colors.slate.100)_25%,transparent_25%)_-8px_0/16px_16px,linear-gradient(45deg,transparent_75%,theme(colors.slate.100)_75%)_-8px_0/16px_16px,linear-gradient(-45deg,transparent_75%,theme(colors.slate.100)_75%)_-8px_0/16px_16px,theme(colors.slate.50)] [&_img]:h-auto [&_img]:max-w-full [&_img]:rounded-lg", className)}>
-        <div className="absolute right-2.5 top-2.5 z-[2] inline-flex items-center gap-1 rounded-[10px] border border-gray-200 bg-white/90 p-1 shadow-[0_2px_8px_rgba(15,23,42,0.1)] backdrop-blur-[6px]">
-          {showImage ? (
-            <>
-              <button
-                type="button"
-                className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
-                onClick={() => setZoomed((z) => !z)}
-                title={zoomed ? "Zoom out" : "Zoom in"}
-                aria-label={zoomed ? "Zoom out" : "Zoom in"}
-              >
-                {zoomed ? (
-                  <ZoomOut className="h-4 w-4" aria-hidden />
-                ) : (
+      <>
+        <figure ref={mediaRef} className={cn("relative m-0 flex min-h-[200px] items-center justify-center overflow-hidden rounded-[14px] border border-gray-200 p-3 [background:linear-gradient(45deg,theme(colors.slate.100)_25%,transparent_25%)_-8px_0/16px_16px,linear-gradient(-45deg,theme(colors.slate.100)_25%,transparent_25%)_-8px_0/16px_16px,linear-gradient(45deg,transparent_75%,theme(colors.slate.100)_75%)_-8px_0/16px_16px,linear-gradient(-45deg,transparent_75%,theme(colors.slate.100)_75%)_-8px_0/16px_16px,theme(colors.slate.50)]", className)}>
+          <div className="absolute right-2.5 top-2.5 z-[2] inline-flex items-center gap-1 rounded-[10px] border border-gray-200 bg-white/90 p-1 shadow-[0_2px_8px_rgba(15,23,42,0.1)] backdrop-blur-[6px]">
+            {showImage ? (
+              <>
+                <button
+                  type="button"
+                  className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
+                  onClick={() => setLightboxOpen(true)}
+                  title="View full image"
+                  aria-label="View full image"
+                >
                   <ZoomIn className="h-4 w-4" aria-hidden />
-                )}
-              </button>
-              <button
-                type="button"
-                className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
-                onClick={goFullscreen}
-                title="Fullscreen"
-                aria-label="Fullscreen"
-              >
-                <Maximize2 className="h-4 w-4" aria-hidden />
-              </button>
-            </>
-          ) : null}
-          <a
-            href={objectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
-            title="Open in new tab"
-            aria-label="Open in new tab"
-          >
-            <ExternalLink className="h-4 w-4" aria-hidden />
-          </a>
-          <a
-            href={objectUrl}
-            download={fileName ?? "payment-proof"}
-            className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
-            title="Download"
-            aria-label="Download"
-          >
-            <Download className="h-4 w-4" aria-hidden />
-          </a>
-        </div>
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
+                  onClick={goFullscreen}
+                  title="Fullscreen"
+                  aria-label="Fullscreen"
+                >
+                  <Maximize2 className="h-4 w-4" aria-hidden />
+                </button>
+              </>
+            ) : null}
+            <a
+              href={objectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
+              title="Open in new tab"
+              aria-label="Open in new tab"
+            >
+              <ExternalLink className="h-4 w-4" aria-hidden />
+            </a>
+            <a
+              href={objectUrl}
+              download={fileName ?? "payment-proof"}
+              className="inline-flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-[7px] border-none bg-transparent text-slate-600 transition-colors hover:bg-green-50 hover:text-green-700"
+              title="Download"
+              aria-label="Download"
+            >
+              <Download className="h-4 w-4" aria-hidden />
+            </a>
+          </div>
+
+          {showImage ? (
+            <Image
+              src={objectUrl}
+              alt="Payment proof — click to view full size"
+              width={1280}
+              height={720}
+              unoptimized
+              onClick={() => setLightboxOpen(true)}
+              title="Click to view full image"
+              className={cn(
+                "w-full cursor-zoom-in rounded-lg object-cover",
+                imageMaxHeight
+              )}
+            />
+          ) : (
+            <a
+              href={objectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-brand-ink shadow-sm transition hover:border-brand-olive"
+            >
+              <FileText className="h-4 w-4" aria-hidden />
+              View receipt (PDF)
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+            </a>
+          )}
+        </figure>
 
         {showImage ? (
-          <Image
-            src={objectUrl}
-            alt="Payment proof"
-            width={640}
-            height={400}
-            unoptimized
-            onClick={() => setZoomed((z) => !z)}
-            className={cn(
-              "w-auto object-contain transition-all duration-200",
-              zoomed ? "max-h-[46rem] cursor-zoom-out" : imageMaxHeight,
-              !zoomed && "cursor-zoom-in"
-            )}
-          />
-        ) : (
-          <a
-            href={objectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-brand-ink shadow-sm transition hover:border-brand-olive"
-          >
-            <FileText className="h-4 w-4" aria-hidden />
-            View receipt (PDF)
-            <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-          </a>
-        )}
-      </figure>
+          <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+            <DialogContent className="w-auto max-w-[94vw] border-none bg-transparent p-0 shadow-none sm:rounded-xl [&>button:last-child]:rounded-full [&>button:last-child]:bg-white/90 [&>button:last-child]:p-1.5 [&>button:last-child]:text-slate-700 [&>button:last-child]:opacity-100 [&>button:last-child]:shadow">
+              <DialogTitle className="sr-only">
+                Payment proof — full size
+              </DialogTitle>
+              <Image
+                src={objectUrl}
+                alt="Payment proof full size"
+                width={1600}
+                height={1200}
+                unoptimized
+                onClick={() => setLightboxOpen(false)}
+                className="max-h-[88vh] w-auto max-w-[92vw] cursor-zoom-out rounded-xl object-contain"
+              />
+            </DialogContent>
+          </Dialog>
+        ) : null}
+      </>
     );
   }
 

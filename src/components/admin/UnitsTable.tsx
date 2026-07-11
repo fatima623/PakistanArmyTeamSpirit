@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import {
@@ -13,7 +12,6 @@ import {
   formatAdminTableCountry,
   isInternationalParticipant,
 } from "@/lib/participant-country";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -238,17 +236,6 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                   </h4>
                   <TeamRosterTable members={viewUnit.user.teamMembers} />
                 </section>
-              </div>
-
-              <div className="mt-3.5 flex justify-end border-t border-input pt-3">
-                <Button
-                  size="sm"
-                  variant="adminPrimary"
-                  className="portal-table-action-btn portal-table-action-btn--primary"
-                  asChild
-                >
-                  <Link href={`/admin/units/${viewUnit.id}/edit`}>Edit unit</Link>
-                </Button>
               </div>
             </>
           )}

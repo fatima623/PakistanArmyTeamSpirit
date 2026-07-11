@@ -53,12 +53,6 @@ const STATUS_FILTERS: {
   { key: "rejected", label: "Rejected", status: APPLICATION_STATUS.REJECTED },
 ];
 
-const PENDING_FILTER = {
-  key: "pending",
-  label: "Pending",
-  status: APPLICATION_STATUS.PENDING,
-} as const;
-
 const PAYMENT_FILTER_OPTIONS = [
   "all",
   PAYMENT_STATUS.PENDING,
@@ -189,10 +183,9 @@ export default async function AdminUsersPage({
     allCount += count;
   }
 
-  const chips = [...STATUS_FILTERS];
-  if (statusCounts.PENDING > 0 || filter === "pending") {
-    chips.splice(1, 0, PENDING_FILTER);
-  }
+  /* Chip row is fixed to the five reference statuses — pending rows stay
+     reachable through the “All” chip. */
+  const chips = STATUS_FILTERS;
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
   const exportRows = users.map((u) => ({

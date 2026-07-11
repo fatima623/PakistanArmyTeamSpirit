@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Activity, FileText, Mail } from "lucide-react";
+import { ArrowLeft, Activity, Landmark } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 import { AUDIT_ENTITY, PAYMENT_STATUS } from "@/lib/constants";
@@ -11,7 +11,6 @@ import { serializeRejectionHistory } from "@/lib/payment-rejection-history";
 import { AuditLogList } from "@/components/admin/AuditLogList";
 import { PaymentReviewPanel } from "@/components/admin/admin-dynamic";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
-import { Button } from "@/components/ui/button";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import { isInternationalParticipant } from "@/lib/participant-country";
@@ -99,6 +98,8 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
     paymentDate: payment.paymentDate?.toISOString() ?? null,
     proofUploadedAt: payment.proofUploadedAt?.toISOString() ?? null,
     createdAt: payment.createdAt.toISOString(),
+    updatedAt: payment.updatedAt.toISOString(),
+    verifiedAt: payment.verifiedAt?.toISOString() ?? null,
   };
 
   const initials =
@@ -106,10 +107,10 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
     "–";
 
   return (
-    <div className="flex w-full flex-col gap-4 pb-[5.5rem] lg:pb-6">
+    <div className="flex w-full flex-col gap-4 pb-6">
       <Link href="/admin/payments" className="inline-flex items-center self-start text-[0.8125rem] font-medium text-slate-500 no-underline transition-colors hover:text-green-700">
         <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-        Back to payment verification
+        Back to Requests
       </Link>
 
       <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
@@ -125,26 +126,29 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
           </h1>
           <p className="truncate text-[0.8125rem] text-slate-500">{payment.user.email}</p>
           <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[0.8125rem] text-slate-600">
-            <span>{payment.user.unit?.unitName ?? "No unit"}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Landmark size={13} className="text-slate-400" aria-hidden />
+              {payment.user.unit?.unitName ?? "No unit"}
+            </span>
             <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
-            <span className="font-bold text-slate-900">
+            <span className="font-bold text-green-800">
               {formatRegistrationFee(payment.amount)}
             </span>
             <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
             <span>Submitted {formatDateShort(payment.createdAt)}</span>
           </div>
         </div>
-        <div className="ml-auto flex flex-wrap items-center gap-3">
-          <PaymentStatusBadge status={payment.status} />
-          <Link href={`/admin/users/${payment.user.id}`}>
-            <Button size="sm" variant="adminOutline">
-              View application
-            </Button>
-          </Link>
+        <div className="ml-auto flex flex-wrap items-center gap-2.5">
+          <div className="flex min-w-[110px] flex-col items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
+            <span className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-slate-400">
+              Payment Status
+            </span>
+            <PaymentStatusBadge status={payment.status} showPrefix={false} />
+          </div>
         </div>
       </section>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_336px] lg:items-start">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_336px]">
         <div className="flex min-w-0 flex-col gap-4">
           {!canDecide ? (
             <div className="portal-alert-info rounded-lg px-4 py-2.5 text-[13px]">
@@ -160,38 +164,16 @@ export default async function AdminPaymentDetailPage({ params }: PageProps) {
           />
         </div>
 
-        <aside className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-20 [&_.admin-timeline]:max-h-[calc(100vh-220px)] [&_.admin-timeline]:min-h-[280px]">
-          <section className="rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden transition-[box-shadow,transform] duration-200">
-            <div className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+        <aside className="flex min-w-0 flex-col gap-4 lg:self-stretch">
+          <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <div className="flex flex-none items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
               <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:text-green-700">
                 <Activity className="h-4 w-4" aria-hidden />
-                Activity timeline
+                Activity Timeline
               </h3>
             </div>
-            <div className="p-[18px]">
+            <div className="flex-1 p-[18px]">
               <AuditLogList logs={auditLogs} />
-            </div>
-          </section>
-
-          <section className="rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden transition-[box-shadow,transform] duration-200">
-            <div className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
-              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:text-green-700">Quick actions</h3>
-            </div>
-            <div className="p-[18px]">
-              <div className="flex flex-col gap-2">
-                <Button variant="adminOutline" className="justify-start" asChild>
-                  <Link href={`/admin/users/${payment.user.id}`}>
-                    <FileText className="mr-2 h-4 w-4" aria-hidden />
-                    View full application
-                  </Link>
-                </Button>
-                <Button variant="adminOutline" className="justify-start" asChild>
-                  <a href={`mailto:${payment.user.email}`}>
-                    <Mail className="mr-2 h-4 w-4" aria-hidden />
-                    Email participant
-                  </a>
-                </Button>
-              </div>
             </div>
           </section>
         </aside>

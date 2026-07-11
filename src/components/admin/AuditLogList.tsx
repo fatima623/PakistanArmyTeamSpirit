@@ -22,7 +22,7 @@ export function AuditLogList({ logs }: { logs: AuditEntry[] }) {
   }
 
   return (
-    <ul className="admin-timeline m-0 max-h-[440px] list-none overflow-y-auto p-0">
+    <ul className="admin-timeline m-0 list-none p-0">
       {logs.map((log) => (
         <li key={log.id} className="relative flex gap-2.5 py-[7px] [&:not(:last-child)]:before:absolute [&:not(:last-child)]:before:-bottom-px [&:not(:last-child)]:before:left-1 [&:not(:last-child)]:before:top-[17px] [&:not(:last-child)]:before:w-px [&:not(:last-child)]:before:bg-brand-line/60 [&:not(:last-child)]:before:content-['']">
           <span className="mt-[5px] h-[9px] w-[9px] flex-none rounded-full bg-green-800 ring-[3px] ring-green-800/10" aria-hidden />

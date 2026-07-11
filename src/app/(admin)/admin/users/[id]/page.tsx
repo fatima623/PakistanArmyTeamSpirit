@@ -60,7 +60,7 @@ function Field({
   wide?: boolean;
 }) {
   return (
-    <div className={`flex min-w-0 flex-col gap-[5px] rounded-xl border border-gray-200 bg-slate-50 px-3.5 py-3 transition-colors hover:border-slate-300 hover:bg-white hover:shadow-[0_4px_12px_rgba(15,23,42,0.06)] ${wide ? "col-span-full" : ""}`.trim()}>
+    <div className={`flex min-w-0 flex-col gap-[5px] rounded-xl border border-gray-200 bg-slate-50 px-3.5 py-3 ${wide ? "col-span-full" : ""}`.trim()}>
       <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">{label}</span>
       <span className="break-words text-[0.9375rem] font-semibold text-slate-900">{value || "—"}</span>
     </div>
@@ -297,7 +297,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_336px] lg:items-start">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_336px]">
         <main className="flex min-w-0 flex-col gap-4">
           {canApprove ? (
             <RegistrationVerificationPanel
@@ -310,7 +310,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           ) : null}
 
           {/* —— Account Information ———————————————————————— */}
-          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
             <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
               <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <User size={16} aria-hidden />
@@ -350,7 +350,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
 
           {/* —— Unit Information ——————————————————————————— */}
           {user.unit ? (
-            <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
+            <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
               <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
                 <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                   <Building2 size={16} aria-hidden />
@@ -369,7 +369,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           ) : null}
 
           {/* —— Workflow Progress —————————————————————————— */}
-          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
             <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
               <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <Workflow size={16} aria-hidden />
@@ -406,15 +406,15 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           </section>
         </main>
 
-        <aside className="flex min-w-0 flex-col gap-4 lg:sticky lg:top-20">
-          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)] [&>*:last-child]:!pb-3">
-            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+        <aside className="flex min-w-0 flex-col gap-4 lg:self-stretch">
+          <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <header className="flex flex-none items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
               <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <Activity size={16} aria-hidden />
                 Activity
               </h3>
             </header>
-            <div className="p-[18px]">
+            <div className="flex-1 p-[18px]">
               <AuditLogList logs={auditLogs} />
             </div>
           </section>

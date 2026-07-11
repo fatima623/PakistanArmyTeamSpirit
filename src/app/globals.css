@@ -19765,6 +19765,24 @@ html:has(.dashboard-day) body {
   color: #9a6711;
 }
 
+/* ————————————————————————————————————————————————————————————————
+   Admin density — render the 80% browser-zoom view at 100% by default.
+   The fixed sidebar sits outside the zoomed subtree, so its offset is
+   compensated to stay visually equal to the sidebar width; min-height
+   is raised so 0.8 × height still fills the viewport.
+   ———————————————————————————————————————————————————————————————— */
+
+.admin-theme .admin-layout-main {
+  zoom: 0.8;
+  min-height: 125vh;
+}
+
+@media (min-width: 1024px) {
+  .admin-theme .admin-layout-main {
+    margin-left: calc(var(--admin-sidebar-width) / 0.8);
+  }
+}
+
 /* Row action — amber “revisit decision” / blue “review” icon buttons.
    Unlayered + double-class specificity so they outrank the layered
    .ops-btn-secondary base without cascade overrides. */
