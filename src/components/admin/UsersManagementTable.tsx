@@ -1,16 +1,16 @@
 import { IntlBadge } from "@/components/admin/IntlBadge";
-import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
+import {
+  ApplicationStatusBadge,
+  OverallStatusBadge,
+  PaymentStatusBadge,
+} from "@/components/admin/StatusBadges";
 import {
   formatAdminTableCountry,
   isInternationalParticipant,
 } from "@/lib/participant-country";
-import { UserApplicationStatusCell } from "@/components/admin/UserApplicationStatusCell";
 import { UserManagementRowActions } from "@/components/admin/UserManagementRowActions";
 import { formatDateShort } from "@/lib/utils";
-import {
-  adminApproveBtnStyles,
-  adminTablePillStyles,
-} from "@/lib/admin-ui";
+import { adminApproveBtnStyles, adminTablePillStyles } from "@/lib/admin-ui";
 
 export type UserManagementRow = {
   id: string;
@@ -22,6 +22,8 @@ export type UserManagementRow = {
   paymentStatus: string;
   suspended: boolean;
   createdAt: Date;
+  approvedAt: Date | null;
+  rejectedAt: Date | null;
   country: string | null;
   nationality: string | null;
   unit: { unitName: string } | null;
@@ -36,7 +38,7 @@ export function UsersManagementTable({
   canApprove = false,
 }: {
   users: UserManagementRow[];
-  /** SD (Sports Directorate) only — enables the quick-approve button. */
+  /** SD (Sports Directorate) only — enables the verification row action. */
   canApprove?: boolean;
 }) {
   if (users.length === 0) {
@@ -49,16 +51,19 @@ export function UsersManagementTable({
 
   return (
     <section
-      className="overflow-x-hidden rounded-xl border border-brand-line/60 bg-white"
+      className="overflow-x-auto rounded-xl border border-brand-line/60 bg-white"
       aria-label="Participation requests table"
     >
-      <table className={`admin-data-table ${adminTablePillStyles} ${adminApproveBtnStyles} [&>tbody>tr:nth-child(even)]:bg-neutral-50 [&>tbody>tr:hover]:bg-slate-50`}>
+      <table
+        className={`admin-data-table min-w-[860px] ${adminTablePillStyles} ${adminApproveBtnStyles} [&>tbody>tr:nth-child(even)]:bg-neutral-50 [&>tbody>tr:hover]:bg-slate-50 [&_thead_th]:!text-[0.71875rem] [&_thead_th]:!tracking-[0.07em] [&_thead_th]:!text-slate-400`}
+      >
         <colgroup>
           <col className="admin-users-col-participant" />
-          <col className="admin-users-col-unit !w-[13%]" />
-          <col className="admin-users-col-app" />
-          <col className="admin-users-col-pay" />
-          <col className="admin-users-col-actions !w-[10%]" />
+          <col className="admin-users-col-unit !w-[15%]" />
+          <col className="admin-users-col-app !w-[13%]" />
+          <col className="admin-users-col-pay !w-[12%]" />
+          <col className="!w-[14%]" />
+          <col className="admin-users-col-actions !w-[128px]" />
         </colgroup>
         <thead>
           <tr>
@@ -69,10 +74,13 @@ export function UsersManagementTable({
               Unit
             </th>
             <th scope="col">
-              Application
+              Application Status
             </th>
             <th scope="col">
-              Payment
+              Payment Status
+            </th>
+            <th scope="col">
+              Overall Status
             </th>
             <th scope="col">
               Actions
@@ -82,9 +90,10 @@ export function UsersManagementTable({
         <tbody>
           {users.map((u) => {
             const international = isInternationalParticipant(u.country);
-            const unitSub = [u.rank, formatAdminTableCountry(u.country, u.nationality)]
+            const meta = [u.rank, formatAdminTableCountry(u.country, u.nationality)]
               .filter((v) => v && v !== "—")
               .join(" · ");
+            const decisionDate = u.approvedAt ?? u.rejectedAt ?? u.createdAt;
             return (
               <tr key={u.id} className="admin-users-row">
                 <td className="admin-users-cell-participant">
@@ -98,6 +107,11 @@ export function UsersManagementTable({
                         {international ? <IntlBadge /> : null}
                       </div>
                       <div className="admin-users-participant-sub">{u.email}</div>
+                      {meta ? (
+                        <div className="admin-users-participant-sub !text-[11px]">
+                          {meta}
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </td>
@@ -105,19 +119,18 @@ export function UsersManagementTable({
                   <div className="admin-users-unit-name">
                     {u.unit?.unitName ?? "—"}
                   </div>
-                  {unitSub ? (
-                    <div className="admin-users-unit-sub">{unitSub}</div>
-                  ) : null}
                 </td>
                 <td>
-                  <UserApplicationStatusCell
-                    userId={u.id}
-                    applicationStatus={u.applicationStatus}
-                    suspended={u.suspended}
-                    canApprove={canApprove}
-                  />
-                  <div className="admin-users-app-date">
-                    {formatDateShort(u.createdAt)}
+                  <div className="flex w-full min-w-0 flex-col items-center justify-start gap-0.5">
+                    <ApplicationStatusBadge
+                      status={u.applicationStatus}
+                      showPrefix={false}
+                      density="table"
+                      className="admin-users-status-badge--app"
+                    />
+                    <div className="admin-users-app-date">
+                      {formatDateShort(decisionDate)}
+                    </div>
                   </div>
                 </td>
                 <td>
@@ -131,7 +144,17 @@ export function UsersManagementTable({
                   </div>
                 </td>
                 <td>
-                  <UserManagementRowActions userId={u.id} />
+                  <OverallStatusBadge
+                    applicationStatus={u.applicationStatus}
+                    suspended={u.suspended}
+                  />
+                </td>
+                <td>
+                  <UserManagementRowActions
+                    userId={u.id}
+                    applicationStatus={u.applicationStatus}
+                    canReview={canApprove}
+                  />
                 </td>
               </tr>
             );

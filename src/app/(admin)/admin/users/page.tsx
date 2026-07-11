@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SlidersHorizontal, Users2 } from "lucide-react";
 import { Prisma } from "@prisma/client";
 
 import { AdminExportButton } from "@/components/admin/AdminExportButton";
@@ -11,9 +12,15 @@ import { getAdminRole } from "@/lib/admin-session";
 import { canApproveRegistration } from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
 import { adminNavLabel } from "@/lib/admin-navigation";
-import { APPLICATION_STATUS } from "@/lib/constants";
 import {
-  adminUsersFilterTabs,
+  APPLICATION_STATUS,
+  LEGACY_PAYMENT_STATUS,
+  PAYMENT_STATUS,
+  PAYMENT_STATUS_FILTER_LABELS,
+  type ApplicationStatus,
+} from "@/lib/constants";
+import { normalizeApplicationStatus } from "@/lib/user-status";
+import {
   segmentedChipClasses,
   adminUsersControls,
   adminUsersPage,
@@ -28,13 +35,39 @@ export const metadata: Metadata = {
 
 const PAGE_SIZE = 20;
 
-const FILTER_LABELS: Record<string, string> = {
-  all: "All",
-  pending: "Pending",
-  approved: "Approved",
-  rejected: "Referred",
-  payment_pending: "Payment due",
-};
+/** Overall-status chips — reference design: All / Approved / Under Review /
+ *  Returned / Rejected (Pending appears only while pending rows exist). */
+const STATUS_FILTERS: {
+  key: string;
+  label: string;
+  status?: ApplicationStatus;
+}[] = [
+  { key: "all", label: "All" },
+  { key: "approved", label: "Approved", status: APPLICATION_STATUS.APPROVED },
+  {
+    key: "under_review",
+    label: "Under Review",
+    status: APPLICATION_STATUS.UNDER_REVIEW,
+  },
+  { key: "returned", label: "Returned", status: APPLICATION_STATUS.RETURNED },
+  { key: "rejected", label: "Rejected", status: APPLICATION_STATUS.REJECTED },
+];
+
+const PENDING_FILTER = {
+  key: "pending",
+  label: "Pending",
+  status: APPLICATION_STATUS.PENDING,
+} as const;
+
+const PAYMENT_FILTER_OPTIONS = [
+  "all",
+  PAYMENT_STATUS.PENDING,
+  PAYMENT_STATUS.SUBMITTED,
+  PAYMENT_STATUS.UNDER_REVIEW,
+  PAYMENT_STATUS.VERIFIED,
+  PAYMENT_STATUS.REJECTED,
+  PAYMENT_STATUS.RETURNED,
+] as const;
 
 type SearchParams = Promise<{
   page?: string;
@@ -43,6 +76,21 @@ type SearchParams = Promise<{
   appStatus?: string;
   payStatus?: string;
 }>;
+
+function buildHref(params: {
+  filter: string;
+  search: string;
+  payStatus: string;
+  page?: number;
+}): string {
+  const query = new URLSearchParams();
+  if (params.filter && params.filter !== "all") query.set("filter", params.filter);
+  if (params.search) query.set("search", params.search);
+  if (params.payStatus && params.payStatus !== "all")
+    query.set("payStatus", params.payStatus);
+  query.set("page", String(params.page ?? 1));
+  return `/admin/users?${query.toString()}`;
+}
 
 export default async function AdminUsersPage({
   searchParams,
@@ -54,35 +102,46 @@ export default async function AdminUsersPage({
   const search = params.search ?? "";
   const filter = params.filter ?? "all";
   const appStatus = params.appStatus ?? "";
-  const payStatus = params.payStatus ?? "";
+  const payStatus = params.payStatus ?? "all";
 
-  const where: Prisma.UserWhereInput = { role: { not: "admin" } };
-  if (filter === "pending") {
-    where.applicationStatus = APPLICATION_STATUS.PENDING;
-  }
-  if (filter === "approved") {
-    where.applicationStatus = APPLICATION_STATUS.APPROVED;
-  }
-  if (filter === "rejected") {
-    where.applicationStatus = APPLICATION_STATUS.REJECTED;
-  }
-  if (filter === "payment_pending") {
-    where.applicationStatus = APPLICATION_STATUS.APPROVED;
-    where.paymentStatus = "PENDING";
-  }
-  if (appStatus) where.applicationStatus = appStatus;
-  if (payStatus) where.paymentStatus = payStatus;
+  /* Base scope: everything except the status chip itself — the chip counts
+     are computed against this same scope so the numbers always match. */
+  const baseWhere: Prisma.UserWhereInput = { role: { not: "admin" } };
   if (search) {
-    where.OR = [
+    baseWhere.OR = [
       { email: { contains: search } },
       { firstName: { contains: search } },
       { lastName: { contains: search } },
     ];
   }
+  if (payStatus && payStatus !== "all") {
+    baseWhere.paymentStatus =
+      payStatus === PAYMENT_STATUS.VERIFIED
+        ? { in: [PAYMENT_STATUS.VERIFIED, LEGACY_PAYMENT_STATUS.APPROVED] }
+        : payStatus;
+  }
+
+  const where: Prisma.UserWhereInput = { ...baseWhere };
+
+  const statusByFilter: Record<string, ApplicationStatus> = {
+    approved: APPLICATION_STATUS.APPROVED,
+    under_review: APPLICATION_STATUS.UNDER_REVIEW,
+    returned: APPLICATION_STATUS.RETURNED,
+    rejected: APPLICATION_STATUS.REJECTED,
+    pending: APPLICATION_STATUS.PENDING,
+  };
+  if (statusByFilter[filter]) {
+    where.applicationStatus = statusByFilter[filter];
+  } else if (filter === "payment_pending") {
+    // Legacy bookmark support
+    where.applicationStatus = APPLICATION_STATUS.APPROVED;
+    where.paymentStatus = PAYMENT_STATUS.PENDING;
+  }
+  if (appStatus) where.applicationStatus = appStatus;
 
   const viewerRole = await getAdminRole();
 
-  const [users, totalCount] = await Promise.all([
+  const [users, totalCount, grouped] = await Promise.all([
     prisma.user.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -100,13 +159,40 @@ export default async function AdminUsersPage({
         paymentStatus: true,
         suspended: true,
         createdAt: true,
+        approvedAt: true,
+        rejectedAt: true,
         country: true,
         nationality: true,
         unit: { select: { unitName: true } },
       },
     }),
     prisma.user.count({ where }),
+    prisma.user.groupBy({
+      by: ["applicationStatus"],
+      where: baseWhere,
+      _count: { _all: true },
+    }),
   ]);
+
+  /* Chip counts (normalised so legacy status strings still tally). */
+  const statusCounts: Record<ApplicationStatus, number> = {
+    PENDING: 0,
+    UNDER_REVIEW: 0,
+    APPROVED: 0,
+    REJECTED: 0,
+    RETURNED: 0,
+  };
+  let allCount = 0;
+  for (const group of grouped) {
+    const count = group._count._all;
+    statusCounts[normalizeApplicationStatus(group.applicationStatus)] += count;
+    allCount += count;
+  }
+
+  const chips = [...STATUS_FILTERS];
+  if (statusCounts.PENDING > 0 || filter === "pending") {
+    chips.splice(1, 0, PENDING_FILTER);
+  }
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
   const exportRows = users.map((u) => ({
@@ -119,17 +205,95 @@ export default async function AdminUsersPage({
     Payment: u.paymentStatus,
     Registered: u.createdAt.toISOString().slice(0, 10),
   }));
-  const filters = [
-    "all",
-    "pending",
-    "approved",
-    "rejected",
-    "payment_pending",
-  ] as const;
+
+  const paginationExtraQuery =
+    payStatus && payStatus !== "all"
+      ? `payStatus=${encodeURIComponent(payStatus)}`
+      : "";
 
   return (
       <div className={cn(adminUsersPage, "admin-fade-in-up")}>
         <div className={adminUsersPanel}>
+          <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5 border-b border-brand-line/60 pb-3">
+            <h2 className="m-0 flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900">
+              <Users2
+                size={17}
+                className="flex-shrink-0 text-green-800"
+                aria-hidden
+              />
+              Participation Requests
+            </h2>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              <nav
+                className="flex flex-wrap items-center gap-1.5"
+                aria-label="Filter by overall status"
+              >
+                {chips.map((chip) => {
+                  const count = chip.status
+                    ? statusCounts[chip.status]
+                    : allCount;
+                  const active = filter === chip.key;
+                  return (
+                    <Link
+                      key={chip.key}
+                      href={buildHref({ filter: chip.key, search, payStatus })}
+                      className={segmentedChipClasses(chip.key, active)}
+                      aria-current={active ? "true" : undefined}
+                    >
+                      {chip.label} ({count})
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              <span
+                className="mx-1 hidden h-5 w-px bg-brand-line/80 sm:block"
+                aria-hidden
+              />
+
+              <details className="relative">
+                <summary
+                  className={cn(
+                    "inline-flex min-h-[2.125rem] cursor-pointer list-none items-center justify-center gap-1.5 rounded-lg border border-brand-line/80 bg-white px-3.5 py-[0.4375rem] text-[0.8125rem] font-semibold text-slate-700 transition-colors hover:border-brand-olive/40 hover:bg-slate-50 [&::-webkit-details-marker]:hidden",
+                    payStatus !== "all" &&
+                      "border-green-700 bg-green-50 text-green-800"
+                  )}
+                >
+                  <SlidersHorizontal size={14} aria-hidden />
+                  Filter
+                  {payStatus !== "all" ? (
+                    <span className="rounded-full bg-green-700 px-1.5 py-px text-[10px] font-bold text-white">
+                      1
+                    </span>
+                  ) : null}
+                </summary>
+                <div className="absolute right-0 top-[calc(100%+6px)] z-30 w-52 rounded-xl border border-brand-line/70 bg-white p-1.5 shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
+                  <p className="m-0 px-2.5 pb-1 pt-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.07em] text-slate-400">
+                    Payment status
+                  </p>
+                  {PAYMENT_FILTER_OPTIONS.map((option) => {
+                    const active = payStatus === option;
+                    return (
+                      <Link
+                        key={option}
+                        href={buildHref({ filter, search, payStatus: option })}
+                        className={cn(
+                          "block rounded-lg px-2.5 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition-colors hover:bg-slate-100",
+                          active && "bg-green-50 font-bold text-green-800"
+                        )}
+                      >
+                        {option === "all"
+                          ? "All payments"
+                          : PAYMENT_STATUS_FILTER_LABELS[option]}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </details>
+            </div>
+          </header>
+
           <section className={adminUsersControls}>
             <div className={adminUsersToolbarSearch}>
               <LiveSearchInput
@@ -155,17 +319,6 @@ export default async function AdminUsersPage({
                 filename="participation-requests.csv"
               />
             </div>
-            <nav className={adminUsersFilterTabs} aria-label="Filter users">
-              {filters.map((f) => (
-                <Link
-                  key={f}
-                  href={`/admin/users?filter=${f}&search=${encodeURIComponent(search)}&page=1`}
-                  className={segmentedChipClasses(f, filter === f)}
-                >
-                  {FILTER_LABELS[f] ?? f}
-                </Link>
-              ))}
-            </nav>
           </section>
 
           <UsersManagementTable
@@ -176,12 +329,14 @@ export default async function AdminUsersPage({
           <footer className={adminUsersPagination}>
             <p className="m-0 text-sm font-medium text-slate-900">
               Page {page} of {totalPages}
+              <span className="text-slate-500"> · {totalCount} requests</span>
             </p>
             <AdminUsersPagination
               page={page}
               totalPages={totalPages}
               filter={filter}
               search={search}
+              extraQuery={paginationExtraQuery}
             />
           </footer>
         </div>

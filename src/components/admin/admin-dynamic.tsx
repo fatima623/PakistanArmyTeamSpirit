@@ -69,3 +69,11 @@ export const ApplicationReviewPanel = dynamic(
     })),
   { loading, ssr: false }
 );
+
+export const RegistrationVerificationPanel = dynamic(
+  () =>
+    import("@/components/admin/RegistrationActions").then((m) => ({
+      default: m.RegistrationVerificationPanel,
+    })),
+  { loading, ssr: false }
+);

@@ -50,3 +50,18 @@ export function formatDateTime(date: Date | string): string {
     hour12: true,
   }).format(new Date(date));
 }
+
+/** e.g. 10 Jul 2026, 6:42 PM in Pakistan Standard Time — used for admin
+ *  activity timelines so events show local wall-clock time. Fixed zone keeps
+ *  SSR and client hydration output identical. */
+export function formatDateTimePK(date: Date | string): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Karachi",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(date));
+}

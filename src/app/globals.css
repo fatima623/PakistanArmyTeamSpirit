@@ -19710,3 +19710,86 @@ html:has(.dashboard-day) body {
 .pp [class~="text-emerald-700"] {
   color: var(--pp-primary) !important;
 }
+
+/* ————————————————————————————————————————————————————————————————
+   Participation Requests — overall-status icon pill (reference table)
+   ———————————————————————————————————————————————————————————————— */
+
+.admin-theme .admin-overall-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.admin-theme .admin-overall-badge svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+.admin-theme .admin-overall-badge--approved {
+  background: #e9f5ed;
+  border-color: #cde8d6;
+  color: #15803d;
+}
+
+.admin-theme .admin-overall-badge--review {
+  background: #e8f3fb;
+  border-color: #cfe6f7;
+  color: #0369a1;
+}
+
+.admin-theme .admin-overall-badge--returned {
+  background: #fdf0e3;
+  border-color: #f8ddc0;
+  color: #c2620e;
+}
+
+.admin-theme .admin-overall-badge--rejected {
+  background: #fdebe9;
+  border-color: #f8d2cd;
+  color: #b42318;
+}
+
+.admin-theme .admin-overall-badge--pending {
+  background: #fbf2e0;
+  border-color: #f1e2bb;
+  color: #9a6711;
+}
+
+/* Row action — amber “revisit decision” / blue “review” icon buttons.
+   Unlayered + double-class specificity so they outrank the layered
+   .ops-btn-secondary base without cascade overrides. */
+.admin-theme .portal-table-action-btn--warning.portal-table-action-btn {
+  border: 1px solid #f3ddba;
+  background: #ffffff;
+  color: #c2620e;
+}
+
+.admin-theme
+  .portal-table-action-btn--warning.portal-table-action-btn:hover:not(:disabled) {
+  border-color: #eab308;
+  background: #fdf6e7;
+  color: #9a6711;
+}
+
+.admin-theme .portal-table-action-btn--info.portal-table-action-btn {
+  border: 1px solid #cfe6f7;
+  background: #ffffff;
+  color: #0369a1;
+}
+
+.admin-theme
+  .portal-table-action-btn--info.portal-table-action-btn:hover:not(:disabled) {
+  border-color: #38bdf8;
+  background: #eef7fd;
+  color: #075985;
+}

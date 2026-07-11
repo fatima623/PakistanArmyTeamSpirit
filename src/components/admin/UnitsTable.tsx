@@ -5,6 +5,10 @@ import Link from "next/link";
 
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import {
+  TeamRosterTable,
+  type RosterMember,
+} from "@/components/admin/TeamRosterTable";
+import {
   displayCountry,
   formatAdminTableCountry,
   isInternationalParticipant,
@@ -38,6 +42,7 @@ type UnitRow = {
     country: string | null;
     nationality: string | null;
     _count: { teamMembers: number };
+    teamMembers: RosterMember[];
   };
 };
 
@@ -153,7 +158,7 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
       </div>
 
       <Dialog open={!!viewUnit} onOpenChange={() => setViewUnit(null)}>
-        <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
+        <DialogContent className="max-h-[88vh] max-w-3xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.12)]">
           {viewUnit && (
             <>
               <DialogHeader>
@@ -219,6 +224,19 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                     <Field label="CO email" value={viewUnit.coEmail} />
                     <Field label="CO phone" value={viewUnit.coPhone} />
                   </div>
+                </section>
+
+                <section>
+                  <h4 className="mb-2 flex items-center justify-between gap-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-brand-olive-dark">
+                    <span>Team members</span>
+                    <span className="rounded-full bg-brand-olive/10 px-2 py-0.5 text-[10.5px] font-bold normal-case tracking-normal text-brand-olive-dark">
+                      {viewUnit.user.teamMembers.length}{" "}
+                      {viewUnit.user.teamMembers.length === 1
+                        ? "member"
+                        : "members"}
+                    </span>
+                  </h4>
+                  <TeamRosterTable members={viewUnit.user.teamMembers} />
                 </section>
               </div>
 

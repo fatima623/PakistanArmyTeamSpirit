@@ -1,13 +1,23 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Activity, Building2, User, Workflow } from "lucide-react";
+import { Fragment } from "react";
+import {
+  Activity,
+  Building2,
+  CalendarDays,
+  Check,
+  User,
+  Users2,
+  Workflow,
+} from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { formatDateDisplay, formatDateShort } from "@/lib/utils";
+import { cn, formatDateDisplay, formatDateShort } from "@/lib/utils";
 import { AUDIT_ENTITY } from "@/lib/constants";
-import { ApplicationReviewPanel } from "@/components/admin/admin-dynamic";
+import { RegistrationVerificationPanel } from "@/components/admin/admin-dynamic";
 import { AdminResetPassword } from "@/components/admin/AdminResetPassword";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
+import { TeamRosterDialog } from "@/components/admin/TeamRosterDialog";
 import { getAdminRole } from "@/lib/admin-session";
 import { canApproveRegistration, canManageSystem } from "@/lib/auth-routes";
 import { AuditLogList } from "@/components/admin/AuditLogList";
@@ -57,6 +67,82 @@ function Field({
   );
 }
 
+/** Header status chip — label above badge, boxed (reference: image top-right). */
+function HeaderStatusBox({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex min-w-[92px] flex-col items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 shadow-[0_1px_2px_rgba(15,23,42,0.03)]">
+      <span className="text-[0.65rem] font-bold uppercase tracking-[0.06em] text-slate-400">
+        {label}
+      </span>
+      {children}
+    </div>
+  );
+}
+
+type WorkflowStep = {
+  label: string;
+  date: Date | null;
+  /** shown under the label when the step has no date yet */
+  fallback?: string;
+};
+
+/** Numbered progress stepper — completed → green check, current → blue
+ *  number, upcoming → gray number (reference: Workflow Progress card). */
+function WorkflowStepper({ steps }: { steps: WorkflowStep[] }) {
+  const currentIndex = steps.findIndex((s) => !s.date);
+  return (
+    <ol className="m-0 flex min-w-[520px] list-none items-start p-0">
+      {steps.map((step, i) => {
+        const done = !!step.date;
+        const isCurrent = i === currentIndex;
+        return (
+          <Fragment key={step.label}>
+            {i > 0 ? (
+              <li aria-hidden className="flex-1 pt-[13px]">
+                <span
+                  className={cn(
+                    "block h-[2.5px] w-full rounded-full",
+                    steps[i - 1].date ? "bg-green-600" : "bg-slate-200"
+                  )}
+                />
+              </li>
+            ) : null}
+            <li className="flex w-[124px] flex-none flex-col items-center gap-1.5 text-center">
+              <span
+                className={cn(
+                  "inline-flex h-7 w-7 items-center justify-center rounded-full text-[0.75rem] font-bold",
+                  done
+                    ? "bg-green-600 text-white"
+                    : isCurrent
+                      ? "bg-sky-600 text-white shadow-[0_0_0_4px_rgba(2,132,199,0.15)]"
+                      : "bg-slate-200 text-slate-500"
+                )}
+                aria-hidden
+              >
+                {done ? <Check size={15} strokeWidth={3} /> : i + 1}
+              </span>
+              <span className="text-[0.75rem] font-semibold leading-tight text-slate-800">
+                {step.label}
+              </span>
+              <span className="text-[0.6875rem] leading-tight text-slate-400">
+                {step.date
+                  ? formatDateDisplay(step.date)
+                  : (step.fallback ?? "Pending")}
+              </span>
+            </li>
+          </Fragment>
+        );
+      })}
+    </ol>
+  );
+}
+
 export default async function AdminUserDetailPage({ params }: PageProps) {
   const { id } = await params;
 
@@ -85,6 +171,17 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       flightsFinalizedAt: true,
       createdAt: true,
       unit: true,
+      teamMembers: {
+        select: {
+          id: true,
+          fullName: true,
+          serviceNumber: true,
+          rank: true,
+          serviceArm: true,
+          gender: true,
+        },
+        orderBy: { createdAt: "asc" },
+      },
       _count: { select: { teamMembers: true, flightDetails: true } },
     },
   });
@@ -106,27 +203,30 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     },
   });
 
-  const participationValue = user.participationConfirmedAt
-    ? formatDateDisplay(user.participationConfirmedAt)
-    : user.participationDeclinedAt
-      ? `Declined ${formatDateDisplay(user.participationDeclinedAt)}`
-      : "Not yet";
+  const workflowSteps: WorkflowStep[] = [
+    {
+      label: "Participation Confirmed",
+      date: user.participationConfirmedAt,
+      fallback: user.participationDeclinedAt
+        ? `Declined ${formatDateShort(user.participationDeclinedAt)}`
+        : "Pending",
+    },
+    { label: "Team Registered", date: user.teamRegisteredAt },
+    { label: "Roster Completed", date: user.rosterCompletedAt },
+    { label: "Flight Details", date: user.flightsFinalizedAt },
+  ];
 
-  const teamRegisteredValue = user.teamRegisteredAt
-    ? formatDateDisplay(user.teamRegisteredAt)
-    : "Not yet";
-
-  const rosterValue =
-    `${user._count.teamMembers} member${user._count.teamMembers === 1 ? "" : "s"}` +
+  const rosterSummary =
+    `${user._count.teamMembers} ${user._count.teamMembers === 1 ? "member" : "members"}` +
     (user.maxTeamMembersOverride
       ? ` (limit raised to ${user.maxTeamMembersOverride})`
       : "") +
     (user.rosterCompletedAt
-      ? ` — completed ${formatDateShort(user.rosterCompletedAt)}`
+      ? ` — completed on ${formatDateDisplay(user.rosterCompletedAt)}`
       : " — in progress");
 
-  const flightValue =
-    `${user._count.flightDetails} record${user._count.flightDetails === 1 ? "" : "s"}` +
+  const flightSummary =
+    `${user._count.flightDetails} ${user._count.flightDetails === 1 ? "record" : "records"}` +
     (user.flightsFinalizedAt
       ? ` — finalized ${formatDateShort(user.flightsFinalizedAt)}`
       : " — not finalized");
@@ -141,19 +241,20 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
         ]}
       />
 
+      {/* —— Profile header ————————————————————————————————— */}
       <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <span className="inline-flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-olive-dark to-brand-olive text-[1.05rem] font-bold tracking-[0.02em] text-white" aria-hidden>
           {`${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() ||
             "–"}
         </span>
 
-        <div className="flex min-w-0 flex-[1_1_18rem] flex-col gap-1.5">
+        <div className="flex min-w-0 flex-[1_1_16rem] flex-col gap-1">
           <h1 className="flex flex-wrap items-center gap-2 text-xl font-bold leading-tight tracking-[-0.01em] text-slate-900">
             {user.firstName} {user.lastName}
             {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
           </h1>
 
-          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[0.8125rem] text-slate-600">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.8125rem] text-slate-600">
             {user.rank ? <span>{user.rank}</span> : null}
             {user.gender ? (
               <>
@@ -163,57 +264,43 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             ) : null}
             <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
             <span>{displayCountry(user.country)}</span>
-            <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
-            <span>Registered {formatDateShort(user.createdAt)}</span>
           </div>
 
-          <div
-            className="mt-1 flex flex-wrap items-start gap-x-4 gap-y-3 border-t border-gray-200 pt-2.5"
-            role="group"
-            aria-label="Status"
-          >
-            <div className="flex min-w-0 flex-col gap-[5px]">
-              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Participation</span>
-              <ApplicationStatusBadge
-                status={user.applicationStatus}
-                showPrefix={false}
-              />
-            </div>
-            <span className="my-0.5 w-px self-stretch bg-gray-200" aria-hidden />
-            <div className="flex min-w-0 flex-col gap-[5px]">
-              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Payment</span>
-              <PaymentStatusBadge
-                status={user.paymentStatus}
-                showPrefix={false}
-              />
-            </div>
-            <span className="my-0.5 w-px self-stretch bg-gray-200" aria-hidden />
-            <div className="flex min-w-0 flex-col gap-[5px]">
-              <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">Account</span>
-              <span
-                className={
-                  user.suspended
-                    ? "ops-status-badge ops-status-rejected"
-                    : "ops-status-badge ops-status-approved"
-                }
-              >
-                {user.suspended ? "Suspended" : "Active"}
-              </span>
-            </div>
+          <div className="flex items-center gap-1.5 text-[0.8125rem] text-slate-500">
+            <CalendarDays size={14} className="flex-shrink-0 text-slate-400" aria-hidden />
+            <span>Registered on {formatDateDisplay(user.createdAt)}</span>
           </div>
         </div>
 
-        {canManageRoles ? (
-          <div className="ml-auto flex flex-wrap items-center gap-3">
-            <AdminResetPassword userId={user.id} />
-          </div>
-        ) : null}
+        <div className="ml-auto flex flex-wrap items-center gap-2.5">
+          <HeaderStatusBox label="Participation">
+            <ApplicationStatusBadge
+              status={user.applicationStatus}
+              showPrefix={false}
+            />
+          </HeaderStatusBox>
+          <HeaderStatusBox label="Payment">
+            <PaymentStatusBadge status={user.paymentStatus} showPrefix={false} />
+          </HeaderStatusBox>
+          <HeaderStatusBox label="Account">
+            <span
+              className={
+                user.suspended
+                  ? "ops-status-badge ops-status-rejected"
+                  : "ops-status-badge ops-status-approved"
+              }
+            >
+              {user.suspended ? "Suspended" : "Active"}
+            </span>
+          </HeaderStatusBox>
+          {canManageRoles ? <AdminResetPassword userId={user.id} /> : null}
+        </div>
       </section>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_336px] lg:items-start">
         <main className="flex min-w-0 flex-col gap-4">
           {canApprove ? (
-            <ApplicationReviewPanel
+            <RegistrationVerificationPanel
               userId={user.id}
               applicationStatus={user.applicationStatus}
               paymentStatus={user.paymentStatus}
@@ -222,11 +309,12 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             />
           ) : null}
 
+          {/* —— Account Information ———————————————————————— */}
           <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
             <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
               <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <User size={16} aria-hidden />
-                Account
+                Account Information
               </h3>
             </header>
             <div className="p-[18px]">
@@ -260,12 +348,13 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             </div>
           </section>
 
+          {/* —— Unit Information ——————————————————————————— */}
           {user.unit ? (
             <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
               <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
                 <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                   <Building2 size={16} aria-hidden />
-                  Unit
+                  Unit Information
                 </h3>
               </header>
               <div className="p-[18px]">
@@ -279,23 +368,40 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             </section>
           ) : null}
 
+          {/* —— Workflow Progress —————————————————————————— */}
           <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[box-shadow,transform] duration-200 hover:-translate-y-px hover:shadow-[0_6px_18px_rgba(15,23,42,0.07)]">
             <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
               <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
                 <Workflow size={16} aria-hidden />
-                Workflow progress
+                Workflow Progress
               </h3>
             </header>
-            <div className="p-[18px]">
-              <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
-                <Field
-                  label="Participation confirmed"
-                  value={participationValue}
-                />
-                <Field label="Team registered" value={teamRegisteredValue} />
-                <Field label="Roster" value={rosterValue} wide />
-                <Field label="Flight details" value={flightValue} wide />
+            <div className="flex flex-col gap-4 p-[18px]">
+              <div className="overflow-x-auto pb-1">
+                <WorkflowStepper steps={workflowSteps} />
               </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-slate-50 px-4 py-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <Users2 size={16} className="flex-shrink-0 text-green-700" aria-hidden />
+                  <div className="min-w-0">
+                    <p className="m-0 text-[0.8125rem] font-bold text-slate-900">
+                      Roster
+                    </p>
+                    <p className="m-0 text-[0.75rem] text-slate-500">
+                      {rosterSummary}
+                    </p>
+                  </div>
+                </div>
+                <TeamRosterDialog
+                  members={user.teamMembers}
+                  teamName={user.unit?.unitName}
+                />
+              </div>
+
+              <p className="m-0 px-0.5 text-[0.75rem] text-slate-400">
+                Flight details: {flightSummary}
+              </p>
             </div>
           </section>
         </main>

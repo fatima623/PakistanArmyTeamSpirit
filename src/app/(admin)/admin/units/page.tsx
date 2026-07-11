@@ -53,6 +53,17 @@ export default async function AdminUnitsPage({
           country: true,
           nationality: true,
           _count: { select: { teamMembers: true } },
+          teamMembers: {
+            select: {
+              id: true,
+              fullName: true,
+              serviceNumber: true,
+              rank: true,
+              serviceArm: true,
+              gender: true,
+            },
+            orderBy: { createdAt: "asc" },
+          },
         },
       },
     },

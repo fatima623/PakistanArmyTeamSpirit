@@ -8,9 +8,10 @@ function pageHref(
   page: number,
   filter: string,
   search: string,
-  filterParam: string
+  filterParam: string,
+  extraQuery = ""
 ) {
-  return `${basePath}?page=${page}&${filterParam}=${filter}&search=${encodeURIComponent(search)}`;
+  return `${basePath}?page=${page}&${filterParam}=${filter}&search=${encodeURIComponent(search)}${extraQuery ? `&${extraQuery}` : ""}`;
 }
 
 function visiblePages(current: number, total: number): number[] {
@@ -28,6 +29,7 @@ export function AdminUsersPagination({
   search,
   basePath = "/admin/users",
   filterParam = "filter",
+  extraQuery = "",
 }: {
   page: number;
   totalPages: number;
@@ -35,6 +37,8 @@ export function AdminUsersPagination({
   search: string;
   basePath?: string;
   filterParam?: string;
+  /** Pre-encoded query-string tail preserved across page links (e.g. `payStatus=VERIFIED`). */
+  extraQuery?: string;
 }) {
   const pages = visiblePages(page, totalPages);
 
@@ -42,7 +46,7 @@ export function AdminUsersPagination({
     <nav className="inline-flex flex-nowrap items-center gap-1.5" aria-label="Pagination">
       {page > 1 ? (
         <Link
-          href={pageHref(basePath, page - 1, filter, search, filterParam)}
+          href={pageHref(basePath, page - 1, filter, search, filterParam, extraQuery)}
           className="inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800"
           aria-label="Previous page"
         >
@@ -68,7 +72,7 @@ export function AdminUsersPagination({
               </span>
             ) : null}
             <Link
-              href={pageHref(basePath, p, filter, search, filterParam)}
+              href={pageHref(basePath, p, filter, search, filterParam, extraQuery)}
               className={cn(
                 "inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800 text-sm font-semibold",
                 p === page &&
@@ -84,7 +88,7 @@ export function AdminUsersPagination({
 
       {page < totalPages ? (
         <Link
-          href={pageHref(basePath, page + 1, filter, search, filterParam)}
+          href={pageHref(basePath, page + 1, filter, search, filterParam, extraQuery)}
           className="inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800"
           aria-label="Next page"
         >

@@ -1,4 +1,4 @@
-import { formatDateDisplay } from "@/lib/utils";
+import { formatDateTimePK } from "@/lib/utils";
 
 type AuditEntry = {
   id: string;
@@ -31,7 +31,9 @@ export function AuditLogList({ logs }: { logs: AuditEntry[] }) {
               {log.action.replace(/_/g, " ")}
             </p>
             <p className="mt-px text-[11px] text-muted-foreground">
-              {formatDateDisplay(log.createdAt)}
+              <time dateTime={new Date(log.createdAt).toISOString()}>
+                {formatDateTimePK(log.createdAt)}
+              </time>
               {log.actor
                 ? ` · ${log.actor.firstName} ${log.actor.lastName}`
                 : " · System"}

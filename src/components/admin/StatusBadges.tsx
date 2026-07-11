@@ -1,7 +1,15 @@
 import { memo, type ReactNode } from "react";
+import {
+  CheckCircle2,
+  Clock,
+  CornerUpLeft,
+  Hourglass,
+  XCircle,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
+  APPLICATION_STATUS,
   APPLICATION_STATUS_LABELS,
   APPLICATION_STATUS_TABLE_LABELS,
   PAYMENT_STATUS,
@@ -192,5 +200,69 @@ export const PaymentStatusBadge = memo(function PaymentStatusBadge({
       density={density}
       className={className}
     />
+  );
+});
+
+/* —— Overall status (Participation Requests table) —— */
+
+export type OverallStatusKey =
+  | "approved"
+  | "review"
+  | "returned"
+  | "rejected"
+  | "pending";
+
+/** Collapses application status + suspension into the single overall state
+ *  shown in the Participation Requests table. */
+export function overallStatusOf(
+  applicationStatus: string,
+  suspended = false
+): { key: OverallStatusKey; label: string } {
+  if (suspended) return { key: "rejected", label: "Suspended" };
+  switch (applicationStatus) {
+    case APPLICATION_STATUS.APPROVED:
+      return { key: "approved", label: "Approved" };
+    case APPLICATION_STATUS.UNDER_REVIEW:
+      return { key: "review", label: "Under Review" };
+    case APPLICATION_STATUS.RETURNED:
+      return { key: "returned", label: "Returned" };
+    case APPLICATION_STATUS.REJECTED:
+      return { key: "rejected", label: "Rejected" };
+    default:
+      return { key: "pending", label: "Pending" };
+  }
+}
+
+const overallIcons: Record<OverallStatusKey, ReactNode> = {
+  approved: <CheckCircle2 aria-hidden />,
+  review: <Clock aria-hidden />,
+  returned: <CornerUpLeft aria-hidden />,
+  rejected: <XCircle aria-hidden />,
+  pending: <Hourglass aria-hidden />,
+};
+
+/** Icon pill — “✓ Approved”, “🕐 Under Review”, “↩ Returned”, “⊗ Rejected”. */
+export const OverallStatusBadge = memo(function OverallStatusBadge({
+  applicationStatus,
+  suspended = false,
+  className,
+}: {
+  applicationStatus: string;
+  suspended?: boolean;
+  className?: string;
+}) {
+  const overall = overallStatusOf(applicationStatus, suspended);
+  return (
+    <span
+      className={cn(
+        "admin-overall-badge",
+        `admin-overall-badge--${overall.key}`,
+        className
+      )}
+      title={overall.label}
+    >
+      {overallIcons[overall.key]}
+      {overall.label}
+    </span>
   );
 });

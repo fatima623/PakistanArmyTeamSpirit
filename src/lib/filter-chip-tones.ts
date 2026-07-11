@@ -9,7 +9,7 @@ const FILTER_TONE_MAP: Record<string, string> = {
   submitted: "pending",
   verified: "approved",
   under_review: "payment",
-  returned: "rejected",
+  returned: "returned",
 };
 
 export function filterChipTone(filterKey: string): string {
@@ -47,6 +47,10 @@ const CHIP_TONES: Record<string, { active: string; inactive: string }> = {
     inactive: "border-sky-300 bg-sky-100 text-sky-700",
     active: "border-sky-600 bg-sky-600 text-white",
   },
+  returned: {
+    inactive: "border-orange-300 bg-orange-100 text-orange-700",
+    active: "border-orange-600 bg-orange-500 text-white",
+  },
 };
 
 /** Full chip class string: base + tone, active variant adds a stronger shadow. */
@@ -59,42 +63,42 @@ export function filterChipClasses(filterKey: string, active: boolean): string {
       slate tray, solid + glow when active) -- */
 
 const SEG_BASE =
-  "inline-flex min-h-[2.125rem] cursor-pointer items-center justify-center whitespace-nowrap rounded-lg border px-4 py-[0.4375rem] text-[0.8125rem] font-semibold transition";
+  "inline-flex min-h-[2.125rem] cursor-pointer items-center justify-center whitespace-nowrap rounded-full border px-3.5 py-[0.4375rem] text-[0.8125rem] font-bold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25";
 
+/** Reference design: inactive chips are plain colored labels; the active chip
+ *  is an outlined pill tinted with the same tone. */
 const SEG_TONES: Record<string, { active: string; inactive: string }> = {
   all: {
-    inactive: "border-transparent bg-transparent text-slate-900",
-    active:
-      "border-green-800 bg-green-800 text-white shadow-[0_2px_8px_rgba(22,101,52,0.35)]",
+    inactive: "border-transparent bg-transparent text-emerald-900",
+    active: "border-green-700 bg-green-50 text-green-800 shadow-sm",
   },
   pending: {
-    inactive: "border-transparent bg-transparent text-amber-700",
-    active:
-      "border-amber-600 bg-amber-500 text-white shadow-[0_2px_8px_rgba(217,119,6,0.3)]",
+    inactive: "border-transparent bg-transparent text-amber-600",
+    active: "border-amber-500 bg-amber-50 text-amber-700 shadow-sm",
   },
   approved: {
     inactive: "border-transparent bg-transparent text-green-700",
-    active:
-      "border-green-600 bg-green-500 text-white shadow-[0_2px_8px_rgba(22,163,74,0.3)]",
+    active: "border-green-600 bg-green-50 text-green-700 shadow-sm",
   },
   rejected: {
-    inactive: "border-transparent bg-transparent text-red-700",
-    active:
-      "border-red-600 bg-red-500 text-white shadow-[0_2px_8px_rgba(220,38,38,0.3)]",
+    inactive: "border-transparent bg-transparent text-red-600",
+    active: "border-red-500 bg-red-50 text-red-600 shadow-sm",
   },
   payment: {
     inactive: "border-transparent bg-transparent text-sky-700",
-    active:
-      "border-sky-600 bg-sky-500 text-white shadow-[0_2px_8px_rgba(14,165,233,0.3)]",
+    active: "border-sky-500 bg-sky-50 text-sky-700 shadow-sm",
+  },
+  returned: {
+    inactive: "border-transparent bg-transparent text-orange-600",
+    active: "border-orange-500 bg-orange-50 text-orange-600 shadow-sm",
   },
   admins: {
     inactive: "border-transparent bg-transparent text-violet-700",
-    active:
-      "border-violet-600 bg-violet-500 text-white shadow-[0_2px_8px_rgba(124,58,237,0.3)]",
+    active: "border-violet-500 bg-violet-50 text-violet-700 shadow-sm",
   },
 };
 
 export function segmentedChipClasses(filterKey: string, active: boolean): string {
   const tone = SEG_TONES[filterChipTone(filterKey)] ?? SEG_TONES.all;
-  return `${SEG_BASE} ${active ? tone.active : `${tone.inactive} hover:bg-white/85`}`;
+  return `${SEG_BASE} ${active ? tone.active : `${tone.inactive} hover:bg-slate-100/80`}`;
 }

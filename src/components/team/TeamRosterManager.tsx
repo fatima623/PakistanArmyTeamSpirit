@@ -760,8 +760,7 @@ export function TeamRosterManager({
 
         {canEdit ? (
           <p className="mt-3 text-xs text-slate-500">
-            Fill in your team members, then save and mark the roster complete to
-            unlock Flight Details.
+           Fill in your team member details,then click on save button. After saving, mark the roster button complete to unlock flight details.
           </p>
         ) : null}
 
