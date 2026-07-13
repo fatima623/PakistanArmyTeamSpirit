@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SlidersHorizontal, Users2 } from "lucide-react";
+import { Users2 } from "lucide-react";
 import { Prisma } from "@prisma/client";
 
 import { AdminExportButton } from "@/components/admin/AdminExportButton";
@@ -16,7 +16,6 @@ import {
   APPLICATION_STATUS,
   LEGACY_PAYMENT_STATUS,
   PAYMENT_STATUS,
-  PAYMENT_STATUS_FILTER_LABELS,
   type ApplicationStatus,
 } from "@/lib/constants";
 import { normalizeApplicationStatus } from "@/lib/user-status";
@@ -52,16 +51,6 @@ const STATUS_FILTERS: {
   { key: "returned", label: "Returned", status: APPLICATION_STATUS.RETURNED },
   { key: "rejected", label: "Rejected", status: APPLICATION_STATUS.REJECTED },
 ];
-
-const PAYMENT_FILTER_OPTIONS = [
-  "all",
-  PAYMENT_STATUS.PENDING,
-  PAYMENT_STATUS.SUBMITTED,
-  PAYMENT_STATUS.UNDER_REVIEW,
-  PAYMENT_STATUS.VERIFIED,
-  PAYMENT_STATUS.REJECTED,
-  PAYMENT_STATUS.RETURNED,
-] as const;
 
 type SearchParams = Promise<{
   page?: string;
@@ -239,51 +228,6 @@ export default async function AdminUsersPage({
                   );
                 })}
               </nav>
-
-              <span
-                className="mx-1 hidden h-5 w-px bg-brand-line/80 sm:block"
-                aria-hidden
-              />
-
-              <details className="relative">
-                <summary
-                  className={cn(
-                    "inline-flex min-h-[2.125rem] cursor-pointer list-none items-center justify-center gap-1.5 rounded-lg border border-brand-line/80 bg-white px-3.5 py-[0.4375rem] text-[0.8125rem] font-semibold text-slate-700 transition-colors hover:border-brand-olive/40 hover:bg-slate-50 [&::-webkit-details-marker]:hidden",
-                    payStatus !== "all" &&
-                      "border-green-700 bg-green-50 text-green-800"
-                  )}
-                >
-                  <SlidersHorizontal size={14} aria-hidden />
-                  Filter
-                  {payStatus !== "all" ? (
-                    <span className="rounded-full bg-green-700 px-1.5 py-px text-[10px] font-bold text-white">
-                      1
-                    </span>
-                  ) : null}
-                </summary>
-                <div className="absolute right-0 top-[calc(100%+6px)] z-30 w-52 rounded-xl border border-brand-line/70 bg-white p-1.5 shadow-[0_12px_32px_rgba(15,23,42,0.14)]">
-                  <p className="m-0 px-2.5 pb-1 pt-1.5 text-[0.6875rem] font-bold uppercase tracking-[0.07em] text-slate-400">
-                    Payment status
-                  </p>
-                  {PAYMENT_FILTER_OPTIONS.map((option) => {
-                    const active = payStatus === option;
-                    return (
-                      <Link
-                        key={option}
-                        href={buildHref({ filter, search, payStatus: option })}
-                        className={cn(
-                          "block rounded-lg px-2.5 py-1.5 text-[0.8125rem] font-medium text-slate-700 transition-colors hover:bg-slate-100",
-                          active && "bg-green-50 font-bold text-green-800"
-                        )}
-                      >
-                        {option === "all"
-                          ? "All payments"
-                          : PAYMENT_STATUS_FILTER_LABELS[option]}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </details>
             </div>
           </header>
 

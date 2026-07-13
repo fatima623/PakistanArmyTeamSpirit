@@ -201,7 +201,7 @@ export function PaymentSubmissionForm({
                 className="flex flex-wrap items-center gap-3.5 rounded-2xl border border-slate-200 bg-white px-4 py-3.5"
               >
                 <span
-                  className="flex h-10 w-10 flex-none items-center justify-center rounded-lg border border-emerald-100 bg-emerald-50 text-emerald-700"
+                  className="pp-proof-filerow__icon flex h-10 w-10 flex-none items-center justify-center rounded-lg border border-emerald-100 bg-emerald-50 text-emerald-700"
                   aria-hidden
                 >
                   <Receipt className="h-[18px] w-[18px]" />
@@ -233,7 +233,7 @@ export function PaymentSubmissionForm({
         <section className="pp-card">
           <div className="mb-4 flex items-center gap-2.5 border-b border-slate-100 pb-3">
             <span
-              className="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-emerald-100 bg-emerald-50 text-emerald-700"
+              className="pp-proof-filerow__icon flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-emerald-100 bg-emerald-50 text-emerald-700"
               aria-hidden
             >
               <ImageIcon className="h-4 w-4" />

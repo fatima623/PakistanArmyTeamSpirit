@@ -27,6 +27,7 @@ import {
 } from "@/components/admin/StatusBadges";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 import {
   displayCountry,
   isInternationalParticipant,
@@ -243,10 +244,10 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
 
       {/* —— Profile header ————————————————————————————————— */}
       <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-gray-200 bg-white px-5 py-4 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-        <span className="inline-flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-olive-dark to-brand-olive text-[1.05rem] font-bold tracking-[0.02em] text-white" aria-hidden>
-          {`${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() ||
-            "–"}
-        </span>
+        <CountryFlag
+          country={user.country}
+          className="h-[40px] w-[56px] flex-shrink-0 rounded-md border border-gray-200 shadow-sm"
+        />
 
         <div className="flex min-w-0 flex-[1_1_16rem] flex-col gap-1">
           <h1 className="flex flex-wrap items-center gap-2 text-xl font-bold leading-tight tracking-[-0.01em] text-slate-900">
@@ -262,8 +263,6 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                 <span>{user.gender}</span>
               </>
             ) : null}
-            <span className="h-[3px] w-[3px] rounded-full bg-slate-300" aria-hidden />
-            <span>{displayCountry(user.country)}</span>
           </div>
 
           <div className="flex items-center gap-1.5 text-[0.8125rem] text-slate-500">

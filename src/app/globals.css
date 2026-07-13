@@ -1709,9 +1709,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme) .admin-sidebar-brand-link:hover {
-  background: rgba(240, 253, 244, 0.65);
-}
+/* Sidebar brand/logo hover intentionally has no visual effect. */
 
 
 :is(.admin-theme) .admin-sidebar-brand-mark {
@@ -3660,6 +3658,13 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
   max-width: min(72%, 24rem);
   text-decoration: none;
   color: #fff;
+}
+
+
+/* When the nav menu is open (expanded), hide the brand/logo + text so every
+   nav item fits without being clipped by the horizontally-scrolling link row. */
+.army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__brand {
+  display: none;
 }
 
 
@@ -11024,12 +11029,7 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 }
 
 
-.admin-theme .admin-sidebar-brand-link:hover .admin-sidebar-brand-mark {
-  transform: translateY(-1px);
-  box-shadow:
-    0 6px 16px rgba(47, 64, 37, 0.24),
-    0 0 0 1px rgba(47, 64, 37, 0.1);
-}
+/* Brand logo hover lift/shadow removed — no hover effect on the sidebar logo. */
 
 
 .admin-theme .admin-sidebar-brand-logo {
@@ -16610,13 +16610,7 @@ html[data-site-theme="day"]
 }
 
 
-.admin-theme .admin-sidebar-brand-link:hover .admin-sidebar-brand-mark {
-  transform: translateY(-1px);
-  box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(201, 168, 76, 0.55),
-    0 0 0 4px rgba(201, 168, 76, 0.12) !important;
-}
+/* Brand logo hover (dark theme) removed — no hover effect on the sidebar logo. */
 
 
 .admin-theme .admin-sidebar-brand-logo {
@@ -20575,4 +20569,22 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   text-align: center;
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.7);
+}
+
+/* Payment-proof icons in the participant portal (forced light mode).
+   The `.cinematic-site:not(.dashboard-day)` whitening rule leaks onto these
+   portal spans/buttons (the `:not` guard sits on an ancestor, not `.pp`),
+   turning the emerald/slate icons white-on-white. These higher-specificity
+   selectors restore the intended colors without adding `!important`. */
+html.light-theme .participant-portal.pats-portal .pp-proof-filerow__icon,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__icon {
+  color: #047857; /* emerald-700 */
+}
+html.light-theme .participant-portal.pats-portal .pp-proof-filerow__action,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__action {
+  color: #475569; /* slate-600 */
+}
+html.light-theme .participant-portal.pats-portal .pp-proof-filerow__action:hover,
+html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__action:hover {
+  color: #047857; /* emerald-700 */
 }

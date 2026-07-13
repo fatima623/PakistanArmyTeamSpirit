@@ -7,6 +7,7 @@ import { flights } from "./flights";
 import { tickets } from "./tickets";
 import { home } from "./home";
 import { register } from "./register";
+import { publicSite } from "./public-site";
 
 export const zh = {
   ...core,
@@ -18,4 +19,5 @@ export const zh = {
   tickets,
   home,
   register,
+  publicSite,
 };

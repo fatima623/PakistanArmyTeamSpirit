@@ -99,7 +99,7 @@ export function PaymentProofFileRow({
     <>
       <div className="flex items-center gap-3.5 rounded-xl border border-slate-200 bg-white px-4 py-3">
         <span
-          className="flex h-10 w-10 flex-none items-center justify-center rounded-lg border border-emerald-100 bg-emerald-50 text-emerald-700"
+          className="pp-proof-filerow__icon flex h-10 w-10 flex-none items-center justify-center rounded-lg border border-emerald-100 bg-emerald-50 text-emerald-700"
           aria-hidden
         >
           <RowIcon className="h-[18px] w-[18px]" />
@@ -119,7 +119,7 @@ export function PaymentProofFileRow({
             type="button"
             onClick={() => void view()}
             disabled={busy !== null}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-60"
+            className="pp-proof-filerow__action inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-60"
             title={isImage ? "View image" : "View PDF"}
             aria-label={isImage ? "View image" : "View PDF"}
           >
@@ -133,7 +133,7 @@ export function PaymentProofFileRow({
             type="button"
             onClick={() => void download()}
             disabled={busy !== null}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-60"
+            className="pp-proof-filerow__action inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-60"
             title="Download"
             aria-label="Download"
           >

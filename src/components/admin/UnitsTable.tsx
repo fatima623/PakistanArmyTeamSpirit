@@ -3,13 +3,13 @@
 import { useState } from "react";
 
 import { IntlBadge } from "@/components/admin/IntlBadge";
+import { CountryFlag } from "@/components/ui/CountryFlag";
 import {
   TeamRosterTable,
   type RosterMember,
 } from "@/components/admin/TeamRosterTable";
 import {
   displayCountry,
-  formatAdminTableCountry,
   isInternationalParticipant,
 } from "@/lib/participant-country";
 import {
@@ -43,10 +43,6 @@ type UnitRow = {
     teamMembers: RosterMember[];
   };
 };
-
-function initials(first: string, last: string): string {
-  return `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "–";
-}
 
 /** One labelled field block — laid out 2–3 per row inside a section grid. */
 function Field({
@@ -89,10 +85,6 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
             ? u.coName
             : `${u.user.firstName} ${u.user.lastName}`;
           const intl = isInternationalParticipant(u.user.country);
-          const country = formatAdminTableCountry(
-            u.user.country,
-            u.user.nationality
-          );
           const members = u.user._count.teamMembers;
           const sub = [u.branch, u.arm].filter(Boolean).join(" · ");
           return (
@@ -127,9 +119,10 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
               </div>
 
               <div className="admin-team-card-captain">
-                <span className="admin-users-avatar" aria-hidden>
-                  {initials(u.user.firstName, u.user.lastName)}
-                </span>
+                <CountryFlag
+                  country={u.user.country}
+                  className="h-[26px] w-[36px] flex-none rounded-[6px] border border-slate-200"
+                />
                 <div className="admin-team-card-captain-text">
                   <div className="admin-team-card-captain-name">
                     {captain}
@@ -137,9 +130,6 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                   </div>
                   <div className="admin-team-card-captain-role">Team captain</div>
                 </div>
-                {country && country !== "—" ? (
-                  <span className="admin-team-card-country">{country}</span>
-                ) : null}
               </div>
 
               <div className="admin-team-card-foot">

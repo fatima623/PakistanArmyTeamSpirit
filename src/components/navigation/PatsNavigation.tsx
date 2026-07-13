@@ -17,6 +17,7 @@ import {
 } from "@/lib/public-navigation";
 import { useSiteChromeScroll } from "@/components/public/site-chrome-scroll-context";
 import { pathnameHasHeroOverlay } from "@/lib/public-layout";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 const DROPDOWN_CLOSE_MS = 150;
@@ -33,10 +34,12 @@ function PafMenuIcon() {
 
 function NavDropdown({
   item,
+  label,
   pathname,
   onNavigate,
 }: {
   item: PublicNavItem;
+  label: string;
   pathname: string;
   onNavigate?: () => void;
 }) {
@@ -77,7 +80,7 @@ function NavDropdown({
         aria-haspopup="true"
         onClick={() => setOpen((v) => !v)}
       >
-        {item.label}
+        {label}
       </button>
       <div className="pats-nav__dropdown" role="menu">
         {item.children.map((child) => (
@@ -105,16 +108,23 @@ function NavDropdown({
 
 function NavItemLink({
   item,
+  label,
   pathname,
   onNavigate,
 }: {
   item: PublicNavItem;
+  label: string;
   pathname: string;
   onNavigate?: () => void;
 }) {
   if (item.children?.length) {
     return (
-      <NavDropdown item={item} pathname={pathname} onNavigate={onNavigate} />
+      <NavDropdown
+        item={item}
+        label={label}
+        pathname={pathname}
+        onNavigate={onNavigate}
+      />
     );
   }
 
@@ -130,7 +140,7 @@ function NavItemLink({
         isNavItemActive(pathname, item) && "pats-nav__link--active"
       )}
     >
-      {item.label}
+      {label}
     </Link>
   );
 }
@@ -138,9 +148,11 @@ function NavItemLink({
 function NavLoginLink({
   pathname,
   onNavigate,
+  label,
 }: {
   pathname: string;
   onNavigate?: () => void;
+  label: string;
 }) {
   return (
     <Link
@@ -152,7 +164,7 @@ function NavLoginLink({
         isHrefActive(pathname, "/event/login") && "pats-nav__link--active"
       )}
     >
-      Login
+      {label}
     </Link>
   );
 }
@@ -165,6 +177,18 @@ type Props = {
 export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const pathnameFromRouter = usePathname();
   const pathname = pathnameFromRouter ?? pathnameProp;
+  const { t } = useI18n();
+  // Translated labels keyed by the nav item's href (labels in PUBLIC_NAV_ITEMS
+  // stay English as stable keys; the visible text comes from the dictionary).
+  const navLabels: Record<string, string> = {
+    "/": t.publicSite.nav.home,
+    "/events-detail": t.publicSite.nav.eventsDetail,
+    "/international": t.publicSite.nav.international,
+    "/awards": t.publicSite.nav.awards,
+    "/gallery": t.publicSite.nav.gallery,
+    "/announcements": t.publicSite.nav.announcements,
+    "/key-dates": t.publicSite.nav.keyDates,
+  };
   const isHome = pathname === "/";
   const overHeroMedia = pathnameHasHeroOverlay(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -231,11 +255,16 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
                 <NavItemLink
                   key={item.label}
                   item={item}
+                  label={(item.href && navLabels[item.href]) || item.label}
                   pathname={pathname}
                   onNavigate={closeMenu}
                 />
               ))}
-              <NavLoginLink pathname={pathname} onNavigate={closeMenu} />
+              <NavLoginLink
+                pathname={pathname}
+                onNavigate={closeMenu}
+                label={t.publicSite.nav.login}
+              />
               <PublicLanguageSwitcher />
               <SiteThemeToggle />
             </nav>

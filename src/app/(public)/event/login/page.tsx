@@ -4,33 +4,33 @@ import type { Metadata } from "next";
 import { LoginForm } from "@/components/public/LoginForm";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Log in",
 };
 
-export default function EventLoginPage() {
+export default async function EventLoginPage() {
+  const { t, locale, dir } = await getDictionary();
+  const L = t.publicSite.login;
+
   return (
-    <>
+    <div lang={locale} dir={dir}>
       <PatsPageHero
-        eyebrow="Participant portal"
-        title="Log in"
-        subtitle="Access your patrol dashboard and registration status."
+        eyebrow={L.hero.eyebrow}
+        title={L.hero.title}
+        subtitle={L.hero.subtitle}
       />
       <PatsSection variant="navy">
         <div className="pats-auth-shell">
           <div className="pats-auth-shell__intro">
-            <p className="pats-eyebrow">Secure access</p>
-            <h2 className="pats-section-title">Participant login</h2>
-            <p className="pats-body mt-4">
-              Use your approved patrol credentials to access the participant
-              dashboard, monitor fee status, and review key coordination steps
-              before movement.
-            </p>
+            <p className="pats-eyebrow">{L.intro.eyebrow}</p>
+            <h2 className="pats-section-title">{L.intro.title}</h2>
+            <p className="pats-body mt-4">{L.intro.body}</p>
             <ul className="pats-auth-shell__checklist">
-              <li>Approved patrol accounts only</li>
-              <li>Payment and registration status tracking</li>
-              <li>Direct access to participant actions and updates</li>
+              {L.intro.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
           <Suspense fallback={null}>
@@ -38,6 +38,6 @@ export default function EventLoginPage() {
           </Suspense>
         </div>
       </PatsSection>
-    </>
+    </div>
   );
 }

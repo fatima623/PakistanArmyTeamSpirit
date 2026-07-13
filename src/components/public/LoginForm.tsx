@@ -12,9 +12,12 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { resolveLoginErrorMessage } from "@/lib/auth-login-errors";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 export function LoginForm() {
+  const { t } = useI18n();
+  const L = t.publicSite.login;
   const router = useRouter();
   const searchParams = useSearchParams();
   const reduce = useReducedMotion();
@@ -31,11 +34,11 @@ export function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const emailError =
     email.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-      ? "Enter a valid email address."
+      ? L.validation.invalidEmail
       : null;
   const passwordError =
     password.length > 0 && password.trim().length === 0
-      ? "Password is required."
+      ? L.validation.passwordRequired
       : null;
 
   const clearError = () => {
@@ -47,12 +50,11 @@ export function LoginForm() {
 
     let message: string | null = null;
     if (isRegistered) {
-      message =
-        "Registration submitted. Check your inbox for the verification link before logging in.";
+      message = L.toasts.registered;
     } else if (isPasswordReset) {
-      message = "Password updated. Please sign in with your new password.";
+      message = L.toasts.passwordReset;
     } else if (isVerified) {
-      message = "Email verified. You can sign in now.";
+      message = L.toasts.verified;
     }
 
     if (!message) return;
@@ -68,12 +70,14 @@ export function LoginForm() {
     router.replace(query ? `/event/login?${query}` : "/event/login", {
       scroll: false,
     });
-  }, [isPasswordReset, isRegistered, isVerified, router, searchParams]);
+  }, [isPasswordReset, isRegistered, isVerified, router, searchParams, L]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (emailError || passwordError || !email.trim() || !password) {
-      setError(emailError ?? passwordError ?? "Email and password are required.");
+      setError(
+        emailError ?? passwordError ?? L.validation.emailPasswordRequired
+      );
       return;
     }
     setLoading(true);
@@ -112,11 +116,9 @@ export function LoginForm() {
   return (
     <div className="pats-login-card cp-form-card w-full max-w-none p-7 sm:p-10">
       <header className="pats-login-card__header">
-        <p className="pats-eyebrow pats-login-card__eyebrow">Participant access</p>
-        <h2 className="pats-login-card__title">Sign in to continue</h2>
-        <p className="pats-login-card__description">
-          Enter the email and password approved for your team account.
-        </p>
+        <p className="pats-eyebrow pats-login-card__eyebrow">{L.card.eyebrow}</p>
+        <h2 className="pats-login-card__title">{L.card.title}</h2>
+        <p className="pats-login-card__description">{L.card.description}</p>
       </header>
 
       <AnimatePresence mode="wait">
@@ -142,7 +144,7 @@ export function LoginForm() {
         noValidate={false}
       >
         <label htmlFor="login-email" className="pats-form-label">
-          Email address
+          {L.card.emailLabel}
         </label>
         <Input
           id="login-email"
@@ -169,7 +171,7 @@ export function LoginForm() {
         </div>
 
         <label htmlFor="login-password" className="pats-form-label">
-          Password
+          {L.card.passwordLabel}
         </label>
         <Input
           id="login-password"
@@ -193,9 +195,7 @@ export function LoginForm() {
             <p className="text-sm text-red-300">{passwordError}</p>
           ) : (
             <p className="pats-login-card__hint text-sm">
-              {remember
-                ? "This device will stay signed in for up to 30 days."
-                : "Without Remember Me, your session expires after 24 hours."}
+              {remember ? L.card.rememberHintOn : L.card.rememberHintOff}
             </p>
           )}
         </div>
@@ -209,7 +209,7 @@ export function LoginForm() {
             onCheckedChange={(v) => setRemember(v === true)}
           />
           <label htmlFor="remember" className="pats-form-choice">
-            Remember Me
+            {L.card.rememberMe}
           </label>
         </div>
 
@@ -223,10 +223,10 @@ export function LoginForm() {
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden />
-                <span>Signing in…</span>
+                <span>{L.card.signingIn}</span>
               </>
             ) : (
-              "Login"
+              L.card.login
             )}
           </Button>
           <Link
@@ -234,15 +234,15 @@ export function LoginForm() {
             className="login-form-link text-sm hover:underline"
             tabIndex={loading ? -1 : 0}
           >
-            Forgot Your Password?
+            {L.card.forgot}
           </Link>
         </div>
       </form>
 
       <p className="login-form-footer mt-8 border-t pt-5 text-sm">
-        If you have not registered please{" "}
+        {L.card.footerPrefix}{" "}
         <Link href="/event/register" className="login-form-link hover:underline">
-          click here to register your unit
+          {L.card.footerLink}
         </Link>
         .
       </p>
