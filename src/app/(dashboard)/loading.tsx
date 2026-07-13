@@ -1,10 +1,12 @@
 import { RouteLoadingShell } from "@/components/navigation/RouteLoadingShell";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export default function DashboardLoading() {
+export default async function DashboardLoading() {
+  const { t } = await getDictionary();
   return (
     <RouteLoadingShell
-      title="Participant dashboard"
-      description="Loading participant actions and status panels."
+      title={t.common.loadingTitle}
+      description={t.common.loadingDesc}
       compact
     />
   );

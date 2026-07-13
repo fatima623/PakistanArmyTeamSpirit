@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TOAST } from "@/lib/toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 /**
  * Reply + close controls for a participant's own ticket.
@@ -21,15 +22,15 @@ export function TicketReplyBox({
   closed: boolean;
 }) {
   const router = useRouter();
+  const { t } = useI18n();
+  const tk = t.tickets;
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
   const [closing, setClosing] = useState(false);
 
   if (closed) {
     return (
-      <p className="portal-muted mt-4 text-sm">
-        This ticket is closed. Raise a new ticket if you need further help.
-      </p>
+      <p className="portal-muted mt-4 text-sm">{tk.reply.closedNotice}</p>
     );
   }
 
@@ -64,7 +65,7 @@ export function TicketReplyBox({
         method: "POST",
       });
       if (res.ok) {
-        toast.success("Ticket closed");
+        toast.success(tk.reply.toastClosed);
         router.refresh();
         return;
       }
@@ -82,7 +83,7 @@ export function TicketReplyBox({
         value={body}
         onChange={(e) => setBody(e.target.value)}
         rows={4}
-        placeholder="Write a reply…"
+        placeholder={tk.reply.placeholder}
         maxLength={5000}
       />
       <div className="flex justify-between gap-3">
@@ -93,7 +94,7 @@ export function TicketReplyBox({
           disabled={closing || sending}
         >
           {closing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Close ticket
+          {tk.reply.closeTicket}
         </Button>
         <Button
           type="submit"
@@ -101,7 +102,7 @@ export function TicketReplyBox({
           disabled={sending || !body.trim()}
         >
           {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Send reply
+          {tk.reply.sendReply}
         </Button>
       </div>
     </form>

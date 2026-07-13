@@ -50,4 +50,14 @@ export function pathnameUsesInnerPageShell(pathname: string): boolean {
   return pathname !== "/" && pathnameIsCinematicFullWidth(pathname);
 }
 
+/** Standalone pages that render bare — no global header/nav, ticker or footer. */
+const BARE_CHROME_PREFIXES = ["/gallery", "/announcements"];
+
+/** True for pages that should show only their own content (no site chrome). */
+export function pathnameHidesSiteChrome(pathname: string): boolean {
+  return BARE_CHROME_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+  );
+}
+
 export { pathnameIsParticipantPortalApp } from "@/lib/participant-portal-paths";

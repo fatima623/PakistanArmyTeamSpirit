@@ -27,6 +27,7 @@ import {
   effectiveTeamLimit,
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
 
 export default async function EventDashboardPage() {
   const session = await requireConfirmedParticipant();
+  const { t } = await getDictionary();
 
   const [
     user,
@@ -109,6 +111,7 @@ export default async function EventDashboardPage() {
     user,
     settings: workflowSettings,
     teamMemberCount: user._count.teamMembers,
+    wf: t.workflow,
   });
   const activeStageIdx = currentWorkflowStageIndex(workflowStages);
 
@@ -120,7 +123,7 @@ export default async function EventDashboardPage() {
   const fullName = `${user.firstName} ${user.lastName}`.trim();
   const activeStage =
     activeStageIdx >= 0 ? workflowStages[activeStageIdx] : null;
-  const chipLabel = activeStage ? activeStage.sub : "All stages complete";
+  const chipLabel = activeStage ? activeStage.sub : t.dashboard.allStagesComplete;
   const chipPending = activeStage ? activeStage.state !== "done" : false;
 
   const teamLimit = effectiveTeamLimit(user, workflowSettings);
@@ -138,10 +141,10 @@ export default async function EventDashboardPage() {
     <>
       <header className="pp-hero">
         <div className="min-w-0">
-          <p className="pp-hero__eyebrow">Welcome back</p>
+          <p className="pp-hero__eyebrow">{t.dashboard.welcomeBack}</p>
           <h1 className="pp-hero__title">{fullName}</h1>
           <p className="pp-hero__meta">
-            {user.unit?.unitName ?? "Unit not registered"} · {user.email}
+            {user.unit?.unitName ?? t.dashboard.unitNotRegistered} · {user.email}
           </p>
         </div>
         <div className="pp-hero__aside">
@@ -152,17 +155,14 @@ export default async function EventDashboardPage() {
           </span>
           <Link href="/event/team" className="pp-hero__team">
             <Users className="h-4 w-4" aria-hidden />
-            <span>
-              {user._count.teamMembers}{" "}
-              {user._count.teamMembers === 1 ? "team member" : "team members"}
-            </span>
+            <span>{t.dashboard.membersCount(user._count.teamMembers)}</span>
           </Link>
         </div>
       </header>
 
 
 
-      <ParticipantWorkflowPanel stages={workflowStages} />
+      <ParticipantWorkflowPanel stages={workflowStages} t={t.workflowPanel} />
 
       {feeNoticeHtml ? (
         <div
@@ -178,6 +178,7 @@ export default async function EventDashboardPage() {
         canAccessPayment={showPaymentLink}
         paymentComplete={paymentComplete}
         exerciseDates={siteSettings.exerciseDates}
+        t={t.statusBar}
       />
 
       <div className="pp-grid">
@@ -191,22 +192,23 @@ export default async function EventDashboardPage() {
             country={user.country}
             nationality={user.nationality}
             unit={user.unit}
+            t={t.registration}
           />
 
           <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
             <div className="pp-card__head">
               <div>
-                <p className="pp-eyebrow">Schedule</p>
+                <p className="pp-eyebrow">{t.dashboard.scheduleEyebrow}</p>
                 <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
-                  Data entry periods
+                  {t.dashboard.dataEntryPeriods}
                 </h2>
                 <p className="pp-card__desc">
-                  Available only after payment has been verified.
+                  {t.dashboard.dataEntryDesc}
                 </p>
               </div>
             </div>
             {dataEntryPeriods.length === 0 ? (
-              <p className="pp-muted">No periods scheduled yet.</p>
+              <p className="pp-muted">{t.dashboard.noPeriods}</p>
             ) : (
               <ul className="pp-dates">
                 {dataEntryPeriods.map((p) => (
@@ -227,9 +229,9 @@ export default async function EventDashboardPage() {
             <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
               <div className="pp-card__head">
                 <div>
-                  <p className="pp-eyebrow">Deadlines</p>
+                  <p className="pp-eyebrow">{t.dashboard.deadlinesEyebrow}</p>
                   <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
-                    Timeline
+                    {t.dashboard.timeline}
                   </h2>
                 </div>
               </div>
@@ -240,18 +242,18 @@ export default async function EventDashboardPage() {
           <section className="pp-card" aria-labelledby="dashboard-news-heading" style={{ borderRadius: "1rem", overflow: "hidden" }}>
             <div className="pp-card__head">
               <div>
-                <p className="pp-eyebrow">Updates</p>
+                <p className="pp-eyebrow">{t.dashboard.updatesEyebrow}</p>
                 <h2
                   id="dashboard-news-heading"
                   className="pp-card__title"
                   style={{ marginTop: "0.15rem" }}
                 >
-                  Latest news
+                  {t.dashboard.latestNews}
                 </h2>
               </div>
             </div>
             {newsPosts.length === 0 ? (
-              <p className="pp-muted">No news posts yet.</p>
+              <p className="pp-muted">{t.dashboard.noNews}</p>
             ) : (
               <ul className="pp-news">
                 {newsPosts.map((post) => (

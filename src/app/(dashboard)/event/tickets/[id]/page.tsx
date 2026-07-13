@@ -9,8 +9,10 @@ import { formatDateTime } from "@/lib/utils";
 import {
   TICKET_CATEGORY_LABELS,
   TICKET_STATUS,
+  normalizeTicketStatus,
   type TicketCategory,
 } from "@/lib/constants";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 import {
   TicketPriorityTag,
@@ -30,6 +32,8 @@ export default async function ParticipantTicketDetailPage({
 }: PageProps) {
   const session = await requireConfirmedParticipant();
   const { id } = await params;
+  const { t: dict } = await getDictionary();
+  const tk = dict.tickets;
 
   const ticket = await prisma.supportTicket.findUnique({
     where: { id },
@@ -64,25 +68,37 @@ export default async function ParticipantTicketDetailPage({
     <>
       <Link href="/event/tickets" className="portal-back-link mb-4">
         <ArrowLeft className="h-4 w-4" aria-hidden />
-        Back to support
+        {tk.detail.backToSupport}
       </Link>
       <div className="mb-6 flex items-start justify-between gap-4">
         <PatsPortalHeader
           title={ticket.subject}
-          subtitle={`${
-            TICKET_CATEGORY_LABELS[ticket.category as TicketCategory] ??
-            ticket.category
-          } · Opened ${formatDateTime(ticket.createdAt)}`}
+          subtitle={tk.detail.subtitle(
+            tk.categories[ticket.category as keyof typeof tk.categories] ??
+              TICKET_CATEGORY_LABELS[ticket.category as TicketCategory] ??
+              ticket.category,
+            formatDateTime(ticket.createdAt)
+          )}
         />
       </div>
 
       <div className="portal-form-card">
         <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-brand-line pb-4">
-          <TicketStatusBadge status={ticket.status} />
-          <TicketPriorityTag priority={ticket.priority} />
+          <TicketStatusBadge
+            status={ticket.status}
+            label={tk.statuses[normalizeTicketStatus(ticket.status)]}
+          />
+          <TicketPriorityTag
+            priority={ticket.priority}
+            label={
+              tk.priorities[ticket.priority as keyof typeof tk.priorities] ??
+              tk.priorities.NORMAL
+            }
+            format={tk.priorityTag}
+          />
         </div>
 
-        <TicketThread messages={ticket.messages} />
+        <TicketThread messages={ticket.messages} staffLabel={tk.staffTag} />
 
         <TicketReplyBox ticketId={ticket.id} closed={closed} />
       </div>

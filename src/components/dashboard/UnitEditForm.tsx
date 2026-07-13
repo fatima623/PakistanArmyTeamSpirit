@@ -22,6 +22,7 @@ import {
 import { UnitUpdateSchema } from "@/lib/validations";
 import { ARM_OPTIONS } from "@/lib/form-options";
 import { TOAST } from "@/lib/toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 type UnitEditValues = z.infer<typeof UnitUpdateSchema>;
 
@@ -53,7 +54,19 @@ export function UnitEditForm({
   unitNames: string[];
 }) {
   const unit = user.unit;
+  const { t } = useI18n();
+  const u = t.unit;
   const [submitting, setSubmitting] = useState(false);
+
+  const unitTypeLabels: Record<"Regular" | "Reserve", string> = {
+    Regular: u.options.regular,
+    Reserve: u.options.reserve,
+  };
+  const branchLabels: Record<"Army" | "Navy" | "Air Force", string> = {
+    Army: u.options.army,
+    Navy: u.options.navy,
+    "Air Force": u.options.airForce,
+  };
 
   const {
     register,
@@ -120,16 +133,16 @@ export function UnitEditForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-0">
       <div className="portal-form-card mb-6 rounded-2xl">
         <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
-          Personal details
+          {u.sections.personalDetails}
         </h2>
         <div className={gridClass}>
-          <FormField stacked label="First name" required error={errors.firstName?.message}>
+          <FormField stacked label={u.fields.firstName} required error={errors.firstName?.message}>
             <Input {...register("firstName")} />
           </FormField>
-          <FormField stacked label="Last name" required error={errors.lastName?.message}>
+          <FormField stacked label={u.fields.lastName} required error={errors.lastName?.message}>
             <Input {...register("lastName")} />
           </FormField>
-          <FormField stacked label="Rank" required error={errors.rank?.message}>
+          <FormField stacked label={u.fields.rank} required error={errors.rank?.message}>
             <Input {...register("rank")} />
           </FormField>
         </div>
@@ -137,10 +150,10 @@ export function UnitEditForm({
 
       <div className="portal-form-card mb-6 rounded-2xl">
         <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
-          Unit details
+          {u.sections.unitDetails}
         </h2>
         <div className={gridClass}>
-          <FormField stacked label="Unit type" required error={errors.unitType?.message}>
+          <FormField stacked label={u.fields.unitType} required error={errors.unitType?.message}>
             <RadioGroup
               value={watch("unitType")}
               onValueChange={(v) =>
@@ -152,14 +165,14 @@ export function UnitEditForm({
                 <div key={opt} className="flex items-center gap-2">
                   <RadioGroupItem value={opt} id={`unitType-${opt}`} />
                   <label htmlFor={`unitType-${opt}`} className="text-sm">
-                    {opt}
+                    {unitTypeLabels[opt]}
                   </label>
                 </div>
               ))}
             </RadioGroup>
           </FormField>
 
-          <FormField stacked label="Branch" required error={errors.branch?.message}>
+          <FormField stacked label={u.fields.branch} required error={errors.branch?.message}>
             <RadioGroup
               value={watch("branch")}
               onValueChange={(v) =>
@@ -171,21 +184,21 @@ export function UnitEditForm({
                 <div key={opt} className="flex items-center gap-2">
                   <RadioGroupItem value={opt} id={`branch-${opt}`} />
                   <label htmlFor={`branch-${opt}`} className="text-sm">
-                    {opt}
+                    {branchLabels[opt]}
                   </label>
                 </div>
               ))}
             </RadioGroup>
           </FormField>
 
-          <FormField stacked label="Unit name" required error={errors.unitName?.message}>
+          <FormField stacked label={u.fields.unitName} required error={errors.unitName?.message}>
             <Controller
               name="unitName"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select unit" />
+                    <SelectValue placeholder={u.placeholders.selectUnit} />
                   </SelectTrigger>
                   <SelectContent>
                     {unitNames.map((name) => (
@@ -199,14 +212,14 @@ export function UnitEditForm({
             />
           </FormField>
 
-          <FormField stacked label="Arm" required error={errors.arm?.message}>
+          <FormField stacked label={u.fields.arm} required error={errors.arm?.message}>
             <Controller
               name="arm"
               control={control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select" />
+                    <SelectValue placeholder={u.placeholders.select} />
                   </SelectTrigger>
                   <SelectContent>
                     {ARM_OPTIONS.map((opt) => (
@@ -220,12 +233,12 @@ export function UnitEditForm({
             />
           </FormField>
 
-          <FormField stacked label="2nd POC email" error={errors.secondPocEmail?.message}>
+          <FormField stacked label={u.fields.secondPocEmail} error={errors.secondPocEmail?.message}>
             <Input type="email" {...register("secondPocEmail")} />
           </FormField>
           <FormField
             stacked
-            label="3rd POC email (optional)"
+            label={u.fields.thirdPocEmail}
             error={errors.thirdPocEmail?.message}
           >
             <Input type="email" {...register("thirdPocEmail")} />
@@ -233,7 +246,7 @@ export function UnitEditForm({
           <FormField
             stacked
             className="sm:col-span-2"
-            label="Additional info (optional)"
+            label={u.fields.additionalInfo}
             error={errors.additionalInfo?.message}
           >
             <Textarea rows={4} {...register("additionalInfo")} />
@@ -243,16 +256,16 @@ export function UnitEditForm({
 
       <div className="portal-form-card mb-6 rounded-2xl">
         <h2 className="portal-section-title mb-6 border-b border-brand-line pb-3">
-          CO / 2IC details
+          {u.sections.coDetails}
         </h2>
         <div className={gridClass}>
-          <FormField stacked label="CO name" required error={errors.coName?.message}>
+          <FormField stacked label={u.fields.coName} required error={errors.coName?.message}>
             <Input {...register("coName")} />
           </FormField>
-          <FormField stacked label="CO email" required error={errors.coEmail?.message}>
+          <FormField stacked label={u.fields.coEmail} required error={errors.coEmail?.message}>
             <Input type="email" {...register("coEmail")} />
           </FormField>
-          <FormField stacked label="CO phone" required error={errors.coPhone?.message}>
+          <FormField stacked label={u.fields.coPhone} required error={errors.coPhone?.message}>
             <Input {...register("coPhone")} />
           </FormField>
         </div>
@@ -265,7 +278,7 @@ export function UnitEditForm({
           className="cp-btn-primary px-8"
         >
           {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Save changes
+          {u.actions.saveChanges}
         </Button>
       </div>
     </form>

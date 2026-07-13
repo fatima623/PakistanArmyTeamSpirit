@@ -6,6 +6,7 @@ import {
   DM_Sans,
   Inter,
   JetBrains_Mono,
+  Noto_Nastaliq_Urdu,
   Oswald,
   Roboto_Mono,
 } from "next/font/google";
@@ -77,6 +78,14 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+/** Nastaliq Urdu — for the official Urdu crest motto (RTL calligraphic script). */
+const notoNastaliq = Noto_Nastaliq_Urdu({
+  subsets: ["arabic"],
+  variable: "--font-nastaliq",
+  weight: ["400", "600"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   applicationName: SITE_NAME,
   title: {
@@ -123,7 +132,7 @@ export default async function RootLayout({
       lang="en"
       data-site-theme={initialSiteTheme}
       data-scroll-behavior="smooth"
-      className={`${geist.variable} ${oswald.variable} ${barlow.variable} ${bebas.variable} ${inter.variable} ${robotoMono.variable} ${dmSans.variable} ${jetbrains.variable} ${dayThemeClass}`}
+      className={`${geist.variable} ${oswald.variable} ${barlow.variable} ${bebas.variable} ${inter.variable} ${robotoMono.variable} ${dmSans.variable} ${jetbrains.variable} ${notoNastaliq.variable} ${dayThemeClass}`}
       suppressHydrationWarning
     >
       <body

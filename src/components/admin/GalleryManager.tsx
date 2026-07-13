@@ -118,8 +118,7 @@ export function GalleryManager({
                 <div className="flex flex-1 flex-col gap-1.5 px-[0.9rem] pb-[0.9rem] pt-[0.8rem]">
                   <div className="text-[0.92rem] font-bold leading-[1.25] text-brand-ink">{img.title}</div>
                   <div className="text-xs text-brand-ink-muted">
-                    {[img.category, img.year].filter(Boolean).join(" · ") ||
-                      "Uncategorised"}
+                    {img.year ? String(img.year) : "Undated"}
                   </div>
                   <div className="mt-auto flex items-center gap-1.5 border-t border-brand-line/70 pt-2.5">
                     <button
@@ -173,7 +172,6 @@ function UploadForm({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
   const [year, setYear] = useState("");
   const [caption, setCaption] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
@@ -194,7 +192,6 @@ function UploadForm({
     setFile(null);
     setPreview(null);
     setTitle("");
-    setCategory("");
     setYear("");
     setCaption("");
     setSortOrder("0");
@@ -216,7 +213,6 @@ function UploadForm({
       const fd = new FormData();
       fd.append("file", file);
       fd.append("title", title.trim());
-      fd.append("category", category.trim());
       fd.append("year", year.trim());
       fd.append("caption", caption.trim());
       fd.append("sortOrder", sortOrder || "0");
@@ -289,16 +285,6 @@ function UploadForm({
               onChange={(e) => setTitle(e.target.value)}
               className="admin-input"
               placeholder="e.g. 5th International PATS — Opening"
-            />
-          </div>
-          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="g-category">Category</label>
-            <Input
-              id="g-category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="admin-input"
-              placeholder="e.g. Ceremony"
             />
           </div>
           <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
@@ -478,23 +464,33 @@ function EditDialog({
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
   const [year, setYear] = useState("");
   const [caption, setCaption] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [replaceFile, setReplaceFile] = useState<File | null>(null);
+  const [replacePreview, setReplacePreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  const pickReplace = (f: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    setReplaceFile(f);
+    setReplacePreview(URL.createObjectURL(f));
+  };
 
   // Sync local state whenever a new image is opened.
   const [loadedId, setLoadedId] = useState<string | null>(null);
   if (image && image.id !== loadedId) {
     setLoadedId(image.id);
     setTitle(image.title);
-    setCategory(image.category ?? "");
     setYear(image.year != null ? String(image.year) : "");
     setCaption(image.caption ?? "");
     setSortOrder(String(image.sortOrder));
     setReplaceFile(null);
+    setReplacePreview(null);
     if (fileRef.current) fileRef.current.value = "";
   } else if (!image && loadedId !== null) {
     // Dialog closed — reset the key so reopening the same image re-syncs
@@ -515,7 +511,6 @@ function EditDialog({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: title.trim(),
-          category: category.trim(),
           year: year.trim() === "" ? null : year.trim(),
           caption: caption.trim(),
           sortOrder: sortOrder || "0",
@@ -574,15 +569,6 @@ function EditDialog({
               />
             </div>
             <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-              <label htmlFor="e-category">Category</label>
-              <Input
-                id="e-category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="admin-input"
-              />
-            </div>
-            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-year">Year</label>
               <Input
                 id="e-year"
@@ -602,16 +588,47 @@ function EditDialog({
                 className="admin-input"
               />
             </div>
-            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+            <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-replace">Replace image</label>
-              <input
-                id="e-replace"
-                ref={fileRef}
-                type="file"
-                accept="image/png,image/jpeg,image/webp,image/gif"
-                className="text-xs"
-                onChange={(e) => setReplaceFile(e.target.files?.[0] ?? null)}
-              />
+              <div
+                className="flex items-center gap-3 rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-2.5 transition-colors hover:border-brand-olive/60"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  pickReplace(e.dataTransfer.files?.[0] ?? null);
+                }}
+              >
+                <div className="relative h-16 w-[5.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={replacePreview ?? imageUrl(image.imagePath)}
+                    alt={replaceFile ? "New image preview" : "Current image"}
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-1.5 text-[0.8rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
+                  >
+                    <Upload className="h-3.5 w-3.5" aria-hidden />
+                    {replaceFile ? "Choose a different image" : "Choose new image"}
+                  </button>
+                  <p className="mt-1 truncate text-[0.72rem] text-brand-ink-muted">
+                    {replaceFile
+                      ? replaceFile.name
+                      : "Drag & drop or click to replace — keeps the current image if left unchanged."}
+                  </p>
+                </div>
+                <input
+                  id="e-replace"
+                  ref={fileRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  className="sr-only"
+                  onChange={(e) => pickReplace(e.target.files?.[0] ?? null)}
+                />
+              </div>
             </div>
             <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-caption">Caption</label>

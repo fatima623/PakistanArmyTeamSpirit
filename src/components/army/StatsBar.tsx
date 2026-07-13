@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { PatsSection } from "@/components/pats/PatsSection";
 import { ARMY_STATS } from "@/lib/army-content";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 function useCountUp(target: number, active: boolean, duration = 1800) {
@@ -66,6 +67,7 @@ function StatItem({
 }
 
 export function StatsBar({ className }: { className?: string }) {
+  const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
 
@@ -102,15 +104,18 @@ export function StatsBar({ className }: { className?: string }) {
       className={cn("scroll-deck-layer !py-0", className)}
     >
       <div ref={ref} className="pats-stats">
-        {ARMY_STATS.map((stat) => (
-          <StatItem
-            key={stat.label}
-            value={stat.value}
-            suffix={stat.suffix}
-            label={stat.label}
-            active={active}
-          />
-        ))}
+        {ARMY_STATS.map((stat, i) => {
+          const localized = t.home.stats[i];
+          return (
+            <StatItem
+              key={stat.label}
+              value={stat.value}
+              suffix={localized?.suffix ?? stat.suffix}
+              label={localized?.label ?? stat.label}
+              active={active}
+            />
+          );
+        })}
       </div>
     </PatsSection>
   );

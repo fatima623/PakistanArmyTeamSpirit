@@ -1,0 +1,100 @@
+import type { payment as enPayment } from "../en/payment";
+
+// Simplified Chinese (zh-CN) translations for payment instructions and form.
+export const payment: typeof enPayment = {
+  instructions: {
+    registrationFee: "注册费",
+    sendExactBold: "请准确汇出此金额",
+    sendExactRest: "然后再上传您的付款凭证。",
+    chooseMethod: "选择付款方式",
+    methods: {
+      bank: "银行转账",
+      wise: "Wise",
+      mobile: "移动钱包",
+      remitly: "Remitly",
+    },
+    detailsTitle: {
+      bank: "银行转账详情",
+      wise: "Wise 详情",
+      mobile: "移动钱包详情",
+      remitly: "Remitly 详情",
+    },
+    detailsSub: {
+      bank: "请使用下方的账户详情通过银行转账付款。",
+      wise: "请将费用汇至下方的 Wise 账户。",
+      mobile: "请将费用汇至下方的移动钱包账户。",
+      remitly: "请使用下方的详情通过 Remitly 汇出费用。",
+    },
+    rows: {
+      bankName: "银行名称",
+      accountTitle: "账户名称",
+      accountNumber: "账号",
+      ibanSwift: "IBAN / SWIFT",
+      wiseEmail: "Wise 电子邮件",
+      recipientName: "收款人姓名",
+      walletNumber: "钱包账号",
+      remitlyEmail: "Remitly 电子邮件",
+    },
+    copyHeader: (title, fee) =>
+      `${title} — 注册费 ${fee}`,
+    copied: "已复制",
+    copyDetails: "复制详情",
+    toastCopied: "付款详情已复制",
+    toastCopyFail: "无法复制 — 请手动复制详情",
+    stepsTitle: "完成付款的步骤",
+    steps: [
+      "使用您选择的付款方式汇出注册费。",
+      "保存您的付款截图或收据。",
+      "上传付款凭证及交易参考号以供核实。",
+    ] as string[],
+  },
+  form: {
+    toastAttachProof: "请附上付款凭证（截图或收据）",
+    toastSubmitSuccess: "付款已提交以待核实",
+    submittedPayments: "已提交的付款",
+    submittedRef: (ref) => `— 参考号 ${ref}`,
+    submittedOn: (date) => `提交于 ${date}`,
+    paidSuffix: (date) => ` · 付款于 ${date}`,
+    paymentProof: "付款凭证",
+    verificationSummary: "核实摘要",
+    messageFromPats: "来自 PATS 的消息：",
+    paymentStatus: "付款状态",
+    amountDue: "应付金额",
+    verificationResult: "核实结果",
+    lastUpdated: "最后更新",
+    banners: {
+      verified: "付款已成功核实。无需进一步操作。",
+      rejected: "付款凭证已被拒绝。请在下方提交更正后的凭证。",
+      returned: "付款凭证已退回以待更正。请在下方重新提交。",
+      pending:
+        "付款凭证已提交。等待管理组 (MT) 核实。",
+    },
+    result: {
+      verified: "已核实",
+      rejected: "已拒绝",
+      returned: "已退回",
+      pending: "待审核",
+    },
+    uploadTitle: "上传付款凭证",
+    uploadDesc: (fee) =>
+      `汇出 ${fee} 后，请上传您的付款凭证及交易参考号。接受格式：PNG、JPG、JPEG、PDF（最大 5MB）。`,
+    uploadAria: "上传付款凭证文件",
+    selectedPreviewAlt: "所选凭证预览",
+    chooseDifferent: "点击以选择其他文件",
+    dropHerePre: "将文件拖放到此处，或",
+    browse: "点击浏览",
+    fileTypes: "PNG、JPG、JPEG、PDF（最大 5MB）",
+    amountPaid: (currency) => `已付金额（${currency}）`,
+    paymentDate: "付款日期",
+    transactionRef: "交易 / 参考号",
+    transactionRefPlaceholder: "例如银行参考号、Wise / Remitly ID",
+    notes: "备注（可选）",
+    notesPlaceholder: "关于此次付款的任何补充信息",
+    uploading: "正在上传凭证…",
+    submitForVerification: "提交付款以待核实",
+    secureNote:
+      "您的付款信息是安全的，仅用于核实。",
+    willBeVerified:
+      "您的付款将由 PATS 团队核实。一经确认，我们将通知您。",
+  },
+};

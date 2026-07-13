@@ -7,6 +7,8 @@ import { ChevronRight, MessageSquare, Plus } from "lucide-react";
 import { NewTicketForm } from "@/components/tickets/NewTicketForm";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import { normalizeTicketStatus } from "@/lib/constants";
 
 export type SupportTicketListItem = {
   id: string;
@@ -28,6 +30,8 @@ export function SupportTicketsPanel({
   tickets: SupportTicketListItem[];
 }) {
   const [creating, setCreating] = useState(false);
+  const { t: i18n } = useI18n();
+  const tk = i18n.tickets;
 
   return (
     <div className="flex flex-col gap-5">
@@ -35,10 +39,10 @@ export function SupportTicketsPanel({
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
             <h1 className="text-[1.5rem] font-bold leading-[1.2] tracking-[-0.02em] text-slate-800">
-              Support
+              {tk.panel.title}
             </h1>
             <div className="mt-[0.3rem] text-[0.875rem] !text-slate-600">
-              Raise a ticket and our team will get back to you.
+              {tk.panel.subtitle}
             </div>
           </div>
           <Button
@@ -46,7 +50,7 @@ export function SupportTicketsPanel({
             onClick={() => setCreating(true)}
           >
             <Plus className="mr-2 h-4 w-4" aria-hidden />
-            New ticket
+            {tk.panel.newTicket}
           </Button>
         </header>
       ) : null}
@@ -57,9 +61,7 @@ export function SupportTicketsPanel({
         tickets.length === 0 ? (
           <div className="flex flex-col items-center gap-[0.6rem] rounded-xl border border-dashed border-slate-300 px-4 py-7 text-center text-sm text-slate-500">
             <MessageSquare className="h-6 w-6 opacity-60" aria-hidden />
-            <p className="text-slate-500">
-              You have no support tickets yet. Raise one above if you need help.
-            </p>
+            <p className="text-slate-500">{tk.panel.empty}</p>
           </div>
         ) : (
           <ul className="m-0 flex list-none flex-col gap-[0.6rem] p-0">
@@ -77,12 +79,18 @@ export function SupportTicketsPanel({
                       {t.subject}
                     </div>
                     <div className="mt-[0.2rem] text-[0.76rem] leading-[1.4] !text-slate-500">
-                      {t.categoryLabel} · {t.messageCount} message
-                      {t.messageCount === 1 ? "" : "s"} · Updated {t.updatedLabel}
+                      {tk.panel.listMeta(t.categoryLabel, t.messageCount, t.updatedLabel)}
                     </div>
                   </div>
                   <div className="inline-flex shrink-0 items-center gap-[0.65rem]">
-                    <TicketStatusBadge status={t.status} />
+                    <TicketStatusBadge
+                      status={t.status}
+                      label={
+                        tk.statuses[
+                          normalizeTicketStatus(t.status) as keyof typeof tk.statuses
+                        ]
+                      }
+                    />
                     <ChevronRight
                       className="h-4 w-4 text-slate-400 transition-transform duration-150 group-hover:translate-x-[2px]"
                       aria-hidden

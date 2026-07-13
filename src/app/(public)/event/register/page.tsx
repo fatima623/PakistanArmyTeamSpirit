@@ -5,6 +5,7 @@ import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { getSiteSettings } from "@/lib/site-data";
 import { isPastDeadline } from "@/lib/deadlines";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Register",
@@ -13,22 +14,20 @@ export const metadata: Metadata = {
 export default async function RegisterPage() {
   const settings = await getSiteSettings();
   const registrationClosed = isPastDeadline(settings.registrationDeadline);
+  const { t, locale, dir } = await getDictionary();
 
   return (
-    <>
+    <div lang={locale} dir={dir}>
       <PatsPageHero
-        eyebrow="Registration"
-        title="Register interest"
-        subtitle="Submit patrol and liaison details for HQ review. Registration is not complete until patrol fees are confirmed."
+        eyebrow={t.register.hero.eyebrow}
+        title={t.register.hero.title}
+        subtitle={t.register.hero.subtitle}
       />
       <PatsSection variant="navy">
         {registrationClosed ? (
           <div className="portal-alert-warning mx-auto max-w-xl">
-            <p className="mb-1 text-sm font-bold">Registration closed</p>
-            <p className="portal-body text-sm">
-              The registration deadline has passed. Please contact PATS
-              administration if you believe this is in error.
-            </p>
+            <p className="mb-1 text-sm font-bold">{t.register.closed.title}</p>
+            <p className="portal-body text-sm">{t.register.closed.body}</p>
           </div>
         ) : (
           <RegisterForm
@@ -36,6 +35,6 @@ export default async function RegisterPage() {
           />
         )}
       </PatsSection>
-    </>
+    </div>
   );
 }

@@ -21,9 +21,10 @@ import {
   TICKET_PRIORITY_LABELS,
 } from "@/lib/constants";
 import { TOAST } from "@/lib/toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
-const CATEGORIES = Object.entries(TICKET_CATEGORY_LABELS);
-const PRIORITIES = Object.entries(TICKET_PRIORITY_LABELS);
+const CATEGORY_KEYS = Object.keys(TICKET_CATEGORY_LABELS);
+const PRIORITY_KEYS = Object.keys(TICKET_PRIORITY_LABELS);
 
 export function NewTicketForm({
   open: openProp,
@@ -34,6 +35,8 @@ export function NewTicketForm({
   onOpenChange?: (open: boolean) => void;
 } = {}) {
   const router = useRouter();
+  const { t } = useI18n();
+  const tk = t.tickets;
   const [openState, setOpenState] = useState(false);
   const open = openProp ?? openState;
   const setOpen = (value: boolean) => {
@@ -67,7 +70,7 @@ export function NewTicketForm({
       });
       if (res.ok) {
         const { ticket } = await res.json();
-        toast.success("Ticket raised");
+        toast.success(tk.form.toastRaised);
         reset();
         setOpen(false);
         router.push(`/event/tickets/${ticket.id}`);
@@ -102,43 +105,43 @@ export function NewTicketForm({
       className="portal-form-card mx-auto w-full max-w-xl space-y-5 !rounded-2xl"
     >
       <h2 className="portal-section-title border-b border-brand-line pb-3">
-        Raise a support ticket
+        {tk.form.title}
       </h2>
 
-      <FormField label="Subject" required error={errors.subject}>
+      <FormField label={tk.form.subject} required error={errors.subject}>
         <Input
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          placeholder="Brief summary of your issue"
+          placeholder={tk.form.subjectPlaceholder}
           maxLength={150}
         />
       </FormField>
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <FormField label="Category" error={errors.category}>
+        <FormField label={tk.form.category} error={errors.category}>
           <Select value={category} onValueChange={setCategory}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {CATEGORIES.map(([value, label]) => (
+              {CATEGORY_KEYS.map((value) => (
                 <SelectItem key={value} value={value}>
-                  {label}
+                  {tk.categories[value as keyof typeof tk.categories]}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </FormField>
 
-        <FormField label="Priority" error={errors.priority}>
+        <FormField label={tk.form.priority} error={errors.priority}>
           <Select value={priority} onValueChange={setPriority}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {PRIORITIES.map(([value, label]) => (
+              {PRIORITY_KEYS.map((value) => (
                 <SelectItem key={value} value={value}>
-                  {label}
+                  {tk.priorities[value as keyof typeof tk.priorities]}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -146,12 +149,12 @@ export function NewTicketForm({
         </FormField>
       </div>
 
-      <FormField label="How can we help?" required error={errors.message}>
+      <FormField label={tk.form.help} required error={errors.message}>
         <Textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           rows={5}
-          placeholder="Describe your issue in detail"
+          placeholder={tk.form.helpPlaceholder}
           maxLength={5000}
         />
       </FormField>
@@ -167,7 +170,7 @@ export function NewTicketForm({
           }}
           disabled={submitting}
         >
-          Cancel
+          {tk.form.cancel}
         </Button>
         <Button
           type="submit"
@@ -175,7 +178,7 @@ export function NewTicketForm({
           disabled={submitting}
         >
           {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Submit ticket
+          {tk.form.submit}
         </Button>
       </div>
     </form>

@@ -159,3 +159,25 @@ export async function getNewsPostBySlug(slug: string) {
     return null;
   }
 }
+
+const getCachedAnnouncementRows = unstable_cache(
+  async () => {
+    try {
+      return await prisma.newsPost.findMany({
+        where: { published: true },
+        orderBy: { publishedAt: "desc" },
+        take: 60,
+      });
+    } catch (error) {
+      logDbError("getAnnouncements", error);
+      return [];
+    }
+  },
+  ["announcements"],
+  { revalidate: SITE_DATA_REVALIDATE_SEC }
+);
+
+/** All published announcements (NewsPost) for the public /announcements page. */
+export async function getAnnouncements(): Promise<NewsPost[]> {
+  return getCachedAnnouncementRows();
+}

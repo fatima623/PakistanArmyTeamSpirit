@@ -10,12 +10,19 @@ export function revalidatePublicSite() {
 
 export function revalidateNewsPaths() {
   revalidatePublicSite();
+  revalidatePath("/announcements");
   revalidatePath("/admin/news");
 }
 
 export function revalidateGalleryPaths() {
   revalidatePath("/gallery");
   revalidatePath("/admin/gallery");
+}
+
+export function revalidateEventPaths() {
+  revalidatePath("/events-detail");
+  revalidatePath("/exercise-contour");
+  revalidatePath("/admin/events");
 }
 
 export function revalidateKeyDatesPaths() {

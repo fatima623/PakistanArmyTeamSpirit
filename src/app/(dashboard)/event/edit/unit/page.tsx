@@ -8,6 +8,7 @@ import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { UNIT_NAMES } from "@/lib/units-list";
 import { UnitEditForm } from "@/components/dashboard/UnitEditForm";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Update unit information",
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 
 export default async function EditUnitPage() {
   const session = await requireConfirmedParticipant();
+  const { t } = await getDictionary();
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
@@ -36,12 +38,12 @@ export default async function EditUnitPage() {
     <div className="mx-auto w-full max-w-3xl">
       <Link href="/event/dashboard" className="portal-back-link mb-4">
         <ArrowLeft className="h-4 w-4" aria-hidden />
-        Back to dashboard
+        {t.common.backToDashboard}
       </Link>
       <div className="mb-6">
         <PatsPortalHeader
-          title="Unit information"
-          subtitle="Update the details of your registration below."
+          title={t.unit.page.title}
+          subtitle={t.unit.page.subtitle}
         />
       </div>
       <UnitEditForm user={user} unitNames={[...UNIT_NAMES]} />

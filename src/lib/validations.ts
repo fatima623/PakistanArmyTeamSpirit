@@ -186,6 +186,29 @@ export const GalleryImageSchema = z.object({
 /** Update variant — all metadata fields optional (partial patch). */
 export const GalleryImageUpdateSchema = GalleryImageSchema.partial();
 
+export const EventBreakdownItemSchema = z.object({
+  label: z.string().min(1, "Label required").max(120),
+  marks: z.coerce.number().int().min(0).max(9999),
+});
+
+export const EventSchema = z.object({
+  title: z.string().min(1, "Title required").max(200),
+  marks: z.coerce.number().int().min(0).max(9999).optional(),
+  icon: z.string().max(60).optional().or(z.literal("")),
+  category: z.string().min(1, "Category required").max(80),
+  difficulty: z.string().min(1, "Difficulty required").max(40),
+  duration: z.string().min(1, "Duration required").max(120),
+  summary: z.string().min(1, "Summary required").max(600),
+  details: z.string().min(1, "Details required").max(4000),
+  participants: z.string().max(200).optional().or(z.literal("")),
+  breakdown: z.array(EventBreakdownItemSchema).max(20).optional(),
+  sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
+  published: z.boolean().optional(),
+});
+
+/** Update variant — all fields optional (partial patch). */
+export const EventUpdateSchema = EventSchema.partial();
+
 export const KeyDateSchema = z.object({
   label: z.string().min(1, "Label required"),
   value: z.string().min(1, "Value required"),

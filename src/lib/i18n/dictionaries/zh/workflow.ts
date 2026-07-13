@@ -1,0 +1,46 @@
+import type { WorkflowStrings } from "../../workflow-strings";
+
+// Simplified Chinese (zh-CN) strings for the guided registration workflow stages.
+export const workflow: WorkflowStrings = {
+  label: {
+    confirmation: "确认参与",
+    verification: "注册核验",
+    payment: "付款",
+    teamRegistration: "团队注册",
+    roster: "团队成员",
+    flights: "航班信息",
+    hostInfo: "接待信息",
+  },
+  sub: {
+    confirmed: "已确认",
+    deadlineExpired: "截止日期已过",
+    actionRequired: "需要采取行动",
+    confirmBy: (date) => `请于 ${date} 前确认`,
+    locked: "已锁定",
+    returnedForCorrection: "已退回以待更正",
+    approvedBySd: "已由 SD 批准",
+    rejected: "已拒绝",
+    underReviewBySd: "SD 审核中",
+    pendingSdVerification: "等待 SD 核验",
+    verifiedByMt: "已由 MT 核实",
+    underReviewByMt: "MT 审核中",
+    proofRejected: "凭证被拒",
+    paymentRequired: "需要付款",
+    teamRegistered: "团队已注册",
+    opensOn: (date) => `${date} 开放`,
+    notYetOpen: "尚未开放",
+    windowClosed: "窗口已关闭",
+    openUntil: (date) => `开放至 ${date}`,
+    windowOpen: "窗口已开放",
+    membersConfirmed: (count) => `已确认 ${count} 名成员`,
+    membersAdded: (count, limit) => `已添加 ${count} / ${limit}`,
+    finalized: "已由管理部门最终确定",
+    deadlinePassedLocked: "截止日期已过 — 已锁定",
+    submitBy: (date) => `请于 ${date} 前提交`,
+    provideTravelDocs: "提供出行文件",
+    available: "可用",
+    awaitingPublication: "等待发布",
+  },
+  formatDate: (d) =>
+    d.toLocaleDateString("zh-CN", { day: "numeric", month: "short", year: "numeric" }),
+};

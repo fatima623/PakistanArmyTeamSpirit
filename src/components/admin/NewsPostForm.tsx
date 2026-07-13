@@ -8,7 +8,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, Eye, FileText, Loader2, Pencil, Upload, X } from "lucide-react";
+import { ArrowLeft, Eye, FileText, ImagePlus, Loader2, Pencil, Upload, X } from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -171,6 +171,10 @@ export function NewsPostForm({
 
     pdfReadable?: boolean;
 
+    hasImage?: boolean;
+
+    imagePath?: string | null;
+
   };
 
 }) {
@@ -178,6 +182,8 @@ export function NewsPostForm({
   const router = useRouter();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const isNew = !postId;
 
@@ -219,6 +225,14 @@ export function NewsPostForm({
 
     initial?.pdfFileSize ?? null
 
+  );
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [removeImage, setRemoveImage] = useState(false);
+
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initial?.imagePath ? `/uploads/${initial.imagePath}` : null
   );
 
   const hasExistingPdf =
@@ -383,6 +397,51 @@ export function NewsPostForm({
 
 
 
+  const onPickImage = (file: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file.");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Image must be 8 MB or smaller.");
+      return;
+    }
+    setImageFile(file);
+    setRemoveImage(false);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const markRemoveImage = () => {
+    setImageFile(null);
+    setRemoveImage(true);
+    setImagePreview(null);
+    if (imageInputRef.current) imageInputRef.current.value = "";
+  };
+
+  const syncImage = async (id: string) => {
+    if (removeImage && initial?.hasImage) {
+      const res = await fetch(`/api/admin/news/${id}/image`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("IMAGE_REMOVE_FAILED");
+    }
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      const res = await fetch(`/api/admin/news/${id}/image`, {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(
+          typeof data.error === "string" ? data.error : "IMAGE_UPLOAD_FAILED"
+        );
+      }
+    }
+  };
+
   const handleSave = async () => {
 
     setSubmitting(true);
@@ -466,6 +525,21 @@ export function NewsPostForm({
       }
 
 
+
+      if (imageFile || (removeImage && initial?.hasImage)) {
+        try {
+          await syncImage(savedId);
+        } catch (err) {
+          toast.error(
+            err instanceof Error && err.message !== "IMAGE_UPLOAD_FAILED"
+              ? err.message
+              : "Post saved but the image could not be updated. Try editing the post."
+          );
+          router.push("/admin/news");
+          router.refresh();
+          return;
+        }
+      }
 
       toast.success(TOAST.SAVE_SUCCESS);
 
@@ -915,6 +989,85 @@ export function NewsPostForm({
       </section>
 
 
+
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
+            Announcement image
+          </h3>
+          <p className="mt-1 text-xs leading-[1.4] text-muted-foreground">
+            Optional cover image shown on the Announcements card and detail
+            page. Max 8 MB.
+          </p>
+        </div>
+        <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
+          <div className="grid gap-4 sm:grid-cols-[200px_1fr] sm:items-start">
+            <button
+              type="button"
+              className="relative flex aspect-[16/9] cursor-pointer items-center justify-center overflow-hidden rounded-[10px] border-2 border-dashed border-slate-300 bg-slate-50 text-center transition-colors hover:border-brand-olive-dark hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+              onClick={() => imageInputRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                onPickImage(e.dataTransfer.files?.[0] ?? null);
+              }}
+            >
+              {imagePreview ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={imagePreview} alt="Announcement preview" />
+              ) : (
+                <div className="flex flex-col items-center gap-1 p-3">
+                  <ImagePlus
+                    className="h-7 w-7 text-brand-olive-dark opacity-85"
+                    aria-hidden
+                  />
+                  <span className="text-[0.8rem] font-semibold text-slate-800">
+                    Click or drop an image
+                  </span>
+                  <span className="text-[0.72rem] text-slate-900">
+                    JPG/PNG/WEBP · up to 8 MB
+                  </span>
+                </div>
+              )}
+            </button>
+            <div className="flex flex-col gap-2">
+              <input
+                ref={imageInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                className="sr-only"
+                id="news-image-input"
+                onChange={(e) => onPickImage(e.target.files?.[0] ?? null)}
+              />
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="adminOutline"
+                  onClick={() => imageInputRef.current?.click()}
+                >
+                  Choose image
+                </Button>
+                {imagePreview ? (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="adminDestructive"
+                    onClick={markRemoveImage}
+                  >
+                    Remove image
+                  </Button>
+                ) : null}
+              </div>
+              {imageFile ? (
+                <p className="text-xs text-brand-olive">
+                  New image selected — save to apply.
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
 

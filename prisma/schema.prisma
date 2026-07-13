@@ -8,54 +8,62 @@ datasource db {
 }
 
 model User {
-  id                  String   @id @default(cuid())
-  email               String   @unique
-  passwordHash        String
-  emailVerifiedAt     DateTime? @default(now())
-  firstName           String
-  lastName            String
-  rank                String
-  gender              String
-  country             String?
-  nationality         String?  @default("Pakistani")
-  role                String   @default("user")
-  approved            Boolean  @default(false)
-  applicationStatus   String   @default("PENDING")
-  paymentStatus       String   @default("PENDING")
-  adminNotes          String?  @db.Text
-  rejectionReason     String?  @db.Text
-  rejectedAt          DateTime?
-  approvedAt          DateTime?
-  suspended           Boolean  @default(false)
-  failedLoginAttempts Int      @default(0)
-  lockedUntil         DateTime?
-  privacyAccepted     Boolean  @default(false)
-  privacyAcceptedAt   DateTime?
-  /** Participation confirmation (first-login availability dialog). */
+  id                       String              @id @default(cuid())
+  email                    String              @unique
+  passwordHash             String
+  emailVerifiedAt          DateTime?           @default(now())
+  firstName                String
+  lastName                 String
+  rank                     String
+  gender                   String
+  country                  String?
+  nationality              String?             @default("Pakistani")
+  role                     String              @default("user")
+  approved                 Boolean             @default(false)
+  applicationStatus        String              @default("PENDING")
+  paymentStatus            String              @default("PENDING")
+  adminNotes               String?             @db.Text
+  rejectionReason          String?             @db.Text
+  rejectedAt               DateTime?
+  approvedAt               DateTime?
+  suspended                Boolean             @default(false)
+  failedLoginAttempts      Int                 @default(0)
+  lockedUntil              DateTime?
+  privacyAccepted          Boolean             @default(false)
+  privacyAcceptedAt        DateTime?
+  /**
+   * Participation confirmation (first-login availability dialog).
+   */
   participationConfirmedAt DateTime?
   participationDeclinedAt  DateTime?
-  /** Team registration workflow. */
+  /**
+   * Team registration workflow.
+   */
   teamRegisteredAt         DateTime?
   rosterCompletedAt        DateTime?
-  /** Approved team-size override (defaults to SiteSettings.maxTeamMembers). */
+  /**
+   * Approved team-size override (defaults to SiteSettings.maxTeamMembers).
+   */
   maxTeamMembersOverride   Int?
-  /** Set by administration once flight details are reviewed & finalized. */
+  /**
+   * Set by administration once flight details are reviewed & finalized.
+   */
   flightsFinalizedAt       DateTime?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  unit                Unit?
-  teamMembers         TeamMember[]
-  emailVerifications  EmailVerification[]
-  passwordResets      PasswordReset[]
-  payments            Payment[]
-  auditLogsActed      AuditLog[]      @relation("AuditActor")
-  paymentsVerified    Payment[]       @relation("PaymentVerifier")
-  supportTickets      SupportTicket[] @relation("TicketCreator")
-  assignedTickets     SupportTicket[] @relation("TicketAssignee")
-  ticketMessages      TicketMessage[] @relation("TicketMessageAuthor")
-  teamSizeRequests    TeamSizeRequest[] @relation("TeamSizeRequestUser")
-  teamSizeReviews     TeamSizeRequest[] @relation("TeamSizeRequestReviewer")
-  flightDetails       FlightDetail[]    @relation("FlightDetailUser")
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt
+  unit                     Unit?
+  teamMembers              TeamMember[]
+  emailVerifications       EmailVerification[]
+  passwordResets           PasswordReset[]
+  payments                 Payment[]
+  auditLogsActed           AuditLog[]          @relation("AuditActor")
+  paymentsVerified         Payment[]           @relation("PaymentVerifier")
+  supportTickets           SupportTicket[]     @relation("TicketCreator")
+  assignedTickets          SupportTicket[]     @relation("TicketAssignee")
+  ticketMessages           TicketMessage[]     @relation("TicketMessageAuthor")
+  teamSizeRequests         TeamSizeRequest[]   @relation("TeamSizeRequestUser")
+  teamSizeReviews          TeamSizeRequest[]   @relation("TeamSizeRequestReviewer")
+  flightDetails            FlightDetail[]      @relation("FlightDetailUser")
 
   @@index([applicationStatus])
   @@index([paymentStatus])
@@ -99,16 +107,16 @@ model Unit {
 }
 
 model TeamMember {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   fullName      String
   serviceNumber String
-  rank          String   @default("")
-  serviceArm    String   @default("")
+  rank          String        @default("")
+  serviceArm    String        @default("")
   gender        String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   flightDetail  FlightDetail?
 
   @@index([userId])
@@ -157,15 +165,15 @@ model FlightDetail {
 }
 
 model Payment {
-  id                    String    @id @default(cuid())
+  id                    String                    @id @default(cuid())
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  amount                Decimal   @db.Decimal(10, 2)
-  currency              String    @default("PKR")
-  status                String    @default("PENDING")
+  user                  User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount                Decimal                   @db.Decimal(10, 2)
+  currency              String                    @default("PKR")
+  status                String                    @default("PENDING")
   proofFileName         String?
   proofMimeType         String?
-  internalFilePath      String?   @unique
+  internalFilePath      String?                   @unique
   proofOriginalFileName String?
   proofFileSize         Int?
   proofUploadedAt       DateTime?
@@ -173,13 +181,13 @@ model Payment {
   uploaderEmail         String?
   paymentDate           DateTime?
   transactionReference  String?
-  adminNotes            String?   @db.Text
-  rejectionReason       String?   @db.Text
+  adminNotes            String?                   @db.Text
+  rejectionReason       String?                   @db.Text
   verifiedById          String?
-  verifiedBy            User?     @relation("PaymentVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
+  verifiedBy            User?                     @relation("PaymentVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
   verifiedAt            DateTime?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
   rejectionHistory      PaymentRejectionHistory[]
 
   @@index([userId])
@@ -262,8 +270,48 @@ model NewsPost {
   pdfOriginalName String?
   pdfMimeType     String?
   pdfFileSize     Int?
+  /**
+   * Optional announcement/cover image (served from /uploads/news).
+   */
+  imagePath       String?
+  imageMimeType   String?
+  imageFileSize   Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+}
+
+/// Competition event catalogue (dynamic, admin-managed; seeded from CONTOUR_EVENTS).
+model Event {
+  id                String   @id @default(cuid())
+  slug              String   @unique
+  title             String
+  marks             Int      @default(0)
+  /**
+   * Lucide icon name (resolved client-side; fallback Target).
+   */
+  icon              String   @default("Target")
+  category          String
+  difficulty        String
+  duration          String
+  summary           String   @db.Text
+  details           String   @db.Text
+  participants      String?
+  /**
+   * Ordered [{ label, marks }] marks breakdown.
+   */
+  breakdown         Json?
+  /**
+   * Optional admin-uploaded card thumbnail (served from /uploads/events).
+   */
+  thumbnailPath     String?
+  thumbnailMimeType String?
+  thumbnailFileSize Int?
+  sortOrder         Int      @default(0)
+  published         Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([published, sortOrder])
 }
 
 model GalleryImage {
@@ -284,13 +332,13 @@ model GalleryImage {
 }
 
 model KeyDate {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   label     String
-  value     String   @db.Text
+  value     String    @db.Text
   date      DateTime?
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sortOrder Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model TickerAnnouncement {
@@ -346,49 +394,61 @@ model EmailVerification {
 }
 
 model SiteSettings {
-  id                         String  @id @default("singleton")
-  registrationOpen           Boolean @default(true)
-  intlRegistrationOpen       Boolean @default(true)
-  registrationDeadline       DateTime?
-  paymentDeadline            DateTime?
-  /** Deadline for the first-login participation confirmation dialog. */
+  id                           String    @id @default("singleton")
+  registrationOpen             Boolean   @default(true)
+  intlRegistrationOpen         Boolean   @default(true)
+  registrationDeadline         DateTime?
+  paymentDeadline              DateTime?
+  /**
+   * Deadline for the first-login participation confirmation dialog.
+   */
   participationConfirmDeadline DateTime?
-  /** Team registration window (participants may register only inside it). */
-  teamRegistrationOpenDate   DateTime?
-  teamRegistrationCloseDate  DateTime?
-  /** Flight details editable until this deadline (or admin finalization). */
-  flightDetailsDeadline      DateTime?
-  /** Default team-member cap (per-user override on User). */
-  maxTeamMembers             Int     @default(13)
-  /** Host information visibility + content for finalized participants. */
-  hostInfoPublished          Boolean @default(false)
-  hostInfoContent            String? @db.Text
-  exerciseYear               Int     @default(2026)
-  exerciseDates              String  @default("2 – 13 October 2026")
-  privacyPolicyUrl           String  @default("/privacy")
-  feeNoticeText              String  @db.Text
-  approvalNoticeText         String  @db.Text
-  facebookUrl                String  @default("#")
-  twitterUrl                 String  @default("#")
-  instagramUrl               String  @default("#")
-  merchandiseQrUrl           String  @default("https://www.theprintsofwales.co.uk/cambrian-patrol/")
-  photographyQrUrl           String  @default("mailto:igphoto@yahoo.co.uk")
-  defaultPaymentAmount       Decimal @default(15000.00) @db.Decimal(10, 2)
-  paymentCurrency            String  @default("PKR")
-  paymentBankName            String  @default("HBL")
-  paymentBankAccountTitle    String  @default("PATS")
-  paymentBankAccountNumber   String  @default("1234567890")
-  paymentBankIban            String  @default("PK00HABB0000000012345678")
-  paymentEasypaisaNumber     String  @default("0312-3456789")
-  paymentEasypaisaTitle      String  @default("PATS")
-  paymentJazzcashNumber      String  @default("0300-9876543")
-  paymentJazzcashTitle       String  @default("PATS")
-  paymentWiseEmail           String  @default("payments@pats.gov.pk")
-  paymentWiseName            String  @default("PATS Organising Committee")
-  paymentMobileNumber        String  @default("+92 300 1234567")
-  paymentMobileTitle         String  @default("PATS")
-  paymentRemitlyEmail        String  @default("payments@pats.gov.pk")
-  paymentRemitlyName         String  @default("PATS Organising Committee")
-  /** SLOW | NORMAL | FAST | VERY_FAST — homepage announcement ticker scroll */
-  tickerScrollSpeed          String  @default("NORMAL")
+  /**
+   * Team registration window (participants may register only inside it).
+   */
+  teamRegistrationOpenDate     DateTime?
+  teamRegistrationCloseDate    DateTime?
+  /**
+   * Flight details editable until this deadline (or admin finalization).
+   */
+  flightDetailsDeadline        DateTime?
+  /**
+   * Default team-member cap (per-user override on User).
+   */
+  maxTeamMembers               Int       @default(13)
+  /**
+   * Host information visibility + content for finalized participants.
+   */
+  hostInfoPublished            Boolean   @default(false)
+  hostInfoContent              String?   @db.Text
+  exerciseYear                 Int       @default(2026)
+  exerciseDates                String    @default("2 – 13 October 2026")
+  privacyPolicyUrl             String    @default("/privacy")
+  feeNoticeText                String    @db.Text
+  approvalNoticeText           String    @db.Text
+  facebookUrl                  String    @default("#")
+  twitterUrl                   String    @default("#")
+  instagramUrl                 String    @default("#")
+  merchandiseQrUrl             String    @default("https://www.theprintsofwales.co.uk/cambrian-patrol/")
+  photographyQrUrl             String    @default("mailto:igphoto@yahoo.co.uk")
+  defaultPaymentAmount         Decimal   @default(15000.00) @db.Decimal(10, 2)
+  paymentCurrency              String    @default("PKR")
+  paymentBankName              String    @default("HBL")
+  paymentBankAccountTitle      String    @default("PATS")
+  paymentBankAccountNumber     String    @default("1234567890")
+  paymentBankIban              String    @default("PK00HABB0000000012345678")
+  paymentEasypaisaNumber       String    @default("0312-3456789")
+  paymentEasypaisaTitle        String    @default("PATS")
+  paymentJazzcashNumber        String    @default("0300-9876543")
+  paymentJazzcashTitle         String    @default("PATS")
+  paymentWiseEmail             String    @default("payments@pats.gov.pk")
+  paymentWiseName              String    @default("PATS Organising Committee")
+  paymentMobileNumber          String    @default("+92 300 1234567")
+  paymentMobileTitle           String    @default("PATS")
+  paymentRemitlyEmail          String    @default("payments@pats.gov.pk")
+  paymentRemitlyName           String    @default("PATS Organising Committee")
+  /**
+   * SLOW | NORMAL | FAST | VERY_FAST — homepage announcement ticker scroll
+   */
+  tickerScrollSpeed            String    @default("NORMAL")
 }

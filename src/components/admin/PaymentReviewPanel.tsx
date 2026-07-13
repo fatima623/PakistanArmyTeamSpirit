@@ -147,31 +147,9 @@ export function PaymentReviewPanel({
       payment.createdAt
   );
 
-  const banner = alreadyVerified
-    ? {
-        classes: "border-green-200 bg-green-50 text-green-900 [&_svg]:text-green-700",
-        icon: CheckCircle2,
-        text: "Payment verified successfully. No further action is required.",
-      }
-    : isProofRejected
-      ? {
-          classes: "border-red-200 bg-red-50 text-red-900 [&_svg]:text-red-600",
-          icon: XCircle,
-          text: "Payment proof was rejected. The participant must submit corrected proof.",
-        }
-      : isReturned
-        ? {
-            classes:
-              "border-orange-200 bg-orange-50 text-orange-900 [&_svg]:text-orange-600",
-            icon: CornerUpLeft,
-            text: "Payment proof was returned for correction. Awaiting resubmission from the participant.",
-          }
-        : {
-            classes: "border-sky-200 bg-sky-50 text-sky-900 [&_svg]:text-sky-700",
-            icon: Clock,
-            text: "Payment proof is awaiting verification by the Management Team (MT).",
-          };
-  const BannerIcon = banner.icon;
+ 
+    
+  
 
   return (
     <>
@@ -245,15 +223,7 @@ export function PaymentReviewPanel({
           </h3>
         </div>
         <div className="space-y-4 p-[18px]">
-          <div
-            className={cn(
-              "flex items-start gap-2.5 rounded-xl border px-3.5 py-3 text-sm leading-[1.45] [&_svg]:mt-px [&_svg]:flex-shrink-0",
-              banner.classes
-            )}
-          >
-            <BannerIcon className="h-4 w-4" aria-hidden />
-            <span>{banner.text}</span>
-          </div>
+       
 
           {(isProofRejected || isReturned) && payment.rejectionReason ? (
             <p className="m-0 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-[0.8125rem] leading-[1.5] text-amber-900">

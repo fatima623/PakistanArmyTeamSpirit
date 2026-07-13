@@ -13,7 +13,14 @@ const STATUS_STYLE: Record<string, { bg: string; fg: string; border: string }> =
     CLOSED: { bg: "#f1f5f9", fg: "#475569", border: "#e2e8f0" },
   };
 
-export function TicketStatusBadge({ status }: { status: string }) {
+export function TicketStatusBadge({
+  status,
+  label,
+}: {
+  status: string;
+  /** Optional translated label; falls back to the English constant. */
+  label?: string;
+}) {
   const key = normalizeTicketStatus(status);
   const s = STATUS_STYLE[key] ?? STATUS_STYLE.CLOSED;
   return (
@@ -33,7 +40,7 @@ export function TicketStatusBadge({ status }: { status: string }) {
         whiteSpace: "nowrap",
       }}
     >
-      {TICKET_STATUS_LABELS[key]}
+      {label ?? TICKET_STATUS_LABELS[key]}
     </span>
   );
 }
@@ -44,10 +51,22 @@ const PRIORITY_COLOR: Record<TicketPriority, string> = {
   HIGH: "#dc2626",
 };
 
-export function TicketPriorityTag({ priority }: { priority: string }) {
+export function TicketPriorityTag({
+  priority,
+  label,
+  format,
+}: {
+  priority: string;
+  /** Optional translated priority word; falls back to the English constant. */
+  label?: string;
+  /** Optional formatter to build the full tag text (e.g. "High priority"). */
+  format?: (label: string) => string;
+}) {
   const key = (priority as TicketPriority) in TICKET_PRIORITY_LABELS
     ? (priority as TicketPriority)
     : "NORMAL";
+  const word = label ?? TICKET_PRIORITY_LABELS[key];
+  const text = format ? format(word) : `${word} priority`;
   return (
     <span
       style={{
@@ -56,7 +75,7 @@ export function TicketPriorityTag({ priority }: { priority: string }) {
         color: PRIORITY_COLOR[key],
       }}
     >
-      {TICKET_PRIORITY_LABELS[key]} priority
+      {text}
     </span>
   );
 }

@@ -37,6 +37,8 @@ export default async function AdminNewsEditPage({ params }: PageProps) {
           pdfReadable,
           pdfOriginalName: post.pdfOriginalName,
           pdfFileSize: post.pdfFileSize,
+          hasImage: Boolean(post.imagePath),
+          imagePath: post.imagePath,
         }}
       />
   );

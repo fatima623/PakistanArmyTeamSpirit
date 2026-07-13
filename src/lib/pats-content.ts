@@ -3,7 +3,8 @@
  * Powers drills, awards, international history, operations, and documents UX.
  */
 
-export const PATS_MOTTO = "NO GUTS NO GLORY";
+/** Official Urdu motto from the PATS crest (rendered RTL/nastaliq via `.pats-urdu-motto`). */
+export const PATS_MOTTO = "یقین محکم ، عمل پیہم ، محبت فاتح عالم";
 export const PATS_ESSENCE =
   "Perseverance acclaimed through Team Spirit";
 

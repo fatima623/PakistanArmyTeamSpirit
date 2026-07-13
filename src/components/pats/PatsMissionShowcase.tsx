@@ -12,6 +12,8 @@ type Props = {
   quote: string;
   body: string;
   motto?: string;
+  /** Render the motto as the RTL Urdu crest motto (nastaliq, no letter-spacing). */
+  mottoUrdu?: boolean;
 };
 
 const REVEAL_MS = 900;
@@ -22,6 +24,7 @@ export function PatsMissionShowcase({
   quote,
   body,
   motto,
+  mottoUrdu = false,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -126,7 +129,14 @@ export function PatsMissionShowcase({
               {motto ? (
                 <div className="pats-mission-showcase__motto-row">
                   <span className="pats-mission-showcase__motto-line" aria-hidden />
-                  <p className="pats-mission__motto pats-mission-showcase__motto">
+                  <p
+                    className={cn(
+                      "pats-mission__motto pats-mission-showcase__motto",
+                      mottoUrdu && "pats-urdu-motto"
+                    )}
+                    lang={mottoUrdu ? "ur" : undefined}
+                    dir={mottoUrdu ? "rtl" : undefined}
+                  >
                     {motto}
                   </p>
                   <span className="pats-mission-showcase__motto-line" aria-hidden />

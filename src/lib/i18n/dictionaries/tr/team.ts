@@ -1,0 +1,111 @@
+import type { team as enTeam } from "../en/team";
+
+export const team: typeof enTeam = {
+  errors: {
+    serialRequired: "Sicil numarası zorunludur",
+    rankRequired: "Rütbe zorunludur",
+    fullNameRequired: "Ad soyad zorunludur",
+    rowError: (row, msg) => `Satır ${row}: ${msg}`,
+    duplicateSerial: (serial) => `Yinelenen sicil numarası: ${serial}`,
+  },
+  toasts: {
+    teamRegistered: "Takım kaydedildi — artık listenizi oluşturabilirsiniz",
+    rosterSaved: "Liste kaydedildi",
+    rosterCompleted: "Liste tamamlandı — Uçuş Bilgileri artık kullanılabilir",
+    rosterReopened: "Liste düzenleme için yeniden açıldı",
+    requestSubmitted: "Talep, onay için yöneticilere gönderildi",
+  },
+  window: {
+    opensOn: (date) => `Takım kaydı ${date} tarihinde açılır.`,
+    notOpenedYet: "Takım kaydı henüz açılmadı.",
+    closedOn: (date) => `Takım kaydı ${date} tarihinde kapandı.`,
+    periodClosed: "Takım kayıt dönemi kapandı.",
+    openUntil: (date) => `Takım kaydı ${date} tarihine kadar açık.`,
+    open: "Takım kaydı açık.",
+  },
+  settingUp: "Takım listeniz hazırlanıyor…",
+  register: {
+    title: "Takım Kaydı",
+    windowOpen: "Kayıt penceresi açık",
+    windowNotYetOpen: "Pencere henüz açılmadı",
+    windowClosed: "Pencere kapalı",
+    unlockNote:
+      "Takım kaydı; katılım onayı, SD kayıt doğrulaması ve MT ödeme doğrulamasından sonra açılır.",
+  },
+  roster: {
+    completedShort: "Liste tamamlandı",
+    unsavedChanges: "Kaydedilmemiş değişiklikleriniz var",
+    filledCount: (filled, total) => `${total} üyeden ${filled} tanesi dolduruldu`,
+    heading: "Takım Üyeleri",
+    addMembersDesc:
+      "Takım üyelerinizi aşağıya ekleyin. Kaydettikten sonra, uçuş bilgilerinin kilidini açmak için listeyi tamamlanmış olarak işaretleyin.",
+    lockedByAdmin: "Yönetim tarafından kilitlendi",
+    requestAdditional: "Ek takım üyesi talep et",
+    saveRoster: "Listeyi kaydet",
+    saveTitleFill: "Kaydetmeyi etkinleştirmek için her üyenin bilgilerini doldurun",
+    saveTitleDirty: "Listenizi kaydedin",
+    saveTitleNoChanges: "Kaydedilecek değişiklik yok",
+    edit: "Düzenle",
+    markComplete: "Listeyi tamamlandı olarak işaretle",
+    completeTitleFill: "Önce her takım üyesini doldurun",
+    completeTitleDirty: "Önce listenizi kaydedin",
+    completeTitleReady: "Uçuş Bilgilerinin kilidini açmak için listeyi tamamlayın",
+    infoNote:
+      "Tüm takım üyesi bilgilerini doldurun ve Kaydet'e tıklayın. Ardından uçuş bilgilerinin kilidini açmak için listeyi tamamlanmış olarak işaretleyin.",
+  },
+  table: {
+    caption: "Takım üyeleri — sicil numarası, rütbe, ad soyad ve cinsiyet",
+    serialNumber: "Numara",
+    serialTitle: "Sicil / seri numarası, örn. PA-12345",
+    rank: "Rütbe",
+    rankTitle: "Askeri rütbe, örn. Yüzbaşı",
+    fullName: "Ad Soyad",
+    fullNameTitle: "Resmi belgelerdeki tam ad",
+    gender: "Cinsiyet",
+    actions: "İşlemler",
+  },
+  placeholders: {
+    serialEg: "örn. PA-12345",
+    rankEg: "örn. Yüzbaşı",
+    fullName: "Ad soyad",
+  },
+  aria: {
+    serialRow: (n) => `Sicil numarası, satır ${n}`,
+    rankRow: (n) => `Rütbe, satır ${n}`,
+    fullNameRow: (n) => `Ad soyad, satır ${n}`,
+    genderRow: (n) => `Cinsiyet, satır ${n}`,
+    clearRow: (n) => `Satırı temizle ${n}`,
+    clearRowTitle: "Bu satırı temizle",
+    prevPage: "Önceki sayfa",
+    nextPage: "Sonraki sayfa",
+    page: (n) => `Sayfa ${n}`,
+    rowsPerPage: "Sayfa başına satır",
+    perPage: (n) => `sayfa başına ${n}`,
+  },
+  genders: {
+    male: "Erkek",
+    female: "Kadın",
+    other: "Diğer",
+  },
+  sizeRequest: {
+    summary: (count, statusText) =>
+      `Takım büyüklüğü talebi — ${count} üye: ${statusText}`,
+    pendingReview: "yönetici incelemesi bekleniyor",
+    approved: "onaylandı",
+    rejected: "reddedildi",
+    pending: "beklemede",
+  },
+  dialog: {
+    title: "Ek üye talep et",
+    desc: (limit) =>
+      `Takım sınırınız ${limit}. Yönetimden bunu artırmasını isteyin — talebinizi inceleyecekler.`,
+    requestedSize: "Talep edilen takım büyüklüğü",
+    between: (min) => `${min} ile 200 üye arasında.`,
+    justification: "Gerekçe",
+    justificationPlaceholder:
+      "Takımınızın neden ek üyeye ihtiyaç duyduğunu açıklayın…",
+    charsMin: (n) => `en az ${n}/20 karakter`,
+    cancel: "İptal",
+    submit: "Talebi gönder",
+  },
+};

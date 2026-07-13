@@ -11,6 +11,7 @@ import { CinematicShell } from "@/components/cinematic/CinematicShell";
 import { useSiteTheme } from "@/components/theme/SiteThemeProvider";
 import {
   pathnameHasPageBanner,
+  pathnameHidesSiteChrome,
   pathnameIsCinematicFullWidth,
   pathnameIsParticipantPortalApp,
   pathnameUsesInnerPageShell,
@@ -33,6 +34,8 @@ function PublicSiteChrome({
   const innerPageShell = pathnameUsesInnerPageShell(pathname);
   const pageBanner = pathnameHasPageBanner(pathname);
   const portalApp = pathnameIsParticipantPortalApp(pathname);
+  // Gallery + Announcements render standalone: no site nav, ticker, or footer.
+  const bareChrome = pathnameHidesSiteChrome(pathname);
   const chromeRef = useRef<HTMLDivElement>(null);
   const hasSiteTicker = Boolean(siteTicker);
   const { scrolled: chromeScrolled, pastHero } = useSiteChromeScroll();
@@ -44,8 +47,9 @@ function PublicSiteChrome({
   return (
     <>
       {/* Logged-in participant portal pages render their own sidebar/header,
-          so the public marketing nav + news marquee are hidden there. */}
-      {portalApp ? null : (
+          so the public marketing nav + news marquee are hidden there. The
+          Gallery + Announcements pages are also intentionally chrome-free. */}
+      {portalApp || bareChrome ? null : (
         <div
           ref={chromeRef}
           className={cn(
@@ -80,7 +84,7 @@ function PublicSiteChrome({
         >
           {children}
         </div>
-        <div className="pats-site-footer">{footer}</div>
+        {bareChrome ? null : <div className="pats-site-footer">{footer}</div>}
       </div>
     </>
   );

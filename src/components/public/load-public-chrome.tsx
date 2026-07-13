@@ -1,92 +1,47 @@
 import type { ReactNode } from "react";
 
-
-
 import { ArmyFooter } from "@/components/army/ArmyFooter";
-
 import { ArmyNavbar } from "@/components/army/ArmyNavbar";
-
-import { AnnouncementTicker } from "@/components/cinematic/AnnouncementTicker";
-
 import {
-
-  getCachedPublicTickerItems,
-
-  getCachedTickerScrollDurationSec,
-
-} from "@/lib/cached-public-data";
-
+  AnnouncementTicker,
+  type MarqueeItem,
+} from "@/components/cinematic/AnnouncementTicker";
 import { getRequestPathname } from "@/lib/request-pathname";
-
-import { DEFAULT_SOCIAL, getPublicSocialLinks } from "@/lib/site-data";
-
-import { resolveTickerVisibilityContext } from "@/lib/ticker";
-
-
+import { getLatestNews } from "@/lib/site-data";
+import { TICKER_SCROLL_DURATION_SEC } from "@/lib/ticker";
 
 export type PublicChrome = {
-
   nav: ReactNode;
-
   footer: ReactNode;
-
   siteTicker: ReactNode | null;
-
 };
 
-
-
-/** Load nav, footer, and site ticker together — avoids Suspense stagger. */
-
+/** Load nav, footer, and the announcements marquee together. */
 export async function loadPublicChrome(): Promise<PublicChrome> {
-
   const pathname = await getRequestPathname();
 
-  const tickerContext = resolveTickerVisibilityContext(pathname, false);
+  const announcements = await getLatestNews(12).catch(() => []);
 
-
-
-  const [social, tickerItems, tickerScrollDurationSec] = await Promise.all([
-
-    getPublicSocialLinks().catch(() => DEFAULT_SOCIAL),
-
-    getCachedPublicTickerItems(tickerContext),
-
-    getCachedTickerScrollDurationSec(),
-
-  ]);
-
-
+  const marqueeItems: MarqueeItem[] = announcements.map((a) => ({
+    id: a.id,
+    message: a.title,
+    href: `/announcements/${a.slug}`,
+  }));
 
   const siteTicker =
-
-    tickerItems.length > 0 ? (
-
+    marqueeItems.length > 0 ? (
       <AnnouncementTicker
-
         variant="overlay"
-
-        items={tickerItems}
-
-        scrollDurationSec={tickerScrollDurationSec}
-
+        items={marqueeItems}
+        showSpeaker
+        scrollDurationSec={TICKER_SCROLL_DURATION_SEC.SLOW}
         className="pats-hero-ticker announcement-ticker"
-
       />
-
     ) : null;
 
-
-
   return {
-
     nav: <ArmyNavbar pathname={pathname} />,
-
     footer: <ArmyFooter />,
-
     siteTicker,
-
   };
-
 }
-

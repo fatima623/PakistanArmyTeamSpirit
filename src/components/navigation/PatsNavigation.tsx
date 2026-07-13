@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PatsLogo } from "@/components/pats/PatsLogo";
+import { PublicLanguageSwitcher } from "@/components/navigation/PublicLanguageSwitcher";
 import { SiteThemeToggle } from "@/components/theme/SiteThemeToggle";
 import { useSiteTheme } from "@/components/theme/SiteThemeProvider";
 import { NAV_BRAND_SUBTITLE, NAV_BRAND_TITLE } from "@/lib/branding";
@@ -235,6 +236,7 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
                 />
               ))}
               <NavLoginLink pathname={pathname} onNavigate={closeMenu} />
+              <PublicLanguageSwitcher />
               <SiteThemeToggle />
             </nav>
           ) : null}

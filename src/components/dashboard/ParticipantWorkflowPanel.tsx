@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AlertTriangle, Check, ChevronRight, Lock } from "lucide-react";
 
 import type { WorkflowStage } from "@/lib/participant-workflow";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const STATE_CLASS: Record<WorkflowStage["state"], string> = {
   done: "pp-step--done",
@@ -32,16 +33,22 @@ function StageDot({
   );
 }
 
-function StageInner({ stage, index }: { stage: WorkflowStage; index: number }) {
+function StageInner({
+  stage,
+  index,
+  clickable,
+}: {
+  stage: WorkflowStage;
+  index: number;
+  clickable: boolean;
+}) {
   return (
     <div className={`pp-step ${STATE_CLASS[stage.state]}`}>
       <StageDot state={stage.state} index={index} />
       <div className="min-w-0">
         <div className="pp-step__name">
           <span className="truncate">{stage.label}</span>
-          {stage.href && stage.state !== "locked" ? (
-            <ChevronRight aria-hidden />
-          ) : null}
+          {clickable ? <ChevronRight aria-hidden /> : null}
         </div>
         <div className="pp-step__sub">{stage.sub}</div>
       </div>
@@ -58,24 +65,26 @@ function StageInner({ stage, index }: { stage: WorkflowStage; index: number }) {
  */
 export function ParticipantWorkflowPanel({
   stages,
+  t,
 }: {
   stages: WorkflowStage[];
+  t: Dictionary["workflowPanel"];
 }) {
   const doneCount = stages.filter((s) => s.state === "done").length;
   const pct = Math.round((doneCount / stages.length) * 100);
 
   return (
-    <section className="pp-journey" aria-label="Registration workflow">
+    <section className="pp-journey" aria-label={t.ariaLabel}>
       <div className="pp-journey__head">
         <div>
-          
+
           <h2 className="pp-h2" style={{ marginTop: "0.15rem" }}>
-            Registration progress
+            {t.registrationProgress}
           </h2>
         </div>
         <div className="pp-journey__count">
           <span className="pp-journey__count-dot" aria-hidden />
-          {doneCount} of {stages.length} complete
+          {t.countComplete(doneCount, stages.length)}
         </div>
       </div>
       <div
@@ -84,22 +93,34 @@ export function ParticipantWorkflowPanel({
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label="Workflow progress"
+        aria-label={t.progressAria}
       >
         <div className="pp-journey__fill" style={{ width: `${pct}%` }} />
       </div>
       <ol className="pp-journey__grid">
-        {stages.map((stage, i) => (
-          <li key={stage.key}>
-            {stage.href && stage.state !== "locked" ? (
-              <Link href={stage.href} aria-label={`${stage.label}: ${stage.sub}`}>
-                <StageInner stage={stage} index={i} />
-              </Link>
-            ) : (
-              <StageInner stage={stage} index={i} />
-            )}
-          </li>
-        ))}
+        {stages.map((stage, i) => {
+          /* Every unlocked step links straight to its own section so the
+             dashboard is the navigation hub — the active step is emphasised,
+             completed steps stay revisitable, and locked steps render static. */
+          const clickable = stage.state !== "locked";
+          const isCurrent =
+            stage.state === "current" || stage.state === "attention";
+          return (
+            <li key={stage.key}>
+              {clickable ? (
+                <Link
+                  href={`/event/journey?step=${stage.key}`}
+                  aria-label={`${stage.label}: ${stage.sub}`}
+                  aria-current={isCurrent ? "step" : undefined}
+                >
+                  <StageInner stage={stage} index={i} clickable />
+                </Link>
+              ) : (
+                <StageInner stage={stage} index={i} clickable={false} />
+              )}
+            </li>
+          );
+        })}
       </ol>
     </section>
   );

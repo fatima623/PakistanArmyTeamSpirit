@@ -9,6 +9,7 @@ import {
 
 import { formatDateShort } from "@/lib/utils";
 import type { ParticipantJourneyStage } from "@/lib/participant-journey";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 type Props = {
   stage: ParticipantJourneyStage;
@@ -17,6 +18,7 @@ type Props = {
   canAccessPayment: boolean;
   paymentComplete: boolean;
   exerciseDates?: string | null;
+  t: Dictionary["statusBar"];
 };
 
 /**
@@ -30,30 +32,29 @@ export function DashboardStatusBar({
   canAccessPayment,
   paymentComplete,
   exerciseDates,
+  t,
 }: Props) {
   let variant = "";
   let Icon: LucideIcon = Clock;
-  let title = "Application under review";
-  let text =
-    "Your registration is being reviewed by PATS. We'll email you as soon as it's approved.";
+  let title = t.underReviewTitle;
+  let text = t.underReviewText;
 
   if (stage === 3) {
     variant = "pp-status--confirmed";
     Icon = CheckCircle2;
-    title = "Confirmed — you're cleared for PATS 2026";
+    title = t.confirmedTitle;
     text = exerciseDates
-      ? `Your payment is verified and your place is confirmed. Scheduled: ${exerciseDates}.`
-      : "Your payment is verified and your place is confirmed.";
+      ? t.confirmedTextWithDates(exerciseDates)
+      : t.confirmedText;
   } else if (stage === 2) {
     variant = "pp-status--approved";
     Icon = CreditCard;
-    title = "Approved — payment required";
-    text =
-      "Your application is approved. Complete your payment to secure your place in the competition.";
+    title = t.approvedTitle;
+    text = t.approvedText;
   } else if (rejectionReason) {
     variant = "pp-status--attention";
     Icon = AlertTriangle;
-    title = "Returned for correction";
+    title = t.returnedTitle;
     text = rejectionReason;
   }
 
@@ -70,7 +71,7 @@ export function DashboardStatusBar({
           <p className="pp-status__text">{text}</p>
           {approvedAt && stage >= 2 ? (
             <p className="pp-status__meta">
-              Approved {formatDateShort(approvedAt)}
+              {t.approvedOn(formatDateShort(approvedAt))}
             </p>
           ) : null}
         </div>
@@ -79,12 +80,12 @@ export function DashboardStatusBar({
       {showPayButton ? (
         <Link href="/event/payment" className="pp-btn pp-btn--primary">
           <CreditCard className="h-4 w-4" aria-hidden />
-          Go to payment submission
+          {t.goToPayment}
         </Link>
       ) : paymentComplete ? (
         <span className="pp-status__verified">
           <CheckCircle2 className="h-4 w-4" aria-hidden />
-          Payment verified
+          {t.paymentVerified}
         </span>
       ) : null}
     </section>

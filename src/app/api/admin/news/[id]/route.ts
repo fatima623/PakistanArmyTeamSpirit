@@ -4,6 +4,7 @@ import { revalidateNewsPaths } from "@/lib/revalidate-public";
 import { NewsPostSchema } from "@/lib/validations";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { deleteNewsPdfFile } from "@/lib/storage/news-pdf";
+import { deleteNewsImageFile } from "@/lib/storage/news-image";
 import {
   ApiError,
   handleApiError,
@@ -88,6 +89,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
     }
 
     await deleteNewsPdfFile(existing.pdfPath, id);
+    await deleteNewsImageFile(existing.imagePath);
     await prisma.newsPost.delete({ where: { id } });
 
     revalidateNewsPaths();

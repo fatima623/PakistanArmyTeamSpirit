@@ -16,6 +16,8 @@ type MedalCard = {
   imageSrc: string;
   imageAlt: string;
   highQuality?: boolean;
+  /** True for photographed medals (fill the frame) vs. transparent renders. */
+  photo?: boolean;
 };
 
 const MEDAL_CARDS: readonly MedalCard[] = [
@@ -24,32 +26,36 @@ const MEDAL_CARDS: readonly MedalCard[] = [
     tier: "Gold tier",
     name: "Gold Medal",
     range: "75% and above",
-    imageSrc: PATS_CROP.goldMedalDisplay,
-    imageAlt: "PATS gold medal with green and gold ribbon",
+    imageSrc: "/awards/pats-medal-gold.jpeg",
+    imageAlt: "PATS gold medal — Pakistan Army Team Spirit Competition",
     highQuality: true,
+    photo: true,
   },
   {
     id: "silver",
     tier: "Silver tier",
     name: "Silver Medal",
     range: "65% to 74.99%",
-    imageSrc: PATS_CROP.silverMedalDisplay,
-    imageAlt: "PATS silver medal with green and gold ribbon",
+    imageSrc: "/awards/pats-medal-silver.jpeg",
+    imageAlt: "PATS silver medal — Pakistan Army Team Spirit Competition",
     highQuality: true,
+    photo: true,
   },
   {
     id: "bronze",
     tier: "Bronze tier",
     name: "Bronze Medal",
     range: "55% to 64.99%",
-    imageSrc: PATS_CROP.awardBronzeDisplay,
-    imageAlt: "PATS bronze medal with green and gold ribbon",
+    imageSrc: "/awards/pats-medal-bronze.jpeg",
+    imageAlt: "PATS bronze medal — Pakistan Army Team Spirit Competition",
+    highQuality: true,
+    photo: true,
   },
   {
     id: "certificate",
     tier: "Participation",
     name: "Certificate",
-    range: "Below 55%",
+    range: "Below 65%",
     imageSrc: PATS_CROP.awardCertificateDisplay,
     imageAlt: "PATS certificate of participation",
   },
@@ -113,7 +119,9 @@ export function AwardsShowcase() {
         {MEDAL_CARDS.map((card) => (
           <article
             key={card.id}
-            className={`pats-awards-hero-card pats-awards-hero-card--${card.id}`}
+            className={`pats-awards-hero-card pats-awards-hero-card--${card.id}${
+              card.photo ? " pats-awards-hero-card--photo" : ""
+            }`}
           >
             <div className="pats-awards-hero-card__visual">
               <Image

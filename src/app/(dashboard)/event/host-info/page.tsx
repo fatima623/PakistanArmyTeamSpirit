@@ -19,6 +19,7 @@ import {
   workflowUserSelect,
 } from "@/lib/participant-workflow";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 
 export const metadata: Metadata = {
@@ -51,6 +52,8 @@ function StatCard({
 
 export default async function HostInfoPage() {
   const session = await requireConfirmedParticipant();
+  const { t } = await getDictionary();
+  const h = t.hostInfo;
 
   const [user, settings] = await Promise.all([
     prisma.user.findUnique({
@@ -77,19 +80,17 @@ export default async function HostInfoPage() {
           Back to dashboard
         </Link>
         <PatsPortalHeader
-          title="Host Information"
-          subtitle="Finalized hosting and arrival information from the organizers."
+          title={h.title}
+          subtitle={h.subtitleLocked}
         />
         <section className="portal-card pats-panel">
           <div className="flex flex-col items-center gap-3 px-4 py-10 text-center">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 ring-1 ring-slate-200">
               <Lock className="h-6 w-6 text-slate-500" aria-hidden />
             </span>
-            <h2 className="portal-h2">Not available yet</h2>
+            <h2 className="portal-h2">{h.notAvailableTitle}</h2>
             <p className="mx-auto max-w-md text-sm text-slate-600">
-              The Host Information section becomes visible after your flight
-              details have been reviewed and finalized by the administration
-              and the organizers publish the hosting information.
+              {h.notAvailableText}
             </p>
           </div>
         </section>
@@ -143,11 +144,11 @@ export default async function HostInfoPage() {
     <div className="flex flex-col">
       <Link href="/event/dashboard" className="portal-back-link mb-4">
         <ArrowLeft className="h-4 w-4" aria-hidden />
-        Back to dashboard
+        {t.common.backToDashboard}
       </Link>
       <PatsPortalHeader
-        title="Host Information"
-        subtitle="Finalized hosting, team, and arrival information — read-only."
+        title={h.title}
+        subtitle={h.subtitle}
       />
 
       <div className="space-y-5">
@@ -155,17 +156,17 @@ export default async function HostInfoPage() {
         <div className="grid gap-3 sm:grid-cols-3">
           <StatCard
             icon={<Globe2 className="h-5 w-5" aria-hidden />}
-            label="Participating countries"
+            label={h.participatingCountries}
             value={String(countryTeams.length)}
           />
           <StatCard
             icon={<Users className="h-5 w-5" aria-hidden />}
-            label="Registered teams"
+            label={h.registeredTeams}
             value={String(totalTeams)}
           />
           <StatCard
             icon={<Plane className="h-5 w-5" aria-hidden />}
-            label="Your finalized travelers"
+            label={h.yourFinalizedTravelers}
             value={String(flights.length)}
           />
         </div>
@@ -175,7 +176,7 @@ export default async function HostInfoPage() {
           <section className="portal-card pats-panel">
             <h2 className="portal-h2 mb-3 flex items-center gap-2">
               <Info className="h-5 w-5 text-emerald-700" aria-hidden />
-              Hosting &amp; arrival information
+              {h.hostingArrivalInfo}
             </h2>
             <div
               className="prose prose-sm max-w-none text-slate-700"
@@ -186,19 +187,19 @@ export default async function HostInfoPage() {
 
         {/* Country-wise team numbers */}
         <section className="portal-card pats-panel">
-          <h2 className="portal-h2 mb-3">Country-wise team numbers</h2>
+          <h2 className="portal-h2 mb-3">{h.countryWiseTeamNumbers}</h2>
           <div className="overflow-x-auto rounded-lg border border-slate-200">
             <table className="w-full min-w-[360px] border-collapse text-sm">
               <thead>
                 <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   <th scope="col" className="w-14 px-3 py-2.5">
-                    S.No
+                    {h.sNo}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Country
+                    {h.country}
                   </th>
                   <th scope="col" className="px-3 py-2.5 text-right">
-                    Teams
+                    {h.teams}
                   </th>
                 </tr>
               </thead>
@@ -209,7 +210,7 @@ export default async function HostInfoPage() {
                       colSpan={3}
                       className="px-3 py-6 text-center text-slate-500"
                     >
-                      No registered teams yet.
+                      {h.noRegisteredTeams}
                     </td>
                   </tr>
                 ) : (
@@ -217,7 +218,7 @@ export default async function HostInfoPage() {
                     <tr key={c.country ?? "unknown"}>
                       <td className="px-3 py-2.5 text-slate-500">{i + 1}</td>
                       <td className="px-3 py-2.5 font-medium text-slate-800">
-                        {c.country ?? "Unspecified"}
+                        {c.country ?? h.unspecified}
                       </td>
                       <td className="px-3 py-2.5 text-right font-semibold text-slate-800">
                         {c._count._all}
@@ -233,26 +234,26 @@ export default async function HostInfoPage() {
         {/* Own team details */}
         <section className="portal-card pats-panel">
           <h2 className="portal-h2 mb-3">
-            Your team{user.unit?.unitName ? ` — ${user.unit.unitName}` : ""}
+            {user.unit?.unitName ? h.yourTeamWithUnit(user.unit.unitName) : h.yourTeam}
           </h2>
           <div className="overflow-x-auto rounded-lg border border-slate-200">
             <table className="w-full min-w-[560px] border-collapse text-sm">
               <thead>
                 <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   <th scope="col" className="w-14 px-3 py-2.5">
-                    S.No
+                    {h.sNo}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Serial Number
+                    {h.serialNumber}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Rank
+                    {h.rank}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Full Name
+                    {h.fullName}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Gender
+                    {h.gender}
                   </th>
                 </tr>
               </thead>
@@ -277,22 +278,22 @@ export default async function HostInfoPage() {
 
         {/* Finalized flight information */}
         <section className="portal-card pats-panel">
-          <h2 className="portal-h2 mb-3">Finalized flight information</h2>
+          <h2 className="portal-h2 mb-3">{h.finalizedFlightInfo}</h2>
           <div className="overflow-x-auto rounded-lg border border-slate-200">
             <table className="w-full min-w-[560px] border-collapse text-sm">
               <thead>
                 <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   <th scope="col" className="px-3 py-2.5">
-                    Traveler
+                    {h.traveler}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Passenger Name
+                    {h.passengerName}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Passport No.
+                    {h.passportNo}
                   </th>
                   <th scope="col" className="px-3 py-2.5">
-                    Documents
+                    {h.documents}
                   </th>
                 </tr>
               </thead>
@@ -303,7 +304,7 @@ export default async function HostInfoPage() {
                       colSpan={4}
                       className="px-3 py-6 text-center text-slate-500"
                     >
-                      No flight records.
+                      {h.noFlightRecords}
                     </td>
                   </tr>
                 ) : (
@@ -326,12 +327,12 @@ export default async function HostInfoPage() {
                             className={`h-4 w-4 ${f.passportFileName ? "text-emerald-600" : "text-slate-300"}`}
                             aria-hidden
                           />
-                          Passport
+                          {h.passport}
                           <FileCheck2
                             className={`h-4 w-4 ${f.ticketFileName ? "text-emerald-600" : "text-slate-300"}`}
                             aria-hidden
                           />
-                          Ticket
+                          {h.ticket}
                         </span>
                       </td>
                     </tr>
@@ -341,8 +342,7 @@ export default async function HostInfoPage() {
             </table>
           </div>
           <p className="mt-3 text-xs text-slate-500">
-            This information is read-only. Contact the organizers for any
-            corrections.
+            {h.readOnlyNote}
           </p>
         </section>
       </div>

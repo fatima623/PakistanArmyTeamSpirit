@@ -4,11 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-import {
-  HERO_DESCRIPTION,
-  HERO_MOTTO,
-  HERO_TITLE,
-} from "@/lib/branding";
+import { HERO_MOTTO } from "@/lib/branding";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 const HERO_IMAGES = [
@@ -22,21 +19,8 @@ type Props = {
   exerciseYear: number;
 };
 
-/** Display lines for long official title (PAF-style stacked headline). */
-function HeroHeadlineLines({ title }: { title: string }) {
-  const match = title.match(/^(.+?\(PATS\))\s*(.+)$/i);
-  if (match) {
-    return (
-      <>
-        <span className="pats-hero__headline-line">{match[1]}</span>
-        <span className="pats-hero__headline-line">{match[2]}</span>
-      </>
-    );
-  }
-  return <span className="pats-hero__headline-line">{title}</span>;
-}
-
 export function PatsHero({ exerciseYear }: Props) {
+  const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [dynamicYear, setDynamicYear] = useState(exerciseYear);
@@ -75,7 +59,7 @@ export function PatsHero({ exerciseYear }: Props) {
     <section
       ref={sectionRef}
       className="pats-hero"
-      aria-label="Featured highlights"
+      aria-label={t.home.hero.featuredAria}
     >
       {HERO_IMAGES.map((src, index) => (
         <img
@@ -97,13 +81,24 @@ export function PatsHero({ exerciseYear }: Props) {
       <div className="pats-hero__footer">
         <div className="pats-hero__content">
           <div className="pats-hero__caption">
-            <p className="pats-hero__caption-text">{HERO_MOTTO}</p>
+            <p
+              className="pats-hero__caption-text pats-urdu-motto"
+              lang="ur"
+              dir="rtl"
+            >
+              {HERO_MOTTO}
+            </p>
           </div>
           <h1 className="pats-hero__headline">
-            <HeroHeadlineLines title={HERO_TITLE} />
+            <span className="pats-hero__headline-line">
+              {t.home.hero.titleLine1}
+            </span>
+            <span className="pats-hero__headline-line">
+              {t.home.hero.titleLine2}
+            </span>
             <span className="pats-hero__headline-accent">{dynamicYear}</span>
           </h1>
-          <p className="pats-hero__subline">{HERO_DESCRIPTION}</p>
+          <p className="pats-hero__subline">{t.home.hero.description}</p>
         </div>
 
         <Link
@@ -111,7 +106,7 @@ export function PatsHero({ exerciseYear }: Props) {
           className="pats-hero__cta hero-register-btn"
           prefetch
         >
-          Register your team
+          {t.home.hero.cta}
         </Link>
       </div>
 
@@ -121,7 +116,7 @@ export function PatsHero({ exerciseYear }: Props) {
           "pats-hero__scroll-hint",
           !showScrollHint && "pats-hero__scroll-hint--hidden"
         )}
-        aria-label="Scroll down"
+        aria-label={t.home.hero.scrollHint}
         aria-hidden={!showScrollHint}
         tabIndex={showScrollHint ? 0 : -1}
       >

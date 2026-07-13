@@ -4,18 +4,31 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CalendarClock,
+  CalendarDays,
   CheckCircle2,
-  FileCheck2,
   FileText,
   FileUp,
   Loader2,
   Lock,
   Pencil,
+  Plane,
+  Ticket,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { TOAST } from "@/lib/toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+
+const DATE_TAG: Record<Locale, string> = {
+  en: "en-GB",
+  ru: "ru-RU",
+  tr: "tr-TR",
+  ar: "ar",
+  zh: "zh-CN",
+};
 
 export type FlightRecord = {
   id: string;
@@ -23,8 +36,10 @@ export type FlightRecord = {
   passengerName: string;
   passportNumber: string;
   passportFileName: string | null;
+  passportFileSize?: number | null;
   passportUploadedAt: string | null;
   ticketFileName: string | null;
+  ticketFileSize?: number | null;
   ticketUploadedAt: string | null;
   updatedAt: string;
   teamMember: {
@@ -35,6 +50,12 @@ export type FlightRecord = {
   } | null;
 };
 
+function fmtFileSize(bytes: number | null | undefined): string | null {
+  if (!bytes || bytes <= 0) return null;
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
 type FormState = {
   passengerName: string;
   passportNumber: string;
@@ -42,11 +63,11 @@ type FormState = {
   ticketFile: File | null;
 };
 
-function fmtDateTime(iso: string | null): string {
+function fmtDateTime(iso: string | null, tag: string): string {
   if (!iso) return "—";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleString("en-GB", {
+  return d.toLocaleString(tag, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -59,23 +80,42 @@ function isPdf(file: File): boolean {
   return file.type === "application/pdf" && /\.pdf$/i.test(file.name);
 }
 
+/** Document tile — icon square, name + “PDF · 2.4 MB”, View PDF button. */
 function DocStatus({
   label,
   uploaded,
   fileName,
+  fileSize,
   href,
+  icon: DocIcon,
+  tx,
 }: {
   label: string;
   uploaded: boolean;
   fileName: string | null;
+  fileSize?: number | null;
   href: string;
+  icon: typeof FileText;
+  tx: Dictionary["flights"]["doc"];
 }) {
+  const size = fmtFileSize(fileSize);
   return (
-    <div className="pp-doc">
-      <div className="min-w-0">
-        <p className="pp-doc__label">{label}</p>
-        <p className="pp-doc__name">
-          {uploaded ? (fileName ?? "Uploaded") : "Not uploaded yet"}
+    <div className="flex items-center gap-3.5 rounded-xl border border-slate-200 bg-white p-4">
+      <span
+        className="flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-700"
+        aria-hidden
+      >
+        <DocIcon className="h-5 w-5" />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="m-0 text-[0.875rem] font-bold leading-tight text-slate-900">
+          {label}
+        </p>
+        <p className="m-0 mt-0.5 truncate text-[0.78rem] text-slate-500">
+          {uploaded ? (fileName ?? tx.uploaded) : tx.notUploadedYet}
+        </p>
+        <p className="m-0 mt-0.5 text-[0.72rem] font-medium uppercase tracking-[0.02em] text-slate-400">
+          {uploaded ? tx.pdfLabel(size) : tx.required}
         </p>
       </div>
       {uploaded ? (
@@ -83,16 +123,16 @@ function DocStatus({
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="pp-badge pp-badge--success"
-          title={`Open ${label} PDF`}
+          className="inline-flex flex-none items-center gap-1.5 rounded-lg border border-emerald-200 bg-white px-3 py-2 text-[0.8125rem] font-semibold text-emerald-700 no-underline transition-colors hover:border-emerald-400 hover:bg-emerald-50"
+          title={tx.openPdfTitle(label)}
         >
-          <FileCheck2 className="h-3.5 w-3.5" aria-hidden />
-          View PDF
+          <FileText className="h-3.5 w-3.5" aria-hidden />
+          {tx.viewPdf}
         </a>
       ) : (
-        <span className="pp-badge pp-badge--warning">
+        <span className="pp-badge pp-badge--warning flex-none">
           <FileUp className="h-3.5 w-3.5" aria-hidden />
-          Missing
+          {tx.missing}
         </span>
       )}
     </div>
@@ -118,6 +158,9 @@ export function FlightDetailsManager({
   deadlinePassed: boolean;
 }) {
   const router = useRouter();
+  const { t, locale } = useI18n();
+  const fl = t.flights;
+  const dateTag = DATE_TAG[locale];
   const [flight, setFlight] = useState<FlightRecord | null>(
     initialFlights[0] ?? null
   );
@@ -132,14 +175,14 @@ export function FlightDetailsManager({
 
   const deadlineLabel = useMemo(() => {
     if (!deadlineIso) return null;
-    return new Date(deadlineIso).toLocaleString("en-GB", {
+    return new Date(deadlineIso).toLocaleString(dateTag, {
       day: "numeric",
       month: "long",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
     });
-  }, [deadlineIso]);
+  }, [deadlineIso, dateTag]);
 
   const apiError = async (res: Response) => {
     const data = await res.json().catch(() => ({}));
@@ -162,23 +205,23 @@ export function FlightDetailsManager({
 
   const submit = async () => {
     if (!form.passengerName.trim()) {
-      toast.error("Lead traveller name is required");
+      toast.error(fl.errors.nameRequired);
       return;
     }
     if (form.passportNumber.trim().length < 3) {
-      toast.error("Passport number is required");
+      toast.error(fl.errors.passportRequired);
       return;
     }
     for (const [file, label] of [
-      [form.passportFile, "Passport"],
-      [form.ticketFile, "Flight ticket"],
+      [form.passportFile, fl.errors.passportLabel],
+      [form.ticketFile, fl.errors.ticketLabel],
     ] as const) {
       if (file && !isPdf(file)) {
-        toast.error(`${label} must be a PDF file`);
+        toast.error(fl.errors.mustBePdf(label));
         return;
       }
       if (file && file.size > 10 * 1024 * 1024) {
-        toast.error(`${label} must be under 10MB`);
+        toast.error(fl.errors.mustBeUnder10(label));
         return;
       }
     }
@@ -202,9 +245,7 @@ export function FlightDetailsManager({
       const { flight: saved } = (await res.json()) as { flight: FlightRecord };
       setFlight(saved);
       setEditing(false);
-      toast.success(
-        flight ? "Flight details updated" : "Flight details submitted"
-      );
+      toast.success(flight ? fl.errors.updated : fl.errors.submitted);
       router.refresh();
     } catch {
       toast.error(TOAST.GENERIC_ERROR);
@@ -218,38 +259,49 @@ export function FlightDetailsManager({
   return (
     <div className="space-y-4">
       {finalized ? (
-        <div className="portal-alert-success flex items-start gap-2 px-4 py-3 text-sm">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-          Your flight details have been reviewed and finalized by the
-          administration. Records are read-only. Host Information becomes
-          available once published by the organizers.
+        <div className="flex items-start gap-3.5 rounded-2xl border-l-4 border border-emerald-200 border-l-emerald-600 bg-emerald-50/70 px-5 py-4">
+          <span
+            className="mt-0.5 flex h-9 w-9 flex-none items-center justify-center rounded-full bg-emerald-600 text-white"
+            aria-hidden
+          >
+            <CheckCircle2 className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="m-0 text-[0.9375rem] font-bold leading-snug text-emerald-800">
+              {fl.banners.finalizedTitle}
+            </p>
+            <p className="m-0 mt-1 text-[0.8125rem] leading-relaxed text-slate-600">
+              {fl.banners.finalizedSub}
+            </p>
+          </div>
         </div>
       ) : deadlinePassed ? (
         <div className="portal-alert-error flex items-start gap-2 px-4 py-3 text-sm">
           <Lock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-          The flight details submission deadline has passed. Contact the
-          organizers if corrections are required.
+          {fl.banners.deadlinePassed}
         </div>
       ) : deadlineLabel ? (
         <div className="portal-alert-info flex items-start gap-2 px-4 py-3 text-sm">
           <CalendarClock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-          You can submit or replace documents until {deadlineLabel} (or until
-          records are locked by the administration).
+          {fl.banners.deadlineInfo(deadlineLabel)}
         </div>
       ) : null}
 
       <section className="pp-card">
         <div className="pp-card__head">
-          <div>
-            <p className="pp-eyebrow">Flight details</p>
-            <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
-              Team flight information
-            </h2>
-            <p className="pp-card__desc">
-              One submission covers your whole team — provide the lead
-              traveller&apos;s details and upload the passport &amp; ticket
-              documents (PDF, max 10MB each).
-            </p>
+          <div className="flex min-w-0 items-start gap-3.5">
+            <span
+              className="mt-0.5 flex h-11 w-11 flex-none items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-700"
+              aria-hidden
+            >
+              <Plane className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <h2 className="pp-card__title">{fl.card.title}</h2>
+              <p className="pp-card__desc" style={{ marginTop: "0.2rem" }}>
+                {fl.card.desc}
+              </p>
+            </div>
           </div>
           <span
             className={`pp-badge ${flight ? "pp-badge--success" : "pp-badge--neutral"}`}
@@ -257,10 +309,10 @@ export function FlightDetailsManager({
             {flight ? (
               <>
                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden />
-                Submitted
+                {fl.card.submitted}
               </>
             ) : (
-              "Not submitted"
+              fl.card.notSubmitted
             )}
           </span>
         </div>
@@ -270,7 +322,7 @@ export function FlightDetailsManager({
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="fd-name" className="pp-label">
-                  Lead traveller name (as on passport)
+                  {fl.form.leadName}
                 </label>
                 <Input
                   id="fd-name"
@@ -278,13 +330,13 @@ export function FlightDetailsManager({
                   onChange={(e) =>
                     setForm({ ...form, passengerName: e.target.value })
                   }
-                  placeholder="e.g. CAPT SARA KHAN"
+                  placeholder={fl.form.leadNamePlaceholder}
                   disabled={busy}
                 />
               </div>
               <div>
                 <label htmlFor="fd-passport-no" className="pp-label">
-                  Passport number
+                  {fl.form.passportNumber}
                 </label>
                 <Input
                   id="fd-passport-no"
@@ -292,7 +344,7 @@ export function FlightDetailsManager({
                   onChange={(e) =>
                     setForm({ ...form, passportNumber: e.target.value })
                   }
-                  placeholder="e.g. AB1234567"
+                  placeholder={fl.form.passportNumberPlaceholder}
                   disabled={busy}
                 />
               </div>
@@ -301,7 +353,7 @@ export function FlightDetailsManager({
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label htmlFor="fd-passport-file" className="pp-label">
-                  Passport document (PDF)
+                  {fl.form.passportDoc}
                 </label>
                 <input
                   id="fd-passport-file"
@@ -319,13 +371,13 @@ export function FlightDetailsManager({
                 {flight?.passportFileName ? (
                   <p className="mt-1 text-xs text-slate-500">
                     <FileText className="mr-1 inline h-3 w-3" aria-hidden />
-                    Current: {flight.passportFileName}. Leave empty to keep it.
+                    {fl.form.currentFile(flight.passportFileName)}
                   </p>
                 ) : null}
               </div>
               <div>
                 <label htmlFor="fd-ticket-file" className="pp-label">
-                  Flight ticket (PDF)
+                  {fl.form.ticketDoc}
                 </label>
                 <input
                   id="fd-ticket-file"
@@ -343,7 +395,7 @@ export function FlightDetailsManager({
                 {flight?.ticketFileName ? (
                   <p className="mt-1 text-xs text-slate-500">
                     <FileText className="mr-1 inline h-3 w-3" aria-hidden />
-                    Current: {flight.ticketFileName}. Leave empty to keep it.
+                    {fl.form.currentFile(flight.ticketFileName)}
                   </p>
                 ) : null}
               </div>
@@ -361,7 +413,7 @@ export function FlightDetailsManager({
                 ) : (
                   <CheckCircle2 className="h-4 w-4" aria-hidden />
                 )}
-                {flight ? "Save changes" : "Submit flight details"}
+                {flight ? fl.form.saveChanges : fl.form.submitFlight}
               </button>
               {flight ? (
                 <button
@@ -370,45 +422,73 @@ export function FlightDetailsManager({
                   disabled={busy}
                   onClick={() => setEditing(false)}
                 >
-                  Cancel
+                  {fl.form.cancel}
                 </button>
               ) : null}
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-5">
+            <div className="grid gap-5 border-t border-slate-100 pt-4 sm:grid-cols-2">
               <div>
-                <p className="pp-dl__term">Lead traveller</p>
-                <p className="pp-dl__desc">{flight.passengerName}</p>
+                <p className="m-0 text-[0.75rem] font-medium text-slate-500">
+                  {fl.view.leadTraveller}
+                </p>
+                <p className="m-0 mt-1 text-[0.9375rem] font-bold text-slate-900">
+                  {flight.passengerName}
+                </p>
               </div>
               <div>
-                <p className="pp-dl__term">Passport number</p>
-                <p className="pp-dl__desc" style={{ fontFamily: "ui-monospace, monospace" }}>
+                <p className="m-0 text-[0.75rem] font-medium text-slate-500">
+                  {fl.view.passportNumber}
+                </p>
+                <p
+                  className="m-0 mt-1 text-[0.9375rem] font-bold tracking-wide text-slate-900"
+                  style={{ fontFamily: "ui-monospace, monospace" }}
+                >
                   {flight.passportNumber}
                 </p>
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3.5 sm:grid-cols-2">
               <DocStatus
-                label="Passport"
+                label={fl.labels.passport}
+                icon={FileText}
                 uploaded={!!flight.passportFileName}
                 fileName={flight.passportFileName}
+                fileSize={flight.passportFileSize}
                 href={`/api/user/flights/${flight.id}/file?type=passport`}
+                tx={fl.doc}
               />
               <DocStatus
-                label="Flight ticket"
+                label={fl.labels.flightTicket}
+                icon={Ticket}
                 uploaded={!!flight.ticketFileName}
                 fileName={flight.ticketFileName}
+                fileSize={flight.ticketFileSize}
                 href={`/api/user/flights/${flight.id}/file?type=ticket`}
+                tx={fl.doc}
               />
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-xs text-slate-500">
-                Last updated {fmtDateTime(flight.updatedAt)}
-              </p>
+              <div className="flex items-center gap-3">
+                <span
+                  className="flex h-10 w-10 flex-none items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500"
+                  aria-hidden
+                >
+                  <CalendarDays className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="m-0 text-[0.72rem] font-medium text-slate-500">
+                    {fl.view.lastUpdated}
+                  </p>
+                  <p className="m-0 mt-0.5 text-[0.875rem] font-bold text-slate-900">
+                    {fmtDateTime(flight.updatedAt, dateTag)}
+                  </p>
+                </div>
+              </div>
               {canEdit ? (
                 <button
                   type="button"
@@ -416,7 +496,7 @@ export function FlightDetailsManager({
                   onClick={startEdit}
                 >
                   <Pencil className="h-4 w-4" aria-hidden />
-                  Edit details
+                  {fl.view.editDetails}
                 </button>
               ) : null}
             </div>

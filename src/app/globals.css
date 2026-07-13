@@ -3803,7 +3803,7 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
   min-width: 0;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.75rem 0.6rem;
+  gap: 0.6rem 0.4rem;
   padding: 0 0.35rem;
   overflow-x: auto;
   scrollbar-width: none;
@@ -3826,8 +3826,8 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
 
 
 .army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__link {
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  letter-spacing: 0.05em;
 }
 
 
@@ -3840,12 +3840,12 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
 
 @media (min-width: 1024px) {
   .army-site:not(.dashboard-day) .pats-nav__panel-links {
-    gap: 0.875rem 0.75rem;
+    gap: 0.6rem 0.5rem;
   }
 
 
   .army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__link {
-    font-size: 13.5px;
+    font-size: 12.5px;
   }
 
 
@@ -4027,6 +4027,128 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__theme-bt
 }
 
 
+/* Public nav language switcher — placement/legibility mirrors the theme control. */
+.army-site:not(.dashboard-day) .pats-nav__panel-links .pats-nav__lang {
+  position: relative;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(16, 28, 40, 0.9);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-trigger:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.82);
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-trigger:focus-visible {
+  outline: 2px solid var(--pats-gold, #d4af37);
+  outline-offset: 2px;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang[data-pending="true"] .pats-nav__lang-trigger {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-icon {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  flex-shrink: 0;
+}
+
+
+/* Day / solid-compact — dark text on a translucent chip (matches theme switch). */
+html.light-theme .army-site .pats-header--compact .pats-nav__lang-trigger,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__lang-trigger {
+  border-color: rgba(42, 61, 82, 0.35);
+  background: rgba(16, 28, 40, 0.08);
+  color: rgba(42, 61, 82, 0.9);
+}
+
+
+html.light-theme .army-site .pats-header--compact .pats-nav__lang-trigger:hover,
+html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__lang-trigger:hover {
+  color: #0f1a28;
+  border-color: rgba(42, 61, 82, 0.55);
+}
+
+
+/* Menu is positioned `fixed` (inline top/right) to escape the nav's overflow clip. */
+.army-site:not(.dashboard-day) .pats-nav__lang-menu {
+  position: fixed;
+  z-index: 200;
+  min-width: 9.5rem;
+  margin: 0;
+  padding: 0.375rem;
+  list-style: none;
+  border-radius: 0.625rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #16213e;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 0;
+  border-radius: 0.4375rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-option:hover,
+.army-site:not(.dashboard-day) .pats-nav__lang-option:focus-visible {
+  background: rgba(212, 175, 55, 0.14);
+  color: #ffffff;
+  outline: none;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-option[data-active="true"] {
+  color: var(--pats-gold, #d4af37);
+  font-weight: 600;
+}
+
+
+.army-site:not(.dashboard-day) .pats-nav__lang-check {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+
 .army-site:not(.dashboard-day) .pats-header--menu-open:not(.pats-header--solid) .pats-nav {
   background: linear-gradient(
     to bottom,
@@ -4083,11 +4205,11 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  padding: 0.42rem 0.8rem;
+  padding: 0.4rem 0.62rem;
   font-family: var(--font-barlow), system-ui, sans-serif;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
@@ -4444,7 +4566,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 .army-site:not(.dashboard-day) .pats-hero__headline {
   font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif;
-  font-size: clamp(1.75rem, 4.5vw + 0.35rem, 5.25rem);
+  font-size: clamp(1.5rem, 3.6vw + 0.3rem, 4.25rem);
   font-weight: 400;
   line-height: 0.92;
   letter-spacing: 0.04em;
@@ -4462,7 +4584,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   display: block;
   margin-top: 0.125rem;
   color: var(--gold, #c8a84b);
-  font-size: clamp(2rem, 5.5vw + 0.35rem, 5.75rem);
+  font-size: clamp(1.7rem, 4.4vw + 0.3rem, 4.65rem);
   line-height: 0.9;
 }
 
@@ -8056,7 +8178,10 @@ html[data-site-theme="day"] .army-site .paf-footer__photo {
   background-color: transparent !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
-  background-size: min(92%, 1100px) auto !important;
+  /* Match the dark-theme footer crest: fit-to-footer (the .pats-site-footer
+     rule adds transform: scale(0.85)) instead of a fixed 1100px width that
+     overflowed the short footer in light mode. */
+  background-size: contain !important;
 }
 
 
@@ -9979,6 +10104,15 @@ html:not(.light-theme):not([data-site-theme="day"])
   .pats-mission-showcase
   .pats-body {
   color: #4a5248;
+}
+
+/* The mission panel is light in EVERY theme, but a broad `.cinematic-site p`
+   rule paints the motto white in dark mode → invisible (incl. the Urdu motto).
+   This higher-specificity, theme-agnostic rule keeps it dark gold and legible.
+   Specificity (0,3,0) beats the generic `.cinematic-site p` (0,2,1), so no
+   cascade override flag is required here. */
+.army-home .pats-mission-showcase .pats-mission__motto {
+  color: #9a7a0a;
 }
 
 @media (max-width: 1023px) {
@@ -14085,11 +14219,11 @@ body {
 
 @media (min-width: 640px) and (max-width: 1023px) {
   .army-site:not(.dashboard-day) .pats-hero__headline {
-    font-size: clamp(2.75rem, 7vw, 5rem);
+    font-size: clamp(2.25rem, 5.7vw, 4rem);
   }
 
   .army-site:not(.dashboard-day) .pats-hero__headline-accent {
-    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-size: clamp(2.4rem, 6.5vw, 4.4rem);
   }
 }
 
@@ -14903,8 +15037,21 @@ html[data-site-theme="day"] .army-site .pats-awards-showcase__subtitle {
   border: none;
   border-radius: 0;
   transform: scale(1.15);
-  
+
   mix-blend-mode: multiply;
+}
+
+/* Photographed medals (real product shots on a light backdrop) fill the frame
+   uniformly instead of the multiply/contain treatment used for the transparent
+   renders — this keeps all three medal cards consistently aligned. */
+.pats-awards-hero-card--photo .pats-awards-hero-card__visual {
+  background: #eef0ee;
+}
+.pats-awards-hero-card--photo .pats-awards-hero-card__image {
+  object-fit: cover;
+  object-position: center;
+  transform: none;
+  mix-blend-mode: normal;
 }
 
 
@@ -16112,6 +16259,20 @@ html[data-site-theme="day"]
 
 /* ---- event modal ---- */
 .ec-modal {
+  /* The dialog portals to <body>, outside `.exercise-contour`, so the event
+     palette must be re-declared here or every var()-based color resolves to
+     nothing and the text blends into the dark modal background. */
+  --ec-line: rgba(197, 168, 128, 0.16);
+  --ec-line-soft: rgba(255, 255, 255, 0.07);
+  --ec-brass: #c5a880;
+  --ec-gold: #d8b549;
+  --ec-gold-bright: #e6cf7f;
+  --ec-khaki: #b9c3ac;
+  --ec-sand: #f2f2ee;
+  --ec-alert: #d09a2c;
+  --ec-red: #cf6a52;
+  --ec-green: #6fa06a;
+
   max-width: 40rem !important;
   width: calc(100vw - 2rem);
   max-height: 88vh;
@@ -18705,6 +18866,167 @@ html:has(.dashboard-day) body {
   color: #ffd9d4 !important;
 }
 
+/* -------------------------------------------------- language switcher */
+.pp .pp-lang {
+  position: relative;
+  width: 100%;
+  margin-bottom: 0.45rem;
+}
+
+.pp .pp-lang[data-pending="true"] {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* trigger — mirrors a sidebar nav row (forest bg, white text, gold icon) */
+.pp .pp-lang__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--pp-radius-xs);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--pp-nav-text-strong);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.pp .pp-lang__trigger:hover {
+  background: var(--pp-nav-hover);
+}
+
+.pp .pp-lang__trigger:focus-visible {
+  outline: none;
+  border-color: var(--pp-nav-accent);
+  box-shadow: 0 0 0 2px rgba(226, 198, 122, 0.35);
+}
+
+.pp .pp-lang[data-open="true"] .pp-lang__trigger {
+  background: var(--pp-nav-active);
+  border-color: rgba(226, 198, 122, 0.4);
+}
+
+.pp .pp-lang__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--pp-nav-accent);
+}
+
+.pp .pp-lang__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.15;
+}
+
+.pp .pp-lang__label {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.pp .pp-lang__value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp .pp-lang__chevron {
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: transform 0.18s ease;
+}
+
+.pp .pp-lang[data-open="true"] .pp-lang__chevron {
+  transform: rotate(180deg);
+}
+
+/* dropdown menu — opens upward (switcher sits at the sidebar foot) and reuses
+   the sidebar's forest gradient so the options read the same in light + dark */
+.pp .pp-lang__menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 0.35rem);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0.3rem;
+  list-style: none;
+  max-height: 15rem;
+  overflow-y: auto;
+  border-radius: var(--pp-radius-sm);
+  border: 1px solid rgba(226, 198, 122, 0.22);
+  /* Solid forest fallback first, then the gradient — guarantees a dark ground
+     for the white option text even if the --pp-nav-* vars ever fail to resolve. */
+  background: #1c2a20;
+  background: linear-gradient(180deg, var(--pp-nav-1), var(--pp-nav-2));
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.42);
+}
+
+.pp .pp-lang__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 0;
+  border-radius: var(--pp-radius-xs);
+  background: transparent;
+  color: var(--pp-nav-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+
+.pp .pp-lang__option:hover {
+  background: var(--pp-nav-hover);
+  color: var(--pp-nav-text-strong);
+}
+
+.pp .pp-lang__option:focus-visible {
+  outline: none;
+  background: var(--pp-nav-hover);
+  color: var(--pp-nav-text-strong);
+  box-shadow: inset 0 0 0 1px rgba(226, 198, 122, 0.5);
+}
+
+.pp .pp-lang__option[data-active="true"] {
+  color: var(--pp-nav-accent);
+  background: var(--pp-nav-active);
+}
+
+/* -------------------------------------------------- RTL (Arabic) portal */
+.pp[dir="rtl"] .pp-sidebar,
+[dir="rtl"] .pp .pp-sidebar {
+  border-right: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: -2px 0 16px rgba(0, 0, 0, 0.18);
+}
+
+[dir="rtl"] .pp .pp-progress__fill {
+  background: linear-gradient(270deg, #2f8a57, var(--pp-nav-accent));
+}
+
+[dir="rtl"] .pp .portal-back-link svg,
+[dir="rtl"] .pp .pp-btn svg.pp-rtl-flip {
+  transform: scaleX(-1);
+}
+
 /* -------------------------------------------------------------- typography */
 .pp .pp-eyebrow {
   font-size: 0.6875rem;
@@ -18772,9 +19094,10 @@ html:has(.dashboard-day) body {
   align-items: center;
   justify-content: space-between;
   gap: 1rem 1.5rem;
-  /* Enough room for two wrapped lines + breathing space */
-  min-height: 5.5rem;
-  padding: 1.4rem 1.6rem;
+  /* Taller floor so the member card (chip + team link) is never cramped or
+     clipped against the rounded edge, on desktop or when it wraps on mobile. */
+  min-height: 7rem;
+  padding: 1.6rem 1.8rem;
   border-radius: var(--pp-radius);
   color: #fff;
   /* Premium muted institutional green */
@@ -18860,7 +19183,21 @@ html:has(.dashboard-day) body {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.6rem;
+  gap: 0.65rem;
+}
+
+/* On narrow screens the hero wraps: top-align the columns and let the member
+   card flow left-to-right beneath the name so every pill stays fully visible. */
+@media (max-width: 640px) {
+  .pp .pp-hero {
+    align-items: flex-start;
+  }
+  .pp .pp-hero__aside {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    align-self: stretch;
+  }
 }
 
 .pp .pp-hero__chip {
@@ -19159,6 +19496,104 @@ html:has(.dashboard-day) body {
 }
 .pp .pp-step--attention .pp-step__name {
   color: #7c3a06;
+}
+
+/* ---- section-to-section nav (replaces the guided-wizard footer) ---------- */
+.pp .pp-section-flow {
+  display: flex;
+  flex-direction: column;
+}
+.pp .pp-stepnav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 0.85rem;
+  margin-top: 1.25rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: var(--pp-radius);
+  border: 1px solid var(--pp-border);
+  background: var(--pp-surface);
+  box-shadow: var(--pp-shadow-sm);
+}
+.pp .pp-stepnav__group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pp .pp-stepnav__group--end {
+  margin-left: auto;
+}
+.pp .pp-stepnav__progress {
+  order: -1;
+  flex: 1 1 100%;
+  margin: 0;
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--pp-muted);
+}
+.pp .pp-stepnav__ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--pp-radius-sm);
+  border: 1px solid var(--pp-border-strong);
+  background: var(--pp-surface);
+  color: var(--pp-primary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.pp .pp-stepnav__ghost:hover {
+  background: var(--pp-primary-soft);
+  border-color: rgba(21, 97, 59, 0.4);
+}
+.pp .pp-stepnav__next {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.62rem 1.05rem;
+  border-radius: var(--pp-radius-sm);
+  background: var(--pp-primary);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(16, 32, 24, 0.14);
+  transition: filter 0.15s ease;
+}
+.pp .pp-stepnav__next:hover {
+  filter: brightness(1.08);
+}
+.pp .pp-stepnav__next--locked {
+  background: #ecefec;
+  color: var(--pp-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.pp .pp-stepnav__done {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.62rem 1.05rem;
+  border-radius: var(--pp-radius-sm);
+  border: 1px solid rgba(21, 97, 59, 0.35);
+  background: var(--pp-primary-soft);
+  color: var(--pp-primary);
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+@media (min-width: 640px) {
+  .pp .pp-stepnav__progress {
+    order: 0;
+    flex: 0 1 auto;
+  }
 }
 
 .pp .pp-step--locked {
@@ -19766,6 +20201,33 @@ html:has(.dashboard-day) body {
 }
 
 /* ————————————————————————————————————————————————————————————————
+   Participant portal density — render the 80% browser-zoom view at
+   100% by default (same treatment as the admin panel below). The
+   whole shell is scaled; dvh-based heights are raised so 0.8 × height
+   still fills the viewport exactly.
+   ———————————————————————————————————————————————————————————————— */
+
+.pp .pp-shell {
+  zoom: 0.8;
+}
+
+@media (min-width: 1024px) {
+  .pp .pp-shell {
+    height: 125dvh;
+  }
+
+  .pp .pp-main {
+    height: 125dvh;
+  }
+
+  .pp .pp-sidebar,
+  .pats-site-body--portal-app .pp-sidebar {
+    height: 125dvh;
+    min-height: 125dvh;
+  }
+}
+
+/* ————————————————————————————————————————————————————————————————
    Admin density — render the 80% browser-zoom view at 100% by default.
    The fixed sidebar sits outside the zoomed subtree, so its offset is
    compensated to stay visually equal to the sidebar width; min-height
@@ -19810,4 +20272,307 @@ html:has(.dashboard-day) body {
   border-color: #38bdf8;
   background: #eef7fd;
   color: #075985;
+}
+
+/* ── Urdu crest motto ──────────────────────────────────────────────
+   The official PATS motto is Urdu (a connected nastaliq script), so it
+   must NEVER carry letter-spacing or text-transform (they break the
+   joined glyphs) and must render RTL. Selectors mirror the themed motto
+   rules so they win by equal specificity + later source order.        */
+.pats-urdu-motto,
+.army-site .pats-urdu-motto,
+.army-home .pats-urdu-motto,
+html.light-theme .army-home .pats-urdu-motto,
+html[data-site-theme="day"] .army-home .pats-urdu-motto,
+html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto {
+  font-family: var(--font-nastaliq), "Noto Nastaliq Urdu",
+    "Jameel Noori Nastaleeq", serif;
+  letter-spacing: normal;
+  text-transform: none;
+  direction: rtl;
+  unicode-bidi: isolate;
+  text-align: center;
+  line-height: 2.05;
+}
+
+/* Hero caption motto — give the calligraphy vertical room. */
+.army-site:not(.dashboard-day) .pats-hero__caption-text.pats-urdu-motto {
+  font-size: 15px;
+  font-weight: 600;
+  padding-block: 0.1em;
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) .pats-hero__caption-text.pats-urdu-motto {
+    font-size: 20px;
+  }
+}
+
+/* Mission-showcase motto — nastaliq sits between the gold rules. Match the
+   light/day size (--pats-type-eyebrow, which the day theme forces) so the motto
+   is the same size in both themes instead of oversized in dark mode. */
+.army-home .pats-mission-showcase__motto.pats-urdu-motto {
+  font-size: var(--pats-type-eyebrow);
+  font-weight: 700;
+}
+
+/* ── Events Detail — admin-uploaded card thumbnails ─────────────────── */
+.exercise-contour .ec-card__thumb {
+  position: relative;
+  margin: -1.3rem -1.3rem 1rem;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ec-line);
+  background: var(--ec-panel-2);
+}
+.exercise-contour .ec-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.exercise-contour .ec-marks--onthumb {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  background: rgba(11, 14, 12, 0.82);
+  border-color: rgba(197, 168, 128, 0.4);
+  backdrop-filter: blur(4px);
+}
+.exercise-contour .ec-modal__media {
+  margin: 0.25rem 0 0.5rem;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--ec-line);
+}
+.exercise-contour .ec-modal__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Announcements — public cards + detail media ────────────────────── */
+.pats-announcement-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--pats-border, rgba(197, 168, 128, 0.25));
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.pats-announcement-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--pats-gold, #c8a84b);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+.pats-announcement-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.25);
+}
+.pats-announcement-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+.pats-announcement-card:hover .pats-announcement-card__media img {
+  transform: scale(1.04);
+}
+.pats-announcement-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: var(--font-bebas), system-ui, sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.2em;
+  color: rgba(197, 168, 128, 0.35);
+}
+.pats-announcement-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+.pats-announcement-card__title {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--pats-white, #fff);
+}
+.pats-announcement-card__excerpt {
+  flex: 1;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.75);
+}
+.pats-announcement-card__more {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pats-gold, #c8a84b);
+}
+.pats-announcement-detail__media {
+  margin: 0 0 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--pats-border, rgba(197, 168, 128, 0.25));
+  border-radius: 10px;
+}
+.pats-announcement-detail__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Announcements marquee — red speaker badge + links ─────────────── */
+.announcement-ticker--speaker .announcement-ticker-viewport {
+  padding-left: 3.35rem;
+}
+.announcement-ticker-speaker {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.7rem;
+  color: #fff;
+  background: linear-gradient(90deg, #d32f2f 0%, #a11414 100%);
+  box-shadow:
+    2px 0 12px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
+.announcement-ticker-speaker svg {
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+  animation: announcement-speaker-pulse 2.4s ease-in-out infinite;
+}
+@keyframes announcement-speaker-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+.announcement-ticker-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.announcement-ticker-link:hover .announcement-ticker-item {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ── International — registered nations map ─────────────────────────── */
+.registered-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.registered-map__stage {
+  position: relative;
+  /* Was hidden — it clipped the country tooltip near the map edges. The map
+     art is inset by the stage padding, so nothing else needs clipping here. */
+  overflow: visible;
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  border: 1px solid var(--pats-border, rgba(197, 168, 128, 0.25));
+  border-radius: 14px;
+  background:
+    radial-gradient(
+      120% 120% at 50% 0%,
+      rgba(45, 90, 30, 0.18) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, #0a1410 0%, #0b1a12 100%);
+}
+.registered-map__svg {
+  width: 100%;
+}
+.registered-map__svg svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.registered-map__tooltip {
+  /* Placement (left/top) is computed in JS and already viewport-clamped, so no
+     transform offset here. Sits above the map art and the site chrome. */
+  position: absolute;
+  z-index: 40;
+  min-width: 168px;
+  max-width: min(288px, calc(100vw - 24px));
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(197, 168, 128, 0.4);
+  border-radius: 10px;
+  background: rgba(10, 16, 12, 0.97);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+.registered-map__tooltip-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-barlow, system-ui), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #e6cf7f;
+}
+.registered-map__tooltip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.registered-map__tooltip-list li {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.88);
+}
+.registered-map__tooltip-name {
+  min-width: 0;
+  /* Wrap long team names instead of truncating so nothing is hidden. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.registered-map__tooltip-year {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--pats-gold, #c8a84b);
+}
+.registered-map__tooltip-more {
+  margin: 0.35rem 0 0;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+.registered-map__caption {
+  margin: 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.7);
 }

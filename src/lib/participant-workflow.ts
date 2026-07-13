@@ -6,6 +6,7 @@ import {
   normalizePaymentStatus,
 } from "@/lib/constants";
 import { normalizeApplicationStatus } from "@/lib/user-status";
+import { enWorkflow, type WorkflowStrings } from "@/lib/i18n/workflow-strings";
 
 /**
  * Client-safe participant workflow engine.
@@ -213,22 +214,20 @@ export function canViewHostInfo(
 /* Stage derivation for the guided dashboard                           */
 /* ------------------------------------------------------------------ */
 
-function fmtDate(d: Date): string {
-  return d.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
-
 export function deriveWorkflowStages(params: {
   user: WorkflowUser;
   settings: WorkflowSettings;
   teamMemberCount: number;
   now?: Date;
+  /** Localized workflow strings; falls back to English. */
+  wf?: WorkflowStrings;
 }): WorkflowStage[] {
   const { user, settings, teamMemberCount } = params;
   const now = params.now ?? new Date();
+  const wf = params.wf ?? enWorkflow;
+  const L = wf.label;
+  const S = wf.sub;
+  const fmt = wf.formatDate;
 
   const confirmed = hasConfirmedParticipation(user);
   const confirmExpired = isConfirmationDeadlinePassed(settings, now);
@@ -247,15 +246,15 @@ export function deriveWorkflowStages(params: {
   // 1 — Participation confirmation
   stages.push({
     key: "confirmation",
-    label: "Confirm Participation",
+    label: L.confirmation,
     state: confirmed ? "done" : confirmExpired ? "attention" : "current",
     sub: confirmed
-      ? "Confirmed"
+      ? S.confirmed
       : confirmExpired
-        ? "Deadline expired"
+        ? S.deadlineExpired
         : settings.participationConfirmDeadline
-          ? `Confirm by ${fmtDate(settings.participationConfirmDeadline)}`
-          : "Action required",
+          ? S.confirmBy(fmt(settings.participationConfirmDeadline))
+          : S.actionRequired,
     href: confirmed ? null : "/event/confirm-participation",
   });
 
@@ -263,7 +262,7 @@ export function deriveWorkflowStages(params: {
   const verificationLocked = !confirmed;
   stages.push({
     key: "verification",
-    label: "Registration Verification",
+    label: L.verification,
     state: verificationLocked
       ? "locked"
       : approvedStage
@@ -273,16 +272,16 @@ export function deriveWorkflowStages(params: {
           ? "attention"
           : "current",
     sub: verificationLocked
-      ? "Locked"
+      ? S.locked
       : approvedStage
-        ? "Approved by SD"
+        ? S.approvedBySd
         : appStatus === APPLICATION_STATUS.REJECTED
-          ? "Rejected"
+          ? S.rejected
           : appStatus === APPLICATION_STATUS.RETURNED
-            ? "Returned for correction"
+            ? S.returnedForCorrection
             : appStatus === APPLICATION_STATUS.UNDER_REVIEW
-              ? "Under review by SD"
-              : "Pending SD verification",
+              ? S.underReviewBySd
+              : S.pendingSdVerification,
     href: verificationLocked ? null : "/event/dashboard",
   });
 
@@ -290,7 +289,7 @@ export function deriveWorkflowStages(params: {
   const paymentLocked = verificationLocked || !approvedStage;
   stages.push({
     key: "payment",
-    label: "Payment",
+    label: L.payment,
     state: paymentLocked
       ? "locked"
       : paid
@@ -300,17 +299,17 @@ export function deriveWorkflowStages(params: {
           ? "attention"
           : "current",
     sub: paymentLocked
-      ? "Locked"
+      ? S.locked
       : paid
-        ? "Verified by MT"
+        ? S.verifiedByMt
         : payStatus === PAYMENT_STATUS.SUBMITTED ||
             payStatus === PAYMENT_STATUS.UNDER_REVIEW
-          ? "Under review by MT"
+          ? S.underReviewByMt
           : payStatus === PAYMENT_STATUS.REJECTED
-            ? "Proof rejected"
+            ? S.proofRejected
             : payStatus === PAYMENT_STATUS.RETURNED
-              ? "Returned for correction"
-              : "Payment required",
+              ? S.returnedForCorrection
+              : S.paymentRequired,
     href: paymentLocked ? null : "/event/payment",
   });
 
@@ -318,7 +317,7 @@ export function deriveWorkflowStages(params: {
   const teamRegLocked = paymentLocked || !paid;
   stages.push({
     key: "teamRegistration",
-    label: "Team Registration",
+    label: L.teamRegistration,
     state: teamRegLocked
       ? "locked"
       : teamRegistered
@@ -327,18 +326,18 @@ export function deriveWorkflowStages(params: {
           ? "current"
           : "attention",
     sub: teamRegLocked
-      ? "Locked"
+      ? S.locked
       : teamRegistered
-        ? "Team registered"
+        ? S.teamRegistered
         : windowState === "before"
           ? settings.teamRegistrationOpenDate
-            ? `Opens ${fmtDate(settings.teamRegistrationOpenDate)}`
-            : "Not yet open"
+            ? S.opensOn(fmt(settings.teamRegistrationOpenDate))
+            : S.notYetOpen
           : windowState === "closed"
-            ? "Window closed"
+            ? S.windowClosed
             : settings.teamRegistrationCloseDate
-              ? `Open until ${fmtDate(settings.teamRegistrationCloseDate)}`
-              : "Window open",
+              ? S.openUntil(fmt(settings.teamRegistrationCloseDate))
+              : S.windowOpen,
     href: teamRegLocked ? null : "/event/team",
   });
 
@@ -346,13 +345,13 @@ export function deriveWorkflowStages(params: {
   const rosterLocked = teamRegLocked || !teamRegistered;
   stages.push({
     key: "roster",
-    label: "Team Members",
+    label: L.roster,
     state: rosterLocked ? "locked" : rosterDone ? "done" : "current",
     sub: rosterLocked
-      ? "Locked"
+      ? S.locked
       : rosterDone
-        ? `${teamMemberCount} member${teamMemberCount === 1 ? "" : "s"} confirmed`
-        : `${teamMemberCount} of ${limit} added`,
+        ? S.membersConfirmed(teamMemberCount)
+        : S.membersAdded(teamMemberCount, limit),
     href: rosterLocked ? null : "/event/team",
   });
 
@@ -361,7 +360,7 @@ export function deriveWorkflowStages(params: {
   const flightDeadlinePassed = isFlightDeadlinePassed(settings, now);
   stages.push({
     key: "flights",
-    label: "Flight Details",
+    label: L.flights,
     state: flightsLocked
       ? "locked"
       : flightsDone
@@ -370,14 +369,14 @@ export function deriveWorkflowStages(params: {
           ? "attention"
           : "current",
     sub: flightsLocked
-      ? "Locked"
+      ? S.locked
       : flightsDone
-        ? "Finalized by administration"
+        ? S.finalized
         : flightDeadlinePassed
-          ? "Deadline passed — locked"
+          ? S.deadlinePassedLocked
           : settings.flightDetailsDeadline
-            ? `Submit by ${fmtDate(settings.flightDetailsDeadline)}`
-            : "Provide travel documents",
+            ? S.submitBy(fmt(settings.flightDetailsDeadline))
+            : S.provideTravelDocs,
     href: flightsLocked ? null : "/event/flights",
   });
 
@@ -385,13 +384,13 @@ export function deriveWorkflowStages(params: {
   const hostAvailable = flightsDone && settings.hostInfoPublished;
   stages.push({
     key: "hostInfo",
-    label: "Host Information",
+    label: L.hostInfo,
     state: hostAvailable ? "done" : "locked",
     sub: hostAvailable
-      ? "Available"
+      ? S.available
       : flightsDone
-        ? "Awaiting publication"
-        : "Locked",
+        ? S.awaitingPublication
+        : S.locked,
     href: hostAvailable ? "/event/host-info" : null,
   });
 

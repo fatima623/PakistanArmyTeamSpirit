@@ -17,22 +17,26 @@ import {
 
 import { logoutAction } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 type NavGate = "always" | "payment" | "flights" | "hostInfo";
+type NavKey = keyof Dictionary["nav"];
 
 const BASE_LINKS: {
   href: string;
-  label: string;
+  labelKey: NavKey;
   Icon: LucideIcon;
   gate: NavGate;
 }[] = [
-  { href: "/event/dashboard", label: "Dashboard", Icon: LayoutDashboard, gate: "always" },
-  { href: "/event/edit/unit", label: "Unit information", Icon: ClipboardList, gate: "always" },
-  { href: "/event/team", label: "Team Registration", Icon: Users, gate: "always" },
-  { href: "/event/payment", label: "Payment", Icon: CreditCard, gate: "payment" },
-  { href: "/event/flights", label: "Flight Details", Icon: Plane, gate: "flights" },
-  { href: "/event/host-info", label: "Host Information", Icon: Home, gate: "hostInfo" },
-  { href: "/event/tickets", label: "Support", Icon: LifeBuoy, gate: "always" },
+  { href: "/event/dashboard", labelKey: "dashboard", Icon: LayoutDashboard, gate: "always" },
+  { href: "/event/edit/unit", labelKey: "unitInformation", Icon: ClipboardList, gate: "always" },
+  { href: "/event/team", labelKey: "teamRegistration", Icon: Users, gate: "always" },
+  { href: "/event/payment", labelKey: "payment", Icon: CreditCard, gate: "payment" },
+  { href: "/event/flights", labelKey: "flightDetails", Icon: Plane, gate: "flights" },
+  { href: "/event/host-info", labelKey: "hostInformation", Icon: Home, gate: "hostInfo" },
+  { href: "/event/tickets", labelKey: "support", Icon: LifeBuoy, gate: "always" },
 ];
 
 export function PatsPortalNav({
@@ -51,6 +55,7 @@ export function PatsPortalNav({
   stageTone?: "pending" | "confirmed";
 }) {
   const pathname = usePathname();
+  const { t } = useI18n();
   const gates: Record<NavGate, boolean> = {
     always: true,
     payment: showPaymentLink,
@@ -65,14 +70,14 @@ export function PatsPortalNav({
       : 0;
 
   return (
-    <nav className="pp-sidebar" aria-label="Participant portal">
+    <nav className="pp-sidebar" aria-label={t.nav.ariaLabel}>
       <div className="pp-sidebar__brand">
         <span className="pp-sidebar__mark" aria-hidden>
           <Shield className="h-5 w-5" />
         </span>
         <div className="min-w-0">
-          <div className="pp-sidebar__brand-title">PATS Portal</div>
-          <div className="pp-sidebar__brand-sub">Participant</div>
+          <div className="pp-sidebar__brand-title">{t.nav.portalName}</div>
+          <div className="pp-sidebar__brand-sub">{t.nav.participant}</div>
         </div>
       </div>
 
@@ -82,7 +87,7 @@ export function PatsPortalNav({
             <span className="pp-progress__label">{stageLabel}</span>
             <span className="pp-progress__step">
               {stageTone === "confirmed"
-                ? "Done"
+                ? t.nav.done
                 : `${stageStep.current}/${stageStep.total}`}
             </span>
           </div>
@@ -93,7 +98,7 @@ export function PatsPortalNav({
       ) : null}
 
       <div className="pp-nav">
-        <p className="pp-nav__label">Menu</p>
+        <p className="pp-nav__label">{t.nav.menu}</p>
         <ul className="pp-nav__list">
           {links.map((link) => {
             const active =
@@ -109,7 +114,7 @@ export function PatsPortalNav({
                   aria-current={active ? "page" : undefined}
                 >
                   <Icon className="pp-nav__icon" aria-hidden />
-                  <span>{link.label}</span>
+                  <span>{t.nav[link.labelKey]}</span>
                 </Link>
               </li>
             );
@@ -118,10 +123,11 @@ export function PatsPortalNav({
       </div>
 
       <div className="pp-sidebar__foot">
+        <LanguageSwitcher />
         <form action={logoutAction}>
           <button type="submit" className="pp-logout">
             <LogOut className="pp-nav__icon" aria-hidden />
-            <span>Log out</span>
+            <span>{t.nav.logout}</span>
           </button>
         </form>
       </div>

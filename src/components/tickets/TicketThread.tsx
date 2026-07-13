@@ -11,8 +11,11 @@ export type TicketThreadMessage = {
 /** Read-only conversation view, shared by the participant and admin ticket pages. */
 export function TicketThread({
   messages,
+  staffLabel = "PATS team",
 }: {
   messages: TicketThreadMessage[];
+  /** Optional translated label for staff replies. */
+  staffLabel?: string;
 }) {
   return (
     <ul className="space-y-4">
@@ -41,7 +44,7 @@ export function TicketThread({
                       letterSpacing: "0.04em",
                     }}
                   >
-                    PATS team
+                    {staffLabel}
                   </span>
                 ) : null}
               </span>

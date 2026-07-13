@@ -1,0 +1,111 @@
+import type { team as enTeam } from "../en/team";
+
+export const team: typeof enTeam = {
+  errors: {
+    serialRequired: "الرقم التسلسلي مطلوب",
+    rankRequired: "الرتبة مطلوبة",
+    fullNameRequired: "الاسم الكامل مطلوب",
+    rowError: (row, msg) => `الصف ${row}: ${msg}`,
+    duplicateSerial: (serial) => `رقم تسلسلي مكرر: ${serial}`,
+  },
+  toasts: {
+    teamRegistered: "تم تسجيل الفريق — يمكنك الآن إعداد قائمتك",
+    rosterSaved: "تم حفظ القائمة",
+    rosterCompleted: "اكتملت القائمة — أصبحت تفاصيل الرحلة متاحة الآن",
+    rosterReopened: "أُعيد فتح القائمة للتعديل",
+    requestSubmitted: "تم إرسال الطلب إلى المسؤولين للموافقة",
+  },
+  window: {
+    opensOn: (date) => `يُفتح تسجيل الفريق في ${date}.`,
+    notOpenedYet: "لم يُفتح تسجيل الفريق بعد.",
+    closedOn: (date) => `أُغلق تسجيل الفريق في ${date}.`,
+    periodClosed: "انتهت فترة تسجيل الفريق.",
+    openUntil: (date) => `تسجيل الفريق مفتوح حتى ${date}.`,
+    open: "تسجيل الفريق مفتوح.",
+  },
+  settingUp: "جارٍ إعداد قائمة فريقك…",
+  register: {
+    title: "تسجيل الفريق",
+    windowOpen: "نافذة التسجيل مفتوحة",
+    windowNotYetOpen: "النافذة لم تُفتح بعد",
+    windowClosed: "النافذة مغلقة",
+    unlockNote:
+      "يُفتح تسجيل الفريق بعد تأكيد المشاركة، والتحقق من التسجيل من المديرية الرياضية، والتحقق من الدفع من فريق الإدارة.",
+  },
+  roster: {
+    completedShort: "اكتملت القائمة",
+    unsavedChanges: "لديك تغييرات غير محفوظة",
+    filledCount: (filled, total) => `تم ملء ${filled} من ${total} عضو`,
+    heading: "أعضاء الفريق",
+    addMembersDesc:
+      "أضف أعضاء فريقك أدناه. بعد الحفظ، حدّد القائمة كمكتملة لفتح تفاصيل الرحلة.",
+    lockedByAdmin: "مقفل من قبل الإدارة",
+    requestAdditional: "طلب أعضاء إضافيين",
+    saveRoster: "حفظ القائمة",
+    saveTitleFill: "املأ بيانات كل عضو لتفعيل الحفظ",
+    saveTitleDirty: "احفظ قائمتك",
+    saveTitleNoChanges: "لا توجد تغييرات لحفظها",
+    edit: "تعديل",
+    markComplete: "تحديد القائمة كمكتملة",
+    completeTitleFill: "املأ بيانات كل عضو أولًا",
+    completeTitleDirty: "احفظ قائمتك أولًا",
+    completeTitleReady: "أكمل القائمة لفتح تفاصيل الرحلة",
+    infoNote:
+      "املأ بيانات جميع أعضاء الفريق واضغط حفظ. ثم حدّد القائمة كمكتملة لفتح تفاصيل الرحلة.",
+  },
+  table: {
+    caption: "أعضاء الفريق — الرقم التسلسلي والرتبة والاسم الكامل والجنس",
+    serialNumber: "الرقم",
+    serialTitle: "الرقم الخدمي / التسلسلي، مثل PA-12345",
+    rank: "الرتبة",
+    rankTitle: "الرتبة العسكرية، مثل نقيب",
+    fullName: "الاسم الكامل",
+    fullNameTitle: "الاسم الكامل كما في الوثائق الرسمية",
+    gender: "الجنس",
+    actions: "الإجراءات",
+  },
+  placeholders: {
+    serialEg: "مثل PA-12345",
+    rankEg: "مثل نقيب",
+    fullName: "الاسم الكامل",
+  },
+  aria: {
+    serialRow: (n) => `الرقم التسلسلي، الصف ${n}`,
+    rankRow: (n) => `الرتبة، الصف ${n}`,
+    fullNameRow: (n) => `الاسم الكامل، الصف ${n}`,
+    genderRow: (n) => `الجنس، الصف ${n}`,
+    clearRow: (n) => `مسح الصف ${n}`,
+    clearRowTitle: "مسح هذا الصف",
+    prevPage: "الصفحة السابقة",
+    nextPage: "الصفحة التالية",
+    page: (n) => `الصفحة ${n}`,
+    rowsPerPage: "صفوف في كل صفحة",
+    perPage: (n) => `${n} في كل صفحة`,
+  },
+  genders: {
+    male: "ذكر",
+    female: "أنثى",
+    other: "آخر",
+  },
+  sizeRequest: {
+    summary: (count, statusText) =>
+      `طلب حجم الفريق — ${count} عضو: ${statusText}`,
+    pendingReview: "بانتظار مراجعة المسؤول",
+    approved: "تمت الموافقة",
+    rejected: "مرفوض",
+    pending: "قيد الانتظار",
+  },
+  dialog: {
+    title: "طلب أعضاء إضافيين",
+    desc: (limit) =>
+      `حد فريقك هو ${limit}. اطلب من الإدارة رفعه — سيراجعون طلبك.`,
+    requestedSize: "حجم الفريق المطلوب",
+    between: (min) => `بين ${min} و200 عضو.`,
+    justification: "المبرر",
+    justificationPlaceholder:
+      "اشرح سبب حاجة فريقك إلى أعضاء إضافيين…",
+    charsMin: (n) => `${n}/20 حرفًا كحد أدنى`,
+    cancel: "إلغاء",
+    submit: "إرسال الطلب",
+  },
+};

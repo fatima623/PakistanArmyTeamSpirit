@@ -13,11 +13,14 @@ export type PublicNavItem = {
 
 export const PUBLIC_NAV_ITEMS: PublicNavItem[] = [
   { href: "/", label: "Home" },
-  { href: "/operations", label: "Operational Overview" },
-  { href: "/exercise-contour", label: "Exercise Contour" },
+  // { href: "/operations", label: "Operational Overview" },
+  // Exercise Contour is temporarily hidden from the navbar (kept for future use).
+  // { href: "/exercise-contour", label: "Exercise Contour" },
+  { href: "/events-detail", label: "Events Detail" },
   { href: "/international", label: "International Participation" },
   { href: "/awards", label: "Awards" },
   { href: "/gallery", label: "Gallery" },
+  { href: "/announcements", label: "Announcements" },
   { href: "/key-dates", label: "Key Dates" },
 ];
 

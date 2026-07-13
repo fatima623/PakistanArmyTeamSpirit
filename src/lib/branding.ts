@@ -11,12 +11,12 @@ export const NAV_BRAND_SUBTITLE = "Pakistan Army Team Spirit";
 /** Motto — hero/footer only; not shown in navbar */
 export const NAV_BRAND_TAGLINE = "No guts, no glory";
 
-/** Official PATS emblem — used site-wide (nav, portal, admin, favicons). */
+/** Official PATS emblem — used site-wide (nav, portal, admin, favicons). Square crest. */
 export const PATS_LOGO = {
   src: "/media/pats/pats-logo.webp",
   navSrc: "/media/pats/pats-logo-nav.webp",
   alt: "PATS — International Pakistan Army Team Spirit Competition",
-  width: 682,
+  width: 1024,
   height: 1024,
 } as const;
 
@@ -26,8 +26,13 @@ export const HERO_TITLE = "Pakistan Army Team Spirit (PATS) Competition";
 export const HERO_TAGLINE = `${ARMY_NAME} · ${COUNTRY}`;
 /** Homepage hero body copy — keep wording fixed; style/layout may change around it. */
 export const HERO_DESCRIPTION =
-  "International Pakistan Army Team Spirit — a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit among partner nations. No guts, no glory.";
-export const HERO_MOTTO = "NO GUTS NO GLORY";
+  "International Pakistan Army Team Spirit — a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit among partner nations.";
+/**
+ * Hero motto — the official Urdu motto from the PATS crest.
+ * Transliteration: "Yaqeen-e-Muhkam, Amal-e-Paiham, Mohabbat Fateh-e-Aalam".
+ * Rendered RTL with a nastaliq font (see `.pats-urdu-motto` in globals.css).
+ */
+export const HERO_MOTTO = "یقین محکم ، عمل پیہم ، محبت فاتح عالم";
 
 export const SITE_DESCRIPTION = `Official ${COMPETITION_NAME} participation portal — ${SITE_NAME}`;
 

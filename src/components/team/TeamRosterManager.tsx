@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CalendarClock,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  ClipboardCheck,
+  Info,
   Loader2,
   Lock,
   Pencil,
@@ -29,14 +29,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { TOAST } from "@/lib/toast";
 import type { TeamMemberRecord } from "@/lib/team-members";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import type { Locale } from "@/lib/i18n/config";
+
+const DATE_TAG: Record<Locale, string> = {
+  en: "en-GB",
+  ru: "ru-RU",
+  tr: "tr-TR",
+  ar: "ar",
+  zh: "zh-CN",
+};
 
 type WindowState = "open" | "before" | "closed";
 
@@ -91,11 +95,13 @@ function buildRows(members: TeamMemberRecord[], limit: number): Row[] {
 const isRowBlank = (r: Row) =>
   !r.serviceNumber.trim() && !r.rank.trim() && !r.fullName.trim();
 
-const rowError = (r: Row): string | null => {
+type RowErrorCode = "serial" | "rank" | "fullName" | null;
+
+const rowError = (r: Row): RowErrorCode => {
   if (isRowBlank(r)) return null;
-  if (!r.serviceNumber.trim()) return "Serial number is required";
-  if (!r.rank.trim()) return "Rank is required";
-  if (!r.fullName.trim()) return "Full name is required";
+  if (!r.serviceNumber.trim()) return "serial";
+  if (!r.rank.trim()) return "rank";
+  if (!r.fullName.trim()) return "fullName";
   return null;
 };
 
@@ -114,11 +120,11 @@ const rowBody = (r: Row) => ({
   gender: r.gender,
 });
 
-function fmt(dateIso: string | null): string | null {
+function fmt(dateIso: string | null, tag: string): string | null {
   if (!dateIso) return null;
   const d = new Date(dateIso);
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleString("en-GB", {
+  return d.toLocaleString(tag, {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -148,6 +154,7 @@ export function TeamRosterManager({
   windowCloseIso,
   limit,
   latestRequest,
+  hideHeading = false,
 }: {
   initialMembers: TeamMemberRecord[];
   teamRegistered: boolean;
@@ -159,8 +166,18 @@ export function TeamRosterManager({
   windowCloseIso: string | null;
   limit: number;
   latestRequest: SizeRequest | null;
+  /** Hide the in-card heading when the page already renders one (wizard). */
+  hideHeading?: boolean;
 }) {
   const router = useRouter();
+  const { t, locale } = useI18n();
+  const tm = t.team;
+  const dateTag = DATE_TAG[locale];
+  const genderLabels: Record<string, string> = {
+    Male: tm.genders.male,
+    Female: tm.genders.female,
+    Other: tm.genders.other,
+  };
   const [members, setMembers] = useState<TeamMemberRecord[]>(initialMembers);
   const [rows, setRows] = useState<Row[]>(() =>
     buildRows(initialMembers, limit)
@@ -170,6 +187,7 @@ export function TeamRosterManager({
   );
   const [busy, setBusy] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestedCount, setRequestedCount] = useState(limit + 1);
@@ -178,29 +196,28 @@ export function TeamRosterManager({
     latestRequest
   );
 
-  const canEdit = teamRegistered && !flightsFinalized;
+  /* Completed rosters are read-only (view details only) until reopened. */
+  const canEdit = teamRegistered && !flightsFinalized && !rosterCompleted;
   const filledCount = rows.filter((r) => !isRowBlank(r)).length;
+  /** Every roster row fully filled — required before Save is enabled. */
+  const allFilled = rows.every((r) => !isRowBlank(r) && !rowError(r));
   const dirty = useMemo(
     () => JSON.stringify(buildRows(members, limit)) !== JSON.stringify(rows),
     [members, rows, limit]
   );
 
   const windowLabel = useMemo(() => {
-    const open = fmt(windowOpenIso);
-    const close = fmt(windowCloseIso);
+    const open = fmt(windowOpenIso, dateTag);
+    const close = fmt(windowCloseIso, dateTag);
     if (windowState === "before") {
-      return open
-        ? `Team registration opens on ${open}.`
-        : "Team registration has not opened yet.";
+      return open ? tm.window.opensOn(open) : tm.window.notOpenedYet;
     }
     if (windowState === "closed") {
-      return close
-        ? `Team registration closed on ${close}.`
-        : "The team registration period has closed.";
+      return close ? tm.window.closedOn(close) : tm.window.periodClosed;
     }
-    if (close) return `Team registration is open until ${close}.`;
-    return "Team registration is open.";
-  }, [windowState, windowOpenIso, windowCloseIso]);
+    if (close) return tm.window.openUntil(close);
+    return tm.window.open;
+  }, [windowState, windowOpenIso, windowCloseIso, dateTag, tm]);
 
   const apiError = async (res: Response) => {
     const data = await res.json().catch(() => ({}));
@@ -247,7 +264,7 @@ export function TeamRosterManager({
         toast.error(await apiError(res));
         return;
       }
-      toast.success("Team registered — you can now build your roster");
+      toast.success(tm.toasts.teamRegistered);
       router.refresh();
     } catch {
       toast.error(TOAST.GENERIC_ERROR);
@@ -256,16 +273,32 @@ export function TeamRosterManager({
     }
   };
 
+  /* Registration happens implicitly — when the window is open the roster is
+     shown directly instead of an interstitial “Register Team” screen. */
+  const autoRegisterAttempted = useRef(false);
+  useEffect(() => {
+    if (!teamRegistered && canRegister && !autoRegisterAttempted.current) {
+      autoRegisterAttempted.current = true;
+      void registerTeam();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamRegistered, canRegister]);
+
   /**
    * Persist the grid. Deletes cleared members first (frees the cap), then
    * walks the rows in order applying updates / creates so the saved order
    * matches what the participant sees.
    */
   const saveRoster = async (): Promise<boolean> => {
+    const errMsg: Record<Exclude<RowErrorCode, null>, string> = {
+      serial: tm.errors.serialRequired,
+      rank: tm.errors.rankRequired,
+      fullName: tm.errors.fullNameRequired,
+    };
     for (let i = 0; i < rows.length; i++) {
       const err = rowError(rows[i]);
       if (err) {
-        toast.error(`Row ${i + 1}: ${err}`);
+        toast.error(tm.errors.rowError(i + 1, errMsg[err]));
         return false;
       }
     }
@@ -275,7 +308,7 @@ export function TeamRosterManager({
       if (isRowBlank(r)) continue;
       const key = r.serviceNumber.trim().toLowerCase();
       if (seen.has(key)) {
-        toast.error(`Duplicate serial number: ${r.serviceNumber.trim()}`);
+        toast.error(tm.errors.duplicateSerial(r.serviceNumber.trim()));
         return false;
       }
       seen.add(key);
@@ -332,7 +365,7 @@ export function TeamRosterManager({
 
       setMembers(next);
       setRows(buildRows(next, limit));
-      toast.success("Roster saved");
+      toast.success(tm.toasts.rosterSaved);
       router.refresh();
       return true;
     } catch (error) {
@@ -358,9 +391,7 @@ export function TeamRosterManager({
       }
       setRosterCompleted(complete);
       toast.success(
-        complete
-          ? "Roster completed — Flight Details is now available"
-          : "Roster reopened for editing"
+        complete ? tm.toasts.rosterCompleted : tm.toasts.rosterReopened
       );
       router.refresh();
     } catch {
@@ -370,12 +401,10 @@ export function TeamRosterManager({
     }
   };
 
-  /** Save any pending edits before locking the roster in. */
+  /** Enabled only once the saved roster is complete (all rows filled, no
+   *  unsaved edits) — per the guided flow: fill → Save → Mark complete. */
   const markComplete = async () => {
-    if (dirty) {
-      const ok = await saveRoster();
-      if (!ok) return;
-    }
+    if (dirty || !allFilled) return;
     await setComplete(true);
   };
 
@@ -395,7 +424,7 @@ export function TeamRosterManager({
       setSizeRequest(request);
       setRequestOpen(false);
       setJustification("");
-      toast.success("Request submitted to the administrators for approval");
+      toast.success(tm.toasts.requestSubmitted);
     } catch {
       toast.error(TOAST.GENERIC_ERROR);
     } finally {
@@ -405,6 +434,24 @@ export function TeamRosterManager({
 
   /* ---------------- not yet registered ---------------- */
   if (!teamRegistered) {
+    // Window open → registration is performed automatically (no interstitial
+    // “Register Team” screen); show a brief setup state while it completes.
+    if (canRegister) {
+      return (
+        <section className="portal-card pats-panel">
+          <div className="flex flex-col items-center gap-3 px-4 py-12 text-center">
+            <Loader2
+              className="h-7 w-7 animate-spin text-emerald-700"
+              aria-hidden
+            />
+            <p className="m-0 text-sm font-semibold text-slate-700">
+              {tm.settingUp}
+            </p>
+            <p className="m-0 text-xs text-slate-500">{windowLabel}</p>
+          </div>
+        </section>
+      );
+    }
     return (
       <section className="portal-card pats-panel">
         <div className="flex flex-col items-center gap-4 px-4 py-10 text-center">
@@ -412,9 +459,9 @@ export function TeamRosterManager({
             <Users className="h-7 w-7 text-emerald-700" aria-hidden />
           </span>
           <div>
-            <h2 className="portal-h2 mb-1">Team Registration</h2>
+            <h2 className="portal-h2 mb-1">{tm.register.title}</h2>
             <p className="mx-auto max-w-md text-sm text-slate-600">
-              Register your team to unlock the team member roster. {windowLabel}
+              {windowLabel}
             </p>
           </div>
           <div
@@ -426,35 +473,14 @@ export function TeamRosterManager({
           >
             <CalendarClock className="h-3.5 w-3.5" aria-hidden />
             {windowState === "open"
-              ? "Registration window open"
+              ? tm.register.windowOpen
               : windowState === "before"
-                ? "Window not yet open"
-                : "Window closed"}
+                ? tm.register.windowNotYetOpen
+                : tm.register.windowClosed}
           </div>
-          <Button
-            size="lg"
-            className="bg-emerald-700 text-white hover:bg-emerald-800 disabled:!opacity-100 disabled:!bg-slate-200 disabled:!text-slate-500 disabled:!shadow-none"
-            disabled={!canRegister || busy !== null}
-            onClick={registerTeam}
-            title={
-              canRegister
-                ? "Register your team now"
-                : windowState !== "open"
-                  ? "Available only during the active registration period"
-                  : "Complete the previous workflow stages first"
-            }
-          >
-            {busy === "register" ? (
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-            ) : (
-              <ClipboardCheck className="h-4 w-4" aria-hidden />
-            )}
-            Register Team
-          </Button>
-          {!canRegister && windowState === "open" ? (
+          {windowState === "open" ? (
             <p className="text-xs text-slate-500">
-              Team registration unlocks after participation confirmation, SD
-              registration verification, and MT payment verification.
+              {tm.register.unlockNote}
             </p>
           ) : null}
         </div>
@@ -463,13 +489,8 @@ export function TeamRosterManager({
   }
 
   /* ---------------- roster grid ---------------- */
-  const progress = Math.min(
-    100,
-    Math.round((filledCount / Math.max(limit, 1)) * 100)
-  );
-
-  // Paginate so every member is enterable without a long scroll.
-  const pageSize = 7;
+  // Paginate so every member is enterable without a long scroll. Page count
+  // follows the roster size (13 members @ 10/page → 2 pages, more if raised).
   const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));
   const safePage = Math.min(page, pageCount - 1);
   const startIdx = safePage * pageSize;
@@ -477,58 +498,66 @@ export function TeamRosterManager({
     .map((row, i) => ({ row, i }))
     .slice(startIdx, startIdx + pageSize);
 
+  const saveDisabled = busy !== null || !dirty || !allFilled;
+  const completeDisabled = busy !== null || dirty || !allFilled;
+
   return (
     <div className="space-y-4">
       <section className="portal-card pats-panel">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h2 className="portal-h2 mb-0.5">Team Members</h2>
-            <p className="text-sm text-slate-600">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          {hideHeading ? (
+            <p className="m-0 text-[0.8125rem] text-slate-500">
               {rosterCompleted
-                ? "Roster completed"
+                ? tm.roster.completedShort
                 : dirty
-                  ? "You have unsaved changes"
-                  : "Enter each team member's details below."}
+                  ? tm.roster.unsavedChanges
+                  : tm.roster.filledCount(filledCount, rows.length)}
             </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
+          ) : (
+            <div>
+              <h2 className="portal-h2 mb-0.5">{tm.roster.heading}</h2>
+              <p className="text-sm text-slate-600">
+                {rosterCompleted
+                  ? tm.roster.completedShort
+                  : dirty
+                    ? tm.roster.unsavedChanges
+                    : tm.roster.addMembersDesc}
+              </p>
+            </div>
+          )}
+          <div className="flex flex-wrap items-center gap-2.5">
             {flightsFinalized ? (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600 ring-1 ring-slate-200">
                 <Lock className="h-3.5 w-3.5" aria-hidden />
-                Locked by administration
+                {tm.roster.lockedByAdmin}
               </span>
             ) : (
               <>
-                <TooltipProvider delayDuration={150}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-9 w-9 p-0"
-                        disabled={busy !== null}
-                        onClick={() => {
-                          setRequestedCount(limit + 1);
-                          setRequestOpen(true);
-                        }}
-                        aria-label="Request additional team members"
-                      >
-                        <UserPlus className="h-4 w-4" aria-hidden />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      Request additional team members
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="border-emerald-300 text-emerald-800 hover:bg-emerald-50"
+                  disabled={busy !== null}
+                  onClick={() => {
+                    setRequestedCount(limit + 1);
+                    setRequestOpen(true);
+                  }}
+                >
+                  <UserPlus className="h-4 w-4" aria-hidden />
+                  {tm.roster.requestAdditional}
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={busy !== null || !dirty}
+                  disabled={saveDisabled || rosterCompleted}
                   onClick={saveRoster}
                   title={
-                    dirty ? "Save your roster" : "No changes to save"
+                    !allFilled
+                      ? tm.roster.saveTitleFill
+                      : dirty
+                        ? tm.roster.saveTitleDirty
+                        : tm.roster.saveTitleNoChanges
                   }
                 >
                   {busy === "save" ? (
@@ -536,7 +565,7 @@ export function TeamRosterManager({
                   ) : (
                     <Save className="h-4 w-4" aria-hidden />
                   )}
-                  Save
+                  {tm.roster.saveRoster}
                 </Button>
                 {rosterCompleted ? (
                   <Button
@@ -546,18 +575,20 @@ export function TeamRosterManager({
                     onClick={() => setComplete(false)}
                   >
                     <Pencil className="h-4 w-4" aria-hidden />
-                    Edit
+                    {tm.roster.edit}
                   </Button>
                 ) : (
                   <Button
                     size="sm"
-                    className="bg-emerald-700 text-white hover:bg-emerald-800"
-                    disabled={busy !== null || filledCount === 0}
+                    className="bg-emerald-700 text-white hover:bg-emerald-800 disabled:!opacity-100 disabled:!bg-emerald-700/50 disabled:!text-white/70"
+                    disabled={completeDisabled}
                     onClick={markComplete}
                     title={
-                      filledCount === 0
-                        ? "Add at least one team member first"
-                        : "Save and complete the roster to unlock Flight Details"
+                      !allFilled
+                        ? tm.roster.completeTitleFill
+                        : dirty
+                          ? tm.roster.completeTitleDirty
+                          : tm.roster.completeTitleReady
                     }
                   >
                     {busy === "complete" ? (
@@ -565,7 +596,7 @@ export function TeamRosterManager({
                     ) : (
                       <CheckCircle2 className="h-4 w-4" aria-hidden />
                     )}
-                    Mark roster complete
+                    {tm.roster.markComplete}
                   </Button>
                 )}
               </>
@@ -573,40 +604,47 @@ export function TeamRosterManager({
           </div>
         </div>
 
-        {/* progress */}
-        <div className="mb-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
-          <div
-            className="h-full rounded-full bg-emerald-600 transition-all"
-            style={{ width: `${progress}%` }}
-            aria-hidden
-          />
-        </div>
-
-        <div className="overflow-x-auto rounded-xl border border-slate-200">
-          <table className="w-full min-w-[600px] border-collapse text-sm">
-            <caption className="sr-only">
-              Team members — serial number, rank, full name and gender
-            </caption>
+        <div className="w-full overflow-x-auto rounded-xl border border-slate-200">
+          <table className="w-full min-w-[720px] border-collapse text-sm">
+            <caption className="sr-only">{tm.table.caption}</caption>
             <thead>
               <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <th scope="col" className="w-12 px-3 py-2.5 text-center">
                   #
                 </th>
                 <th scope="col" className="px-3 py-2.5">
-                  Serial Number
+                  <span
+                    className="inline-flex items-center gap-1"
+                    title={tm.table.serialTitle}
+                  >
+                    {tm.table.serialNumber}
+                    <Info className="h-3 w-3 text-slate-400" aria-hidden />
+                  </span>
                 </th>
                 <th scope="col" className="px-3 py-2.5">
-                  Rank
+                  <span
+                    className="inline-flex items-center gap-1"
+                    title={tm.table.rankTitle}
+                  >
+                    {tm.table.rank}
+                    <Info className="h-3 w-3 text-slate-400" aria-hidden />
+                  </span>
                 </th>
                 <th scope="col" className="px-3 py-2.5">
-                  Full Name
+                  <span
+                    className="inline-flex items-center gap-1"
+                    title={tm.table.fullNameTitle}
+                  >
+                    {tm.table.fullName}
+                    <Info className="h-3 w-3 text-slate-400" aria-hidden />
+                  </span>
                 </th>
                 <th scope="col" className="w-32 px-3 py-2.5">
-                  Gender
+                  {tm.table.gender}
                 </th>
                 {canEdit ? (
                   <th scope="col" className="w-14 px-2 py-2.5">
-                    <span className="sr-only">Actions</span>
+                    <span className="sr-only">{tm.table.actions}</span>
                   </th>
                 ) : null}
               </tr>
@@ -632,7 +670,7 @@ export function TeamRosterManager({
                         {row.fullName || "—"}
                       </td>
                       <td className="px-3 py-2.5 text-slate-700">
-                        {isRowBlank(row) ? "—" : row.gender}
+                        {isRowBlank(row) ? "—" : genderLabels[row.gender] ?? row.gender}
                       </td>
                     </tr>
                   );
@@ -649,20 +687,20 @@ export function TeamRosterManager({
                         onChange={(e) =>
                           updateRow(i, { serviceNumber: e.target.value })
                         }
-                        placeholder="e.g. PA-12345"
+                        placeholder={tm.placeholders.serialEg}
                         disabled={busy !== null}
                         className="h-9"
-                        aria-label={`Serial number, row ${i + 1}`}
+                        aria-label={tm.aria.serialRow(i + 1)}
                       />
                     </td>
                     <td className="px-2 py-1.5">
                       <Input
                         value={row.rank}
                         onChange={(e) => updateRow(i, { rank: e.target.value })}
-                        placeholder="e.g. Captain"
+                        placeholder={tm.placeholders.rankEg}
                         disabled={busy !== null}
                         className="h-9"
-                        aria-label={`Rank, row ${i + 1}`}
+                        aria-label={tm.aria.rankRow(i + 1)}
                       />
                     </td>
                     <td className="px-2 py-1.5">
@@ -671,10 +709,10 @@ export function TeamRosterManager({
                         onChange={(e) =>
                           updateRow(i, { fullName: e.target.value })
                         }
-                        placeholder="Full name"
+                        placeholder={tm.placeholders.fullName}
                         disabled={busy !== null}
                         className="h-9"
-                        aria-label={`Full name, row ${i + 1}`}
+                        aria-label={tm.aria.fullNameRow(i + 1)}
                       />
                     </td>
                     <td className="px-2 py-1.5">
@@ -684,29 +722,27 @@ export function TeamRosterManager({
                           updateRow(i, { gender: e.target.value })
                         }
                         disabled={busy !== null}
-                        aria-label={`Gender, row ${i + 1}`}
+                        aria-label={tm.aria.genderRow(i + 1)}
                         className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
                         {GENDERS.map((g) => (
                           <option key={g} value={g}>
-                            {g}
+                            {genderLabels[g] ?? g}
                           </option>
                         ))}
                       </select>
                     </td>
                     <td className="px-2 py-1.5 text-center">
-                      <Button
+                      <button
                         type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 w-8 p-0 text-slate-400 hover:text-red-600"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-white text-red-500 transition-colors hover:border-red-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
                         disabled={busy !== null || isRowBlank(row)}
                         onClick={() => clearRow(i)}
-                        aria-label={`Clear row ${i + 1}`}
-                        title="Clear this row"
+                        aria-label={tm.aria.clearRow(i + 1)}
+                        title={tm.aria.clearRowTitle}
                       >
                         <Trash2 className="h-4 w-4" aria-hidden />
-                      </Button>
+                      </button>
                     </td>
                   </tr>
                 );
@@ -715,52 +751,68 @@ export function TeamRosterManager({
           </table>
         </div>
 
-        {pageCount > 1 ? (
-          <div className="mt-3 flex flex-wrap items-center justify-end gap-2">
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 w-8 p-0"
-                disabled={safePage === 0}
-                onClick={() => setPage(safePage - 1)}
-                aria-label="Previous page"
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white !text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={safePage === 0}
+              onClick={() => setPage(safePage - 1)}
+              aria-label={tm.aria.prevPage}
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden />
+            </button>
+            {Array.from({ length: pageCount }).map((_, p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPage(p)}
+                aria-label={tm.aria.page(p + 1)}
+                aria-current={p === safePage ? "page" : undefined}
+                className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-bold transition-colors ${
+                  p === safePage
+                    ? "bg-emerald-700 !text-white"
+                    : "border border-slate-200 bg-white !text-slate-700 hover:bg-slate-50"
+                }`}
               >
-                <ChevronLeft className="h-4 w-4" aria-hidden />
-              </Button>
-              {Array.from({ length: pageCount }).map((_, p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setPage(p)}
-                  aria-label={`Page ${p + 1}`}
-                  aria-current={p === safePage ? "page" : undefined}
-                  className={`h-8 min-w-8 rounded-md px-2 text-sm font-semibold transition-colors ${
-                    p === safePage
-                      ? "bg-emerald-700 text-white"
-                      : "text-slate-600 hover:bg-slate-100"
-                  }`}
-                >
-                  {p + 1}
-                </button>
-              ))}
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 w-8 p-0"
-                disabled={safePage === pageCount - 1}
-                onClick={() => setPage(safePage + 1)}
-                aria-label="Next page"
-              >
-                <ChevronRight className="h-4 w-4" aria-hidden />
-              </Button>
-            </div>
+                {p + 1}
+              </button>
+            ))}
+            <button
+              type="button"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white !text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={safePage === pageCount - 1}
+              onClick={() => setPage(safePage + 1)}
+              aria-label={tm.aria.nextPage}
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden />
+            </button>
           </div>
-        ) : null}
+          <span className="h-5 w-px bg-slate-200" aria-hidden />
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value) || 10);
+              setPage(0);
+            }}
+            aria-label={tm.aria.rowsPerPage}
+            className="h-9 rounded-lg border border-slate-200 bg-white px-2.5 text-sm font-medium text-slate-600 shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          >
+            {[5, 10, 20].map((n) => (
+              <option key={n} value={n}>
+                {tm.aria.perPage(n)}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {canEdit ? (
-          <p className="mt-3 text-xs text-slate-500">
-           Fill in your team member details,then click on save button. After saving, mark the roster button complete to unlock flight details.
+          <p className="mt-4 flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-[0.8125rem] leading-relaxed text-emerald-900">
+            <Info
+              className="mt-px h-4 w-4 flex-shrink-0 text-emerald-700"
+              aria-hidden
+            />
+            {tm.roster.infoNote}
           </p>
         ) : null}
 
@@ -775,10 +827,16 @@ export function TeamRosterManager({
             }`}
           >
             <p className="font-semibold">
-              Team size request — {sizeRequest.requestedCount} members:{" "}
-              {sizeRequest.status === "PENDING"
-                ? "pending admin review"
-                : sizeRequest.status.toLowerCase()}
+              {tm.sizeRequest.summary(
+                sizeRequest.requestedCount,
+                sizeRequest.status === "PENDING"
+                  ? tm.sizeRequest.pendingReview
+                  : sizeRequest.status === "APPROVED"
+                    ? tm.sizeRequest.approved
+                    : sizeRequest.status === "REJECTED"
+                      ? tm.sizeRequest.rejected
+                      : sizeRequest.status.toLowerCase()
+              )}
             </p>
             {sizeRequest.reviewNote ? (
               <p className="mt-1">{sizeRequest.reviewNote}</p>
@@ -805,11 +863,10 @@ export function TeamRosterManager({
                 </span>
                 <div>
                   <DialogTitle className="text-base font-bold text-white">
-                    Request additional members
+                    {tm.dialog.title}
                   </DialogTitle>
                   <DialogDescription className="mt-0.5 text-xs text-emerald-50/90">
-                    Your team limit is {limit}. Ask the administration to raise
-                    it — they&apos;ll review your request.
+                    {tm.dialog.desc(limit)}
                   </DialogDescription>
                 </div>
               </div>
@@ -822,7 +879,7 @@ export function TeamRosterManager({
                 htmlFor="requested-count"
                 className="mb-1 block text-sm font-semibold text-slate-700"
               >
-                Requested team size
+                {tm.dialog.requestedSize}
               </label>
               <Input
                 id="requested-count"
@@ -835,7 +892,7 @@ export function TeamRosterManager({
                 }
               />
               <p className="mt-1 text-xs text-slate-500">
-                Between {limit + 1} and 200 members.
+                {tm.dialog.between(limit + 1)}
               </p>
             </div>
             <div>
@@ -843,14 +900,14 @@ export function TeamRosterManager({
                 htmlFor="justification"
                 className="mb-1 block text-sm font-semibold text-slate-700"
               >
-                Justification
+                {tm.dialog.justification}
               </label>
               <Textarea
                 id="justification"
                 rows={4}
                 value={justification}
                 onChange={(e) => setJustification(e.target.value)}
-                placeholder="Explain why your team needs additional members…"
+                placeholder={tm.dialog.justificationPlaceholder}
               />
               <p
                 className={`mt-1 text-xs ${
@@ -859,7 +916,7 @@ export function TeamRosterManager({
                     : "text-emerald-700"
                 }`}
               >
-                {justification.trim().length}/20 characters minimum
+                {tm.dialog.charsMin(justification.trim().length)}
               </p>
             </div>
           </div>
@@ -870,7 +927,7 @@ export function TeamRosterManager({
               disabled={busy !== null}
               onClick={() => setRequestOpen(false)}
             >
-              Cancel
+              {tm.dialog.cancel}
             </Button>
             <Button
               className="bg-emerald-700 text-white hover:bg-emerald-800"
@@ -880,7 +937,7 @@ export function TeamRosterManager({
               {busy === "request" ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
               ) : null}
-              Submit request
+              {tm.dialog.submit}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -25,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { TOAST } from "@/lib/toast";
 import { SITE_NAME, SUPPORT_EMAIL } from "@/lib/branding";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
   CUSTOM_COUNTRY_OPTION,
   PAKISTAN_COUNTRY,
@@ -39,7 +40,7 @@ const ARM_OPTIONS = [
   "Combat",
   "Combat Support",
   "Combat Service Support",
-];
+] as const;
 
 type RegisterFormProps = {
   initialIntlRegistrationOpen: boolean;
@@ -48,6 +49,7 @@ type RegisterFormProps = {
 export function RegisterForm({
   initialIntlRegistrationOpen,
 }: RegisterFormProps) {
+  const { t } = useI18n();
   const router = useRouter();
   const [csrfToken, setCsrfToken] = useState("");
 
@@ -96,7 +98,7 @@ export function RegisterForm({
 
   const onSubmit = async (data: RegisterFormValues) => {
     if (!csrfToken) {
-      toast.error("Security check failed. Refresh and try again.");
+      toast.error(t.register.errors.csrf);
       return;
     }
 
@@ -144,23 +146,18 @@ export function RegisterForm({
     <div className="pats-form-page">
       <div className="pats-form-notice space-y-2">
         <p>
-          Before registering for {SITE_NAME} please{" "}
-          <strong>make sure you have all the details below available.</strong>{" "}
-          Applications containing incorrect information will be rejected. All
-          fields are required unless marked otherwise.
+          {t.register.notice.intro(SITE_NAME)}{" "}
+          <strong>{t.register.notice.emphasis}</strong>{" "}
+          {t.register.notice.rest}
         </p>
-        <p>
-          Note: phase selection is available in the next stage. Registration is
-          not complete until patrols are paid for.
-        </p>
+        <p>{t.register.notice.phaseNote}</p>
         {!initialIntlRegistrationOpen && (
           <p className="pats-form-notice--warn">
-            Applications are now closed for International Patrols only. Please
-            contact{" "}
+            {t.register.notice.intlClosedPrefix}{" "}
             <a href={`mailto:${SUPPORT_EMAIL}`} className="underline">
               {SUPPORT_EMAIL}
             </a>{" "}
-            if you require any assistance.
+            {t.register.notice.intlClosedSuffix}
           </p>
         )}
       </div>
@@ -168,22 +165,22 @@ export function RegisterForm({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-0">
         <div className={sectionClass}>
           <h2 className="pats-form-section-title">
-            Account details
+            {t.register.sections.account}
           </h2>
           <div className={gridClass}>
             <FormField
               stacked
               className="lg:col-span-2"
-              label="Email"
+              label={t.register.fields.email}
               required
               error={errors.email?.message}
             >
               <Input type="email" autoComplete="email" {...register("email")} />
             </FormField>
             <FormField stacked
-              label="Password"
+              label={t.register.fields.password}
               required
-              hint="Min 8 chars: upper, lower, number, special"
+              hint={t.register.fields.passwordHint}
               error={errors.password?.message}
             >
               <Input
@@ -193,7 +190,7 @@ export function RegisterForm({
               />
             </FormField>
             <FormField stacked
-              label="Confirm password"
+              label={t.register.fields.confirmPassword}
               required
               error={errors.confirmPassword?.message}
             >
@@ -203,16 +200,16 @@ export function RegisterForm({
                 {...register("confirmPassword")}
               />
             </FormField>
-            <FormField stacked label="First name" required error={errors.firstName?.message}>
+            <FormField stacked label={t.register.fields.firstName} required error={errors.firstName?.message}>
               <Input {...register("firstName")} />
             </FormField>
-            <FormField stacked label="Last name" required error={errors.lastName?.message}>
+            <FormField stacked label={t.register.fields.lastName} required error={errors.lastName?.message}>
               <Input {...register("lastName")} />
             </FormField>
-            <FormField stacked label="Rank" required error={errors.rank?.message}>
+            <FormField stacked label={t.register.fields.rank} required error={errors.rank?.message}>
               <Input {...register("rank")} />
             </FormField>
-            <FormField stacked label="Gender" required error={errors.gender?.message}>
+            <FormField stacked label={t.register.fields.gender} required error={errors.gender?.message}>
               <RadioGroup
                 value={watch("gender")}
                 onValueChange={(v) =>
@@ -224,7 +221,7 @@ export function RegisterForm({
                   <div key={g} className="flex items-center gap-2">
                     <RadioGroupItem value={g} id={`gender-${g}`} />
                     <Label htmlFor={`gender-${g}`} className="font-normal">
-                      {g}
+                      {t.register.options.gender[g]}
                     </Label>
                   </div>
                 ))}
@@ -235,10 +232,10 @@ export function RegisterForm({
 
         <div className={sectionClass}>
           <h2 className="pats-form-section-title">
-            Unit details
+            {t.register.sections.unit}
           </h2>
           <div className={gridClass}>
-            <FormField stacked label="Unit type" required error={errors.unitType?.message}>
+            <FormField stacked label={t.register.fields.unitType} required error={errors.unitType?.message}>
               <RadioGroup
                 value={watch("unitType")}
                 onValueChange={(v) =>
@@ -246,17 +243,17 @@ export function RegisterForm({
                 }
                 className="flex flex-wrap gap-4"
               >
-                {(["Regular", "Reserve"] as const).map((t) => (
-                  <div key={t} className="flex items-center gap-2">
-                    <RadioGroupItem value={t} id={`unitType-${t}`} />
-                    <Label htmlFor={`unitType-${t}`} className="font-normal">
-                      {t}
+                {(["Regular", "Reserve"] as const).map((opt) => (
+                  <div key={opt} className="flex items-center gap-2">
+                    <RadioGroupItem value={opt} id={`unitType-${opt}`} />
+                    <Label htmlFor={`unitType-${opt}`} className="font-normal">
+                      {t.register.options.unitType[opt]}
                     </Label>
                   </div>
                 ))}
               </RadioGroup>
             </FormField>
-            <FormField stacked label="Branch" required error={errors.branch?.message}>
+            <FormField stacked label={t.register.fields.branch} required error={errors.branch?.message}>
               <RadioGroup
                 value={watch("branch")}
                 onValueChange={(v) =>
@@ -268,13 +265,13 @@ export function RegisterForm({
                   <div key={b} className="flex items-center gap-2">
                     <RadioGroupItem value={b} id={`branch-${b}`} />
                     <Label htmlFor={`branch-${b}`} className="font-normal">
-                      {b}
+                      {t.register.options.branch[b]}
                     </Label>
                   </div>
                 ))}
               </RadioGroup>
             </FormField>
-            <FormField stacked label="Unit name" required error={errors.unitName?.message}>
+            <FormField stacked label={t.register.fields.unitName} required error={errors.unitName?.message}>
               <Controller
                 name="unitName"
                 control={control}
@@ -284,7 +281,7 @@ export function RegisterForm({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select unit" />
+                      <SelectValue placeholder={t.register.fields.selectUnit} />
                     </SelectTrigger>
                     <SelectContent>
                       {UNIT_NAMES.map((name) => (
@@ -298,7 +295,7 @@ export function RegisterForm({
               />
             </FormField>
             <FormField stacked
-              label="Country of Application"
+              label={t.register.fields.country}
               required
               error={errors.country?.message}
             >
@@ -316,31 +313,31 @@ export function RegisterForm({
             </FormField>
             {isOtherCountrySelected ? (
               <FormField stacked
-                label="Specify country"
+                label={t.register.fields.specifyCountry}
                 required
-                hint="Enter your country if it is not listed above"
+                hint={t.register.fields.specifyCountryHint}
                 error={errors.customCountry?.message}
               >
                 <Input
                   {...register("customCountry")}
-                  placeholder="Enter your country"
+                  placeholder={t.register.fields.specifyCountryPlaceholder}
                 />
               </FormField>
             ) : null}
             {!isPakistanSelected ? (
               <FormField stacked
-                label="Nationality"
+                label={t.register.fields.nationality}
                 required
-                hint="Required for international participants"
+                hint={t.register.fields.nationalityHint}
                 error={errors.nationality?.message}
               >
                 <Input
                   {...register("nationality")}
-                  placeholder="e.g. British, Turkish, Jordanian"
+                  placeholder={t.register.fields.nationalityPlaceholder}
                 />
               </FormField>
             ) : null}
-            <FormField stacked label="Arm" required error={errors.arm?.message}>
+            <FormField stacked label={t.register.fields.arm} required error={errors.arm?.message}>
               <Controller
                 name="arm"
                 control={control}
@@ -350,12 +347,12 @@ export function RegisterForm({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select" />
+                      <SelectValue placeholder={t.register.fields.select} />
                     </SelectTrigger>
                     <SelectContent>
                       {ARM_OPTIONS.map((o) => (
                         <SelectItem key={o} value={o}>
-                          {o}
+                          {t.register.options.arm[o]}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -364,20 +361,20 @@ export function RegisterForm({
               />
             </FormField>
             <FormField stacked
-              label="2nd POC email"
+              label={t.register.fields.secondPoc}
               error={errors.secondPocEmail?.message}
             >
               <Input type="email" {...register("secondPocEmail")} />
             </FormField>
             <FormField stacked
-              label="3rd POC email (optional)"
+              label={t.register.fields.thirdPoc}
               error={errors.thirdPocEmail?.message}
             >
               <Input type="email" {...register("thirdPocEmail")} />
             </FormField>
             <FormField stacked
               className="lg:col-span-2"
-              label="Additional info (optional)"
+              label={t.register.fields.additionalInfo}
               error={errors.additionalInfo?.message}
             >
               <Textarea rows={4} {...register("additionalInfo")} />
@@ -387,16 +384,16 @@ export function RegisterForm({
 
         <div className={sectionClass}>
           <h2 className="pats-form-section-title">
-            DETAIL OF DEFENCE ATTACHE
+            {t.register.sections.attache}
           </h2>
           <div className={gridClass}>
-            <FormField stacked label="CO name" required error={errors.coName?.message}>
+            <FormField stacked label={t.register.fields.coName} required error={errors.coName?.message}>
               <Input {...register("coName")} />
             </FormField>
-            <FormField stacked label="CO email" required error={errors.coEmail?.message}>
+            <FormField stacked label={t.register.fields.coEmail} required error={errors.coEmail?.message}>
               <Input type="email" {...register("coEmail")} />
             </FormField>
-            <FormField stacked label="CO phone" required error={errors.coPhone?.message}>
+            <FormField stacked label={t.register.fields.coPhone} required error={errors.coPhone?.message}>
               <Input {...register("coPhone")} />
             </FormField>
           </div>
@@ -421,14 +418,14 @@ export function RegisterForm({
               htmlFor="privacyAccepted"
               className="pats-form-choice cursor-pointer"
             >
-              I have read and agree to the{" "}
+              {t.register.consent.prefix}{" "}
               <Link
                 href="/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-olive hover:underline"
               >
-                privacy policy
+                {t.register.consent.link}
               </Link>
             </label>
           </div>
@@ -446,15 +443,14 @@ export function RegisterForm({
             {isSubmitting ? (
               <span className="flex items-center">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
+                {t.register.submitting}
               </span>
             ) : (
-              "Next stage"
+              t.register.submit
             )}
           </Button>
           <p className="mt-4 text-sm text-slate-500">
-            After registering you will receive an email confirmation. Please
-            check your Spam/Junk folder in case it ends up there.
+            {t.register.afterSubmit}
           </p>
         </div>
       </form>

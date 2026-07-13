@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
 import { ScrollReveal } from "@/components/army/ScrollReveal";
-import { NationsWall } from "@/components/international/NationsWall";
 import { ParticipationTimeline } from "@/components/international/ParticipationTimeline";
-import { WorldMapPanel } from "@/components/international/WorldMapPanel";
+import { RegisteredNationsMap } from "@/components/international/RegisteredNationsMap";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
@@ -32,15 +31,12 @@ export default function InternationalPage() {
         <ScrollReveal>
           <PatsSectionHeading
             eyebrow="Theatre map"
-            title="Partner nations"
-            description="Friendly forces represented across successive international editions."
+            title="Registered nations"
+            description="Countries with teams registered for the competition. Hover a highlighted nation to see its teams and the year they registered."
           />
         </ScrollReveal>
         <ScrollReveal className="mt-8">
-          <WorldMapPanel />
-        </ScrollReveal>
-        <ScrollReveal className="mt-10">
-          <NationsWall />
+          <RegisteredNationsMap />
         </ScrollReveal>
       </PatsSection>
 

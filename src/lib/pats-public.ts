@@ -12,7 +12,7 @@ export const ABOUT_PATS = {
     },
     {
       title: "International since 2016",
-      body: "Eight international editions have brought partner nations together for realistic patrolling, orientation, and shared competition standards.",
+      body: "Ninth international editions have brought partner nations together for realistic patrolling, orientation, and shared competition standards.",
     },
     {
       title: "Scored battlefield events",

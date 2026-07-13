@@ -14,6 +14,7 @@ import { toast } from "sonner";
 
 import { logoutAction } from "@/lib/actions/auth";
 import { TOAST } from "@/lib/toast";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 type CountdownParts = {
   days: number;
@@ -71,6 +72,8 @@ export function ParticipationConfirmCard({
   previouslyDeclined: boolean;
 }) {
   const router = useRouter();
+  const { t } = useI18n();
+  const c = t.confirm;
   const [submitting, setSubmitting] = useState<"confirm" | "decline" | null>(
     null
   );
@@ -97,7 +100,7 @@ export function ParticipationConfirmCard({
 
   const deadlineLabel = useMemo(() => {
     if (!deadlineIso) return null;
-    return new Date(deadlineIso).toLocaleString("en-GB", {
+    return new Date(deadlineIso).toLocaleString(c.dateLocale, {
       weekday: "long",
       day: "numeric",
       month: "long",
@@ -105,7 +108,7 @@ export function ParticipationConfirmCard({
       hour: "2-digit",
       minute: "2-digit",
     });
-  }, [deadlineIso]);
+  }, [deadlineIso, c.dateLocale]);
 
   const submit = useCallback(
     async (action: "confirm" | "decline") => {
@@ -123,11 +126,11 @@ export function ParticipationConfirmCard({
           return;
         }
         if (action === "confirm") {
-          toast.success("Registration confirmed — welcome aboard!");
+          toast.success(c.toastConfirmed);
           router.replace("/event/dashboard");
           router.refresh();
         } else {
-          toast.info("Registration rejected. Signing you out…");
+          toast.info(c.toastRejected);
           startTransition(() => {
             void logoutAction();
           });
@@ -137,7 +140,7 @@ export function ParticipationConfirmCard({
         setSubmitting(null);
       }
     },
-    [router]
+    [router, c.toastConfirmed, c.toastRejected]
   );
 
   return (
@@ -153,9 +156,9 @@ export function ParticipationConfirmCard({
             <ShieldCheck className="h-6 w-6" aria-hidden />
           </span>
           <div className="min-w-0">
-            <div className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] !text-slate-400">Action required</div>
+            <div className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] !text-slate-400">{c.actionRequired}</div>
             <h1 id="participation-title" className="mt-0.5 text-xl font-bold leading-[1.3] tracking-[-0.01em] !text-slate-900">
-              Confirm your participation
+              {c.title}
             </h1>
             <div className="mt-1 text-sm font-medium !text-slate-500">
               {firstName} {lastName}
@@ -166,27 +169,20 @@ export function ParticipationConfirmCard({
 
         <div className="grid gap-[1.125rem] px-7 pb-[1.625rem] pt-6 [&_p]:!text-slate-600">
           <p id="participation-desc" className="text-[0.9rem] leading-[1.65] !text-slate-600">
-            Before entering the Participant Dashboard, please confirm whether
-            your team will be available to participate in the exercise.
-            Confirming grants access to the next registration stages. Rejecting
-            signs you out — you may log back in and confirm any time before the
-            deadline below.
+            {c.description}
           </p>
 
           {previouslyDeclined && !expired ? (
             <div className="flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-sm leading-[1.55] !text-amber-800 [&_div]:!text-amber-800 [&_svg]:mt-0.5 [&_svg]:flex-shrink-0 [&_svg]:!text-amber-600">
               <AlertTriangle className="h-4 w-4" aria-hidden />
-              <div>
-                You previously rejected the registration. You can still confirm
-                before the deadline expires.
-              </div>
+              <div>{c.previouslyDeclined}</div>
             </div>
           ) : null}
 
           <div className="rounded-xl border border-slate-200 bg-slate-50 px-[1.125rem] pb-[1.125rem] pt-4">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.1em] !text-slate-500 [&_svg]:!text-green-700">
               <CalendarClock className="h-4 w-4" aria-hidden />
-              Confirmation deadline
+              {c.confirmationDeadline}
             </div>
             {deadlineIso ? (
               <>
@@ -194,28 +190,24 @@ export function ParticipationConfirmCard({
                 {expired ? (
                   <div className="mt-3 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3.5 text-sm font-semibold leading-[1.55] !text-red-700 [&_div]:!text-red-700 [&_svg]:mt-0.5 [&_svg]:flex-shrink-0 [&_svg]:!text-red-600">
                     <XCircle className="h-5 w-5" aria-hidden />
-                    <div>
-                      The confirmation deadline has passed. Confirmation is no
-                      longer possible. Please contact the organizers for
-                      assistance.
-                    </div>
+                    <div>{c.deadlineExpired}</div>
                   </div>
                 ) : countdown ? (
                   <div
                     className="mt-3.5 flex flex-wrap items-center gap-2"
-                    aria-label="Time remaining to confirm"
+                    aria-label={c.timeRemainingAria}
                   >
-                    <CountdownUnit value={countdown.days} label="Days" />
-                    <CountdownUnit value={countdown.hours} label="Hours" />
-                    <CountdownUnit value={countdown.minutes} label="Min" />
-                    <CountdownUnit value={countdown.seconds} label="Sec" />
-                    <div className="text-xs font-medium !text-slate-400">remaining</div>
+                    <CountdownUnit value={countdown.days} label={c.days} />
+                    <CountdownUnit value={countdown.hours} label={c.hours} />
+                    <CountdownUnit value={countdown.minutes} label={c.min} />
+                    <CountdownUnit value={countdown.seconds} label={c.sec} />
+                    <div className="text-xs font-medium !text-slate-400">{c.remaining}</div>
                   </div>
                 ) : null}
               </>
             ) : (
               <div className="mt-2 text-[0.95rem] font-semibold !text-slate-800">
-                To be announced by the organizers.
+                {c.toBeAnnounced}
               </div>
             )}
           </div>
@@ -223,8 +215,7 @@ export function ParticipationConfirmCard({
           {confirmingReject && !expired ? (
             <div className="rounded-xl border border-red-200 bg-red-50 px-[1.125rem] py-4">
               <div className="mb-3 text-sm font-medium leading-[1.55] !text-red-800">
-                Reject registration and sign out? You can log back in and
-                confirm later, as long as the deadline has not expired.
+                {c.rejectPrompt}
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
@@ -238,7 +229,7 @@ export function ParticipationConfirmCard({
                   ) : (
                     <XCircle className="h-4 w-4" aria-hidden />
                   )}
-                  Yes, reject and sign out
+                  {c.yesReject}
                 </button>
                 <button
                   type="button"
@@ -246,7 +237,7 @@ export function ParticipationConfirmCard({
                   disabled={submitting !== null}
                   onClick={() => setConfirmingReject(false)}
                 >
-                  Go back
+                  {c.goBack}
                 </button>
               </div>
             </div>
@@ -257,18 +248,14 @@ export function ParticipationConfirmCard({
                 className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 !border !border-green-900 !bg-gradient-to-b !from-green-700 !to-green-800 !text-white shadow-[0_1px_2px_rgba(22,101,52,0.35)] hover:!from-green-800 hover:!to-green-900"
                 disabled={submitting !== null || expired}
                 onClick={() => submit("confirm")}
-                title={
-                  expired
-                    ? "The confirmation deadline has passed"
-                    : "Confirm your registration"
-                }
+                title={expired ? c.deadlinePassedAttr : c.confirmTitleAttr}
               >
                 {submitting === "confirm" ? (
                   <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
                 ) : (
                   <CheckCircle2 className="h-4 w-4" aria-hidden />
                 )}
-                Confirm 
+                {c.confirm}
               </button>
               <button
                 type="button"
@@ -283,14 +270,13 @@ export function ParticipationConfirmCard({
                 }
               >
                 <XCircle className="h-4 w-4" aria-hidden />
-                {expired ? "Sign out" : "Reject "}
+                {expired ? c.signOut : c.reject}
               </button>
             </div>
           )}
 
           <div className="mt-0.5 border-t border-slate-100 pt-3.5 text-xs leading-[1.6] !text-slate-400">
-            Your decision is recorded with a timestamp for the organizing
-            staff. Need help? Contact support from the login page.
+            {c.footer}
           </div>
         </div>
       </section>

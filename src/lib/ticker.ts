@@ -78,15 +78,16 @@ export const TICKER_SCROLL_SPEED_LABELS: Record<TickerScrollSpeed, string> = {
 };
 
 /** Seconds for one full marquee loop (duplicated track). Lower = faster scroll.
- *  Durations increased ~35% over the previous values to slow the marquee down. */
+ *  Durations raised to slow the marquee down (the public news marquee reads at
+ *  a relaxed pace so headlines are easy to follow / hover). */
 export const TICKER_SCROLL_DURATION_SEC: Record<TickerScrollSpeed, number> = {
-  SLOW: 65,
-  NORMAL: 41,
-  FAST: 27,
-  VERY_FAST: 16,
+  SLOW: 95,
+  NORMAL: 70,
+  FAST: 48,
+  VERY_FAST: 28,
 };
 
-export const DEFAULT_TICKER_SCROLL_SPEED = TICKER_SCROLL_SPEED.NORMAL;
+export const DEFAULT_TICKER_SCROLL_SPEED = TICKER_SCROLL_SPEED.SLOW;
 
 export function parseTickerScrollSpeed(
   value: string | null | undefined

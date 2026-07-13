@@ -9,11 +9,13 @@ import {
   workflowUserSelect,
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 import { PatsPortalNav } from "./PatsPortalNav";
 
 export async function PatsPortalNavServer() {
   const session = await getCachedSession();
+  const { t } = await getDictionary();
   let showPaymentLink = false;
   let showFlightsLink = false;
   let showHostInfoLink = false;
@@ -42,6 +44,7 @@ export async function PatsPortalNavServer() {
         user,
         settings,
         teamMemberCount: user._count.teamMembers,
+        wf: t.workflow,
       });
       const idx = currentWorkflowStageIndex(stages);
       if (idx >= 0) {
@@ -49,7 +52,7 @@ export async function PatsPortalNavServer() {
         stageStep = { current: idx + 1, total: stages.length };
         stageTone = "pending";
       } else {
-        stageLabel = "Journey complete";
+        stageLabel = t.nav.journeyComplete;
         stageStep = { current: stages.length, total: stages.length };
         stageTone = "confirmed";
       }
