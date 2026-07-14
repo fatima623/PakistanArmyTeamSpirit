@@ -39,4 +39,10 @@ export const unit: typeof enUnit = {
   actions: {
     saveChanges: "حفظ التغييرات",
   },
+  descriptions: {
+    personal: "يرجى تقديم معلوماتك الشخصية",
+    co: "أدخل تفاصيل القائد / النائب",
+    unit: "قدّم معلومات عن وحدتك وفرعك",
+  },
+  reviewNote: "يرجى مراجعة معلوماتك بعناية قبل حفظ التغييرات.",
 };

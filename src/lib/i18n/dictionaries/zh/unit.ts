@@ -40,4 +40,10 @@ export const unit: typeof enUnit = {
   actions: {
     saveChanges: "保存更改",
   },
+  descriptions: {
+    personal: "请提供您的个人信息",
+    co: "请提供指挥官 / 副指挥官详情",
+    unit: "请提供有关您单位和军种的信息",
+  },
+  reviewNote: "保存更改前，请仔细核对您的信息。",
 };

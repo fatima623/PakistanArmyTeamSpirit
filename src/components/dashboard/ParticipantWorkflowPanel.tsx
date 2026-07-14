@@ -99,12 +99,12 @@ export function ParticipantWorkflowPanel({
       </div>
       <ol className="pp-journey__grid">
         {stages.map((stage, i) => {
-          /* Every unlocked step links straight to its own section so the
-             dashboard is the navigation hub — the active step is emphasised,
-             completed steps stay revisitable, and locked steps render static. */
-          const clickable = stage.state !== "locked";
+          /* Only the active step (current / needs-attention) links to its
+             section and shows hover + a chevron. Completed and locked steps
+             render static — no link, no hover animation, no chevron. */
           const isCurrent =
             stage.state === "current" || stage.state === "attention";
+          const clickable = isCurrent;
           return (
             <li key={stage.key}>
               {clickable ? (

@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Prisma } from "@prisma/client";
 import { Eye } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 import { formatDateShort } from "@/lib/utils";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
+import { PaymentRowAction } from "@/components/admin/PaymentActions";
+import { FilterMemory } from "@/components/admin/FilterMemory";
 import { Button } from "@/components/ui/button";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
+import { getAdminRole } from "@/lib/admin-session";
+import { ROLES, canVerifyPayment } from "@/lib/auth-routes";
 import {
   adminPaymentsControls,
   adminPaymentsFilterTabs,
@@ -35,20 +40,44 @@ export const metadata: Metadata = {
 
 type SearchParams = Promise<{ status?: string; search?: string }>;
 
+/** Session cookie remembering the last-selected payment-status filter. */
+const PAYMENTS_STATUS_COOKIE = "admin_payments_status";
+const VALID_PAYMENT_STATUSES = new Set<string>([
+  "all",
+  PAYMENT_STATUS.SUBMITTED,
+  PAYMENT_STATUS.UNDER_REVIEW,
+  PAYMENT_STATUS.VERIFIED,
+  PAYMENT_STATUS.REJECTED,
+  PAYMENT_STATUS.RETURNED,
+]);
+
 export default async function AdminPaymentsPage({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
-  const status = params.status ?? "all";
+  const viewerRole = await getAdminRole();
+  const canVerify = canVerifyPayment(viewerRole);
+  // First-load default: the MT (who verify payments) land on newly-submitted
+  // proofs awaiting review; everyone else on All. An explicit ?status= wins;
+  // otherwise the last-used filter (remembered in a session cookie) is
+  // restored so the choice survives navigating away and back to the page.
+  const roleDefaultStatus =
+    viewerRole === ROLES.MTD ? PAYMENT_STATUS.SUBMITTED : "all";
+  const rememberedStatus = (await cookies()).get(PAYMENTS_STATUS_COOKIE)?.value;
+  const defaultStatus =
+    rememberedStatus && VALID_PAYMENT_STATUSES.has(rememberedStatus)
+      ? rememberedStatus
+      : roleDefaultStatus;
+  const status = params.status ?? defaultStatus;
   const search = params.search ?? "";
 
   const where: Prisma.PaymentWhereInput = {};
   if (status === PAYMENT_STATUS.SUBMITTED) {
-    where.status = {
-      in: [PAYMENT_STATUS.SUBMITTED, PAYMENT_STATUS.UNDER_REVIEW],
-    };
+    // "Newly submitted" = proof uploaded, no action taken yet (strictly
+    // SUBMITTED — once the MT opens it, it auto-moves to UNDER_REVIEW).
+    where.status = PAYMENT_STATUS.SUBMITTED;
   } else if (status === PAYMENT_STATUS.UNDER_REVIEW) {
     where.status = PAYMENT_STATUS.UNDER_REVIEW;
   } else if (status === PAYMENT_STATUS.VERIFIED) {
@@ -107,6 +136,7 @@ export default async function AdminPaymentsPage({
 
   return (
     <div className={adminPaymentsPage}>
+      <FilterMemory cookieName={PAYMENTS_STATUS_COOKIE} value={status} />
       <div className={adminPaymentsPanel}>
   
 
@@ -234,6 +264,14 @@ export default async function AdminPaymentsPage({
                               <Eye className="h-4 w-4" aria-hidden />
                             </Link>
                           </Button>
+                          {canVerify ? (
+                            <PaymentRowAction
+                              paymentId={p.id}
+                              status={p.status}
+                              participantName={`${p.user.firstName} ${p.user.lastName}`}
+                              amountLabel={formatRegistrationFee(p.amount)}
+                            />
+                          ) : null}
                         </div>
                       </td>
                     </tr>

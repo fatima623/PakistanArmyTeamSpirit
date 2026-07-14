@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Users2 } from "lucide-react";
 import { Prisma } from "@prisma/client";
 
 import { AdminExportButton } from "@/components/admin/AdminExportButton";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
+import { FilterMemory } from "@/components/admin/FilterMemory";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
 import { UsersManagementTable } from "@/components/admin/UsersManagementTable";
 import { prisma } from "@/lib/prisma";
 import { getAdminRole } from "@/lib/admin-session";
-import { canApproveRegistration } from "@/lib/auth-routes";
+import { ROLES, canApproveRegistration } from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import {
@@ -34,14 +36,26 @@ export const metadata: Metadata = {
 
 const PAGE_SIZE = 20;
 
-/** Overall-status chips — reference design: All / Approved / Under Review /
- *  Returned / Rejected (Pending appears only while pending rows exist). */
+/** Session cookie remembering the last-selected overall-status filter. */
+const USERS_FILTER_COOKIE = "admin_users_filter";
+const VALID_USER_FILTERS = new Set([
+  "all",
+  "pending",
+  "approved",
+  "under_review",
+  "returned",
+  "rejected",
+]);
+
+/** Overall-status chips: All / Pending / Approved / Under Review /
+ *  Returned / Rejected. Pending is the SD Directorate's landing view. */
 const STATUS_FILTERS: {
   key: string;
   label: string;
   status?: ApplicationStatus;
 }[] = [
   { key: "all", label: "All" },
+  { key: "pending", label: "Pending", status: APPLICATION_STATUS.PENDING },
   { key: "approved", label: "Approved", status: APPLICATION_STATUS.APPROVED },
   {
     key: "under_review",
@@ -81,9 +95,26 @@ export default async function AdminUsersPage({
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
+  const viewerRole = await getAdminRole();
   const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
   const search = params.search ?? "";
-  const filter = params.filter ?? "all";
+  // First-load default is role-appropriate: the SD Directorate (who process
+  // registrations) land on Pending new requests; MT lands on Under Review;
+  // everyone else on All. An explicit ?filter= wins; otherwise the last-used
+  // filter (remembered in a session cookie) is restored so the choice
+  // survives navigating away and back to the page.
+  const roleDefaultFilter =
+    viewerRole === ROLES.SDBS
+      ? "pending"
+      : viewerRole === ROLES.MTD
+        ? "under_review"
+        : "all";
+  const rememberedFilter = (await cookies()).get(USERS_FILTER_COOKIE)?.value;
+  const defaultFilter =
+    rememberedFilter && VALID_USER_FILTERS.has(rememberedFilter)
+      ? rememberedFilter
+      : roleDefaultFilter;
+  const filter = params.filter ?? defaultFilter;
   const appStatus = params.appStatus ?? "";
   const payStatus = params.payStatus ?? "all";
 
@@ -121,8 +152,6 @@ export default async function AdminUsersPage({
     where.paymentStatus = PAYMENT_STATUS.PENDING;
   }
   if (appStatus) where.applicationStatus = appStatus;
-
-  const viewerRole = await getAdminRole();
 
   const [users, totalCount, grouped] = await Promise.all([
     prisma.user.findMany({
@@ -172,8 +201,8 @@ export default async function AdminUsersPage({
     allCount += count;
   }
 
-  /* Chip row is fixed to the five reference statuses — pending rows stay
-     reachable through the “All” chip. */
+  /* Chip row: All + the five application statuses (Pending first, as the
+     SD Directorate's default review queue). */
   const chips = STATUS_FILTERS;
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
@@ -195,6 +224,7 @@ export default async function AdminUsersPage({
 
   return (
       <div className={cn(adminUsersPage, "admin-fade-in-up")}>
+        <FilterMemory cookieName={USERS_FILTER_COOKIE} value={filter} />
         <div className={adminUsersPanel}>
           <header className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2.5 border-b border-brand-line/60 pb-3">
             <h2 className="m-0 flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900">

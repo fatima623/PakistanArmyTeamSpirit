@@ -411,6 +411,9 @@ export function PaymentSubmissionForm({
                 <div>
                   <Label htmlFor="amount">
                     {pf.amountPaid(paymentSettings.currency)}
+                    <strong className="ml-0.5 text-red-500" aria-hidden>
+                      *
+                    </strong>
                   </Label>
                   <Input
                     id="amount"
@@ -424,7 +427,12 @@ export function PaymentSubmissionForm({
                   />
                 </div>
                 <div>
-                  <Label htmlFor="paymentDate">{pf.paymentDate}</Label>
+                  <Label htmlFor="paymentDate">
+                    {pf.paymentDate}
+                    <strong className="ml-0.5 text-red-500" aria-hidden>
+                      *
+                    </strong>
+                  </Label>
                   <Input
                     id="paymentDate"
                     type="date"
@@ -438,6 +446,9 @@ export function PaymentSubmissionForm({
               <div>
                 <Label htmlFor="transactionReference">
                   {pf.transactionRef}
+                  <strong className="ml-0.5 text-red-500" aria-hidden>
+                    *
+                  </strong>
                 </Label>
                 <Input
                   id="transactionReference"

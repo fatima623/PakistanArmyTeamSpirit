@@ -124,6 +124,18 @@ const ACTIONS: Record<ActionKey, ActionMeta> = {
 const ACTION_ORDER: ActionKey[] = ["approve", "review", "return", "reject"];
 
 /**
+ * Decision statuses. Once a registration reaches one of these, a decision has
+ * been made — the taken action stays visible but every other action is locked
+ * to prevent duplicate processing. "Under review" is a transitional queue state
+ * (not a decision), so it does not lock the other actions.
+ */
+const REGISTRATION_DECIDED: string[] = [
+  APPLICATION_STATUS.APPROVED,
+  APPLICATION_STATUS.RETURNED,
+  APPLICATION_STATUS.REJECTED,
+];
+
+/**
  * Confirmation / reason dialog shared by the SD verification panel and the
  * Participation Requests table row action.
  *
@@ -385,23 +397,29 @@ export function RegistrationVerificationPanel({
               const meta = ACTIONS[key];
               const Icon = meta.icon;
               const isCurrent = applicationStatus === meta.status;
+              const decided = REGISTRATION_DECIDED.includes(applicationStatus);
+              const locked = decided && !isCurrent;
+              const disabled = isCurrent || locked;
               return (
                 <button
                   key={key}
                   type="button"
-                  disabled={isCurrent}
+                  disabled={disabled}
                   onClick={() => setAction(key)}
                   className={cn(
                     "flex flex-col items-center gap-1 rounded-xl border px-3 py-3.5 text-center transition-all duration-150",
                     meta.card,
-                    isCurrent
-                      ? "cursor-not-allowed opacity-45 hover:translate-y-0"
-                      : "hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(15,23,42,0.07)]"
+                    isCurrent && "cursor-default hover:translate-y-0",
+                    locked && "cursor-not-allowed opacity-45 hover:translate-y-0",
+                    !disabled &&
+                      "hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(15,23,42,0.07)]"
                   )}
                   title={
                     isCurrent
-                      ? "This is the current registration status"
-                      : meta.cardHint
+                      ? "Current status — this action was taken"
+                      : locked
+                        ? "A decision has already been made"
+                        : meta.cardHint
                   }
                 >
                   <span
@@ -499,22 +517,28 @@ export function RegistrationRowAction({
               const meta = ACTIONS[key];
               const Icon = meta.icon;
               const isCurrent = applicationStatus === meta.status;
+              const decided = REGISTRATION_DECIDED.includes(applicationStatus);
+              const locked = decided && !isCurrent;
+              const disabled = isCurrent || locked;
               return (
                 <button
                   key={key}
                   type="button"
-                  disabled={isCurrent}
+                  disabled={disabled}
                   onClick={() => setAction(key)}
                   className={cn(
                     "flex items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-[0.8125rem] font-bold transition-colors",
                     meta.card,
                     meta.cardIcon,
-                    isCurrent && "cursor-not-allowed opacity-45"
+                    isCurrent && "cursor-default",
+                    locked && "cursor-not-allowed opacity-45"
                   )}
                   title={
                     isCurrent
-                      ? "This is the current registration status"
-                      : meta.cardHint
+                      ? "Current status — this action was taken"
+                      : locked
+                        ? "A decision has already been made"
+                        : meta.cardHint
                   }
                 >
                   <Icon size={15} aria-hidden />

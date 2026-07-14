@@ -41,8 +41,8 @@ function computeCountdown(deadlineMs: number, nowMs: number): CountdownParts {
 
 function CountdownUnit({ value, label }: { value: number; label: string }) {
   return (
-    <div className="min-w-[3.75rem] rounded-[10px] border border-slate-200 bg-white px-2.5 py-2 text-center shadow-[0_1px_2px_rgba(15,23,42,0.05)]">
-      <div className="text-[1.375rem] font-bold leading-[1.2] tabular-nums !text-slate-900">
+    <div className="min-w-[3.25rem] rounded-[10px] border border-slate-200 bg-white px-2.5 py-1.5 text-center shadow-[0_1px_2px_rgba(15,23,42,0.05)]">
+      <div className="text-[1.125rem] font-bold leading-[1.2] tabular-nums !text-slate-900">
         {String(value).padStart(2, "0")}
       </div>
       <div className="mt-0.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] !text-slate-400">{label}</div>
@@ -144,20 +144,20 @@ export function ParticipationConfirmCard({
   );
 
   return (
-    <div className="mx-auto flex min-h-[70vh] w-full max-w-2xl items-center justify-center px-2 py-8">
+    <div className="mx-auto flex w-full max-w-xl items-center justify-center px-2 py-4">
       <section
         className="relative w-full overflow-hidden !rounded-2xl !border !border-slate-200 !bg-white !shadow-[0_1px_3px_rgba(15,23,42,0.08),0_12px_32px_rgba(15,23,42,0.14)] before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-gradient-to-r before:from-green-900 before:via-green-700 before:to-yellow-600 before:content-['']"
         role="alertdialog"
         aria-labelledby="participation-title"
         aria-describedby="participation-desc"
       >
-        <div className="flex items-center gap-3.5 border-b border-slate-100 bg-slate-50/60 px-7 pb-5 pt-[1.375rem]">
-          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 !text-green-700 [&_svg]:!text-green-700">
-            <ShieldCheck className="h-6 w-6" aria-hidden />
+        <div className="flex items-center gap-3.5 border-b border-slate-100 bg-slate-50/60 px-6 py-3.5">
+          <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 !text-green-700 [&_svg]:!text-green-700">
+            <ShieldCheck className="h-5 w-5" aria-hidden />
           </span>
           <div className="min-w-0">
             <div className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] !text-slate-400">{c.actionRequired}</div>
-            <h1 id="participation-title" className="mt-0.5 text-xl font-bold leading-[1.3] tracking-[-0.01em] !text-slate-900">
+            <h1 id="participation-title" className="mt-0.5 text-lg font-bold leading-[1.25] tracking-[-0.01em] !text-slate-900">
               {c.title}
             </h1>
             <div className="mt-1 text-sm font-medium !text-slate-500">
@@ -167,8 +167,8 @@ export function ParticipationConfirmCard({
           </div>
         </div>
 
-        <div className="grid gap-[1.125rem] px-7 pb-[1.625rem] pt-6 [&_p]:!text-slate-600">
-          <p id="participation-desc" className="text-[0.9rem] leading-[1.65] !text-slate-600">
+        <div className="grid gap-3 px-6 pb-5 pt-4 [&_p]:!text-slate-600">
+          <p id="participation-desc" className="text-[0.85rem] leading-[1.5] !text-slate-600">
             {c.description}
           </p>
 
@@ -179,7 +179,7 @@ export function ParticipationConfirmCard({
             </div>
           ) : null}
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 px-[1.125rem] pb-[1.125rem] pt-4">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-[1.125rem] pb-3 pt-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.1em] !text-slate-500 [&_svg]:!text-green-700">
               <CalendarClock className="h-4 w-4" aria-hidden />
               {c.confirmationDeadline}
@@ -194,7 +194,7 @@ export function ParticipationConfirmCard({
                   </div>
                 ) : countdown ? (
                   <div
-                    className="mt-3.5 flex flex-wrap items-center gap-2"
+                    className="mt-2.5 flex flex-wrap items-center gap-2"
                     aria-label={c.timeRemainingAria}
                   >
                     <CountdownUnit value={countdown.days} label={c.days} />
@@ -275,7 +275,7 @@ export function ParticipationConfirmCard({
             </div>
           )}
 
-          <div className="mt-0.5 border-t border-slate-100 pt-3.5 text-xs leading-[1.6] !text-slate-400">
+          <div className="mt-0.5 border-t border-slate-100 pt-3 text-xs leading-[1.5] !text-slate-400">
             {c.footer}
           </div>
         </div>

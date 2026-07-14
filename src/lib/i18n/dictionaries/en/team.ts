@@ -99,7 +99,7 @@ export const team = {
     desc: (limit: number) =>
       `Your team limit is ${limit}. Ask the administration to raise it — they'll review your request.`,
     requestedSize: "Requested team size",
-    between: (min: number) => `Between ${min} and 200 members.`,
+    between: (min: number) => `Between ${min} and 20 members.`,
     justification: "Justification",
     justificationPlaceholder:
       "Explain why your team needs additional members…",

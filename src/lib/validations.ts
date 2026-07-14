@@ -45,7 +45,7 @@ export const TeamSizeRequestSchema = z.object({
   requestedCount: z.coerce
     .number()
     .int()
-    .min(1, "Requested size required")
+    .min(14, "Requested team size must be at least 14")
     .max(200, "Requested size too large"),
   justification: z
     .string()

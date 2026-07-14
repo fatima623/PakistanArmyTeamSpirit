@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  ArrowRight,
   CalendarClock,
   CheckCircle2,
   ChevronLeft,
@@ -377,7 +378,7 @@ export function TeamRosterManager({
     }
   };
 
-  const setComplete = async (complete: boolean) => {
+  const setComplete = async (complete: boolean): Promise<boolean> => {
     setBusy("complete");
     try {
       const res = await fetch("/api/user/team-roster", {
@@ -387,15 +388,17 @@ export function TeamRosterManager({
       });
       if (!res.ok) {
         toast.error(await apiError(res));
-        return;
+        return false;
       }
       setRosterCompleted(complete);
       toast.success(
         complete ? tm.toasts.rosterCompleted : tm.toasts.rosterReopened
       );
       router.refresh();
+      return true;
     } catch {
       toast.error(TOAST.GENERIC_ERROR);
+      return false;
     } finally {
       setBusy(null);
     }
@@ -406,6 +409,17 @@ export function TeamRosterManager({
   const markComplete = async () => {
     if (dirty || !allFilled) return;
     await setComplete(true);
+  };
+
+  /** Bottom "Next step" — marks the roster complete (if needed) then jumps
+   *  straight to the Flight Details step, skipping sidebar navigation. */
+  const goToFlights = async () => {
+    if (busy !== null || !allFilled || dirty) return;
+    if (!rosterCompleted) {
+      const ok = await setComplete(true);
+      if (!ok) return;
+    }
+    router.push("/event/journey?step=flights");
   };
 
   const submitSizeRequest = async () => {
@@ -537,12 +551,13 @@ export function TeamRosterManager({
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="border-emerald-300 text-emerald-800 hover:bg-emerald-50"
-                  disabled={busy !== null}
+                  className="border-emerald-300 text-emerald-800 hover:bg-emerald-50 hover:text-emerald-900"
+                  disabled={busy !== null || !allFilled}
                   onClick={() => {
                     setRequestedCount(limit + 1);
                     setRequestOpen(true);
                   }}
+                  title={!allFilled ? tm.roster.completeTitleFill : undefined}
                 >
                   <UserPlus className="h-4 w-4" aria-hidden />
                   {tm.roster.requestAdditional}
@@ -845,6 +860,29 @@ export function TeamRosterManager({
         ) : null}
       </section>
 
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          size="lg"
+          className="justify-center gap-2 bg-emerald-700 px-6 text-white hover:bg-emerald-800 disabled:!opacity-100 disabled:!bg-emerald-700/45 disabled:!text-white/70"
+          disabled={busy !== null || !allFilled || dirty}
+          onClick={goToFlights}
+          title={
+            !allFilled
+              ? tm.roster.completeTitleFill
+              : dirty
+                ? tm.roster.completeTitleDirty
+                : tm.roster.completeTitleReady
+          }
+        >
+          {busy === "complete" ? (
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+          ) : null}
+          {t.common.next}: {t.journey.headers.flights.title}
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Button>
+      </div>
+
       <Dialog open={requestOpen} onOpenChange={setRequestOpen}>
         <DialogContent className="overflow-hidden p-0 sm:max-w-md">
           <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-800 to-green-900 px-6 py-5">
@@ -886,9 +924,23 @@ export function TeamRosterManager({
                 type="number"
                 min={limit + 1}
                 max={200}
+                step={1}
+                inputMode="none"
                 value={requestedCount}
+                onKeyDown={(e) => {
+                  // Spinner-only: block manual keyboard entry so the value can
+                  // never be typed below the minimum (allow focus/dialog keys).
+                  if (!["Tab", "Enter", "Escape"].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
                 onChange={(e) =>
-                  setRequestedCount(Number(e.target.value) || limit + 1)
+                  setRequestedCount(
+                    Math.max(
+                      limit + 1,
+                      Math.floor(Number(e.target.value) || limit + 1)
+                    )
+                  )
                 }
               />
               <p className="mt-1 text-xs text-slate-500">

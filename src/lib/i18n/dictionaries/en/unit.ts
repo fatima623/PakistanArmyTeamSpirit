@@ -37,4 +37,10 @@ export const unit = {
   actions: {
     saveChanges: "Save changes",
   },
+  descriptions: {
+    personal: "Please provide your personal information",
+    co: "Provide commanding officer / second in command details",
+    unit: "Provide information about your unit and branch",
+  },
+  reviewNote: "Please review your information carefully before saving changes.",
 };

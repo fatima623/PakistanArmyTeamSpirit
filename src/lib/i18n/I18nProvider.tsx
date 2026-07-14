@@ -46,3 +46,13 @@ export function useI18n(): I18nValue {
   }
   return ctx;
 }
+
+/**
+ * Non-throwing variant for components (e.g. the shared public nav) that can be
+ * rendered outside a provider — such as the dashboard shell or the 404 page,
+ * where `PublicLayout` mounts the nav without an `I18nProvider` around it.
+ * Returns `null` when there is no provider so the caller can fall back.
+ */
+export function useI18nOptional(): I18nValue | null {
+  return useContext(I18nContext);
+}

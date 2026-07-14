@@ -17,7 +17,7 @@ import {
 } from "@/lib/public-navigation";
 import { useSiteChromeScroll } from "@/components/public/site-chrome-scroll-context";
 import { pathnameHasHeroOverlay } from "@/lib/public-layout";
-import { useI18n } from "@/lib/i18n/I18nProvider";
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 const DROPDOWN_CLOSE_MS = 150;
@@ -177,18 +177,22 @@ type Props = {
 export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const pathnameFromRouter = usePathname();
   const pathname = pathnameFromRouter ?? pathnameProp;
-  const { t } = useI18n();
-  // Translated labels keyed by the nav item's href (labels in PUBLIC_NAV_ITEMS
-  // stay English as stable keys; the visible text comes from the dictionary).
-  const navLabels: Record<string, string> = {
-    "/": t.publicSite.nav.home,
-    "/events-detail": t.publicSite.nav.eventsDetail,
-    "/international": t.publicSite.nav.international,
-    "/awards": t.publicSite.nav.awards,
-    "/gallery": t.publicSite.nav.gallery,
-    "/announcements": t.publicSite.nav.announcements,
-    "/key-dates": t.publicSite.nav.keyDates,
-  };
+  // The public nav is also mounted (usually hidden) by the dashboard shell and
+  // the 404 page, which don't wrap it in an I18nProvider — so read the locale
+  // optionally and fall back to the English PUBLIC_NAV_ITEMS labels.
+  const i18n = useI18nOptional();
+  const navLabels: Record<string, string> = i18n
+    ? {
+        "/": i18n.t.publicSite.nav.home,
+        "/events-detail": i18n.t.publicSite.nav.eventsDetail,
+        "/international": i18n.t.publicSite.nav.international,
+        "/awards": i18n.t.publicSite.nav.awards,
+        "/gallery": i18n.t.publicSite.nav.gallery,
+        "/announcements": i18n.t.publicSite.nav.announcements,
+        "/key-dates": i18n.t.publicSite.nav.keyDates,
+      }
+    : {};
+  const loginLabel = i18n ? i18n.t.publicSite.nav.login : "Login";
   const isHome = pathname === "/";
   const overHeroMedia = pathnameHasHeroOverlay(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -263,9 +267,9 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
               <NavLoginLink
                 pathname={pathname}
                 onNavigate={closeMenu}
-                label={t.publicSite.nav.login}
+                label={loginLabel}
               />
-              <PublicLanguageSwitcher />
+              {i18n ? <PublicLanguageSwitcher /> : null}
               <SiteThemeToggle />
             </nav>
           ) : null}

@@ -39,4 +39,11 @@ export const unit: typeof enUnit = {
   actions: {
     saveChanges: "Değişiklikleri kaydet",
   },
+  descriptions: {
+    personal: "Lütfen kişisel bilgilerinizi girin",
+    co: "Komutan / yardımcı komutan bilgilerini girin",
+    unit: "Biriminiz ve kuvvetiniz hakkında bilgi verin",
+  },
+  reviewNote:
+    "Lütfen değişiklikleri kaydetmeden önce bilgilerinizi dikkatlice gözden geçirin.",
 };
