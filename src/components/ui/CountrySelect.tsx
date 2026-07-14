@@ -10,6 +10,8 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   id?: string;
+  className?: string;
+  placeholder?: string;
   "aria-invalid"?: boolean;
 };
 
@@ -17,15 +19,25 @@ export function CountrySelect({
   value,
   onChange,
   id,
+  className,
+  /* No default: this component renders on the PUBLIC, fully-localized register
+     page (en/ar/ru/tr/zh, incl. RTL). An English literal here would be the one
+     untranslated string on that form. English-only callers (/admin) pass their
+     own. */
+  placeholder,
   "aria-invalid": ariaInvalid,
 }: Props) {
   const listId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [query, setQuery] = useState(value || WORLD_COUNTRIES[0]);
+  /* An empty value means "no country recorded" and must STAY empty. Seeding the
+     query with WORLD_COUNTRIES[0] (Pakistan) made a country-less participant
+     look Pakistani, and handleBlur then committed it — silently stamping a
+     nationality nobody chose. */
+  const [query, setQuery] = useState(value);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    setQuery(value || WORLD_COUNTRIES[0]);
+    setQuery(value);
   }, [value]);
 
   useEffect(() => {
@@ -59,11 +71,13 @@ export function CountrySelect({
     if (match) {
       onChange(match);
       setQuery(match);
-    } else if (value) {
-      setQuery(value);
     } else {
-      setQuery(WORLD_COUNTRIES[0]);
-      onChange(WORLD_COUNTRIES[0]);
+      /* Never fabricate a country. Unrecognised text reverts to whatever is
+         actually committed — which may legitimately be empty. Defaulting to
+         WORLD_COUNTRIES[0] here meant an admin who merely focused and blurred
+         this field while editing something else would mark a participant whose
+         country was never recorded as Pakistan. */
+      setQuery(value);
     }
     setOpen(false);
   }
@@ -74,6 +88,8 @@ export function CountrySelect({
         id={id}
         list={listId}
         value={query}
+        className={className}
+        placeholder={placeholder}
         aria-invalid={ariaInvalid}
         autoComplete="off"
         role="combobox"
@@ -86,9 +102,21 @@ export function CountrySelect({
         }}
         onBlur={handleBlur}
         onKeyDown={(event) => {
-          if (event.key === "Enter" && filtered[0]) {
-            event.preventDefault();
-            selectCountry(filtered[0]);
+          if (event.key === "Enter") {
+            /* An exact name always wins over the first substring hit. `filtered`
+               is a plain `includes()` match in source order, so committing
+               filtered[0] filed "Guinea" as Equatorial Guinea and "Sudan" as
+               South Sudan — the exact country the user typed loses to a longer
+               one that merely contains it. Mirrors handleBlur's exact lookup. */
+            const q = query.trim().toLowerCase();
+            const exact = WORLD_COUNTRIES.find(
+              (country) => country.toLowerCase() === q
+            );
+            const choice = exact ?? filtered[0];
+            if (choice) {
+              event.preventDefault();
+              selectCountry(choice);
+            }
           }
           if (event.key === "Escape") {
             setOpen(false);

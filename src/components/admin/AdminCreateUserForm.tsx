@@ -14,27 +14,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ASSIGNABLE_ROLES, ROLE_LABELS } from "@/lib/auth-routes";
+import { ASSIGNABLE_ROLES, PARTICIPANT_ROLE, ROLE_LABELS } from "@/lib/auth-routes";
 import { adminInput } from "@/lib/admin-ui";
 import { TOAST } from "@/lib/toast";
+import { CountrySelect } from "@/components/ui/CountrySelect";
+import { CUSTOM_COUNTRY_OPTION, PAKISTAN_COUNTRY } from "@/lib/countries";
 
 const GENDERS = ["Male", "Female", "Other"] as const;
 
 function Field({
   label,
+  required,
+  hint,
   error,
   children,
 }: {
   label: string;
+  required?: boolean;
+  hint?: string;
   error?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
-      <label className="text-sm font-semibold text-[#0f172a]">{label}</label>
+      <label className="text-sm font-semibold text-[#0f172a]">
+        {label}
+        {required ? <span className="ml-1 text-red-600">*</span> : null}
+      </label>
       {children}
+      {hint ? (
+        <p className="text-[0.75rem] text-brand-ink-muted">{hint}</p>
+      ) : null}
       {error ? (
-        <p className="text-xs font-medium text-red-600">{error}</p>
+        <p className="text-[0.75rem] font-medium text-red-600">{error}</p>
       ) : null}
     </div>
   );
@@ -48,8 +60,11 @@ export function AdminCreateUserForm() {
     email: "",
     rank: "",
     gender: "Other",
-    role: "user",
+    role: PARTICIPANT_ROLE,
     password: "",
+    country: PAKISTAN_COUNTRY,
+    customCountry: "",
+    nationality: "Pakistani",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
@@ -57,15 +72,44 @@ export function AdminCreateUserForm() {
   const set = (key: keyof typeof form, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  /* Country only applies to participants — staff accounts (sdbs/mtd/admin) carry
+     no country, and the server stores null for them. */
+  const isParticipant = form.role === PARTICIPANT_ROLE;
+  const isPakistanSelected = form.country === PAKISTAN_COUNTRY;
+  const isOtherCountrySelected = form.country === CUSTOM_COUNTRY_OPTION;
+
+  /* Mirrors RegisterForm: Pakistan implies "Pakistani" and hides the nationality
+     input; only "Other" keeps a typed-in country name; leaving Pakistan clears
+     the auto-filled nationality so the admin must supply the real one. */
+  const handleCountryChange = (value: string) =>
+    setForm((f) => ({
+      ...f,
+      country: value,
+      customCountry: value === CUSTOM_COUNTRY_OPTION ? f.customCountry : "",
+      nationality:
+        value === PAKISTAN_COUNTRY
+          ? "Pakistani"
+          : f.country === PAKISTAN_COUNTRY
+            ? ""
+            : f.nationality,
+    }));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setErrors({});
     try {
+      /* Staff have no country: omit the fields entirely rather than sending a
+         half-filled (and hidden) country the schema would then reject. */
+      const { country, customCountry, nationality, ...base } = form;
+      const payload = isParticipant
+        ? { ...base, country, customCountry, nationality }
+        : base;
+
       const res = await fetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         const { user } = await res.json();
@@ -173,6 +217,49 @@ export function AdminCreateUserForm() {
           />
         </Field>
       </div>
+
+      {isParticipant ? (
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <Field label="Country" required error={errors.country}>
+            <CountrySelect
+              className={adminInput}
+              value={form.country}
+              onChange={handleCountryChange}
+              aria-invalid={!!errors.country}
+            />
+          </Field>
+          {isOtherCountrySelected ? (
+            <Field
+              label="Country (please specify)"
+              required
+              hint="Type the country exactly as it should appear on official records."
+              error={errors.customCountry}
+            >
+              <Input
+                value={form.customCountry}
+                onChange={(e) => set("customCountry", e.target.value)}
+                placeholder="e.g. Kosovo"
+                className={adminInput}
+              />
+            </Field>
+          ) : null}
+          {!isPakistanSelected ? (
+            <Field
+              label="Nationality"
+              required
+              hint="Required for international participants."
+              error={errors.nationality}
+            >
+              <Input
+                value={form.nationality}
+                onChange={(e) => set("nationality", e.target.value)}
+                placeholder="e.g. Turkish"
+                className={adminInput}
+              />
+            </Field>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="flex justify-end gap-3 pt-2">
         <Button

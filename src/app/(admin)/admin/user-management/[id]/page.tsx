@@ -34,6 +34,8 @@ export default async function AdminManageUserPage({
       rank: true,
       gender: true,
       role: true,
+      country: true,
+      nationality: true,
     },
   });
 
@@ -70,6 +72,8 @@ export default async function AdminManageUserPage({
           rank: user.rank ?? "",
           gender: user.gender ?? "Other",
           role: user.role,
+          country: user.country,
+          nationality: user.nationality,
         }}
       />
     </div>

@@ -15,11 +15,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
+import { CountrySelect } from "@/components/ui/CountrySelect";
 import { ASSIGNABLE_ROLES, ROLE_LABELS } from "@/lib/auth-routes";
 import { adminInput } from "@/lib/admin-ui";
+import {
+  CUSTOM_COUNTRY_OPTION,
+  isValidCountry,
+  resolveCountryForSubmit,
+} from "@/lib/countries";
+import {
+  PAKISTAN_COUNTRY,
+  isInternationalParticipant,
+} from "@/lib/participant-country";
 import { TOAST } from "@/lib/toast";
 
 const GENDERS = ["Male", "Female", "Other"] as const;
+
+/** Only participants have a country; staff accounts (sdbs/mtd/admin) do not. */
+const PARTICIPANT_ROLE = "user";
 
 type UserValues = {
   id: string;
@@ -29,21 +42,57 @@ type UserValues = {
   rank: string;
   gender: string;
   role: string;
+  country: string | null;
+  nationality: string | null;
 };
+
+/**
+ * Split the stored country into the two form controls. A country that predates
+ * the picker (or was typed in via "Other") is not in WORLD_COUNTRIES, so it maps
+ * back to Other + custom text rather than being silently dropped. A missing
+ * country stays unselected — we must not invent one for the participants whose
+ * country was never captured.
+ */
+function seedCountryFields(stored: string | null | undefined): {
+  country: string;
+  customCountry: string;
+} {
+  const value = stored?.trim() ?? "";
+  if (!value) return { country: "", customCountry: "" };
+  if (value !== CUSTOM_COUNTRY_OPTION && isValidCountry(value)) {
+    return { country: value, customCountry: "" };
+  }
+  return {
+    country: CUSTOM_COUNTRY_OPTION,
+    customCountry: value === CUSTOM_COUNTRY_OPTION ? "" : value,
+  };
+}
 
 function Field({
   label,
+  required,
+  hint,
   error,
   children,
 }: {
   label: string;
+  required?: boolean;
+  hint?: string;
   error?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
-      <label className="text-sm font-semibold text-[#0f172a]">{label}</label>
+      <label className="text-sm font-semibold text-[#0f172a]">
+        {label}
+        {required ? <span className="ml-1 text-red-600">*</span> : null}
+      </label>
       {children}
+      {hint ? (
+        <p className="mt-[0.35rem] text-[0.75rem] leading-snug text-slate-500">
+          {hint}
+        </p>
+      ) : null}
       {error ? (
         <p className="text-xs font-medium text-red-600">{error}</p>
       ) : null}
@@ -53,6 +102,7 @@ function Field({
 
 export function AdminEditUserForm({ user }: { user: UserValues }) {
   const router = useRouter();
+  const seededCountry = seedCountryFields(user.country);
   const [form, setForm] = useState({
     firstName: user.firstName ?? "",
     lastName: user.lastName ?? "",
@@ -61,7 +111,10 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
     gender: GENDERS.includes(user.gender as (typeof GENDERS)[number])
       ? user.gender
       : "Other",
-    role: user.role ?? "user",
+    role: user.role ?? PARTICIPANT_ROLE,
+    country: seededCountry.country,
+    customCountry: seededCountry.customCountry,
+    nationality: user.nationality ?? "",
   });
   const [newPassword, setNewPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,6 +123,29 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
 
   const set = (key: keyof typeof form, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
+
+  const isParticipant = form.role === PARTICIPANT_ROLE;
+  const isOtherCountrySelected = form.country === CUSTOM_COUNTRY_OPTION;
+  /* False for Pakistan and for an unselected country; "Other" counts as
+     international until the typed-in country says otherwise. */
+  const isInternational = isInternationalParticipant(form.country);
+  const hasNoCountryOnRecord = !user.country?.trim();
+
+  /* Same rules as public registration: Pakistan implies Pakistani nationality
+     and hides the custom-country box; leaving Pakistan clears the auto-filled
+     nationality but keeps one the admin typed. */
+  const handleCountryChange = (next: string) =>
+    setForm((f) => ({
+      ...f,
+      country: next,
+      customCountry: next === CUSTOM_COUNTRY_OPTION ? f.customCountry : "",
+      nationality:
+        next === PAKISTAN_COUNTRY
+          ? "Pakistani"
+          : f.nationality === "Pakistani"
+            ? ""
+            : f.nationality,
+    }));
 
   const applyFieldErrors = (data: { errors?: Record<string, string[]> }) => {
     if (data.errors) {
@@ -81,15 +157,45 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
     return false;
   };
 
+  /* The PUT schema enforces country/customCountry, but not "international needs
+     a nationality" — check it here so we never write a blank nationality. */
+  const validate = (): Record<string, string> => {
+    if (!isParticipant) return {};
+    const resolved = resolveCountryForSubmit(form.country, form.customCountry);
+    if (!form.country.trim()) return { country: "Required" };
+    if (isOtherCountrySelected && !form.customCountry.trim()) {
+      return { customCountry: "Please enter the country" };
+    }
+    if (isInternationalParticipant(resolved) && !form.nationality.trim()) {
+      return { nationality: "Required" };
+    }
+    return {};
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const invalid = validate();
+    if (Object.keys(invalid).length > 0) {
+      setErrors(invalid);
+      return;
+    }
+
     setSaving(true);
     setErrors({});
+
+    const { country, customCountry, nationality, ...account } = form;
+    /* Country only applies to participants — staff accounts keep it untouched.
+       The server resolves "Other" -> customCountry and forces "Pakistani". */
+    const payload = isParticipant
+      ? { ...account, country, customCountry, nationality }
+      : account;
+
     try {
       const res = await fetch(`/api/admin/users/${user.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         toast.success("Account updated");
@@ -200,6 +306,63 @@ export function AdminEditUserForm({ user }: { user: UserValues }) {
             </SelectContent>
           </Select>
         </Field>
+
+        {isParticipant ? (
+          <>
+            <Field
+              label="Country"
+              required
+              hint={
+                hasNoCountryOnRecord
+                  ? "No country was recorded for this participant — select one before saving."
+                  : undefined
+              }
+              error={errors.country}
+            >
+              <CountrySelect
+                className={adminInput}
+                value={form.country}
+                onChange={handleCountryChange}
+                aria-invalid={!!errors.country}
+                placeholder={
+                  hasNoCountryOnRecord ? "No country on record" : undefined
+                }
+              />
+            </Field>
+
+            {isOtherCountrySelected ? (
+              <Field
+                label="Specify country"
+                required
+                hint="Type the country exactly as it should appear on the roster."
+                error={errors.customCountry}
+              >
+                <Input
+                  value={form.customCountry}
+                  onChange={(e) => set("customCountry", e.target.value)}
+                  placeholder="e.g. Kosovo"
+                  className={adminInput}
+                />
+              </Field>
+            ) : null}
+
+            {isInternational ? (
+              <Field
+                label="Nationality"
+                required
+                hint="Required for international participants."
+                error={errors.nationality}
+              >
+                <Input
+                  value={form.nationality}
+                  onChange={(e) => set("nationality", e.target.value)}
+                  placeholder="e.g. Turkish"
+                  className={adminInput}
+                />
+              </Field>
+            ) : null}
+          </>
+        ) : null}
 
         <div className="flex justify-end gap-3 pt-2">
           <Button
