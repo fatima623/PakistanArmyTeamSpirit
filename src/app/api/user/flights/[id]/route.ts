@@ -47,6 +47,9 @@ export async function PUT(request: Request, context: RouteContext) {
     if (!existing) throw new ApiError("Flight record not found", 404);
 
     const formData = await request.formData();
+    // Falls back to the record's current traveller. A legacy team-level row
+    // (teamMemberId = null) is ADOPTED by passing a teamMemberId here; the
+    // schema then rejects the case where it would still end up unlinked.
     const parsed = FlightDetailFieldsSchema.safeParse({
       teamMemberId: formData.get("teamMemberId") ?? existing.teamMemberId,
       passengerName: formData.get("passengerName"),
@@ -104,35 +107,58 @@ export async function PUT(request: Request, context: RouteContext) {
         });
       }
     } catch (err) {
+      // A partially-written upload (e.g. valid passport + invalid ticket) must
+      // not be left on disk — nothing references it, so it would never be
+      // cleaned up, and every retry would strand another copy.
+      await deleteFlightDocByInternalPath(
+        passportUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        ticketUpload?.internalFilePath ?? null
+      );
       const message = err instanceof Error ? err.message : "Upload failed";
       throw new ApiError(message, 400);
     }
 
-    const flight = await prisma.flightDetail.update({
-      where: { id },
-      data: {
-        teamMemberId: parsed.data.teamMemberId,
-        passengerName: parsed.data.passengerName,
-        passportNumber: parsed.data.passportNumber,
-        ...(passportUpload
-          ? {
-              passportFilePath: passportUpload.internalFilePath,
-              passportFileName: passportUpload.originalFileName,
-              passportFileSize: passportUpload.fileSize,
-              passportUploadedAt: passportUpload.uploadedAt,
-            }
-          : {}),
-        ...(ticketUpload
-          ? {
-              ticketFilePath: ticketUpload.internalFilePath,
-              ticketFileName: ticketUpload.originalFileName,
-              ticketFileSize: ticketUpload.fileSize,
-              ticketUploadedAt: ticketUpload.uploadedAt,
-            }
-          : {}),
-      },
-      select: flightDetailSelect,
-    });
+    let flight;
+    try {
+      flight = await prisma.flightDetail.update({
+        where: { id },
+        data: {
+          teamMemberId: parsed.data.teamMemberId,
+          passengerName: parsed.data.passengerName,
+          passportNumber: parsed.data.passportNumber,
+          ...(passportUpload
+            ? {
+                passportFilePath: passportUpload.internalFilePath,
+                passportFileName: passportUpload.originalFileName,
+                passportFileSize: passportUpload.fileSize,
+                passportUploadedAt: passportUpload.uploadedAt,
+              }
+            : {}),
+          ...(ticketUpload
+            ? {
+                ticketFilePath: ticketUpload.internalFilePath,
+                ticketFileName: ticketUpload.originalFileName,
+                ticketFileSize: ticketUpload.fileSize,
+                ticketUploadedAt: ticketUpload.uploadedAt,
+              }
+            : {}),
+        },
+        select: flightDetailSelect,
+      });
+    } catch (err) {
+      // The new files are already on disk but the row still points at the old
+      // ones (e.g. the record was cascade-deleted, or a unique-constraint race
+      // on an adopt). Unlink the new uploads rather than stranding them.
+      await deleteFlightDocByInternalPath(
+        passportUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        ticketUpload?.internalFilePath ?? null
+      );
+      throw err;
+    }
 
     // Remove replaced files only after the DB update succeeded.
     if (passportUpload && existing.passportFilePath) {
@@ -155,7 +181,7 @@ export async function PUT(request: Request, context: RouteContext) {
       },
     });
 
-    revalidatePath("/event/flights");
+    revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");
     return NextResponse.json({ flight });
   } catch (error) {
@@ -188,7 +214,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
       metadata: { actorRole: "user" },
     });
 
-    revalidatePath("/event/flights");
+    revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");
     return NextResponse.json({ success: true });
   } catch (error) {

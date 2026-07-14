@@ -16,6 +16,7 @@ import {
   userSelect,
 } from "@/lib/api-helpers";
 import {
+  PARTICIPANT_ROLE,
   canApproveRegistration,
   canManageSystem,
   canVerifyPayment,
@@ -25,6 +26,9 @@ import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { buildApplicationUpdateData } from "@/lib/payments";
 import { sendRegistrationApprovedEmail } from "@/lib/participant-status-emails";
 import { normalizeApplicationStatus } from "@/lib/user-status";
+import { deleteFlightDocByInternalPath } from "@/lib/storage/flight-doc";
+import { resolveCountryForSubmit } from "@/lib/countries";
+import { resolveNationalityForSubmit } from "@/lib/participant-country";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -125,7 +129,9 @@ export async function PUT(request: Request, context: RouteContext) {
       parsed.data.lastName !== undefined ||
       parsed.data.email !== undefined ||
       parsed.data.rank !== undefined ||
-      parsed.data.gender !== undefined;
+      parsed.data.gender !== undefined ||
+      parsed.data.country !== undefined ||
+      parsed.data.nationality !== undefined;
 
     const editsApplicationDecision =
       parsed.data.applicationStatus !== undefined ||
@@ -188,6 +194,56 @@ export async function PUT(request: Request, context: RouteContext) {
     }
     if (parsed.data.lastName !== undefined) {
       data.lastName = parsed.data.lastName.trim();
+    }
+    if (
+      parsed.data.country !== undefined ||
+      parsed.data.nationality !== undefined
+    ) {
+      /* Country and nationality are resolved TOGETHER against the stored row,
+         never independently:
+           - only participants have a country (a crafted PUT must not stamp one
+             on an SD/MT/admin/host account, nor on a role change to staff);
+           - a country-only edit must not blank an existing nationality;
+           - a nationality-only edit must still honour the stored country, so
+             "Pakistani iff Pakistan" cannot be violated;
+           - "Other" collapses to the typed-in customCountry, exactly as public
+             registration resolves it. */
+      const targetRole = parsed.data.role ?? existing.role;
+      if (targetRole !== PARTICIPANT_ROLE) {
+        throw new ApiError(
+          "Country and nationality apply to participants only",
+          400
+        );
+      }
+
+      const country =
+        parsed.data.country !== undefined
+          ? resolveCountryForSubmit(
+              parsed.data.country,
+              parsed.data.customCountry
+            )
+          : (existing.country ?? "");
+      if (!country.trim()) {
+        throw new ApiError("Select a country for this participant", 400);
+      }
+
+      const suppliedNationality =
+        parsed.data.nationality !== undefined
+          ? (parsed.data.nationality ?? "")
+          : (existing.nationality ?? "");
+      const nationality = resolveNationalityForSubmit(
+        country,
+        suppliedNationality
+      );
+      if (!nationality.trim()) {
+        throw new ApiError(
+          "Nationality is required for international participants",
+          400
+        );
+      }
+
+      data.country = country;
+      data.nationality = nationality;
     }
     if (parsed.data.email !== undefined) {
       data.email = parsed.data.email.toLowerCase().trim();
@@ -291,19 +347,37 @@ export async function DELETE(_request: Request, context: RouteContext) {
       throw new ApiError("Cannot delete your own account", 400);
     }
 
-    const existing = await prisma.user.findUnique({ where: { id } });
+    const existing = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        flightDetails: {
+          select: { passportFilePath: true, ticketFilePath: true },
+        },
+      },
+    });
     if (!existing) {
       throw new ApiError("User not found", 404);
     }
 
     await prisma.user.delete({ where: { id } });
 
+    // FlightDetail rows cascade with the user, but their stored PDFs do not —
+    // unlink them after the DB commit or every deleted participant leaves their
+    // team's passport and ticket scans on disk forever. Best-effort.
+    for (const flight of existing.flightDetails) {
+      await deleteFlightDocByInternalPath(flight.passportFilePath);
+      await deleteFlightDocByInternalPath(flight.ticketFilePath);
+    }
+
     await createAuditLog({
       entityType: AUDIT_ENTITY.USER,
       entityId: id,
       action: "user_deleted",
       actorId: session.user.id,
-      metadata: { email: existing.email },
+      metadata: {
+        email: existing.email,
+        flightDocsRemoved: existing.flightDetails.length,
+      },
     });
 
     return NextResponse.json({ success: true });

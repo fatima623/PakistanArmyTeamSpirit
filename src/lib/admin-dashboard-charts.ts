@@ -1,4 +1,5 @@
 import { APPLICATION_STATUS, type ApplicationStatus } from "@/lib/constants";
+import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 
 export type RegistrationRangeKey = "3m" | "6m" | "1y";
@@ -82,7 +83,7 @@ export async function getRegistrationsByMonth(
 
   const users = await prisma.user.findMany({
     where: {
-      role: { not: "admin" },
+      role: PARTICIPANT_ROLE,
       createdAt: { gte: start },
     },
     select: { createdAt: true },
@@ -138,7 +139,7 @@ export async function getKpiSparklines(months = 7): Promise<KpiSparklines> {
   start.setUTCMonth(start.getUTCMonth() - (months - 1));
 
   const users = await prisma.user.findMany({
-    where: { role: { not: "admin" }, createdAt: { gte: start } },
+    where: { role: PARTICIPANT_ROLE, createdAt: { gte: start } },
     select: { createdAt: true, applicationStatus: true, paymentStatus: true },
   });
 
@@ -177,7 +178,7 @@ export async function getStatusDistribution(): Promise<{
 }> {
   const grouped = await prisma.user.groupBy({
     by: ["applicationStatus"],
-    where: { role: { not: "admin" } },
+    where: { role: PARTICIPANT_ROLE },
     _count: { _all: true },
   });
 

@@ -2,6 +2,7 @@
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { getAdminInitials, getAdminRole } from "@/lib/admin-session";
 import { APPLICATION_STATUS, PAYMENT_STATUS, TICKET_STATUS } from "@/lib/constants";
+import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 
 /** Persistent admin chrome — sidebar stays mounted across navigations. */
@@ -23,7 +24,7 @@ export default async function AdminSectionLayout({
     getAdminRole(),
     prisma.user.count({
       where: {
-        role: { not: "admin" },
+        role: PARTICIPANT_ROLE,
         applicationStatus: {
           in: [APPLICATION_STATUS.PENDING, APPLICATION_STATUS.UNDER_REVIEW],
         },
@@ -42,11 +43,28 @@ export default async function AdminSectionLayout({
       },
     }),
     prisma.teamSizeRequest.count({ where: { status: "PENDING" } }),
+    // "Awaiting finalize" must mean exactly what the finalize gate means:
+    // roster complete, not yet finalized, and EVERY traveller has a record with
+    // both documents on file. Prisma has no `every` on a to-many filter, so it
+    // is expressed as "no member is incomplete" (an empty roster is excluded by
+    // requiring at least one member).
     prisma.user.count({
       where: {
-        role: "user",
+        role: PARTICIPANT_ROLE,
         rosterCompletedAt: { not: null },
         flightsFinalizedAt: null,
+        teamMembers: { some: {} },
+        NOT: {
+          teamMembers: {
+            some: {
+              OR: [
+                { flightDetail: null },
+                { flightDetail: { passportFilePath: null } },
+                { flightDetail: { ticketFilePath: null } },
+              ],
+            },
+          },
+        },
       },
     }),
   ]);

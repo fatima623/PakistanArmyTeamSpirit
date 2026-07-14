@@ -10,7 +10,7 @@ export const PATS_ESSENCE =
 
 export const OVERVIEW = {
   title: "Overview — PATS",
-  lead: "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA — PATS.",
+  lead: "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA PATS.",
   body: [
     "The exercise is manifested by the highest standards of physical fitness, robustness, tactical expertise, and soldierly attributes.",
     "The main aim is a demanding patrolling exercise to assess and enhance tactical and mental abilities — participants must be prepared mentally and physically.",

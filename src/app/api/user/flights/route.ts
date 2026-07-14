@@ -9,29 +9,42 @@ import { FlightDetailFieldsSchema } from "@/lib/validations";
 import {
   flightDetailSelect,
   loadFlightContext,
+  loadFlightCoverage,
   requireEditableFlights,
 } from "@/lib/flights";
 import {
   canEditFlights,
   isFlightDeadlinePassed,
 } from "@/lib/participant-workflow";
-import { saveFlightDoc } from "@/lib/storage/flight-doc";
+import { teamMemberSelect } from "@/lib/team-members";
+import {
+  deleteFlightDocByInternalPath,
+  saveFlightDoc,
+} from "@/lib/storage/flight-doc";
 
-/** The caller's flight details + editability flags. */
+/** The caller's roster, their flight records, coverage and editability flags. */
 export async function GET() {
   try {
     const session = await requireAuth();
-    const [flights, ctx] = await Promise.all([
+    const [flights, members, ctx, coverage] = await Promise.all([
       prisma.flightDetail.findMany({
         where: { userId: session.user.id },
         orderBy: { createdAt: "asc" },
         select: flightDetailSelect,
       }),
+      prisma.teamMember.findMany({
+        where: { userId: session.user.id },
+        orderBy: { createdAt: "asc" },
+        select: teamMemberSelect,
+      }),
       loadFlightContext(session.user.id),
+      loadFlightCoverage(session.user.id),
     ]);
 
     return NextResponse.json({
       flights,
+      members,
+      coverage,
       canEdit: canEditFlights(ctx.user, ctx.settings),
       deadline: ctx.settings.flightDetailsDeadline,
       deadlinePassed: isFlightDeadlinePassed(ctx.settings),
@@ -70,7 +83,7 @@ export async function POST(request: Request) {
 
     const formData = await request.formData();
     const parsed = FlightDetailFieldsSchema.safeParse({
-      teamMemberId: formData.get("teamMemberId") || null,
+      teamMemberId: formData.get("teamMemberId"),
       passengerName: formData.get("passengerName"),
       passportNumber: formData.get("passportNumber"),
     });
@@ -81,36 +94,22 @@ export async function POST(request: Request) {
       );
     }
 
-    // The team submits a single, team-level flight record. A legacy per-member
-    // id is still honoured, but the default flow links to no member.
-    let teamMemberId: string | null = null;
-    if (parsed.data.teamMemberId) {
-      const teamMember = await prisma.teamMember.findFirst({
-        where: { id: parsed.data.teamMemberId, userId: session.user.id },
-        select: { id: true, flightDetail: { select: { id: true } } },
-      });
-      if (!teamMember) {
-        throw new ApiError("Team member not found on your roster", 404);
-      }
-      if (teamMember.flightDetail) {
-        throw new ApiError(
-          "A flight record already exists for this traveler — edit it instead",
-          409
-        );
-      }
-      teamMemberId = teamMember.id;
-    } else {
-      const existing = await prisma.flightDetail.findFirst({
-        where: { userId: session.user.id },
-        select: { id: true },
-      });
-      if (existing) {
-        throw new ApiError(
-          "Flight details have already been submitted for your team — edit them instead",
-          409
-        );
-      }
+    // Every record belongs to exactly one roster member — each traveller files
+    // their own passport and ticket. The @unique on teamMemberId is the backstop.
+    const teamMember = await prisma.teamMember.findFirst({
+      where: { id: parsed.data.teamMemberId, userId: session.user.id },
+      select: { id: true, flightDetail: { select: { id: true } } },
+    });
+    if (!teamMember) {
+      throw new ApiError("Team member not found on your roster", 404);
     }
+    if (teamMember.flightDetail) {
+      throw new ApiError(
+        "A flight record already exists for this traveler — edit it instead",
+        409
+      );
+    }
+    const teamMemberId = teamMember.id;
 
     const passportFile = await fileFromForm(formData, "passport");
     const ticketFile = await fileFromForm(formData, "ticket");
@@ -137,27 +136,50 @@ export async function POST(request: Request) {
         });
       }
     } catch (err) {
+      // The passport is written before the ticket is validated, so a bad ticket
+      // (e.g. a non-PDF renamed .pdf — the browser reports application/pdf, so
+      // only the server's magic-byte check catches it) would strand the already
+      // written passport scan on disk, once per retry.
+      await deleteFlightDocByInternalPath(
+        passportUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        ticketUpload?.internalFilePath ?? null
+      );
       const message = err instanceof Error ? err.message : "Upload failed";
       throw new ApiError(message, 400);
     }
 
-    const flight = await prisma.flightDetail.create({
-      data: {
-        userId: session.user.id,
-        teamMemberId,
-        passengerName: parsed.data.passengerName,
-        passportNumber: parsed.data.passportNumber,
-        passportFilePath: passportUpload?.internalFilePath ?? null,
-        passportFileName: passportUpload?.originalFileName ?? null,
-        passportFileSize: passportUpload?.fileSize ?? null,
-        passportUploadedAt: passportUpload?.uploadedAt ?? null,
-        ticketFilePath: ticketUpload?.internalFilePath ?? null,
-        ticketFileName: ticketUpload?.originalFileName ?? null,
-        ticketFileSize: ticketUpload?.fileSize ?? null,
-        ticketUploadedAt: ticketUpload?.uploadedAt ?? null,
-      },
-      select: flightDetailSelect,
-    });
+    let flight;
+    try {
+      flight = await prisma.flightDetail.create({
+        data: {
+          userId: session.user.id,
+          teamMemberId,
+          passengerName: parsed.data.passengerName,
+          passportNumber: parsed.data.passportNumber,
+          passportFilePath: passportUpload?.internalFilePath ?? null,
+          passportFileName: passportUpload?.originalFileName ?? null,
+          passportFileSize: passportUpload?.fileSize ?? null,
+          passportUploadedAt: passportUpload?.uploadedAt ?? null,
+          ticketFilePath: ticketUpload?.internalFilePath ?? null,
+          ticketFileName: ticketUpload?.originalFileName ?? null,
+          ticketFileSize: ticketUpload?.fileSize ?? null,
+          ticketUploadedAt: ticketUpload?.uploadedAt ?? null,
+        },
+        select: flightDetailSelect,
+      });
+    } catch (err) {
+      // The PDFs are written before the row exists, so a failed create (e.g. a
+      // double-submit racing the unique teamMemberId) would strand them on disk.
+      await deleteFlightDocByInternalPath(
+        passportUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        ticketUpload?.internalFilePath ?? null
+      );
+      throw err;
+    }
 
     await createAuditLog({
       entityType: AUDIT_ENTITY.FLIGHT_DETAIL,
@@ -172,7 +194,7 @@ export async function POST(request: Request) {
       },
     });
 
-    revalidatePath("/event/flights");
+    revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");
     return NextResponse.json({ flight }, { status: 201 });
   } catch (error) {

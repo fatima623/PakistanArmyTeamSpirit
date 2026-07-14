@@ -49,6 +49,12 @@ model User {
    * Set by administration once flight details are reviewed & finalized.
    */
   flightsFinalizedAt       DateTime?
+  /**
+   * Host Formation assignment — set by the JLA (Admin) once a travel-ready
+   * team is finalized and allotted to the hosting formation.
+   */
+  hostFormationId          String?
+  finalizedForHostAt       DateTime?
   createdAt                DateTime            @default(now())
   updatedAt                DateTime            @updatedAt
   unit                     Unit?
@@ -64,10 +70,13 @@ model User {
   teamSizeRequests         TeamSizeRequest[]   @relation("TeamSizeRequestUser")
   teamSizeReviews          TeamSizeRequest[]   @relation("TeamSizeRequestReviewer")
   flightDetails            FlightDetail[]      @relation("FlightDetailUser")
+  hostFormation            HostFormation?      @relation("HostMembers", fields: [hostFormationId], references: [id], onDelete: SetNull)
+  hostLoginFor             HostFormation?      @relation("HostLogin")
 
   @@index([applicationStatus])
   @@index([paymentStatus])
   @@index([approved])
+  @@index([hostFormationId])
 }
 
 model Unit {
@@ -104,6 +113,26 @@ model Unit {
 
   @@index([userId])
   @@index([unitName])
+}
+
+/// Hosting organization (e.g. "HQ 37 Div") created by the JLA (Admin). One
+/// dedicated `host`-role login account runs its read-only dashboard; finalized
+/// teams are allotted to it via User.hostFormationId.
+model HostFormation {
+  id         String   @id @default(cuid())
+  name       String
+  notes      String?  @db.Text
+  /**
+   * The single `host`-role login account for this formation. Deleting the
+   * account cascades to the formation; members detach via SetNull.
+   */
+  hostUserId String   @unique
+  hostUser   User     @relation("HostLogin", fields: [hostUserId], references: [id], onDelete: Cascade)
+  members    User[]   @relation("HostMembers")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([hostUserId])
 }
 
 model TeamMember {
@@ -146,8 +175,14 @@ model FlightDetail {
   id                 String      @id @default(cuid())
   userId             String
   user               User        @relation("FlightDetailUser", fields: [userId], references: [id], onDelete: Cascade)
+  /**
+   * The traveller this record belongs to — one FlightDetail per TeamMember.
+   * Stays nullable so legacy team-level rows survive; they are adopted by
+   * re-linking. Removing a roster member removes their flight record (the
+   * roster delete route unlinks the stored PDFs after the DB commit).
+   */
   teamMemberId       String?     @unique
-  teamMember         TeamMember? @relation(fields: [teamMemberId], references: [id], onDelete: SetNull)
+  teamMember         TeamMember? @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
   passengerName      String
   passportNumber     String
   passportFilePath   String?     @unique

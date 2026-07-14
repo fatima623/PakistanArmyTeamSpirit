@@ -3,12 +3,22 @@ export const ROLES = {
   SDBS: "sdbs",
   MTD: "mtd",
   ADMIN: "admin",
+  HOST: "host",
 } as const;
 
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 /** Roles permitted to load the /admin console. */
 export const STAFF_ROLES: string[] = [ROLES.ADMIN, ROLES.MTD, ROLES.SDBS];
+
+/**
+ * The ONLY role that is an event participant.
+ *
+ * Admin participation lists, counts, charts and exports must scope on this
+ * (an allowlist) — never on `role: { not: "admin" }`, which is a denylist that
+ * silently admits every role added later (sdbs, mtd, and now host).
+ */
+export const PARTICIPANT_ROLE: string = ROLES.USER;
 
 /** Roles an admin may assign to a user. */
 export const ASSIGNABLE_ROLES: string[] = [
@@ -23,6 +33,7 @@ export const ROLE_LABELS: Record<string, string> = {
   sdbs: "SD (Sports Directorate)",
   mtd: "MT (Management Team)",
   admin: "Administrator",
+  host: "Host Formation",
 };
 
 export function roleLabel(role: string | null | undefined): string {
@@ -67,7 +78,23 @@ export function canManageSystem(role: string | undefined | null): boolean {
   return role === ROLES.ADMIN;
 }
 
+/**
+ * Host Formation login. Deliberately NOT a staff role — hosts get a
+ * read-only /host dashboard and must never reach /admin or the participant
+ * portal. Kept out of STAFF_ROLES/ASSIGNABLE_ROLES for exactly this reason.
+ */
+export function isHostRole(role: string | undefined | null): boolean {
+  return role === ROLES.HOST;
+}
+
+/** Anyone who may open the read-only /host area. */
+export function canAccessHostArea(role: string | undefined | null): boolean {
+  return isHostRole(role);
+}
+
 /** Post-login / role-based home route. */
 export function getRoleHomePath(role: string | undefined | null): string {
-  return isStaffRole(role) ? "/admin" : "/event/dashboard";
+  if (isStaffRole(role)) return "/admin";
+  if (isHostRole(role)) return "/host";
+  return "/event/dashboard";
 }

@@ -4,7 +4,7 @@ import {
   RegistrationRejectedError,
 } from "@/lib/auth-login-errors";
 import { APPLICATION_STATUS } from "@/lib/constants";
-import { isStaffRole } from "@/lib/auth-routes";
+import { isHostRole, isStaffRole } from "@/lib/auth-routes";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 
 type LoginUser = {
@@ -26,7 +26,8 @@ export function assertParticipantMayLogin(user: LoginUser): void {
     throw new AccountSuspendedError();
   }
 
-  if (isStaffRole(user.role)) {
+  // Staff and Host Formation logins skip the participant approval gate.
+  if (isStaffRole(user.role) || isHostRole(user.role)) {
     return;
   }
 

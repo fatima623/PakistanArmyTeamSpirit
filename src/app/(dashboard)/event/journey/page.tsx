@@ -149,11 +149,14 @@ export default async function JourneyPage({
 
   /* —— Per-step data ————————————————————————————————————————— */
   const needsTeam = stepKey === "teamRegistration" || stepKey === "roster";
+  /* Flight details are filed one record per traveller, so the flights step
+     needs the roster too — it renders a row per member. */
+  const needsRoster = needsTeam || stepKey === "flights";
   const [paymentData, deadlines, teamMembers, latestRequest, flights] =
     await Promise.all([
       stepKey === "payment" ? getParticipantPaymentData(user.id) : null,
       stepKey === "payment" ? getDeadlines() : null,
-      needsTeam
+      needsRoster
         ? prisma.teamMember.findMany({
             where: { userId: user.id },
             orderBy: { createdAt: "asc" },
@@ -372,6 +375,7 @@ export default async function JourneyPage({
     content = (
       <FlightDetailsManager
         initialFlights={serializedFlights}
+        members={teamMembers ?? []}
         canEdit={canEditFlights(user, settings)}
         finalized={!!user.flightsFinalizedAt}
         deadlineIso={settings.flightDetailsDeadline?.toISOString() ?? null}
@@ -399,7 +403,7 @@ export default async function JourneyPage({
           {available ? (
             <Link
               href="/event/host-info"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2.5 text-[0.8125rem] font-bold text-white no-underline shadow-sm transition-colors hover:bg-emerald-800"
+              className="pp-btn pp-btn--primary no-underline"
             >
               {j.banners.openHostInfo}
               <ArrowUpRight className="h-4 w-4" aria-hidden />

@@ -38,6 +38,14 @@ export const KeyDatesManager = dynamic(
   { loading, ssr: false }
 );
 
+export const HostFormationsManager = dynamic(
+  () =>
+    import("@/components/admin/HostFormationsManager").then((m) => ({
+      default: m.HostFormationsManager,
+    })),
+  { loading, ssr: false }
+);
+
 export const NewsPostForm = dynamic(
   () =>
     import("@/components/admin/NewsPostForm").then((m) => ({

@@ -117,19 +117,27 @@ export function PaymentSubmissionForm({
     if (notes.trim()) formData.append("notes", notes.trim());
     formData.append("proof", proof);
 
-    const res = await fetch("/api/user/payment", {
-      method: "POST",
-      body: formData,
-    });
+    // The upload must not be able to strand the form: if fetch rejects (offline,
+    // connection reset, aborted upload) the busy flag has to be cleared, or the
+    // submit button stays disabled on the spinner until a full page reload.
+    try {
+      const res = await fetch("/api/user/payment", {
+        method: "POST",
+        body: formData,
+      });
 
-    if (res.ok) {
-      toast.success(pf.toastSubmitSuccess);
-      router.push("/event/dashboard");
-    } else {
-      const body = await res.json().catch(() => ({}));
-      toast.error(body.error ?? TOAST.GENERIC_ERROR);
+      if (res.ok) {
+        toast.success(pf.toastSubmitSuccess);
+        router.push("/event/dashboard");
+      } else {
+        const body = await res.json().catch(() => ({}));
+        toast.error(body.error ?? TOAST.GENERIC_ERROR);
+      }
+    } catch {
+      toast.error(TOAST.GENERIC_ERROR);
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
 
   const feeLabel = formatRegistrationFee(
@@ -477,7 +485,7 @@ export function PaymentSubmissionForm({
             <Button
               type="submit"
               disabled={submitting}
-              className="bg-emerald-700 text-white hover:bg-emerald-800"
+              className="pp-btn pp-btn--primary"
             >
               {submitting ? (
                 <>

@@ -10,12 +10,19 @@ import {
   requireAdmin,
   requireJsonContentType,
 } from "@/lib/api-helpers";
+import { isFlightRecordComplete } from "@/lib/flights";
 import { AdminFlightFinalizeSchema } from "@/lib/validations";
 
 /**
  * Finalize (lock) or unlock a participant's flight details — Admin only.
- * Finalizing makes records read-only for the participant and reveals the
- * Host Information section (once published).
+ * Finalizing makes records read-only for the participant, feeds the host
+ * dashboard and the host-formation travel-ready gate, and reveals the Host
+ * Information section (once published).
+ *
+ * Finalizing is gated on completeness: EVERY roster member must have a flight
+ * record with BOTH a passport and a ticket on file (see isFlightRecordComplete)
+ * — otherwise a team could be locked with zero documents. `force: true` lets the
+ * Administrator override that deliberately; the override is audited.
  */
 export async function PUT(request: Request) {
   try {
@@ -30,13 +37,54 @@ export async function PUT(request: Request) {
       );
     }
 
+    const { userId, finalized, force = false } = parsed.data;
+
     const user = await prisma.user.findUnique({
-      where: { id: parsed.data.userId },
-      select: { id: true, flightsFinalizedAt: true },
+      where: { id: userId },
+      select: {
+        id: true,
+        flightsFinalizedAt: true,
+        teamMembers: {
+          select: {
+            id: true,
+            flightDetail: {
+              select: { passportFilePath: true, ticketFilePath: true },
+            },
+          },
+        },
+      },
     });
     if (!user) throw new ApiError("Participant not found", 404);
 
-    const flightsFinalizedAt = parsed.data.finalized ? new Date() : null;
+    // Coverage is always counted from the TeamMember side — counting flight
+    // rows would let a legacy orphan (teamMemberId = null) stand in for a
+    // traveller who submitted nothing.
+    const memberCount = user.teamMembers.length;
+    const completeCount = user.teamMembers.filter((m) =>
+      isFlightRecordComplete(m.flightDetail)
+    ).length;
+
+    /* The single gate condition — reused for BOTH the 409 and the audit's
+       `forced` flag, so the flag can never drift from the branch it describes
+       (an empty roster is a gate failure too, and was previously audited as
+       forced: false because `completeCount < memberCount` is 0 < 0). */
+    const gateFailed = memberCount === 0 || completeCount < memberCount;
+
+    if (finalized && !force && gateFailed) {
+      if (memberCount === 0) {
+        throw new ApiError(
+          "This team has no travellers on its roster — there is nothing to finalize",
+          409
+        );
+      }
+      const missing = memberCount - completeCount;
+      throw new ApiError(
+        `${missing} of ${memberCount} traveller${memberCount === 1 ? "" : "s"} still need a passport and ticket`,
+        409
+      );
+    }
+
+    const flightsFinalizedAt = finalized ? new Date() : null;
     await prisma.user.update({
       where: { id: user.id },
       data: { flightsFinalizedAt },
@@ -45,14 +93,20 @@ export async function PUT(request: Request) {
     await createAuditLog({
       entityType: AUDIT_ENTITY.USER,
       entityId: user.id,
-      action: parsed.data.finalized
-        ? "flight_details_finalized"
-        : "flight_details_unlocked",
+      action: finalized ? "flight_details_finalized" : "flight_details_unlocked",
       actorId: session.user.id,
-      metadata: { actorRole: session.user.role },
+      metadata: {
+        actorRole: session.user.role,
+        memberCount,
+        completeCount,
+        forced: finalized && !!force && gateFailed,
+      },
     });
 
     revalidatePath("/admin/flights");
+    revalidatePath("/admin/host-formations");
+    revalidatePath("/admin/users");
+    revalidatePath("/host");
     revalidatePath("/event/flights");
     revalidatePath("/event/dashboard");
     revalidatePath("/event/host-info");

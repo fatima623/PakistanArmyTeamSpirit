@@ -48,6 +48,13 @@ export const ADMIN_NAV_ITEMS = [
     group: "Operations",
   },
   {
+    key: "hostFormations",
+    href: "/admin/host-formations",
+    label: "Host Formations",
+    roles: ADMIN_ONLY,
+    group: "Operations",
+  },
+  {
     key: "tickets",
     href: "/admin/tickets",
     label: "Support Tickets",

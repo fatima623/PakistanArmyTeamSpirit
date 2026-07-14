@@ -13,8 +13,14 @@ import {
 
 import { prisma } from "@/lib/prisma";
 import { cn, formatDateDisplay, formatDateShort } from "@/lib/utils";
-import { AUDIT_ENTITY } from "@/lib/constants";
+import {
+  AUDIT_ENTITY,
+  APPLICATION_STATUS,
+  isPaymentVerified,
+} from "@/lib/constants";
+import { normalizeApplicationStatus } from "@/lib/user-status";
 import { RegistrationVerificationPanel } from "@/components/admin/admin-dynamic";
+import { HostFormationAssign } from "@/components/admin/HostFormationAssign";
 import { AdminResetPassword } from "@/components/admin/AdminResetPassword";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
 import { TeamRosterDialog } from "@/components/admin/TeamRosterDialog";
@@ -170,6 +176,8 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       rosterCompletedAt: true,
       maxTeamMembersOverride: true,
       flightsFinalizedAt: true,
+      hostFormationId: true,
+      hostFormation: { select: { id: true, name: true } },
       createdAt: true,
       unit: true,
       teamMembers: {
@@ -194,6 +202,20 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   const viewerRole = await getAdminRole();
   const canManageRoles = canManageSystem(viewerRole);
   const canApprove = canApproveRegistration(viewerRole);
+
+  // Host-formation assignment is admin-only. A team is eligible once it is
+  // travel-ready: approved registration + verified payment + finalized flights.
+  const formations = canManageRoles
+    ? await prisma.hostFormation.findMany({
+        orderBy: { createdAt: "desc" },
+        select: { id: true, name: true },
+      })
+    : [];
+  const travelReady =
+    normalizeApplicationStatus(user.applicationStatus) ===
+      APPLICATION_STATUS.APPROVED &&
+    isPaymentVerified(user.paymentStatus) &&
+    user.flightsFinalizedAt != null;
 
   const auditLogs = await prisma.auditLog.findMany({
     where: { entityType: AUDIT_ENTITY.USER, entityId: id },
@@ -305,6 +327,16 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
               paymentStatus={user.paymentStatus}
               rejectionReason={user.rejectionReason}
               suspended={user.suspended}
+            />
+          ) : null}
+
+          {canManageRoles ? (
+            <HostFormationAssign
+              userId={user.id}
+              travelReady={travelReady}
+              currentFormationId={user.hostFormationId}
+              currentFormationName={user.hostFormation?.name ?? null}
+              formations={formations}
             />
           ) : null}
 

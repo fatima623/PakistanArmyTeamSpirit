@@ -29,6 +29,87 @@ export const flightDetailSelect = {
   },
 } as const;
 
+/**
+ * Same as {@link flightDetailSelect} but without the `teamMember` back-relation
+ * — for use when the record is already nested UNDER a TeamMember
+ * (`teamMembers: { select: { ..., flightDetail: { select: flightDetailSummarySelect } } }`).
+ */
+export const flightDetailSummarySelect = {
+  id: true,
+  teamMemberId: true,
+  passengerName: true,
+  passportNumber: true,
+  passportFileName: true,
+  passportFileSize: true,
+  passportUploadedAt: true,
+  ticketFileName: true,
+  ticketFileSize: true,
+  ticketUploadedAt: true,
+  updatedAt: true,
+} as const;
+
+/**
+ * THE definition of a complete flight record — one traveller with BOTH
+ * documents on file. Every surface (participant progress, admin finalize gate,
+ * the sidebar badge, the host coverage pills) MUST use this, or they will
+ * disagree and a team could be locked with zero documents uploaded.
+ *
+ * Checks *FilePath (the stored file), not *FileName (a display-only copy).
+ */
+export function isFlightRecordComplete(
+  flight: { passportFilePath: string | null; ticketFilePath: string | null } | null
+): boolean {
+  return !!flight?.passportFilePath && !!flight?.ticketFilePath;
+}
+
+export type FlightCoverage = {
+  /** Roster size. */
+  teamMemberCount: number;
+  /** Members that have a flight record at all. */
+  membersWithRecord: number;
+  /** Members whose record has BOTH passport and ticket on file. */
+  membersComplete: number;
+};
+
+/**
+ * Live per-member flight coverage. Always counted from the TeamMember side —
+ * counting `flightDetail` rows would let a legacy orphan (teamMemberId = null)
+ * satisfy the tally for a member who submitted nothing. Never cache this: the
+ * roster stays mutable until administration finalizes.
+ */
+export async function loadFlightCoverage(
+  userId: string
+): Promise<FlightCoverage> {
+  const [teamMemberCount, membersWithRecord, membersComplete] =
+    await Promise.all([
+      prisma.teamMember.count({ where: { userId } }),
+      prisma.teamMember.count({
+        where: { userId, flightDetail: { isNot: null } },
+      }),
+      prisma.teamMember.count({
+        where: {
+          userId,
+          flightDetail: {
+            is: {
+              passportFilePath: { not: null },
+              ticketFilePath: { not: null },
+            },
+          },
+        },
+      }),
+    ]);
+
+  return { teamMemberCount, membersWithRecord, membersComplete };
+}
+
+/** Every roster member has a complete record (and the roster isn't empty). */
+export function isTeamFlightsComplete(coverage: FlightCoverage): boolean {
+  return (
+    coverage.teamMemberCount > 0 &&
+    coverage.membersComplete === coverage.teamMemberCount
+  );
+}
+
 export type FlightGuardContext = {
   user: WorkflowUser;
   settings: WorkflowSettings;

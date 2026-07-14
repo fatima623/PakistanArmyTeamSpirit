@@ -19858,13 +19858,15 @@ html:has(.dashboard-day) body {
   transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
-.pp .pp-btn--primary {
+/* Scoped to :not(:disabled) so the disabled rule below wins on plain
+   specificity, rather than having to out-shout the forced colour here. */
+.pp .pp-btn--primary:not(:disabled) {
   background: var(--pp-primary);
   color: #fff !important;
   border-color: var(--pp-primary);
   box-shadow: var(--pp-shadow-sm);
 }
-.pp .pp-btn--primary:hover {
+.pp .pp-btn--primary:hover:not(:disabled) {
   background: var(--pp-primary-hover);
   border-color: var(--pp-primary-hover);
   transform: translateY(-1px);
@@ -19877,6 +19879,29 @@ html:has(.dashboard-day) body {
 }
 .pp .pp-btn--ghost:hover {
   background: var(--pp-surface-2);
+}
+
+/* Disabled portal buttons.
+   The design system had no disabled state at all, so a disabled primary button
+   kept its solid dark background while its label was dimmed to a translucent
+   white — unreadable. Give disabled buttons an explicit muted-but-legible
+   appearance. `opacity: 1` neutralises the `disabled:opacity-50` utility that
+   ships with the shared Button component. */
+.pp .pp-btn:disabled,
+.pp .pp-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 1;
+  background: #e8ece7;
+  border-color: #cbd3c7;
+  color: #5a6352;
+  box-shadow: none;
+  transform: none;
+}
+.pp .pp-btn:disabled:hover,
+.pp .pp-btn[aria-disabled="true"]:hover {
+  background: #e8ece7;
+  border-color: #cbd3c7;
+  transform: none;
 }
 
 /* link */

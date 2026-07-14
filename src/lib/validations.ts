@@ -68,10 +68,15 @@ export const AdminTeamSizeReviewSchema = z
   );
 
 /** Flight detail text fields (files validated separately in the API).
- *  `teamMemberId` is optional: the team submits a single, team-level flight
- *  record (no per-member link). A legacy member id is still accepted. */
+ *  Every flight record belongs to exactly ONE roster member — each traveller
+ *  files their own passport and ticket. `teamMemberId` is therefore required
+ *  on create; legacy team-level rows (teamMemberId = null) are adopted by
+ *  re-linking them through PUT. */
 export const FlightDetailFieldsSchema = z.object({
-  teamMemberId: z.string().trim().min(1).optional().nullable(),
+  teamMemberId: z
+    .string()
+    .trim()
+    .min(1, "Select the traveller this flight belongs to"),
   passengerName: z.string().trim().min(1, "Passenger name is required").max(160),
   passportNumber: z
     .string()
@@ -84,6 +89,8 @@ export const FlightDetailFieldsSchema = z.object({
 export const AdminFlightFinalizeSchema = z.object({
   userId: z.string().trim().min(1),
   finalized: z.boolean(),
+  /** Admin override: lock a team even though some travellers are incomplete. */
+  force: z.boolean().optional(),
 });
 
 export const RegisterSchema = z
@@ -98,9 +105,9 @@ export const RegisterSchema = z
     unitType: z.enum(["Regular", "Reserve"]),
     branch: z.enum(["Army", "Navy", "Air Force"]),
     unitName: z.string().min(1, "Required"),
-    country: z.string().min(1, "Required"),
-    customCountry: z.string().optional(),
-    nationality: z.string().optional(),
+    country: z.string().min(1, "Required").max(100, "Too long"),
+    customCountry: z.string().max(100, "Too long").optional(),
+    nationality: z.string().max(100, "Too long").optional(),
     arm: z.string().min(1, "Required"),
     secondPocEmail: z.string().email().optional().or(z.literal("")),
     thirdPocEmail: z.string().email().optional().or(z.literal("")),
@@ -328,20 +335,98 @@ export const AdminUserUpdateSchema = z.object({
   adminNotes: z.string().optional().nullable(),
   rejectionReason: z.string().optional().nullable(),
   suspended: z.boolean().optional(),
-});
+  /* Country is an admin-editable profile field — without it there is no way to
+     correct a participant whose country was never captured. */
+  country: z.string().trim().min(1, "Required").max(100, "Too long").optional(),
+  customCountry: z.string().max(100, "Too long").optional(),
+  nationality: z.string().trim().max(100, "Too long").optional().nullable(),
+})
+  .refine((d) => !d.country?.trim() || isValidCountry(d.country), {
+    message: "Select a valid country",
+    path: ["country"],
+  })
+  .refine(
+    (d) =>
+      d.country !== CUSTOM_COUNTRY_OPTION ||
+      (d.customCountry?.trim().length ?? 0) > 0,
+    { message: "Please enter the country", path: ["customCountry"] }
+  );
 
 export const AdminResetPasswordSchema = z.object({
   newPassword: passwordFieldSchema,
 });
 
-export const AdminCreateUserSchema = z.object({
-  email: z.string().email("Valid email required"),
+/**
+ * Country is REQUIRED for participants (role "user") and mirrors the public
+ * RegisterSchema rules — otherwise an admin-created participant lands with no
+ * country and is invisible to every country column and country-wise tally.
+ * Staff/host accounts are not participants, so country does not apply to them.
+ */
+export const AdminCreateUserSchema = z
+  .object({
+    email: z.string().email("Valid email required"),
+    firstName: z.string().trim().min(1, "Required"),
+    lastName: z.string().trim().min(1, "Required"),
+    rank: z.string().trim().min(1, "Required"),
+    gender: z.enum(["Male", "Female", "Other"]),
+    role: z.enum(["user", "sdbs", "mtd", "admin"]),
+    password: passwordFieldSchema,
+    country: z.string().max(100, "Too long").optional(),
+    customCountry: z.string().max(100, "Too long").optional(),
+    nationality: z.string().max(100, "Too long").optional(),
+  })
+  .refine((d) => d.role !== "user" || (d.country?.trim().length ?? 0) > 0, {
+    message: "Required for participants",
+    path: ["country"],
+  })
+  .refine((d) => !d.country?.trim() || isValidCountry(d.country), {
+    message: "Select a valid country",
+    path: ["country"],
+  })
+  .refine(
+    (d) =>
+      d.country !== CUSTOM_COUNTRY_OPTION ||
+      (d.customCountry?.trim().length ?? 0) > 0,
+    { message: "Please enter the country", path: ["customCountry"] }
+  )
+  .refine(
+    (d) => {
+      if (d.role !== "user" || !d.country?.trim()) return true;
+      const resolved = resolveCountryForSubmit(d.country, d.customCountry);
+      return (
+        resolved === PAKISTAN_COUNTRY || (d.nationality?.trim().length ?? 0) > 0
+      );
+    },
+    { message: "Required for international participants", path: ["nationality"] }
+  );
+
+/**
+ * Create a Host Formation together with its single `host`-role login account.
+ * `name` is the formation (e.g. "HQ 37 Div"); firstName/lastName/email/password
+ * provision the login. (`host` is deliberately absent from AdminCreateUserSchema
+ * — host accounts are created only through this flow.)
+ */
+export const HostFormationCreateSchema = z.object({
+  name: z.string().trim().min(1, "Formation name is required"),
+  notes: z.string().trim().max(2000).optional(),
   firstName: z.string().trim().min(1, "Required"),
   lastName: z.string().trim().min(1, "Required"),
-  rank: z.string().trim().min(1, "Required"),
-  gender: z.enum(["Male", "Female", "Other"]),
-  role: z.enum(["user", "sdbs", "mtd", "admin"]),
+  email: z.string().email("Valid email required"),
   password: passwordFieldSchema,
+});
+
+/** Edit a Host Formation's own details (not its login credentials). */
+export const HostFormationUpdateSchema = z.object({
+  name: z.string().trim().min(1, "Formation name is required"),
+  notes: z.string().trim().max(2000).optional(),
+});
+
+/**
+ * Assign/unassign a finalized team to a Host Formation. `null` unassigns.
+ * The travel-ready business rule is enforced in the route with DB context.
+ */
+export const HostFormationAssignSchema = z.object({
+  hostFormationId: z.string().trim().min(1).nullable(),
 });
 
 export const PaymentSubmitSchema = z.object({

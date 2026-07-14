@@ -1,5 +1,10 @@
 import { auth } from "@/lib/auth";
-import { canAccessAdminArea, getRoleHomePath } from "@/lib/auth-routes";
+import {
+  canAccessAdminArea,
+  canAccessHostArea,
+  getRoleHomePath,
+  isHostRole,
+} from "@/lib/auth-routes";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -60,6 +65,7 @@ export default auth((req) => {
     pathname.startsWith("/event/tickets") ||
     pathname.startsWith("/event/team");
   const isAdmin = pathname.startsWith("/admin");
+  const isHostArea = pathname.startsWith("/host");
   const isRegisterPage = pathname === "/event/register";
 
   if (isParticipantArea) {
@@ -69,6 +75,10 @@ export default auth((req) => {
     if (canAccessAdminArea(role)) {
       return redirectTo(new URL("/admin", origin), requestId);
     }
+    // Host Formation logins are confined to their read-only /host area.
+    if (isHostRole(role)) {
+      return redirectTo(new URL("/host", origin), requestId);
+    }
   }
 
   if (isAdmin) {
@@ -76,7 +86,16 @@ export default auth((req) => {
       return buildLoginRedirect(origin, requestId, req);
     }
     if (!canAccessAdminArea(role)) {
-      return redirectTo(new URL("/event/dashboard", origin), requestId);
+      return redirectTo(new URL(getRoleHomePath(role), origin), requestId);
+    }
+  }
+
+  if (isHostArea) {
+    if (!isLoggedIn || sessionExpired) {
+      return buildLoginRedirect(origin, requestId, req);
+    }
+    if (!canAccessHostArea(role)) {
+      return redirectTo(new URL(getRoleHomePath(role), origin), requestId);
     }
   }
 
@@ -97,6 +116,7 @@ export const config = {
     "/page/:path*",
     "/manifest.webmanifest",
     "/admin/:path*",
+    "/host/:path*",
     "/event/dashboard/:path*",
     "/event/edit/:path*",
     "/event/payment/:path*",

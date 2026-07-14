@@ -6,12 +6,20 @@ import { Prisma } from "@prisma/client";
 
 import { AdminExportButton } from "@/components/admin/AdminExportButton";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
+import {
+  CountryFilterSelect,
+  type CountryFilterOption,
+} from "@/components/admin/CountryFilterSelect";
 import { FilterMemory } from "@/components/admin/FilterMemory";
 import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
 import { UsersManagementTable } from "@/components/admin/UsersManagementTable";
 import { prisma } from "@/lib/prisma";
 import { getAdminRole } from "@/lib/admin-session";
-import { ROLES, canApproveRegistration } from "@/lib/auth-routes";
+import {
+  PARTICIPANT_ROLE,
+  ROLES,
+  canApproveRegistration,
+} from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import {
@@ -66,25 +74,38 @@ const STATUS_FILTERS: {
   { key: "rejected", label: "Rejected", status: APPLICATION_STATUS.REJECTED },
 ];
 
+/** Sentinel `country` value for the participants who have no country recorded
+ *  (created through the admin console before it captured one). */
+const COUNTRY_NOT_SET = "__none__";
+
 type SearchParams = Promise<{
   page?: string;
   search?: string;
   filter?: string;
   appStatus?: string;
   payStatus?: string;
+  country?: string;
 }>;
 
 function buildHref(params: {
   filter: string;
   search: string;
   payStatus: string;
+  country: string;
   page?: number;
 }): string {
   const query = new URLSearchParams();
-  if (params.filter && params.filter !== "all") query.set("filter", params.filter);
+  /* `filter` is ALWAYS emitted, including "all". Omitting it left the URL with
+     no filter param, which is exactly the signal the page uses to fall back to
+     the remembered-filter cookie — so once any other chip had been clicked,
+     clicking "All" bounced straight back to the remembered filter and the chip
+     looked dead. An explicit ?filter=all is what actually clears it. */
+  query.set("filter", params.filter || "all");
   if (params.search) query.set("search", params.search);
   if (params.payStatus && params.payStatus !== "all")
     query.set("payStatus", params.payStatus);
+  if (params.country && params.country !== "all")
+    query.set("country", params.country);
   query.set("page", String(params.page ?? 1));
   return `/admin/users?${query.toString()}`;
 }
@@ -118,9 +139,50 @@ export default async function AdminUsersPage({
   const appStatus = params.appStatus ?? "";
   const payStatus = params.payStatus ?? "all";
 
+  /* Country dropdown options come from the countries actually present among
+     participants (unfiltered), so the list never offers an empty slice. */
+  const countryGroups = await prisma.user.groupBy({
+    by: ["country"],
+    where: { role: PARTICIPANT_ROLE },
+    _count: { _all: true },
+  });
+
+  const namedCountries = countryGroups
+    .filter((group) => !!group.country?.trim())
+    .map((group) => ({
+      name: (group.country as string).trim(),
+      count: group._count._all,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const notSetCount = countryGroups
+    .filter((group) => !group.country?.trim())
+    .reduce((sum, group) => sum + group._count._all, 0);
+  const participantCount =
+    notSetCount + namedCountries.reduce((sum, c) => sum + c.count, 0);
+
+  const countryOptions: CountryFilterOption[] = [
+    { value: "all", label: `All countries (${participantCount})` },
+    ...namedCountries.map((c) => ({
+      value: c.name,
+      label: `${c.name} (${c.count})`,
+    })),
+    ...(notSetCount > 0
+      ? [{ value: COUNTRY_NOT_SET, label: `Not set (${notSetCount})` }]
+      : []),
+  ];
+
+  /* A stale/hand-typed ?country= that matches nothing falls back to "all"
+     rather than silently rendering an empty table. */
+  const requestedCountry = params.country ?? "all";
+  const country = countryOptions.some((o) => o.value === requestedCountry)
+    ? requestedCountry
+    : "all";
+
   /* Base scope: everything except the status chip itself — the chip counts
      are computed against this same scope so the numbers always match. */
-  const baseWhere: Prisma.UserWhereInput = { role: { not: "admin" } };
+  /* Participants only. A `not: "admin"` denylist would also list SD/MT staff
+     and Host Formation logins as if they were participation requests. */
+  const baseWhere: Prisma.UserWhereInput = { role: PARTICIPANT_ROLE };
   if (search) {
     baseWhere.OR = [
       { email: { contains: search } },
@@ -133,6 +195,14 @@ export default async function AdminUsersPage({
       payStatus === PAYMENT_STATUS.VERIFIED
         ? { in: [PAYMENT_STATUS.VERIFIED, LEGACY_PAYMENT_STATUS.APPROVED] }
         : payStatus;
+  }
+  /* Country lives on baseWhere (not `where`) so it constrains the table, the
+     row count, the status-chip counts AND the CSV export alike. `AND` is used
+     for the "not set" case because `OR` is already taken by the search box. */
+  if (country === COUNTRY_NOT_SET) {
+    baseWhere.AND = [{ OR: [{ country: null }, { country: "" }] }];
+  } else if (country !== "all") {
+    baseWhere.country = country;
   }
 
   const where: Prisma.UserWhereInput = { ...baseWhere };
@@ -206,21 +276,50 @@ export default async function AdminUsersPage({
   const chips = STATUS_FILTERS;
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const exportRows = users.map((u) => ({
+
+  /* Export the WHOLE filtered set, not just the current page. `users` is capped
+     at PAGE_SIZE, so exporting from it produced a CSV of 20 rows while the
+     footer beside the button advertised the full count — a silent truncation
+     that is indistinguishable from a complete export once opened. */
+  const exportUsers = await prisma.user.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    select: {
+      firstName: true,
+      lastName: true,
+      email: true,
+      rank: true,
+      country: true,
+      nationality: true,
+      applicationStatus: true,
+      paymentStatus: true,
+      createdAt: true,
+      unit: { select: { unitName: true } },
+    },
+  });
+
+  const exportRows = exportUsers.map((u) => ({
     Name: `${u.firstName} ${u.lastName}`,
     Email: u.email,
     Rank: u.rank || "",
     Unit: u.unit?.unitName ?? "",
     Country: u.country ?? "",
+    Nationality: u.nationality ?? "",
     Application: u.applicationStatus,
     Payment: u.paymentStatus,
     Registered: u.createdAt.toISOString().slice(0, 10),
   }));
 
-  const paginationExtraQuery =
+  /* Every extra filter must ride along on the page links, or paging silently
+     drops it. */
+  const paginationExtraQuery = [
     payStatus && payStatus !== "all"
       ? `payStatus=${encodeURIComponent(payStatus)}`
-      : "";
+      : "",
+    country && country !== "all" ? `country=${encodeURIComponent(country)}` : "",
+  ]
+    .filter(Boolean)
+    .join("&");
 
   return (
       <div className={cn(adminUsersPage, "admin-fade-in-up")}>
@@ -249,7 +348,12 @@ export default async function AdminUsersPage({
                   return (
                     <Link
                       key={chip.key}
-                      href={buildHref({ filter: chip.key, search, payStatus })}
+                      href={buildHref({
+                        filter: chip.key,
+                        search,
+                        payStatus,
+                        country,
+                      })}
                       className={segmentedChipClasses(chip.key, active)}
                       aria-current={active ? "true" : undefined}
                     >
@@ -262,7 +366,12 @@ export default async function AdminUsersPage({
           </header>
 
           <section className={adminUsersControls}>
-            <div className={adminUsersToolbarSearch}>
+            <div
+              className={cn(
+                adminUsersToolbarSearch,
+                "sm:grid-cols-[minmax(0,1fr)_minmax(0,13rem)_auto]"
+              )}
+            >
               <LiveSearchInput
                 paramName="search"
                 placeholder="Search name or email..."
@@ -271,6 +380,7 @@ export default async function AdminUsersPage({
                 inputClassName="h-11 w-full rounded-[10px] bg-white pl-10 pr-3.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-900/40 focus-visible:border-brand-olive/40 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-brand-olive/15 focus-visible:ring-offset-0"
                 iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-slate-900 opacity-45"
               />
+              <CountryFilterSelect value={country} options={countryOptions} />
               <AdminExportButton
                 rows={exportRows}
                 columns={[
@@ -279,6 +389,7 @@ export default async function AdminUsersPage({
                   "Rank",
                   "Unit",
                   "Country",
+                  "Nationality",
                   "Application",
                   "Payment",
                   "Registered",

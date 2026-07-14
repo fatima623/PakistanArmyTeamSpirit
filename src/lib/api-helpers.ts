@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import {
   canAccessAdminArea,
+  canAccessHostArea,
   canApproveRegistration,
   canVerifyPayment,
 } from "@/lib/auth-routes";
@@ -35,6 +36,15 @@ export async function requireAdmin() {
 export async function requireStaff() {
   const session = await requireAuth();
   if (!canAccessAdminArea(session.user.role)) {
+    throw new ApiError("Forbidden", 403);
+  }
+  return session;
+}
+
+/** Host Formation login only — read-only host dashboard data endpoints. */
+export async function requireHost() {
+  const session = await requireAuth();
+  if (!canAccessHostArea(session.user.role)) {
     throw new ApiError("Forbidden", 403);
   }
   return session;
@@ -108,6 +118,8 @@ export const userSelect = {
   rosterCompletedAt: true,
   maxTeamMembersOverride: true,
   flightsFinalizedAt: true,
+  hostFormationId: true,
+  finalizedForHostAt: true,
   createdAt: true,
   updatedAt: true,
 } as const;

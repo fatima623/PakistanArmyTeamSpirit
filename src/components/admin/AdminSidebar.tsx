@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
   Bell,
+  Building2,
   Calendar,
   CreditCard,
   Images,
@@ -44,6 +45,7 @@ const navIcons: Record<(typeof ADMIN_NAV_ITEMS)[number]["key"], LucideIcon> = {
   units: Shield,
   teamRequests: UserPlus,
   flights: Plane,
+  hostFormations: Building2,
   news: Newspaper,
   events: Trophy,
   gallery: Images,

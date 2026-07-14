@@ -113,6 +113,7 @@ export const AUDIT_ENTITY = {
   TICKET: "ticket",
   TEAM_SIZE_REQUEST: "team_size_request",
   FLIGHT_DETAIL: "flight_detail",
+  HOST_FORMATION: "host_formation",
 } as const;
 
 /** Fallback team-member cap when SiteSettings is unavailable. */

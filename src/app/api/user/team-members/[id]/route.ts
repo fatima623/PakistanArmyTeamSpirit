@@ -10,6 +10,7 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { requireEditableRoster } from "@/lib/roster-guard";
+import { deleteFlightDocByInternalPath } from "@/lib/storage/flight-doc";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -84,12 +85,28 @@ export async function DELETE(_request: Request, context: RouteContext) {
 
     await requireEditableRoster(session.user.id);
 
-    // Scope the delete to the owner so a guessed id can't touch other accounts.
-    const result = await prisma.teamMember.deleteMany({
+    // Scope the lookup to the owner so a guessed id can't touch other accounts.
+    const member = await prisma.teamMember.findFirst({
       where: { id, userId: session.user.id },
+      select: {
+        id: true,
+        flightDetail: {
+          select: { id: true, passportFilePath: true, ticketFilePath: true },
+        },
+      },
     });
-    if (result.count === 0) {
+    if (!member) {
       throw new ApiError("Team member not found", 404);
+    }
+
+    // The member's flight record goes with them (FK onDelete: Cascade).
+    await prisma.teamMember.delete({ where: { id: member.id } });
+
+    // Unlink their stored PDFs only AFTER the DB commit, so a failed delete
+    // never destroys files that are still referenced. Best-effort.
+    if (member.flightDetail) {
+      await deleteFlightDocByInternalPath(member.flightDetail.passportFilePath);
+      await deleteFlightDocByInternalPath(member.flightDetail.ticketFilePath);
     }
 
     return NextResponse.json({ success: true });

@@ -1,16 +1,28 @@
 import { redirect } from "next/navigation";
 
 import { getCachedSession } from "@/lib/cached-auth";
-import { canAccessAdminArea, getRoleHomePath } from "@/lib/auth-routes";
+import {
+  canAccessAdminArea,
+  getRoleHomePath,
+  isHostRole,
+} from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 
-/** Ensures a logged-in participant session; staff (admin/MTD/SDBS) go to /admin. */
+/**
+ * Ensures a logged-in participant session. Non-participants are bounced to
+ * their own home: staff (admin/MTD/SDBS) → /admin, Host Formation logins →
+ * /host. This guard is the backstop for every /event/* page, including those
+ * the middleware matcher does not cover.
+ */
 export async function requireParticipantSession() {
   const session = await getCachedSession();
   if (!session?.user?.id) {
     redirect("/event/login");
   }
-  if (canAccessAdminArea(session.user.role)) {
+  if (
+    canAccessAdminArea(session.user.role) ||
+    isHostRole(session.user.role)
+  ) {
     redirect(getRoleHomePath(session.user.role));
   }
   return session;

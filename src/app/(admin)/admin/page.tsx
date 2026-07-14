@@ -12,6 +12,7 @@ import {
   getStatusDistribution,
 } from "@/lib/admin-dashboard-charts";
 import { adminNavLabel } from "@/lib/admin-navigation";
+import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import {
@@ -43,16 +44,16 @@ export default async function AdminOverviewPage() {
     pipeline,
     kpiSparklines,
   ] = await Promise.all([
-    prisma.user.count({ where: { role: { not: "admin" } } }),
+    prisma.user.count({ where: { role: PARTICIPANT_ROLE } }),
     prisma.user.count({
       where: {
-        role: { not: "admin" },
+        role: PARTICIPANT_ROLE,
         applicationStatus: APPLICATION_STATUS.APPROVED,
       },
     }),
     prisma.user.count({
       where: {
-        role: { not: "admin" },
+        role: PARTICIPANT_ROLE,
         applicationStatus: APPLICATION_STATUS.PENDING,
       },
     }),
@@ -64,7 +65,7 @@ export default async function AdminOverviewPage() {
       },
     }),
     prisma.user.findMany({
-      where: { role: { not: "admin" } },
+      where: { role: PARTICIPANT_ROLE },
       orderBy: { createdAt: "desc" },
       take: 6,
       select: {

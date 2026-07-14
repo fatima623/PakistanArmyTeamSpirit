@@ -18,7 +18,9 @@ import {
   AUDIT_ENTITY,
   PAYMENT_STATUS,
 } from "@/lib/constants";
-import { isStaffRole } from "@/lib/auth-routes";
+import { PARTICIPANT_ROLE, isStaffRole } from "@/lib/auth-routes";
+import { resolveCountryForSubmit } from "@/lib/countries";
+import { resolveNationalityForSubmit } from "@/lib/participant-country";
 import { toCsv } from "@/lib/csv";
 
 const PAGE_SIZE = 25;
@@ -27,7 +29,10 @@ function buildUserWhere(
   search: string | null,
   filter: string | null
 ): Prisma.UserWhereInput {
-  const where: Prisma.UserWhereInput = {};
+  /* Participants only by default. Without this, the JSON list AND the CSV
+     export (which emits a `role` column) returned every admin/SD/MT/host
+     account. The `filter=admin` branch below deliberately overwrites it. */
+  const where: Prisma.UserWhereInput = { role: PARTICIPANT_ROLE };
 
   if (search) {
     where.OR = [
@@ -165,6 +170,17 @@ export async function POST(request: Request) {
     const passwordHash = await bcrypt.hash(parsed.data.password, BCRYPT_ROUNDS);
     const now = new Date();
 
+    /* Resolve country exactly as public registration does ("Other" collapses to
+       the typed-in customCountry; Pakistan implies Pakistani nationality).
+       Staff accounts are not participants, so they carry no country. */
+    const country =
+      !staff && parsed.data.country?.trim()
+        ? resolveCountryForSubmit(parsed.data.country, parsed.data.customCountry)
+        : null;
+    const nationality = country
+      ? resolveNationalityForSubmit(country, parsed.data.nationality)
+      : null;
+
     const user = await prisma.user.create({
       data: {
         email,
@@ -174,6 +190,8 @@ export async function POST(request: Request) {
         rank: parsed.data.rank,
         gender: parsed.data.gender,
         role: parsed.data.role,
+        country,
+        nationality,
         approved: staff,
         applicationStatus: staff
           ? APPLICATION_STATUS.APPROVED
@@ -193,7 +211,7 @@ export async function POST(request: Request) {
       entityId: user.id,
       action: "user_created_by_admin",
       actorId: session.user.id,
-      metadata: { email, role: parsed.data.role },
+      metadata: { email, role: parsed.data.role, country },
     });
 
     return NextResponse.json({ user }, { status: 201 });

@@ -593,9 +593,9 @@ export function TeamRosterManager({
                     {tm.roster.edit}
                   </Button>
                 ) : (
-                  <Button
-                    size="sm"
-                    className="bg-emerald-700 text-white hover:bg-emerald-800 disabled:!opacity-100 disabled:!bg-emerald-700/50 disabled:!text-white/70"
+                  <button
+                    type="button"
+                    className="pp-btn pp-btn--primary"
                     disabled={completeDisabled}
                     onClick={markComplete}
                     title={
@@ -612,7 +612,7 @@ export function TeamRosterManager({
                       <CheckCircle2 className="h-4 w-4" aria-hidden />
                     )}
                     {tm.roster.markComplete}
-                  </Button>
+                  </button>
                 )}
               </>
             )}
@@ -861,10 +861,9 @@ export function TeamRosterManager({
       </section>
 
       <div className="flex justify-end">
-        <Button
+        <button
           type="button"
-          size="lg"
-          className="justify-center gap-2 bg-emerald-700 px-6 text-white hover:bg-emerald-800 disabled:!opacity-100 disabled:!bg-emerald-700/45 disabled:!text-white/70"
+          className="pp-btn pp-btn--primary px-6 py-3 text-[0.9375rem]"
           disabled={busy !== null || !allFilled || dirty}
           onClick={goToFlights}
           title={
@@ -880,7 +879,7 @@ export function TeamRosterManager({
           ) : null}
           {t.common.next}: {t.journey.headers.flights.title}
           <ArrowRight className="h-4 w-4" aria-hidden />
-        </Button>
+        </button>
       </div>
 
       <Dialog open={requestOpen} onOpenChange={setRequestOpen}>
