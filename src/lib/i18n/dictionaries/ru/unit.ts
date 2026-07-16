@@ -31,6 +31,13 @@ export const unit: typeof enUnit = {
     army: "Сухопутные войска",
     navy: "Военно-морской флот",
     airForce: "Военно-воздушные силы",
+    combat: "Боевые части",
+    combatSupport: "Части боевого обеспечения",
+    combatServiceSupport: "Части тылового обеспечения",
+  },
+  errors: {
+    required: "Это поле обязательно для заполнения",
+    email: "Введите корректный адрес электронной почты",
   },
   placeholders: {
     selectUnit: "Выберите подразделение",

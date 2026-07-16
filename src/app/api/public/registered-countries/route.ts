@@ -1,14 +1,25 @@
 import { NextResponse } from "next/server";
 
 import type { RegisteredCountry, RegisteredTeam } from "@/lib/country-iso";
+import {
+  PREDEFINED_PARTICIPANTS,
+  mergeRegisteredCountries,
+} from "@/lib/international-participants";
 import { prisma } from "@/lib/prisma";
 
 export const revalidate = 300;
 
 /**
- * Countries from which teams are registered, with each team's name + the year
- * it registered. A "team" = a participant (role "user") who has registered a
- * unit or completed team registration.
+ * Countries participating in the competition, with each team's name + year.
+ *
+ * The response is the union of two sources, de-duplicated by country:
+ *   1. PREDEFINED_PARTICIPANTS — the confirmed PATS nations, always present.
+ *   2. Live data — participants (role "user") who registered a unit or
+ *      completed team registration. Any country added via the admin panel /
+ *      database appears here automatically, no code change needed.
+ *
+ * If the database is unavailable the predefined set is still returned, so the
+ * map never renders empty.
  */
 export async function GET() {
   try {
@@ -36,17 +47,21 @@ export async function GET() {
       byCountry.set(country, list);
     }
 
-    const countries: RegisteredCountry[] = [...byCountry.entries()]
-      .map(([country, teams]) => ({
-        country,
-        teams: teams.sort(
-          (a, b) => b.year - a.year || a.name.localeCompare(b.name)
-        ),
-      }))
-      .sort((a, b) => a.country.localeCompare(b.country));
+    const dynamicCountries: RegisteredCountry[] = [...byCountry.entries()].map(
+      ([country, teams]) => ({ country, teams })
+    );
+
+    // Predefined first so its clean display names win on a key collision.
+    const countries = mergeRegisteredCountries(
+      PREDEFINED_PARTICIPANTS,
+      dynamicCountries
+    );
 
     return NextResponse.json({ countries });
   } catch {
-    return NextResponse.json({ countries: [] });
+    // DB unavailable — still return the predefined nations.
+    return NextResponse.json({
+      countries: mergeRegisteredCountries(PREDEFINED_PARTICIPANTS),
+    });
   }
 }

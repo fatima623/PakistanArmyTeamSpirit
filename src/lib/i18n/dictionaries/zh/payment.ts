@@ -2,6 +2,43 @@ import type { payment as enPayment } from "../en/payment";
 
 // Simplified Chinese (zh-CN) translations for payment instructions and form.
 export const payment: typeof enPayment = {
+  statuses: {
+    full: {
+      PENDING: "需要付款",
+      SUBMITTED: "付款已提交",
+      UNDER_REVIEW: "审核中",
+      VERIFIED: "付款已核实",
+      REJECTED: "凭证被驳回",
+      RETURNED: "已退回修改",
+    },
+    table: {
+      PENDING: "待付款",
+      SUBMITTED: "已提交",
+      UNDER_REVIEW: "审核中",
+      VERIFIED: "已核实",
+      REJECTED: "已驳回",
+      RETURNED: "已退回",
+    },
+  },
+  timeline: {
+    currentStatus: "当前状态：",
+    rejectionHistory: "驳回记录",
+    rejectionHistoryCount: (n) => `驳回记录（${n}）`,
+    reason: "原因：",
+  },
+  proof: {
+    loadError: "无法加载付款凭证",
+    loadFailed: "凭证加载失败",
+    proofFallback: "付款凭证",
+    downloadFallbackName: "payment-proof",
+    viewImage: "查看图片",
+    viewPdf: "查看 PDF",
+    download: "下载",
+    lightboxTitle: "付款凭证 — 原始尺寸",
+    lightboxAlt: "付款凭证原始尺寸",
+    // Latin unit abbreviations are standard in Chinese technical UIs.
+    units: { mb: "MB", kb: "KB" },
+  },
   instructions: {
     registrationFee: "注册费",
     sendExactBold: "请准确汇出此金额",

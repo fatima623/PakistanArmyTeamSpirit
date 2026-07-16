@@ -2,17 +2,16 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
+import { Medal, ScrollText } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import { mechanicalTransition } from "@/components/cinematic/motion";
-import { STANDINGS_PREVIEW } from "@/lib/leaderboard";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import { getMedalTierStandings, type MedalTierId } from "@/lib/leaderboard";
 import { PATS_CROP } from "@/lib/media";
 
-type MedalCard = {
-  id: "gold" | "silver" | "bronze" | "certificate";
-  tier: string;
-  name: string;
-  range: string;
+type MedalAsset = {
+  id: MedalTierId;
   imageSrc: string;
   imageAlt: string;
   highQuality?: boolean;
@@ -20,12 +19,9 @@ type MedalCard = {
   photo?: boolean;
 };
 
-const MEDAL_CARDS: readonly MedalCard[] = [
+const MEDAL_ASSETS: readonly MedalAsset[] = [
   {
     id: "gold",
-    tier: "Gold tier",
-    name: "Gold Medal",
-    range: "75% and above",
     imageSrc: "/awards/pats-medal-gold.jpeg",
     imageAlt: "PATS gold medal — Pakistan Army Team Spirit Competition",
     highQuality: true,
@@ -33,9 +29,6 @@ const MEDAL_CARDS: readonly MedalCard[] = [
   },
   {
     id: "silver",
-    tier: "Silver tier",
-    name: "Silver Medal",
-    range: "65% to 74.99%",
     imageSrc: "/awards/pats-medal-silver.jpeg",
     imageAlt: "PATS silver medal — Pakistan Army Team Spirit Competition",
     highQuality: true,
@@ -43,9 +36,6 @@ const MEDAL_CARDS: readonly MedalCard[] = [
   },
   {
     id: "bronze",
-    tier: "Bronze tier",
-    name: "Bronze Medal",
-    range: "55% to 64.99%",
     imageSrc: "/awards/pats-medal-bronze.jpeg",
     imageAlt: "PATS bronze medal — Pakistan Army Team Spirit Competition",
     highQuality: true,
@@ -53,17 +43,44 @@ const MEDAL_CARDS: readonly MedalCard[] = [
   },
   {
     id: "certificate",
-    tier: "Participation",
-    name: "Certificate",
-    range: "Below 65%",
     imageSrc: PATS_CROP.awardCertificateDisplay,
     imageAlt: "PATS certificate of participation",
   },
 ];
 
+const TIER_STANDINGS = getMedalTierStandings();
+
 export function AwardsShowcase() {
+  const { t } = useI18n();
+  const p = t.publicSite.pages.awards;
   const reduce = useReducedMotion();
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // Per-tier localized labels, keyed by tier id.
+  const tierLabel: Record<MedalTierId, string> = {
+    gold: p.tierGold,
+    silver: p.tierSilver,
+    bronze: p.tierBronze,
+    certificate: p.tierParticipation,
+  };
+  const medalName: Record<MedalTierId, string> = {
+    gold: p.nameGold,
+    silver: p.nameSilver,
+    bronze: p.nameBronze,
+    certificate: p.nameCertificate,
+  };
+  const medalRange: Record<MedalTierId, string> = {
+    gold: p.rangeGold,
+    silver: p.rangeSilver,
+    bronze: p.rangeBronze,
+    certificate: p.rangeCertificate,
+  };
+  const categoryLabel: Record<MedalTierId, string> = {
+    gold: p.metaGold,
+    silver: p.metaSilver,
+    bronze: p.metaBronze,
+    certificate: p.nameCertificate,
+  };
 
   useEffect(() => {
     const grid = gridRef.current;
@@ -104,44 +121,59 @@ export function AwardsShowcase() {
   return (
     <div className="pats-awards-showcase">
       <header className="pats-awards-showcase__header">
-        <p className="pats-awards-showcase__label">Honors registry</p>
+        <p className="pats-awards-showcase__label">{p.showcaseLabel}</p>
         <div className="pats-awards-showcase__rule" aria-hidden />
         <h2 className="pats-section-title pats-awards-showcase__title">
-          Awards and honors
+          {p.showcaseTitle}
         </h2>
-        <p className="pats-awards-showcase__subtitle">
-          Teams are graded across all tactical events. Overall percentage determines medal
-          tier and certificate of participation.
-        </p>
+        <p className="pats-awards-showcase__subtitle">{p.showcaseSubtitle}</p>
       </header>
 
       <div ref={gridRef} className="pats-awards-hero-grid">
-        {MEDAL_CARDS.map((card) => (
-          <article
-            key={card.id}
-            className={`pats-awards-hero-card pats-awards-hero-card--${card.id}${
-              card.photo ? " pats-awards-hero-card--photo" : ""
-            }`}
-          >
-            <div className="pats-awards-hero-card__visual">
-              <Image
-                src={card.imageSrc}
-                alt={card.imageAlt}
-                fill
-                className="pats-awards-hero-card__image"
-                unoptimized={card.highQuality}
-                quality={100}
-                sizes="(max-width: 639px) 100vw, 50vw"
-                priority={card.id === "gold" || card.id === "silver"}
-              />
-            </div>
-            <div className="pats-awards-hero-card__footer">
-              <p className="pats-awards-hero-card__tier">{card.tier}</p>
-              <h3 className="pats-awards-hero-card__name">{card.name}</h3>
-              <p className="pats-awards-hero-card__score">{card.range}</p>
-            </div>
-          </article>
-        ))}
+        {MEDAL_ASSETS.map((card) => {
+          const BadgeIcon = card.id === "certificate" ? ScrollText : Medal;
+          return (
+            <article
+              key={card.id}
+              className={`pats-awards-hero-card pats-awards-hero-card--${card.id}`}
+            >
+              <div className="pats-awards-hero-card__visual">
+                <span className="pats-awards-hero-card__badge" aria-hidden>
+                  <BadgeIcon />
+                </span>
+                <div
+                  className={`pats-awards-hero-card__thumb${
+                    card.id === "certificate"
+                      ? " pats-awards-hero-card__thumb--doc"
+                      : ""
+                  }`}
+                >
+                  <Image
+                    src={card.imageSrc}
+                    alt={card.imageAlt}
+                    fill
+                    className="pats-awards-hero-card__image"
+                    unoptimized={card.highQuality}
+                    quality={100}
+                    sizes="240px"
+                    priority={card.id === "gold" || card.id === "silver"}
+                  />
+                </div>
+              </div>
+              <div className="pats-awards-hero-card__footer">
+                <p className="pats-awards-hero-card__tier">
+                  {tierLabel[card.id]}
+                </p>
+                <h3 className="pats-awards-hero-card__name">
+                  {medalName[card.id]}
+                </h3>
+                <p className="pats-awards-hero-card__score">
+                  {medalRange[card.id]}
+                </p>
+              </div>
+            </article>
+          );
+        })}
       </div>
 
       <motion.div
@@ -152,29 +184,81 @@ export function AwardsShowcase() {
         className="pats-awards-showcase__standings"
       >
         <div className="pats-awards-standings__header">
-          <h3 className="pats-awards-standings__title">Current standings</h3>
-          <span className="pats-awards-standings__badge">Live telemetry</span>
+          <div>
+            <h3 className="pats-awards-standings__title">{p.standingsTitle}</h3>
+            <p className="pats-awards-standings__subtitle">
+              {p.standingsSubtitle}
+            </p>
+          </div>
+          <span className="pats-awards-standings__badge">
+            {p.standingsBadge}
+          </span>
         </div>
 
-        <div className="pats-awards-standings__list">
-          {STANDINGS_PREVIEW.map((row) => (
-            <div key={row.rank} className="pats-awards-standings__row">
-              <span className="pats-awards-standings__rank">
-                {String(row.rank).padStart(2, "0")}
-              </span>
-              <span>
-                <span className="pats-awards-standings__team">{row.team}</span>
-                <span className="pats-awards-standings__nation">{row.nation}</span>
-              </span>
-              <span className="pats-awards-standings__score">
-                {row.score.toFixed(1)}%
-              </span>
-            </div>
-          ))}
+        <div className="pats-awards-standings__scroll">
+          <table className="pats-awards-standings__table">
+            <caption className="sr-only">{p.standingsSubtitle}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{p.colMedal}</th>
+                <th scope="col">{p.colMinimum}</th>
+                <th scope="col">{p.colCountries}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TIER_STANDINGS.map((tier) => (
+                <tr
+                  key={tier.id}
+                  className={`pats-awards-standings__tier-row pats-awards-standings__tier-row--${tier.id}`}
+                >
+                  <th scope="row" data-label={p.colMedal}>
+                    <span className="pats-awards-standings__tier">
+                      <span
+                        className="pats-awards-standings__dot"
+                        aria-hidden
+                      />
+                      {categoryLabel[tier.id]}
+                    </span>
+                  </th>
+                  <td data-label={p.colMinimum}>
+                    <span className="pats-awards-standings__min">
+                      {tier.minPercent != null ? `≥ ${tier.minPercent}%` : "—"}
+                    </span>
+                    <span className="pats-awards-standings__band">
+                      {medalRange[tier.id]}
+                    </span>
+                  </td>
+                  <td data-label={p.colCountries}>
+                    {tier.countries.length > 0 ? (
+                      <ul className="pats-awards-standings__countries">
+                        {tier.countries.map((c) => (
+                          <li
+                            key={c.team}
+                            className="pats-awards-standings__country"
+                          >
+                            <span className="pats-awards-standings__country-name">
+                              {c.nation}
+                            </span>
+                            <span className="pats-awards-standings__country-score">
+                              {c.score.toFixed(1)}%
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <span className="pats-awards-standings__none">
+                        {p.noTeams}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <p className="pats-awards-standings__footnote">
-          Illustrative standings for command review. Final results certified post-exercise.
+          {p.standingsFootnote}
         </p>
       </motion.div>
     </div>

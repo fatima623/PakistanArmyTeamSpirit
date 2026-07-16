@@ -1,18 +1,27 @@
 import { cn, formatDateDisplay, formatDateTime } from "@/lib/utils";
 import type { TimelineData } from "@/lib/timeline";
+import type { Locale } from "@/lib/i18n/config";
+import type { core as enCore } from "@/lib/i18n/dictionaries/en/core";
+import { translateKeyDateLabel, translateKeyDateValue } from "@/lib/i18n/key-date-i18n";
 
-function DeadlinePill({ passed, days }: { passed: boolean; days: number }) {
+type TimelineStrings = typeof enCore.dashboard.timelinePanel;
+
+function DeadlinePill({
+  passed,
+  days,
+  t,
+}: {
+  passed: boolean;
+  days: number;
+  t: TimelineStrings;
+}) {
   const urgent = !passed && days <= 7;
   const tone = passed
     ? "border-slate-200 bg-slate-100 text-slate-600"
     : urgent
       ? "border-red-200 bg-red-50 text-red-700"
       : "border-emerald-200 bg-emerald-50 text-emerald-700";
-  const text = passed
-    ? "Closed"
-    : days <= 0
-      ? "Due today"
-      : `${days} day${days === 1 ? "" : "s"} left`;
+  const text = passed ? t.closed : days <= 0 ? t.dueToday : t.daysLeft(days);
   return (
     <span
       className={cn(
@@ -28,13 +37,21 @@ function DeadlinePill({ passed, days }: { passed: boolean; days: number }) {
 /**
  * Event timeline — enforced deadlines (with live status) plus informational
  * key dates. `compact` renders the dashboard summary (deadlines only).
+ *
+ * Server component: the caller passes `t` (from `getDictionary()`) and the
+ * active `locale`, matching the DashboardStatusBar / ParticipantWorkflowPanel
+ * pattern.
  */
 export function Timeline({
   data,
   compact = false,
+  t,
+  locale,
 }: {
   data: TimelineData;
   compact?: boolean;
+  t: TimelineStrings;
+  locale: Locale;
 }) {
   const { deadlines, keyDates } = data;
 
@@ -42,7 +59,7 @@ export function Timeline({
     <div className="space-y-5">
       {deadlines.length > 0 ? (
         <div>
-          <h3 className="portal-section-title mb-3 text-sm">Deadlines</h3>
+          <h3 className="portal-section-title mb-3 text-sm">{t.deadlines}</h3>
           <ul className="space-y-2">
             {deadlines.map((d) => {
               const urgent = !d.passed && d.daysRemaining <= 7;
@@ -61,29 +78,29 @@ export function Timeline({
                 >
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-brand-ink">
-                      {d.label}
+                      {/* Deadlines are code-generated with stable keys, so they
+                          resolve directly rather than via prose lookup. */}
+                      {t.deadlineLabels[d.key] ?? d.label}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {formatDateTime(d.date)}
+                      {formatDateTime(d.date, locale)}
                     </p>
                   </div>
-                  <DeadlinePill passed={d.passed} days={d.daysRemaining} />
+                  <DeadlinePill passed={d.passed} days={d.daysRemaining} t={t} />
                 </li>
               );
             })}
           </ul>
         </div>
       ) : (
-        !compact && (
-          <p className="portal-muted text-sm">No deadlines have been set yet.</p>
-        )
+        !compact && <p className="portal-muted text-sm">{t.noDeadlines}</p>
       )}
 
       {!compact && (
         <div>
-          <h3 className="portal-section-title mb-3 text-sm">Key dates</h3>
+          <h3 className="portal-section-title mb-3 text-sm">{t.keyDates}</h3>
           {keyDates.length === 0 ? (
-            <p className="portal-muted text-sm">No key dates published yet.</p>
+            <p className="portal-muted text-sm">{t.noKeyDates}</p>
           ) : (
             <ul className="space-y-2">
               {keyDates.map((k) => (
@@ -92,10 +109,13 @@ export function Timeline({
                   className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3"
                 >
                   <span className="text-sm font-semibold text-brand-ink">
-                    {k.label}
+                    {/* Admin-entered rows: best-effort, falls back to source. */}
+                    {translateKeyDateLabel(k.label, locale)}
                   </span>
                   <span className="text-right text-sm text-slate-600">
-                    {k.date ? formatDateDisplay(k.date) : k.value}
+                    {k.date
+                      ? formatDateDisplay(k.date, locale)
+                      : translateKeyDateValue(k.value, locale)}
                   </span>
                 </li>
               ))}

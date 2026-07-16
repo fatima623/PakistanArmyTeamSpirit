@@ -4,6 +4,7 @@ const PAGE_BANNER_PATHS = new Set([
   "/operations",
   "/international",
   "/awards",
+  "/announcements",
   // "/gallery" — no photo banner; the gallery grid leads the page directly.
   "/documents",
   "/key-dates",
@@ -22,6 +23,9 @@ export function pathnameHasFullscreenHero(pathname: string): boolean {
 export function pathnameHasPageBanner(pathname: string): boolean {
   if (PAGE_BANNER_PATHS.has(pathname)) return true;
   if (pathname.startsWith("/news/") && pathname.length > "/news".length) return true;
+  if (pathname.startsWith("/announcements/") && pathname.length > "/announcements".length) {
+    return true;
+  }
   if (pathname.startsWith("/event/reset-password/")) return true;
   return false;
 }
@@ -37,6 +41,7 @@ export function pathnameIsCinematicFullWidth(pathname: string): boolean {
   if (pathname.startsWith("/international")) return true;
   if (pathname.startsWith("/awards")) return true;
   if (pathname.startsWith("/gallery")) return true;
+  if (pathname.startsWith("/announcements")) return true;
   if (pathname.startsWith("/documents")) return true;
   if (pathname.startsWith("/exercise-contour")) return true;
   if (pathname.startsWith("/event")) return true;
@@ -51,7 +56,7 @@ export function pathnameUsesInnerPageShell(pathname: string): boolean {
 }
 
 /** Standalone pages that render bare — no global header/nav, ticker or footer. */
-const BARE_CHROME_PREFIXES = ["/gallery", "/announcements"];
+const BARE_CHROME_PREFIXES: string[] = [];
 
 /** True for pages that should show only their own content (no site chrome). */
 export function pathnameHidesSiteChrome(pathname: string): boolean {

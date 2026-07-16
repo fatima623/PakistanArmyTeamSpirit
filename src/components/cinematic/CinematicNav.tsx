@@ -7,7 +7,10 @@ import { Menu, X } from "lucide-react";
 
 import { AnnouncementTicker } from "@/components/cinematic/AnnouncementTicker";
 import { navDrop } from "@/components/cinematic/motion";
+import { PublicLanguageSwitcher } from "@/components/navigation/PublicLanguageSwitcher";
 import { NAV_BRAND_TITLE } from "@/lib/branding";
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
+import { publicNavLabel } from "@/lib/i18n/public-nav-labels";
 import { PUBLIC_NAV } from "@/lib/pats-public";
 import type { PublicTickerItem } from "@/lib/ticker";
 import { cn } from "@/lib/utils";
@@ -29,6 +32,13 @@ export function CinematicNav({
   tickerItems?: PublicTickerItem[];
   tickerScrollDurationSec?: number;
 }) {
+  // Mounted by the public shell (inside an I18nProvider) and by the 404 page
+  // (outside one), so read the locale optionally and fall back to English.
+  const i18n = useI18nOptional();
+  const t = i18n?.t ?? null;
+  const chrome = t?.publicSite.chrome;
+  const loginLabel = t ? t.publicSite.nav.login : "Login";
+
   const isHome = pathname === "/" && !dayTheme;
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -92,7 +102,7 @@ export function CinematicNav({
         </Link>
 
         <nav
-          aria-label="Main navigation"
+          aria-label={chrome?.mainNav ?? "Main navigation"}
           className="hidden items-center gap-1 md:flex"
         >
           {navItems.map((item) => (
@@ -107,12 +117,13 @@ export function CinematicNav({
                   : "cinematic-nav-link-inactive"
               )}
             >
-              {item.label}
+              {publicNavLabel(t, item.href, item.label)}
             </Link>
           ))}
           <Link href="/event/login" className="cinematic-btn-nav ml-3">
-            Login
+            {loginLabel}
           </Link>
+          {i18n ? <PublicLanguageSwitcher className="ml-2" /> : null}
         </nav>
 
         <button
@@ -126,7 +137,11 @@ export function CinematicNav({
           onClick={mobileOpen ? closeMobile : openMobile}
           aria-expanded={mobileOpen}
           aria-controls="cinematic-mobile-nav"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          aria-label={
+            mobileOpen
+              ? (chrome?.closeMenu ?? "Close menu")
+              : (chrome?.openMenu ?? "Open menu")
+          }
         >
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -160,15 +175,20 @@ export function CinematicNav({
                         : "text-white hover:text-brand-brass"
                   )}
                 >
-                  {item.label}
+                  {publicNavLabel(t, item.href, item.label)}
                 </Link>
               ))}
               <Link
                 href="/event/login"
                 className="cinematic-btn-nav mt-4 w-full"
               >
-                Login
+                {loginLabel}
               </Link>
+              {i18n ? (
+                <div className="mt-4 flex justify-start pt-1">
+                  <PublicLanguageSwitcher />
+                </div>
+              ) : null}
             </div>
           </div>
       ) : null}

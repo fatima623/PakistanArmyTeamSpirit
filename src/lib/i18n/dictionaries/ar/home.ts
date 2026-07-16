@@ -4,8 +4,10 @@ import type { home as enHome } from "../en/home";
 export const home: typeof enHome = {
   hero: {
     featuredAria: "أبرز المحطات",
-    titleLine1: "Pakistan Army Team Spirit (PATS)",
+    titleLine1: "روح الفريق للجيش الباكستاني (PATS)",
     titleLine2: "المسابقة",
+    // ترجمة معنى شعار الشارة (لإقبال)، وأصله بالأردية.
+    motto: "يقينٌ مُحكَم، وعملٌ دائب، ومحبةٌ فاتحةُ العالم",
     description:
       "روح الفريق الدولية للجيش الباكستاني — تمرين دوريات يستمر 60 ساعة يختبر الإتقان التكتيكي والقدرة على التحمل وروح الفريق بين الدول الشريكة.",
     cta: "سجّل فريقك",

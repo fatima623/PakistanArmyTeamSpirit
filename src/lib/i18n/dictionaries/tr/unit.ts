@@ -31,6 +31,13 @@ export const unit: typeof enUnit = {
     army: "Kara Kuvvetleri",
     navy: "Deniz Kuvvetleri",
     airForce: "Hava Kuvvetleri",
+    combat: "Muharip",
+    combatSupport: "Muharip Destek",
+    combatServiceSupport: "Muharip Hizmet Destek",
+  },
+  errors: {
+    required: "Bu alan zorunludur",
+    email: "Geçerli bir e-posta adresi girin",
   },
   placeholders: {
     selectUnit: "Birlik seçin",

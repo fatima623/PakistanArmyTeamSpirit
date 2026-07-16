@@ -5,23 +5,26 @@ import { AwardsShowcase } from "@/components/awards/AwardsShowcase";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
-import { TEAM_ROLES } from "@/lib/pats-content";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Awards & Recognition",
 };
 
-export default function AwardsPage() {
+export default async function AwardsPage() {
+  const { t } = await getDictionary();
+  const p = t.publicSite.pages.awards;
+
   return (
     <div className="space-y-0">
       <PatsPageHero
-        eyebrow="Honors registry"
-        title="Awards & recognition"
-        subtitle="Teams are graded across all tactical events. Overall percentage determines medal tier and certificate of participation."
+        eyebrow={p.heroEyebrow}
+        title={p.heroTitle}
+        subtitle={p.heroSubtitle}
         meta={[
-          { label: "Gold", value: "≥ 75%" },
-          { label: "Silver", value: "65–74.99%" },
-          { label: "Bronze", value: "55–64.99%" },
+          { label: p.metaGold, value: "≥ 75%" },
+          { label: p.metaSilver, value: "65–74.99%" },
+          { label: p.metaBronze, value: "55–64.99%" },
         ]}
       />
 
@@ -32,14 +35,14 @@ export default function AwardsPage() {
       <PatsSection variant="elevated" className="pats-awards-page-section">
         <ScrollReveal>
           <PatsSectionHeading
-            eyebrow="Team"
-            title="Team composition"
-            description="Official patrol structure for competition teams."
+            eyebrow={p.teamEyebrow}
+            title={p.teamTitle}
+            description={p.teamDescription}
           />
         </ScrollReveal>
         <div className="pats-awards-team-card">
           <div className="pats-data-table">
-            {TEAM_ROLES.map((row) => (
+            {p.teamRoles.map((row) => (
               <div
                 key={row.role}
                 className="pats-data-table__row pats-data-table__row--split"

@@ -1,6 +1,42 @@
 import type { payment as enPayment } from "../en/payment";
 
 export const payment: typeof enPayment = {
+  statuses: {
+    full: {
+      PENDING: "Ödeme Gerekli",
+      SUBMITTED: "Ödeme Gönderildi",
+      UNDER_REVIEW: "İncelemede",
+      VERIFIED: "Ödeme Doğrulandı",
+      REJECTED: "Belge Reddedildi",
+      RETURNED: "Düzeltme için İade Edildi",
+    },
+    table: {
+      PENDING: "Gerekli",
+      SUBMITTED: "Gönderildi",
+      UNDER_REVIEW: "İncelemede",
+      VERIFIED: "Doğrulandı",
+      REJECTED: "Reddedildi",
+      RETURNED: "İade edildi",
+    },
+  },
+  timeline: {
+    currentStatus: "Mevcut Durum:",
+    rejectionHistory: "Ret Geçmişi",
+    rejectionHistoryCount: (n) => `Ret Geçmişi (${n})`,
+    reason: "Gerekçe:",
+  },
+  proof: {
+    loadError: "Ödeme belgesi yüklenemedi",
+    loadFailed: "Belge yüklenemedi",
+    proofFallback: "Ödeme belgesi",
+    downloadFallbackName: "odeme-belgesi",
+    viewImage: "Görseli görüntüle",
+    viewPdf: "PDF'yi görüntüle",
+    download: "İndir",
+    lightboxTitle: "Ödeme belgesi — tam boyut",
+    lightboxAlt: "Ödeme belgesi tam boyut",
+    units: { mb: "MB", kb: "KB" },
+  },
   instructions: {
     registrationFee: "Kayıt ücreti",
     sendExactBold: "Tam olarak bu tutarı gönderin",

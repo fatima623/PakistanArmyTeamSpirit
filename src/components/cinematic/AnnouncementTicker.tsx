@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Volume2 } from "lucide-react";
 
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
 import {
   DEFAULT_TICKER_SCROLL_SPEED,
   TICKER_PRIORITY,
@@ -76,6 +77,10 @@ export function AnnouncementTicker({
   variant = "bar",
   showSpeaker = false,
 }: Props) {
+  const i18n = useI18nOptional();
+  const announcementsLabel = i18n
+    ? i18n.t.publicSite.nav.announcements
+    : "Announcements";
   const loopSec =
     scrollDurationSec ??
     TICKER_SCROLL_DURATION_SEC[DEFAULT_TICKER_SCROLL_SPEED];
@@ -98,7 +103,7 @@ export function AnnouncementTicker({
         className
       )}
       role="region"
-      aria-label="Announcements"
+      aria-label={announcementsLabel}
       aria-live="polite"
     >
       {!isOverlay && (

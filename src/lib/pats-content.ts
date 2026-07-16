@@ -750,30 +750,54 @@ export const GLOSSARY = {
   BUA: "Build-Up Area",
 } as const;
 
+/**
+ * Curated fallback albums for the public gallery — shown only when no gallery
+ * images have been uploaded yet. Each carries one of the standard categories so
+ * an un-seeded gallery still renders the category-album layout. Real uploads
+ * (with admin-assigned categories) replace these entirely.
+ */
 export const GALLERY_ALBUMS = [
   {
-    id: "2016",
-    title: "1st International PATS",
-    year: 2016,
+    id: "opening-ceremony",
+    title: "Opening Ceremony",
+    category: "Opening Ceremony",
+    year: 2026,
     image: "/media/pats/crops/1.jpeg",
   },
   {
-    id: "2020",
-    title: "3rd International PATS",
-    year: 2020,
+    id: "competition-events",
+    title: "Competition Events",
+    category: "Competition Events",
+    year: 2026,
     image: "/media/pats/crops/2.jpeg",
   },
   {
-    id: "2021",
-    title: "4th International PATS",
-    year: 2021,
+    id: "international-delegations",
+    title: "International Delegations",
+    category: "International Delegations",
+    year: 2026,
     image: "/media/pats/crops/3.jpeg",
   },
   {
-    id: "2022",
-    title: "5th International PATS",
-    year: 2022,
+    id: "equipment-demonstrations",
+    title: "Equipment Demonstrations",
+    category: "Equipment Demonstrations",
+    year: 2026,
     image: "/media/pats/crops/4.jpeg",
+  },
+  {
+    id: "awards-recognition",
+    title: "Awards & Recognition",
+    category: "Awards & Recognition",
+    year: 2026,
+    image: "/media/pats/crops/home2.jpeg",
+  },
+  {
+    id: "training-activities",
+    title: "Training Activities",
+    category: "Training Activities",
+    year: 2026,
+    image: "/media/pats/crops/gallery-hero.webp",
   },
 ] as const;
 

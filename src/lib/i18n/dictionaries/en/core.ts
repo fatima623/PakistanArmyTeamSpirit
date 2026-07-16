@@ -10,6 +10,11 @@ export const core = {
     selectLanguage: "Select language",
     loadingTitle: "Participant dashboard",
     loadingDesc: "Loading participant actions and status panels.",
+    toasts: {
+      genericError: "Something went wrong. Please try again.",
+      saveSuccess: "Changes saved successfully",
+      validationError: "Please check the form for errors.",
+    },
   },
 
   nav: {
@@ -43,6 +48,19 @@ export const core = {
     updatesEyebrow: "Updates",
     latestNews: "Latest news",
     noNews: "No news posts yet.",
+    timelinePanel: {
+      closed: "Closed",
+      dueToday: "Due today",
+      daysLeft: (n: number) => `${n} day${n === 1 ? "" : "s"} left`,
+      deadlines: "Deadlines",
+      noDeadlines: "No deadlines have been set yet.",
+      keyDates: "Key dates",
+      noKeyDates: "No key dates published yet.",
+      deadlineLabels: {
+        registration: "Registration deadline",
+        payment: "Payment deadline",
+      },
+    },
   },
 
   workflowPanel: {
@@ -70,6 +88,14 @@ export const core = {
   },
 
   registration: {
+    /** Keyed by the `ApplicationStatus` enum value. */
+    statuses: {
+      PENDING: "Pending",
+      UNDER_REVIEW: "Under Review",
+      APPROVED: "Approved",
+      REJECTED: "Rejected",
+      RETURNED: "Returned for Correction",
+    },
     profileEyebrow: "Profile",
     title: "Registration details",
     name: "Name",

@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { useMemo, useState, type ReactNode } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight, ImageOff, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageIcon, ImageOff, X } from "lucide-react";
 
 import { mechanicalTransition } from "@/components/cinematic/motion";
+import { compareCategories, UNCATEGORISED_LABEL } from "@/lib/gallery-categories";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 const ALL = "all";
@@ -19,13 +21,24 @@ export type GalleryItem = {
   category?: string | null;
 };
 
+type Album = {
+  category: string;
+  items: GalleryItem[];
+  cover: GalleryItem;
+};
+
 function metaLine(item: GalleryItem): string {
   return [item.category, item.year].filter(Boolean).join(" · ");
 }
 
 export function GalleryGrid({ items }: { items: GalleryItem[] }) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  // Read the dictionary here rather than accept strings as props: the photo
+  // count is a function, which cannot cross the server/client boundary.
+  const { t } = useI18n();
+  const strings = t.publicSite.gallery;
   const [filter, setFilter] = useState(ALL);
+  const [openAlbum, setOpenAlbum] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const reduce = useReducedMotion();
 
   const years = useMemo(
@@ -41,28 +54,48 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
   );
 
   const filtered = useMemo(
-    () =>
-      filter === ALL
-        ? items
-        : items.filter((a) => String(a.year) === filter),
+    () => (filter === ALL ? items : items.filter((a) => String(a.year) === filter)),
     [items, filter]
   );
 
-  const active = activeIndex != null ? filtered[activeIndex] : null;
+  // One tile per category, covered by its first image and labelled with a count.
+  const albums = useMemo<Album[]>(() => {
+    const byCategory = new Map<string, GalleryItem[]>();
+    for (const item of filtered) {
+      const key = item.category?.trim() || UNCATEGORISED_LABEL;
+      const bucket = byCategory.get(key);
+      if (bucket) bucket.push(item);
+      else byCategory.set(key, [item]);
+    }
+    return [...byCategory.entries()]
+      .sort(([a], [b]) => compareCategories(a, b))
+      .map(([category, list]) => ({ category, items: list, cover: list[0] }));
+  }, [filtered]);
+
+  const album = openAlbum
+    ? (albums.find((a) => a.category === openAlbum) ?? null)
+    : null;
+  const lightboxItems = album?.items ?? [];
+  const active = activeIndex != null ? (lightboxItems[activeIndex] ?? null) : null;
 
   const step = (dir: 1 | -1) => {
     setActiveIndex((i) => {
-      if (i == null || filtered.length === 0) return i;
-      return (i + dir + filtered.length) % filtered.length;
+      if (i == null || lightboxItems.length === 0) return i;
+      return (i + dir + lightboxItems.length) % lightboxItems.length;
     });
+  };
+
+  const closeLightbox = () => {
+    setActiveIndex(null);
+    setOpenAlbum(null);
   };
 
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-16 text-center">
-        <ImageOff className="h-8 w-8 text-brand-brass" aria-hidden />
-        <p className="font-condensed text-sm uppercase tracking-wider text-white/60">
-          The gallery is being updated. Check back soon.
+        <ImageOff className="h-8 w-8 text-brand-brass-deep" aria-hidden />
+        <p className="font-condensed text-sm uppercase tracking-wider text-brand-ink-muted">
+          {strings.empty}
         </p>
       </div>
     );
@@ -72,13 +105,18 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
     <>
       {years.length > 0 ? (
         <div className="mb-8 flex flex-wrap gap-2">
-          <FilterChip active={filter === ALL} onClick={() => setFilter(ALL)}>
-            All archives
+          <FilterChip
+            active={filter === ALL}
+            variant="all"
+            onClick={() => setFilter(ALL)}
+          >
+            {strings.allArchives}
           </FilterChip>
-          {years.map((y) => (
+          {years.map((y, i) => (
             <FilterChip
               key={y}
               active={filter === String(y)}
+              variant={i === 0 ? "latest" : "year"}
               onClick={() => setFilter(String(y))}
             >
               {y}
@@ -87,37 +125,42 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((item, i) => (
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {albums.map((a, i) => (
           <motion.button
-            key={item.id}
+            key={a.category}
             type="button"
             initial={reduce ? false : { opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ ...mechanicalTransition, duration: 0.45, delay: Math.min(i, 8) * 0.04 }}
-            onClick={() => setActiveIndex(i)}
-            className="group relative aspect-[4/3] overflow-hidden border border-white/10 bg-brand-night-2/50 text-left transition-all duration-300 ease-mechanical hover:-translate-y-1 hover:border-brand-brass/60 hover:shadow-[0_14px_34px_rgba(0,0,0,0.5)]"
-            style={{ borderRadius: "10px" }}
+            transition={{
+              ...mechanicalTransition,
+              duration: 0.45,
+              delay: Math.min(i, 8) * 0.04,
+            }}
+            onClick={() => {
+              setOpenAlbum(a.category);
+              setActiveIndex(0);
+            }}
+            className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-black/5 bg-brand-parchment-2 text-left shadow-[0_2px_10px_rgba(20,26,20,0.10)] transition-all duration-300 ease-mechanical hover:-translate-y-1 hover:border-brand-brass-deep/50 hover:shadow-[0_16px_36px_rgba(20,26,20,0.22)]"
           >
             <Image
-              src={item.image}
-              alt={item.title}
+              src={a.cover.image}
+              alt={a.category}
               fill
               className="object-cover transition-transform duration-500 ease-mechanical group-hover:scale-[1.05]"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               loading={i < 3 ? "eager" : "lazy"}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-night via-brand-night/25 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              {metaLine(item) ? (
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-brass">
-                  {metaLine(item)}
-                </p>
-              ) : null}
-              <h3 className="mt-1 font-display text-sm font-bold uppercase tracking-wide text-white group-hover:text-brand-brass">
-                {item.title}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-4">
+              <h3 className="font-display text-base font-bold text-white drop-shadow-sm group-hover:text-brand-brass">
+                {a.category}
               </h3>
+              <p className="mt-1.5 flex items-center gap-1.5 font-condensed text-xs text-white/85">
+                <ImageIcon className="h-3.5 w-3.5" aria-hidden />
+                {strings.photos(a.items.length)}
+              </p>
             </div>
           </motion.button>
         ))}
@@ -134,18 +177,18 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
             role="dialog"
             aria-modal
             aria-label={active.title}
-            onClick={() => setActiveIndex(null)}
+            onClick={closeLightbox}
           >
             <button
               type="button"
               className="absolute right-4 top-4 p-2 text-white hover:text-brand-brass"
-              onClick={() => setActiveIndex(null)}
-              aria-label="Close"
+              onClick={closeLightbox}
+              aria-label={strings.close}
             >
               <X size={28} />
             </button>
 
-            {filtered.length > 1 ? (
+            {lightboxItems.length > 1 ? (
               <>
                 <button
                   type="button"
@@ -154,7 +197,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                     e.stopPropagation();
                     step(-1);
                   }}
-                  aria-label="Previous"
+                  aria-label={strings.previous}
                 >
                   <ChevronLeft size={34} />
                 </button>
@@ -165,7 +208,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                     e.stopPropagation();
                     step(1);
                   }}
-                  aria-label="Next"
+                  aria-label={strings.next}
                 >
                   <ChevronRight size={34} />
                 </button>
@@ -206,6 +249,11 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                   {active.caption}
                 </p>
               ) : null}
+              {lightboxItems.length > 1 ? (
+                <p className="mt-3 text-center font-mono text-[10px] tracking-[0.18em] text-white/45">
+                  {activeIndex! + 1} / {lightboxItems.length}
+                </p>
+              ) : null}
             </motion.div>
           </motion.div>
         ) : null}
@@ -217,21 +265,26 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
 function FilterChip({
   children,
   active,
+  variant,
   onClick,
 }: {
   children: ReactNode;
   active: boolean;
+  variant: "all" | "latest" | "year";
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={cn(
-        "rounded-full border px-4 py-1.5 font-condensed text-xs font-bold uppercase tracking-wider transition-all duration-200",
+        "rounded-md border px-4 py-1.5 font-condensed text-xs font-bold uppercase tracking-wider transition-all duration-200",
         active
-          ? "border-brand-brass/70 bg-brand-brass/15 text-brand-brass"
-          : "border-white/15 text-white/60 hover:border-brand-brass/40 hover:text-white"
+          ? "border-brand-olive-dark bg-brand-olive-dark text-white shadow-sm"
+          : variant === "latest"
+            ? "border-brand-brass-deep/45 bg-transparent text-brand-brass-deep hover:border-brand-brass-deep hover:bg-brand-brass-deep/10"
+            : "border-brand-line bg-transparent text-brand-ink-muted hover:border-brand-olive/45 hover:text-brand-ink"
       )}
     >
       {children}

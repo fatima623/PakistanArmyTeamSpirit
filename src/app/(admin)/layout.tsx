@@ -18,7 +18,13 @@ export default async function AdminLayout({
     redirect(getRoleHomePath(session.user.role));
   }
 
+  // The admin area is English-only, so it opts out of the document-level
+  // direction that the root layout derives from the participant's locale —
+  // otherwise picking Arabic on the public site would mirror this UI while
+  // leaving its untranslated English copy in place.
   return (
-    <div className="admin-theme pats-dashboard min-h-screen">{children}</div>
+    <div className="admin-theme pats-dashboard min-h-screen" lang="en" dir="ltr">
+      {children}
+    </div>
   );
 }

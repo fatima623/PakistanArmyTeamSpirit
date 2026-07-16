@@ -18,6 +18,7 @@ import {
 import { useSiteChromeScroll } from "@/components/public/site-chrome-scroll-context";
 import { pathnameHasHeroOverlay } from "@/lib/public-layout";
 import { useI18nOptional } from "@/lib/i18n/I18nProvider";
+import { publicNavLabel } from "@/lib/i18n/public-nav-labels";
 import { cn } from "@/lib/utils";
 
 const DROPDOWN_CLOSE_MS = 150;
@@ -181,18 +182,9 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   // the 404 page, which don't wrap it in an I18nProvider — so read the locale
   // optionally and fall back to the English PUBLIC_NAV_ITEMS labels.
   const i18n = useI18nOptional();
-  const navLabels: Record<string, string> = i18n
-    ? {
-        "/": i18n.t.publicSite.nav.home,
-        "/events-detail": i18n.t.publicSite.nav.eventsDetail,
-        "/international": i18n.t.publicSite.nav.international,
-        "/awards": i18n.t.publicSite.nav.awards,
-        "/gallery": i18n.t.publicSite.nav.gallery,
-        "/announcements": i18n.t.publicSite.nav.announcements,
-        "/key-dates": i18n.t.publicSite.nav.keyDates,
-      }
-    : {};
-  const loginLabel = i18n ? i18n.t.publicSite.nav.login : "Login";
+  const t = i18n?.t ?? null;
+  const chrome = t?.publicSite.chrome;
+  const loginLabel = t ? t.publicSite.nav.login : "Login";
   const isHome = pathname === "/";
   const overHeroMedia = pathnameHasHeroOverlay(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -232,9 +224,13 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
         menuOpen && "pats-header--menu-open"
       )}
     >
-      <div className="pats-nav" aria-label="Site">
+      <div className="pats-nav" aria-label={chrome?.siteNav ?? "Site"}>
         <div className="pats-nav__inner">
-          <Link href="/" className="pats-nav__brand" aria-label="PATS home">
+          <Link
+            href="/"
+            className="pats-nav__brand"
+            aria-label={chrome?.brandHome ?? "PATS home"}
+          >
             <span className="pats-nav__emblem-wrap" aria-hidden>
               <PatsLogo
                 size={isScrolled ? 48 : 96}
@@ -253,13 +249,13 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
             <nav
               id="pats-nav-panel"
               className="pats-nav__panel-links"
-              aria-label="Main navigation"
+              aria-label={chrome?.mainNav ?? "Main navigation"}
             >
               {PUBLIC_NAV_ITEMS.map((item) => (
                 <NavItemLink
                   key={item.label}
                   item={item}
-                  label={(item.href && navLabels[item.href]) || item.label}
+                  label={publicNavLabel(t, item.href, item.label)}
                   pathname={pathname}
                   onNavigate={closeMenu}
                 />
@@ -280,7 +276,11 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
             onClick={toggleMenu}
             aria-expanded={menuOpen}
             aria-controls="pats-nav-panel"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={
+              menuOpen
+                ? (chrome?.closeMenu ?? "Close menu")
+                : (chrome?.openMenu ?? "Open menu")
+            }
           >
             <PafMenuIcon />
           </button>

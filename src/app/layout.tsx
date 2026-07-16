@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import {
   Barlow_Condensed,
   Bebas_Neue,
+  Cairo,
   DM_Sans,
   Inter,
   JetBrains_Mono,
@@ -15,6 +16,7 @@ import localFont from "next/font/local";
 import { ClientToaster } from "@/components/ClientToaster";
 import { Providers } from "@/components/providers";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/branding";
+import { localeDir, normalizeLocale, LOCALE_COOKIE } from "@/lib/i18n/config";
 import {
   DEFAULT_SITE_THEME,
   parseSiteTheme,
@@ -86,6 +88,15 @@ const notoNastaliq = Noto_Nastaliq_Urdu({
   display: "swap",
 });
 
+/** Cairo — readable Arabic (naskh) UI/body face for the whole app when Arabic
+ *  is selected. Used for headings and body so RTL text is legible and weighty. */
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  variable: "--font-arabic",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   applicationName: SITE_NAME,
   title: {
@@ -126,13 +137,17 @@ export default async function RootLayout({
   );
   const dayThemeClass =
     initialSiteTheme === "day" ? "site-theme-day light-theme" : "";
+  // The selected locale is a cookie (no /[locale] route segment), so the
+  // document language/direction is resolved here rather than per-page.
+  const locale = normalizeLocale(cookieStore.get(LOCALE_COOKIE)?.value);
 
   return (
     <html
-      lang="en"
+      lang={locale}
+      dir={localeDir(locale)}
       data-site-theme={initialSiteTheme}
       data-scroll-behavior="smooth"
-      className={`${geist.variable} ${oswald.variable} ${barlow.variable} ${bebas.variable} ${inter.variable} ${robotoMono.variable} ${dmSans.variable} ${jetbrains.variable} ${notoNastaliq.variable} ${dayThemeClass}`}
+      className={`${geist.variable} ${oswald.variable} ${barlow.variable} ${bebas.variable} ${inter.variable} ${robotoMono.variable} ${dmSans.variable} ${jetbrains.variable} ${notoNastaliq.variable} ${cairo.variable} ${dayThemeClass}`}
       suppressHydrationWarning
     >
       <body

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   CalendarDays,
   CheckCircle2,
@@ -14,6 +14,7 @@ import {
   Tag,
   Upload,
   XCircle,
+  type LucideIcon,
 } from "lucide-react";
 
 import { formatRegistrationFee } from "@/lib/payment-settings";
@@ -68,7 +69,7 @@ function Stat({
 }: {
   label: string;
   value?: string;
-  icon?: ComponentType<{ size?: number; className?: string }>;
+  icon?: LucideIcon;
   wide?: boolean;
   mono?: boolean;
   children?: ReactNode;

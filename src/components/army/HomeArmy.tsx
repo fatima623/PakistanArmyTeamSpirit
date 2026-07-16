@@ -16,6 +16,10 @@ import {
 } from "@/lib/army-content";
 import { PATS_CROP } from "@/lib/media";
 import { useI18n } from "@/lib/i18n/I18nProvider";
+import {
+  translateKeyDateLabel,
+  translateKeyDateValue,
+} from "@/lib/i18n/key-date-i18n";
 import type { PublicSiteSettings } from "@/lib/site-data";
 
 type KeyDateRow = { id: string; label: string; value: string };
@@ -140,10 +144,10 @@ export function HomeArmy({ settings, keyDates }: Props) {
                   className="pats-home-schedule__row grid gap-2 px-4 py-4 transition-colors sm:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] sm:gap-6 sm:px-6"
                 >
                   <span className="pats-schedule-label pats-type-eyebrow uppercase tracking-[0.14em]">
-                    {kd.label}
+                    {translateKeyDateLabel(kd.label, locale)}
                   </span>
                   <span className="pats-schedule-value pats-type-body">
-                    {kd.value}
+                    {translateKeyDateValue(kd.value, locale)}
                   </span>
                 </li>
               ))}

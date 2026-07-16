@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-import { HERO_MOTTO } from "@/lib/branding";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 const HERO_IMAGES = [
   "/media/pats/crops/home2.jpeg",
+  "/media/pats/crops/hero-hmz1.jpeg",
   "/media/pats/crops/home3.jpeg",
-  "/media/pats/crops/home4.jpeg",
+  "/media/pats/crops/hero-hmz2.jpeg",
   "/media/pats/crops/home5.jpeg",
 ];
 
@@ -20,7 +20,12 @@ type Props = {
 };
 
 export function PatsHero({ exerciseYear }: Props) {
-  const { t } = useI18n();
+  const { t, locale, dir } = useI18n();
+  // English keeps the crest's heraldic Urdu form (nastaliq, RTL). Every other
+  // locale renders a real translation of the motto's meaning, in that locale's
+  // own script and direction — the nastaliq face cannot render Cyrillic, Latin
+  // or CJK, so `.pats-urdu-motto` must not be applied there.
+  const isUrduCrest = locale === "en";
   const sectionRef = useRef<HTMLElement>(null);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [dynamicYear, setDynamicYear] = useState(exerciseYear);
@@ -82,11 +87,14 @@ export function PatsHero({ exerciseYear }: Props) {
         <div className="pats-hero__content">
           <div className="pats-hero__caption">
             <p
-              className="pats-hero__caption-text pats-urdu-motto"
-              lang="ur"
-              dir="rtl"
+              className={cn(
+                "pats-hero__caption-text",
+                isUrduCrest && "pats-urdu-motto"
+              )}
+              lang={isUrduCrest ? "ur" : locale}
+              dir={isUrduCrest ? "rtl" : dir}
             >
-              {HERO_MOTTO}
+              {t.home.hero.motto}
             </p>
           </div>
           <h1 className="pats-hero__headline">

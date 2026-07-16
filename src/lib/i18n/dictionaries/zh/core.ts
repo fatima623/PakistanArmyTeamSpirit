@@ -11,6 +11,11 @@ export const core: typeof enCore = {
     selectLanguage: "选择语言",
     loadingTitle: "参赛者仪表板",
     loadingDesc: "正在加载参赛者操作与状态面板。",
+    toasts: {
+      genericError: "出现问题，请重试。",
+      saveSuccess: "更改已成功保存",
+      validationError: "请检查表单中的错误。",
+    },
   },
 
   nav: {
@@ -44,6 +49,19 @@ export const core: typeof enCore = {
     updatesEyebrow: "动态",
     latestNews: "最新消息",
     noNews: "暂无新闻发布。",
+    timelinePanel: {
+      closed: "已截止",
+      dueToday: "今日截止",
+      daysLeft: (n) => `剩余 ${n} 天`,
+      deadlines: "截止日期",
+      noDeadlines: "尚未设定截止日期。",
+      keyDates: "重要日期",
+      noKeyDates: "尚未发布重要日期。",
+      deadlineLabels: {
+        registration: "报名截止日期",
+        payment: "付款截止日期",
+      },
+    },
   },
 
   workflowPanel: {
@@ -71,6 +89,13 @@ export const core: typeof enCore = {
   },
 
   registration: {
+    statuses: {
+      PENDING: "待处理",
+      UNDER_REVIEW: "审核中",
+      APPROVED: "已批准",
+      REJECTED: "已驳回",
+      RETURNED: "已退回修改",
+    },
     profileEyebrow: "个人资料",
     title: "注册详情",
     name: "姓名",

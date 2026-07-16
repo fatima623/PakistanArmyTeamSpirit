@@ -1,6 +1,17 @@
 import type { core as enCore } from "../en/core";
 
 // Arabic translations for the portal's core surfaces (right-to-left).
+
+// Arabic counts days with four forms: singular (1), dual (2), paucal (3–10,
+// noun in the plural) and the 11+ form (noun in the accusative singular).
+function arDaysLeft(n: number): string {
+  const mod100 = n % 100;
+  if (n === 1) return "بقي يوم واحد";
+  if (n === 2) return "بقي يومان";
+  if (mod100 >= 3 && mod100 <= 10) return `بقيت ${n} أيام`;
+  return `بقي ${n} يومًا`;
+}
+
 export const core: typeof enCore = {
   common: {
     back: "رجوع",
@@ -10,6 +21,11 @@ export const core: typeof enCore = {
     selectLanguage: "اختر اللغة",
     loadingTitle: "لوحة تحكم المشارك",
     loadingDesc: "جارٍ تحميل إجراءات المشارك ولوحات الحالة.",
+    toasts: {
+      genericError: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      saveSuccess: "تم حفظ التغييرات بنجاح",
+      validationError: "يرجى مراجعة النموذج وتصحيح الأخطاء.",
+    },
   },
 
   nav: {
@@ -43,6 +59,19 @@ export const core: typeof enCore = {
     updatesEyebrow: "التحديثات",
     latestNews: "أحدث الأخبار",
     noNews: "لا توجد أخبار بعد.",
+    timelinePanel: {
+      closed: "مغلق",
+      dueToday: "الموعد النهائي اليوم",
+      daysLeft: (n) => arDaysLeft(n),
+      deadlines: "المواعيد النهائية",
+      noDeadlines: "لم يتم تحديد أي مواعيد نهائية بعد.",
+      keyDates: "التواريخ الرئيسية",
+      noKeyDates: "لم يتم نشر أي تواريخ رئيسية بعد.",
+      deadlineLabels: {
+        registration: "الموعد النهائي للتسجيل",
+        payment: "الموعد النهائي للدفع",
+      },
+    },
   },
 
   workflowPanel: {
@@ -70,6 +99,13 @@ export const core: typeof enCore = {
   },
 
   registration: {
+    statuses: {
+      PENDING: "قيد الانتظار",
+      UNDER_REVIEW: "قيد المراجعة",
+      APPROVED: "معتمد",
+      REJECTED: "مرفوض",
+      RETURNED: "أُعيد للتصحيح",
+    },
     profileEyebrow: "الملف الشخصي",
     title: "تفاصيل التسجيل",
     name: "الاسم",

@@ -1,6 +1,44 @@
 import type { payment as enPayment } from "../en/payment";
 
 export const payment: typeof enPayment = {
+  statuses: {
+    full: {
+      PENDING: "الدفع مطلوب",
+      SUBMITTED: "تم إرسال الدفع",
+      UNDER_REVIEW: "قيد المراجعة",
+      VERIFIED: "تم التحقق من الدفع",
+      REJECTED: "رُفض الإثبات",
+      RETURNED: "أُعيد للتصحيح",
+    },
+    table: {
+      PENDING: "مطلوب",
+      SUBMITTED: "مُرسل",
+      UNDER_REVIEW: "قيد المراجعة",
+      VERIFIED: "تم التحقق",
+      REJECTED: "مرفوض",
+      RETURNED: "مُعاد",
+    },
+  },
+  timeline: {
+    currentStatus: "الحالة الحالية:",
+    rejectionHistory: "سجل الرفض",
+    rejectionHistoryCount: (n) => `سجل الرفض (${n})`,
+    reason: "السبب:",
+  },
+  proof: {
+    loadError: "تعذّر تحميل إثبات الدفع",
+    loadFailed: "فشل تحميل الإثبات",
+    proofFallback: "إثبات الدفع",
+    downloadFallbackName: "ithbat-aldafa",
+    viewImage: "عرض الصورة",
+    viewPdf: "عرض ملف PDF",
+    download: "تنزيل",
+    lightboxTitle: "إثبات الدفع — بالحجم الكامل",
+    lightboxAlt: "إثبات الدفع بالحجم الكامل",
+    // Latin unit abbreviations are the convention in Arabic technical UIs and
+    // avoid bidi reordering next to the Latin-digit size.
+    units: { mb: "MB", kb: "KB" },
+  },
   instructions: {
     registrationFee: "رسوم التسجيل",
     sendExactBold: "أرسل هذا المبلغ بالضبط",

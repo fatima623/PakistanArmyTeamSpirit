@@ -21,8 +21,14 @@ export default async function HostLayout({
     redirect(getRoleHomePath(session.user.role));
   }
 
+  // English-only area — opt out of the locale-derived document direction set by
+  // the root layout (see the admin layout for the same reasoning).
   return (
-    <div className="admin-theme pats-dashboard min-h-screen bg-slate-50">
+    <div
+      className="admin-theme pats-dashboard min-h-screen bg-slate-50"
+      lang="en"
+      dir="ltr"
+    >
       <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 py-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <div className="flex min-w-0 items-center gap-2.5">
           <PatsLogo size={34} variant="nav" className="flex-shrink-0" />

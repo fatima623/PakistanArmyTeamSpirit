@@ -32,6 +32,13 @@ export const unit: typeof enUnit = {
     army: "陆军",
     navy: "海军",
     airForce: "空军",
+    combat: "战斗部队",
+    combatSupport: "战斗支援部队",
+    combatServiceSupport: "战斗勤务支援部队",
+  },
+  errors: {
+    required: "此项为必填",
+    email: "请输入有效的电子邮箱地址",
   },
   placeholders: {
     selectUnit: "选择单位",

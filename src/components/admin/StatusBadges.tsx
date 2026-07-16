@@ -123,22 +123,30 @@ export const ApplicationStatusBadge = memo(function ApplicationStatusBadge({
   variant = "admin",
   showPrefix = true,
   density = "default",
+  label: labelOverride,
+  prefix: prefixOverride,
 }: {
   status: string;
   className?: string;
   variant?: BadgeVariant;
   showPrefix?: boolean;
   density?: BadgeDensity;
+  /** Optional translated label; falls back to the English constant. */
+  label?: string;
+  /** Optional translated prefix; falls back to the English constant. */
+  prefix?: string;
 }) {
   const key = status as ApplicationStatus;
   const label =
-    density === "table"
+    labelOverride ??
+    (density === "table"
       ? (APPLICATION_STATUS_TABLE_LABELS[key] ??
         status.replace(/_/g, " ").toLowerCase())
       : (APPLICATION_STATUS_LABELS[key] ??
-        status.replace(/_/g, " ").toLowerCase());
+        status.replace(/_/g, " ").toLowerCase()));
   const isTable = density === "table";
-  const prefixLabel = variant === "participant" ? "Application" : "Participation";
+  const prefixLabel =
+    prefixOverride ?? (variant === "participant" ? "Application" : "Participation");
 
   if (showPrefix && !isTable) {
     return (
@@ -164,20 +172,30 @@ export const PaymentStatusBadge = memo(function PaymentStatusBadge({
   variant: _variant = "admin",
   showPrefix = true,
   density = "default",
+  label: labelOverride,
+  fullLabel: fullLabelOverride,
+  prefix: prefixOverride,
 }: {
   status: string;
   className?: string;
   variant?: BadgeVariant;
   showPrefix?: boolean;
   density?: BadgeDensity;
+  /** Optional translated label (the visible text); falls back to the English constant. */
+  label?: string;
+  /** Optional translated full label (the `title` tooltip); falls back to the English constant. */
+  fullLabel?: string;
+  /** Optional translated prefix; falls back to the English constant. */
+  prefix?: string;
 }) {
   void _variant;
   const key = normalizePaymentStatus(status);
-  const fullLabel = PAYMENT_STATUS_LABELS[key];
+  const fullLabel = fullLabelOverride ?? PAYMENT_STATUS_LABELS[key];
   const label =
-    density === "table" ? PAYMENT_STATUS_TABLE_LABELS[key] : fullLabel;
+    labelOverride ??
+    (density === "table" ? PAYMENT_STATUS_TABLE_LABELS[key] : fullLabel);
   const isTable = density === "table";
-  const prefixLabel = "Payment";
+  const prefixLabel = prefixOverride ?? "Payment";
 
   if (showPrefix && !isTable) {
     return (

@@ -19,6 +19,11 @@ export const core: typeof enCore = {
     selectLanguage: "Выбрать язык",
     loadingTitle: "Панель участника",
     loadingDesc: "Загрузка действий и панелей статуса участника.",
+    toasts: {
+      genericError: "Произошла ошибка. Пожалуйста, попробуйте ещё раз.",
+      saveSuccess: "Изменения сохранены",
+      validationError: "Пожалуйста, проверьте форму на наличие ошибок.",
+    },
   },
 
   nav: {
@@ -53,6 +58,20 @@ export const core: typeof enCore = {
     updatesEyebrow: "Новости",
     latestNews: "Последние новости",
     noNews: "Новостей пока нет.",
+    timelinePanel: {
+      closed: "Закрыто",
+      dueToday: "Сегодня последний день",
+      daysLeft: (n) =>
+        `Осталось ${n} ${ruPlural(n, "день", "дня", "дней")}`,
+      deadlines: "Сроки",
+      noDeadlines: "Сроки пока не установлены.",
+      keyDates: "Ключевые даты",
+      noKeyDates: "Ключевые даты пока не опубликованы.",
+      deadlineLabels: {
+        registration: "Срок регистрации",
+        payment: "Срок оплаты",
+      },
+    },
   },
 
   workflowPanel: {
@@ -80,6 +99,13 @@ export const core: typeof enCore = {
   },
 
   registration: {
+    statuses: {
+      PENDING: "Ожидает рассмотрения",
+      UNDER_REVIEW: "На рассмотрении",
+      APPROVED: "Одобрено",
+      REJECTED: "Отклонено",
+      RETURNED: "Возвращено на доработку",
+    },
     profileEyebrow: "Профиль",
     title: "Данные регистрации",
     name: "Имя",

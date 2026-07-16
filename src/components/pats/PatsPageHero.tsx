@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import type { MetaItem } from "@/components/cinematic/HudMetaStrip";
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
 import { PATS_CROP } from "@/lib/media";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +25,8 @@ export function PatsPageHero({
   meta = [],
   className,
 }: Props) {
+  const i18n = useI18nOptional();
+  const crumb = i18n?.t.publicSite.breadcrumb;
   return (
     <header className={cn("pats-page-hero pats-page-hero--banner", className)}>
       <div className="pats-page-hero__stage">
@@ -41,8 +44,11 @@ export function PatsPageHero({
               {subtitle}
             </p>
           )}
-          <nav className="pats-page-hero__crumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
+          <nav
+            className="pats-page-hero__crumb"
+            aria-label={crumb?.label ?? "Breadcrumb"}
+          >
+            <Link href="/">{crumb?.home ?? "Home"}</Link>
             <span aria-hidden>/</span>
             <span>{title}</span>
           </nav>

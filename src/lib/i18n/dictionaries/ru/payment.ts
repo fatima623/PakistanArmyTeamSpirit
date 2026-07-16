@@ -1,6 +1,42 @@
 import type { payment as enPayment } from "../en/payment";
 
 export const payment: typeof enPayment = {
+  statuses: {
+    full: {
+      PENDING: "Требуется оплата",
+      SUBMITTED: "Оплата отправлена",
+      UNDER_REVIEW: "На рассмотрении",
+      VERIFIED: "Оплата подтверждена",
+      REJECTED: "Подтверждение отклонено",
+      RETURNED: "Возвращено на доработку",
+    },
+    table: {
+      PENDING: "Требуется",
+      SUBMITTED: "Отправлено",
+      UNDER_REVIEW: "На рассмотрении",
+      VERIFIED: "Подтверждено",
+      REJECTED: "Отклонено",
+      RETURNED: "Возвращено",
+    },
+  },
+  timeline: {
+    currentStatus: "Текущий статус:",
+    rejectionHistory: "История отклонений",
+    rejectionHistoryCount: (n) => `История отклонений (${n})`,
+    reason: "Причина:",
+  },
+  proof: {
+    loadError: "Не удалось загрузить подтверждение платежа",
+    loadFailed: "Не удалось загрузить подтверждение",
+    proofFallback: "Подтверждение платежа",
+    downloadFallbackName: "podtverzhdenie-platezha",
+    viewImage: "Просмотреть изображение",
+    viewPdf: "Просмотреть PDF",
+    download: "Скачать",
+    lightboxTitle: "Подтверждение платежа — полный размер",
+    lightboxAlt: "Подтверждение платежа в полном размере",
+    units: { mb: "МБ", kb: "КБ" },
+  },
   instructions: {
     registrationFee: "Регистрационный взнос",
     sendExactBold: "Отправьте точно эту сумму",

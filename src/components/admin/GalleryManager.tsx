@@ -16,7 +16,22 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { GALLERY_CATEGORIES } from "@/lib/gallery-categories";
 import { TOAST } from "@/lib/toast";
+
+/** Suggestion list shared by the upload form and the edit dialog. Category is
+ *  free text in the schema, so the input allows values outside these. */
+const CATEGORY_LIST_ID = "gallery-category-options";
+
+function CategoryOptions() {
+  return (
+    <datalist id={CATEGORY_LIST_ID}>
+      {GALLERY_CATEGORIES.map((c) => (
+        <option key={c} value={c} />
+      ))}
+    </datalist>
+  );
+}
 
 export type AdminGalleryImage = {
   id: string;
@@ -117,8 +132,21 @@ export function GalleryManager({
                 </div>
                 <div className="flex flex-1 flex-col gap-1.5 px-[0.9rem] pb-[0.9rem] pt-[0.8rem]">
                   <div className="text-[0.92rem] font-bold leading-[1.25] text-brand-ink">{img.title}</div>
-                  <div className="text-xs text-brand-ink-muted">
-                    {img.year ? String(img.year) : "Undated"}
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs text-brand-ink-muted">
+                    <span>{img.year ? String(img.year) : "Undated"}</span>
+                    {img.category ? (
+                      <>
+                        <span aria-hidden>·</span>
+                        <span className="rounded-full bg-brand-olive/10 px-2 py-0.5 font-semibold text-brand-olive-dark">
+                          {img.category}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span aria-hidden>·</span>
+                        <span className="italic">Uncategorised</span>
+                      </>
+                    )}
                   </div>
                   <div className="mt-auto flex items-center gap-1.5 border-t border-brand-line/70 pt-2.5">
                     <button
@@ -173,6 +201,7 @@ function UploadForm({
   const [preview, setPreview] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
+  const [category, setCategory] = useState("");
   const [caption, setCaption] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [published, setPublished] = useState(true);
@@ -193,6 +222,7 @@ function UploadForm({
     setPreview(null);
     setTitle("");
     setYear("");
+    setCategory("");
     setCaption("");
     setSortOrder("0");
     setPublished(true);
@@ -214,6 +244,7 @@ function UploadForm({
       fd.append("file", file);
       fd.append("title", title.trim());
       fd.append("year", year.trim());
+      fd.append("category", category.trim());
       fd.append("caption", caption.trim());
       fd.append("sortOrder", sortOrder || "0");
       fd.append("published", published ? "true" : "false");
@@ -297,6 +328,22 @@ function UploadForm({
               className="admin-input"
               placeholder="2022"
             />
+          </div>
+          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+            <label htmlFor="g-category">Category</label>
+            <Input
+              id="g-category"
+              list={CATEGORY_LIST_ID}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="admin-input"
+              placeholder="e.g. Opening Ceremony"
+            />
+            <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
+              Groups the image into an album on the public gallery. Pick a
+              suggestion or type your own.
+            </p>
+            <CategoryOptions />
           </div>
           <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
             <label htmlFor="g-order">Display order</label>
@@ -465,6 +512,7 @@ function EditDialog({
   const fileRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
+  const [category, setCategory] = useState("");
   const [caption, setCaption] = useState("");
   const [sortOrder, setSortOrder] = useState("0");
   const [replaceFile, setReplaceFile] = useState<File | null>(null);
@@ -487,6 +535,7 @@ function EditDialog({
     setLoadedId(image.id);
     setTitle(image.title);
     setYear(image.year != null ? String(image.year) : "");
+    setCategory(image.category ?? "");
     setCaption(image.caption ?? "");
     setSortOrder(String(image.sortOrder));
     setReplaceFile(null);
@@ -512,6 +561,7 @@ function EditDialog({
         body: JSON.stringify({
           title: title.trim(),
           year: year.trim() === "" ? null : year.trim(),
+          category: category.trim(),
           caption: caption.trim(),
           sortOrder: sortOrder || "0",
         }),
@@ -587,6 +637,18 @@ function EditDialog({
                 onChange={(e) => setSortOrder(e.target.value)}
                 className="admin-input"
               />
+            </div>
+            <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+              <label htmlFor="e-category">Category</label>
+              <Input
+                id="e-category"
+                list={CATEGORY_LIST_ID}
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="admin-input"
+                placeholder="e.g. Opening Ceremony"
+              />
+              <CategoryOptions />
             </div>
             <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-replace">Replace image</label>

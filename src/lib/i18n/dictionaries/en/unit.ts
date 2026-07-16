@@ -29,6 +29,14 @@ export const unit = {
     army: "Army",
     navy: "Navy",
     airForce: "Air Force",
+    combat: "Combat",
+    combatSupport: "Combat Support",
+    combatServiceSupport: "Combat Service Support",
+  },
+  /** Resolved from the stable tokens `UnitUpdateSchema` emits. */
+  errors: {
+    required: "This field is required",
+    email: "Enter a valid email address",
   },
   placeholders: {
     selectUnit: "Select unit",

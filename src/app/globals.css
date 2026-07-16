@@ -3281,15 +3281,15 @@ html.reveal-active .army-site:not(.dashboard-day) .reveal.visible {
 
 
 .army-site:not(.dashboard-day) .paf-footer__photo {
-  opacity: var(--pats-footer-photo-opacity, 0.26);
+  opacity: var(--pats-footer-photo-opacity, 0.55);
 }
 
 
 .army-site:not(.dashboard-day) .paf-footer__shade {
   background: linear-gradient(
     180deg,
-    rgba(10, 18, 28, 0.45) 0%,
-    rgba(16, 28, 40, 0.68) 100%
+    rgba(10, 18, 28, 0.3) 0%,
+    rgba(16, 28, 40, 0.5) 100%
   );
 }
 
@@ -4795,7 +4795,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   background-repeat: no-repeat;
   background-position: center center;
   background-size: min(92%, 1100px) auto;
-  opacity: var(--pats-footer-photo-opacity, 0.26);
+  opacity: var(--pats-footer-photo-opacity, 0.55);
   mix-blend-mode: normal;
 }
 
@@ -7225,7 +7225,7 @@ html.site-theme-day .army-site {
   --pats-dropdown: var(--lt-white);
   --text-primary: var(--lt-heading);
   --pats-photo28-opacity: 0.22;
-  --pats-footer-photo-opacity: 0.32;
+  --pats-footer-photo-opacity: 0.6;
   --pats-logo-watermark-opacity: 0.12;
   --lt-nav-bar: rgba(242, 239, 232, 0.98);
   --lt-nav-bar-border: rgba(200, 168, 75, 0.32);
@@ -8177,7 +8177,7 @@ html.light-theme .army-site .paf-footer__photo,
 html[data-site-theme="day"] .army-site .paf-footer__photo {
   display: block !important;
   visibility: visible !important;
-  opacity: var(--pats-footer-photo-opacity, 0.32) !important;
+  opacity: var(--pats-footer-photo-opacity, 0.6) !important;
   mix-blend-mode: normal;
   filter: none;
   background-color: transparent !important;
@@ -8194,9 +8194,9 @@ html.light-theme .army-site .paf-footer__shade,
 html[data-site-theme="day"] .army-site .paf-footer__shade {
   background: linear-gradient(
     180deg,
-    rgba(26, 36, 27, 0.38) 0%,
-    rgba(22, 30, 24, 0.58) 45%,
-    rgba(18, 26, 20, 0.72) 100%
+    rgba(26, 36, 27, 0.26) 0%,
+    rgba(22, 30, 24, 0.4) 45%,
+    rgba(18, 26, 20, 0.54) 100%
   ) !important;
   opacity: 1 !important;
 }
@@ -13153,7 +13153,11 @@ html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
 }
 
 html:has(.pats-site-body--inner .pats-auth-shell),
-html:has(.pats-site-body--inner .pats-form-page) {
+html:has(.pats-site-body--inner .pats-form-page),
+/* The gallery is a short, banner-less page; the footer scroll-snap would
+   otherwise pull the viewport to the bottom on load and hide the title.
+   Two-class :has() to outweigh the `y proximity` rule's specificity. */
+html:has(.pats-site-body--inner .pats-gallery-page) {
   scroll-snap-type: none;
 }
 
@@ -13184,13 +13188,16 @@ html:has(.pats-site-body--inner .pats-form-page) {
   min-height: auto;
 }
 
+/* Stacking order in the footer: shade (0) → crest (1) → content (2). The crest
+   must sit ABOVE the shade — when both shared z-index 0 the shade won on source
+   order and washed the crest out to near-invisible. */
 .army-site:not(.dashboard-day) .pats-site-footer .paf-footer__photo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -13208,7 +13215,7 @@ html:has(.pats-site-body--inner .pats-form-page) {
 
 .army-site:not(.dashboard-day) .pats-site-footer .pats-footer-inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
@@ -15041,17 +15048,20 @@ html[data-site-theme="day"] .army-site .pats-awards-showcase__subtitle {
   mix-blend-mode: multiply;
 }
 
-/* Photographed medals (real product shots on a light backdrop) fill the frame
-   uniformly instead of the multiply/contain treatment used for the transparent
-   renders — this keeps all three medal cards consistently aligned. */
+/* Photographed medals (real product shots on a light backdrop). The source
+   files are portrait, so they are fitted whole rather than cropped — `cover`
+   would slice the ribbon loop and the ring text off a landscape frame. The
+   backdrop matches the photographs' own paper so the fit letterboxing blends. */
 .pats-awards-hero-card--photo .pats-awards-hero-card__visual {
   background: #eef0ee;
+  min-height: 340px;
 }
 .pats-awards-hero-card--photo .pats-awards-hero-card__image {
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   transform: none;
   mix-blend-mode: normal;
+  padding: 18px;
 }
 
 
@@ -15154,66 +15164,234 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
 }
 
 
-.pats-awards-standings__list {
-  max-height: 28rem;
-  overflow-y: auto;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-
-.pats-awards-standings__row {
-  display: grid;
-  grid-template-columns: 2.5rem 1fr auto;
-  gap: 0.75rem;
-  align-items: center;
-  padding: 0.875rem 1rem;
-}
-
-
-.pats-awards-standings__row:nth-child(odd) {
-  background: #ffffff;
-}
-
-
-.pats-awards-standings__row:nth-child(even) {
-  background: #f8faf5;
-}
-
-
-.pats-awards-standings__rank {
-  font-family: var(--font-mono), ui-monospace, monospace;
+.pats-awards-standings__subtitle {
+  margin: 4px 0 0;
+  max-width: 46ch;
   font-size: 0.8125rem;
-  font-weight: 700;
-  color: #b8960c;
-}
-
-
-.pats-awards-standings__team {
-  display: block;
-  font-family: var(--font-barlow), system-ui, sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #1a1a1a;
-}
-
-
-.pats-awards-standings__nation {
-  display: block;
-  margin-top: 2px;
-  font-size: 13px;
+  line-height: 1.5;
   color: #64748b;
 }
 
 
-.pats-awards-standings__score {
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.8125rem;
+/* Rounded, clipped frame around the table so the header and the first/last
+   rows inherit the corner radius. */
+.pats-awards-standings__scroll {
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+
+.pats-awards-standings__table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+
+.pats-awards-standings__table thead th {
+  padding: 0.875rem 1.1rem;
+  background: #f2f5ee;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.6875rem;
   font-weight: 700;
-  text-align: right;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #4a5245;
+  white-space: nowrap;
+}
+
+
+.pats-awards-standings__table tbody tr + tr {
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+
+.pats-awards-standings__table tbody tr:nth-child(even) {
+  background: #f8faf5;
+}
+
+
+.pats-awards-standings__table tbody th,
+.pats-awards-standings__table tbody td {
+  padding: 1rem 1.1rem;
+  vertical-align: top;
+  font-weight: 400;
+}
+
+
+/* Medal category cell — colour-keyed left edge + dot per tier. */
+.pats-awards-standings__tier-row > th {
+  box-shadow: inset 3px 0 0 0 var(--tier-color, #2d5a1e);
+}
+
+
+.pats-awards-standings__tier-row--gold {
+  --tier-color: #d4af37;
+}
+.pats-awards-standings__tier-row--silver {
+  --tier-color: #9ca3af;
+}
+.pats-awards-standings__tier-row--bronze {
+  --tier-color: #cd7f32;
+}
+.pats-awards-standings__tier-row--certificate {
+  --tier-color: #2d5a1e;
+}
+
+
+.pats-awards-standings__tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: #1a1a1a;
+  white-space: nowrap;
+}
+
+
+.pats-awards-standings__dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: var(--tier-color, #2d5a1e);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tier-color, #2d5a1e) 22%, transparent);
+}
+
+
+.pats-awards-standings__min {
+  display: block;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+
+.pats-awards-standings__band {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.75rem;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+
+.pats-awards-standings__countries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+.pats-awards-standings__country {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--tier-color, #2d5a1e) 30%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tier-color, #2d5a1e) 9%, #ffffff);
+}
+
+
+.pats-awards-standings__country-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+
+.pats-awards-standings__country-score {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #4a5245;
+}
+
+
+.pats-awards-standings__none {
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: #94a3b8;
+}
+
+
+/* Below 720px the table collapses into stacked cards — each cell announces its
+   own column via the `data-label` attribute set in the markup. */
+@media (max-width: 720px) {
+  .pats-awards-standings__scroll {
+    border: none;
+    border-radius: 0;
+  }
+
+  .pats-awards-standings__table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .pats-awards-standings__table tbody tr {
+    display: block;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-left: 3px solid var(--tier-color, #2d5a1e);
+    border-radius: 12px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .pats-awards-standings__table tbody tr + tr {
+    border-top: 1px solid rgba(0, 0, 0, 0.09);
+  }
+
+  .pats-awards-standings__table tbody tr:nth-child(even) {
+    background: #ffffff;
+  }
+
+  .pats-awards-standings__table tbody th,
+  .pats-awards-standings__table tbody td {
+    display: block;
+    padding: 0.75rem 1rem;
+  }
+
+  .pats-awards-standings__tier-row > th {
+    box-shadow: none;
+    background: #f8faf5;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  }
+
+  .pats-awards-standings__table tbody td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.35rem;
+    font-family: var(--font-barlow), system-ui, sans-serif;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  .pats-awards-standings__band {
+    display: inline;
+    margin-left: 0.5rem;
+  }
 }
 
 
@@ -20612,4 +20790,806 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__a
 html.light-theme .participant-portal.pats-portal .pp-proof-filerow__action:hover,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__action:hover {
   color: #047857; /* emerald-700 */
+}
+
+
+/* ==========================================================================
+   Public gallery — parchment album panel (Competition Gallery)
+   ========================================================================== */
+
+.pats-gallery-page {
+  /* Clear the fixed site header (ticker + nav) — this page has no page-banner
+     hero to provide the offset, so it must add it itself. */
+  padding: calc(var(--site-header-height, 5.5rem) + clamp(1.25rem, 3vw, 2.25rem))
+    clamp(1rem, 4vw, 2.5rem) clamp(3rem, 6vw, 4.5rem);
+}
+
+.pats-gallery-panel {
+  position: relative;
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 1px solid rgba(20, 26, 20, 0.08);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #faf8f3 0%, #f2efe6 100%);
+  box-shadow: 0 18px 48px rgba(20, 26, 20, 0.14);
+}
+
+/* Faint operational photo bleeding in from the top-right, per the design. */
+.pats-gallery-panel__watermark {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(62%, 760px);
+  height: min(58%, 420px);
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: cover;
+  opacity: 0.16;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom left,
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 0) 78%
+  );
+  mask-image: linear-gradient(
+    to bottom left,
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 0) 78%
+  );
+}
+
+.pats-gallery-panel__inner {
+  position: relative;
+  z-index: 1;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.pats-gallery-panel__header {
+  max-width: 46ch;
+}
+
+.pats-gallery-panel__title {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #24301c;
+}
+
+.pats-gallery-panel__subtitle {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #4a5245;
+}
+
+.pats-gallery-panel__rule {
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin-top: 1.1rem;
+  border-radius: 2px;
+  background: #b8941f;
+}
+
+@media (max-width: 640px) {
+  .pats-gallery-panel {
+    border-radius: 14px;
+  }
+}
+
+
+/* ==========================================================================
+   Announcements — lead feature + card grid
+   ========================================================================== */
+
+.pats-announce-layout {
+  display: grid;
+  gap: 2rem;
+}
+
+.pats-announce-empty {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.pats-announce-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid rgba(200, 168, 75, 0.45);
+  border-radius: 999px;
+  background: rgba(200, 168, 75, 0.12);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c8a84b;
+}
+
+.pats-announce-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(235, 235, 235, 0.58);
+}
+
+.pats-announce-date svg {
+  width: 13px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+
+.pats-announce-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c8a84b;
+}
+
+.pats-announce-more svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------- Lead card */
+
+.pats-announce-lead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  text-decoration: none;
+  transition:
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms,
+    box-shadow 300ms;
+}
+
+.pats-announce-lead:hover {
+  transform: translateY(-3px);
+  border-color: rgba(200, 168, 75, 0.45);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+}
+
+.pats-announce-lead:hover .pats-announce-more svg {
+  transform: translateX(3px);
+}
+
+.pats-announce-lead__media {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  background: #121614;
+}
+
+.pats-announce-lead__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pats-announce-lead:hover .pats-announce-lead__media img {
+  transform: scale(1.04);
+}
+
+.pats-announce-lead__placeholder,
+.pats-announce-card__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1e2720 0%, #141a14 100%);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: rgba(200, 168, 75, 0.3);
+}
+
+.pats-announce-lead__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.pats-announce-lead__title {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.pats-announce-lead__excerpt {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgba(235, 235, 235, 0.72);
+}
+
+.pats-announce-lead__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 820px) {
+  .pats-announce-lead {
+    grid-template-columns: 1fr;
+  }
+  .pats-announce-lead__media {
+    min-height: 200px;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* --------------------------------------------------------------- Card grid */
+
+.pats-announce-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+
+.pats-announce-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  text-decoration: none;
+  transition:
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms,
+    box-shadow 300ms;
+}
+
+.pats-announce-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(200, 168, 75, 0.45);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.38);
+}
+
+.pats-announce-card:hover .pats-announce-more svg {
+  transform: translateX(3px);
+}
+
+.pats-announce-card__media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #121614;
+}
+
+.pats-announce-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pats-announce-card:hover .pats-announce-card__media img {
+  transform: scale(1.05);
+}
+
+.pats-announce-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
+.pats-announce-card__title {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.28;
+  color: #ffffff;
+}
+
+.pats-announce-card__excerpt {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: rgba(235, 235, 235, 0.62);
+}
+
+.pats-announce-card__body .pats-announce-more {
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+/* Day theme — cards sit on a light band, so invert the surface treatment. */
+html.light-theme .cinematic-site.army-site .pats-announce-lead,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-lead,
+html.light-theme .cinematic-site.army-site .pats-announce-card,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-card {
+  border-color: rgba(20, 26, 20, 0.1);
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(20, 26, 20, 0.07);
+}
+
+html.light-theme .cinematic-site.army-site .pats-announce-lead__title,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-lead__title,
+html.light-theme .cinematic-site.army-site .pats-announce-card__title,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-card__title {
+  color: #1c2119;
+}
+
+html.light-theme .cinematic-site.army-site .pats-announce-lead__excerpt,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-lead__excerpt,
+html.light-theme .cinematic-site.army-site .pats-announce-card__excerpt,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-card__excerpt {
+  color: #4a5245;
+}
+
+html.light-theme .cinematic-site.army-site .pats-announce-date,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-date {
+  color: #6b7280;
+}
+
+html.light-theme .cinematic-site.army-site .pats-announce-more,
+html[data-site-theme="day"] .cinematic-site.army-site .pats-announce-more {
+  color: #b8941f;
+}
+
+
+/* ==========================================================================
+   ARABIC (RTL) TYPOGRAPHY — global readability pass
+   When Arabic is selected the document is lang="ar" dir="rtl". The Latin UI
+   fonts (Inter / Barlow Condensed) carry no Arabic glyphs, so Arabic fell back
+   to a thin system face. Cairo (var(--font-arabic)) replaces it everywhere with
+   proper naskh glyphs, heavier weight and a larger size. Extra selector
+   specificity (rather than cascade overrides) beats the base rules, per the
+   css-guardrails ratchet. Latin letter-spacing / uppercasing is neutralised
+   because it breaks Arabic letter-joining and legibility.
+   ========================================================================== */
+
+:lang(ar) {
+  font-family: var(--font-arabic), "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-arabic), "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  font-weight: 500;
+}
+
+/* Force Cairo onto the Barlow/Inter-bound classes across the app. */
+html[lang="ar"] .pats-body,
+html[lang="ar"] .pats-body--bright,
+html[lang="ar"] .pats-eyebrow,
+html[lang="ar"] .pats-section-title,
+html[lang="ar"] .pats-section-title--display,
+html[lang="ar"] .pats-feature-title,
+html[lang="ar"] .pats-hero__headline,
+html[lang="ar"] .pats-hero__headline-line,
+html[lang="ar"] .pats-hero__headline-accent,
+html[lang="ar"] .pats-hero__subline,
+html[lang="ar"] .pats-hero__cta,
+html[lang="ar"] .pats-page-hero__title,
+html[lang="ar"] .pats-page-hero__crumb,
+html[lang="ar"] .pats-btn,
+html[lang="ar"] .pats-nav__link,
+html[lang="ar"] .cinematic-nav-link,
+html[lang="ar"] .pats-footer-brand__title,
+html[lang="ar"] .pats-footer-brand__copyright,
+html[lang="ar"] .pats-footer-legal,
+html[lang="ar"] .announcement-ticker-segment,
+html[lang="ar"] .pats-data-table__label,
+html[lang="ar"] .pats-data-table__value,
+html[lang="ar"] .pats-awards-standings__table,
+html[lang="ar"] .pats-awards-hero-card__name,
+html[lang="ar"] .pats-awards-hero-card__tier,
+html[lang="ar"] .pats-awards-hero-card__score,
+html[lang="ar"] button,
+html[lang="ar"] input,
+html[lang="ar"] textarea,
+html[lang="ar"] select,
+html[lang="ar"] label,
+html[lang="ar"] th,
+html[lang="ar"] td,
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4 {
+  font-family: var(--font-arabic), "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+
+/* Body copy: heavier + larger + looser line-height so it isn't thin/cramped. */
+html[lang="ar"] .pats-body,
+html[lang="ar"] .pats-body--bright,
+html[lang="ar"] .pats-page-hero__title + p,
+html[lang="ar"] p,
+html[lang="ar"] li,
+html[lang="ar"] td,
+html[lang="ar"] .pats-hero__subline,
+html[lang="ar"] .pats-awards-standings__band,
+html[lang="ar"] .pats-awards-standings__country-name {
+  font-weight: 500;
+  line-height: 1.9;
+}
+
+html[lang="ar"] .pats-hero__subline,
+html[lang="ar"] .pats-body {
+  font-size: 1.06em;
+}
+
+/* Headings: solid weight, no Latin tracking. */
+html[lang="ar"] .pats-eyebrow,
+html[lang="ar"] .pats-section-title,
+html[lang="ar"] .pats-hero__headline,
+html[lang="ar"] .pats-page-hero__title,
+html[lang="ar"] .pats-awards-hero-card__name,
+html[lang="ar"] .pats-awards-standings__tier {
+  font-weight: 700;
+}
+
+/* Neutralise Latin letter-spacing + uppercasing on Arabic text (they break
+   cursive joining and add nothing to Arabic). */
+html[lang="ar"] .pats-eyebrow,
+html[lang="ar"] .pats-section-title,
+html[lang="ar"] .pats-hero__headline,
+html[lang="ar"] .pats-hero__headline-line,
+html[lang="ar"] .pats-page-hero__title,
+html[lang="ar"] .pats-nav__link,
+html[lang="ar"] .cinematic-nav-link,
+html[lang="ar"] .pats-btn,
+html[lang="ar"] .pats-hero__cta,
+html[lang="ar"] .announcement-ticker-segment,
+html[lang="ar"] .pats-awards-hero-card__tier,
+html[lang="ar"] .pats-awards-hero-card__name,
+html[lang="ar"] .pats-awards-standings__table th,
+html[lang="ar"] .pats-awards-standings__tier,
+html[lang="ar"] .pats-footer-bar__btn,
+html[lang="ar"] .pats-footer-brand__title {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+
+/* ==========================================================================
+   RTL LAYOUT CORRECTIONS (public site)
+   The public chrome was authored LTR-only. These flip the physical offsets
+   that don't auto-mirror, for Arabic (dir="rtl"). Specificity beats the base
+   rules; no cascade-override keyword needed.
+   ========================================================================== */
+
+/* Hamburger / menu button sits on the inline-start edge (left) in RTL. */
+[dir="rtl"] .pats-nav__menu-btn {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* Announcement marquee: reverse the scroll so it reads right-to-left, and move
+   the speaker badge (and its reserved padding) to the right edge. */
+[dir="rtl"] .announcement-ticker-track {
+  animation-direction: reverse;
+}
+[dir="rtl"] .announcement-ticker-speaker {
+  left: auto;
+  right: 0;
+}
+[dir="rtl"] .announcement-ticker-viewport {
+  padding-left: 0;
+  padding-right: 0.75rem;
+}
+[dir="rtl"] .announcement-ticker--speaker .announcement-ticker-viewport {
+  padding-left: 0;
+  padding-right: 3.35rem;
+}
+@media (min-width: 640px) {
+  [dir="rtl"] .announcement-ticker-viewport {
+    padding-right: 1rem;
+  }
+  [dir="rtl"] .announcement-ticker--speaker .announcement-ticker-viewport {
+    padding-right: 3.35rem;
+  }
+}
+
+
+/* ==========================================================================
+   INTERNATIONAL MAP TOOLTIP — light-mode contrast
+   The base tooltip is dark-on-map. In Light/Day mode it reads poorly, so give
+   it a solid light card (matching the app's light surfaces) with dark ink text.
+   ========================================================================== */
+
+html.light-theme .registered-map__tooltip,
+html[data-site-theme="day"] .registered-map__tooltip {
+  background: #ffffff;
+  border-color: rgba(184, 148, 31, 0.5);
+  box-shadow: 0 16px 36px rgba(20, 26, 20, 0.22);
+  backdrop-filter: none;
+}
+html.light-theme .registered-map__tooltip-title,
+html[data-site-theme="day"] .registered-map__tooltip-title {
+  color: #8a6d00;
+}
+html.light-theme .registered-map__tooltip-list li,
+html[data-site-theme="day"] .registered-map__tooltip-list li {
+  color: #1c2119;
+}
+html.light-theme .registered-map__tooltip-name,
+html[data-site-theme="day"] .registered-map__tooltip-name {
+  color: #24301c;
+}
+html.light-theme .registered-map__tooltip-year,
+html[data-site-theme="day"] .registered-map__tooltip-year {
+  color: #b8941f;
+}
+html.light-theme .registered-map__tooltip-more,
+html[data-site-theme="day"] .registered-map__tooltip-more {
+  color: #4a5245;
+}
+
+
+/* ==========================================================================
+   AWARDS MEDAL CARDS — compact 4-across layout (matches design mockup)
+   Circular medal thumbnail on a light panel with a tier-coloured corner badge,
+   over a dark footer with tier / name / range. Appended so these win by source
+   order over the earlier large-card rules.
+   ========================================================================== */
+
+.pats-awards-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1040px;
+  margin: 40px auto 0;
+}
+
+@media (max-width: 900px) {
+  .pats-awards-hero-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 460px) {
+  .pats-awards-hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pats-awards-hero-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #1a2208;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* Light panel holding the badge + circular medal thumbnail. */
+.pats-awards-hero-card__visual {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 0;
+  height: 152px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #f6f7f2 0%, #e9ece2 100%);
+  overflow: hidden;
+}
+
+/* Tier-coloured corner badge with an icon. */
+.pats-awards-hero-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #1a2208;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+}
+
+.pats-awards-hero-card__badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pats-awards-hero-card--gold .pats-awards-hero-card__badge {
+  background: #d4af37;
+}
+.pats-awards-hero-card--silver .pats-awards-hero-card__badge {
+  background: #b8bcc2;
+}
+.pats-awards-hero-card--bronze .pats-awards-hero-card__badge {
+  background: #cd7f32;
+  color: #fff;
+}
+.pats-awards-hero-card--certificate .pats-awards-hero-card__badge {
+  background: #2d5a1e;
+  color: #fff;
+}
+
+/* Circular medal thumbnail. */
+.pats-awards-hero-card__thumb {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(20, 26, 20, 0.16);
+}
+
+/* Certificate is a document, not a medal — show it as a rounded rectangle. */
+.pats-awards-hero-card__thumb--doc {
+  width: 132px;
+  height: 96px;
+  border-radius: 8px;
+}
+
+.pats-awards-hero-card__image {
+  object-fit: cover;
+  object-position: center;
+  transform: none;
+  mix-blend-mode: normal;
+  border: none;
+  border-radius: 0;
+}
+
+.pats-awards-hero-card__thumb--doc .pats-awards-hero-card__image {
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Dark footer. */
+.pats-awards-hero-card__footer {
+  flex: 1 1 auto;
+  padding: 16px 18px 18px;
+  text-align: left;
+  background: #1a2208;
+}
+
+.pats-awards-hero-card__tier {
+  margin: 0 0 4px;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8a84b;
+}
+
+.pats-awards-hero-card__name {
+  margin: 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.12;
+  color: #ffffff;
+}
+
+.pats-awards-hero-card__score {
+  margin: 5px 0 0;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* Hover lift. */
+.pats-awards-hero-grid--visible .pats-awards-hero-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+}
+
+
+/* ==========================================================================
+   HERO — balanced height on large desktops
+   Cap the full-viewport hero so it isn't excessively tall on big monitors
+   (which pushed the following content far below the fold and read as dead
+   space). The next section then sits just under the fold, contiguous.
+   ========================================================================== */
+
+.army-site:not(.dashboard-day) .pats-hero {
+  height: min(100dvh, 900px);
+}
+
+
+/* ==========================================================================
+   ARABIC + RTL — specificity corrections
+   The public classes are scoped `.army-site:not(.dashboard-day) .pats-*`
+   (0,3,0), which outweighs a plain `html[lang="ar"] .pats-*` (0,2,1). These
+   re-assert the Arabic face and the RTL hamburger side at matching scope.
+   ========================================================================== */
+
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-body,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-body--bright,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-eyebrow,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-section-title,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-section-title--display,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-feature-title,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__headline,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__headline-line,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__headline-accent,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__subline,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__cta,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-page-hero__title,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-page-hero__crumb,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-nav__link,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-nav__brand-title,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-nav__brand-subtitle,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-btn,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-panel__label,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-data-table__label,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-data-table__value,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-schedule-label,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-schedule-value,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-footer-bar__btn,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-footer-brand__title,
+html[lang="ar"] .army-site:not(.dashboard-day) .announcement-ticker-segment {
+  font-family: var(--font-arabic), "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+
+/* Body weight/leading at the same scope so Arabic isn't thin. */
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-body,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-body--bright,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__subline,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-data-table__value,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-schedule-value {
+  font-weight: 500;
+  line-height: 1.9;
+}
+
+/* Arabic headings: weight up, drop Latin tracking/uppercasing. */
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-eyebrow,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-section-title,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__headline,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__headline-line,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-page-hero__title,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-nav__link,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-hero__cta,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-btn,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-schedule-label,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-data-table__label,
+html[lang="ar"] .army-site:not(.dashboard-day) .announcement-ticker-segment,
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-footer-bar__btn {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Hamburger to the inline-start (left) in RTL — matches the .army-site scope,
+   including the menu-open variant which re-asserts margin-left:auto. */
+[dir="rtl"] .army-site:not(.dashboard-day) .pats-nav__menu-btn,
+[dir="rtl"] .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__menu-btn {
+  margin-left: 0;
+  margin-right: auto;
 }

@@ -1,38 +1,39 @@
 import type { Metadata } from "next";
 
 import { ScrollReveal } from "@/components/army/ScrollReveal";
-import { ParticipationTimeline } from "@/components/international/ParticipationTimeline";
 import { RegisteredNationsMap } from "@/components/international/RegisteredNationsMap";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
-import { HISTORY, ORIENTATION_MODULES } from "@/lib/pats-content";
-import { INTERNATIONAL_TEAMS } from "@/lib/pats-public";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const metadata: Metadata = {
   title: "International Participation",
 };
 
-export default function InternationalPage() {
+export default async function InternationalPage() {
+  const { t } = await getDictionary();
+  const p = t.publicSite.pages.international;
+
   return (
     <div className="space-y-0">
       <PatsPageHero
-        eyebrow="Global partnerships"
-        title="International participation"
-        subtitle={INTERNATIONAL_TEAMS.description}
+        eyebrow={p.heroEyebrow}
+        title={p.heroTitle}
+        subtitle={p.heroSubtitle}
         meta={[
-          { label: "Since", value: "2016" },
-          { label: "Editions", value: "8 international" },
-          { label: "Scope", value: "Multi-theatre" },
+          { label: p.metaSince, value: p.metaSinceValue },
+          { label: p.metaEditions, value: p.metaEditionsValue },
+          { label: p.metaReach, value: p.metaReachValue },
         ]}
       />
 
       <PatsSection variant="navy">
         <ScrollReveal>
           <PatsSectionHeading
-            eyebrow="Theatre map"
-            title="Registered nations"
-            description="Countries with teams registered for the competition. Hover a highlighted nation to see its teams and the year they registered."
+            eyebrow={p.mapEyebrow}
+            title={p.mapTitle}
+            description={p.mapDescription}
           />
         </ScrollReveal>
         <ScrollReveal className="mt-8">
@@ -40,37 +41,24 @@ export default function InternationalPage() {
         </ScrollReveal>
       </PatsSection>
 
-      <PatsSection variant="elevated">
-        <ScrollReveal>
-          <PatsSectionHeading
-            eyebrow="History"
-            title="Edition timeline"
-            description={`International PATS since ${HISTORY.internationalSince}. ${HISTORY.editionsHeld} international editions conducted to date.`}
-          />
-        </ScrollReveal>
-        <div className="mt-8">
-          <ParticipationTimeline />
-        </div>
-      </PatsSection>
-
       <PatsSection variant="deepest">
         <ScrollReveal>
           <PatsSectionHeading
-            eyebrow="Orientation"
-            title="Familiarization training"
-            description="International teams are attached to a local unit for acclimatization before exercise start."
+            eyebrow={p.orientationEyebrow}
+            title={p.orientationTitle}
+            description={p.orientationDescription}
           />
         </ScrollReveal>
         <div className="pats-orientation-grid mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {ORIENTATION_MODULES.map((mod) => (
+          {p.orientationModules.map((mod) => (
             <div key={mod} className="pats-panel pats-panel--tile">
               <p className="pats-panel__label">{mod}</p>
             </div>
           ))}
         </div>
         <div className="pats-body mt-8 max-w-3xl space-y-4">
-          {HISTORY.narrative.map((p, i) => (
-            <p key={i}>{p}</p>
+          {p.historyNarrative.map((para, i) => (
+            <p key={i}>{para}</p>
           ))}
         </div>
       </PatsSection>

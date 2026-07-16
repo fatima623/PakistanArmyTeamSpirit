@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
-import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { GalleryGrid, type GalleryItem } from "@/components/gallery/GalleryGrid";
-import { PatsSection } from "@/components/pats/PatsSection";
-import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { PATS_CROP } from "@/lib/media";
 import { prisma } from "@/lib/prisma";
 import { GALLERY_ALBUMS } from "@/lib/pats-content";
 
@@ -46,25 +45,33 @@ async function getGalleryItems(): Promise<GalleryItem[]> {
     title: a.title,
     year: a.year,
     image: a.image,
-    category: "Field archive",
+    category: a.category,
   }));
 }
 
 export default async function GalleryPage() {
-  const items = await getGalleryItems();
+  const [items, { t }] = await Promise.all([getGalleryItems(), getDictionary()]);
+  const g = t.publicSite.gallery;
 
   return (
-    <PatsSection variant="deepest">
-      <ScrollReveal>
-        <PatsSectionHeading
-          eyebrow="Field archive"
-          title="Competition gallery"
-          description="Documentary archive of international PATS editions — delegations, ceremonies, and operational heritage."
+    <div className="pats-gallery-page">
+      <section className="pats-gallery-panel">
+        <div
+          className="pats-gallery-panel__watermark"
+          style={{ backgroundImage: `url(${PATS_CROP.pageHeroInner38})` }}
+          aria-hidden
         />
-      </ScrollReveal>
-      <ScrollReveal className="mt-10">
-        <GalleryGrid items={items} />
-      </ScrollReveal>
-    </PatsSection>
+        <div className="pats-gallery-panel__inner">
+          <header className="pats-gallery-panel__header">
+            <h1 className="pats-gallery-panel__title">{g.title}</h1>
+            <p className="pats-gallery-panel__subtitle">{g.subtitle}</p>
+            <span className="pats-gallery-panel__rule" aria-hidden />
+          </header>
+          <div className="mt-8">
+            <GalleryGrid items={items} />
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

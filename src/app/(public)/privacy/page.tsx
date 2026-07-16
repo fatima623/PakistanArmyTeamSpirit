@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { HQ_ORG, SITE_NAME, SUPPORT_EMAIL } from "@/lib/branding";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { getSiteSettings } from "@/lib/site-data";
 
 export const revalidate = 3600;
@@ -12,25 +13,21 @@ export const metadata: Metadata = {
 };
 
 export default async function PrivacyPage() {
-  const settings = await getSiteSettings();
+  const [settings, { t }] = await Promise.all([
+    getSiteSettings(),
+    getDictionary(),
+  ]);
+  const p = t.publicSite.pages.privacy;
 
   return (
     <>
-      <PatsPageHero eyebrow="Legal" title="Privacy policy" />
+      <PatsPageHero eyebrow={p.heroEyebrow} title={p.heroTitle} />
       <PatsSection variant="navy">
         <div className="pats-prose-panel space-y-4">
+          <p className="pats-body">{p.body1(SITE_NAME)}</p>
+          <p className="pats-body">{p.body2(SITE_NAME, HQ_ORG)}</p>
           <p className="pats-body">
-            {SITE_NAME} is committed to protecting your personal information. This
-            policy explains how we collect, use, and safeguard data submitted through
-            this registration portal.
-          </p>
-          <p className="pats-body">
-            By registering on this website you consent to the processing of your
-            data for the purposes of administering participation in {SITE_NAME},
-            including communication with your unit and coordination with {HQ_ORG}.
-          </p>
-          <p className="pats-body">
-            For full policy details or to exercise your data rights, contact{" "}
+            {p.body3Prefix}
             <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
           </p>
           {settings?.privacyPolicyUrl &&
@@ -41,7 +38,7 @@ export default async function PrivacyPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View external privacy policy
+                  {p.externalLink}
                 </a>
               </p>
             )}

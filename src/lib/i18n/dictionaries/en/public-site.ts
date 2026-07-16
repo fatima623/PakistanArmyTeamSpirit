@@ -5,12 +5,185 @@ export const publicSite = {
   nav: {
     home: "Home",
     eventsDetail: "Events Detail",
+    operations: "Operations",
+    exerciseContour: "Exercise Contour",
     international: "International Participation",
     awards: "Awards",
     gallery: "Gallery",
     announcements: "Announcements",
+    documents: "Documents",
     keyDates: "Key Dates",
     login: "Login",
+  },
+
+  gallery: {
+    eyebrow: "Field archive",
+    title: "Competition Gallery",
+    subtitle:
+      "Documentary archive of international PATS editions — delegations, ceremonies, and operational heritage.",
+    allArchives: "All archives",
+    photos: (count: number) => `${count} ${count === 1 ? "Photo" : "Photos"}`,
+    empty: "The gallery is being updated. Check back soon.",
+    close: "Close",
+    previous: "Previous",
+    next: "Next",
+  },
+
+  announcements: {
+    eyebrow: "Notices",
+    title: "Announcements",
+    subtitle:
+      "Official notices, updates and coordination bulletins for the PATS competition.",
+    latest: "Latest",
+    countLabel: (count: number) =>
+      `${count} ${count === 1 ? "notice" : "notices"} published`,
+    readMore: "Read more",
+    empty: "No announcements yet — please check back soon.",
+  },
+
+  /** Nav/site chrome affordances (aria labels, menu buttons). */
+  chrome: {
+    siteNav: "Site",
+    mainNav: "Main navigation",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    brandHome: "PATS home",
+    selectLanguage: "Select language",
+  },
+
+  /** Shared breadcrumb on inner page headers. */
+  breadcrumb: {
+    home: "Home",
+    label: "Breadcrumb",
+  },
+
+  footer: {
+    isprWebsite: "ISPR Website",
+    registerNow: "Register now",
+    contactUs: "Contact us",
+  },
+
+  /** Per-page chrome (hero + section headings) for the marketing subpages. */
+  pages: {
+    awards: {
+      heroEyebrow: "Honors registry",
+      heroTitle: "Awards & recognition",
+      heroSubtitle:
+        "Teams are graded across all tactical events. Overall percentage determines medal tier and certificate of participation.",
+      metaGold: "Gold",
+      metaSilver: "Silver",
+      metaBronze: "Bronze",
+      showcaseLabel: "Honors registry",
+      showcaseTitle: "Awards and honors",
+      showcaseSubtitle:
+        "Teams are graded across all tactical events. Overall percentage determines medal tier and certificate of participation.",
+      tierGold: "Gold tier",
+      tierSilver: "Silver tier",
+      tierBronze: "Bronze tier",
+      tierParticipation: "Participation",
+      nameGold: "Gold Medal",
+      nameSilver: "Silver Medal",
+      nameBronze: "Bronze Medal",
+      nameCertificate: "Certificate",
+      rangeGold: "75% and above",
+      rangeSilver: "65% to 74.99%",
+      rangeBronze: "55% to 64.99%",
+      rangeCertificate: "Below 55%",
+      standingsTitle: "Current standings",
+      standingsSubtitle:
+        "Countries grouped by the medal category their overall percentage currently qualifies for.",
+      standingsBadge: "Live telemetry",
+      colMedal: "Medal category",
+      colMinimum: "Minimum percentage required",
+      colCountries: "Qualified countries",
+      noTeams: "No teams in this band",
+      standingsFootnote:
+        "Illustrative standings for command review. Final results certified post-exercise.",
+      teamEyebrow: "Team",
+      teamTitle: "Team composition",
+      teamDescription: "Official patrol structure for competition teams.",
+      teamRoles: [
+        { role: "Team Leader", qty: "1 × Captain / Subaltern" },
+        { role: "Team 2nd In Command", qty: "1 × Sergeant / Equivalent" },
+        { role: "Team NCO", qty: "1 × Corporal / Equivalent" },
+        { role: "Light Machine Gun No.1", qty: "1 × Soldier / Equivalent" },
+        { role: "Light Machine Gun No.2", qty: "1 × Soldier / Equivalent" },
+        { role: "Signal Operator", qty: "1 × Soldier / Equivalent" },
+        { role: "Rifleman", qty: "2 × Soldier / Equivalent" },
+        {
+          role: "Reserve",
+          qty: "1 × Captain/Subaltern + 1 × Sergeant/Soldier",
+        },
+        { role: "Team Manager", qty: "1 × Major" },
+      ],
+    },
+    international: {
+      heroEyebrow: "Global partnerships",
+      heroTitle: "International participation",
+      heroSubtitle:
+        "PATS brings together patrol teams from partner nations across multiple theatres.",
+      metaSince: "Since",
+      metaSinceValue: "2016",
+      metaEditions: "Editions",
+      metaEditionsValue: "8 international",
+      metaReach: "Reach",
+      metaReachValue: "Multi-theatre",
+      mapEyebrow: "Theatre map",
+      mapTitle: "Registered nations",
+      mapDescription:
+        "Countries with teams registered for the competition. Hover a highlighted nation to see its teams and the year they registered.",
+      historyEyebrow: "History",
+      historyTitle: "Edition timeline",
+      historyDescription:
+        "International participation across successive editions of the competition.",
+      orientationEyebrow: "Orientation",
+      orientationTitle: "Familiarization training",
+      orientationDescription:
+        "Pre-competition orientation for international teams before movement.",
+      // CBRN and AFOS / ATGP are established military acronyms — kept verbatim
+      // in every locale (a localized gloss may follow in parentheses).
+      orientationModules: [
+        "Firing / zeroing (competition weapons)",
+        "Navigation / map reading",
+        "Signal equipment",
+        "CBRN",
+        "AFOS / ATGP",
+        "Area orientation",
+      ],
+      historyNarrative: [
+        "Since 2005, PATS began as a navigation exercise emphasizing endurance and physical fitness.",
+        "Lessons from counter-terrorism operations were incorporated as realistic events and battlefield scenarios — sub-tactical operations in conventional and sub-conventional environments.",
+        "Growing interest from friendly countries led to International PATS (2016), sharing rich experiences and learning mutually.",
+      ],
+      mapAria: "World map of registered nations",
+      mapCaption: (count: number) =>
+        `${count} nation${count === 1 ? "" : "s"} represented — hover a highlighted country to see its teams.`,
+      mapEmpty: "Registered nations will appear here as teams sign up.",
+      mapCountryAria: (country: string, count: number) =>
+        `${country}: ${count} registered team${count === 1 ? "" : "s"}`,
+      tooltipMore: (count: number) => `+${count} more`,
+    },
+    keyDates: {
+      heroEyebrow: "Schedule",
+      heroTitle: "Key dates",
+      heroSubtitle:
+        "Important dates for the PATS Competition cycle. All times are Pakistan Standard Time (PKT) unless stated otherwise.",
+      sectionEyebrow: "Timeline",
+      sectionTitle: "Competition schedule",
+      sectionDescription:
+        "Official timeline for registration, exercise, and administrative milestones.",
+      empty: "No key dates configured.",
+    },
+    privacy: {
+      heroEyebrow: "Legal",
+      heroTitle: "Privacy policy",
+      body1: (siteName: string) =>
+        `${siteName} is committed to protecting your personal information. This policy explains how we collect, use, and safeguard data submitted through this registration portal.`,
+      body2: (siteName: string, org: string) =>
+        `By registering on this website you consent to the processing of your data for the purposes of administering participation in ${siteName}, including communication with your unit and coordination with ${org}.`,
+      body3Prefix: "For full policy details or to exercise your data rights, contact ",
+      externalLink: "View external privacy policy",
+    },
   },
 
   login: {

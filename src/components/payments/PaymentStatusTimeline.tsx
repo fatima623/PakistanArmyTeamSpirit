@@ -13,6 +13,7 @@ import {
   shouldShowPaymentStatusTimeline,
 } from "@/lib/payment-rejection-history";
 import { formatDateTime, cn } from "@/lib/utils";
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
 
 type Props = {
   status: string;
@@ -20,15 +21,23 @@ type Props = {
   className?: string;
 };
 
+/**
+ * Shared with the admin payment review panel, which renders OUTSIDE the portal
+ * i18n provider — hence `useI18nOptional()` and English fallbacks throughout.
+ */
 export function PaymentStatusTimeline({ status, history, className }: Props) {
   const [expanded, setExpanded] = useState(true);
+  const i18n = useI18nOptional();
+  const pt = i18n?.t.payment.timeline;
+  const statusLabels = i18n?.t.payment.statuses.full;
+  const locale = i18n?.locale;
 
   if (!shouldShowPaymentStatusTimeline(status, history)) {
     return null;
   }
 
   const statusKey = normalizePaymentStatus(status);
-  const statusLabel = PAYMENT_STATUS_LABELS[statusKey];
+  const statusLabel = statusLabels?.[statusKey] ?? PAYMENT_STATUS_LABELS[statusKey];
   const collapsible = history.length > 1;
   const [mostRecent, ...older] = history;
 

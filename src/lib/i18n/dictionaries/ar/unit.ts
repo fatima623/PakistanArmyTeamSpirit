@@ -31,6 +31,13 @@ export const unit: typeof enUnit = {
     army: "القوات البرية",
     navy: "القوات البحرية",
     airForce: "القوات الجوية",
+    combat: "قتالي",
+    combatSupport: "إسناد قتالي",
+    combatServiceSupport: "إسناد خدمات قتالي",
+  },
+  errors: {
+    required: "هذا الحقل مطلوب",
+    email: "أدخل عنوان بريد إلكتروني صالح",
   },
   placeholders: {
     selectUnit: "اختر الوحدة",

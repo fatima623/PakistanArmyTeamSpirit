@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
  * alongside the theme toggle in the site nav.
  */
 export function PublicLanguageSwitcher({ className }: { className?: string }) {
-  const { locale } = useI18n();
+  const { locale, t } = useI18n();
+  const selectLanguage = t.publicSite.chrome.selectLanguage;
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -89,7 +90,8 @@ export function PublicLanguageSwitcher({ className }: { className?: string }) {
         className="pats-nav__lang-trigger"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label="Select language"
+        aria-label={selectLanguage}
+        title={LOCALE_LABELS[locale]}
         disabled={pending}
         onClick={toggle}
       >
@@ -101,7 +103,7 @@ export function PublicLanguageSwitcher({ className }: { className?: string }) {
         <ul
           className="pats-nav__lang-menu"
           role="menu"
-          aria-label="Select language"
+          aria-label={selectLanguage}
           style={menuStyle}
         >
           {LOCALES.map((code) => {

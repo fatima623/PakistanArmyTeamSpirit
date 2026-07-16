@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ComponentType } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CheckCircle2,
@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   SquarePen,
   XCircle,
+  type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -42,7 +43,7 @@ type ActionMeta = {
   needsReason: boolean;
   success: string;
   confirmLabel: string;
-  icon: ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   /** icon disc inside the dialog */
   disc: string;
   /** solid confirm button */

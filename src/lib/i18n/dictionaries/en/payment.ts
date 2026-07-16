@@ -1,4 +1,41 @@
 export const payment = {
+  /** Keyed by the `PaymentStatus` enum value. `table` = compact variant. */
+  statuses: {
+    full: {
+      PENDING: "Payment Required",
+      SUBMITTED: "Payment Submitted",
+      UNDER_REVIEW: "Under Review",
+      VERIFIED: "Payment Verified",
+      REJECTED: "Proof Rejected",
+      RETURNED: "Returned for Correction",
+    },
+    table: {
+      PENDING: "Required",
+      SUBMITTED: "Submitted",
+      UNDER_REVIEW: "In review",
+      VERIFIED: "Verified",
+      REJECTED: "Rejected",
+      RETURNED: "Returned",
+    },
+  },
+  timeline: {
+    currentStatus: "Current Status:",
+    rejectionHistory: "Rejection History",
+    rejectionHistoryCount: (n: number) => `Rejection History (${n})`,
+    reason: "Reason:",
+  },
+  proof: {
+    loadError: "Could not load payment proof",
+    loadFailed: "Failed to load proof",
+    proofFallback: "Payment proof",
+    downloadFallbackName: "payment-proof",
+    viewImage: "View image",
+    viewPdf: "View PDF",
+    download: "Download",
+    lightboxTitle: "Payment proof — full size",
+    lightboxAlt: "Payment proof full size",
+    units: { mb: "MB", kb: "KB" },
+  },
   instructions: {
     registrationFee: "Registration fee",
     sendExactBold: "Send exactly this amount",

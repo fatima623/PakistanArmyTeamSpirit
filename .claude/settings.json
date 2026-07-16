@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless --disable-gpu --no-sandbox --virtual-time-budget=3000 --dump-dom \"file:///C:/Users/fatim/AppData/Local/Temp/claude/d--PakistanArmyTeamSpirit/f006030d-0493-41e9-bd6d-d4f0caf001b7/scratchpad/numtest.html\")"
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless --disable-gpu --no-sandbox --virtual-time-budget=3000 --dump-dom \"file:///C:/Users/fatim/AppData/Local/Temp/claude/d--PakistanArmyTeamSpirit/f006030d-0493-41e9-bd6d-d4f0caf001b7/scratchpad/numtest.html\")",
+      "Bash(break)",
+      "Bash(node \"C:/Users/fatim/AppData/Local/Temp/claude/d--PakistanArmyTeamSpirit/b9858012-2dd7-43d6-8679-51f37ba834f0/scratchpad/verify.js\")",
+      "Bash(curl -s -m 120 \"http://localhost:3001/gallery\")",
+      "Bash(curl -s -I -m 120 \"http://localhost:3001/gallery\")",
+      "Bash(node -e ' *)",
+      "Bash(curl -s -m 60 \"http://localhost:3000/gallery\")",
+      "Bash(cp src/components/army/ArmyFooter.tsx \"C:/Users/fatim/AppData/Local/Temp/claude/d--PakistanArmyTeamSpirit/b9858012-2dd7-43d6-8679-51f37ba834f0/scratchpad/ArmyFooter.bak.tsx\")"
     ]
   }
 }

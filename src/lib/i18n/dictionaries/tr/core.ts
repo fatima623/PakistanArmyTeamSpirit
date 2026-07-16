@@ -10,6 +10,11 @@ export const core: typeof enCore = {
     selectLanguage: "Dil seçin",
     loadingTitle: "Katılımcı paneli",
     loadingDesc: "Katılımcı işlemleri ve durum panelleri yükleniyor.",
+    toasts: {
+      genericError: "Bir sorun oluştu. Lütfen tekrar deneyin.",
+      saveSuccess: "Değişiklikler başarıyla kaydedildi",
+      validationError: "Lütfen formdaki hataları kontrol edin.",
+    },
   },
 
   nav: {
@@ -43,6 +48,19 @@ export const core: typeof enCore = {
     updatesEyebrow: "Güncellemeler",
     latestNews: "Son haberler",
     noNews: "Henüz haber yok.",
+    timelinePanel: {
+      closed: "Kapandı",
+      dueToday: "Son gün bugün",
+      daysLeft: (n) => `${n} gün kaldı`,
+      deadlines: "Son tarihler",
+      noDeadlines: "Henüz son tarih belirlenmedi.",
+      keyDates: "Önemli tarihler",
+      noKeyDates: "Henüz önemli tarih yayımlanmadı.",
+      deadlineLabels: {
+        registration: "Kayıt son tarihi",
+        payment: "Ödeme son tarihi",
+      },
+    },
   },
 
   workflowPanel: {
@@ -70,6 +88,13 @@ export const core: typeof enCore = {
   },
 
   registration: {
+    statuses: {
+      PENDING: "Beklemede",
+      UNDER_REVIEW: "İncelemede",
+      APPROVED: "Onaylandı",
+      REJECTED: "Reddedildi",
+      RETURNED: "Düzeltme için iade edildi",
+    },
     profileEyebrow: "Profil",
     title: "Kayıt bilgileri",
     name: "Ad",

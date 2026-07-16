@@ -4,10 +4,12 @@ import type { home as enHome } from "../en/home";
 export const home: typeof enHome = {
   hero: {
     featuredAria: "Öne çıkanlar",
-    titleLine1: "Pakistan Army Team Spirit (PATS)",
+    titleLine1: "Pakistan Ordusu Takım Ruhu (PATS)",
     titleLine2: "Yarışması",
+    // Armadaki Urduca özdeyişin (İkbal) anlam çevirisi.
+    motto: "Sarsılmaz iman, bitmeyen amel, âlemi fetheden sevgi",
     description:
-      "Uluslararası Pakistan Army Team Spirit — ortak ülkeler arasında taktik ustalığı, dayanıklılığı ve takım ruhunu sınayan 60 saatlik bir devriye tatbikatı.",
+      "Uluslararası Pakistan Ordusu Takım Ruhu (PATS) — ortak ülkeler arasında taktik ustalığı, dayanıklılığı ve takım ruhunu sınayan 60 saatlik bir devriye tatbikatı.",
     cta: "Takımınızı kaydedin",
     scrollHint: "Aşağı kaydırın",
   },

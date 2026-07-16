@@ -8,6 +8,12 @@ import {
   normalizeCountryKey,
   type RegisteredCountry,
 } from "@/lib/country-iso";
+import { DEFAULT_LOCALE } from "@/lib/i18n/config";
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
+import {
+  translateCountryName,
+  translateTeamName,
+} from "@/lib/i18n/international-i18n";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 const XLINK_NS = "http://www.w3.org/1999/xlink";
@@ -91,6 +97,12 @@ function buildFlagPattern(
 }
 
 export function RegisteredNationsMap() {
+  const i18n = useI18nOptional();
+  const m = i18n?.t.publicSite.pages.international;
+  // The map is also mounted outside an I18nProvider (see useI18nOptional), where
+  // it must keep rendering the original English — which is exactly what the
+  // translate* helpers do for DEFAULT_LOCALE.
+  const locale = i18n?.locale ?? DEFAULT_LOCALE;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -211,11 +223,14 @@ export function RegisteredNationsMap() {
         p.style.cursor = "pointer";
         p.setAttribute("tabindex", "0");
         p.setAttribute("role", "button");
+        const localizedName = translateCountryName(country.country, locale);
         p.setAttribute(
           "aria-label",
-          `${country.country}: ${country.teams.length} registered team${
-            country.teams.length === 1 ? "" : "s"
-          }`
+          m
+            ? m.mapCountryAria(localizedName, country.teams.length)
+            : `${localizedName}: ${country.teams.length} registered team${
+                country.teams.length === 1 ? "" : "s"
+              }`
         );
 
         const highlight = () => {
@@ -273,7 +288,10 @@ export function RegisteredNationsMap() {
     }
 
     return () => cleanups.forEach((fn) => fn());
-  }, [svgReady, countries]);
+    // `m`/`locale` feed the per-country aria-labels, so the paint must re-run
+    // when the language changes. Both are stable per locale (the provider
+    // memoizes its value and the dictionaries are module constants).
+  }, [svgReady, countries, m, locale]);
 
   // 4) Position the tooltip: prefer above the cursor, flip below when it would
   //    clip the top, and clamp fully inside the viewport on every axis so the
@@ -310,7 +328,7 @@ export function RegisteredNationsMap() {
         <div
           ref={containerRef}
           className="registered-map__svg"
-          aria-label="World map of registered nations"
+          aria-label={m?.mapAria ?? "World map of registered nations"}
           role="img"
         />
         {tooltip ? (
@@ -326,19 +344,23 @@ export function RegisteredNationsMap() {
             role="tooltip"
           >
             <p className="registered-map__tooltip-title">
-              {tooltip.country.country}
+              {translateCountryName(tooltip.country.country, locale)}
             </p>
             <ul className="registered-map__tooltip-list">
               {tooltip.country.teams.slice(0, 8).map((t, i) => (
                 <li key={`${t.name}-${t.year}-${i}`}>
-                  <span className="registered-map__tooltip-name">{t.name}</span>
+                  <span className="registered-map__tooltip-name">
+                    {translateTeamName(t.name, locale)}
+                  </span>
                   <span className="registered-map__tooltip-year">{t.year}</span>
                 </li>
               ))}
             </ul>
             {tooltip.country.teams.length > 8 ? (
               <p className="registered-map__tooltip-more">
-                +{tooltip.country.teams.length - 8} more
+                {m
+                  ? m.tooltipMore(tooltip.country.teams.length - 8)
+                  : `+${tooltip.country.teams.length - 8} more`}
               </p>
             ) : null}
           </div>
@@ -346,10 +368,13 @@ export function RegisteredNationsMap() {
       </div>
       <p className="registered-map__caption">
         {registeredCount > 0
-          ? `${registeredCount} nation${
-              registeredCount === 1 ? "" : "s"
-            } represented — hover a highlighted country to see its teams.`
-          : "Registered nations will appear here as teams sign up."}
+          ? m
+            ? m.mapCaption(registeredCount)
+            : `${registeredCount} nation${
+                registeredCount === 1 ? "" : "s"
+              } represented — hover a highlighted country to see its teams.`
+          : (m?.mapEmpty ??
+            "Registered nations will appear here as teams sign up.")}
       </p>
     </div>
   );
