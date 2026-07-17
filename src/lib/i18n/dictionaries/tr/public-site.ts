@@ -339,4 +339,9 @@ export const publicSite: typeof enPublicSite = {
     goToLogin: "Girişe git",
     back: "Girişe dön",
   },
+
+  news: {
+    eyebrow: "Haberler",
+    downloadPdf: "PDF indir",
+  },
 };

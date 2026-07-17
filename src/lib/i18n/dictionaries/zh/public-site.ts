@@ -325,4 +325,9 @@ export const publicSite: typeof enPublicSite = {
     goToLogin: "前往登录",
     back: "返回登录",
   },
+
+  news: {
+    eyebrow: "新闻",
+    downloadPdf: "下载 PDF",
+  },
 };

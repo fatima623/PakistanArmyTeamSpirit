@@ -362,4 +362,9 @@ export const publicSite: typeof enPublicSite = {
     goToLogin: "الذهاب إلى تسجيل الدخول",
     back: "العودة إلى تسجيل الدخول",
   },
+
+  news: {
+    eyebrow: "الأخبار",
+    downloadPdf: "تنزيل PDF",
+  },
 };

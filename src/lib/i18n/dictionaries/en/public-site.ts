@@ -346,4 +346,9 @@ export const publicSite = {
     goToLogin: "Go to login",
     back: "Back to login",
   },
+
+  news: {
+    eyebrow: "News",
+    downloadPdf: "Download PDF",
+  },
 };

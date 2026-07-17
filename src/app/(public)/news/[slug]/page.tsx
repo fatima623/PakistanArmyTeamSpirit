@@ -6,6 +6,7 @@ import { PatsSection } from "@/components/pats/PatsSection";
 import { getNewsPostBySlug } from "@/lib/site-data";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { formatDateLong } from "@/lib/utils";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -31,11 +32,13 @@ export default async function NewsArticlePage({ params }: PageProps) {
     notFound();
   }
 
+  const { t, locale, dir } = await getDictionary();
+  const N = t.publicSite.news;
   const safeContent = sanitizeNewsContent(post.content);
 
   return (
-    <>
-      <PatsPageHero eyebrow="News" title={post.title} />
+    <div lang={locale} dir={dir}>
+      <PatsPageHero eyebrow={N.eyebrow} title={post.title} />
       <PatsSection variant="navy">
         <div className="pats-prose-panel">
           <p className="pats-eyebrow !mb-6">{formatDateLong(post.publishedAt)}</p>
@@ -51,7 +54,7 @@ export default async function NewsArticlePage({ params }: PageProps) {
                 rel="noopener noreferrer"
                 className="pats-btn inline-flex"
               >
-                Download PDF
+                {N.downloadPdf}
                 {post.pdfOriginalName ? (
                   <span className="ml-2 font-normal opacity-70">
                     ({post.pdfOriginalName})
@@ -62,6 +65,6 @@ export default async function NewsArticlePage({ params }: PageProps) {
           ) : null}
         </div>
       </PatsSection>
-    </>
+    </div>
   );
 }

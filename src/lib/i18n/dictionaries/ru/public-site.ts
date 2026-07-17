@@ -355,4 +355,9 @@ export const publicSite: typeof enPublicSite = {
     goToLogin: "Перейти ко входу",
     back: "Назад ко входу",
   },
+
+  news: {
+    eyebrow: "Новости",
+    downloadPdf: "Скачать PDF",
+  },
 };
