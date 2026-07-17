@@ -60,6 +60,7 @@ export const publicSite: typeof enPublicSite = {
     isprWebsite: "ISPR 网站",
     registerNow: "立即注册",
     contactUs: "联系我们",
+    disclaimer: "仅限授权使用。PATS 竞赛参与官方门户。",
   },
 
   pages: {

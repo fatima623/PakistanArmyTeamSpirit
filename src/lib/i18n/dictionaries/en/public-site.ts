@@ -67,6 +67,8 @@ export const publicSite = {
     isprWebsite: "ISPR Website",
     registerNow: "Register now",
     contactUs: "Contact us",
+    disclaimer:
+      "Authorized use only. Official portal for PATS Competition participation.",
   },
 
   /** Per-page chrome (hero + section headings) for the marketing subpages. */

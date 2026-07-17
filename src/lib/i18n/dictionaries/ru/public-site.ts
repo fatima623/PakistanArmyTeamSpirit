@@ -73,6 +73,8 @@ export const publicSite: typeof enPublicSite = {
     isprWebsite: "Сайт ISPR",
     registerNow: "Зарегистрироваться",
     contactUs: "Связаться с нами",
+    disclaimer:
+      "Только для авторизованного использования. Официальный портал для участия в соревновании PATS.",
   },
 
   pages: {
