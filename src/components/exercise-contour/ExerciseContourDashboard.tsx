@@ -32,6 +32,12 @@ import {
   type Difficulty,
   type EventCategory,
 } from "@/lib/exercise-contour";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import type { Locale } from "@/lib/i18n/config";
+import {
+  translateContour,
+  translateContourList,
+} from "@/lib/i18n/exercise-contour-i18n";
 import { contourIcon } from "./icon-map";
 
 const ALL = "All";
@@ -57,20 +63,21 @@ function SectionHead({
 /* --------------------------------------------------------------- Hero + stats */
 
 function HeroStats() {
+  const { locale } = useI18n();
   return (
     <section className="ec-hero">
       <div className="ec-hero__badge">
         <span className="ec-hero__badge-dot" aria-hidden />
-        Operational overview · Classified brief
+        {translateContour("Operational overview · Classified brief", locale)}
       </div>
       <h1 className="ec-hero__title">
         Exercise <span>Contour</span>
       </h1>
       <div className="ec-hero__lede">
-        The complete operational overview of the exercise — competition events,
-        weapon and equipment requirements, rules, the evaluation system,
-        international orientation and the full conduct of events, presented as a
-        single command dashboard.
+        {translateContour(
+          "The complete operational overview of the exercise — competition events, weapon and equipment requirements, rules, the evaluation system, international orientation and the full conduct of events, presented as a single command dashboard.",
+          locale
+        )}
       </div>
       <div className="ec-hero__rule" aria-hidden />
 
@@ -89,9 +96,15 @@ function HeroStats() {
               <span className="ec-stat__icon">
                 <Icon size={18} aria-hidden />
               </span>
-              <div className="ec-stat__value">{stat.value}</div>
-              <div className="ec-stat__label">{stat.label}</div>
-              <div className="ec-stat__hint">{stat.hint}</div>
+              <div className="ec-stat__value">
+                {translateContour(stat.value, locale)}
+              </div>
+              <div className="ec-stat__label">
+                {translateContour(stat.label, locale)}
+              </div>
+              <div className="ec-stat__hint">
+                {translateContour(stat.hint, locale)}
+              </div>
             </motion.div>
           );
         })}
@@ -103,12 +116,16 @@ function HeroStats() {
 /* --------------------------------------------------------------- Overview */
 
 function OverviewSection() {
+  const { locale } = useI18n();
   return (
     <section className="ec-section">
       <SectionHead
-        eyebrow="Situation"
-        title="Exercise Overview"
-        sub="How the exercise runs from the Assembly Area through 60 continuous hours of scenario-driven serials."
+        eyebrow={translateContour("Situation", locale)}
+        title={translateContour("Exercise Overview", locale)}
+        sub={translateContour(
+          "How the exercise runs from the Assembly Area through 60 continuous hours of scenario-driven serials.",
+          locale
+        )}
       />
       <div className="ec-overview">
         {CONTOUR_OVERVIEW.map((card, i) => {
@@ -125,8 +142,12 @@ function OverviewSection() {
               <span className="ec-ov-card__icon">
                 <Icon size={20} aria-hidden />
               </span>
-              <div className="ec-ov-card__title">{card.title}</div>
-              <div className="ec-ov-card__body">{card.body}</div>
+              <div className="ec-ov-card__title">
+                {translateContour(card.title, locale)}
+              </div>
+              <div className="ec-ov-card__body">
+                {translateContour(card.body, locale)}
+              </div>
             </motion.div>
           );
         })}
@@ -138,15 +159,19 @@ function OverviewSection() {
 /* --------------------------------------------------------------- Timeline */
 
 function TimelineSection() {
+  const { locale } = useI18n();
   const [active, setActive] = useState(0);
   const step = CONTOUR_TIMELINE[active];
 
   return (
     <section className="ec-section">
       <SectionHead
-        eyebrow="Conduct of events"
-        title="Interactive Timeline"
-        sub="The exercise flow from arrival to debriefing. Select any phase to read its intent."
+        eyebrow={translateContour("Conduct of events", locale)}
+        title={translateContour("Interactive Timeline", locale)}
+        sub={translateContour(
+          "The exercise flow from arrival to debriefing. Select any phase to read its intent.",
+          locale
+        )}
       />
       <div className="ec-timeline">
         <div className="ec-tl-track">
@@ -166,10 +191,11 @@ function TimelineSection() {
               </span>
               <span>
                 <span className="ec-tl-num">
-                  {String(i + 1).padStart(2, "0")} · {item.phase}
+                  {String(i + 1).padStart(2, "0")} ·{" "}
+                  {translateContour(item.phase, locale)}
                 </span>
                 <span className="ec-tl-label" style={{ display: "block" }}>
-                  {item.label}
+                  {translateContour(item.label, locale)}
                 </span>
               </span>
             </button>
@@ -183,15 +209,21 @@ function TimelineSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <span className="ec-tl-detail__phase">{step.phase}</span>
+          <span className="ec-tl-detail__phase">
+            {translateContour(step.phase, locale)}
+          </span>
           <div className="ec-tl-detail__num">
             {String(active + 1).padStart(2, "0")}
             <span style={{ color: "rgba(197,168,128,0.5)" }}>
               /{CONTOUR_TIMELINE.length}
             </span>
           </div>
-          <div className="ec-tl-detail__title">{step.label}</div>
-          <div className="ec-tl-detail__body">{step.detail}</div>
+          <div className="ec-tl-detail__title">
+            {translateContour(step.label, locale)}
+          </div>
+          <div className="ec-tl-detail__body">
+            {translateContour(step.detail, locale)}
+          </div>
         </motion.div>
       </div>
     </section>
@@ -200,14 +232,24 @@ function TimelineSection() {
 
 /* --------------------------------------------------------------- Events */
 
-function EventMeta({ event }: { event: ContourEvent }) {
+function EventMeta({
+  event,
+  locale,
+}: {
+  event: ContourEvent;
+  locale: Locale;
+}) {
   return (
     <>
       <span className={`ec-diff ec-diff--${event.difficulty}`}>
-        {event.difficulty}
+        {translateContour(event.difficulty, locale)}
       </span>
-      <span className="ec-tag ec-tag--cat">{event.category}</span>
-      <span className="ec-tag ec-tag--duration">{event.duration}</span>
+      <span className="ec-tag ec-tag--cat">
+        {translateContour(event.category, locale)}
+      </span>
+      <span className="ec-tag ec-tag--duration">
+        {translateContour(event.duration, locale)}
+      </span>
     </>
   );
 }
@@ -219,6 +261,7 @@ function EventModal({
   event: ContourEvent | null;
   onClose: () => void;
 }) {
+  const { locale } = useI18n();
   const Icon = event ? contourIcon(event.icon) : null;
   const maxBreak = event?.breakdown
     ? Math.max(...event.breakdown.map((b) => b.marks))
@@ -238,33 +281,41 @@ function EventModal({
                 ) : null}
                 <div>
                   <DialogTitle className="ec-modal__title">
-                    {event.title}
+                    {translateContour(event.title, locale)}
                   </DialogTitle>
                   <div className="ec-modal__meta">
-                    <EventMeta event={event} />
+                    <EventMeta event={event} locale={locale} />
                   </div>
                 </div>
               </div>
             </DialogHeader>
 
-            <div className="ec-modal__body">{event.details}</div>
+            <div className="ec-modal__body">
+              {translateContour(event.details, locale)}
+            </div>
 
             {event.participants ? (
               <>
-                <div className="ec-modal__section-label">Participants</div>
+                <div className="ec-modal__section-label">
+                  {translateContour("Participants", locale)}
+                </div>
                 <div className="ec-modal__body" style={{ marginTop: 0 }}>
-                  {event.participants}
+                  {translateContour(event.participants, locale)}
                 </div>
               </>
             ) : null}
 
             {event.breakdown ? (
               <>
-                <div className="ec-modal__section-label">Marks breakdown</div>
+                <div className="ec-modal__section-label">
+                  {translateContour("Marks breakdown", locale)}
+                </div>
                 <div className="ec-breakdown">
                   {event.breakdown.map((b) => (
                     <div className="ec-breakdown__row" key={b.label}>
-                      <div className="ec-breakdown__label">{b.label}</div>
+                      <div className="ec-breakdown__label">
+                        {translateContour(b.label, locale)}
+                      </div>
                       <div className="ec-breakdown__bar">
                         <div
                           className="ec-breakdown__fill"
@@ -281,7 +332,7 @@ function EventModal({
             ) : null}
 
             <div className="ec-modal__total">
-              <span>Total marks for this event</span>
+              <span>{translateContour("Total marks for this event", locale)}</span>
               <b>{event.marks}</b>
             </div>
           </>
@@ -292,6 +343,7 @@ function EventModal({
 }
 
 function EventsSection() {
+  const { locale } = useI18n();
   const reduce = useReducedMotion();
   const [category, setCategory] = useState<EventCategory | typeof ALL>(ALL);
   const [difficulty, setDifficulty] = useState<Difficulty | typeof ALL>(ALL);
@@ -311,9 +363,9 @@ function EventsSection() {
   return (
     <section className="ec-section">
       <SectionHead
-        eyebrow="Evaluation system"
-        title="Competition Events"
-        sub={`${CONTOUR_EVENTS.length} scored serials · ${TOTAL_EVENT_MARKS} total marks. Filter by category or difficulty, or open a card for the full brief.`}
+        eyebrow={translateContour("Evaluation system", locale)}
+        title={translateContour("Competition Events", locale)}
+        sub={`${CONTOUR_EVENTS.length} ${translateContour("scored serials", locale)} · ${TOTAL_EVENT_MARKS} ${translateContour("total marks", locale)}. ${translateContour("Filter by category or difficulty, or open a card for the full brief.", locale)}`}
       />
 
       <div className="ec-controls">
@@ -323,8 +375,8 @@ function EventsSection() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search events…"
-            aria-label="Search competition events"
+            placeholder={translateContour("Search events…", locale)}
+            aria-label={translateContour("Search competition events", locale)}
           />
         </div>
         <div className="ec-chips">
@@ -337,7 +389,7 @@ function EventsSection() {
               setDifficulty(ALL);
             }}
           >
-            All
+            {translateContour("All", locale)}
           </button>
           {EVENT_CATEGORIES.map((c) => (
             <button
@@ -347,7 +399,7 @@ function EventsSection() {
               data-active={category === c ? "true" : undefined}
               onClick={() => setCategory((prev) => (prev === c ? ALL : c))}
             >
-              {c}
+              {translateContour(c, locale)}
             </button>
           ))}
         </div>
@@ -362,7 +414,7 @@ function EventsSection() {
             data-active={difficulty === d ? "true" : undefined}
             onClick={() => setDifficulty((prev) => (prev === d ? ALL : d))}
           >
-            {d}
+            {translateContour(d, locale)}
           </button>
         ))}
       </div>
@@ -385,20 +437,26 @@ function EventsSection() {
                 </span>
                 <span className="ec-marks">
                   <span className="ec-marks__val">{event.marks}</span>
-                  <span className="ec-marks__unit">Marks</span>
+                  <span className="ec-marks__unit">
+                    {translateContour("Marks", locale)}
+                  </span>
                 </span>
               </div>
-              <div className="ec-card__title">{event.title}</div>
-              <div className="ec-card__summary">{event.summary}</div>
+              <div className="ec-card__title">
+                {translateContour(event.title, locale)}
+              </div>
+              <div className="ec-card__summary">
+                {translateContour(event.summary, locale)}
+              </div>
               <div className="ec-card__meta">
-                <EventMeta event={event} />
+                <EventMeta event={event} locale={locale} />
               </div>
               <button
                 type="button"
                 className="ec-card__btn"
                 onClick={() => setSelected(event)}
               >
-                View Details
+                {translateContour("View Details", locale)}
                 <ArrowRight size={15} aria-hidden />
               </button>
             </motion.div>
@@ -406,7 +464,7 @@ function EventsSection() {
         })}
         {filtered.length === 0 ? (
           <div className="ec-empty">
-            No events match the current filters.
+            {translateContour("No events match the current filters.", locale)}
           </div>
         ) : null}
       </div>
@@ -419,16 +477,21 @@ function EventsSection() {
 /* --------------------------------------------------------------- Equipment */
 
 function EquipmentSection() {
+  const { locale } = useI18n();
   return (
     <section className="ec-section">
       <SectionHead
-        eyebrow="Loadout"
-        title="Weapons & Equipment"
-        sub="Everything a patrol carries — organised by category. Total team weight, fully loaded, must not exceed 200 KG."
+        eyebrow={translateContour("Loadout", locale)}
+        title={translateContour("Weapons & Equipment", locale)}
+        sub={translateContour(
+          "Everything a patrol carries — organised by category. Total team weight, fully loaded, must not exceed 200 KG.",
+          locale
+        )}
       />
       <div className="ec-equip">
         {CONTOUR_EQUIPMENT.map((cat, i) => {
           const Icon = contourIcon(cat.icon);
+          const items = translateContourList(cat.items, locale);
           return (
             <motion.div
               key={cat.id}
@@ -442,13 +505,15 @@ function EquipmentSection() {
                 <span className="ec-equip-card__icon">
                   <Icon size={18} aria-hidden />
                 </span>
-                <span className="ec-equip-card__title">{cat.title}</span>
+                <span className="ec-equip-card__title">
+                  {translateContour(cat.title, locale)}
+                </span>
                 <span className="ec-equip-card__count">{cat.items.length}</span>
               </div>
               <div className="ec-equip-list">
-                {cat.items.map((item) => (
+                {cat.items.map((item, idx) => (
                   <span className="ec-equip-item" key={item}>
-                    {item}
+                    {items[idx]}
                   </span>
                 ))}
               </div>
@@ -469,12 +534,16 @@ const RULE_ICON = {
 } as const;
 
 function RulesSection() {
+  const { locale } = useI18n();
   return (
     <section className="ec-section">
       <SectionHead
-        eyebrow="Coordinating points"
-        title="Rules, Do's & Don'ts"
-        sub="Operational rules, penalties and prohibitions. Critical items carry disqualification or heavy penalty points."
+        eyebrow={translateContour("Coordinating points", locale)}
+        title={translateContour("Rules, Do's & Don'ts", locale)}
+        sub={translateContour(
+          "Operational rules, penalties and prohibitions. Critical items carry disqualification or heavy penalty points.",
+          locale
+        )}
       />
       <div className="ec-rules">
         {CONTOUR_RULES.map((rule, i) => {
@@ -491,7 +560,9 @@ function RulesSection() {
               <span className="ec-rule__icon">
                 <Icon size={18} aria-hidden />
               </span>
-              <span className="ec-rule__text">{rule.text}</span>
+              <span className="ec-rule__text">
+                {translateContour(rule.text, locale)}
+              </span>
             </motion.div>
           );
         })}
@@ -503,12 +574,16 @@ function RulesSection() {
 /* --------------------------------------------------------------- Orientation */
 
 function OrientationSection() {
+  const { locale } = useI18n();
   return (
     <section className="ec-section">
       <SectionHead
-        eyebrow="Before the competition"
-        title="International Team Orientation"
-        sub="Foreign teams receive pre-exercise familiarisation before the competition begins."
+        eyebrow={translateContour("Before the competition", locale)}
+        title={translateContour("International Team Orientation", locale)}
+        sub={translateContour(
+          "Foreign teams receive pre-exercise familiarisation before the competition begins.",
+          locale
+        )}
       />
       <div className="ec-orient__banner">
         <ShieldCheck
@@ -521,9 +596,10 @@ function OrientationSection() {
             color: "var(--ec-gold-bright)",
           }}
         />
-        Foreign teams are given hands-on orientation in Pakistan Army weapons and
-        systems, navigation, communications and CBRN drills — levelling the field
-        before the exercise clock starts.
+        {translateContour(
+          "Foreign teams are given hands-on orientation in Pakistan Army weapons and systems, navigation, communications and CBRN drills — levelling the field before the exercise clock starts.",
+          locale
+        )}
       </div>
       <div className="ec-orient">
         {CONTOUR_ORIENTATION.map((item, i) => {
@@ -540,8 +616,12 @@ function OrientationSection() {
               <span className="ec-orient-card__icon">
                 <Icon size={20} aria-hidden />
               </span>
-              <div className="ec-orient-card__title">{item.title}</div>
-              <div className="ec-orient-card__body">{item.detail}</div>
+              <div className="ec-orient-card__title">
+                {translateContour(item.title, locale)}
+              </div>
+              <div className="ec-orient-card__body">
+                {translateContour(item.detail, locale)}
+              </div>
             </motion.div>
           );
         })}
