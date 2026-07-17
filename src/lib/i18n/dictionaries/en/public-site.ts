@@ -235,4 +235,115 @@ export const publicSite = {
       verified: "Email verified. You can sign in now.",
     },
   },
+
+  forgotPassword: {
+    hero: {
+      eyebrow: "Account recovery",
+      title: "Reset password",
+      subtitle:
+        "Enter your registered email and we will send a secure reset link.",
+    },
+    intro: {
+      eyebrow: "Recovery access",
+      title: "Password recovery",
+      body: "Request a secure reset link for an approved participant account. Use the same registered email address tied to your team login.",
+      checklist: [
+        "Registered participant email required",
+        "Secure reset link with limited validity",
+        "Return to login after password update",
+      ],
+    },
+    card: {
+      eyebrow: "Reset request",
+      title: "Send reset link",
+      description:
+        "Enter your participant email and we will send a secure reset link if the account exists.",
+      emailLabel: "Email address",
+      send: "Send reset link",
+      sending: "Sending...",
+      success:
+        "Reset link sent to your email address. Please check your inbox.",
+      back: "Back to login",
+    },
+    validation: {
+      invalidEmail: "Enter a valid email address.",
+      csrf: "Security check failed. Refresh and try again.",
+      generic: "Something went wrong. Please try again.",
+    },
+  },
+
+  resetPassword: {
+    hero: {
+      eyebrow: "Account recovery",
+      title: "Set new password",
+      subtitle: "Choose a strong password for your participant account.",
+    },
+    intro: {
+      eyebrow: "Recovery access",
+      title: "Set a new password",
+      body: "Use a strong password that meets the portal security policy.",
+      checklist: [
+        "Reset links expire after 30 minutes",
+        "Passwords are hashed with bcrypt before storage",
+        "Reset links become invalid immediately after use",
+      ],
+    },
+    card: {
+      eyebrow: "Password reset",
+      title: "Create a new password",
+      policy:
+        "At least 8 characters, including uppercase, lowercase, a number, and a special character.",
+    },
+    validating: "Validating reset link...",
+    newPasswordLabel: "New password",
+    confirmPasswordLabel: "Confirm password",
+    strengthLabel: "Password strength",
+    strength: {
+      weak: "Weak",
+      good: "Good",
+      strong: "Strong",
+    },
+    checks: {
+      length: "At least 8 characters",
+      uppercase: "Uppercase letter",
+      lowercase: "Lowercase letter",
+      number: "Number",
+      special: "Special character",
+    },
+    passwordsMustMatch: "Passwords must match",
+    passwordsDoNotMatch: "Passwords do not match.",
+    policyError: "Your password does not meet the security requirements.",
+    tokenMissing: "Reset token is missing.",
+    invalidFallback: "This password reset link is invalid or has expired.",
+    validateFailed: "Unable to validate this reset link right now.",
+    update: "Update password",
+    updating: "Updating...",
+    requestNewLink: "Request a new link",
+    back: "Back to login",
+    csrf: "Security check failed. Refresh and try again.",
+    generic: "Something went wrong. Please try again.",
+    unableReset: "Unable to reset password.",
+    toastUpdated: "Password updated. Please log in.",
+  },
+
+  verifyEmail: {
+    hero: {
+      eyebrow: "Account security",
+      title: "Verify email",
+      subtitle: "Confirm your email to activate portal access.",
+    },
+    eyebrowComplete: "Verification complete",
+    eyebrowRequired: "Verification required",
+    invalidTitle: "Verification link invalid",
+    invalidBody:
+      "This email verification link is invalid or has expired. Request a fresh registration or contact support if the issue persists.",
+    invalidAlert: "The verification token is not valid anymore.",
+    registerAgain: "Register again",
+    successTitle: "Email verified",
+    successBody: (name: string) =>
+      `Your account is now active${name ? `, ${name}` : ""}. You can continue to login and complete the rest of your workflow.`,
+    successAlert: "Email verification succeeded.",
+    goToLogin: "Go to login",
+    back: "Back to login",
+  },
 };

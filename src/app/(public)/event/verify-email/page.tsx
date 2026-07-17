@@ -5,6 +5,7 @@ import { PatsSection } from "@/components/pats/PatsSection";
 import { Button } from "@/components/ui/button";
 import { hashOpaqueToken } from "@/lib/auth-token";
 import { prisma } from "@/lib/prisma";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,14 @@ type VerificationState = {
 
 export default async function VerifyEmailPage({ searchParams }: Props) {
   const { token } = await searchParams;
+  const { t, locale, dir } = await getDictionary();
+  const V = t.publicSite.verifyEmail;
 
   const state: VerificationState = {
-    title: "Verification link invalid",
-    body: "This email verification link is invalid or has expired. Request a fresh registration or contact support if the issue persists.",
+    title: V.invalidTitle,
+    body: V.invalidBody,
     actionHref: "/event/register",
-    actionLabel: "Register again",
+    actionLabel: V.registerAgain,
     success: false,
   };
 
@@ -58,36 +61,34 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
         }),
       ]);
 
-      state.title = "Email verified";
-      state.body = `Your account is now active${verification.user.firstName ? `, ${verification.user.firstName}` : ""}. You can continue to login and complete the rest of your workflow.`;
+      state.title = V.successTitle;
+      state.body = V.successBody(verification.user.firstName ?? "");
       state.actionHref = "/event/login?verified=true";
-      state.actionLabel = "Go to login";
+      state.actionLabel = V.goToLogin;
       state.success = true;
     }
   }
 
   return (
-    <>
+    <div lang={locale} dir={dir}>
       <PatsPageHero
-        eyebrow="Account security"
-        title="Verify email"
-        subtitle="Confirm your email to activate portal access."
+        eyebrow={V.hero.eyebrow}
+        title={V.hero.title}
+        subtitle={V.hero.subtitle}
       />
       <PatsSection variant="navy">
         <div className="mx-auto flex w-full max-w-3xl justify-center">
           <div className="pats-login-card cp-form-card w-full max-w-2xl p-7 sm:p-10">
             <div className="pats-login-card__header">
               <p className="pats-eyebrow !mb-0">
-                {state.success ? "Verification complete" : "Verification required"}
+                {state.success ? V.eyebrowComplete : V.eyebrowRequired}
               </p>
               <h2 className="pats-login-card__title">{state.title}</h2>
               <p className="pats-login-card__description">{state.body}</p>
             </div>
 
             <div className={state.success ? "cp-alert-success p-4 text-sm" : "cp-alert-error login-alert-error p-4 text-sm"}>
-              {state.success
-                ? "Email verification succeeded."
-                : "The verification token is not valid anymore."}
+              {state.success ? V.successAlert : V.invalidAlert}
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4 border-t border-white/10 pt-6">
@@ -95,12 +96,12 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
                 <Link href={state.actionHref}>{state.actionLabel}</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/event/login">Back to login</Link>
+                <Link href="/event/login">{V.back}</Link>
               </Button>
             </div>
           </div>
         </div>
       </PatsSection>
-    </>
+    </div>
   );
 }

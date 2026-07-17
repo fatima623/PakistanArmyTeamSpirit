@@ -217,4 +217,112 @@ export const publicSite: typeof enPublicSite = {
       verified: "电子邮件已验证。您现在可以登录。",
     },
   },
+
+  forgotPassword: {
+    hero: {
+      eyebrow: "账户找回",
+      title: "重置密码",
+      subtitle: "输入您注册的电子邮件，我们将向您发送一个安全的重置链接。",
+    },
+    intro: {
+      eyebrow: "找回访问",
+      title: "密码找回",
+      body: "为已获批的参赛者账户申请一个安全的重置链接。请使用与您团队登录绑定的同一注册电子邮件地址。",
+      checklist: [
+        "需要已注册的参赛者电子邮件",
+        "有效期有限的安全重置链接",
+        "更新密码后返回登录",
+      ],
+    },
+    card: {
+      eyebrow: "重置申请",
+      title: "发送重置链接",
+      description:
+        "输入您的参赛者电子邮件，如该账户存在，我们将发送一个安全的重置链接。",
+      emailLabel: "电子邮件地址",
+      send: "发送重置链接",
+      sending: "正在发送...",
+      success: "重置链接已发送至您的电子邮件地址。请查收您的收件箱。",
+      back: "返回登录",
+    },
+    validation: {
+      invalidEmail: "请输入有效的电子邮件地址。",
+      csrf: "安全校验失败。请刷新后重试。",
+      generic: "出了点问题。请重试。",
+    },
+  },
+
+  resetPassword: {
+    hero: {
+      eyebrow: "账户找回",
+      title: "设置新密码",
+      subtitle: "为您的参赛者账户选择一个强密码。",
+    },
+    intro: {
+      eyebrow: "找回访问",
+      title: "设置新密码",
+      body: "请使用符合门户安全策略的强密码。",
+      checklist: [
+        "重置链接将在 30 分钟后过期",
+        "密码在存储前使用 bcrypt 进行哈希处理",
+        "重置链接一经使用即失效",
+      ],
+    },
+    card: {
+      eyebrow: "密码重置",
+      title: "创建新密码",
+      policy: "至少 8 个字符，包含大写字母、小写字母、一个数字和一个特殊字符。",
+    },
+    validating: "正在验证重置链接...",
+    newPasswordLabel: "新密码",
+    confirmPasswordLabel: "确认密码",
+    strengthLabel: "密码强度",
+    strength: {
+      weak: "弱",
+      good: "良好",
+      strong: "强",
+    },
+    checks: {
+      length: "至少 8 个字符",
+      uppercase: "大写字母",
+      lowercase: "小写字母",
+      number: "数字",
+      special: "特殊字符",
+    },
+    passwordsMustMatch: "两次密码必须一致",
+    passwordsDoNotMatch: "两次输入的密码不一致。",
+    policyError: "您的密码不符合安全要求。",
+    tokenMissing: "缺少重置令牌。",
+    invalidFallback: "此密码重置链接无效或已过期。",
+    validateFailed: "目前无法验证此重置链接。",
+    update: "更新密码",
+    updating: "正在更新...",
+    requestNewLink: "申请新链接",
+    back: "返回登录",
+    csrf: "安全校验失败。请刷新后重试。",
+    generic: "出了点问题。请重试。",
+    unableReset: "无法重置密码。",
+    toastUpdated: "密码已更新。请登录。",
+  },
+
+  verifyEmail: {
+    hero: {
+      eyebrow: "账户安全",
+      title: "验证电子邮件",
+      subtitle: "确认您的电子邮件以激活门户访问权限。",
+    },
+    eyebrowComplete: "验证完成",
+    eyebrowRequired: "需要验证",
+    invalidTitle: "验证链接无效",
+    invalidBody:
+      "此电子邮件验证链接无效或已过期。请重新注册，如问题仍然存在，请联系支持人员。",
+    invalidAlert: "验证令牌已不再有效。",
+    registerAgain: "重新注册",
+    successTitle: "电子邮件已验证",
+    successBody: (name: string) =>
+      `您的账户现已激活${name ? `，${name}` : ""}。您可以继续登录并完成其余的流程。`,
+    successAlert: "电子邮件验证成功。",
+    goToLogin: "前往登录",
+    back: "返回登录",
+  },
 };
