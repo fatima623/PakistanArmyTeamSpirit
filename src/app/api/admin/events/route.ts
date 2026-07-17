@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 
+import {
+  parseTranslationsFormField,
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
 import { ApiError, handleApiError, requireAdmin } from "@/lib/api-helpers";
+import { deleteTranslationsFor } from "@/lib/i18n/content-translations";
 import { slugifyEventTitle } from "@/lib/events-data";
 import { prisma } from "@/lib/prisma";
 import { revalidateEventPaths } from "@/lib/revalidate-public";
@@ -106,6 +112,13 @@ export async function POST(request: Request) {
     if (hasFile && file.size > MAX_EVENT_IMAGE_BYTES)
       throw new ApiError("Image must be 8 MB or smaller.", 400);
 
+    // Validated before the row exists: a bad locale/field must 400 rather than
+    // leave a half-created event behind.
+    const translations = parseTranslationsInput(
+      "Event",
+      parseTranslationsFormField(formData.get("translations"))
+    );
+
     const slug = await uniqueEventSlug(slugifyEventTitle(data.title));
 
     const created = await prisma.event.create({
@@ -127,6 +140,28 @@ export async function POST(request: Request) {
         published: data.published ?? true,
       },
     });
+
+    try {
+      await saveTranslations({
+        model: "Event",
+        recordId: created.id,
+        translations,
+        source: {
+          title: created.title,
+          summary: created.summary,
+          details: created.details,
+          participants: created.participants,
+        },
+      });
+    } catch (err) {
+      // Same rollback contract as the image path below: never leave an event
+      // whose save reported a failure.
+      await prisma.event
+        .delete({ where: { id: created.id } })
+        .catch(() => undefined);
+      await deleteTranslationsFor("Event", created.id).catch(() => undefined);
+      return handleApiError(err);
+    }
 
     if (!hasFile) {
       const event = await prisma.event.findUnique({
@@ -157,6 +192,7 @@ export async function POST(request: Request) {
       await prisma.event
         .delete({ where: { id: created.id } })
         .catch(() => undefined);
+      await deleteTranslationsFor("Event", created.id).catch(() => undefined);
       if (savedPath) await deleteEventImageFile(savedPath).catch(() => undefined);
       return handleApiError(mapImageError(err));
     }

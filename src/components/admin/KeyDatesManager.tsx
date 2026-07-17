@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { FormFieldAdmin } from "@/components/admin/FormFieldAdmin";
+import {
+  TranslationFields,
+  useTranslationDraft,
+} from "@/components/admin/TranslationFields";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +43,13 @@ export function KeyDatesManager({
     sortOrder: nextSortOrder(initialKeyDates),
   });
   const [saving, setSaving] = useState(false);
+  // Two drafts, because both editors can be on screen at once: the add form
+  // stays mounted (so it needs an explicit reset), while the inline edit draft
+  // reloads whenever a different row is opened.
+  const addTranslations = useTranslationDraft();
+  const editTranslations = useTranslationDraft({
+    url: editingId ? `/api/admin/key-dates/${editingId}` : null,
+  });
 
   const startEdit = (kd: KeyDate) => {
     setEditingId(kd.id);
@@ -55,7 +66,10 @@ export function KeyDatesManager({
       const res = await fetch(`/api/admin/key-dates/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editForm),
+        body: JSON.stringify({
+          ...editForm,
+          translations: editTranslations.payload(),
+        }),
       });
       if (res.ok) {
         const { keyDate } = await res.json();
@@ -92,7 +106,10 @@ export function KeyDatesManager({
       const res = await fetch("/api/admin/key-dates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(addForm),
+        body: JSON.stringify({
+          ...addForm,
+          translations: addTranslations.payload(),
+        }),
       });
       if (res.ok) {
         const { keyDate } = await res.json();
@@ -105,6 +122,7 @@ export function KeyDatesManager({
           value: "",
           sortOrder: nextSortOrder(updated),
         });
+        addTranslations.reset();
         setShowAddForm(false);
         toast.success(TOAST.SAVE_SUCCESS);
       } else {
@@ -174,7 +192,8 @@ export function KeyDatesManager({
                 </tr>
               ) : (
                 keyDates.map((kd) => (
-                  <tr key={kd.id}>
+                  <Fragment key={kd.id}>
+                  <tr>
                     {editingId === kd.id ? (
                       <>
                         <td>
@@ -285,6 +304,20 @@ export function KeyDatesManager({
                       </>
                     )}
                   </tr>
+                  {editingId === kd.id ? (
+                    // Full-width row: four narrow table cells cannot hold a
+                    // four-language editor legibly.
+                    <tr>
+                      <td colSpan={4} className="bg-brand-parchment/20">
+                        <TranslationFields
+                          model="KeyDate"
+                          draft={editTranslations}
+                          idPrefix={`kd-t-${kd.id}`}
+                        />
+                      </td>
+                    </tr>
+                  ) : null}
+                  </Fragment>
                 ))
               )}
             </tbody>
@@ -352,6 +385,12 @@ export function KeyDatesManager({
               className={adminInput}
             />
           </FormFieldAdmin>
+
+          <TranslationFields
+            model="KeyDate"
+            draft={addTranslations}
+            idPrefix="kd-t-new"
+          />
         </div>
 
         <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-6">

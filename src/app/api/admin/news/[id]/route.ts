@@ -6,6 +6,11 @@ import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { deleteNewsPdfFile } from "@/lib/storage/news-pdf";
 import { deleteNewsImageFile } from "@/lib/storage/news-image";
 import {
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
+import { deleteTranslationsFor } from "@/lib/i18n/content-translations";
+import {
   ApiError,
   handleApiError,
   requireAdmin,
@@ -59,6 +64,8 @@ export async function PUT(request: Request, context: RouteContext) {
       }
     }
 
+    const translations = parseTranslationsInput("NewsPost", body?.translations);
+
     const post = await prisma.newsPost.update({
       where: { id },
       data: {
@@ -68,6 +75,13 @@ export async function PUT(request: Request, context: RouteContext) {
         publishedAt: new Date(publishedAt),
         ...(published !== undefined ? { published } : {}),
       },
+    });
+
+    await saveTranslations({
+      model: "NewsPost",
+      recordId: id,
+      translations,
+      source: { title: post.title, content: post.content },
     });
 
     revalidateNewsPaths();
@@ -91,6 +105,8 @@ export async function DELETE(_request: Request, context: RouteContext) {
     await deleteNewsPdfFile(existing.pdfPath, id);
     await deleteNewsImageFile(existing.imagePath);
     await prisma.newsPost.delete({ where: { id } });
+    // No FK on Translation — orphan rows are this route's responsibility.
+    await deleteTranslationsFor("NewsPost", id);
 
     revalidateNewsPaths();
 

@@ -2,7 +2,7 @@
 
 
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Link from "next/link";
 
@@ -13,6 +13,11 @@ import { ArrowLeft, Eye, FileText, ImagePlus, Loader2, Pencil, Upload, X } from 
 import { toast } from "sonner";
 
 
+
+import {
+  TranslationFields,
+  useTranslationDraft,
+} from "@/components/admin/TranslationFields";
 
 import { Button } from "@/components/ui/button";
 
@@ -38,6 +43,8 @@ import {
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 
 import { TOAST } from "@/lib/toast";
+
+import type { TranslationSeed } from "@/lib/admin-translations";
 
 
 
@@ -147,9 +154,14 @@ export function NewsPostForm({
 
   initial,
 
+  initialTranslations,
+
 }: {
 
   postId?: string;
+
+  /** Loaded by the edit page — the news editor is reached through a server route. */
+  initialTranslations?: TranslationSeed | null;
 
   initial?: {
 
@@ -198,6 +210,27 @@ export function NewsPostForm({
   );
 
   const [contentView, setContentView] = useState<"write" | "preview">("write");
+
+  // `content` is stored as HTML but authored as plain text — the English body
+  // above does the same round trip. The translated body must mirror it exactly,
+  // or an admin would be shown raw <p> tags to edit.
+  const translationSeed = useMemo(() => {
+    if (!initialTranslations) return null;
+    const out: TranslationSeed = {};
+    for (const [locale, fields] of Object.entries(initialTranslations)) {
+      const next: Record<string, { value: string; stale: boolean }> = {};
+      for (const [field, row] of Object.entries(fields ?? {})) {
+        next[field] =
+          field === "content"
+            ? { ...row, value: htmlToPlainText(row.value) }
+            : row;
+      }
+      out[locale as keyof TranslationSeed] = next;
+    }
+    return out;
+  }, [initialTranslations]);
+
+  const translations = useTranslationDraft({ seed: translationSeed });
 
   const [publishedAt, setPublishedAt] = useState(
 
@@ -448,6 +481,24 @@ export function NewsPostForm({
 
     try {
 
+      // Same plain-text → HTML step the English body gets; the server then runs
+      // both through the identical sanitizer.
+      const translationPayload = translations.payload();
+
+      if (translationPayload) {
+
+        for (const fields of Object.values(translationPayload)) {
+
+          if (fields?.content) {
+
+            fields.content = prepareContentForSave(fields.content);
+
+          }
+
+        }
+
+      }
+
       const body = {
 
         title,
@@ -459,6 +510,8 @@ export function NewsPostForm({
         publishedAt: new Date(publishedAt).toISOString(),
 
         published,
+
+        translations: translationPayload,
 
       };
 
@@ -1196,6 +1249,24 @@ export function NewsPostForm({
           )}
 
         </div>
+
+      </section>
+
+
+
+      <section className="rounded-[14px] border border-brand-line/60 bg-white p-[1.1rem] shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+
+        <TranslationFields
+
+          model="NewsPost"
+
+          draft={translations}
+
+          idPrefix={`news-t-${postId ?? "new"}`}
+
+          description="Write the title and body for each language in plain text — paragraphs are formatted automatically, exactly like the English body above. Anything left blank falls back to English on the public site."
+
+        />
 
       </section>
 

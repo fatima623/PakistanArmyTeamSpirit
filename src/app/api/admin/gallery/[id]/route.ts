@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 
 import {
+  buildTranslationSeed,
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
+import {
   ApiError,
   handleApiError,
   requireAdmin,
   requireJsonContentType,
 } from "@/lib/api-helpers";
+import { deleteTranslationsFor } from "@/lib/i18n/content-translations";
 import { prisma } from "@/lib/prisma";
 import { revalidateGalleryPaths } from "@/lib/revalidate-public";
 import { GalleryImageUpdateSchema } from "@/lib/validations";
@@ -15,6 +21,31 @@ import {
 } from "@/lib/storage/gallery-image";
 
 type RouteContext = { params: Promise<{ id: string }> };
+
+/** Existing translations + staleness, loaded when the edit dialog opens. */
+export async function GET(_request: Request, context: RouteContext) {
+  try {
+    await requireAdmin();
+    const { id } = await context.params;
+
+    const image = await prisma.galleryImage.findUnique({
+      where: { id },
+      select: GALLERY_ADMIN_SELECT,
+    });
+    if (!image) {
+      throw new ApiError("Gallery image not found", 404);
+    }
+
+    const translations = await buildTranslationSeed("GalleryImage", id, {
+      title: image.title,
+      caption: image.caption,
+    });
+
+    return NextResponse.json({ translations });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
 
 export async function PATCH(request: Request, context: RouteContext) {
   try {
@@ -36,6 +67,13 @@ export async function PATCH(request: Request, context: RouteContext) {
       );
     }
 
+    // Absent `translations` leaves the stored rows untouched — that is what
+    // lets the publish toggle PATCH `{ published }` alone without wiping them.
+    const translations = parseTranslationsInput(
+      "GalleryImage",
+      body?.translations
+    );
+
     const d = parsed.data;
     const image = await prisma.galleryImage.update({
       where: { id },
@@ -52,6 +90,15 @@ export async function PATCH(request: Request, context: RouteContext) {
         ...(d.published !== undefined ? { published: d.published } : {}),
       },
       select: GALLERY_ADMIN_SELECT,
+    });
+
+    // Hash the English written by THIS request, so editing English and its
+    // translation together does not immediately flag the translation stale.
+    await saveTranslations({
+      model: "GalleryImage",
+      recordId: id,
+      translations,
+      source: { title: image.title, caption: image.caption },
     });
 
     revalidateGalleryPaths();
@@ -73,6 +120,8 @@ export async function DELETE(_request: Request, context: RouteContext) {
 
     await deleteGalleryImageFile(existing.imagePath);
     await prisma.galleryImage.delete({ where: { id } });
+    // No FK on Translation — orphan rows are this route's responsibility.
+    await deleteTranslationsFor("GalleryImage", id);
 
     revalidateGalleryPaths();
     return NextResponse.json({ success: true });
