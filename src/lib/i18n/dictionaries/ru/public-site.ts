@@ -34,6 +34,8 @@ export const publicSite: typeof enPublicSite = {
       "Документальный архив международных этапов PATS — делегации, церемонии и оперативное наследие.",
     allArchives: "Весь архив",
     photos: (count: number) => `${count} фото`,
+    metaPhotosLabel: "Фотографии",
+    metaYearsLabel: "Охваченные годы",
     empty: "Галерея обновляется. Загляните позже.",
     close: "Закрыть",
     previous: "Назад",
@@ -49,6 +51,8 @@ export const publicSite: typeof enPublicSite = {
     countLabel: (count: number) => `Опубликовано объявлений: ${count}`,
     readMore: "Читать далее",
     empty: "Объявлений пока нет — загляните позже.",
+    downloadPdf: "Скачать PDF",
+    backToList: "Назад к объявлениям",
   },
 
   chrome: {

@@ -22,6 +22,8 @@ export const publicSite: typeof enPublicSite = {
     subtitle: "PATS 历届国际赛事的纪实存档——代表团、典礼与作战传统。",
     allArchives: "全部存档",
     photos: (count: number) => `${count} 张照片`,
+    metaPhotosLabel: "照片",
+    metaYearsLabel: "涵盖年份",
     empty: "图库正在更新，请稍后再来查看。",
     close: "关闭",
     previous: "上一张",
@@ -36,6 +38,8 @@ export const publicSite: typeof enPublicSite = {
     countLabel: (count: number) => `已发布 ${count} 条公告`,
     readMore: "阅读更多",
     empty: "暂无公告，请稍后再来查看。",
+    downloadPdf: "下载 PDF",
+    backToList: "返回公告列表",
   },
 
   chrome: {

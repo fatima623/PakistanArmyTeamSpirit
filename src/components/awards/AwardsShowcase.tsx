@@ -14,32 +14,27 @@ type MedalAsset = {
   id: MedalTierId;
   imageSrc: string;
   imageAlt: string;
-  highQuality?: boolean;
-  /** True for photographed medals (fill the frame) vs. transparent renders. */
-  photo?: boolean;
 };
 
+/* The three medals are background-free alpha cut-outs (generated from the studio
+   photographs by scripts/remove-medal-background.js), so they float directly on the
+   card panel. The certificate is a document scan and keeps its framed treatment —
+   the `--doc` / `--render` thumb modifiers below encode that difference. */
 const MEDAL_ASSETS: readonly MedalAsset[] = [
   {
     id: "gold",
-    imageSrc: "/awards/pats-medal-gold.jpeg",
+    imageSrc: "/awards/pats-medal-gold.png",
     imageAlt: "PATS gold medal — Pakistan Army Team Spirit Competition",
-    highQuality: true,
-    photo: true,
   },
   {
     id: "silver",
-    imageSrc: "/awards/pats-medal-silver.jpeg",
+    imageSrc: "/awards/pats-medal-silver.png",
     imageAlt: "PATS silver medal — Pakistan Army Team Spirit Competition",
-    highQuality: true,
-    photo: true,
   },
   {
     id: "bronze",
-    imageSrc: "/awards/pats-medal-bronze.jpeg",
+    imageSrc: "/awards/pats-medal-bronze.png",
     imageAlt: "PATS bronze medal — Pakistan Army Team Spirit Competition",
-    highQuality: true,
-    photo: true,
   },
   {
     id: "certificate",
@@ -131,7 +126,8 @@ export function AwardsShowcase() {
 
       <div ref={gridRef} className="pats-awards-hero-grid">
         {MEDAL_ASSETS.map((card) => {
-          const BadgeIcon = card.id === "certificate" ? ScrollText : Medal;
+          const isCertificate = card.id === "certificate";
+          const BadgeIcon = isCertificate ? ScrollText : Medal;
           return (
             <article
               key={card.id}
@@ -142,10 +138,10 @@ export function AwardsShowcase() {
                   <BadgeIcon />
                 </span>
                 <div
-                  className={`pats-awards-hero-card__thumb${
-                    card.id === "certificate"
-                      ? " pats-awards-hero-card__thumb--doc"
-                      : ""
+                  className={`pats-awards-hero-card__thumb ${
+                    isCertificate
+                      ? "pats-awards-hero-card__thumb--doc"
+                      : "pats-awards-hero-card__thumb--render"
                   }`}
                 >
                   <Image
@@ -153,7 +149,6 @@ export function AwardsShowcase() {
                     alt={card.imageAlt}
                     fill
                     className="pats-awards-hero-card__image"
-                    unoptimized={card.highQuality}
                     quality={100}
                     sizes="240px"
                     priority={card.id === "gold" || card.id === "silver"}

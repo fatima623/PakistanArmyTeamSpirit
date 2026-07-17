@@ -376,6 +376,43 @@ model KeyDate {
   updatedAt DateTime  @updatedAt
 }
 
+/// Per-locale translations of admin-entered content.
+///
+/// English lives on the source model itself (`Event.title`, `NewsPost.content`,
+/// …); this table holds only the ru/tr/ar/zh renderings that an admin types in
+/// the admin forms. A missing row is not an error — the reader falls back to the
+/// English source, so untranslated content still renders (just in English).
+///
+/// Deliberately polymorphic rather than per-locale columns on four models:
+/// Event alone would need 16 extra columns, and adding a translatable field
+/// would mean a migration every time. The trade-off is no FK/cascade, so rows
+/// are cleaned up explicitly when the source record is deleted.
+///
+/// NOTE: admin content is written at RUNTIME, so it can never be translated at
+/// build time, and a static lookup (see `key-date-i18n.ts`) can only cover
+/// values known in advance. Automatic machine translation was ruled out by the
+/// "no external API calls from the server" constraint — hence manual entry.
+model Translation {
+  id         String   @id @default(cuid())
+  /// Prisma model name: "Event" | "NewsPost" | "GalleryImage" | "KeyDate".
+  model      String   @db.VarChar(32)
+  /// Primary key (cuid) of the row being translated.
+  recordId   String   @db.VarChar(64)
+  /// Target locale. Never "en" — English is the source, stored on the model.
+  locale     String   @db.VarChar(8)
+  /// Field name on the source model, e.g. "title" | "summary" | "caption".
+  field      String   @db.VarChar(64)
+  value      String   @db.Text
+  /// SHA-256 of the English source at the time this translation was saved, so
+  /// the admin UI can flag a translation as stale once the English text changes.
+  sourceHash String?  @db.VarChar(64)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([model, recordId, locale, field])
+  @@index([model, recordId, locale])
+}
+
 model TickerAnnouncement {
   id         String    @id @default(cuid())
   message    String    @db.Text

@@ -5,7 +5,7 @@ const PAGE_BANNER_PATHS = new Set([
   "/international",
   "/awards",
   "/announcements",
-  // "/gallery" — no photo banner; the gallery grid leads the page directly.
+  "/gallery",
   "/documents",
   "/key-dates",
   "/privacy",

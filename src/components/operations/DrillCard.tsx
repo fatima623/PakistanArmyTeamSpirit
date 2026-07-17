@@ -5,10 +5,13 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { mechanicalTransition } from "@/components/cinematic/motion";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import { translatePatsText } from "@/lib/i18n/pats-content-i18n";
 import type { TacticalDrill } from "@/lib/pats-content";
 import { CATEGORY_PILLAR_META } from "@/lib/mission-pillars";
 import { cn } from "@/lib/utils";
 
+/** Keyed by the RAW difficulty value — translating it would break the colours. */
 const DIFFICULTY_CLASS = {
   foundational: "tac-difficulty--foundational",
   intermediate: "tac-difficulty--intermediate",
@@ -24,9 +27,10 @@ type Props = {
 
 export function DrillCard({ drill, index = 0, variant = "grid" }: Props) {
   const reduce = useReducedMotion();
+  const { t, locale } = useI18n();
   const meta = CATEGORY_PILLAR_META[drill.category];
   const isPillar = variant === "pillar";
-  const title = isPillar ? meta.pillar : drill.title;
+  const title = isPillar ? meta.pillar : translatePatsText(drill.title, locale);
 
   const card = (
     <Link
@@ -42,15 +46,17 @@ export function DrillCard({ drill, index = 0, variant = "grid" }: Props) {
             DIFFICULTY_CLASS[drill.difficulty]
           )}
         >
-          {drill.difficulty}
+          {t.marketing.operations.difficulty[drill.difficulty]}
         </span>
 
         <h3 className="tac-mission-card__title">{title}</h3>
 
-        <p className="tac-mission-card__desc">{drill.purpose}</p>
+        <p className="tac-mission-card__desc">
+          {translatePatsText(drill.purpose, locale)}
+        </p>
 
         <span className="tac-mission-card__footer">
-          Mission brief
+          {t.marketing.operations.card.missionBrief}
           <ArrowRight className="h-3.5 w-3.5" aria-hidden />
         </span>
       </div>

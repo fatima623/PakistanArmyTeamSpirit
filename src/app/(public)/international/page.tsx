@@ -56,6 +56,16 @@ export default async function InternationalPage() {
             </div>
           ))}
         </div>
+      </PatsSection>
+
+      <PatsSection variant="navy">
+        <ScrollReveal>
+          <PatsSectionHeading
+            eyebrow={p.historyEyebrow}
+            title={p.historyTitle}
+            description={p.historyDescription}
+          />
+        </ScrollReveal>
         <div className="pats-body mt-8 max-w-3xl space-y-4">
           {p.historyNarrative.map((para, i) => (
             <p key={i}>{para}</p>

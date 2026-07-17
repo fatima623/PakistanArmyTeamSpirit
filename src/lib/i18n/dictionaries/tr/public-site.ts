@@ -23,6 +23,8 @@ export const publicSite: typeof enPublicSite = {
       "Uluslararası PATS dönemlerinin belgesel arşivi — delegasyonlar, törenler ve operasyonel miras.",
     allArchives: "Tüm arşiv",
     photos: (count: number) => `${count} Fotoğraf`,
+    metaPhotosLabel: "Fotoğraflar",
+    metaYearsLabel: "Kapsanan yıllar",
     empty: "Galeri güncelleniyor. Lütfen daha sonra tekrar bakın.",
     close: "Kapat",
     previous: "Önceki",
@@ -38,6 +40,8 @@ export const publicSite: typeof enPublicSite = {
     countLabel: (count: number) => `${count} duyuru yayınlandı`,
     readMore: "Devamını oku",
     empty: "Henüz duyuru yok — lütfen daha sonra tekrar bakın.",
+    downloadPdf: "PDF indir",
+    backToList: "Duyurulara dön",
   },
 
   chrome: {

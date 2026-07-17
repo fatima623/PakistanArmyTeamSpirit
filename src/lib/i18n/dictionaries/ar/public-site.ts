@@ -34,6 +34,8 @@ export const publicSite: typeof enPublicSite = {
       "أرشيف وثائقي لنسخ PATS الدولية — الوفود والمراسم والإرث العملياتي.",
     allArchives: "كل الأرشيف",
     photos: (count: number) => `${count} صورة`,
+    metaPhotosLabel: "الصور",
+    metaYearsLabel: "السنوات المشمولة",
     empty: "يجري تحديث المعرض. يرجى العودة قريبًا.",
     close: "إغلاق",
     previous: "السابق",
@@ -48,6 +50,8 @@ export const publicSite: typeof enPublicSite = {
     countLabel: (count: number) => `تم نشر ${count} إعلان`,
     readMore: "اقرأ المزيد",
     empty: "لا توجد إعلانات بعد — يرجى العودة قريبًا.",
+    downloadPdf: "تنزيل ملف PDF",
+    backToList: "العودة إلى الإعلانات",
   },
 
   chrome: {

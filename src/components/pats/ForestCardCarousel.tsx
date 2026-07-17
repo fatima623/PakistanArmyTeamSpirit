@@ -12,6 +12,7 @@ import {
 } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
 const AUTO_ADVANCE_MS = 5500;
@@ -209,8 +210,13 @@ function CarouselArrow({
   onClick: () => void;
 }) {
   const Icon = direction === "prev" ? ChevronLeft : ChevronRight;
+  // Optional hook + English fallback: this carousel is documented for reuse
+  // "sitewide", so it must keep working outside an I18nProvider.
+  const i18n = useI18nOptional();
   const label =
-    direction === "prev" ? "Previous cards" : "Next cards";
+    direction === "prev"
+      ? (i18n?.t.marketing.carousel.prev ?? "Previous cards")
+      : (i18n?.t.marketing.carousel.next ?? "Next cards");
 
   return (
     <button

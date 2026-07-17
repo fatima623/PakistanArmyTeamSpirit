@@ -11,6 +11,10 @@ export function revalidatePublicSite() {
 export function revalidateNewsPaths() {
   revalidatePublicSite();
   revalidatePath("/announcements");
+  // Every dynamic instance of the detail route: without this, an edited
+  // announcement's card updated but its permalink kept serving stale HTML
+  // from the full route cache.
+  revalidatePath("/announcements/[slug]", "page");
   revalidatePath("/admin/news");
 }
 

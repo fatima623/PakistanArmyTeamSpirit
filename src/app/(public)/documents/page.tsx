@@ -5,55 +5,75 @@ import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Documents",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return {
+    title: t.marketing.documents.meta.title,
+    description: t.marketing.documents.meta.description,
+  };
+}
 
-const BOOKLET_SECTIONS = [
-  { page: 3, title: "Overview — PATS", href: "/#mission" },
-  { page: 5, title: "History — International teams", href: "/international" },
-  { page: 6, title: "Concept of PATS", href: "/#mission" },
-  { page: 7, title: "Layout of events", href: "/operations" },
-  { page: 8, title: "Conduct of events (part 1)", href: "/operations" },
-  { page: 17, title: "Team composition", href: "/awards" },
-  { page: 18, title: "Scores & awards", href: "/awards" },
-  { page: 19, title: "Weapon & equipment", href: "/operations" },
-  { page: 21, title: "Coordinating points", href: "/operations" },
-] as const;
+type SectionKey = keyof Dictionary["marketing"]["documents"]["sections"];
 
-export default function DocumentsPage() {
+/**
+ * Booklet topics, in booklet order. The visible title comes from
+ * `t.marketing.documents.sections[key]`; `page` is the printed booklet page.
+ */
+const BOOKLET_SECTIONS: readonly {
+  page: number;
+  key: SectionKey;
+  href: string;
+}[] = [
+  { page: 3, key: "overview", href: "/#mission" },
+  { page: 5, key: "history", href: "/international" },
+  { page: 6, key: "concept", href: "/#mission" },
+  { page: 7, key: "layout", href: "/operations" },
+  { page: 8, key: "conduct", href: "/operations" },
+  { page: 17, key: "teamComposition", href: "/awards" },
+  { page: 18, key: "scoresAwards", href: "/awards" },
+  { page: 19, key: "weaponEquipment", href: "/operations" },
+  { page: 21, key: "coordinatingPoints", href: "/operations" },
+];
+
+export default async function DocumentsPage() {
+  const { t } = await getDictionary();
+  const docs = t.marketing.documents;
+
   return (
     <div className="space-y-0">
       <PatsPageHero
-        eyebrow="Reference library"
-        title="Document center"
-        subtitle="Official PATS competition reference — browse interactive briefs aligned to the information booklet."
+        eyebrow={docs.hero.eyebrow}
+        title={docs.hero.title}
+        subtitle={docs.hero.subtitle}
         meta={[
-          { label: "Source", value: "Official booklet" },
-          { label: "Access", value: "Digital briefs" },
+          { label: docs.hero.metaSource, value: docs.hero.metaSourceValue },
+          { label: docs.hero.metaAccess, value: docs.hero.metaAccessValue },
         ]}
       />
 
       <PatsSection variant="navy">
         <ScrollReveal>
           <PatsSectionHeading
-            eyebrow="Reference"
-            title="Competition library"
-            description="Each topic links to the matching section on this site. Full booklet scans are not shown — use the structured briefs below."
+            eyebrow={docs.library.eyebrow}
+            title={docs.library.title}
+            description={docs.library.description}
           />
         </ScrollReveal>
 
         <div className="mt-8 flex flex-wrap gap-4">
+          {/* Filename is the actual asset in /public — not user-visible copy. */}
           <a
             href="/Cambrian Patrol 2025 Results.v2.pdf"
             className="pats-btn pats-btn--gold"
             download
           >
-            Download results PDF
+            {docs.downloadResults}
           </a>
           <Link href="/operations" className="pats-btn">
-            Interactive operations →
+            {docs.interactiveOperations}
           </Link>
         </div>
 
@@ -64,11 +84,13 @@ export default function DocumentsPage() {
                 href={doc.href}
                 className="pats-panel block transition-colors hover:border-[var(--pats-gold)]/50"
               >
-                <p className="pats-eyebrow !text-[10px]">Booklet p.{doc.page}</p>
+                <p className="pats-eyebrow !text-[10px]">
+                  {docs.bookletPage(doc.page)}
+                </p>
                 <h3 className="mt-2 font-[family-name:var(--font-barlow)] text-base font-bold uppercase tracking-[0.06em] text-white">
-                  {doc.title}
+                  {docs.sections[doc.key]}
                 </h3>
-                <p className="pats-body mt-3 text-sm">Open brief →</p>
+                <p className="pats-body mt-3 text-sm">{docs.openBrief}</p>
               </Link>
             </li>
           ))}

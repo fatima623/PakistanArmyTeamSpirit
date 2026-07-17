@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 
 import { MissionBrief } from "@/components/operations/MissionBrief";
 import { PatsSection } from "@/components/pats/PatsSection";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { translatePatsText } from "@/lib/i18n/pats-content-i18n";
 import { getDrillById, TACTICAL_DRILLS } from "@/lib/pats-content";
 
 type Props = { params: Promise<{ id: string }> };
@@ -13,11 +15,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
+  const { t, locale } = await getDictionary();
   const drill = getDrillById(id);
-  if (!drill) return { title: "Operation" };
+  if (!drill) return { title: t.marketing.operations.brief.fallbackTitle };
   return {
-    title: drill.title,
-    description: drill.purpose,
+    title: translatePatsText(drill.title, locale),
+    description: translatePatsText(drill.purpose, locale),
   };
 }
 

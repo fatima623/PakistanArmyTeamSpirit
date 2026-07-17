@@ -7,6 +7,8 @@ import { flights } from "./flights";
 import { tickets } from "./tickets";
 import { home } from "./home";
 import { register } from "./register";
+import { events } from "./events";
+import { marketing } from "./marketing";
 import { publicSite } from "./public-site";
 
 export const tr = {
@@ -19,5 +21,7 @@ export const tr = {
   tickets,
   home,
   register,
+  events,
+  marketing,
   publicSite,
 };

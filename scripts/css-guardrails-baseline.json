@@ -2,9 +2,9 @@
   "cssFiles": [
     "src/app/globals.css"
   ],
-  "importantCount": 1689,
+  "importantCount": 1687,
   "importantByFile": {
-    "src/app/globals.css": 1689
+    "src/app/globals.css": 1687
   },
   "cssImports": [
     "src/app/layout.tsx -> ./globals.css",

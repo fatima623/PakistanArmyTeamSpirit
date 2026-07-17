@@ -23,6 +23,10 @@ export const publicSite = {
       "Documentary archive of international PATS editions — delegations, ceremonies, and operational heritage.",
     allArchives: "All archives",
     photos: (count: number) => `${count} ${count === 1 ? "Photo" : "Photos"}`,
+    // Hero meta-strip <dt> labels. Distinct from `eyebrow`/`allArchives`, which
+    // are the hero kicker and the "show everything" filter chip respectively.
+    metaPhotosLabel: "Photographs",
+    metaYearsLabel: "Years covered",
     empty: "The gallery is being updated. Check back soon.",
     close: "Close",
     previous: "Previous",
@@ -39,6 +43,8 @@ export const publicSite = {
       `${count} ${count === 1 ? "notice" : "notices"} published`,
     readMore: "Read more",
     empty: "No announcements yet — please check back soon.",
+    downloadPdf: "Download PDF",
+    backToList: "Back to announcements",
   },
 
   /** Nav/site chrome affordances (aria labels, menu buttons). */

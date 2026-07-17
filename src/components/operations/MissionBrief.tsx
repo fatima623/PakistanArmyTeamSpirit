@@ -6,6 +6,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { HudMetaStrip } from "@/components/cinematic/HudMetaStrip";
 import { TacticalHud } from "@/components/cinematic/TacticalHud";
 import { fadeUp, stagger } from "@/components/cinematic/motion";
+import { useI18n } from "@/lib/i18n/I18nProvider";
+import { translatePatsText } from "@/lib/i18n/pats-content-i18n";
 import type { TacticalDrill } from "@/lib/pats-content";
 import { operationCode } from "@/lib/ops-code";
 import { cn } from "@/lib/utils";
@@ -17,6 +19,10 @@ type Props = {
 
 export function MissionBrief({ drill, opIndex }: Props) {
   const reduce = useReducedMotion();
+  const { t, locale } = useI18n();
+  const ops = t.marketing.operations;
+  const b = ops.brief;
+  // A mission code (PATS-INF-07), not prose — identical in every locale.
   const code = operationCode(drill, opIndex);
 
   return (
@@ -27,21 +33,21 @@ export function MissionBrief({ drill, opIndex }: Props) {
           href="/operations"
           className="cinematic-link font-condensed text-xs font-semibold uppercase tracking-[0.2em]"
         >
-          ← Mission selection
+          {b.back}
         </Link>
         <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
           <div>
             <span className="tac-ops-code">{code}</span>
             <p className="mt-3 font-condensed text-xs font-bold uppercase tracking-[0.28em] text-brand-brass">
-              Classified operational brief
+              {b.classified}
             </p>
             <h1 className="cinematic-heading mt-2 font-display text-2xl font-bold uppercase text-white sm:text-4xl">
-              {drill.title}
+              {translatePatsText(drill.title, locale)}
             </h1>
           </div>
           <div className="text-right">
             <p className="font-condensed text-[10px] uppercase tracking-widest text-white/45">
-              Total marks
+              {b.totalMarks}
             </p>
             <p className="font-display text-3xl font-bold text-brand-brass sm:text-4xl">
               {drill.marks}
@@ -51,11 +57,18 @@ export function MissionBrief({ drill, opIndex }: Props) {
         <HudMetaStrip
           className="mt-5"
           items={[
-            { label: "Phase", value: drill.phase },
-            { label: "Category", value: drill.category },
-            { label: "Difficulty", value: drill.difficulty },
+            { label: b.phase, value: ops.phases[drill.phase] },
+            { label: b.category, value: ops.category[drill.category] },
+            { label: b.difficulty, value: ops.difficulty[drill.difficulty] },
             ...(drill.checkpoint
-              ? [{ label: "Checkpoint", value: drill.checkpoint }]
+              ? [
+                  {
+                    label: b.checkpoint,
+                    // Mostly acronym codes ("CP 4 / CTR") — these fall back
+                    // untranslated by design.
+                    value: translatePatsText(drill.checkpoint, locale),
+                  },
+                ]
               : []),
           ]}
         />
@@ -69,16 +82,16 @@ export function MissionBrief({ drill, opIndex }: Props) {
       >
         <motion.section variants={fadeUp}>
           <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
-            Mission objective
+            {b.objective}
           </h2>
           <p className="cinematic-body mt-3 max-w-3xl font-sans text-lg leading-relaxed text-white/90">
-            {drill.purpose}
+            {translatePatsText(drill.purpose, locale)}
           </p>
         </motion.section>
 
         <motion.section variants={fadeUp}>
           <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
-            Operational objectives
+            {b.objectives}
           </h2>
           <ul className="mt-4 space-y-3">
             {drill.objectives.map((o, i) => (
@@ -89,7 +102,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
                 <span className="font-display text-sm font-bold text-brand-brass">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                {o}
+                {translatePatsText(o, locale)}
               </li>
             ))}
           </ul>
@@ -98,7 +111,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
         {drill.scoring && drill.scoring.length > 0 && (
           <motion.section variants={fadeUp}>
             <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
-              Scoring matrix
+              {b.scoring}
             </h2>
             <div className="mt-4 overflow-hidden rounded-sm border border-brand-brass/20">
               {drill.scoring.map((line, i) => {
@@ -112,9 +125,11 @@ export function MissionBrief({ drill, opIndex }: Props) {
                     )}
                   >
                     <div className="flex justify-between gap-4 font-condensed text-sm">
-                      <span className="text-white/90">{line.label}</span>
+                      <span className="text-white/90">
+                        {translatePatsText(line.label, locale)}
+                      </span>
                       <span className="font-bold text-brand-brass">
-                        {line.marks} mks
+                        {line.marks} {b.marksUnit}
                       </span>
                     </div>
                     <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
@@ -136,11 +151,11 @@ export function MissionBrief({ drill, opIndex }: Props) {
             className="group rounded-sm border border-white/8 bg-white/[0.03] p-5 transition-colors duration-150 hover:border-brand-red/50 hover:bg-brand-red/10"
           >
             <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass transition-colors duration-150 group-hover:text-red-200">
-              Critical notice
+              {b.criticalNotice}
             </h2>
             <ul className="mt-3 space-y-2 font-condensed text-base text-white/80 transition-colors duration-150 group-hover:text-red-100/90">
               {drill.rules.map((r) => (
-                <li key={r}>{r}</li>
+                <li key={r}>{translatePatsText(r, locale)}</li>
               ))}
             </ul>
           </motion.section>
@@ -148,7 +163,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
 
         <motion.section variants={fadeUp}>
           <h2 className="font-display text-xs font-bold uppercase tracking-[0.25em] text-brand-brass">
-            Tactical skills
+            {b.skills}
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {drill.skills.map((s) => (
@@ -156,7 +171,7 @@ export function MissionBrief({ drill, opIndex }: Props) {
                 key={s}
                 className="rounded-sm border border-brand-olive/40 bg-brand-olive/15 px-3 py-1.5 font-condensed text-xs font-semibold uppercase tracking-wide text-brand-sand"
               >
-                {s}
+                {translatePatsText(s, locale)}
               </span>
             ))}
           </div>
@@ -164,10 +179,10 @@ export function MissionBrief({ drill, opIndex }: Props) {
 
         <motion.div variants={fadeUp} className="flex flex-wrap gap-4 pt-2">
           <Link href="/gallery" className="cinematic-btn-ghost">
-            Related archive
+            {b.relatedArchive}
           </Link>
           <Link href="/operations" className="cinematic-btn-ghost">
-            All missions
+            {b.allMissions}
           </Link>
         </motion.div>
       </motion.div>

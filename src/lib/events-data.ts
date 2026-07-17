@@ -11,8 +11,18 @@ import type {
 import { prisma } from "@/lib/prisma";
 import { eventImageUrl, EVENT_PUBLIC_SELECT } from "@/lib/storage/event-image";
 
-/** A public-facing event = the ContourEvent shape + an optional card thumbnail. */
-export type PublicEvent = ContourEvent & { thumbnailUrl: string | null };
+/**
+ * A public-facing event = the ContourEvent shape + an optional card thumbnail.
+ *
+ * `id` is the SLUG (the ContourEvent contract — it is the React key and the
+ * public identifier). `recordId` is the Event row's primary key, which is what
+ * Translation.recordId points at; without it the translation lookup would have
+ * nothing to join on.
+ */
+export type PublicEvent = ContourEvent & {
+  thumbnailUrl: string | null;
+  recordId: string;
+};
 
 /** Coerce the stored JSON breakdown into an ordered MarkBreakdown[]. */
 export function parseBreakdown(
@@ -35,6 +45,7 @@ type EventPublicRow = Prisma.EventGetPayload<{ select: typeof EVENT_PUBLIC_SELEC
 export function mapToPublicEvent(row: EventPublicRow): PublicEvent {
   return {
     id: row.slug,
+    recordId: row.id,
     title: row.title,
     marks: row.marks,
     icon: row.icon,

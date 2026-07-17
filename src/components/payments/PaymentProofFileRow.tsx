@@ -10,6 +10,10 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useI18nOptional } from "@/lib/i18n/I18nProvider";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+
+type ProofStrings = Dictionary["payment"]["proof"];
 
 function isImageMime(mime: string | null | undefined, fileName?: string | null) {
   if (mime?.startsWith("image/")) return true;
@@ -17,16 +21,25 @@ function isImageMime(mime: string | null | undefined, fileName?: string | null) 
   return /\.(jpe?g|png)$/i.test(fileName);
 }
 
-function fmtFileSize(bytes: number | null | undefined): string | null {
+function fmtFileSize(
+  bytes: number | null | undefined,
+  p?: ProofStrings
+): string | null {
   if (!bytes || bytes <= 0) return null;
-  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  return `${(bytes / 1024).toFixed(1)} KB`;
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(1)} ${p?.units.mb ?? "MB"}`;
+  }
+  return `${(bytes / 1024).toFixed(1)} ${p?.units.kb ?? "KB"}`;
 }
 
 /**
  * Compact proof file row — “[icon] 1.jpeg · 164.5 KB … [view] [download]”.
  * The blob is fetched on first use; viewing an image opens a lightbox,
  * viewing a PDF opens a new tab.
+ *
+ * Rendered both inside the participant portal (wrapped by the I18nProvider at
+ * `(dashboard)/layout.tsx`) and in the provider-less admin console — hence
+ * `useI18nOptional()` and the English fallbacks throughout.
  */
 export function PaymentProofFileRow({
   paymentId,
@@ -44,9 +57,11 @@ export function PaymentProofFileRow({
   const [busy, setBusy] = useState<"view" | "download" | null>(null);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const cachedUrl = useRef<string | null>(null);
+  const i18n = useI18nOptional();
+  const p = i18n?.t.payment.proof;
 
   const isImage = isImageMime(mimeType, fileName);
-  const size = fmtFileSize(fileSize);
+  const size = fmtFileSize(fileSize, p);
   const endpoint =
     access === "admin"
       ? `/api/admin/payment-proof/${paymentId}`
@@ -59,17 +74,21 @@ export function PaymentProofFileRow({
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(
-          (data as { error?: string }).error ?? "Could not load payment proof"
+          (data as { error?: string }).error ??
+            p?.loadError ??
+            "Could not load payment proof"
         );
       }
       const blob = await res.blob();
       cachedUrl.current = URL.createObjectURL(blob);
       return cachedUrl.current;
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Failed to load proof");
+      toast.error(
+        e instanceof Error ? e.message : (p?.loadFailed ?? "Failed to load proof")
+      );
       return null;
     }
-  }, [endpoint]);
+  }, [endpoint, p]);
 
   const view = async () => {
     setBusy("view");
@@ -87,13 +106,17 @@ export function PaymentProofFileRow({
     if (!url) return;
     const a = document.createElement("a");
     a.href = url;
-    a.download = fileName ?? "payment-proof";
+    a.download = fileName ?? p?.downloadFallbackName ?? "payment-proof";
     document.body.appendChild(a);
     a.click();
     a.remove();
   };
 
   const RowIcon = isImage ? ImageIcon : FileText;
+  const viewLabel = isImage
+    ? (p?.viewImage ?? "View image")
+    : (p?.viewPdf ?? "View PDF");
+  const downloadLabel = p?.download ?? "Download";
 
   return (
     <>
@@ -106,7 +129,7 @@ export function PaymentProofFileRow({
         </span>
         <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-4 gap-y-0.5">
           <p className="m-0 max-w-full truncate text-[0.875rem] font-bold text-slate-900">
-            {fileName ?? "Payment proof"}
+            {fileName ?? p?.proofFallback ?? "Payment proof"}
           </p>
           {size ? (
             <p className="m-0 text-[0.78rem] font-medium text-slate-400">
@@ -120,8 +143,8 @@ export function PaymentProofFileRow({
             onClick={() => void view()}
             disabled={busy !== null}
             className="pp-proof-filerow__action inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-60"
-            title={isImage ? "View image" : "View PDF"}
-            aria-label={isImage ? "View image" : "View PDF"}
+            title={viewLabel}
+            aria-label={viewLabel}
           >
             {busy === "view" ? (
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
@@ -134,8 +157,8 @@ export function PaymentProofFileRow({
             onClick={() => void download()}
             disabled={busy !== null}
             className="pp-proof-filerow__action inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 disabled:opacity-60"
-            title="Download"
-            aria-label="Download"
+            title={downloadLabel}
+            aria-label={downloadLabel}
           >
             {busy === "download" ? (
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
@@ -155,12 +178,12 @@ export function PaymentProofFileRow({
         >
           <DialogContent className="w-auto max-w-[94vw] border-none bg-transparent p-0 shadow-none sm:rounded-xl [&>button:last-child]:rounded-full [&>button:last-child]:bg-white/90 [&>button:last-child]:p-1.5 [&>button:last-child]:text-slate-700 [&>button:last-child]:opacity-100 [&>button:last-child]:shadow">
             <DialogTitle className="sr-only">
-              Payment proof — full size
+              {p?.lightboxTitle ?? "Payment proof — full size"}
             </DialogTitle>
             {lightboxUrl ? (
               <Image
                 src={lightboxUrl}
-                alt="Payment proof full size"
+                alt={p?.lightboxAlt ?? "Payment proof full size"}
                 width={1600}
                 height={1200}
                 unoptimized

@@ -4,6 +4,9 @@ import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
+import {
+  getTranslations,
+} from "@/lib/i18n/content-translations";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import {
   translateKeyDateLabel,
@@ -24,6 +27,28 @@ export default async function KeyDatesPage() {
   ]);
   const p = t.publicSite.pages.keyDates;
 
+  // THE FALLBACK CHAIN, per field:
+  //   1. an admin-entered DB translation (deliberate, so it wins);
+  //   2. the static key-date-i18n lookup — still authoritative for the known
+  //      milestone labels and for swapping English month names inside a value;
+  //   3. the English source.
+  // `getTranslations` already drops blank values, so `??` lands on tier 2
+  // whenever a field is untranslated, and tier 2 itself falls back to English.
+  // Translated outside site-data's unstable_cache, which is not locale-keyed.
+  const translations = await getTranslations(
+    "KeyDate",
+    keyDates.map((kd) => kd.id),
+    locale
+  );
+  const rows = keyDates.map((kd) => {
+    const tr = translations.get(kd.id);
+    return {
+      id: kd.id,
+      label: tr?.label ?? translateKeyDateLabel(kd.label, locale),
+      value: tr?.value ?? translateKeyDateValue(kd.value, locale),
+    };
+  });
+
   return (
     <>
       <PatsPageHero
@@ -41,20 +66,16 @@ export default async function KeyDatesPage() {
         </ScrollReveal>
         <ScrollReveal className="mt-8">
           <div className="pats-data-table">
-            {keyDates.length === 0 ? (
+            {rows.length === 0 ? (
               <p className="pats-body p-6">{p.empty}</p>
             ) : (
-              keyDates.map((kd) => (
+              rows.map((kd) => (
                 <div
                   key={kd.id}
                   className="pats-data-table__row pats-data-table__row--split"
                 >
-                  <div className="pats-data-table__label">
-                    {translateKeyDateLabel(kd.label, locale)}
-                  </div>
-                  <div className="pats-data-table__value">
-                    {translateKeyDateValue(kd.value, locale)}
-                  </div>
+                  <div className="pats-data-table__label">{kd.label}</div>
+                  <div className="pats-data-table__value">{kd.value}</div>
                 </div>
               ))
             )}

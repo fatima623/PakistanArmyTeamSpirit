@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 
 export default async function EventDashboardPage() {
   const session = await requireConfirmedParticipant();
-  const { t } = await getDictionary();
+  const { t, locale } = await getDictionary();
 
   const [
     user,
@@ -235,7 +235,12 @@ export default async function EventDashboardPage() {
                   </h2>
                 </div>
               </div>
-              <Timeline data={timelineData} compact />
+              <Timeline
+                data={timelineData}
+                compact
+                t={t.dashboard.timelinePanel}
+                locale={locale}
+              />
             </section>
           ) : null}
 
