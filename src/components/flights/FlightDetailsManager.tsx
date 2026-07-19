@@ -21,7 +21,7 @@ import {
 import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
-import { TOAST } from "@/lib/toast";
+import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import type { TeamMemberRecord } from "@/lib/team-members";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import type { Locale } from "@/lib/i18n/config";
@@ -276,7 +276,7 @@ export function FlightDetailsManager({
       const first = Object.values(data.errors).flat()[0];
       if (typeof first === "string") return first;
     }
-    return typeof data.error === "string" ? data.error : TOAST.GENERIC_ERROR;
+    return apiErrorMessage(data, locale, t.common.toasts.genericError);
   };
 
   const setRowError = (key: string, message: string | null) =>
@@ -389,8 +389,8 @@ export function FlightDetailsManager({
       toast.success(existing ? fl.errors.updated : fl.errors.submitted);
       router.refresh();
     } catch {
-      setRowError(member.id, TOAST.GENERIC_ERROR);
-      toast.error(TOAST.GENERIC_ERROR);
+      setRowError(member.id, t.common.toasts.genericError);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setBusyId(null);
     }
@@ -415,8 +415,8 @@ export function FlightDetailsManager({
       toast.success(fl.member.deleted);
       router.refresh();
     } catch {
-      setRowError(rowKey, TOAST.GENERIC_ERROR);
-      toast.error(TOAST.GENERIC_ERROR);
+      setRowError(rowKey, t.common.toasts.genericError);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setBusyId(null);
     }
@@ -460,8 +460,8 @@ export function FlightDetailsManager({
       toast.success(fl.unlinked.assigned);
       router.refresh();
     } catch {
-      setRowError(flight.id, TOAST.GENERIC_ERROR);
-      toast.error(TOAST.GENERIC_ERROR);
+      setRowError(flight.id, t.common.toasts.genericError);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setBusyId(null);
     }

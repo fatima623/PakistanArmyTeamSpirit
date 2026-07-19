@@ -30,7 +30,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { TOAST } from "@/lib/toast";
+import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import type { TeamMemberRecord } from "@/lib/team-members";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import type { Locale } from "@/lib/i18n/config";
@@ -226,7 +226,7 @@ export function TeamRosterManager({
       const first = Object.values(data.errors).flat()[0];
       if (typeof first === "string") return first;
     }
-    return typeof data.error === "string" ? data.error : TOAST.GENERIC_ERROR;
+    return apiErrorMessage(data, locale, t.common.toasts.genericError);
   };
 
   const updateRow = (index: number, patch: Partial<Row>) =>
@@ -268,7 +268,7 @@ export function TeamRosterManager({
       toast.success(tm.toasts.teamRegistered);
       router.refresh();
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setBusy(null);
     }
@@ -370,7 +370,7 @@ export function TeamRosterManager({
       router.refresh();
       return true;
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : TOAST.GENERIC_ERROR);
+      toast.error(error instanceof Error ? error.message : t.common.toasts.genericError);
       await reload();
       return false;
     } finally {
@@ -397,7 +397,7 @@ export function TeamRosterManager({
       router.refresh();
       return true;
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
       return false;
     } finally {
       setBusy(null);
@@ -440,7 +440,7 @@ export function TeamRosterManager({
       setJustification("");
       toast.success(tm.toasts.requestSubmitted);
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setBusy(null);
     }

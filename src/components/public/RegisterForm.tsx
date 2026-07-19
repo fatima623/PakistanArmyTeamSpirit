@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -23,9 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { TOAST } from "@/lib/toast";
 import { SITE_NAME, SUPPORT_EMAIL } from "@/lib/branding";
 import { useI18n } from "@/lib/i18n/I18nProvider";
+import { apiErrorMessage, translateApiMessage } from "@/lib/i18n/api-error-i18n";
 import {
   CUSTOM_COUNTRY_OPTION,
   PAKISTAN_COUNTRY,
@@ -49,9 +49,30 @@ type RegisterFormProps = {
 export function RegisterForm({
   initialIntlRegistrationOpen,
 }: RegisterFormProps) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const router = useRouter();
   const [csrfToken, setCsrfToken] = useState("");
+
+  // Localize zod validation messages (from RegisterSchema) via the shared
+  // api-error dictionary, so form errors match the participant's language.
+  const resolver: Resolver<RegisterFormValues> = async (
+    values,
+    context,
+    options
+  ) => {
+    const result = await zodResolver(RegisterSchema)(values, context, options);
+    const errs = result.errors as unknown as Record<
+      string,
+      { message?: string } | undefined
+    >;
+    for (const key of Object.keys(errs)) {
+      const err = errs[key];
+      if (err && typeof err.message === "string") {
+        err.message = translateApiMessage(err.message, locale);
+      }
+    }
+    return result;
+  };
 
   const {
     register,
@@ -62,7 +83,7 @@ export function RegisterForm({
     setError,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
-    resolver: zodResolver(RegisterSchema),
+    resolver,
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
@@ -127,12 +148,12 @@ export function RegisterForm({
       Object.entries(body.errors as Record<string, string[]>).forEach(
         ([field, messages]) => {
           setError(field as keyof RegisterFormValues, {
-            message: messages[0],
+            message: translateApiMessage(messages[0], locale),
           });
         }
       );
     } else {
-      toast.error(body.error ?? TOAST.GENERIC_ERROR);
+      toast.error(apiErrorMessage(body, locale, t.common.toasts.genericError));
     }
   };
 

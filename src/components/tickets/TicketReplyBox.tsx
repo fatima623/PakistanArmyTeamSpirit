@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { TOAST } from "@/lib/toast";
+import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
 /**
@@ -22,7 +22,7 @@ export function TicketReplyBox({
   closed: boolean;
 }) {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const tk = t.tickets;
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
@@ -50,9 +50,9 @@ export function TicketReplyBox({
         return;
       }
       const data = await res.json();
-      toast.error(data.error ?? data.errors?.body?.[0] ?? TOAST.GENERIC_ERROR);
+      toast.error(apiErrorMessage(data, locale, t.common.toasts.genericError));
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setSending(false);
     }
@@ -69,9 +69,9 @@ export function TicketReplyBox({
         router.refresh();
         return;
       }
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setClosing(false);
     }

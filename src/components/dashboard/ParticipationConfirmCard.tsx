@@ -13,7 +13,7 @@ import {
 import { toast } from "sonner";
 
 import { logoutAction } from "@/lib/actions/auth";
-import { TOAST } from "@/lib/toast";
+import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
 type CountdownParts = {
@@ -72,7 +72,7 @@ export function ParticipationConfirmCard({
   previouslyDeclined: boolean;
 }) {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const c = t.confirm;
   const [submitting, setSubmitting] = useState<"confirm" | "decline" | null>(
     null
@@ -121,7 +121,7 @@ export function ParticipationConfirmCard({
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
-          toast.error(data.error ?? TOAST.GENERIC_ERROR);
+          toast.error(apiErrorMessage(data, locale, t.common.toasts.genericError));
           setSubmitting(null);
           return;
         }
@@ -136,7 +136,7 @@ export function ParticipationConfirmCard({
           });
         }
       } catch {
-        toast.error(TOAST.GENERIC_ERROR);
+        toast.error(t.common.toasts.genericError);
         setSubmitting(null);
       }
     },

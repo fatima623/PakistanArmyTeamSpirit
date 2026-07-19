@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ChevronsUp,
@@ -33,8 +33,8 @@ import {
 } from "@/components/ui/select";
 import { UnitUpdateSchema } from "@/lib/validations";
 import { ARM_OPTIONS } from "@/lib/form-options";
-import { TOAST } from "@/lib/toast";
 import { useI18n } from "@/lib/i18n/I18nProvider";
+import { apiErrorMessage, translateApiMessage } from "@/lib/i18n/api-error-i18n";
 
 type UnitEditValues = z.infer<typeof UnitUpdateSchema>;
 
@@ -81,7 +81,7 @@ export function UnitEditForm({
   unitNames: string[];
 }) {
   const unit = user.unit;
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const u = t.unit;
   const [submitting, setSubmitting] = useState(false);
 
@@ -95,6 +95,27 @@ export function UnitEditForm({
     "Air Force": u.options.airForce,
   };
 
+  // Localize zod validation messages (from UnitUpdateSchema) to the active
+  // locale via the shared api-error dictionary.
+  const resolver: Resolver<UnitEditValues> = async (
+    values,
+    context,
+    options
+  ) => {
+    const result = await zodResolver(UnitUpdateSchema)(values, context, options);
+    const errs = result.errors as unknown as Record<
+      string,
+      { message?: string } | undefined
+    >;
+    for (const key of Object.keys(errs)) {
+      const err = errs[key];
+      if (err && typeof err.message === "string") {
+        err.message = translateApiMessage(err.message, locale);
+      }
+    }
+    return result;
+  };
+
   const {
     register,
     control,
@@ -104,7 +125,7 @@ export function UnitEditForm({
     setError,
     formState: { errors },
   } = useForm<UnitEditValues>({
-    resolver: zodResolver(UnitUpdateSchema),
+    resolver,
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
@@ -131,7 +152,7 @@ export function UnitEditForm({
         body: JSON.stringify(data),
       });
       if (res.ok) {
-        toast.success(TOAST.SAVE_SUCCESS);
+        toast.success(t.common.toasts.saveSuccess);
         return;
       }
       const body = await res.json();
@@ -139,15 +160,15 @@ export function UnitEditForm({
         Object.entries(body.errors as Record<string, string[]>).forEach(
           ([field, messages]) => {
             setError(field as keyof UnitEditValues, {
-              message: messages[0],
+              message: translateApiMessage(messages[0], locale),
             });
           }
         );
       } else {
-        toast.error(body.error ?? TOAST.GENERIC_ERROR);
+        toast.error(apiErrorMessage(body, locale, t.common.toasts.genericError));
       }
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setSubmitting(false);
     }
