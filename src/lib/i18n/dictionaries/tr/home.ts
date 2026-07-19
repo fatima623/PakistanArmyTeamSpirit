@@ -23,6 +23,7 @@ export const home: typeof enHome = {
 
   mission: {
     eyebrow: "Konsept / Amaç",
+    imageAlt: "PATS uluslararası yarışma amblemleri",
     quote: "TAKIM RUHUYLA TAKDİR EDİLEN AZİM",
     body:
       "Pakistan Army Team Spirit (PATS), her yıl JLA — PATS kapsamında düzenlenen görev ve görev odaklı bir devriye yarışmasıdır. Temel amaç, taktik ve zihinsel yetenekleri değerlendirmek ve geliştirmek için zorlu bir devriye tatbikatıdır — katılımcılar zihinsel ve fiziksel olarak hazır olmalıdır. Takımlar; küçük operasyonlarda ustalık, dayanıklılık ile temel tatbikat ve prosedürlerde yetkinlik kazanmalıdır.",

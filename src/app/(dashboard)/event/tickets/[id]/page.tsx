@@ -32,7 +32,7 @@ export default async function ParticipantTicketDetailPage({
 }: PageProps) {
   const session = await requireConfirmedParticipant();
   const { id } = await params;
-  const { t: dict } = await getDictionary();
+  const { t: dict, locale } = await getDictionary();
   const tk = dict.tickets;
 
   const ticket = await prisma.supportTicket.findUnique({
@@ -77,7 +77,7 @@ export default async function ParticipantTicketDetailPage({
             tk.categories[ticket.category as keyof typeof tk.categories] ??
               TICKET_CATEGORY_LABELS[ticket.category as TicketCategory] ??
               ticket.category,
-            formatDateTime(ticket.createdAt)
+            formatDateTime(ticket.createdAt, locale)
           )}
         />
       </div>

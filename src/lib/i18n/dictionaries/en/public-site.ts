@@ -2,6 +2,11 @@
 // item labels and the login page. Other locales mirror this shape exactly.
 
 export const publicSite = {
+  loading: {
+    title: "Public page",
+    description: "Loading page content and public navigation.",
+  },
+
   nav: {
     home: "Home",
     eventsDetail: "Events Detail",

@@ -220,9 +220,9 @@ export function PaymentSubmissionForm({
                     {pf.submittedRef(p.transactionReference ?? "—")}
                   </p>
                   <p className="m-0 mt-0.5 text-[0.75rem] text-slate-500">
-                    {pf.submittedOn(formatDateShort(p.createdAt))}
+                    {pf.submittedOn(formatDateShort(p.createdAt, locale))}
                     {p.paymentDate
-                      ? pf.paidSuffix(formatDateShort(p.paymentDate))
+                      ? pf.paidSuffix(formatDateShort(p.paymentDate, locale))
                       : ""}
                   </p>
                 </div>
@@ -309,7 +309,7 @@ export function PaymentSubmissionForm({
               <SummaryTile label={pf.verificationResult} value={verificationResult} />
               <SummaryTile
                 label={pf.lastUpdated}
-                value={formatDateTimePK(latest.updatedAt)}
+                value={formatDateTimePK(latest.updatedAt, locale)}
               />
             </div>
 

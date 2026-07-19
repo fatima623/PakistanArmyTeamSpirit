@@ -2,6 +2,11 @@ import type { publicSite as enPublicSite } from "../en/public-site";
 
 // Simplified Chinese (zh-CN) translations for shared public chrome: nav + login.
 export const publicSite: typeof enPublicSite = {
+  loading: {
+    title: "公共页面",
+    description: "正在加载页面内容和公共导航。",
+  },
+
   nav: {
     home: "首页",
     eventsDetail: "活动详情",

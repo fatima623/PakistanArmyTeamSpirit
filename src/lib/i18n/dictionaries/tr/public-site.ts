@@ -2,6 +2,11 @@ import type { publicSite as enPublicSite } from "../en/public-site";
 
 // Turkish translations for the shared public chrome: nav labels and login page.
 export const publicSite: typeof enPublicSite = {
+  loading: {
+    title: "Genel sayfa",
+    description: "Sayfa içeriği ve genel gezinme yükleniyor.",
+  },
+
   nav: {
     home: "Ana Sayfa",
     eventsDetail: "Etkinlik Ayrıntıları",

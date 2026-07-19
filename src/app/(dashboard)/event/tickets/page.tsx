@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function ParticipantTicketsPage() {
   const session = await requireConfirmedParticipant();
-  const { t: dict } = await getDictionary();
+  const { t: dict, locale } = await getDictionary();
   const tk = dict.tickets;
 
   const tickets = await prisma.supportTicket.findMany({
@@ -38,7 +38,7 @@ export default async function ParticipantTicketsPage() {
       t.category,
     messageCount: t._count.messages,
     status: t.status,
-    updatedLabel: formatDateShort(t.lastReplyAt),
+    updatedLabel: formatDateShort(t.lastReplyAt, locale),
   }));
 
   return <SupportTicketsPanel tickets={items} />;

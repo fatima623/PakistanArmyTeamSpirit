@@ -1,6 +1,7 @@
 import { displayCountry, isInternationalParticipant } from "@/lib/participant-country";
 import { formatDateShort } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 
 type UnitSummary = {
   unitName: string;
@@ -18,6 +19,7 @@ type Props = {
   nationality: string | null;
   unit: UnitSummary;
   t: Dictionary["registration"];
+  locale: Locale;
 };
 
 export function ParticipantRegistrationDetailsCard({
@@ -30,6 +32,7 @@ export function ParticipantRegistrationDetailsCard({
   nationality,
   unit,
   t,
+  locale,
 }: Props) {
   return (
     <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
@@ -62,7 +65,7 @@ export function ParticipantRegistrationDetailsCard({
         </div>
         <div>
           <dt className="pp-dl__term">{t.dateRegistered}</dt>
-          <dd className="pp-dl__desc">{formatDateShort(createdAt)}</dd>
+          <dd className="pp-dl__desc">{formatDateShort(createdAt, locale)}</dd>
         </div>
         <div>
           <dt className="pp-dl__term">{t.countryOfApplication}</dt>

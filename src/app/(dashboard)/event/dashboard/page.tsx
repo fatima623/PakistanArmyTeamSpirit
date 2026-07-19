@@ -179,6 +179,7 @@ export default async function EventDashboardPage() {
         paymentComplete={paymentComplete}
         exerciseDates={siteSettings.exerciseDates}
         t={t.statusBar}
+        locale={locale}
       />
 
       <div className="pp-grid">
@@ -193,6 +194,7 @@ export default async function EventDashboardPage() {
             nationality={user.nationality}
             unit={user.unit}
             t={t.registration}
+            locale={locale}
           />
 
           <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
@@ -214,7 +216,7 @@ export default async function EventDashboardPage() {
                 {dataEntryPeriods.map((p) => (
                   <li key={p.id} className="pp-dates__item">
                     <span className="pp-dates__date">
-                      {formatDateDisplay(p.openDate)}
+                      {formatDateDisplay(p.openDate, locale)}
                     </span>
                     <span className="pp-dates__label">{p.label}</span>
                   </li>
@@ -267,7 +269,7 @@ export default async function EventDashboardPage() {
                       {post.title}
                     </Link>
                     <span className="pp-news__date">
-                      {formatDateShort(post.publishedAt)}
+                      {formatDateShort(post.publishedAt, locale)}
                     </span>
                   </li>
                 ))}

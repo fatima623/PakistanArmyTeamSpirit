@@ -14,6 +14,8 @@ type Props = {
   motto?: string;
   /** Render the motto as the RTL Urdu crest motto (nastaliq, no letter-spacing). */
   mottoUrdu?: boolean;
+  /** Localized alt text for the decorative badges image. */
+  imageAlt?: string;
 };
 
 const REVEAL_MS = 900;
@@ -25,6 +27,7 @@ export function PatsMissionShowcase({
   body,
   motto,
   mottoUrdu = false,
+  imageAlt = "PATS international competition marks",
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -158,7 +161,7 @@ export function PatsMissionShowcase({
             <div className="pats-mission-showcase__badges-float">
               <Image
                 src={PATS_CROP.photo28Footer}
-                alt="PATS international competition marks"
+                alt={imageAlt}
                 width={680}
                 height={680}
                 quality={95}

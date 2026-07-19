@@ -13,6 +13,11 @@ function plural(count: number, forms: Record<Intl.LDMLPluralRule, string>): stri
 
 // Arabic translations for shared public chrome: marketing nav and login page (right-to-left).
 export const publicSite: typeof enPublicSite = {
+  loading: {
+    title: "صفحة عامة",
+    description: "جارٍ تحميل محتوى الصفحة والتنقل العام.",
+  },
+
   nav: {
     home: "الرئيسية",
     eventsDetail: "تفاصيل الفعاليات",

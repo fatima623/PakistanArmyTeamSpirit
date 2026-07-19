@@ -13,6 +13,11 @@ function plural(count: number, one: string, few: string, many: string): string {
 
 // Russian translations for shared public chrome: nav labels and the login page.
 export const publicSite: typeof enPublicSite = {
+  loading: {
+    title: "Публичная страница",
+    description: "Загрузка содержимого страницы и публичной навигации.",
+  },
+
   nav: {
     home: "Главная",
     eventsDetail: "О соревновании",

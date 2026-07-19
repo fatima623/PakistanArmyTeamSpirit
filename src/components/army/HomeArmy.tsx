@@ -63,6 +63,7 @@ export function HomeArmy({ settings, keyDates }: Props) {
           body={t.home.mission.body}
           motto={MISSION_MOTTO}
           mottoUrdu
+          imageAlt={t.home.mission.imageAlt}
         />
       </PatsSection>
 
