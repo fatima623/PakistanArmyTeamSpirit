@@ -21,9 +21,10 @@ import {
 import { TicketThread } from "@/components/tickets/TicketThread";
 import { TicketReplyBox } from "@/components/tickets/TicketReplyBox";
 
-export const metadata: Metadata = {
-  title: "Support ticket",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.supportTicket };
+}
 
 type PageProps = { params: Promise<{ id: string }> };
 

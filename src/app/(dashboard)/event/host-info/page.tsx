@@ -22,9 +22,10 @@ import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 
-export const metadata: Metadata = {
-  title: "Host Information",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.hostInfo };
+}
 
 function StatCard({
   icon,

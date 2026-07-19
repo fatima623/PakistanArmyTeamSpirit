@@ -28,6 +28,26 @@ export const core: typeof enCore = {
     },
   },
 
+  meta: {
+    home: "الرئيسية",
+    announcements: "الإعلانات",
+    awards: "الجوائز والتكريم",
+    login: "تسجيل الدخول",
+    register: "التسجيل",
+    exerciseContour: "Exercise Contour",
+    gallery: "المعرض",
+    international: "المشاركة الدولية",
+    keyDates: "التواريخ الرئيسية",
+    privacy: "سياسة الخصوصية",
+    dashboard: "لوحة التحكم",
+    unitInfo: "تحديث بيانات الوحدة",
+    hostInfo: "معلومات الاستضافة",
+    journey: "مسار التسجيل",
+    support: "الدعم",
+    supportTicket: "طلب دعم",
+    confirmParticipation: "تأكيد المشاركة",
+  },
+
   nav: {
     ariaLabel: "بوابة المشارك",
     portalName: "بوابة PATS",

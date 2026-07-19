@@ -6,10 +6,12 @@ import { requireParticipantSession } from "@/lib/require-participant";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { isConfirmationDeadlinePassed } from "@/lib/participant-workflow";
 import { ParticipationConfirmCard } from "@/components/dashboard/ParticipationConfirmCard";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Confirm Participation",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.confirmParticipation };
+}
 
 export default async function ConfirmParticipationPage() {
   const session = await requireParticipantSession();

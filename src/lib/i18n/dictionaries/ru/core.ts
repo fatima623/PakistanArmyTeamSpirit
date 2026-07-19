@@ -26,6 +26,26 @@ export const core: typeof enCore = {
     },
   },
 
+  meta: {
+    home: "Главная",
+    announcements: "Объявления",
+    awards: "Награды и признание",
+    login: "Вход",
+    register: "Регистрация",
+    exerciseContour: "Exercise Contour",
+    gallery: "Галерея",
+    international: "Международное участие",
+    keyDates: "Ключевые даты",
+    privacy: "Политика конфиденциальности",
+    dashboard: "Панель управления",
+    unitInfo: "Обновление данных подразделения",
+    hostInfo: "Информация о принимающей стороне",
+    journey: "Процесс регистрации",
+    support: "Поддержка",
+    supportTicket: "Обращение в поддержку",
+    confirmParticipation: "Подтверждение участия",
+  },
+
   nav: {
     ariaLabel: "Портал участника",
     portalName: "Портал PATS",

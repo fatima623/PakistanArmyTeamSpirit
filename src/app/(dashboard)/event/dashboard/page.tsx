@@ -29,9 +29,10 @@ import {
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.dashboard };
+}
 
 export default async function EventDashboardPage() {
   const session = await requireConfirmedParticipant();

@@ -12,9 +12,10 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { prisma } from "@/lib/prisma";
 import { GALLERY_ALBUMS } from "@/lib/pats-content";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.gallery };
+}
 
 async function getGalleryItems(locale: Locale): Promise<GalleryItem[]> {
   try {

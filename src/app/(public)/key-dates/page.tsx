@@ -16,9 +16,10 @@ import { getKeyDates } from "@/lib/site-data";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Key Dates",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.keyDates };
+}
 
 export default async function KeyDatesPage() {
   const [keyDates, { t, locale }] = await Promise.all([

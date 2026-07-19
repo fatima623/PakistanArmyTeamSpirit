@@ -7,9 +7,10 @@ import { TICKET_CATEGORY_LABELS, type TicketCategory } from "@/lib/constants";
 import { SupportTicketsPanel } from "@/components/tickets/SupportTicketsPanel";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Support",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.support };
+}
 
 export default async function ParticipantTicketsPage() {
   const session = await requireConfirmedParticipant();

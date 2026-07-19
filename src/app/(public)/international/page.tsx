@@ -7,9 +7,10 @@ import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "International Participation",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.international };
+}
 
 export default async function InternationalPage() {
   const { t } = await getDictionary();

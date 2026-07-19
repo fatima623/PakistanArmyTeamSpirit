@@ -7,9 +7,10 @@ import { UNIT_NAMES } from "@/lib/units-list";
 import { UnitEditForm } from "@/components/dashboard/UnitEditForm";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Update unit information",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.unitInfo };
+}
 
 export default async function EditUnitPage() {
   const session = await requireConfirmedParticipant();

@@ -43,9 +43,10 @@ import {
 } from "@/components/flights/FlightDetailsManager";
 import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
 
-export const metadata: Metadata = {
-  title: "Registration Journey",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.journey };
+}
 
 type SearchParams = Promise<{ step?: string }>;
 

@@ -16,11 +16,14 @@ import { formatDateLong } from "@/lib/utils";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Announcements",
-  description:
-    "Latest announcements and updates for the Pakistan Army Team Spirit (PATS) competition.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return {
+    title: t.meta.announcements,
+    description:
+      "Latest announcements and updates for the Pakistan Army Team Spirit (PATS) competition.",
+  };
+}
 
 export default async function AnnouncementsPage() {
   const [posts, { t, locale }] = await Promise.all([

@@ -6,9 +6,10 @@ import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Log in",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.login };
+}
 
 export default async function EventLoginPage() {
   const { t, locale, dir } = await getDictionary();

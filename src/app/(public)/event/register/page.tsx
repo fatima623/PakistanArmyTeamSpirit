@@ -7,9 +7,10 @@ import { getSiteSettings } from "@/lib/site-data";
 import { isPastDeadline } from "@/lib/deadlines";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export const metadata: Metadata = {
-  title: "Register",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.register };
+}
 
 export default async function RegisterPage() {
   const settings = await getSiteSettings();

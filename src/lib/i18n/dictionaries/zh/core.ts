@@ -18,6 +18,26 @@ export const core: typeof enCore = {
     },
   },
 
+  meta: {
+    home: "首页",
+    announcements: "公告",
+    awards: "奖项与表彰",
+    login: "登录",
+    register: "注册",
+    exerciseContour: "Exercise Contour",
+    gallery: "图库",
+    international: "国际参与",
+    keyDates: "关键日期",
+    privacy: "隐私政策",
+    dashboard: "仪表板",
+    unitInfo: "更新单位信息",
+    hostInfo: "东道信息",
+    journey: "注册流程",
+    support: "支持",
+    supportTicket: "支持工单",
+    confirmParticipation: "确认参与",
+  },
+
   nav: {
     ariaLabel: "参赛者门户",
     portalName: "PATS 门户",
