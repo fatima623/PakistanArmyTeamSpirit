@@ -1,0 +1,26 @@
+# Normalize line endings across devices (Windows + Linux/macOS).
+#
+# The repo stores text files with LF; each machine's working tree uses its
+# platform-native ending on checkout. This makes line-ending handling
+# deterministic regardless of a machine's `core.autocrlf` setting and prevents
+# the "whole file shows as modified" churn when two dev machines disagree.
+* text=auto
+
+# Binary assets — never touch line endings.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.webp   binary
+*.avif   binary
+*.ico    binary
+*.pdf    binary
+*.woff   binary
+*.woff2  binary
+*.ttf    binary
+*.otf    binary
+*.eot    binary
+*.mp4    binary
+*.webm   binary
+*.mov    binary
+*.zip    binary
