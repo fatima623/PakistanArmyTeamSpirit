@@ -14649,6 +14649,94 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
   --tier-color: #2d5a1e;
 }
 
+/* Results-roll only tiers — no medal artwork, so they exist as colour keys. */
+.pats-awards-standings__tier-row--coin {
+  --tier-color: #7c8b9a;
+}
+
+.pats-awards-standings__tier-row--dnf {
+  --tier-color: #8f2b2b;
+}
+
+
+/* ── Results roll ──────────────────────────────────────────────────────────
+   The full per-patrol result table. Deliberately reuses the standings table's
+   `__scroll` / `__table` shells so both tables on the awards page stay visually
+   identical; only the filter bar and the call-sign/medal cells are new. */
+
+.pats-awards-roll {
+  margin-top: 3rem;
+}
+
+.pats-awards-roll__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.pats-awards-roll__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--tier-color, #2d5a1e) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tier-color, #2d5a1e) 10%, transparent);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: inherit;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.pats-awards-roll__chip:hover {
+  background: color-mix(in srgb, var(--tier-color, #2d5a1e) 20%, transparent);
+}
+
+.pats-awards-roll__chip[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--tier-color, #2d5a1e) 32%, transparent);
+  border-color: var(--tier-color, #2d5a1e);
+}
+
+.pats-awards-roll__chip-count {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+.pats-awards-roll__callsign {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.pats-awards-roll__medal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.22rem 0.6rem;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--tier-color, #2d5a1e) 18%, transparent);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pats-awards-roll__empty {
+  padding: 2rem 0;
+  text-align: center;
+  opacity: 0.7;
+}
+
 
 .pats-awards-standings__tier {
   display: inline-flex;
@@ -15019,8 +15107,8 @@ html[data-site-theme="day"] .participant-portal.pats-portal [class~="portal-card
 
 
 
-html.light-theme .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body) {
+html.light-theme .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body):not(.pp-btn *):not(.pp-badge):not(.pp-badge *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) :is(p, span, li, dd, dt, strong, em, label, .portal-body, .portal-muted, .portal-subtitle, .text-brand-ink-muted, .pats-body):not(.pp-btn *):not(.pp-badge):not(.pp-badge *) {
   color: #475569 !important;
 }
 
@@ -15057,8 +15145,13 @@ html[data-site-theme="day"] .participant-portal.pats-portal :is([class~="text-em
 
 
 
-html.light-theme .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *) {
+/* `.pp-btn` is excluded because this `*` catch-all otherwise repaints the
+   design-system buttons' labels slate-600. Both this rule and the white in
+   `.pp .pp-btn--primary` are forced, so the more specific one — this one —
+   used to win, turning the solid-green "Mark roster complete" dark-on-dark.
+   That only showed under the day/light theme, the one place this applies. */
+html.light-theme .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *):not(.pp-btn):not(.pp-btn *):not(.pp-badge):not(.pp-badge *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *):not(.pp-btn):not(.pp-btn *):not(.pp-badge):not(.pp-badge *) {
   color: #475569 !important;
 }
 
@@ -19715,18 +19808,32 @@ html:has(.dashboard-day) body {
   transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
+/* Enabled primary button, usable outside the `.pp` scope too.
+   The label is forced white, so the dark background must never be allowed to
+   collapse — otherwise the button renders white-on-white and the text vanishes
+   exactly when it becomes enabled. Two things guarantee that here:
+   the `--pp-primary` fallback (the variable is only defined on `.pp`, so it
+   resolves to nothing in a portal/dialog mounted on document.body), and this
+   unscoped rule, which still applies where `.pp .pp-btn--primary` cannot
+   match at all. Inside `.pp` the scoped rule below wins on specificity. */
+.pp-btn--primary:not(:disabled) {
+  background: var(--pp-primary, #15613b);
+  color: #fff;
+  border-color: var(--pp-primary, #15613b);
+}
+
 /* Scoped to :not(:disabled) so the disabled rule below wins on plain
    specificity, rather than having to out-shout the forced colour here. */
 .pp .pp-btn--primary:not(:disabled) {
-  background: var(--pp-primary);
+  background: var(--pp-primary, #15613b);
   color: #fff !important;
-  border-color: var(--pp-primary);
+  border-color: var(--pp-primary, #15613b);
   box-shadow: var(--pp-shadow-sm);
 }
 
 .pp .pp-btn--primary:hover:not(:disabled) {
-  background: var(--pp-primary-hover);
-  border-color: var(--pp-primary-hover);
+  background: var(--pp-primary-hover, #114d2f);
+  border-color: var(--pp-primary-hover, #114d2f);
   transform: translateY(-1px);
 }
 
@@ -19789,19 +19896,29 @@ html:has(.dashboard-day) body {
   border: 1px solid transparent;
 }
 
-.pp .pp-badge--success {
+/* Both classes are named on purpose. The sitewide whitening rule
+   `.cinematic-site:not(.dashboard-day) span` scores (0,2,1) — its `:not`
+   guard sits on an ancestor, so it leaks into the portal — and that beat a
+   single-class `.pp .pp-badge--neutral` at (0,2,0), painting badge labels
+   white. On a light badge inside `.pp-card` that is invisible, which is what
+   hid "Not started yet" and the traveller progress count under the day theme.
+   Doubling the class takes these to (0,3,0), which wins on specificity alone
+   with no forced override. Badges inside `.pats-panel` were shielded by the
+   day-theme card rules and so never showed the bug — hence the
+   container-dependent symptom. */
+.pp .pp-badge.pp-badge--success {
   background: var(--pp-success-soft);
   color: var(--pp-success);
   border-color: rgba(21, 115, 71, 0.22);
 }
 
-.pp .pp-badge--warning {
+.pp .pp-badge.pp-badge--warning {
   background: var(--pp-warning-soft);
   color: #7c3a06;
   border-color: rgba(180, 83, 9, 0.24);
 }
 
-.pp .pp-badge--neutral {
+.pp .pp-badge.pp-badge--neutral {
   background: var(--pp-surface-3);
   color: var(--pp-muted);
   border-color: var(--pp-border);

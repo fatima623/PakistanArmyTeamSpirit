@@ -28,7 +28,9 @@ async function getGalleryItems(locale: Locale): Promise<GalleryItem[]> {
         year: true,
         caption: true,
         category: true,
+        mediaType: true,
         imagePath: true,
+        posterPath: true,
       },
     });
 
@@ -39,7 +41,9 @@ async function getGalleryItems(locale: Locale): Promise<GalleryItem[]> {
         year: r.year,
         caption: r.caption,
         category: r.category,
+        mediaType: r.mediaType === "video" ? ("video" as const) : ("image" as const),
         image: `/uploads/${r.imagePath}`,
+        poster: r.posterPath ? `/uploads/${r.posterPath}` : null,
       }));
 
       // One batched query for the page. Only title/caption are substituted:

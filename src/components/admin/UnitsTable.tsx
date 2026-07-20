@@ -208,9 +208,9 @@ export function UnitsTable({ units }: { units: UnitRow[] }) {
                 <section>
                   <h4 className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.08em] text-brand-olive-dark">CO / 2IC</h4>
                   <div className="grid grid-cols-2 gap-2 min-[560px]:grid-cols-3">
-                    <Field label="CO name" value={viewUnit.coName} />
-                    <Field label="CO email" value={viewUnit.coEmail} />
-                    <Field label="CO phone" value={viewUnit.coPhone} />
+                    <Field label=" Name" value={viewUnit.coName} />
+                    <Field label="Email" value={viewUnit.coEmail} />
+                    <Field label="Phone" value={viewUnit.coPhone} />
                   </div>
                 </section>
 

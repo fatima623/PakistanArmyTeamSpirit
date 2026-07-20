@@ -87,10 +87,46 @@ const COUNTRY_NAMES_BY_ISO2: Record<string, Translations> = {
   // --- Common nations a DB-added registration could carry ---
   RU: { ru: "Россия", tr: "Rusya", ar: "روسيا", zh: "俄罗斯" },
   IN: { ru: "Индия", tr: "Hindistan", ar: "الهند", zh: "印度" },
+
+  // --- Cambrian Patrol results roll (src/lib/awards-data.ts) ---
+  // Nations that appear only in the awards standings, not the PATS roster.
+  NZ: { ru: "Новая Зеландия", tr: "Yeni Zelanda", ar: "نيوزيلندا", zh: "新西兰" },
+  CA: { ru: "Канада", tr: "Kanada", ar: "كندا", zh: "加拿大" },
+  AU: { ru: "Австралия", tr: "Avustralya", ar: "أستراليا", zh: "澳大利亚" },
+  CL: { ru: "Чили", tr: "Şili", ar: "تشيلي", zh: "智利" },
+  CY: { ru: "Кипр", tr: "Kıbrıs", ar: "قبرص", zh: "塞浦路斯" },
+  IE: { ru: "Ирландия", tr: "İrlanda", ar: "أيرلندا", zh: "爱尔兰" },
+  NL: { ru: "Нидерланды", tr: "Hollanda", ar: "هولندا", zh: "荷兰" },
+  LT: { ru: "Литва", tr: "Litvanya", ar: "ليتوانيا", zh: "立陶宛" },
+  FR: { ru: "Франция", tr: "Fransa", ar: "فرنسا", zh: "法国" },
+  EE: { ru: "Эстония", tr: "Estonya", ar: "إستونيا", zh: "爱沙尼亚" },
+  BE: { ru: "Бельгия", tr: "Belçika", ar: "بلجيكا", zh: "比利时" },
+  LV: { ru: "Латвия", tr: "Letonya", ar: "لاتفيا", zh: "拉脱维亚" },
+  ES: { ru: "Испания", tr: "İspanya", ar: "إسبانيا", zh: "西班牙" },
+  DK: { ru: "Дания", tr: "Danimarka", ar: "الدنمارك", zh: "丹麦" },
+  CZ: { ru: "Чехия", tr: "Çekya", ar: "التشيك", zh: "捷克" },
+  IT: { ru: "Италия", tr: "İtalya", ar: "إيطاليا", zh: "意大利" },
+  PL: { ru: "Польша", tr: "Polonya", ar: "بولندا", zh: "波兰" },
+  MK: {
+    ru: "Северная Македония",
+    tr: "Kuzey Makedonya",
+    ar: "مقدونيا الشمالية",
+    zh: "北马其顿",
+  },
+  AL: { ru: "Албания", tr: "Arnavutluk", ar: "ألبانيا", zh: "阿尔巴尼亚" },
+  TM: { ru: "Туркменистан", tr: "Türkmenistan", ar: "تركمانستان", zh: "土库曼斯坦" },
+  AM: { ru: "Армения", tr: "Ermenistan", ar: "أرمينيا", zh: "亚美尼亚" },
+  KG: { ru: "Киргизия", tr: "Kırgızistan", ar: "قيرغيزستان", zh: "吉尔吉斯斯坦" },
 };
 
 /** Fallback for countries with no ISO2, keyed by normalized English name. */
-const COUNTRY_NAMES_BY_NAME: Record<string, Translations> = {};
+const COUNTRY_NAMES_BY_NAME: Record<string, Translations> = {
+  // Kosovo has no assigned ISO-3166 alpha-2, so it can only match by name.
+  kosovo: { ru: "Косово", tr: "Kosova", ar: "كوسوفو", zh: "科索沃" },
+  // Spelled "PHILLIPINES" on the published results board. Kept as the source
+  // spells it so the roll matches, rather than correcting the record.
+  phillipines: { ru: "Филиппины", tr: "Filipinler", ar: "الفلبين", zh: "菲律宾" },
+};
 
 /**
  * Localized country name, or the original string when unknown.

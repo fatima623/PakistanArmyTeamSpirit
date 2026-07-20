@@ -106,6 +106,17 @@ export const publicSite: typeof enPublicSite = {
       noTeams: "Bu aralıkta takım yok",
       standingsFootnote:
         "Komuta incelemesi için örnek sıralama. Nihai sonuçlar tatbikat sonrası onaylanır.",
+      rollTitle: "Sonuç listesi",
+      rollSubtitle:
+        "Katılan tüm devriyeler, çağrı işaretiyle ve kazanılan ödülle birlikte.",
+      rollColCallSign: "Çağrı işareti",
+      rollColUnit: "Birlik",
+      rollColAward: "Ödül",
+      rollFilterAll: "Tümü",
+      rollFilterAria: "Sonuçları ödüle göre filtrele",
+      rollMedalCoin: "Madeni ödül",
+      rollMedalDnf: "Tamamlamadı",
+      rollEmpty: "Bu aralıkta devriye yok",
       teamEyebrow: "Takım",
       teamTitle: "Takım yapısı",
       teamDescription: "Yarışma takımları için resmi devriye yapısı.",

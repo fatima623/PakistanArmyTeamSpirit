@@ -25,7 +25,6 @@ export const team: typeof enTeam = {
   },
   settingUp: "جارٍ إعداد قائمة فريقك…",
   register: {
-    title: "تسجيل الفريق",
     windowOpen: "نافذة التسجيل مفتوحة",
     windowNotYetOpen: "النافذة لم تُفتح بعد",
     windowClosed: "النافذة مغلقة",
@@ -37,8 +36,6 @@ export const team: typeof enTeam = {
     unsavedChanges: "لديك تغييرات غير محفوظة",
     filledCount: (filled, total) => `تم ملء ${filled} من ${total} عضو`,
     heading: "أعضاء الفريق",
-    addMembersDesc:
-      "أضف أعضاء فريقك أدناه. بعد الحفظ، حدّد القائمة كمكتملة لفتح تفاصيل الرحلة.",
     lockedByAdmin: "مقفل من قبل الإدارة",
     requestAdditional: "طلب أعضاء إضافيين",
     saveRoster: "حفظ القائمة",

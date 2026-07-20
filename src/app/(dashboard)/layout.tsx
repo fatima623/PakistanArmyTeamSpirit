@@ -14,12 +14,13 @@ export default async function DashboardLayout({
 
   return (
     // The provider must wrap PublicLayout, not sit inside it (this mirrors
-    // `(public)/layout.tsx`). PublicLayout's nav/footer stay mounted on the
-    // (dashboard) routes that are not listed in `participant-portal-paths.ts`
-    // (/event/journey, /event/flights, /event/host-info,
-    // /event/confirm-participation); with the provider nested inside, that
-    // chrome fell outside it — `useI18nOptional()` returned null, so the nav
-    // fell back to English and the language switcher rendered nothing.
+    // `(public)/layout.tsx`). PublicLayout's nav/footer stay mounted on any
+    // (dashboard) route not listed in `participant-portal-paths.ts`; with the
+    // provider nested inside, that chrome fell outside it —
+    // `useI18nOptional()` returned null, so the nav fell back to English and
+    // the language switcher rendered nothing. Every route that renders the
+    // `.pp` shell is now listed there (see that file for why omitting one
+    // clips the bottom of the page).
     <I18nProvider locale={locale}>
       <PublicLayout>
         {/* Legacy shell classes are kept so not-yet-redesigned pages keep their

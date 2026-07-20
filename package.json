@@ -17,6 +17,8 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:seed:awards": "npx tsx prisma/seed-awards.ts",
+    "db:seed:hero": "npx tsx prisma/seed-hero.ts",
     "migrate:payment-proofs": "node scripts/migrate-payment-proofs-to-storage.mjs",
     "repair:pdfs": "node scripts/repair-news-pdf-paths.mjs",
     "media:process": "python scripts/process-pats-media.py",

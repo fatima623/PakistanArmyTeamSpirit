@@ -25,7 +25,6 @@ export const team: typeof enTeam = {
   },
   settingUp: "Takım listeniz hazırlanıyor…",
   register: {
-    title: "Takım Kaydı",
     windowOpen: "Kayıt penceresi açık",
     windowNotYetOpen: "Pencere henüz açılmadı",
     windowClosed: "Pencere kapalı",
@@ -37,8 +36,6 @@ export const team: typeof enTeam = {
     unsavedChanges: "Kaydedilmemiş değişiklikleriniz var",
     filledCount: (filled, total) => `${total} üyeden ${filled} tanesi dolduruldu`,
     heading: "Takım Üyeleri",
-    addMembersDesc:
-      "Takım üyelerinizi aşağıya ekleyin. Kaydettikten sonra, uçuş bilgilerinin kilidini açmak için listeyi tamamlanmış olarak işaretleyin.",
     lockedByAdmin: "Yönetim tarafından kilitlendi",
     requestAdditional: "Ek takım üyesi talep et",
     saveRoster: "Listeyi kaydet",

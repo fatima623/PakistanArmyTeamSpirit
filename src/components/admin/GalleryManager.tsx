@@ -1,7 +1,17 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Eye, EyeOff, ImagePlus, Loader2, Pencil, Trash2, Upload } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Film,
+  ImagePlus,
+  Loader2,
+  Pencil,
+  Play,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -43,14 +53,43 @@ export type AdminGalleryImage = {
   caption: string | null;
   year: number | null;
   category: string | null;
+  mediaType: string;
   imagePath: string;
+  posterPath: string | null;
   sortOrder: number;
   published: boolean;
 };
 
+const ACCEPT_IMAGE = "image/png,image/jpeg,image/webp,image/gif";
+const ACCEPT_VIDEO = "video/mp4,video/webm,video/quicktime";
+const ACCEPT_MEDIA = `${ACCEPT_IMAGE},${ACCEPT_VIDEO}`;
+
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const MAX_VIDEO_BYTES = 128 * 1024 * 1024;
+
+function isVideoFile(file: File): boolean {
+  return file.type.startsWith("video/");
+}
+
+/**
+ * Client-side gate mirroring the server's per-kind ceilings. Advisory only —
+ * the API re-checks after sniffing the bytes.
+ */
+function tooLarge(file: File): boolean {
+  return file.size > (isVideoFile(file) ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES);
+}
+
 function imageUrl(imagePath: string, bust = 0): string {
   const base = `/uploads/${imagePath}`;
   return bust ? `${base}?v=${bust}` : base;
+}
+
+/** Thumbnail source for a card: the poster for video, the still otherwise. */
+function thumbUrl(img: AdminGalleryImage, bust = 0): string | null {
+  if (img.mediaType === "video") {
+    return img.posterPath ? imageUrl(img.posterPath, bust) : null;
+  }
+  return imageUrl(img.imagePath, bust);
 }
 
 export function GalleryManager({
@@ -78,8 +117,11 @@ export function GalleryManager({
       <section className="rounded-[14px] border border-brand-line bg-white px-[1.4rem] pb-6 pt-5 shadow-[0_1px_3px_rgba(20,26,20,0.06)]">
         <header className="mb-4 flex flex-wrap items-center justify-between gap-3 [&_h2]:text-[1.05rem] [&_h2]:font-bold [&_h2]:text-brand-ink [&_p]:mt-0.5 [&_p]:text-[0.85rem] [&_p]:text-brand-ink-muted">
           <div>
-            <h2>Gallery images</h2>
-            <p>Lower order numbers appear first on the public gallery.</p>
+            <h2>Gallery media</h2>
+            <p>
+              Photos and videos. Lower order numbers appear first on the public
+              gallery.
+            </p>
           </div>
           <Button
             variant="adminPrimary"
@@ -90,7 +132,7 @@ export function GalleryManager({
             ) : (
               <>
                 <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
-                Add image
+                Add media
               </>
             )}
           </Button>
@@ -110,19 +152,50 @@ export function GalleryManager({
 
         {images.length === 0 ? (
           <div className="rounded-xl border border-dashed border-brand-line px-4 py-10 text-center text-brand-ink-muted">
-            No images yet — click “Add image” to upload your first photo.
+            Nothing here yet — click “Add media” to upload your first photo or
+            video.
           </div>
         ) : (
           <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
             {images.map((img) => (
               <article className="flex flex-col overflow-hidden rounded-xl border border-brand-line bg-white transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(20,26,20,0.12)]" key={img.id}>
-                <div className="relative aspect-[4/3] overflow-hidden bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={imageUrl(img.imagePath, bust[img.id])}
-                    alt={img.title}
-                    loading="lazy"
-                  />
+                <div className="relative aspect-[4/3] overflow-hidden bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_video]:h-full [&_video]:w-full [&_video]:object-cover">
+                  {img.mediaType === "video" ? (
+                    thumbUrl(img, bust[img.id]) ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={thumbUrl(img, bust[img.id]) as string}
+                        alt={img.title}
+                        loading="lazy"
+                      />
+                    ) : (
+                      // No poster uploaded — let the browser paint the first
+                      // frame via the metadata preload instead of a blank tile.
+                      <video
+                        src={imageUrl(img.imagePath, bust[img.id])}
+                        preload="metadata"
+                        muted
+                        playsInline
+                      />
+                    )
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={imageUrl(img.imagePath, bust[img.id])}
+                      alt={img.title}
+                      loading="lazy"
+                    />
+                  )}
+                  {img.mediaType === "video" ? (
+                    <span
+                      className="absolute inset-0 grid place-items-center"
+                      aria-hidden
+                    >
+                      <span className="grid h-10 w-10 place-items-center rounded-full bg-brand-ink/60 text-white backdrop-blur-[2px]">
+                        <Play className="h-4 w-4 translate-x-[1px]" />
+                      </span>
+                    </span>
+                  ) : null}
                   <span
                     className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[0.66rem] font-bold uppercase tracking-[0.04em] text-white backdrop-blur-[4px] ${
                       img.published ? "bg-[rgba(46,107,79,0.9)]" : "bg-brand-ink-muted/85"
@@ -201,8 +274,11 @@ function UploadForm({
   onCancel?: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const posterRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [poster, setPoster] = useState<File | null>(null);
+  const [posterPreview, setPosterPreview] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
   const [category, setCategory] = useState("");
@@ -214,17 +290,47 @@ function UploadForm({
 
   const pickFile = (f: File | null) => {
     if (!f) return;
-    if (!f.type.startsWith("image/")) {
-      toast.error("Please choose an image file.");
+    if (!f.type.startsWith("image/") && !f.type.startsWith("video/")) {
+      toast.error("Please choose an image or video file.");
+      return;
+    }
+    if (tooLarge(f)) {
+      toast.error(
+        isVideoFile(f)
+          ? "Videos must be 128 MB or smaller."
+          : "Images must be 8 MB or smaller."
+      );
       return;
     }
     setFile(f);
     setPreview(URL.createObjectURL(f));
+    // A poster only applies to video; drop a stale one when swapping to a still.
+    if (!isVideoFile(f)) {
+      setPoster(null);
+      setPosterPreview(null);
+      if (posterRef.current) posterRef.current.value = "";
+    }
+  };
+
+  const pickPoster = (f: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      toast.error("The poster frame must be an image.");
+      return;
+    }
+    if (tooLarge(f)) {
+      toast.error("Images must be 8 MB or smaller.");
+      return;
+    }
+    setPoster(f);
+    setPosterPreview(URL.createObjectURL(f));
   };
 
   const reset = () => {
     setFile(null);
     setPreview(null);
+    setPoster(null);
+    setPosterPreview(null);
     setTitle("");
     setYear("");
     setCategory("");
@@ -235,11 +341,12 @@ function UploadForm({
     // the next upload inherits the last one's translations.
     translations.reset();
     if (fileRef.current) fileRef.current.value = "";
+    if (posterRef.current) posterRef.current.value = "";
   };
 
   const submit = async () => {
     if (!file) {
-      toast.error("Choose an image to upload.");
+      toast.error("Choose an image or video to upload.");
       return;
     }
     if (!title.trim()) {
@@ -250,6 +357,7 @@ function UploadForm({
     try {
       const fd = new FormData();
       fd.append("file", file);
+      if (poster && isVideoFile(file)) fd.append("poster", poster);
       fd.append("title", title.trim());
       fd.append("year", year.trim());
       fd.append("category", category.trim());
@@ -269,7 +377,7 @@ function UploadForm({
         return;
       }
       onCreated(data.image as AdminGalleryImage);
-      toast.success("Image added.");
+      toast.success(isVideoFile(file) ? "Video added." : "Image added.");
       reset();
     } catch {
       toast.error(TOAST.GENERIC_ERROR);
@@ -281,10 +389,12 @@ function UploadForm({
   return (
     <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[260px_1fr] min-[820px]:items-start">
       <div className="flex flex-col gap-1.5">
-        <label className="text-[0.8rem] font-semibold text-brand-ink">Image *</label>
+        <label className="text-[0.8rem] font-semibold text-brand-ink">
+          Photo or video *
+        </label>
         <button
           type="button"
-          className="relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+          className="relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_video]:absolute [&_video]:inset-0 [&_video]:h-full [&_video]:w-full [&_video]:object-cover"
           onClick={() => fileRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
@@ -292,28 +402,75 @@ function UploadForm({
             pickFile(e.dataTransfer.files?.[0] ?? null);
           }}
         >
-          {preview ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={preview} alt="Preview" />
+          {preview && file ? (
+            isVideoFile(file) ? (
+              <video src={preview} muted playsInline preload="metadata" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={preview} alt="Preview" />
+            )
           ) : (
             <>
               <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
               <span className="text-[0.82rem] font-semibold text-brand-ink">
-                Click or drop to upload an image
+                Click or drop to upload a photo or video
               </span>
               <span className="text-[0.72rem] text-brand-ink-muted">
-                JPG, PNG, WEBP or GIF · up to 8 MB
+                JPG, PNG, WEBP, GIF up to 8 MB · MP4, WEBM, MOV up to 128 MB
               </span>
             </>
           )}
           <input
             ref={fileRef}
             type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif"
+            accept={ACCEPT_MEDIA}
             className="sr-only"
             onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
           />
         </button>
+
+        {file && isVideoFile(file) ? (
+          <div className="mt-1 rounded-xl border border-brand-line bg-brand-parchment/40 p-2.5">
+            <div className="mb-1.5 flex items-center gap-1.5 text-[0.78rem] font-semibold text-brand-ink">
+              <Film className="h-3.5 w-3.5 text-brand-olive" aria-hidden />
+              Poster frame
+            </div>
+            <div className="flex items-center gap-2.5">
+              <div className="relative h-12 w-[4.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
+                {posterPreview ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={posterPreview} alt="Poster preview" />
+                ) : (
+                  <span className="grid h-full w-full place-items-center text-brand-ink-muted">
+                    <Film className="h-4 w-4" aria-hidden />
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <button
+                  type="button"
+                  onClick={() => posterRef.current?.click()}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-1.5 text-[0.78rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
+                >
+                  <Upload className="h-3.5 w-3.5" aria-hidden />
+                  {poster ? "Change poster" : "Choose poster"}
+                </button>
+                <p className="mt-1 truncate text-[0.7rem] text-brand-ink-muted">
+                  {poster
+                    ? poster.name
+                    : "Optional — the thumbnail shown before the video plays."}
+                </p>
+              </div>
+            </div>
+            <input
+              ref={posterRef}
+              type="file"
+              accept={ACCEPT_IMAGE}
+              className="sr-only"
+              onChange={(e) => pickPoster(e.target.files?.[0] ?? null)}
+            />
+          </div>
+        ) : null}
       </div>
 
       <div>
@@ -405,7 +562,7 @@ function UploadForm({
             ) : (
               <Upload className="mr-2 h-4 w-4" />
             )}
-            Add image
+            Add media
           </Button>
           {file ? (
             <Button variant="adminOutline" onClick={reset} disabled={submitting}>
@@ -498,8 +655,8 @@ function DeleteImageButton({
           <Trash2 className="h-4 w-4" aria-hidden />
         </button>
       }
-      title="Delete image?"
-      description="This permanently removes the image from the gallery."
+      title={image.mediaType === "video" ? "Delete video?" : "Delete image?"}
+      description="This permanently removes the item from the gallery."
       confirmLabel="Delete"
       onConfirm={async () => {
         const res = await fetch(`/api/admin/gallery/${image.id}`, {
@@ -528,6 +685,7 @@ function EditDialog({
   onSaved: (img: AdminGalleryImage, replaced: boolean) => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const posterRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
   const [category, setCategory] = useState("");
@@ -535,6 +693,8 @@ function EditDialog({
   const [sortOrder, setSortOrder] = useState("0");
   const [replaceFile, setReplaceFile] = useState<File | null>(null);
   const [replacePreview, setReplacePreview] = useState<string | null>(null);
+  const [posterFile, setPosterFile] = useState<File | null>(null);
+  const [posterPreview, setPosterPreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   // This dialog is always mounted and swaps records via `loadedId`, so the draft
   // is keyed off the open image and reloads whenever that changes.
@@ -544,12 +704,34 @@ function EditDialog({
 
   const pickReplace = (f: File | null) => {
     if (!f) return;
-    if (!f.type.startsWith("image/")) {
-      toast.error("Please choose an image file.");
+    if (!f.type.startsWith("image/") && !f.type.startsWith("video/")) {
+      toast.error("Please choose an image or video file.");
+      return;
+    }
+    if (tooLarge(f)) {
+      toast.error(
+        isVideoFile(f)
+          ? "Videos must be 128 MB or smaller."
+          : "Images must be 8 MB or smaller."
+      );
       return;
     }
     setReplaceFile(f);
     setReplacePreview(URL.createObjectURL(f));
+  };
+
+  const pickPoster = (f: File | null) => {
+    if (!f) return;
+    if (!f.type.startsWith("image/")) {
+      toast.error("The poster frame must be an image.");
+      return;
+    }
+    if (tooLarge(f)) {
+      toast.error("Images must be 8 MB or smaller.");
+      return;
+    }
+    setPosterFile(f);
+    setPosterPreview(URL.createObjectURL(f));
   };
 
   // Sync local state whenever a new image is opened.
@@ -563,7 +745,10 @@ function EditDialog({
     setSortOrder(String(image.sortOrder));
     setReplaceFile(null);
     setReplacePreview(null);
+    setPosterFile(null);
+    setPosterPreview(null);
     if (fileRef.current) fileRef.current.value = "";
+    if (posterRef.current) posterRef.current.value = "";
   } else if (!image && loadedId !== null) {
     // Dialog closed — reset the key so reopening the same image re-syncs
     // from its real values instead of showing abandoned edits.
@@ -598,16 +783,21 @@ function EditDialog({
       let latest = data.image as AdminGalleryImage;
       let replaced = false;
 
-      if (replaceFile) {
+      // The binary endpoint takes the media, the poster, or both — so a poster
+      // can be added to an existing video without re-uploading the video.
+      if (replaceFile || posterFile) {
         const fd = new FormData();
-        fd.append("file", replaceFile);
+        if (replaceFile) fd.append("file", replaceFile);
+        if (posterFile) fd.append("poster", posterFile);
         const imgRes = await fetch(`/api/admin/gallery/${image.id}/image`, {
           method: "POST",
           body: fd,
         });
         const imgData = await imgRes.json().catch(() => ({}));
         if (!imgRes.ok) {
-          toast.error(imgData.error ?? "Image saved but the file could not be replaced.");
+          toast.error(
+            imgData.error ?? "Details saved but the file could not be replaced."
+          );
           onSaved(latest, false);
           return;
         }
@@ -624,11 +814,21 @@ function EditDialog({
     }
   };
 
+  const currentIsVideo = image?.mediaType === "video";
+  const isReplacingWithVideo = Boolean(
+    replaceFile && replacePreview && isVideoFile(replaceFile)
+  );
+  // Offer the poster field whenever the item is (or is becoming) a video, and
+  // hide it the moment a still is staged to replace a video.
+  const showsPosterField = replaceFile
+    ? isReplacingWithVideo
+    : currentIsVideo;
+
   return (
     <Dialog open={Boolean(image)} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Edit image</DialogTitle>
+          <DialogTitle>{currentIsVideo ? "Edit video" : "Edit image"}</DialogTitle>
         </DialogHeader>
 
         {image ? (
@@ -675,7 +875,7 @@ function EditDialog({
               <CategoryOptions />
             </div>
             <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-              <label htmlFor="e-replace">Replace image</label>
+              <label htmlFor="e-replace">Replace photo or video</label>
               <div
                 className="flex items-center gap-3 rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-2.5 transition-colors hover:border-brand-olive/60"
                 onDragOver={(e) => e.preventDefault()}
@@ -684,12 +884,33 @@ function EditDialog({
                   pickReplace(e.dataTransfer.files?.[0] ?? null);
                 }}
               >
-                <div className="relative h-16 w-[5.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={replacePreview ?? imageUrl(image.imagePath)}
-                    alt={replaceFile ? "New image preview" : "Current image"}
-                  />
+                <div className="relative h-16 w-[5.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_video]:h-full [&_video]:w-full [&_video]:object-cover">
+                  {isReplacingWithVideo ? (
+                    <video
+                      src={replacePreview as string}
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
+                  ) : currentIsVideo && !replaceFile ? (
+                    <video
+                      src={imageUrl(image.imagePath)}
+                      poster={
+                        image.posterPath
+                          ? imageUrl(image.posterPath)
+                          : undefined
+                      }
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={replacePreview ?? imageUrl(image.imagePath)}
+                      alt={replaceFile ? "New media preview" : "Current image"}
+                    />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <button
@@ -698,24 +919,71 @@ function EditDialog({
                     className="inline-flex items-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-1.5 text-[0.8rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
                   >
                     <Upload className="h-3.5 w-3.5" aria-hidden />
-                    {replaceFile ? "Choose a different image" : "Choose new image"}
+                    {replaceFile ? "Choose a different file" : "Choose new file"}
                   </button>
                   <p className="mt-1 truncate text-[0.72rem] text-brand-ink-muted">
                     {replaceFile
                       ? replaceFile.name
-                      : "Drag & drop or click to replace — keeps the current image if left unchanged."}
+                      : "Drag & drop or click to replace — keeps the current file if left unchanged."}
                   </p>
                 </div>
                 <input
                   id="e-replace"
                   ref={fileRef}
                   type="file"
-                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  accept={ACCEPT_MEDIA}
                   className="sr-only"
                   onChange={(e) => pickReplace(e.target.files?.[0] ?? null)}
                 />
               </div>
             </div>
+
+            {showsPosterField ? (
+              <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                <label htmlFor="e-poster">Poster frame</label>
+                <div className="flex items-center gap-3 rounded-xl border border-brand-line bg-brand-parchment/40 p-2.5">
+                  <div className="relative h-16 w-[5.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
+                    {posterPreview ?? image.posterPath ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={
+                          posterPreview ??
+                          imageUrl(image.posterPath as string)
+                        }
+                        alt={posterFile ? "New poster preview" : "Current poster"}
+                      />
+                    ) : (
+                      <span className="grid h-full w-full place-items-center text-brand-ink-muted">
+                        <Film className="h-4 w-4" aria-hidden />
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <button
+                      type="button"
+                      onClick={() => posterRef.current?.click()}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-1.5 text-[0.8rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
+                    >
+                      <Upload className="h-3.5 w-3.5" aria-hidden />
+                      {posterFile ? "Change poster" : "Choose poster"}
+                    </button>
+                    <p className="mt-1 truncate text-[0.72rem] text-brand-ink-muted">
+                      {posterFile
+                        ? posterFile.name
+                        : "Optional — the thumbnail shown before the video plays."}
+                    </p>
+                  </div>
+                  <input
+                    id="e-poster"
+                    ref={posterRef}
+                    type="file"
+                    accept={ACCEPT_IMAGE}
+                    className="sr-only"
+                    onChange={(e) => pickPoster(e.target.files?.[0] ?? null)}
+                  />
+                </div>
+              </div>
+            ) : null}
             <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="e-caption">Caption</label>
               <Textarea

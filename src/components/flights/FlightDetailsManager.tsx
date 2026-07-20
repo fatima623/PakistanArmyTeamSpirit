@@ -929,9 +929,6 @@ export function FlightDetailsManager({
             </span>
             <div className="min-w-0">
               <h2 className="pp-card__title">{fl.card.title}</h2>
-              <p className="pp-card__desc" style={{ marginTop: "0.2rem" }}>
-                {fl.card.desc}
-              </p>
             </div>
           </div>
           <span

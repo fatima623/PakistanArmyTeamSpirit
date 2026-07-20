@@ -111,7 +111,7 @@ export const payment = {
     },
     uploadTitle: "Upload payment proof",
     uploadDesc: (fee: string) =>
-      `After sending ${fee}, upload your payment proof and transaction reference. Accepted: PNG, JPG, JPEG, PDF (max 5MB).`,
+      `After sending ${fee}, upload your payment proof and transaction reference. Accepted: PNG, JPG, JPEG, PDF.`,
     uploadAria: "Upload payment proof file",
     selectedPreviewAlt: "Selected proof preview",
     chooseDifferent: "Click to choose a different file",

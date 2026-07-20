@@ -24,7 +24,6 @@ export const flights: typeof enFlights = {
   },
   card: {
     title: "出行人员航班信息",
-    desc: "每位出行人员均使用本人证件出行 — 请为名单中的每位成员填写乘客信息，并上传护照和机票（PDF，每个最大 10MB）。",
     progress: (done, total) => `${total} 位出行人员中已完成 ${done} 位`,
     emptyRoster:
       "您的团队名单为空。请先添加团队成员 — 航班信息需按每位出行人员分别填写。",

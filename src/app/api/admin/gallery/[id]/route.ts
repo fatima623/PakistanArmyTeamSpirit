@@ -119,6 +119,8 @@ export async function DELETE(_request: Request, context: RouteContext) {
     }
 
     await deleteGalleryImageFile(existing.imagePath);
+    // Video items also own a poster frame; leaving it behind orphans a file.
+    await deleteGalleryImageFile(existing.posterPath);
     await prisma.galleryImage.delete({ where: { id } });
     // No FK on Translation — orphan rows are this route's responsibility.
     await deleteTranslationsFor("GalleryImage", id);

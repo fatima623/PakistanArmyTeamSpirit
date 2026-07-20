@@ -12,6 +12,8 @@ const dirs = [
   "uploads/payment-proofs",
   "storage/news-pdfs",
   "uploads/flight-docs",
+  "uploads/gallery",
+  "uploads/hero",
 ];
 
 for (const dir of dirs) {

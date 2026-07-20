@@ -32,7 +32,6 @@ import { flightDetailSelect } from "@/lib/flights";
 import { formatDateDisplay } from "@/lib/utils";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
-import { WorkflowStepNav } from "@/components/dashboard/WorkflowStepNav";
 import { ParticipationConfirmCard } from "@/components/dashboard/ParticipationConfirmCard";
 import { ParticipantRegistrationDetailsCard } from "@/components/dashboard/ParticipantRegistrationDetailsCard";
 import { PaymentSubmissionForm } from "@/components/dashboard/PaymentSubmissionForm";
@@ -149,7 +148,7 @@ export default async function JourneyPage({
   const stepKey = requestedStage.key;
 
   /* —— Per-step data ————————————————————————————————————————— */
-  const needsTeam = stepKey === "teamRegistration" || stepKey === "roster";
+  const needsTeam = stepKey === "roster";
   /* Flight details are filed one record per traveller, so the flights step
      needs the roster too — it renders a row per member. */
   const needsRoster = needsTeam || stepKey === "flights";
@@ -319,15 +318,7 @@ export default async function JourneyPage({
   } else if (needsTeam) {
     content = (
       <section className="flex flex-col gap-4">
-        {stepKey === "teamRegistration" && user.teamRegisteredAt ? (
-          <StepDoneBanner
-            title={j.banners.teamRegistered}
-            sub={j.banners.teamRegisteredSub(
-              formatDateDisplay(user.teamRegisteredAt, locale)
-            )}
-          />
-        ) : null}
-        {stepKey === "roster" && user.rosterCompletedAt ? (
+        {user.rosterCompletedAt ? (
           <StepDoneBanner
             title={j.banners.rosterCompleted}
             sub={j.banners.rosterCompletedSub(
@@ -430,15 +421,7 @@ export default async function JourneyPage({
         title={header.title}
         subtitle={header.subtitle}
       />
-      <div className="pp-section-flow">
-        {content}
-        <WorkflowStepNav
-          stages={stages}
-          activeKey={stepKey}
-          wizard={j.wizard}
-          common={t.common}
-        />
-      </div>
+      <div className="pp-section-flow">{content}</div>
     </div>
   );
 }

@@ -20,6 +20,9 @@ const securityHeaders = [
       "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
+      // Gallery video is served same-origin from /uploads; blob: covers the
+      // admin's local preview of a file before it is uploaded.
+      "media-src 'self' blob:",
       "font-src 'self'",
       "connect-src 'self'",
       "frame-src https://www.youtube-nocookie.com https://www.youtube.com",

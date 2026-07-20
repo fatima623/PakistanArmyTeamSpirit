@@ -17,10 +17,14 @@ import { enWorkflow, type WorkflowStrings } from "@/lib/i18n/workflow-strings";
  *   1. confirmation      — first-login participation confirmation (deadline)
  *   2. verification      — registration verification by SD (Sports Directorate)
  *   3. payment           — fee submission, verified by MT (Management Team)
- *   4. teamRegistration  — team registration inside the admin-configured window
- *   5. roster            — team member table (capped, extendable on request)
- *   6. flights           — flight details + passport/ticket PDFs
- *   7. hostInfo          — read-only hosting dashboard once flights finalized
+ *   4. roster            — team registration + member table (capped, extendable)
+ *   5. flights           — flight details + passport/ticket PDFs
+ *   6. hostInfo          — read-only hosting dashboard once flights finalized
+ *
+ * `teamRegistration` used to be a stage of its own between payment and roster,
+ * but both rendered the same TeamRosterManager — the extra tile only added a
+ * click. Registering the team is now done inside the roster stage, which is
+ * still window-gated; the window state surfaces in the roster stage's subtitle.
  */
 
 export type WorkflowSettings = {
@@ -57,7 +61,6 @@ export const WORKFLOW_STAGES = [
   "confirmation",
   "verification",
   "payment",
-  "teamRegistration",
   "roster",
   "flights",
   "hostInfo",
@@ -313,45 +316,37 @@ export function deriveWorkflowStages(params: {
     href: paymentLocked ? null : "/event/payment",
   });
 
-  // 4 — Team registration (window-gated)
-  const teamRegLocked = paymentLocked || !paid;
-  stages.push({
-    key: "teamRegistration",
-    label: L.teamRegistration,
-    state: teamRegLocked
-      ? "locked"
-      : teamRegistered
-        ? "done"
-        : windowState === "open"
-          ? "current"
-          : "attention",
-    sub: teamRegLocked
-      ? S.locked
-      : teamRegistered
-        ? S.teamRegistered
-        : windowState === "before"
-          ? settings.teamRegistrationOpenDate
-            ? S.opensOn(fmt(settings.teamRegistrationOpenDate))
-            : S.notYetOpen
-          : windowState === "closed"
-            ? S.windowClosed
-            : settings.teamRegistrationCloseDate
-              ? S.openUntil(fmt(settings.teamRegistrationCloseDate))
-              : S.windowOpen,
-    href: teamRegLocked ? null : "/event/team",
-  });
-
-  // 5 — Team members roster
-  const rosterLocked = teamRegLocked || !teamRegistered;
+  // 4 — Team registration + members roster (one stage, window-gated)
+  const rosterLocked = paymentLocked || !paid;
+  /* Before the team is registered this stage still reports the registration
+     window, since that is what the participant is waiting on; "attention"
+     mirrors the old teamRegistration tile for a window that is not open. */
+  const awaitingRegistration = !rosterLocked && !teamRegistered;
   stages.push({
     key: "roster",
     label: L.roster,
-    state: rosterLocked ? "locked" : rosterDone ? "done" : "current",
+    state: rosterLocked
+      ? "locked"
+      : rosterDone
+        ? "done"
+        : awaitingRegistration && windowState !== "open"
+          ? "attention"
+          : "current",
     sub: rosterLocked
       ? S.locked
       : rosterDone
         ? S.membersConfirmed(teamMemberCount)
-        : S.membersAdded(teamMemberCount, limit),
+        : awaitingRegistration
+          ? windowState === "before"
+            ? settings.teamRegistrationOpenDate
+              ? S.opensOn(fmt(settings.teamRegistrationOpenDate))
+              : S.notYetOpen
+            : windowState === "closed"
+              ? S.windowClosed
+              : settings.teamRegistrationCloseDate
+                ? S.openUntil(fmt(settings.teamRegistrationCloseDate))
+                : S.windowOpen
+          : S.membersAdded(teamMemberCount, limit),
     href: rosterLocked ? null : "/event/team",
   });
 

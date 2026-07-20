@@ -23,7 +23,6 @@ export const team = {
   },
   settingUp: "Setting up your team roster…",
   register: {
-    title: "Team Registration",
     windowOpen: "Registration window open",
     windowNotYetOpen: "Window not yet open",
     windowClosed: "Window closed",
@@ -36,8 +35,6 @@ export const team = {
     filledCount: (filled: number, total: number) =>
       `${filled} of ${total} members filled in`,
     heading: "Team Members",
-    addMembersDesc:
-      "Add your team members below. After saving, mark the roster complete to unlock flight details.",
     lockedByAdmin: "Locked by administration",
     requestAdditional: "Request additional team members",
     saveRoster: "Save roster",

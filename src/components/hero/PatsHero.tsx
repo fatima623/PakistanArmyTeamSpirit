@@ -7,18 +7,29 @@ import { ChevronDown } from "lucide-react";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
-const HERO_IMAGES = [
-  "/media/pats/crops/home2.jpeg",
-  "/media/pats/crops/hero-hmz1.jpeg",
-  "/media/pats/crops/home3.jpeg",
-  "/media/pats/crops/hero-hmz2.jpeg",
+/**
+ * Shipped fallback art. Used only when no hero slide has been published in the
+ * admin, so the home page is never heroless on a fresh install.
+ */
+const FALLBACK_HERO_IMAGES: HeroImage[] = [
+  { src: "/media/pats/crops/home2.jpeg", alt: "" },
+  { src: "/media/pats/crops/hero-hmz1.jpeg", alt: "" },
+  { src: "/media/pats/crops/home3.jpeg", alt: "" },
+  { src: "/media/pats/crops/hero-hmz2.jpeg", alt: "" },
 ];
+
+export type HeroImage = {
+  src: string;
+  alt: string;
+};
 
 type Props = {
   exerciseYear: number;
+  /** Admin-managed slides; falls back to the bundled art when empty. */
+  slides?: HeroImage[];
 };
 
-export function PatsHero({ exerciseYear }: Props) {
+export function PatsHero({ exerciseYear, slides }: Props) {
   const { t, locale, dir } = useI18n();
   // English keeps the crest's heraldic Urdu form (nastaliq, RTL). Every other
   // locale renders a real translation of the motto's meaning, in that locale's
@@ -38,12 +49,22 @@ export function PatsHero({ exerciseYear }: Props) {
     setDynamicYear(computedYear);
   }, []);
 
+  const heroImages =
+    slides && slides.length > 0 ? slides : FALLBACK_HERO_IMAGES;
+
   useEffect(() => {
+    // A single slide has nothing to cycle to — skip the timer entirely.
+    if (heroImages.length < 2) return;
     const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [heroImages.length]);
+
+  // Guards against an index left over from a longer previous slide list.
+  useEffect(() => {
+    setCurrentImageIndex((prev) => (prev < heroImages.length ? prev : 0));
+  }, [heroImages.length]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -65,17 +86,18 @@ export function PatsHero({ exerciseYear }: Props) {
       className="pats-hero"
       aria-label={t.home.hero.featuredAria}
     >
-      {HERO_IMAGES.map((src, index) => (
+      {heroImages.map((image, index) => (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
-          key={src}
-          src={src}
-          alt=""
+          key={image.src}
+          src={image.src}
+          alt={image.alt}
           className="pats-hero__video"
           style={{
             transition: "opacity 1s ease-in-out",
             opacity: index === currentImageIndex ? 1 : 0,
           }}
-          aria-hidden
+          aria-hidden={image.alt ? undefined : true}
         />
       ))}
 

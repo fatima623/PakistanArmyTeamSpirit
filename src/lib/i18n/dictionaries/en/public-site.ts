@@ -112,6 +112,17 @@ export const publicSite = {
       noTeams: "No teams in this band",
       standingsFootnote:
         "Illustrative standings for command review. Final results certified post-exercise.",
+      rollTitle: "Results roll",
+      rollSubtitle:
+        "Every patrol entered, by call sign, with the award attained.",
+      rollColCallSign: "Call sign",
+      rollColUnit: "Unit",
+      rollColAward: "Award",
+      rollFilterAll: "All",
+      rollFilterAria: "Filter results by award",
+      rollMedalCoin: "Coin",
+      rollMedalDnf: "DNF",
+      rollEmpty: "No patrols in this band",
       teamEyebrow: "Team",
       teamTitle: "Team composition",
       teamDescription: "Official patrol structure for competition teams.",

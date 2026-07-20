@@ -26,7 +26,6 @@ export const flights: typeof enFlights = {
   },
   card: {
     title: "Yolcu uçuş bilgileri",
-    desc: "Her yolcu kendi belgeleriyle seyahat eder — kadronuzdaki her üye için yolcu bilgilerini girin ve pasaport ile bileti yükleyin (PDF, her biri en fazla 10MB).",
     progress: (done, total) => `${total} yolcudan ${done} tanesi tamamlandı`,
     emptyRoster:
       "Kadronuz boş. Önce takım üyelerinizi ekleyin — uçuş bilgileri her yolcu için ayrı ayrı girilir.",

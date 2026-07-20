@@ -16,9 +16,10 @@ import { revalidateGalleryPaths } from "@/lib/revalidate-public";
 import { GalleryImageSchema } from "@/lib/validations";
 import {
   GALLERY_ADMIN_SELECT,
-  MAX_GALLERY_IMAGE_BYTES,
+  MAX_GALLERY_VIDEO_BYTES,
   deleteGalleryImageFile,
-  saveGalleryImage,
+  saveGalleryMedia,
+  saveGalleryPoster,
 } from "@/lib/storage/gallery-image";
 
 /** Normalise a multipart boolean field ("true"/"false"/"on"). */
@@ -47,8 +48,17 @@ function mapImageError(error: unknown): ApiError | unknown {
         400
       );
     }
+    if (error.message === "INVALID_MEDIA") {
+      return new ApiError(
+        "Unsupported or invalid file. Use a JPG, PNG, WEBP or GIF image, or an MP4, WEBM or MOV video.",
+        400
+      );
+    }
     if (error.message === "FILE_TOO_LARGE") {
-      return new ApiError("Image must be 8 MB or smaller.", 400);
+      return new ApiError(
+        "Images must be 8 MB or smaller; videos 128 MB or smaller.",
+        400
+      );
     }
   }
   return error;
@@ -74,11 +84,18 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get("file");
     if (!(file instanceof File)) {
-      throw new ApiError("Image file is required", 400);
+      throw new ApiError("Image or video file is required", 400);
     }
-    if (file.size > MAX_GALLERY_IMAGE_BYTES) {
-      throw new ApiError("Image must be 8 MB or smaller.", 400);
+    // Coarse gate only — the per-kind ceiling is enforced once the bytes have
+    // been sniffed, since `file.type` is client-supplied and not trustworthy.
+    if (file.size > MAX_GALLERY_VIDEO_BYTES) {
+      throw new ApiError("File must be 128 MB or smaller.", 400);
     }
+
+    const posterFile = formData.get("poster");
+    const poster = posterFile instanceof File && posterFile.size > 0
+      ? posterFile
+      : null;
 
     const parsed = GalleryImageSchema.safeParse({
       title: formString(formData.get("title")),
@@ -121,13 +138,28 @@ export async function POST(request: Request) {
     });
 
     let savedPath: string | null = null;
+    let savedPosterPath: string | null = null;
     try {
-      const saved = await saveGalleryImage({
+      const saved = await saveGalleryMedia({
         id: created.id,
         buffer,
         declaredMime: file.type || "",
       });
       savedPath = saved.imagePath;
+
+      // A poster only means anything for video; ignore it on stills so the
+      // still itself stays the single source of truth for the thumbnail.
+      let posterFields = {};
+      if (poster && saved.mediaType === "video") {
+        const savedPoster = await saveGalleryPoster({
+          id: created.id,
+          buffer: Buffer.from(await poster.arrayBuffer()),
+          declaredMime: poster.type || "",
+        });
+        savedPosterPath = savedPoster.posterPath;
+        posterFields = savedPoster;
+      }
+
       await saveTranslations({
         model: "GalleryImage",
         recordId: created.id,
@@ -136,7 +168,7 @@ export async function POST(request: Request) {
       });
       const image = await prisma.galleryImage.update({
         where: { id: created.id },
-        data: saved,
+        data: { ...saved, ...posterFields },
         select: GALLERY_ADMIN_SELECT,
       });
       revalidateGalleryPaths();
@@ -152,6 +184,9 @@ export async function POST(request: Request) {
       );
       if (savedPath) {
         await deleteGalleryImageFile(savedPath).catch(() => undefined);
+      }
+      if (savedPosterPath) {
+        await deleteGalleryImageFile(savedPosterPath).catch(() => undefined);
       }
       return handleApiError(mapImageError(err));
     }

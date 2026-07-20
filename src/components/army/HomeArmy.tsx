@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HeroSlider } from "@/components/army/HeroSlider";
+import type { HeroImage } from "@/components/hero/PatsHero";
 import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { StatsBar } from "@/components/army/StatsBar";
 import { PatsImageGrid } from "@/components/pats/PatsImageGrid";
@@ -23,9 +24,10 @@ type KeyDateRow = { id: string; label: string; value: string };
 type Props = {
   settings: PublicSiteSettings;
   keyDates: KeyDateRow[];
+  heroSlides?: HeroImage[];
 };
 
-export function HomeArmy({ settings, keyDates }: Props) {
+export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
   const { t, locale, dir } = useI18n();
   const previewDates = keyDates.slice(0, 4);
 
@@ -43,7 +45,10 @@ export function HomeArmy({ settings, keyDates }: Props) {
   return (
     <div className="army-home scroll-deck" lang={locale} dir={dir}>
       <div className="scroll-deck__hero">
-        <HeroSlider exerciseYear={settings.exerciseYear} />
+        <HeroSlider
+          exerciseYear={settings.exerciseYear}
+          slides={heroSlides}
+        />
       </div>
 
       <StatsBar className="scroll-deck-layer--first" />

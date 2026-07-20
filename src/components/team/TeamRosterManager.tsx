@@ -473,7 +473,6 @@ export function TeamRosterManager({
             <Users className="h-7 w-7 text-emerald-700" aria-hidden />
           </span>
           <div>
-            <h2 className="portal-h2 mb-1">{tm.register.title}</h2>
             <p className="mx-auto max-w-md text-sm text-slate-600">
               {windowLabel}
             </p>
@@ -530,13 +529,15 @@ export function TeamRosterManager({
           ) : (
             <div>
               <h2 className="portal-h2 mb-0.5">{tm.roster.heading}</h2>
-              <p className="text-sm text-slate-600">
-                {rosterCompleted
-                  ? tm.roster.completedShort
-                  : dirty
-                    ? tm.roster.unsavedChanges
-                    : tm.roster.addMembersDesc}
-              </p>
+              {/* No copy for the resting state — the roster's own table and
+                  the inline hint below it already say what to do. */}
+              {rosterCompleted || dirty ? (
+                <p className="text-sm text-slate-600">
+                  {rosterCompleted
+                    ? tm.roster.completedShort
+                    : tm.roster.unsavedChanges}
+                </p>
+              ) : null}
             </div>
           )}
           <div className="flex flex-wrap items-center gap-2.5">
@@ -821,15 +822,40 @@ export function TeamRosterManager({
           </select>
         </div>
 
-        {canEdit ? (
-          <p className="mt-4 flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-[0.8125rem] leading-relaxed text-emerald-900">
-            <Info
-              className="mt-px h-4 w-4 flex-shrink-0 text-emerald-700"
-              aria-hidden
-            />
-            {tm.roster.infoNote}
-          </p>
-        ) : null}
+        {/* Hint and the forward action share one row, so the way out of this
+            step sits directly opposite the text explaining how to unlock it.
+            `ms-auto` keeps the button trailing even when the hint is hidden
+            (roster already complete) and mirrors correctly under RTL. */}
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {canEdit ? (
+            <p className="m-0 flex min-w-[16rem] flex-1 items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50/60 px-4 py-3 text-[0.8125rem] leading-relaxed text-emerald-900">
+              <Info
+                className="mt-px h-4 w-4 flex-shrink-0 text-emerald-700"
+                aria-hidden
+              />
+              {tm.roster.infoNote}
+            </p>
+          ) : null}
+          <button
+            type="button"
+            className="pp-btn pp-btn--primary ms-auto px-6 py-3 text-[0.9375rem]"
+            disabled={busy !== null || !allFilled || dirty}
+            onClick={goToFlights}
+            title={
+              !allFilled
+                ? tm.roster.completeTitleFill
+                : dirty
+                  ? tm.roster.completeTitleDirty
+                  : tm.roster.completeTitleReady
+            }
+          >
+            {busy === "complete" ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            ) : null}
+            {t.common.next}: {t.journey.headers.flights.title}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
 
         {sizeRequest ? (
           <div
@@ -859,28 +885,6 @@ export function TeamRosterManager({
           </div>
         ) : null}
       </section>
-
-      <div className="flex justify-end">
-        <button
-          type="button"
-          className="pp-btn pp-btn--primary px-6 py-3 text-[0.9375rem]"
-          disabled={busy !== null || !allFilled || dirty}
-          onClick={goToFlights}
-          title={
-            !allFilled
-              ? tm.roster.completeTitleFill
-              : dirty
-                ? tm.roster.completeTitleDirty
-                : tm.roster.completeTitleReady
-          }
-        >
-          {busy === "complete" ? (
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-          ) : null}
-          {t.common.next}: {t.journey.headers.flights.title}
-          <ArrowRight className="h-4 w-4" aria-hidden />
-        </button>
-      </div>
 
       <Dialog open={requestOpen} onOpenChange={setRequestOpen}>
         <DialogContent className="overflow-hidden p-0 sm:max-w-md">

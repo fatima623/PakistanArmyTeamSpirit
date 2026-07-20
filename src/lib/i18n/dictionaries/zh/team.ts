@@ -26,7 +26,6 @@ export const team: typeof enTeam = {
   },
   settingUp: "正在设置您的团队名单…",
   register: {
-    title: "团队注册",
     windowOpen: "注册窗口已开放",
     windowNotYetOpen: "窗口尚未开放",
     windowClosed: "窗口已关闭",
@@ -39,8 +38,6 @@ export const team: typeof enTeam = {
     filledCount: (filled, total) =>
       `已填写 ${filled} / ${total} 名成员`,
     heading: "团队成员",
-    addMembersDesc:
-      "在下方添加您的团队成员。保存后，请将名单标记为完成，以解锁航班信息。",
     lockedByAdmin: "已被管理部门锁定",
     requestAdditional: "申请增加团队成员",
     saveRoster: "保存名单",

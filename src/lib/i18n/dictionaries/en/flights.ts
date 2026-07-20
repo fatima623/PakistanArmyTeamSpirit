@@ -24,7 +24,6 @@ export const flights = {
   },
   card: {
     title: "Traveller flight details",
-    desc: "Every traveller flies on their own documents — for each member of your roster, enter the passenger details and upload a passport and a ticket (PDF, max 10MB each).",
     progress: (done: number, total: number) =>
       `${done} of ${total} travellers complete`,
     emptyRoster:

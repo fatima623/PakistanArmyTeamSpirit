@@ -117,6 +117,17 @@ export const publicSite: typeof enPublicSite = {
       noTeams: "Нет команд в этой группе",
       standingsFootnote:
         "Иллюстративное положение для командного анализа. Итоговые результаты утверждаются после учений.",
+      rollTitle: "Список результатов",
+      rollSubtitle:
+        "Все участвовавшие патрули по позывному с полученной наградой.",
+      rollColCallSign: "Позывной",
+      rollColUnit: "Подразделение",
+      rollColAward: "Награда",
+      rollFilterAll: "Все",
+      rollFilterAria: "Фильтровать результаты по награде",
+      rollMedalCoin: "Монета",
+      rollMedalDnf: "Не финишировали",
+      rollEmpty: "Нет патрулей в этой группе",
       teamEyebrow: "Команда",
       teamTitle: "Состав команды",
       teamDescription: "Официальная структура патруля для команд соревнования.",

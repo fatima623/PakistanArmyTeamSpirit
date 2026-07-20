@@ -25,7 +25,6 @@ export const team: typeof enTeam = {
   },
   settingUp: "Настройка списка вашей команды…",
   register: {
-    title: "Регистрация команды",
     windowOpen: "Окно регистрации открыто",
     windowNotYetOpen: "Окно ещё не открыто",
     windowClosed: "Окно закрыто",
@@ -37,8 +36,6 @@ export const team: typeof enTeam = {
     unsavedChanges: "У вас есть несохранённые изменения",
     filledCount: (filled, total) => `Заполнено ${filled} из ${total} участников`,
     heading: "Участники команды",
-    addMembersDesc:
-      "Добавьте участников команды ниже. После сохранения отметьте список как завершённый, чтобы открыть данные о рейсах.",
     lockedByAdmin: "Заблокировано администрацией",
     requestAdditional: "Запросить дополнительных участников",
     saveRoster: "Сохранить список",

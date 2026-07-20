@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 
 import { ScrollReveal } from "@/components/army/ScrollReveal";
+import { AwardsResultsRoll } from "@/components/awards/AwardsResultsRoll";
 import { AwardsShowcase } from "@/components/awards/AwardsShowcase";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { getAwardsRoll } from "@/lib/awards";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getDictionary();
@@ -15,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AwardsPage() {
   const { t } = await getDictionary();
   const p = t.publicSite.pages.awards;
+  const roll = await getAwardsRoll();
 
   return (
     <div className="space-y-0">
@@ -31,6 +34,9 @@ export default async function AwardsPage() {
 
       <PatsSection variant="navy" className="pats-awards-page-section">
         <AwardsShowcase />
+        {roll.rows.length > 0 && (
+          <AwardsResultsRoll rows={roll.rows} year={roll.year} />
+        )}
       </PatsSection>
 
       <PatsSection variant="elevated" className="pats-awards-page-section">

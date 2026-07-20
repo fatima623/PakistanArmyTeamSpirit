@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight, ImageOff, X, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageOff, Play, X, ArrowLeft } from "lucide-react";
 
 import { compareCategories, UNCATEGORISED_LABEL } from "@/lib/gallery-categories";
 import { translateGalleryCategory } from "@/lib/i18n/gallery-category-i18n";
@@ -18,10 +18,19 @@ export type GalleryItem = {
   id: string;
   title: string;
   year: number | null;
+  /** The media URL — a still for "image" items, the video file for "video". */
   image: string;
+  /** Absent on legacy/static rows, which are always stills. */
+  mediaType?: "image" | "video" | null;
+  /** Poster frame for video items; null means "let the browser show frame 0". */
+  poster?: string | null;
   caption?: string | null;
   category?: string | null;
 };
+
+function isVideo(item: GalleryItem): boolean {
+  return item.mediaType === "video";
+}
 
 type Album = {
   category: string;
@@ -365,23 +374,41 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
               >
                 {activeCategory.items[selectedImageIndex] ? (
                   <>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenAlbum(activeCategory.category);
-                        setActiveIndex(selectedImageIndex);
-                      }}
-                      className="w-full h-full relative"
-                    >
-                      <Image
+                    {isVideo(activeCategory.items[selectedImageIndex]) ? (
+                      // Video plays in place with native controls — wrapping it
+                      // in the lightbox button would swallow every click on the
+                      // scrubber and volume slider.
+                      <video
+                        key={activeCategory.items[selectedImageIndex].id}
                         src={activeCategory.items[selectedImageIndex].image}
-                        alt={activeCategory.items[selectedImageIndex].title}
-                        fill
-                        className="object-contain transition-transform duration-500 ease-mechanical hover:scale-[1.01]"
-                        sizes="(max-width: 1024px) 100vw, 80vw"
-                        priority
+                        poster={
+                          activeCategory.items[selectedImageIndex].poster ??
+                          undefined
+                        }
+                        controls
+                        playsInline
+                        preload="metadata"
+                        className="h-full w-full object-contain"
                       />
-                    </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenAlbum(activeCategory.category);
+                          setActiveIndex(selectedImageIndex);
+                        }}
+                        className="w-full h-full relative"
+                      >
+                        <Image
+                          src={activeCategory.items[selectedImageIndex].image}
+                          alt={activeCategory.items[selectedImageIndex].title}
+                          fill
+                          className="object-contain transition-transform duration-500 ease-mechanical hover:scale-[1.01]"
+                          sizes="(max-width: 1024px) 100vw, 80vw"
+                          priority
+                        />
+                      </button>
+                    )}
 
                     {activeCategory.items.length > 1 ? (
                       <>
@@ -462,13 +489,41 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                             : "border-transparent opacity-60 hover:opacity-90"
                         )}
                       >
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover"
-                          sizes="80px"
-                        />
+                        {isVideo(item) ? (
+                          <>
+                            {item.poster ? (
+                              <Image
+                                src={item.poster}
+                                alt={item.title}
+                                fill
+                                className="object-cover"
+                                sizes="80px"
+                              />
+                            ) : (
+                              <video
+                                src={item.image}
+                                muted
+                                playsInline
+                                preload="metadata"
+                                className="h-full w-full object-cover"
+                              />
+                            )}
+                            <span
+                              className="absolute inset-0 grid place-items-center bg-black/25"
+                              aria-hidden
+                            >
+                              <Play className="h-4 w-4 translate-x-[1px] text-white drop-shadow" />
+                            </span>
+                          </>
+                        ) : (
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-cover"
+                            sizes="80px"
+                          />
+                        )}
                       </button>
                     ))}
                   </div>
@@ -559,13 +614,24 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                 className="overflow-hidden border border-brand-brass/25"
                 style={{ borderRadius: "2px" }}
               >
-                <Image
-                  src={active.image}
-                  alt={active.title}
-                  width={1600}
-                  height={1200}
-                  className="max-h-[80vh] w-auto object-contain"
-                />
+                {isVideo(active) ? (
+                  <video
+                    src={active.image}
+                    poster={active.poster ?? undefined}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="max-h-[80vh] w-auto object-contain"
+                  />
+                ) : (
+                  <Image
+                    src={active.image}
+                    alt={active.title}
+                    width={1600}
+                    height={1200}
+                    className="max-h-[80vh] w-auto object-contain"
+                  />
+                )}
               </div>
               {metaLine(active, locale) ? (
                 <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-brand-khaki">

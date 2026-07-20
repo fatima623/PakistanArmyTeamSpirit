@@ -355,6 +355,40 @@ model GalleryImage {
   caption       String?  @db.Text
   year          Int?
   category      String?
+  /**
+   * Discriminator: "image" | "video". Existing rows predate video support and
+   * default to "image" so the migration is additive.
+   */
+  mediaType     String   @default("image")
+  /**
+   * The media binary — a still for mediaType "image", the video file for "video".
+   * Field names kept as-is to avoid a rename migration on live data.
+   */
+  imagePath     String
+  imageMimeType String
+  imageFileSize Int
+  /**
+   * Poster frame for video items (served from /uploads/gallery). Null for stills,
+   * and optional for video — the grid falls back to a generic play tile.
+   */
+  posterPath     String?
+  posterMimeType String?
+  posterFileSize Int?
+  sortOrder     Int      @default(0)
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([published, sortOrder])
+}
+
+/// Home hero carousel slides (admin-managed; served from /uploads/hero).
+model HeroSlide {
+  id            String   @id @default(cuid())
+  /// Internal label shown in the admin list; never rendered on the public hero.
+  title         String
+  /// Decorative alt text. The hero images are aria-hidden, so this is admin-facing.
+  alt           String?
   imagePath     String
   imageMimeType String
   imageFileSize Int
@@ -364,6 +398,24 @@ model GalleryImage {
   updatedAt     DateTime @updatedAt
 
   @@index([published, sortOrder])
+}
+
+/// Exercise results roll — one row per participating patrol/unit.
+model Award {
+  id        String   @id @default(cuid())
+  /// Patrol call sign, e.g. "G12B".
+  callSign  String
+  unit      String
+  /// GOLD | SILVER | BRONZE | COIN | DNF
+  medal     String
+  /// Exercise year the result belongs to; groups the roll on the public page.
+  year      Int
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, year, sortOrder])
 }
 
 model KeyDate {

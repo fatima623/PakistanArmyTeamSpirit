@@ -209,6 +209,16 @@ export const GalleryImageSchema = z.object({
 /** Update variant — all metadata fields optional (partial patch). */
 export const GalleryImageUpdateSchema = GalleryImageSchema.partial();
 
+/** Metadata for a hero slide. The binary is uploaded separately (multipart). */
+export const HeroSlideSchema = z.object({
+  title: z.string().min(1, "Title required").max(160),
+  alt: z.string().max(300).optional().or(z.literal("")),
+  sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
+  published: z.boolean().optional(),
+});
+
+export const HeroSlideUpdateSchema = HeroSlideSchema.partial();
+
 export const EventBreakdownItemSchema = z.object({
   label: z.string().min(1, "Label required").max(120),
   marks: z.coerce.number().int().min(0).max(9999),

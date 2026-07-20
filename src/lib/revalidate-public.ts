@@ -23,6 +23,13 @@ export function revalidateGalleryPaths() {
   revalidatePath("/admin/gallery");
 }
 
+export function revalidateHeroPaths() {
+  // The hero lives on the home page, which is ISR'd at 1h — without this an
+  // edited slide would not surface until the window expired.
+  revalidatePath("/");
+  revalidatePath("/admin/hero");
+}
+
 export function revalidateEventPaths() {
   revalidatePath("/events-detail");
   revalidatePath("/exercise-contour");
