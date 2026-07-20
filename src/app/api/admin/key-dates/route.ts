@@ -3,6 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { revalidateKeyDatesPaths } from "@/lib/revalidate-public";
 import { KeyDateSchema } from "@/lib/validations";
 import {
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
+import {
   handleApiError,
   requireAdmin,
   requireJsonContentType,
@@ -36,8 +40,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validate before creating: a bad locale/field must 400 without leaving a
+    // key date behind.
+    const translations = parseTranslationsInput("KeyDate", body?.translations);
+
     const keyDate = await prisma.keyDate.create({
       data: parsed.data,
+    });
+
+    await saveTranslations({
+      model: "KeyDate",
+      recordId: keyDate.id,
+      translations,
+      source: { label: keyDate.label, value: keyDate.value },
     });
 
     revalidateKeyDatesPaths();

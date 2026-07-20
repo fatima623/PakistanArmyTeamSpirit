@@ -17,6 +17,26 @@ export const core: typeof enCore = {
     },
   },
 
+  meta: {
+    home: "Ana sayfa",
+    announcements: "Duyurular",
+    awards: "Ödüller ve Takdir",
+    login: "Giriş",
+    register: "Kayıt",
+    exerciseContour: "Exercise Contour",
+    gallery: "Galeri",
+    international: "Uluslararası Katılım",
+    keyDates: "Önemli Tarihler",
+    privacy: "Gizlilik Politikası",
+    dashboard: "Panel",
+    unitInfo: "Birlik bilgilerini güncelle",
+    hostInfo: "Ev Sahibi Bilgileri",
+    journey: "Kayıt Süreci",
+    support: "Destek",
+    supportTicket: "Destek talebi",
+    confirmParticipation: "Katılımı Onayla",
+  },
+
   nav: {
     ariaLabel: "Katılımcı portalı",
     portalName: "PATS Portalı",

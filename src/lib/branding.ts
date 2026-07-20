@@ -43,8 +43,7 @@ export const JLA = "Junior Leaders Academy (JLA)";
 export const ADMIN_PORTAL_LABEL = "PATS Administrative Console";
 export const FOOTER_BRAND_DESCRIPTION =
   "Official participation portal for the PATS Competition. Secure registration, scheduling, and team coordination.";
-export const FOOTER_DISCLAIMER =
-  "Authorized use only. Official portal for PATS Competition participation.";
+// Footer legal line is localized via `publicSite.footer.disclaimer` (all locales).
 
 export const PORTAL_TAGLINE = HERO_TAGLINE;
 export const SUPPORT_EMAIL = "support@example.com";

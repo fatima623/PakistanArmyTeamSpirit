@@ -4,6 +4,10 @@ import { useRef, useState } from "react";
 import { Eye, EyeOff, ImagePlus, Loader2, Pencil, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
+import {
+  TranslationFields,
+  useTranslationDraft,
+} from "@/components/admin/TranslationFields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -206,6 +210,7 @@ function UploadForm({
   const [sortOrder, setSortOrder] = useState("0");
   const [published, setPublished] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const translations = useTranslationDraft();
 
   const pickFile = (f: File | null) => {
     if (!f) return;
@@ -226,6 +231,9 @@ function UploadForm({
     setCaption("");
     setSortOrder("0");
     setPublished(true);
+    // This form stays mounted after a save, so the draft must be cleared too or
+    // the next upload inherits the last one's translations.
+    translations.reset();
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -248,6 +256,8 @@ function UploadForm({
       fd.append("caption", caption.trim());
       fd.append("sortOrder", sortOrder || "0");
       fd.append("published", published ? "true" : "false");
+      const t = translations.payload();
+      if (t) fd.append("translations", JSON.stringify(t));
 
       const res = await fetch("/api/admin/gallery", {
         method: "POST",
@@ -366,6 +376,14 @@ function UploadForm({
               placeholder="Optional short description shown with the image."
             />
           </div>
+        </div>
+
+        <div className="mt-3">
+          <TranslationFields
+            model="GalleryImage"
+            draft={translations}
+            idPrefix="g-t-new"
+          />
         </div>
 
         <div className="mt-3 flex items-center gap-3">
@@ -518,6 +536,11 @@ function EditDialog({
   const [replaceFile, setReplaceFile] = useState<File | null>(null);
   const [replacePreview, setReplacePreview] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  // This dialog is always mounted and swaps records via `loadedId`, so the draft
+  // is keyed off the open image and reloads whenever that changes.
+  const translations = useTranslationDraft({
+    url: image ? `/api/admin/gallery/${image.id}` : null,
+  });
 
   const pickReplace = (f: File | null) => {
     if (!f) return;
@@ -564,6 +587,7 @@ function EditDialog({
           category: category.trim(),
           caption: caption.trim(),
           sortOrder: sortOrder || "0",
+          translations: translations.payload(),
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -700,6 +724,13 @@ function EditDialog({
                 onChange={(e) => setCaption(e.target.value)}
                 rows={2}
                 className="admin-input"
+              />
+            </div>
+            <div className="col-span-full">
+              <TranslationFields
+                model="GalleryImage"
+                draft={translations}
+                idPrefix={`g-t-${image.id}`}
               />
             </div>
           </div>

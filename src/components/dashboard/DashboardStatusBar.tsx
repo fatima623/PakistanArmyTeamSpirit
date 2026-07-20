@@ -10,6 +10,7 @@ import {
 import { formatDateShort } from "@/lib/utils";
 import type { ParticipantJourneyStage } from "@/lib/participant-journey";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 
 type Props = {
   stage: ParticipantJourneyStage;
@@ -19,6 +20,7 @@ type Props = {
   paymentComplete: boolean;
   exerciseDates?: string | null;
   t: Dictionary["statusBar"];
+  locale: Locale;
 };
 
 /**
@@ -33,6 +35,7 @@ export function DashboardStatusBar({
   paymentComplete,
   exerciseDates,
   t,
+  locale,
 }: Props) {
   let variant = "";
   let Icon: LucideIcon = Clock;
@@ -71,7 +74,7 @@ export function DashboardStatusBar({
           <p className="pp-status__text">{text}</p>
           {approvedAt && stage >= 2 ? (
             <p className="pp-status__meta">
-              {t.approvedOn(formatDateShort(approvedAt))}
+              {t.approvedOn(formatDateShort(approvedAt, locale))}
             </p>
           ) : null}
         </div>

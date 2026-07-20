@@ -9,8 +9,11 @@ import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/lib/i18n/I18nProvider";
 
 export default function ForgotPasswordPage() {
+  const { t, locale, dir } = useI18n();
+  const F = t.publicSite.forgotPassword;
   const [email, setEmail] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,8 +24,8 @@ export default function ForgotPasswordPage() {
     if (!email) return null;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
       ? null
-      : "Enter a valid email address.";
-  }, [email]);
+      : F.validation.invalidEmail;
+  }, [email, F.validation.invalidEmail]);
 
   useEffect(() => {
     fetch("/api/auth/csrf-token")
@@ -34,7 +37,7 @@ export default function ForgotPasswordPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!csrfToken) {
-      setError("Security check failed. Refresh and try again.");
+      setError(F.validation.csrf);
       return;
     }
     if (emailError) {
@@ -55,16 +58,12 @@ export default function ForgotPasswordPage() {
         | null;
 
       if (res.ok) {
-        const successMessage =
-          data?.message ??
-          "Reset link sent to your email address. Please check your inbox.";
+        const successMessage = F.card.success;
         setMessage(successMessage);
         toast.success(successMessage);
       } else {
         const nextError =
-          data?.errors?.email?.[0] ??
-          data?.error ??
-          "Something went wrong. Please try again.";
+          data?.errors?.email?.[0] ?? data?.error ?? F.validation.generic;
         setError(nextError);
         toast.error(nextError);
       }
@@ -75,35 +74,29 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <>
+    <div lang={locale} dir={dir}>
       <PatsPageHero
-        eyebrow="Account recovery"
-        title="Reset password"
-        subtitle="Enter your registered email and we will send a secure reset link."
+        eyebrow={F.hero.eyebrow}
+        title={F.hero.title}
+        subtitle={F.hero.subtitle}
       />
       <PatsSection variant="navy">
         <div className="pats-auth-shell">
           <div className="pats-auth-shell__intro">
-            <p className="pats-eyebrow">Recovery access</p>
-            <h2 className="pats-section-title">Password recovery</h2>
-            <p className="pats-body mt-4">
-              Request a secure reset link for an approved participant account.
-              Use the same registered email address tied to your team login.
-            </p>
+            <p className="pats-eyebrow">{F.intro.eyebrow}</p>
+            <h2 className="pats-section-title">{F.intro.title}</h2>
+            <p className="pats-body mt-4">{F.intro.body}</p>
             <ul className="pats-auth-shell__checklist">
-              <li>Registered participant email required</li>
-              <li>Secure reset link with limited validity</li>
-              <li>Return to login after password update</li>
+              {F.intro.checklist.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
           <div className="pats-login-card cp-form-card w-full max-w-none p-7 sm:p-10">
             <div className="pats-login-card__header">
-              <p className="pats-eyebrow !mb-0">Reset request</p>
-              <h3 className="pats-login-card__title">Send reset link</h3>
-              <p className="pats-login-card__description">
-                Enter your participant email and we will send a secure reset link
-                if the account exists.
-              </p>
+              <p className="pats-eyebrow !mb-0">{F.card.eyebrow}</p>
+              <h3 className="pats-login-card__title">{F.card.title}</h3>
+              <p className="pats-login-card__description">{F.card.description}</p>
             </div>
 
             {!submitted ? (
@@ -112,7 +105,7 @@ export default function ForgotPasswordPage() {
                 className="grid grid-cols-1 items-center gap-y-5 sm:grid-cols-[minmax(10.5rem,12.5rem)_1fr] sm:gap-x-7"
               >
                 <label htmlFor="reset-email" className="pats-form-label">
-                  Email address
+                  {F.card.emailLabel}
                 </label>
                 <Input
                   id="reset-email"
@@ -143,10 +136,10 @@ export default function ForgotPasswordPage() {
                     {loading ? (
                       <span className="flex items-center">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Sending...
+                        {F.card.sending}
                       </span>
                     ) : (
-                      "Send reset link"
+                      F.card.send
                     )}
                   </Button>
                 </div>
@@ -163,12 +156,12 @@ export default function ForgotPasswordPage() {
 
             <p className="login-form-footer mt-8 border-t border-white/10 pt-5 text-sm">
               <Link href="/event/login" className="login-form-link hover:underline">
-                Back to login
+                {F.card.back}
               </Link>
             </p>
           </div>
         </div>
       </PatsSection>
-    </>
+    </div>
   );
 }

@@ -33,6 +33,7 @@ export const home = {
 
   mission: {
     eyebrow: "Concept / Purpose",
+    imageAlt: "PATS international competition marks",
     quote: "PERSEVERANCE ACCLAIMED THROUGH TEAM SPIRIT",
     body:
       "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA — PATS. The main aim is a demanding patrolling exercise to assess and enhance tactical and mental abilities — participants must be prepared mentally and physically. Teams must achieve proficiency in minor operations, endurance, and prowess in basic drills and procedures.",

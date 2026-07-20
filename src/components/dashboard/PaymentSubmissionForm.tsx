@@ -36,7 +36,7 @@ import {
 import type { ParticipantPaymentData } from "@/lib/participant-payment-data";
 import { PaymentProofFileRow } from "@/components/payments/PaymentProofFileRow";
 import { PaymentStatusTimeline } from "@/components/payments/PaymentStatusTimeline";
-import { TOAST } from "@/lib/toast";
+import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import { formatDateShort, formatDateTimePK } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
@@ -59,7 +59,7 @@ export function PaymentSubmissionForm({
   initialData: ParticipantPaymentData;
 }) {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const pf = t.payment.form;
   const [submitting, setSubmitting] = useState(false);
   const [canSubmit, setCanSubmit] = useState(initialData.canSubmit);
@@ -131,10 +131,10 @@ export function PaymentSubmissionForm({
         router.push("/event/dashboard");
       } else {
         const body = await res.json().catch(() => ({}));
-        toast.error(body.error ?? TOAST.GENERIC_ERROR);
+        toast.error(apiErrorMessage(body, locale, t.common.toasts.genericError));
       }
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setSubmitting(false);
     }
@@ -220,9 +220,9 @@ export function PaymentSubmissionForm({
                     {pf.submittedRef(p.transactionReference ?? "—")}
                   </p>
                   <p className="m-0 mt-0.5 text-[0.75rem] text-slate-500">
-                    {pf.submittedOn(formatDateShort(p.createdAt))}
+                    {pf.submittedOn(formatDateShort(p.createdAt, locale))}
                     {p.paymentDate
-                      ? pf.paidSuffix(formatDateShort(p.paymentDate))
+                      ? pf.paidSuffix(formatDateShort(p.paymentDate, locale))
                       : ""}
                   </p>
                 </div>
@@ -309,7 +309,7 @@ export function PaymentSubmissionForm({
               <SummaryTile label={pf.verificationResult} value={verificationResult} />
               <SummaryTile
                 label={pf.lastUpdated}
-                value={formatDateTimePK(latest.updatedAt)}
+                value={formatDateTimePK(latest.updatedAt, locale)}
               />
             </div>
 

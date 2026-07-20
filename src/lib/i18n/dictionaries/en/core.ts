@@ -17,6 +17,27 @@ export const core = {
     },
   },
 
+  // Browser-tab / SEO titles, one per route (localized page metadata).
+  meta: {
+    home: "Home",
+    announcements: "Announcements",
+    awards: "Awards & Recognition",
+    login: "Log in",
+    register: "Register",
+    exerciseContour: "Exercise Contour",
+    gallery: "Gallery",
+    international: "International Participation",
+    keyDates: "Key Dates",
+    privacy: "Privacy Policy",
+    dashboard: "Dashboard",
+    unitInfo: "Update unit information",
+    hostInfo: "Host Information",
+    journey: "Registration Journey",
+    support: "Support",
+    supportTicket: "Support ticket",
+    confirmParticipation: "Confirm Participation",
+  },
+
   nav: {
     ariaLabel: "Participant portal",
     portalName: "PATS Portal",

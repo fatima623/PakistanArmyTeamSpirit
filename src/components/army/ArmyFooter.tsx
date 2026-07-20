@@ -1,10 +1,6 @@
 import Link from "next/link";
 
-import {
-  COMPETITION_NAME,
-  FOOTER_DISCLAIMER,
-  SITE_NAME,
-} from "@/lib/branding";
+import { COMPETITION_NAME, SITE_NAME } from "@/lib/branding";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 /**
@@ -53,7 +49,7 @@ export async function ArmyFooter() {
           </p>
         </div>
 
-        <p className="pats-footer-legal">{FOOTER_DISCLAIMER}</p>
+        <p className="pats-footer-legal">{f.disclaimer}</p>
       </div>
     </footer>
   );

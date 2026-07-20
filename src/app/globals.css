@@ -20944,6 +20944,20 @@ html[lang="ar"] .pats-footer-brand__title {
   text-transform: none;
 }
 
+/* Home stat labels are 10px with wide Latin tracking + uppercasing — legible in
+   Latin but far too small and broken for Arabic naskh. Enlarge and neutralise
+   the Latin tracking/uppercasing. The full ancestor chain (incl. the base
+   :not(.dashboard-day)) is repeated so this out-specifies the base rule by
+   specificity alone, per the css-guardrails ratchet. */
+html[lang="ar"] .army-site:not(.dashboard-day) .pats-stat__label {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.85);
+}
+
 
 /* ==========================================================================
    RTL LAYOUT CORRECTIONS (public site)

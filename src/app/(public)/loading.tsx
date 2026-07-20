@@ -1,10 +1,12 @@
 import { RouteLoadingShell } from "@/components/navigation/RouteLoadingShell";
+import { getDictionary } from "@/lib/i18n/get-dictionary";
 
-export default function PublicLoading() {
+export default async function PublicLoading() {
+  const { t } = await getDictionary();
   return (
     <RouteLoadingShell
-      title="Public page"
-      description="Loading page content and public navigation."
+      title={t.publicSite.loading.title}
+      description={t.publicSite.loading.description}
     />
   );
 }

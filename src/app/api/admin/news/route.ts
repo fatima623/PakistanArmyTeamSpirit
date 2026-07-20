@@ -4,6 +4,10 @@ import { revalidateNewsPaths } from "@/lib/revalidate-public";
 import { NewsPostSchema } from "@/lib/validations";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import {
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
+import {
   ApiError,
   handleApiError,
   requireAdmin,
@@ -45,6 +49,10 @@ export async function POST(request: Request) {
       throw new ApiError("Slug already in use", 409);
     }
 
+    // Translated `content` is HTML and is sanitized inside
+    // parseTranslationsInput, by the same sanitizer used for the English below.
+    const translations = parseTranslationsInput("NewsPost", body?.translations);
+
     const post = await prisma.newsPost.create({
       data: {
         title,
@@ -53,6 +61,15 @@ export async function POST(request: Request) {
         publishedAt: new Date(publishedAt),
         published: published ?? true,
       },
+    });
+
+    // Hash the STORED English (post-sanitize) so the staleness check compares
+    // like with like when the editor reloads.
+    await saveTranslations({
+      model: "NewsPost",
+      recordId: post.id,
+      translations,
+      source: { title: post.title, content: post.content },
     });
 
     revalidateNewsPaths();

@@ -109,8 +109,16 @@ export const RegisterSchema = z
     customCountry: z.string().max(100, "Too long").optional(),
     nationality: z.string().max(100, "Too long").optional(),
     arm: z.string().min(1, "Required"),
-    secondPocEmail: z.string().email().optional().or(z.literal("")),
-    thirdPocEmail: z.string().email().optional().or(z.literal("")),
+    secondPocEmail: z
+      .string()
+      .email("Valid email required")
+      .optional()
+      .or(z.literal("")),
+    thirdPocEmail: z
+      .string()
+      .email("Valid email required")
+      .optional()
+      .or(z.literal("")),
     additionalInfo: z.string().optional(),
     coName: z.string().min(1, "Required"),
     coEmail: z.string().email("Valid email required"),
@@ -147,19 +155,27 @@ export const RegisterSchema = z
   });
 
 export const UnitUpdateSchema = z.object({
-  firstName: z.string().min(1),
-  lastName: z.string().min(1),
-  rank: z.string().min(1),
+  firstName: z.string().min(1, "Required"),
+  lastName: z.string().min(1, "Required"),
+  rank: z.string().min(1, "Required"),
   unitType: z.enum(["Regular", "Reserve"]),
   branch: z.enum(["Army", "Navy", "Air Force"]),
-  unitName: z.string().min(1),
-  arm: z.string().min(1),
-  secondPocEmail: z.string().email().optional().or(z.literal("")),
-  thirdPocEmail: z.string().email().optional().or(z.literal("")),
+  unitName: z.string().min(1, "Required"),
+  arm: z.string().min(1, "Required"),
+  secondPocEmail: z
+    .string()
+    .email("Valid email required")
+    .optional()
+    .or(z.literal("")),
+  thirdPocEmail: z
+    .string()
+    .email("Valid email required")
+    .optional()
+    .or(z.literal("")),
   additionalInfo: z.string().optional(),
-  coName: z.string().min(1),
-  coEmail: z.string().email(),
-  coPhone: z.string().min(1),
+  coName: z.string().min(1, "Required"),
+  coEmail: z.string().email("Valid email required"),
+  coPhone: z.string().min(1, "Required"),
 });
 
 export const NewsPostSchema = z.object({

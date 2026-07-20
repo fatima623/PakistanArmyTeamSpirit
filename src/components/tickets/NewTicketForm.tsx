@@ -20,7 +20,7 @@ import {
   TICKET_CATEGORY_LABELS,
   TICKET_PRIORITY_LABELS,
 } from "@/lib/constants";
-import { TOAST } from "@/lib/toast";
+import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
 const CATEGORY_KEYS = Object.keys(TICKET_CATEGORY_LABELS);
@@ -35,7 +35,7 @@ export function NewTicketForm({
   onOpenChange?: (open: boolean) => void;
 } = {}) {
   const router = useRouter();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const tk = t.tickets;
   const [openState, setOpenState] = useState(false);
   const open = openProp ?? openState;
@@ -86,10 +86,10 @@ export function NewTicketForm({
         }
         setErrors(flat);
       } else {
-        toast.error(body.error ?? TOAST.GENERIC_ERROR);
+        toast.error(apiErrorMessage(body, locale, t.common.toasts.genericError));
       }
     } catch {
-      toast.error(TOAST.GENERIC_ERROR);
+      toast.error(t.common.toasts.genericError);
     } finally {
       setSubmitting(false);
     }

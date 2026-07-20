@@ -8,9 +8,10 @@ import { getSiteSettings } from "@/lib/site-data";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.privacy };
+}
 
 export default async function PrivacyPage() {
   const [settings, { t }] = await Promise.all([

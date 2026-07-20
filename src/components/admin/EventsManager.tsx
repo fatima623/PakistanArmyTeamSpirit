@@ -13,6 +13,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import {
+  TranslationFields,
+  useTranslationDraft,
+} from "@/components/admin/TranslationFields";
 import { contourIcon } from "@/components/exercise-contour/icon-map";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -241,6 +245,11 @@ function EventForm({
     initial?.breakdown ?? []
   );
   const [published, setPublished] = useState(initial?.published ?? true);
+  // Loaded on demand rather than shipped with the events list — only the record
+  // actually being edited needs its translations. A new event has none yet.
+  const translations = useTranslationDraft({
+    url: initial ? `/api/admin/events/${initial.id}` : null,
+  });
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
     initial?.thumbnailPath ? thumbUrl(initial.thumbnailPath) : null
@@ -289,6 +298,7 @@ function EventForm({
             details: details.trim(),
             participants: participants.trim(),
             breakdown: cleanBreakdown(),
+            translations: translations.payload(),
           }),
         });
         const data = await res.json().catch(() => ({}));
@@ -335,6 +345,8 @@ function EventForm({
         fd.append("participants", participants.trim());
         fd.append("breakdown", JSON.stringify(cleanBreakdown()));
         fd.append("published", published ? "true" : "false");
+        const t = translations.payload();
+        if (t) fd.append("translations", JSON.stringify(t));
 
         const res = await fetch("/api/admin/events", {
           method: "POST",
@@ -604,6 +616,12 @@ function EventForm({
           </div>
         </div>
       </div>
+
+      <TranslationFields
+        model="Event"
+        draft={translations}
+        idPrefix={`ev-t-${initial?.id ?? "new"}`}
+      />
 
       <div className="flex items-center gap-3">
         <Switch

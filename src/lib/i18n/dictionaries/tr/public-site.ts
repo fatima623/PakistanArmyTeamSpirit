@@ -2,6 +2,11 @@ import type { publicSite as enPublicSite } from "../en/public-site";
 
 // Turkish translations for the shared public chrome: nav labels and login page.
 export const publicSite: typeof enPublicSite = {
+  loading: {
+    title: "Genel sayfa",
+    description: "Sayfa içeriği ve genel gezinme yükleniyor.",
+  },
+
   nav: {
     home: "Ana Sayfa",
     eventsDetail: "Etkinlik Ayrıntıları",
@@ -62,6 +67,8 @@ export const publicSite: typeof enPublicSite = {
     isprWebsite: "ISPR Web Sitesi",
     registerNow: "Şimdi kaydolun",
     contactUs: "Bize ulaşın",
+    disclaimer:
+      "Yalnızca yetkili kullanım içindir. PATS Yarışması katılımı için resmî portal.",
   },
 
   pages: {
@@ -213,8 +220,6 @@ export const publicSite: typeof enPublicSite = {
       signingIn: "Giriş yapılıyor…",
       login: "Giriş",
       forgot: "Parolanızı mı Unuttunuz?",
-      footerPrefix: "Henüz kayıt olmadıysanız lütfen",
-      footerLink: "birliğinizi kaydetmek için buraya tıklayın",
     },
     validation: {
       invalidEmail: "Geçerli bir e-posta adresi girin.",
@@ -227,5 +232,121 @@ export const publicSite: typeof enPublicSite = {
       passwordReset: "Parola güncellendi. Lütfen yeni parolanızla giriş yapın.",
       verified: "E-posta doğrulandı. Artık giriş yapabilirsiniz.",
     },
+  },
+
+  forgotPassword: {
+    hero: {
+      eyebrow: "Hesap kurtarma",
+      title: "Parolayı sıfırla",
+      subtitle:
+        "Kayıtlı e-postanızı girin, size güvenli bir sıfırlama bağlantısı gönderelim.",
+    },
+    intro: {
+      eyebrow: "Kurtarma erişimi",
+      title: "Parola kurtarma",
+      body: "Onaylı bir katılımcı hesabı için güvenli bir sıfırlama bağlantısı isteyin. Takım girişinize bağlı olan aynı kayıtlı e-posta adresini kullanın.",
+      checklist: [
+        "Kayıtlı katılımcı e-postası gereklidir",
+        "Sınırlı geçerlilikte güvenli sıfırlama bağlantısı",
+        "Parola güncellemesinden sonra girişe dönüş",
+      ],
+    },
+    card: {
+      eyebrow: "Sıfırlama isteği",
+      title: "Sıfırlama bağlantısı gönder",
+      description:
+        "Katılımcı e-postanızı girin; hesap mevcutsa güvenli bir sıfırlama bağlantısı göndereceğiz.",
+      emailLabel: "E-posta adresi",
+      send: "Sıfırlama bağlantısı gönder",
+      sending: "Gönderiliyor...",
+      success:
+        "Sıfırlama bağlantısı e-posta adresinize gönderildi. Lütfen gelen kutunuzu kontrol edin.",
+      back: "Girişe dön",
+    },
+    validation: {
+      invalidEmail: "Geçerli bir e-posta adresi girin.",
+      csrf: "Güvenlik kontrolü başarısız. Sayfayı yenileyip tekrar deneyin.",
+      generic: "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    },
+  },
+
+  resetPassword: {
+    hero: {
+      eyebrow: "Hesap kurtarma",
+      title: "Yeni parola belirle",
+      subtitle: "Katılımcı hesabınız için güçlü bir parola seçin.",
+    },
+    intro: {
+      eyebrow: "Kurtarma erişimi",
+      title: "Yeni bir parola belirleyin",
+      body: "Portal güvenlik politikasına uygun güçlü bir parola kullanın.",
+      checklist: [
+        "Sıfırlama bağlantıları 30 dakika sonra sona erer",
+        "Parolalar saklanmadan önce bcrypt ile karma haline getirilir",
+        "Sıfırlama bağlantıları kullanıldıktan hemen sonra geçersiz olur",
+      ],
+    },
+    card: {
+      eyebrow: "Parola sıfırlama",
+      title: "Yeni bir parola oluşturun",
+      policy:
+        "En az 8 karakter; büyük harf, küçük harf, bir rakam ve bir özel karakter içermelidir.",
+    },
+    validating: "Sıfırlama bağlantısı doğrulanıyor...",
+    newPasswordLabel: "Yeni parola",
+    confirmPasswordLabel: "Parolayı onayla",
+    strengthLabel: "Parola gücü",
+    strength: {
+      weak: "Zayıf",
+      good: "İyi",
+      strong: "Güçlü",
+    },
+    checks: {
+      length: "En az 8 karakter",
+      uppercase: "Büyük harf",
+      lowercase: "Küçük harf",
+      number: "Rakam",
+      special: "Özel karakter",
+    },
+    passwordsMustMatch: "Parolalar eşleşmelidir",
+    passwordsDoNotMatch: "Parolalar eşleşmiyor.",
+    policyError: "Parolanız güvenlik gereksinimlerini karşılamıyor.",
+    tokenMissing: "Sıfırlama belirteci eksik.",
+    invalidFallback: "Bu parola sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
+    validateFailed: "Bu sıfırlama bağlantısı şu anda doğrulanamıyor.",
+    update: "Parolayı güncelle",
+    updating: "Güncelleniyor...",
+    requestNewLink: "Yeni bir bağlantı iste",
+    back: "Girişe dön",
+    csrf: "Güvenlik kontrolü başarısız. Sayfayı yenileyip tekrar deneyin.",
+    generic: "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    unableReset: "Parola sıfırlanamadı.",
+    toastUpdated: "Parola güncellendi. Lütfen giriş yapın.",
+  },
+
+  verifyEmail: {
+    hero: {
+      eyebrow: "Hesap güvenliği",
+      title: "E-postayı doğrula",
+      subtitle: "Portal erişimini etkinleştirmek için e-postanızı onaylayın.",
+    },
+    eyebrowComplete: "Doğrulama tamamlandı",
+    eyebrowRequired: "Doğrulama gerekli",
+    invalidTitle: "Doğrulama bağlantısı geçersiz",
+    invalidBody:
+      "Bu e-posta doğrulama bağlantısı geçersiz veya süresi dolmuş. Yeni bir kayıt isteyin veya sorun devam ederse destekle iletişime geçin.",
+    invalidAlert: "Doğrulama belirteci artık geçerli değil.",
+    registerAgain: "Yeniden kayıt ol",
+    successTitle: "E-posta doğrulandı",
+    successBody: (name: string) =>
+      `Hesabınız artık etkin${name ? `, ${name}` : ""}. Girişe devam edip iş akışınızın geri kalanını tamamlayabilirsiniz.`,
+    successAlert: "E-posta doğrulama başarılı oldu.",
+    goToLogin: "Girişe git",
+    back: "Girişe dön",
+  },
+
+  news: {
+    eyebrow: "Haberler",
+    downloadPdf: "PDF indir",
   },
 };

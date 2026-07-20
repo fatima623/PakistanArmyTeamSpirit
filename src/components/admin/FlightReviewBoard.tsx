@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -10,13 +11,16 @@ import {
   Lock,
   Plane,
   AlertTriangle,
+  Search,
   Unlock,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
+import { adminInput } from "@/lib/admin-ui";
 import { TOAST } from "@/lib/toast";
 
 /** File paths never cross this boundary — only "is it on file" booleans. */
@@ -167,13 +171,60 @@ export function FlightReviewBoard({
   const router = useRouter();
   const [busyId, setBusyId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const [query, setQuery] = useState("");
+  // Detail tables are collapsed by default so a long roster never dominates the
+  // page — a team's id is added here when the reviewer opens it.
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
-  const totalPages = Math.max(1, Math.ceil(teams.length / TEAMS_PER_PAGE));
+  const toggleExpanded = (id: string) =>
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  // Match against everything a reviewer might search by: the team/unit/contact
+  // fields and every traveller's name, service number, passenger name and
+  // passport number.
+  const filteredTeams = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return teams;
+    return teams.filter((team) => {
+      const haystack = [
+        team.name,
+        team.unitName ?? "",
+        team.email,
+        team.country ?? "",
+        ...team.travellers.flatMap((t) => [
+          t.fullName,
+          t.rank,
+          t.serviceNumber,
+          t.flight?.passengerName ?? "",
+          t.flight?.passportNumber ?? "",
+        ]),
+        ...team.legacyFlights.flatMap((f) => [f.passengerName, f.passportNumber]),
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(q);
+    });
+  }, [teams, query]);
+
+  // A narrowed result set can leave `page` past the last page; jump back.
+  useEffect(() => {
+    setPage(0);
+  }, [query]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTeams.length / TEAMS_PER_PAGE));
   const current = Math.min(page, totalPages - 1);
   const pageTeams = useMemo(
     () =>
-      teams.slice(current * TEAMS_PER_PAGE, current * TEAMS_PER_PAGE + TEAMS_PER_PAGE),
-    [teams, current]
+      filteredTeams.slice(
+        current * TEAMS_PER_PAGE,
+        current * TEAMS_PER_PAGE + TEAMS_PER_PAGE
+      ),
+    [filteredTeams, current]
   );
 
   const setFinalized = async (
@@ -219,11 +270,36 @@ export function FlightReviewBoard({
 
   return (
     <div className="admin-flights flex flex-col gap-5">
+      <div className="relative w-full max-w-sm">
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-ink-muted"
+          aria-hidden
+        />
+        <Input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search team, traveller or passport…"
+          aria-label="Search flight records"
+          className={adminInput}
+          style={{ paddingLeft: "2.5rem" }}
+        />
+      </div>
+
+      {filteredTeams.length === 0 ? (
+        <AdminEmptyState
+          icon={Search}
+          title="No matching teams"
+          description={`No flight records match “${query.trim()}”. Try a different name, unit or passport number.`}
+        />
+      ) : null}
+
       {pageTeams.map((team) => {
         const finalized = team.flightsFinalizedAt !== null;
         const ready = team.memberCount > 0 && team.docsComplete === team.memberCount;
         const missing = team.memberCount - team.docsComplete;
         const busy = busyId === team.id;
+        const isExpanded = expandedIds.has(team.id);
 
         return (
           <section
@@ -231,15 +307,29 @@ export function FlightReviewBoard({
             className="admin-surface flex flex-col gap-3.5 rounded-2xl border border-brand-line/70 bg-white p-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]"
           >
             <header className="flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
-                <h3 className="truncate text-base font-bold tracking-[-0.01em] text-brand-ink">
-                  {team.unitName ?? team.name}
-                </h3>
-                <p className="mt-0.5 truncate text-xs text-brand-ink-muted">
-                  {team.name}
-                  {team.country ? ` · ${team.country}` : ""} · {team.email}
-                </p>
-              </div>
+              <button
+                type="button"
+                onClick={() => toggleExpanded(team.id)}
+                aria-expanded={isExpanded}
+                aria-controls={`flight-team-${team.id}`}
+                className="group flex min-w-0 items-start gap-2 text-left"
+              >
+                <ChevronDown
+                  className={`mt-1 h-4 w-4 flex-none text-brand-ink-muted transition-transform ${
+                    isExpanded ? "rotate-180" : ""
+                  }`}
+                  aria-hidden
+                />
+                <span className="min-w-0">
+                  <span className="block truncate text-base font-bold tracking-[-0.01em] text-brand-ink group-hover:underline">
+                    {team.unitName ?? team.name}
+                  </span>
+                  <span className="mt-0.5 block truncate text-xs text-brand-ink-muted">
+                    {team.name}
+                    {team.country ? ` · ${team.country}` : ""} · {team.email}
+                  </span>
+                </span>
+              </button>
 
               <div className="flex flex-wrap items-center gap-2">
                 <CoveragePill
@@ -328,7 +418,12 @@ export function FlightReviewBoard({
               </div>
             </header>
 
-            <div className="admin-flights-wrap">
+            {isExpanded ? (
+              <>
+                <div
+                  id={`flight-team-${team.id}`}
+                  className="admin-flights-wrap"
+                >
               <table className="admin-data-table admin-flights-table w-full">
                 <thead className="admin-table-head">
                   <tr>
@@ -390,12 +485,14 @@ export function FlightReviewBoard({
               </table>
             </div>
 
-            {team.legacyFlights.length > 0 ? (
-              <p className="text-xs text-brand-ink-muted">
-                Legacy records were submitted before travellers were linked
-                individually. They do not count towards this team&apos;s coverage
-                — the participant must re-link them to a traveller.
-              </p>
+                {team.legacyFlights.length > 0 ? (
+                  <p className="text-xs text-brand-ink-muted">
+                    Legacy records were submitted before travellers were linked
+                    individually. They do not count towards this team&apos;s
+                    coverage — the participant must re-link them to a traveller.
+                  </p>
+                ) : null}
+              </>
             ) : null}
           </section>
         );
@@ -404,7 +501,7 @@ export function FlightReviewBoard({
       {totalPages > 1 ? (
         <div className="admin-flights-foot">
           <span className="admin-flights-pager-label">
-            {teams.length} team{teams.length === 1 ? "" : "s"}
+            {filteredTeams.length} team{filteredTeams.length === 1 ? "" : "s"}
           </span>
           <div className="admin-flights-pager">
             <button

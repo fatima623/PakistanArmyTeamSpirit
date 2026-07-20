@@ -9,11 +9,7 @@ import { PatsImageGrid } from "@/components/pats/PatsImageGrid";
 import { PatsMissionShowcase } from "@/components/pats/PatsMissionShowcase";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
-import {
-  ABOUT_FEATURE_IMAGE,
-  CAREER_TRACKS,
-  MISSION_MOTTO,
-} from "@/lib/army-content";
+import { ABOUT_FEATURE_IMAGE, CAREER_TRACKS } from "@/lib/army-content";
 import { PATS_CROP } from "@/lib/media";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
@@ -61,8 +57,9 @@ export function HomeArmy({ settings, keyDates }: Props) {
           eyebrow={t.home.mission.eyebrow}
           quote={t.home.mission.quote}
           body={t.home.mission.body}
-          motto={MISSION_MOTTO}
-          mottoUrdu
+          motto={t.home.hero.motto}
+          mottoUrdu={locale === "en"}
+          imageAlt={t.home.mission.imageAlt}
         />
       </PatsSection>
 

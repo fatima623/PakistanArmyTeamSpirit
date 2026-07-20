@@ -28,10 +28,13 @@ import {
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { getTranslations, applyTranslations } from "@/lib/i18n/content-translations";
+import { translateDataEntryLabel } from "@/lib/i18n/data-entry-period-i18n";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.dashboard };
+}
 
 export default async function EventDashboardPage() {
   const session = await requireConfirmedParticipant();
@@ -101,6 +104,18 @@ export default async function EventDashboardPage() {
     redirect("/event/login");
   }
 
+  // Admin-entered news titles are single-language in the DB; substitute an
+  // admin-authored translation for the active locale where one exists, falling
+  // back to English otherwise (mirrors the public announcements/news pages).
+  const newsTranslations = await getTranslations(
+    "NewsPost",
+    newsPosts.map((p) => p.id),
+    locale
+  );
+  const localizedNews = newsPosts.map((p) =>
+    applyTranslations(p, newsTranslations.get(p.id))
+  );
+
   const stage = resolveParticipantJourneyStage({
     applicationStatus: user.applicationStatus,
     paymentStatus: user.paymentStatus,
@@ -162,7 +177,10 @@ export default async function EventDashboardPage() {
 
 
 
-      <ParticipantWorkflowPanel stages={workflowStages} t={t.workflowPanel} />
+      <ParticipantWorkflowPanel
+        stages={workflowStages.filter((s) => s.key !== "hostInfo")}
+        t={t.workflowPanel}
+      />
 
       {feeNoticeHtml ? (
         <div
@@ -179,6 +197,7 @@ export default async function EventDashboardPage() {
         paymentComplete={paymentComplete}
         exerciseDates={siteSettings.exerciseDates}
         t={t.statusBar}
+        locale={locale}
       />
 
       <div className="pp-grid">
@@ -193,6 +212,7 @@ export default async function EventDashboardPage() {
             nationality={user.nationality}
             unit={user.unit}
             t={t.registration}
+            locale={locale}
           />
 
           <section className="pp-card" style={{ borderRadius: "1rem", overflow: "hidden" }}>
@@ -214,9 +234,11 @@ export default async function EventDashboardPage() {
                 {dataEntryPeriods.map((p) => (
                   <li key={p.id} className="pp-dates__item">
                     <span className="pp-dates__date">
-                      {formatDateDisplay(p.openDate)}
+                      {formatDateDisplay(p.openDate, locale)}
                     </span>
-                    <span className="pp-dates__label">{p.label}</span>
+                    <span className="pp-dates__label">
+                      {translateDataEntryLabel(p.label, locale)}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -257,17 +279,17 @@ export default async function EventDashboardPage() {
                 </h2>
               </div>
             </div>
-            {newsPosts.length === 0 ? (
+            {localizedNews.length === 0 ? (
               <p className="pp-muted">{t.dashboard.noNews}</p>
             ) : (
               <ul className="pp-news">
-                {newsPosts.map((post) => (
+                {localizedNews.map((post) => (
                   <li key={post.id} className="pp-news__item">
                     <Link href={`/news/${post.slug}`} className="pp-news__link">
                       {post.title}
                     </Link>
                     <span className="pp-news__date">
-                      {formatDateShort(post.publishedAt)}
+                      {formatDateShort(post.publishedAt, locale)}
                     </span>
                   </li>
                 ))}

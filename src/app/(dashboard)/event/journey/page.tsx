@@ -43,9 +43,10 @@ import {
 } from "@/components/flights/FlightDetailsManager";
 import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
 
-export const metadata: Metadata = {
-  title: "Registration Journey",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getDictionary();
+  return { title: t.meta.journey };
+}
 
 type SearchParams = Promise<{ step?: string }>;
 
@@ -80,7 +81,7 @@ export default async function JourneyPage({
 }) {
   const session = await requireParticipantSession();
   const params = await searchParams;
-  const { t } = await getDictionary();
+  const { t, locale } = await getDictionary();
   const j = t.journey;
 
   const [user, settings] = await Promise.all([
@@ -201,7 +202,7 @@ export default async function JourneyPage({
         <StepDoneBanner
           title={j.banners.participationConfirmed}
           sub={j.banners.confirmedOnSub(
-            formatDateDisplay(user.participationConfirmedAt),
+            formatDateDisplay(user.participationConfirmedAt, locale),
             user.unit?.unitName ?? null
           )}
         />
@@ -215,6 +216,7 @@ export default async function JourneyPage({
           nationality={user.nationality}
           unit={user.unit}
           t={t.registration}
+          locale={locale}
         />
       </section>
     ) : (
@@ -281,6 +283,7 @@ export default async function JourneyPage({
           nationality={user.nationality}
           unit={user.unit}
           t={t.registration}
+          locale={locale}
         />
       </section>
     );
@@ -320,7 +323,7 @@ export default async function JourneyPage({
           <StepDoneBanner
             title={j.banners.teamRegistered}
             sub={j.banners.teamRegisteredSub(
-              formatDateDisplay(user.teamRegisteredAt)
+              formatDateDisplay(user.teamRegisteredAt, locale)
             )}
           />
         ) : null}
@@ -329,7 +332,7 @@ export default async function JourneyPage({
             title={j.banners.rosterCompleted}
             sub={j.banners.rosterCompletedSub(
               user._count.teamMembers,
-              formatDateDisplay(user.rosterCompletedAt)
+              formatDateDisplay(user.rosterCompletedAt, locale)
             )}
           />
         ) : null}

@@ -287,6 +287,116 @@ const MESSAGES: Record<string, Translations> = {
     ar: "الرسالة مطلوبة",
     zh: "请填写留言内容",
   },
+
+  /* —— Client form validation (RegisterSchema, UnitUpdateSchema, password) —— */
+  required: {
+    ru: "Обязательное поле",
+    tr: "Zorunlu",
+    ar: "مطلوب",
+    zh: "必填",
+  },
+  toolong: {
+    ru: "Слишком длинно",
+    tr: "Çok uzun",
+    ar: "طويل جدًا",
+    zh: "过长",
+  },
+  validemailrequired: {
+    ru: "Требуется действительный адрес электронной почты",
+    tr: "Geçerli bir e-posta gerekli",
+    ar: "يلزم بريد إلكتروني صالح",
+    zh: "需要有效的电子邮件",
+  },
+  validmilitaryemailrequired: {
+    ru: "Требуется действительная служебная электронная почта",
+    tr: "Geçerli bir askerî e-posta gerekli",
+    ar: "يلزم بريد إلكتروني عسكري صالح",
+    zh: "需要有效的军用电子邮件",
+  },
+  passwordrequired: {
+    ru: "Требуется пароль",
+    tr: "Parola gereklidir",
+    ar: "كلمة المرور مطلوبة",
+    zh: "密码为必填项",
+  },
+  youmustaccepttheprivacypolicy: {
+    ru: "Вы должны принять политику конфиденциальности",
+    tr: "Gizlilik politikasını kabul etmelisiniz",
+    ar: "يجب أن تقبل سياسة الخصوصية",
+    zh: "您必须接受隐私政策",
+  },
+  passwordsdonotmatch: {
+    ru: "Пароли не совпадают",
+    tr: "Parolalar eşleşmiyor",
+    ar: "كلمتا المرور غير متطابقتين",
+    zh: "两次输入的密码不一致",
+  },
+  selectavalidcountry: {
+    ru: "Выберите действительную страну",
+    tr: "Geçerli bir ülke seçin",
+    ar: "اختر دولة صالحة",
+    zh: "请选择有效的国家/地区",
+  },
+  pleaseenteryourcountry: {
+    ru: "Укажите вашу страну",
+    tr: "Lütfen ülkenizi girin",
+    ar: "يرجى إدخال دولتك",
+    zh: "请输入您的国家/地区",
+  },
+  pleaseenterthecountry: {
+    ru: "Укажите страну",
+    tr: "Lütfen ülkeyi girin",
+    ar: "يرجى إدخال الدولة",
+    zh: "请输入国家/地区",
+  },
+  requiredforinternationalparticipants: {
+    ru: "Обязательно для международных участников",
+    tr: "Uluslararası katılımcılar için zorunludur",
+    ar: "مطلوب للمشاركين الدوليين",
+    zh: "国际参赛者必填",
+  },
+  requiredforparticipants: {
+    ru: "Обязательно для участников",
+    tr: "Katılımcılar için zorunludur",
+    ar: "مطلوب للمشاركين",
+    zh: "参赛者必填",
+  },
+  minimum8characters: {
+    ru: "Минимум 8 символов",
+    tr: "En az 8 karakter",
+    ar: "8 أحرف على الأقل",
+    zh: "至少 8 个字符",
+  },
+  maximum128characters: {
+    ru: "Максимум 128 символов",
+    tr: "En fazla 128 karakter",
+    ar: "128 حرفًا كحد أقصى",
+    zh: "最多 128 个字符",
+  },
+  mustincludealowercaseletter: {
+    ru: "Должен содержать строчную букву",
+    tr: "Bir küçük harf içermelidir",
+    ar: "يجب أن يتضمّن حرفًا صغيرًا",
+    zh: "必须包含一个小写字母",
+  },
+  mustincludeanuppercaseletter: {
+    ru: "Должен содержать заглавную букву",
+    tr: "Bir büyük harf içermelidir",
+    ar: "يجب أن يتضمّن حرفًا كبيرًا",
+    zh: "必须包含一个大写字母",
+  },
+  mustincludeanumber: {
+    ru: "Должен содержать цифру",
+    tr: "Bir rakam içermelidir",
+    ar: "يجب أن يتضمّن رقمًا",
+    zh: "必须包含一个数字",
+  },
+  mustincludeaspecialcharacter: {
+    ru: "Должен содержать специальный символ",
+    tr: "Bir özel karakter içermelidir",
+    ar: "يجب أن يتضمّن رمزًا خاصًا",
+    zh: "必须包含一个特殊字符",
+  },
 };
 
 /** Server messages that interpolate a value — matched by pattern. */

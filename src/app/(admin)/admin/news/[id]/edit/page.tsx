@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { buildTranslationSeed } from "@/lib/admin-translations";
 import { prisma } from "@/lib/prisma";
 import { isAdminNewsPdfReadable } from "@/lib/serve-admin-news-pdf";
 import { NewsPostForm } from "@/components/admin/admin-dynamic";
@@ -24,9 +25,17 @@ export default async function AdminNewsEditPage({ params }: PageProps) {
     ? await isAdminNewsPdfReadable(post.id, post.pdfPath)
     : false;
 
+  // Seeded here rather than fetched by the form: this editor is already a
+  // server route, so the translations arrive with the first paint.
+  const translations = await buildTranslationSeed("NewsPost", post.id, {
+    title: post.title,
+    content: post.content,
+  });
+
   return (
       <NewsPostForm
         postId={post.id}
+        initialTranslations={translations}
         initial={{
           title: post.title,
           slug: post.slug,

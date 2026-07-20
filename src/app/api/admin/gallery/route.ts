@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
 
 import {
+  parseTranslationsFormField,
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
+import {
   ApiError,
   handleApiError,
   requireAdmin,
 } from "@/lib/api-helpers";
+import { deleteTranslationsFor } from "@/lib/i18n/content-translations";
 import { prisma } from "@/lib/prisma";
 import { revalidateGalleryPaths } from "@/lib/revalidate-public";
 import { GalleryImageSchema } from "@/lib/validations";
@@ -89,6 +95,13 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validated before the row exists: a bad locale/field must 400 rather than
+    // leave a half-created image behind.
+    const translations = parseTranslationsInput(
+      "GalleryImage",
+      parseTranslationsFormField(formData.get("translations"))
+    );
+
     const buffer = Buffer.from(await file.arrayBuffer());
     const data = parsed.data;
 
@@ -115,6 +128,12 @@ export async function POST(request: Request) {
         declaredMime: file.type || "",
       });
       savedPath = saved.imagePath;
+      await saveTranslations({
+        model: "GalleryImage",
+        recordId: created.id,
+        translations,
+        source: { title: created.title, caption: created.caption },
+      });
       const image = await prisma.galleryImage.update({
         where: { id: created.id },
         data: saved,
@@ -123,10 +142,14 @@ export async function POST(request: Request) {
       revalidateGalleryPaths();
       return NextResponse.json({ image }, { status: 201 });
     } catch (err) {
-      // Roll back both the row and any file written before the failure.
+      // Roll back the row, its translations and any file written before the
+      // failure.
       await prisma.galleryImage
         .delete({ where: { id: created.id } })
         .catch(() => undefined);
+      await deleteTranslationsFor("GalleryImage", created.id).catch(
+        () => undefined
+      );
       if (savedPath) {
         await deleteGalleryImageFile(savedPath).catch(() => undefined);
       }
