@@ -243,8 +243,6 @@ export const publicSite: typeof enPublicSite = {
       signingIn: "جارٍ تسجيل الدخول…",
       login: "تسجيل الدخول",
       forgot: "هل نسيت كلمة المرور؟",
-      footerPrefix: "إذا لم تكن قد سجّلت بعد، يرجى",
-      footerLink: "النقر هنا لتسجيل وحدتك",
     },
     validation: {
       invalidEmail: "أدخل عنوان بريد إلكتروني صالحًا.",

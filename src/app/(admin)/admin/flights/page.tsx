@@ -137,11 +137,7 @@ export default async function AdminFlightsPage() {
     <div className="admin-fade-in-up">
       <header className="mb-5 [&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
         <h2>Flight review</h2>
-        <p>
-          Review every traveller&apos;s passport and ticket, then finalize the
-          team to lock its records. A team can only be finalized once all of its
-          travellers have both documents on file.
-        </p>
+      
       </header>
 
       <FlightReviewBoard canFinalize={canManageSystem(role)} teams={teams} />

@@ -220,8 +220,6 @@ export const publicSite: typeof enPublicSite = {
       signingIn: "Giriş yapılıyor…",
       login: "Giriş",
       forgot: "Parolanızı mı Unuttunuz?",
-      footerPrefix: "Henüz kayıt olmadıysanız lütfen",
-      footerLink: "birliğinizi kaydetmek için buraya tıklayın",
     },
     validation: {
       invalidEmail: "Geçerli bir e-posta adresi girin.",

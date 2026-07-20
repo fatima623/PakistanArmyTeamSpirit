@@ -35,6 +35,7 @@ import { UnitUpdateSchema } from "@/lib/validations";
 import { ARM_OPTIONS } from "@/lib/form-options";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { apiErrorMessage, translateApiMessage } from "@/lib/i18n/api-error-i18n";
+import { translateUnitName } from "@/lib/i18n/unit-name-i18n";
 
 type UnitEditValues = z.infer<typeof UnitUpdateSchema>;
 
@@ -93,6 +94,13 @@ export function UnitEditForm({
     Army: u.options.army,
     Navy: u.options.navy,
     "Air Force": u.options.airForce,
+  };
+  // Arm is a fixed vocabulary — localize the option labels while the stored
+  // value stays the canonical English token. Unknown values fall back to raw.
+  const armLabels: Record<string, string> = {
+    Combat: u.options.combat,
+    "Combat Support": u.options.combatSupport,
+    "Combat Service Support": u.options.combatServiceSupport,
   };
 
   // Localize zod validation messages (from UnitUpdateSchema) to the active
@@ -310,7 +318,7 @@ export function UnitEditForm({
                     <SelectContent>
                       {unitNames.map((name) => (
                         <SelectItem key={name} value={name}>
-                          {name}
+                          {translateUnitName(name, locale)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -331,7 +339,7 @@ export function UnitEditForm({
                     <SelectContent>
                       {ARM_OPTIONS.map((opt) => (
                         <SelectItem key={opt} value={opt}>
-                          {opt}
+                          {armLabels[opt] ?? opt}
                         </SelectItem>
                       ))}
                     </SelectContent>

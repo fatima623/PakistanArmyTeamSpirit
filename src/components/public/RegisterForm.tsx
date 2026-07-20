@@ -32,6 +32,7 @@ import {
   resolveCountryForSubmit,
 } from "@/lib/countries";
 import { UNIT_NAMES } from "@/lib/units-list";
+import { translateUnitName } from "@/lib/i18n/unit-name-i18n";
 import { CountrySelect } from "@/components/ui/CountrySelect";
 
 type RegisterFormValues = z.infer<typeof RegisterSchema>;
@@ -307,7 +308,7 @@ export function RegisterForm({
                     <SelectContent>
                       {UNIT_NAMES.map((name) => (
                         <SelectItem key={name} value={name}>
-                          {name}
+                          {translateUnitName(name, locale)}
                         </SelectItem>
                       ))}
                     </SelectContent>

@@ -235,8 +235,6 @@ export const publicSite: typeof enPublicSite = {
       signingIn: "Выполняется вход…",
       login: "Вход",
       forgot: "Забыли пароль?",
-      footerPrefix: "Если вы ещё не зарегистрированы, пожалуйста,",
-      footerLink: "нажмите здесь, чтобы зарегистрировать своё подразделение",
     },
     validation: {
       invalidEmail: "Введите действительный адрес электронной почты.",

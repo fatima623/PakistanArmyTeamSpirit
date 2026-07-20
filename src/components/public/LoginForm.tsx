@@ -238,14 +238,6 @@ export function LoginForm() {
           </Link>
         </div>
       </form>
-
-      <p className="login-form-footer mt-8 border-t pt-5 text-sm">
-        {L.card.footerPrefix}{" "}
-        <Link href="/event/register" className="login-form-link hover:underline">
-          {L.card.footerLink}
-        </Link>
-        .
-      </p>
     </div>
   );
 }

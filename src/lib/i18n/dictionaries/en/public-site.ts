@@ -227,8 +227,6 @@ export const publicSite = {
       signingIn: "Signing in…",
       login: "Login",
       forgot: "Forgot Your Password?",
-      footerPrefix: "If you have not registered please",
-      footerLink: "click here to register your unit",
     },
     validation: {
       invalidEmail: "Enter a valid email address.",

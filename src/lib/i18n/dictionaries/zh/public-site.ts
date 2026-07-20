@@ -208,8 +208,6 @@ export const publicSite: typeof enPublicSite = {
       signingIn: "正在登录…",
       login: "登录",
       forgot: "忘记密码？",
-      footerPrefix: "如果您尚未注册，请",
-      footerLink: "点击此处注册您的单位",
     },
     validation: {
       invalidEmail: "请输入有效的电子邮件地址。",
