@@ -46,6 +46,7 @@
     from {
       opacity: 0.98;
     }
+
     to {
       opacity: 1;
     }
@@ -58,26 +59,46 @@
        Tailwind opacity modifiers work (bg-brand-night/50).
        Change a value here -> every usage app-wide follows.
        ============================================================ */
-    --brand-night: 13 15 14;         /* #0d0f0e  darkest surface (ex tactical-void/carbon) */
-    --brand-night-2: 18 22 20;       /* #121614  raised dark surface (ex carbon-raised/navy) */
-    --brand-olive: 61 82 48;         /* #3d5230  primary brand green (ex tactical-olive + cp-olive) */
-    --brand-olive-dark: 47 64 37;    /* #2f4025  (ex cp-olive-dark) */
-    --brand-brass: 197 168 128;      /* #c5a880  metallic accent (ex tactical-brass) */
-    --brand-khaki: 139 150 118;      /* #8b9676  muted accent on dark (ex tactical-khaki) */
-    --brand-khaki-warm: 138 148 120; /* #8a9478  muted accent on light (ex cp-khaki) */
-    --brand-sand: 235 235 235;       /* #ebebeb  light text on dark (ex tactical-sand/mist) */
-    --brand-sand-dim: 138 130 114;   /* #8a8272  dim text on dark (ex tactical-sand-dim) */
-    --brand-red: 139 58 42;          /* #8b3a2a  alert/destructive (ex tactical-ops-red + cp-alert) */
-    --brand-ink: 28 33 25;           /* #1c2119  text on light (ex cp-ink) */
-    --brand-ink-muted: 74 82 69;     /* #4a5245  muted text on light (ex cp-ink-muted) */
-    --brand-line: 200 194 180;       /* #c8c2b4  borders on light (ex cp-border) */
-    --brand-parchment: 243 239 230;  /* #f3efe6  light surface (ex cp-parchment) */
-    --brand-parchment-2: 230 224 212;/* #e6e0d4  light surface alt (ex cp-parchment-dark) */
-    --brand-black: 10 10 10;         /* #0a0a0a  page base (ex bg-base) */
-    --brand-brass-deep: 184 148 31;  /* #b8941f  deep metallic on light (ex cp-brass) */
-    --brand-gunmetal: 20 26 20;      /* #141a14  dark panel on light pages (ex cp-gunmetal) */
-    --brand-gunmetal-2: 30 39 32;    /* #1e2720  raised gunmetal (ex cp-gunmetal-light) */
-    --brand-panel: 26 34 30;         /* #1a221e  dark panel surface (ex tactical-panel) */
+    --brand-night: 13 15 14;
+    /* #0d0f0e  darkest surface (ex tactical-void/carbon) */
+    --brand-night-2: 18 22 20;
+    /* #121614  raised dark surface (ex carbon-raised/navy) */
+    --brand-olive: 61 82 48;
+    /* #3d5230  primary brand green (ex tactical-olive + cp-olive) */
+    --brand-olive-dark: 47 64 37;
+    /* #2f4025  (ex cp-olive-dark) */
+    --brand-brass: 197 168 128;
+    /* #c5a880  metallic accent (ex tactical-brass) */
+    --brand-khaki: 139 150 118;
+    /* #8b9676  muted accent on dark (ex tactical-khaki) */
+    --brand-khaki-warm: 138 148 120;
+    /* #8a9478  muted accent on light (ex cp-khaki) */
+    --brand-sand: 235 235 235;
+    /* #ebebeb  light text on dark (ex tactical-sand/mist) */
+    --brand-sand-dim: 138 130 114;
+    /* #8a8272  dim text on dark (ex tactical-sand-dim) */
+    --brand-red: 139 58 42;
+    /* #8b3a2a  alert/destructive (ex tactical-ops-red + cp-alert) */
+    --brand-ink: 28 33 25;
+    /* #1c2119  text on light (ex cp-ink) */
+    --brand-ink-muted: 74 82 69;
+    /* #4a5245  muted text on light (ex cp-ink-muted) */
+    --brand-line: 200 194 180;
+    /* #c8c2b4  borders on light (ex cp-border) */
+    --brand-parchment: 243 239 230;
+    /* #f3efe6  light surface (ex cp-parchment) */
+    --brand-parchment-2: 230 224 212;
+    /* #e6e0d4  light surface alt (ex cp-parchment-dark) */
+    --brand-black: 10 10 10;
+    /* #0a0a0a  page base (ex bg-base) */
+    --brand-brass-deep: 184 148 31;
+    /* #b8941f  deep metallic on light (ex cp-brass) */
+    --brand-gunmetal: 20 26 20;
+    /* #141a14  dark panel on light pages (ex cp-gunmetal) */
+    --brand-gunmetal-2: 30 39 32;
+    /* #1e2720  raised gunmetal (ex cp-gunmetal-light) */
+    --brand-panel: 26 34 30;
+    /* #1a221e  dark panel surface (ex tactical-panel) */
 
     --cp-green: #3d5230;
     --cp-navy: #141a14;
@@ -124,6 +145,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-brand-parchment antialiased;
     color: #1c2119;
@@ -215,11 +237,9 @@
   .admin-btn-primary {
     color: #ffffff;
     border-color: rgba(52, 70, 42, 0.85);
-    background: linear-gradient(
-      180deg,
-      #4a6040 0%,
-      #3d5230 100%
-    );
+    background: linear-gradient(180deg,
+        #4a6040 0%,
+        #3d5230 100%);
     box-shadow:
       0 1px 2px rgba(28, 33, 25, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -273,11 +293,9 @@
   .admin-btn-destructive {
     color: #ffffff;
     border-color: rgba(220, 38, 38, 0.65);
-    background: linear-gradient(
-      180deg,
-      rgba(127, 29, 29, 0.95) 0%,
-      rgba(69, 10, 10, 0.98) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(127, 29, 29, 0.95) 0%,
+        rgba(69, 10, 10, 0.98) 100%);
     box-shadow:
       0 1px 2px rgba(0, 0, 0, 0.35),
       0 0 0 1px rgba(248, 113, 113, 0.12);
@@ -293,11 +311,9 @@
   .ops-btn-warning,
   .admin-btn-reject {
     border-color: rgba(217, 119, 6, 0.65);
-    background: linear-gradient(
-      180deg,
-      rgba(120, 53, 15, 0.95) 0%,
-      rgba(69, 26, 3, 0.98) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(120, 53, 15, 0.95) 0%,
+        rgba(69, 26, 3, 0.98) 100%);
     color: #fff7ed;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
   }
@@ -618,7 +634,7 @@
     @apply justify-center;
   }
 
-  .admin-table-actions > a {
+  .admin-table-actions>a {
     display: inline-flex;
     flex-shrink: 0;
   }
@@ -651,9 +667,7 @@
     min-width: 7.25rem !important;
   }
 
-  .admin-theme
-    .admin-table-actions
-    :is(.portal-table-action-btn, .ops-btn, button, a) {
+  .admin-theme .admin-table-actions :is(.portal-table-action-btn, .ops-btn, button, a) {
     font-size: 0.8125rem !important;
     min-height: 2rem !important;
     max-height: 2rem !important;
@@ -670,13 +684,13 @@
     font-size: 14px !important;
   }
 
-  .admin-table-actions-stack > form,
-  .admin-table-actions-stack > div {
+  .admin-table-actions-stack>form,
+  .admin-table-actions-stack>div {
     @apply w-full;
   }
 
-  .admin-table-actions-stack > form button,
-  .admin-table-actions-stack > div button {
+  .admin-table-actions-stack>form button,
+  .admin-table-actions-stack>div button {
     @apply w-full min-w-0 justify-center;
     min-width: 0 !important;
   }
@@ -1031,22 +1045,18 @@
   }
 
   /* Immediate press feedback on all tactical buttons */
-  .army-site:not(.dashboard-day) :is(
-      .ops-btn,
-      .cp-btn-primary,
-      .cp-btn-secondary,
-      .pats-btn,
-      .army-btn,
-      .pats-hero__cta,
-      button,
-      a.army-btn
-    ):not(:disabled) {
+  .army-site:not(.dashboard-day) :is(.ops-btn,
+    .cp-btn-primary,
+    .cp-btn-secondary,
+    .pats-btn,
+    .army-btn,
+    .pats-hero__cta,
+    button,
+    a.army-btn):not(:disabled) {
     touch-action: manipulation;
   }
 
-  .army-site:not(.dashboard-day) :is(.ops-btn, .cp-btn-primary, .cp-btn-secondary):active:not(
-      :disabled
-    ) {
+  .army-site:not(.dashboard-day) :is(.ops-btn, .cp-btn-primary, .cp-btn-secondary):active:not( :disabled) {
     transform: translateY(0);
     transition-duration: 50ms;
   }
@@ -1069,9 +1079,7 @@
 
 /* Reserve ticker + nav when the announcement bar is present */
 .cinematic-site:has(.announcement-ticker) {
-  --cinematic-header-height: calc(
-    var(--cinematic-ticker-height) + var(--cinematic-nav-height)
-  );
+  --cinematic-header-height: calc(var(--cinematic-ticker-height) + var(--cinematic-nav-height));
 }
 
 /* Inner public pages: nav only (no announcement ticker) */
@@ -1213,6 +1221,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(-50%, 0, 0);
   }
@@ -1232,8 +1241,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   height: 100%;
   min-height: var(--cinematic-ticker-height, 44px);
   box-sizing: border-box;
-  animation: announcement-ticker-scroll-rtl
-    calc(var(--announcement-ticker-duration-sec, 30) * 1s) linear infinite;
+  animation: announcement-ticker-scroll-rtl calc(var(--announcement-ticker-duration-sec, 30) * 1s) linear infinite;
   will-change: transform;
 }
 
@@ -1265,6 +1273,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1303,7 +1312,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   padding-bottom: clamp(1.25rem, 3vw, 2rem);
 }
 
-.cinematic-home-flow > .cinematic-section {
+.cinematic-home-flow>.cinematic-section {
   border-radius: 0;
   padding-top: clamp(3rem, 6vw, 4.5rem);
   padding-bottom: clamp(3rem, 6vw, 4.5rem);
@@ -1314,7 +1323,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 @media (min-width: 640px) {
-  .cinematic-home-flow > .cinematic-section {
+  .cinematic-home-flow>.cinematic-section {
     padding-top: clamp(2.25rem, 4vw, 3rem);
     padding-bottom: clamp(2.25rem, 4vw, 3rem);
   }
@@ -1327,7 +1336,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   gap: 0.75rem;
 }
 
-.cinematic-hero-actions > a {
+.cinematic-hero-actions>a {
   justify-content: center;
   min-height: 3rem;
   padding: 0.75rem 1.5rem;
@@ -1343,7 +1352,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
     gap: 0.75rem 1rem;
   }
 
-  .cinematic-hero-actions > a {
+  .cinematic-hero-actions>a {
     flex: 0 1 auto;
     min-width: 11.25rem;
     width: auto;
@@ -1650,20 +1659,15 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(
-    .admin-data-table,
-    .admin-users-table,
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-units-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table
-  )
-  thead
-  th,
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.admin-data-table,
+  .admin-users-table,
+  .admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-units-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table) thead th,
 :is(.admin-theme, .participant-portal, .dashboard-day) .admin-table-head th {
   text-align: center;
 }
@@ -1827,17 +1831,13 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 :is(.admin-theme) .admin-sidebar-footer--logout:hover .admin-sidebar-logout,
-:is(.admin-theme)
-  .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible)
-  .admin-sidebar-logout {
+:is(.admin-theme) .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible) .admin-sidebar-logout {
   color: #b91c1c;
 }
 
 
 :is(.admin-theme) .admin-sidebar-footer--logout:hover .admin-sidebar-link-icon,
-:is(.admin-theme)
-  .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible)
-  .admin-sidebar-link-icon {
+:is(.admin-theme) .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible) .admin-sidebar-link-icon {
   opacity: 1;
   color: #dc2626;
 }
@@ -1932,8 +1932,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn, .cp-btn-primary, .cp-btn-secondary) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn, .cp-btn-primary, .cp-btn-secondary) {
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -1950,8 +1949,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary) {
   background: var(--portal-primary);
   border: 1px solid var(--portal-primary);
   color: #ffffff;
@@ -1959,8 +1957,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):hover:not(:disabled) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):hover:not(:disabled) {
   background: var(--portal-primary-hover);
   border-color: var(--portal-primary-hover);
   transform: translateY(-1px);
@@ -1968,8 +1965,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):active:not(:disabled) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-primary, .cp-btn-primary, .admin-btn-primary):active:not(:disabled) {
   transform: translateY(0);
 }
 
@@ -1990,8 +1986,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-secondary, .cp-btn-secondary, .admin-btn-outline) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-secondary, .cp-btn-secondary, .admin-btn-outline) {
   background: #ffffff;
   border: 1.5px solid var(--portal-border-soft);
   color: var(--portal-text-heading);
@@ -2000,8 +1995,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-secondary, .cp-btn-secondary, .admin-btn-outline):hover:not(:disabled) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-secondary, .cp-btn-secondary, .admin-btn-outline):hover:not(:disabled) {
   border-color: #aaaaaa;
   background: #f5f4f0;
   color: var(--portal-text-heading);
@@ -2010,8 +2004,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-danger, .admin-btn-destructive) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-danger, .admin-btn-destructive) {
   background: #ffffff;
   border: 1.5px solid var(--portal-destructive);
   color: var(--portal-destructive);
@@ -2020,8 +2013,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.ops-btn-danger, .admin-btn-destructive):hover:not(:disabled) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.ops-btn-danger, .admin-btn-destructive):hover:not(:disabled) {
   background: #fdf0f0;
   border-color: var(--portal-destructive-hover);
   color: var(--portal-destructive-hover);
@@ -2043,9 +2035,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  .portal-filter-group
-  :is(.ops-filter-chip, .admin-filter-chip) {
+:is(.admin-theme, .participant-portal, .dashboard-day) .portal-filter-group :is(.ops-filter-chip, .admin-filter-chip) {
   margin: 0;
   border: none;
   border-radius: 999px;
@@ -2059,17 +2049,13 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  .portal-filter-group
-  :is(.ops-filter-chip, .admin-filter-chip):hover {
+:is(.admin-theme, .participant-portal, .dashboard-day) .portal-filter-group :is(.ops-filter-chip, .admin-filter-chip):hover {
   background: rgba(0, 0, 0, 0.04);
   color: var(--portal-text-value);
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  .portal-filter-group
-  :is(.ops-filter-chip-active, .admin-filter-chip-active) {
+:is(.admin-theme, .participant-portal, .dashboard-day) .portal-filter-group :is(.ops-filter-chip-active, .admin-filter-chip-active) {
   background: var(--portal-primary);
   color: #ffffff;
   box-shadow: none;
@@ -2194,8 +2180,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.admin-surface, .admin-data-table-shell) {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.admin-surface, .admin-data-table-shell) {
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   background: #ffffff;
@@ -2204,39 +2189,29 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-data-table,
-    .admin-users-table,
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-units-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table
-  )
-  thead
-  th,
+:is(.admin-theme) :is(.admin-data-table,
+  .admin-users-table,
+  .admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-units-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table) thead th,
 :is(.admin-theme) .admin-table-head th {
   font-size: 0.8125rem;
 }
 
 
-:is(.participant-portal, .dashboard-day)
-  :is(
-    .admin-data-table,
-    .admin-users-table,
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-units-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table
-  )
-  thead
-  th,
+:is(.participant-portal, .dashboard-day) :is(.admin-data-table,
+  .admin-users-table,
+  .admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-units-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table) thead th,
 :is(.participant-portal, .dashboard-day) .admin-table-head th {
   font-size: 0.7rem;
   font-weight: 600;
@@ -2248,43 +2223,30 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 
-:is(.admin-theme)
-  :is(
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-data-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table
-  )
-  tbody
-  td {
+:is(.admin-theme) :is(.admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-data-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table) tbody td {
   text-align: center;
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.admin-data-table, .admin-users-table)
-  tbody
-  tr {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.admin-data-table, .admin-users-table) tbody tr {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   border-top: none;
   transition: background 0.15s ease;
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  :is(.admin-data-table, .admin-users-table)
-  tbody
-  tr:hover {
+:is(.admin-theme, .participant-portal, .dashboard-day) :is(.admin-data-table, .admin-users-table) tbody tr:hover {
   background: #f1f5f9;
 }
 
 
-:is(.admin-theme, .participant-portal, .dashboard-day)
-  .admin-data-table
-  td {
+:is(.admin-theme, .participant-portal, .dashboard-day) .admin-data-table td {
   padding: 14px 16px;
   font-size: 0.875rem;
   color: var(--portal-text-body);
@@ -2379,17 +2341,14 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions
-  ) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions) {
   display: inline-flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -2399,35 +2358,27 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions
-  )
-  > * {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions)>* {
   flex: 0 0 auto;
   margin: 0 !important;
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions,
-    .admin-payments-cell-actions
-  )
-  :is(.portal-table-action-btn, .admin-users-action-btn, .ops-btn, button, a) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions,
+  .admin-payments-cell-actions) :is(.portal-table-action-btn, .admin-users-action-btn, .ops-btn, button, a) {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2460,94 +2411,70 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions,
-    .admin-payments-cell-actions
-  )
-  :is(.ops-btn-secondary, .admin-btn-outline, .portal-table-action-btn--view) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions,
+  .admin-payments-cell-actions) :is(.ops-btn-secondary, .admin-btn-outline, .portal-table-action-btn--view) {
   border: 1px solid #d1d5db !important;
   background: #ffffff !important;
   color: #3d4538 !important;
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions,
-    .admin-payments-cell-actions
-  )
-  :is(.ops-btn-secondary, .admin-btn-outline, .portal-table-action-btn--view):hover:not(
-      :disabled
-    ) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions,
+  .admin-payments-cell-actions) :is(.ops-btn-secondary, .admin-btn-outline, .portal-table-action-btn--view):hover:not( :disabled) {
   border-color: #7a9a6e !important;
   background: #eef4ea !important;
   color: #2d4a22 !important;
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions,
-    .admin-payments-cell-actions
-  )
-  :is(.ops-btn-danger, .admin-btn-destructive, .portal-table-action-btn--danger) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions,
+  .admin-payments-cell-actions) :is(.ops-btn-danger, .admin-btn-destructive, .portal-table-action-btn--danger) {
   border: 1px solid #e8b4b4 !important;
   background: #fff8f8 !important;
   color: #b91c1c !important;
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-news-row-actions,
-    .admin-news-pdf-cell,
-    .admin-ticker-row-actions,
-    .admin-units-row-actions,
-    .admin-key-dates-row-actions,
-    .admin-payments-cell-actions
-  )
-  :is(.ops-btn-danger, .admin-btn-destructive, .portal-table-action-btn--danger):hover:not(
-      :disabled
-    ) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-news-row-actions,
+  .admin-news-pdf-cell,
+  .admin-ticker-row-actions,
+  .admin-units-row-actions,
+  .admin-key-dates-row-actions,
+  .admin-payments-cell-actions) :is(.ops-btn-danger, .admin-btn-destructive, .portal-table-action-btn--danger):hover:not( :disabled) {
   border-color: #dc2626 !important;
   background: #dc2626 !important;
   color: #ffffff !important;
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-payments-cell-actions
-  )
-  :is(.ops-btn-approve, .admin-btn-approve, .ops-btn-primary, .portal-table-action-btn--primary) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-payments-cell-actions) :is(.ops-btn-approve, .admin-btn-approve, .ops-btn-primary, .portal-table-action-btn--primary) {
   border: 1px solid #5a7349 !important;
   background: #e8f0e4 !important;
   color: #2d4a22 !important;
@@ -2555,16 +2482,10 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 
-:is(.admin-theme)
-  :is(
-    .admin-table-actions,
-    .admin-users-row-actions,
-    .admin-users-row-actions-pair,
-    .admin-payments-cell-actions
-  )
-  :is(.ops-btn-approve, .admin-btn-approve, .ops-btn-primary, .portal-table-action-btn--primary):hover:not(
-      :disabled
-    ) {
+:is(.admin-theme) :is(.admin-table-actions,
+  .admin-users-row-actions,
+  .admin-users-row-actions-pair,
+  .admin-payments-cell-actions) :is(.ops-btn-approve, .admin-btn-approve, .ops-btn-primary, .portal-table-action-btn--primary):hover:not( :disabled) {
   border-color: #3d5230 !important;
   background: #4a6040 !important;
   color: #ffffff !important;
@@ -2681,8 +2602,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 :is(.admin-theme) .admin-sidebar-footer--logout:hover,
-:is(.admin-theme)
-  .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible) {
+:is(.admin-theme) .admin-sidebar-footer--logout:has(.admin-sidebar-logout:focus-visible) {
   background: transparent;
 }
 
@@ -2781,7 +2701,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
   .cinematic-site .tac-scan-overlay::after,
-.cinematic-site .tac-world-dot {
+  .cinematic-site .tac-world-dot {
     animation: none !important;
   }
 }
@@ -2792,12 +2712,15 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
     transform: translateY(-100%);
     opacity: 0;
   }
+
   8% {
     opacity: 1;
   }
+
   92% {
     opacity: 1;
   }
+
   100% {
     transform: translateY(100vh);
     opacity: 0;
@@ -2805,30 +2728,36 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 @keyframes tac-hud-pulse {
+
   0%,
   100% {
     opacity: 0.35;
   }
+
   50% {
     opacity: 0.85;
   }
 }
 
 @keyframes tac-route-pulse {
+
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.25);
   }
+
   50% {
     box-shadow: 0 0 0 6px rgba(201, 162, 39, 0);
   }
 }
 
 @keyframes tac-spotlight {
+
   0%,
   100% {
     opacity: 0.55;
   }
+
   50% {
     opacity: 0.9;
   }
@@ -2838,6 +2767,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   0% {
     background-position: 200% center;
   }
+
   100% {
     background-position: -200% center;
   }
@@ -2858,14 +2788,12 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   left: 0;
   right: 0;
   height: 28%;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    var(--tac-scan) 45%,
-    rgba(201, 162, 39, 0.14) 50%,
-    var(--tac-scan) 55%,
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      transparent 0%,
+      var(--tac-scan) 45%,
+      rgba(201, 162, 39, 0.14) 50%,
+      var(--tac-scan) 55%,
+      transparent 100%);
   animation: tac-scan-sweep 9s ease-in-out infinite;
 }
 
@@ -3010,11 +2938,9 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .tac-difficulty--elite {
   color: #f0e6c8;
   border-color: rgba(201, 162, 39, 0.65);
-  background: linear-gradient(
-    135deg,
-    rgba(201, 162, 39, 0.2),
-    rgba(139, 58, 42, 0.15)
-  );
+  background: linear-gradient(135deg,
+      rgba(201, 162, 39, 0.2),
+      rgba(139, 58, 42, 0.15));
 }
 
 
@@ -3028,22 +2954,18 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 .tac-mission-card__veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    165deg,
-    rgba(20, 28, 18, 0.5) 0%,
-    rgba(16, 22, 14, 0.9) 55%,
-    rgba(14, 20, 12, 0.98) 100%
-  );
+  background: linear-gradient(165deg,
+      rgba(20, 28, 18, 0.5) 0%,
+      rgba(16, 22, 14, 0.9) 55%,
+      rgba(14, 20, 12, 0.98) 100%);
 }
 
 
 .tac-brief-classified {
   border: 1px solid rgba(201, 162, 39, 0.2);
-  background: linear-gradient(
-    180deg,
-    rgba(15, 20, 18, 0.95) 0%,
-    rgba(8, 11, 10, 0.98) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(15, 20, 18, 0.95) 0%,
+      rgba(8, 11, 10, 0.98) 100%);
   box-shadow:
     inset 0 1px 0 rgba(201, 162, 39, 0.12),
     0 24px 60px rgba(0, 0, 0, 0.5);
@@ -3052,13 +2974,11 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 .tac-brief-header {
   border-bottom: 1px solid rgba(201, 162, 39, 0.15);
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 6px,
-    rgba(201, 162, 39, 0.02) 6px,
-    rgba(201, 162, 39, 0.02) 12px
-  );
+  background: repeating-linear-gradient(-45deg,
+      transparent,
+      transparent 6px,
+      rgba(201, 162, 39, 0.02) 6px,
+      rgba(201, 162, 39, 0.02) 12px);
 }
 
 
@@ -3111,9 +3031,10 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 @media (prefers-reduced-motion: reduce) {
+
   .tac-scan-overlay::after,
-.tac-route-node--steady,
-.tac-world-dot {
+  .tac-route-node--steady,
+  .tac-world-dot {
     animation: none;
   }
 
@@ -3137,7 +3058,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 
 .army-site:not(.dashboard-day) {
-  
+
   --bg-base: #101c28;
   --bg-surface: #152535;
   --bg-card: #1a3248;
@@ -3152,12 +3073,10 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   --text-label: #d4b85a;
   --border-subtle: rgba(255, 255, 255, 0.14);
   --border-gold: rgba(200, 168, 75, 0.45);
-  --overlay-hero: linear-gradient(
-    to right,
-    rgba(16, 28, 40, 0.62) 0%,
-    rgba(21, 37, 53, 0.28) 55%,
-    rgba(21, 37, 53, 0.06) 100%
-  );
+  --overlay-hero: linear-gradient(to right,
+      rgba(16, 28, 40, 0.62) 0%,
+      rgba(21, 37, 53, 0.28) 55%,
+      rgba(21, 37, 53, 0.06) 100%);
   --shadow-card: 0 12px 40px rgba(8, 16, 28, 0.35);
   --cinematic-accent: var(--accent-gold);
   color: var(--text-primary);
@@ -3169,11 +3088,9 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.045) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(circle,
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px);
   background-size: 32px 32px;
   pointer-events: none;
   z-index: 0;
@@ -3286,11 +3203,9 @@ html.reveal-active .army-site:not(.dashboard-day) .reveal.visible {
 
 
 .army-site:not(.dashboard-day) .paf-footer__shade {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 18, 28, 0.3) 0%,
-    rgba(16, 28, 40, 0.5) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(10, 18, 28, 0.3) 0%,
+      rgba(16, 28, 40, 0.5) 100%);
 }
 
 
@@ -3367,9 +3282,7 @@ html.reveal-active .army-site:not(.dashboard-day) .reveal.visible {
   --pats-nav-height: 5.25rem;
   --pats-nav-inner-pad-y: 0.4375rem;
   --pats-nav-pad-x: 1.25rem;
-  --pats-nav-emblem: calc(
-    var(--pats-nav-height) - (2 * var(--pats-nav-inner-pad-y))
-  );
+  --pats-nav-emblem: calc(var(--pats-nav-height) - (2 * var(--pats-nav-inner-pad-y)));
   --pats-nav-menu-w: 1.375rem;
 }
 
@@ -3430,8 +3343,9 @@ html.reveal-active .army-site:not(.dashboard-day) .reveal.visible {
 
 
 @media (min-width: 640px) {
+
   .army-site:not(.dashboard-day) .pats-header--compact,
-.army-site:not(.dashboard-day) .pats-header--shrunk {
+  .army-site:not(.dashboard-day) .pats-header--shrunk {
     --pats-nav-height: 3.5rem;
     --pats-nav-inner-pad-y: 0.25rem;
     --pats-nav-pad-x: 1.5rem;
@@ -3440,10 +3354,7 @@ html.reveal-active .army-site:not(.dashboard-day) .reveal.visible {
 
 
 
-html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
-  .army-site:not(.dashboard-day)
-  .pats-header--compact
-  .pats-nav {
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-site:not(.dashboard-day) .pats-header--compact .pats-nav {
   background: #16213e !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
@@ -3504,8 +3415,9 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__brand-ti
 
 
 @media (min-width: 640px) {
+
   .army-site:not(.dashboard-day) .pats-header--compact .pats-nav__brand-title,
-.army-site:not(.dashboard-day) .pats-header--shrunk .pats-nav__brand-title {
+  .army-site:not(.dashboard-day) .pats-header--shrunk .pats-nav__brand-title {
     font-size: 1.625rem;
   }
 }
@@ -3550,9 +3462,7 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__brand {
 }
 
 
-.army-site:not(.dashboard-day)
-  .pats-header:not(.pats-header--compact):not(.pats-header--shrunk)
-  .pats-nav__emblem-wrap {
+.army-site:not(.dashboard-day) .pats-header:not(.pats-header--compact):not(.pats-header--shrunk) .pats-nav__emblem-wrap {
   width: var(--pats-nav-emblem);
   height: var(--pats-nav-emblem);
 }
@@ -3698,12 +3608,8 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
 }
 
 
-.army-site:not(.dashboard-day)
-  .pats-header--home:not(.pats-header--solid)
-  .pats-nav__emblem-wrap,
-.army-site:not(.dashboard-day)
-  .pats-header--over-hero:not(.pats-header--solid)
-  .pats-nav__emblem-wrap {
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__emblem-wrap,
+.army-site:not(.dashboard-day) .pats-header--over-hero:not(.pats-header--solid) .pats-nav__emblem-wrap {
   filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.55));
 }
 
@@ -3717,7 +3623,7 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
   transform-origin: center center;
   transform-style: preserve-3d;
   backface-visibility: visible;
-  
+
   animation: pats-nav-emblem-spin 8s linear infinite;
   will-change: transform;
 }
@@ -3728,9 +3634,11 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
   0% {
     transform: rotateY(0deg);
   }
+
   87.5% {
     transform: rotateY(360deg);
   }
+
   100% {
     transform: rotateY(360deg);
   }
@@ -3854,7 +3762,7 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
   }
 
 
-  
+
   .army-site:not(.dashboard-day) .pats-header--compact.pats-header--menu-open .pats-nav__panel-links {
     gap: 0.5rem 0.5rem;
   }
@@ -4155,12 +4063,10 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__lang-tri
 
 
 .army-site:not(.dashboard-day) .pats-header--menu-open:not(.pats-header--solid) .pats-nav {
-  background: linear-gradient(
-    to bottom,
-    rgba(16, 28, 40, 0.72) 0%,
-    rgba(16, 28, 40, 0.35) 70%,
-    transparent 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(16, 28, 40, 0.72) 0%,
+      rgba(16, 28, 40, 0.35) 70%,
+      transparent 100%);
 }
 
 
@@ -4171,10 +4077,7 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__lang-tri
 }
 
 
-html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
-  .army-site:not(.dashboard-day)
-  .pats-header--menu-open.pats-header--compact
-  .pats-nav {
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-site:not(.dashboard-day) .pats-header--menu-open.pats-header--compact .pats-nav {
   background: #16213e !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
@@ -4387,10 +4290,12 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
+
 /* ============================================================
    HERO (ex pats-hero.css, retired in phase 3d). Homepage hero:
    video/overlay layers, headline, subline, caption, CTA,
@@ -4402,60 +4307,40 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 /* PATS homepage hero — DESIGN_SPEC.md + PAF legibility */
 
 /* Homepage hero only — overlay marquee (white text, transparent band) */
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker {
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker {
   background: none !important;
   background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker
-  .announcement-ticker-viewport {
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker .announcement-ticker-viewport {
   background: transparent;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker
-  .announcement-ticker-segment {
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker .announcement-ticker-segment {
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker,
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker
-  * {
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker,
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker * {
   color: #fff !important;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker
-  span[class*="tactical-brass"],
-.army-site:not(.dashboard-day)
-  .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled)
-  .pats-hero-ticker
-  span[class*="accent-gold"] {
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker span[class*="tactical-brass"],
+.army-site:not(.dashboard-day) .pats-site-chrome:not(.pats-site-chrome--marquee-scrolled) .pats-hero-ticker span[class*="accent-gold"] {
   color: var(--gold, #c8a84b) !important;
 }
 
-/* Full viewport under fixed nav overlay */
 .army-site:not(.dashboard-day) .pats-hero {
   position: relative;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
-  height: 100vh;
-  height: 100dvh;
-  min-height: min(640px, 100dvh);
-  min-height: min(640px, 100svh);
+  height: 80vh;
+  height: 80dvh;
+  min-height: min(512px, 80dvh);
+  min-height: min(512px, 80svh);
   padding-top: var(--site-header-height, calc(32px + 6.25rem));
   overflow: hidden;
   background: #101c28;
@@ -4476,14 +4361,12 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(16, 28, 40, 0.38) 0%,
-    rgba(21, 37, 53, 0.12) 22%,
-    rgba(21, 37, 53, 0.04) 45%,
-    rgba(16, 28, 40, 0.45) 78%,
-    rgba(16, 28, 40, 0.65) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(16, 28, 40, 0.38) 0%,
+      rgba(21, 37, 53, 0.12) 22%,
+      rgba(21, 37, 53, 0.04) 45%,
+      rgba(16, 28, 40, 0.45) 78%,
+      rgba(16, 28, 40, 0.65) 100%);
 }
 
 .army-site:not(.dashboard-day) .pats-hero__overlay-vignette {
@@ -4491,12 +4374,10 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  background: linear-gradient(
-    to right,
-    rgba(16, 28, 40, 0.48) 0%,
-    rgba(21, 37, 53, 0.18) 35%,
-    transparent 62%
-  );
+  background: linear-gradient(to right,
+      rgba(16, 28, 40, 0.48) 0%,
+      rgba(21, 37, 53, 0.18) 35%,
+      transparent 62%);
 }
 
 /* Bottom row — copy + CTA (pinned to lower hero; clear of fixed chrome via hero padding-top) */
@@ -4689,10 +4570,12 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 }
 
 @keyframes pats-hero-scroll-bob {
+
   0%,
   100% {
     transform: translateX(-50%) translateY(0);
   }
+
   50% {
     transform: translateX(-50%) translateY(6px);
   }
@@ -4873,38 +4756,30 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 
 .army-site:not(.dashboard-day) .pats-section__backdrop-shade--deepest {
-  background: linear-gradient(
-    180deg,
-    rgba(16, 28, 40, 0.42) 0%,
-    rgba(21, 37, 53, 0.58) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(16, 28, 40, 0.42) 0%,
+      rgba(21, 37, 53, 0.58) 100%);
 }
 
 
 .army-site:not(.dashboard-day) .pats-section__backdrop-shade--dark {
-  background: linear-gradient(
-    165deg,
-    rgba(16, 28, 40, 0.4) 0%,
-    rgba(26, 50, 72, 0.55) 100%
-  );
+  background: linear-gradient(165deg,
+      rgba(16, 28, 40, 0.4) 0%,
+      rgba(26, 50, 72, 0.55) 100%);
 }
 
 
 .army-site:not(.dashboard-day) .pats-section__backdrop-shade--navy {
-  background: linear-gradient(
-    180deg,
-    rgba(21, 37, 53, 0.38) 0%,
-    rgba(26, 50, 72, 0.52) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(21, 37, 53, 0.38) 0%,
+      rgba(26, 50, 72, 0.52) 100%);
 }
 
 
 .army-site:not(.dashboard-day) .pats-section__backdrop-shade--elevated {
-  background: linear-gradient(
-    180deg,
-    rgba(26, 50, 72, 0.36) 0%,
-    rgba(21, 37, 53, 0.52) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(26, 50, 72, 0.36) 0%,
+      rgba(21, 37, 53, 0.52) 100%);
 }
 
 
@@ -4914,20 +4789,16 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 
 .army-site:not(.dashboard-day) .pats-section__backdrop-shade--mission {
-  background: linear-gradient(
-    180deg,
-    rgba(16, 28, 40, 0.52) 0%,
-    rgba(21, 37, 53, 0.68) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(16, 28, 40, 0.52) 0%,
+      rgba(21, 37, 53, 0.68) 100%);
 }
 
 
 .army-site:not(.dashboard-day) .pats-section__backdrop-shade--light {
-  background: linear-gradient(
-    180deg,
-    rgba(242, 245, 250, 0.88) 0%,
-    rgba(242, 245, 250, 0.94) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(242, 245, 250, 0.88) 0%,
+      rgba(242, 245, 250, 0.94) 100%);
 }
 
 
@@ -4938,11 +4809,9 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 
 .army-site:not(.dashboard-day) .pats-section--light.pats-section--has-bg .pats-section__backdrop-shade--light {
-  background: linear-gradient(
-    180deg,
-    rgba(244, 247, 250, 0.55) 0%,
-    rgba(238, 242, 246, 0.68) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(244, 247, 250, 0.55) 0%,
+      rgba(238, 242, 246, 0.68) 100%);
 }
 
 
@@ -4985,7 +4854,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   --pats-photo28-opacity: 0.18;
   --pats-logo-watermark-opacity: 0.18;
   --pats-ease: cubic-bezier(0.16, 1, 0.3, 1);
-  
+
 }
 
 
@@ -5107,8 +4976,8 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 .army-site:not(.dashboard-day) .pats-section {
   position: relative;
-  padding-top: 3rem; 
-  padding-bottom: 3rem; 
+  padding-top: 3rem;
+  padding-bottom: 3rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
@@ -5122,16 +4991,16 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 @media (min-width: 768px) {
   .army-site:not(.dashboard-day) .pats-section {
-    padding-top: 4rem; 
-    padding-bottom: 4rem; 
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 }
 
 
 @media (min-width: 1024px) {
   .army-site:not(.dashboard-day) .pats-section {
-    padding-top: 4rem; 
-    padding-bottom: 4rem; 
+    padding-top: 4rem;
+    padding-bottom: 4rem;
     padding-left: 4rem;
     padding-right: 4rem;
   }
@@ -5159,12 +5028,10 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 
 .army-site:not(.dashboard-day) .pats-section--stats {
-  background: linear-gradient(
-    90deg,
-    var(--pats-bg-navy) 0%,
-    var(--pats-bg-elevated) 50%,
-    var(--pats-bg-navy) 100%
-  );
+  background: linear-gradient(90deg,
+      var(--pats-bg-navy) 0%,
+      var(--pats-bg-elevated) 50%,
+      var(--pats-bg-navy) 100%);
   border-top: 1px solid var(--pats-border-gold);
   border-bottom: 1px solid var(--pats-border-gold);
   padding: 0.75rem 1rem;
@@ -5231,7 +5098,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 .army-site:not(.dashboard-day) .pats-highlight-grid {
   position: relative;
   isolation: isolate;
-  overflow: visible; 
+  overflow: visible;
   transform: none !important;
   transition: none !important;
 }
@@ -5404,12 +5271,10 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 .army-site:not(.dashboard-day) .pats-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(16, 28, 40, 0.72) 0%,
-    rgba(21, 37, 53, 0.2) 55%,
-    transparent 72%
-  );
+  background: linear-gradient(to top,
+      rgba(16, 28, 40, 0.72) 0%,
+      rgba(21, 37, 53, 0.2) 55%,
+      transparent 72%);
 }
 
 
@@ -5471,12 +5336,10 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 
 .army-site:not(.dashboard-day) .pats-section--light .pats-image-card__overlay {
-  background: linear-gradient(
-    to top,
-    rgba(15, 25, 35, 0.82) 0%,
-    rgba(15, 25, 35, 0.25) 55%,
-    transparent 72%
-  );
+  background: linear-gradient(to top,
+      rgba(15, 25, 35, 0.82) 0%,
+      rgba(15, 25, 35, 0.25) 55%,
+      transparent 72%);
 }
 
 
@@ -5597,23 +5460,13 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 
 
 
-.army-site:not(.dashboard-day)
-  .pats-site-body--page-banner
-  .pats-page-hero--banner
-  .pats-page-hero__stage {
-  min-height: calc(
-    var(--pats-page-banner-height) + var(--site-header-height, 5.5rem)
-  );
+.army-site:not(.dashboard-day) .pats-site-body--page-banner .pats-page-hero--banner .pats-page-hero__stage {
+  min-height: calc(var(--pats-page-banner-height) + var(--site-header-height, 5.5rem));
 }
 
 
-.army-site:not(.dashboard-day)
-  .pats-site-body--page-banner
-  .pats-page-hero--banner
-  .pats-page-hero__content {
-  min-height: calc(
-    var(--pats-page-banner-height) + var(--site-header-height, 5.5rem)
-  );
+.army-site:not(.dashboard-day) .pats-site-body--page-banner .pats-page-hero--banner .pats-page-hero__content {
+  min-height: calc(var(--pats-page-banner-height) + var(--site-header-height, 5.5rem));
 }
 
 
@@ -5641,12 +5494,10 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   inset: 0;
   z-index: 2;
   background:
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
       rgba(6, 10, 8, 0.45) 0%,
       rgba(6, 10, 8, 0.2) 50%,
-      rgba(6, 10, 8, 0.82) 100%
-    ),
+      rgba(6, 10, 8, 0.82) 100%),
     linear-gradient(to right, rgba(0, 0, 0, 0.55) 0%, transparent 55%);
 }
 
@@ -5732,16 +5583,14 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   margin: 0;
   padding: 0;
   border: none;
-  background: linear-gradient(
-    90deg,
-    var(--pats-bg-stats, #1a3248) 0%,
-    var(--pats-bg-elevated, #111a0e) 50%,
-    var(--pats-bg-stats, #1a3248) 100%
-  );
+  background: linear-gradient(90deg,
+      var(--pats-bg-stats, #1a3248) 0%,
+      var(--pats-bg-elevated, #111a0e) 50%,
+      var(--pats-bg-stats, #1a3248) 100%);
 }
 
 
-.army-site:not(.dashboard-day) .pats-page-hero__meta > div {
+.army-site:not(.dashboard-day) .pats-page-hero__meta>div {
   display: flex;
   flex: 1 1 0;
   min-width: 0;
@@ -5754,13 +5603,13 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
 }
 
 
-.army-site:not(.dashboard-day) .pats-page-hero__meta > div:last-child {
+.army-site:not(.dashboard-day) .pats-page-hero__meta>div:last-child {
   border-right: none;
 }
 
 
 @media (min-width: 640px) {
-  .army-site:not(.dashboard-day) .pats-page-hero__meta > div {
+  .army-site:not(.dashboard-day) .pats-page-hero__meta>div {
     padding: 1rem 1.25rem;
   }
 }
@@ -5965,23 +5814,23 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
   --pats-radius-btn: 8px;
   --pats-radius-card: 12px;
   --pats-radius-media: 12px;
-  --pats-type-brand: 1.5rem; 
-  --pats-type-display: clamp(1.5rem, 4vw + 0.5rem, 2.75rem); 
-  --pats-type-feature: 1.375rem; 
-  --pats-type-title: 1.25rem; 
-  --pats-type-body: 1.125rem; 
+  --pats-type-brand: 1.5rem;
+  --pats-type-display: clamp(1.5rem, 4vw + 0.5rem, 2.75rem);
+  --pats-type-feature: 1.375rem;
+  --pats-type-title: 1.25rem;
+  --pats-type-body: 1.125rem;
   --pats-type-caption: 1.125rem;
-  --pats-type-eyebrow: 0.875rem; 
-  --pats-type-section-eyebrow: 1.0625rem; 
-  --pats-type-body-sm: 1rem; 
+  --pats-type-eyebrow: 0.875rem;
+  --pats-type-section-eyebrow: 1.0625rem;
+  --pats-type-body-sm: 1rem;
   --pats-type-ui-sm: 1rem;
   --pats-type-form-label: 1rem;
   --pats-type-form-helper: 1rem;
   --pats-type-form-section: 1.125rem;
   --pats-type-stat-value: clamp(1.75rem, 3.5vw, 2.5rem);
   --pats-type-stat-label: 10px;
-  --pats-type-quote: clamp(1.25rem, 3vw, 1.75rem); 
-  --pats-type-quote-credit: 0.875rem; 
+  --pats-type-quote: clamp(1.25rem, 3vw, 1.75rem);
+  --pats-type-quote-credit: 0.875rem;
   --pats-type-btn: 1rem;
   --pats-type-line-body: 1.65;
   --pats-type-line-title: 1.35;
@@ -6211,9 +6060,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--comp
    ============================================================ */
 /* PAF-style inner public shell — night theme only (light uses pats-section-panels.css) */
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell {
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell {
   --pats-inner-gap: clamp(1rem, 2vw, 1.75rem);
   display: grid;
   gap: var(--pats-inner-gap);
@@ -6222,10 +6069,7 @@ html:not(.light-theme):not([data-site-theme="day"])
   padding-bottom: clamp(1.75rem, 3vw, 3rem);
 }
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  > .space-y-0 {
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell>.space-y-0 {
   display: grid;
   gap: var(--pats-inner-gap);
 }
@@ -6233,10 +6077,7 @@ html:not(.light-theme):not([data-site-theme="day"])
 /* Full-bleed section bands (matches /exercise-contour): the section colour spans
    the viewport edge-to-edge and the inner content stays centred at 80rem. This
    removes the old "floating card" look that left dark gutters on wide screens. */
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  .pats-section:not(.pats-section--light) {
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section:not(.pats-section--light) {
   margin-left: 0;
   margin-right: 0;
   max-width: none;
@@ -6244,23 +6085,13 @@ html:not(.light-theme):not([data-site-theme="day"])
   border-radius: 0;
 }
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  .pats-section--light {
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section--light {
   background: transparent;
   color: var(--pats-text-on-light, #0f1923);
 }
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  > .space-y-0
-  > .pats-section,
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  > .pats-section {
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell>.space-y-0>.pats-section,
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell>.pats-section {
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -6312,13 +6143,11 @@ html:not(.light-theme):not([data-site-theme="day"])
 }
 
 /* Auth pages — static panels (no hover lift, transform, or shadow change) */
-.army-site:not(.dashboard-day) :is(
-    .pats-auth-shell__intro,
-    .pats-auth-shell .pats-login-card,
-    .pats-login-card.cp-form-card,
-    .pats-form-page .pats-form-section,
-    .pats-form-page .pats-form-notice
-  ) {
+.army-site:not(.dashboard-day) :is(.pats-auth-shell__intro,
+  .pats-auth-shell .pats-login-card,
+  .pats-login-card.cp-form-card,
+  .pats-form-page .pats-form-section,
+  .pats-form-page .pats-form-notice) {
   transform: none !important;
   transition:
     border-color 0.25s ease,
@@ -6327,46 +6156,37 @@ html:not(.light-theme):not([data-site-theme="day"])
 }
 
 @media (hover: hover) {
-  .army-site:not(.dashboard-day) :is(
-      .pats-auth-shell__intro,
-      .pats-auth-shell .pats-login-card,
-      .pats-login-card.cp-form-card,
-      .pats-form-page .pats-form-section,
-      .pats-form-page .pats-form-notice
-    ):is(:hover, :focus-within, .hover-lift-card:hover, .hover-lift-card:focus-within) {
+
+  .army-site:not(.dashboard-day) :is(.pats-auth-shell__intro,
+    .pats-auth-shell .pats-login-card,
+    .pats-login-card.cp-form-card,
+    .pats-form-page .pats-form-section,
+    .pats-form-page .pats-form-notice):is(:hover, :focus-within, .hover-lift-card:hover, .hover-lift-card:focus-within) {
     transform: none !important;
   }
 
-  .army-site:not(.dashboard-day) .pats-auth-shell__intro:is(
-      :hover,
-      :focus-within,
-      .hover-lift-card:hover
-    ) {
+  .army-site:not(.dashboard-day) .pats-auth-shell__intro:is( :hover,
+    :focus-within,
+    .hover-lift-card:hover) {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.04),
       0 18px 42px rgba(15, 25, 35, 0.24) !important;
   }
 
-  .army-site:not(.dashboard-day) :is(
-      .pats-auth-shell .pats-login-card,
-      .pats-login-card.cp-form-card
-    ):is(:hover, :focus-within, .hover-lift-card:hover) {
+  .army-site:not(.dashboard-day) :is(.pats-auth-shell .pats-login-card,
+    .pats-login-card.cp-form-card):is(:hover, :focus-within, .hover-lift-card:hover) {
     box-shadow: 0 8px 28px rgba(26, 36, 27, 0.1) !important;
   }
 
-  .army-site:not(.dashboard-day) .pats-form-page .pats-form-section:is(
-      :hover,
-      :focus-within,
-      .hover-lift-card:hover
-    ) {
+  .army-site:not(.dashboard-day) .pats-form-page .pats-form-section:is( :hover,
+    :focus-within,
+    .hover-lift-card:hover) {
     box-shadow: none !important;
   }
 
-  .army-site:not(.dashboard-day) .pats-form-page .pats-form-notice:is(
-      :hover,
-      :focus-within,
-      .hover-lift-card:hover
-    ) {
+  .army-site:not(.dashboard-day) .pats-form-page .pats-form-notice:is( :hover,
+    :focus-within,
+    .hover-lift-card:hover) {
     box-shadow: none !important;
   }
 }
@@ -6492,6 +6312,7 @@ html:not(.light-theme):not([data-site-theme="day"])
 }
 
 @media (min-width: 1024px) {
+
   .army-site:not(.dashboard-day) .pats-login-card,
   .army-site:not(.dashboard-day) .pats-auth-shell__intro {
     min-height: 34rem;
@@ -6559,12 +6380,8 @@ html:not(.light-theme):not([data-site-theme="day"])
    (0,5,1)) painted their borders white → invisible. Scope a visible sage
    border to the auth shell + login card at higher specificity so the field
    edges read clearly. */
-.army-site:not(.dashboard-day)
-  .pats-auth-shell
-  input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
-.army-site:not(.dashboard-day)
-  .pats-login-card
-  input:not([type="checkbox"]):not([type="radio"]) {
+.army-site:not(.dashboard-day) .pats-auth-shell input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.army-site:not(.dashboard-day) .pats-login-card input:not([type="checkbox"]):not([type="radio"]) {
   border-color: #a7b29a !important;
   box-shadow: inset 0 1px 2px rgba(15, 25, 35, 0.06);
 }
@@ -6817,9 +6634,10 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 
 
 @media (max-width: 639px) {
+
   .pats-portal input:not([type="checkbox"]):not([type="radio"]),
-.pats-portal select,
-.pats-portal textarea {
+  .pats-portal select,
+  .pats-portal textarea {
     width: 100%;
     font-size: 16px;
   }
@@ -7124,14 +6942,14 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 html.light-theme,
 html[data-site-theme="day"],
 html.site-theme-day {
-  
+
   --lt-parchment: #f4f1ea;
   --lt-white: #ffffff;
   --lt-warm: #f0ebe3;
   --lt-mist: #eef2f6;
   --lt-sage: #e8efe4;
   --lt-sage-deep: #dce8d6;
-  
+
   --lt-canvas: var(--lt-parchment);
   --lt-canvas-top: var(--lt-parchment);
   --lt-canvas-bottom: var(--lt-warm);
@@ -7149,7 +6967,7 @@ html.site-theme-day {
   --lt-divider: #ddd8cc;
   --lt-sand-border: #d4cfc4;
   --lt-card-border: #e0dcd4;
-  
+
   --lt-forest-card: #1a241b;
   --lt-forest-card-hover: #243028;
   --lt-forest-card-border: rgba(200, 168, 75, 0.28);
@@ -7240,11 +7058,9 @@ html.light-theme .army-site::before,
 html[data-site-theme="day"] .army-site::before {
   display: block;
   opacity: 0.4;
-  background-image: radial-gradient(
-    circle,
-    rgba(61, 92, 54, 0.07) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(circle,
+      rgba(61, 92, 54, 0.07) 1px,
+      transparent 1px);
   background-size: 28px 28px;
 }
 
@@ -7506,11 +7322,9 @@ html[data-site-theme="day"] .army-site .pats-section--mission::after {
 
 html.light-theme .army-site .pats-section--light.pats-section--has-bg .pats-section__backdrop-shade--light,
 html[data-site-theme="day"] .army-site .pats-section--light.pats-section--has-bg .pats-section__backdrop-shade--light {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.92) 0%,
-    rgba(244, 241, 234, 0.88) 100%
-  ) !important;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(244, 241, 234, 0.88) 100%) !important;
 }
 
 
@@ -7537,8 +7351,9 @@ html[data-site-theme="day"] .army-site .pats-stats {
 
 
 @media (min-width: 1024px) {
+
   html.light-theme .army-site .pats-stats,
-html[data-site-theme="day"] .army-site .pats-stats {
+  html[data-site-theme="day"] .army-site .pats-stats {
     grid-template-columns: repeat(4, 1fr);
   }
 }
@@ -7577,26 +7392,20 @@ html.light-theme .army-site .pats-highlight-cell,
 html.light-theme .army-site .tac-mission-card,
 html.light-theme .army-site .pats-rule-card,
 html.light-theme .army-site .pats-panel,
-html.light-theme
-  .army-site
-  .pats-section--dark
-  [class*="border-[var(--pats-border)]"]:not(.pats-home-schedule):not(.pats-data-table),
+html.light-theme .army-site .pats-section--dark [class*="border-[var(--pats-border)]"]:not(.pats-home-schedule):not(.pats-data-table),
 html.light-theme .army-site .army-home article,
-html.light-theme .army-site .army-home li > a,
+html.light-theme .army-site .army-home li>a,
 html.light-theme .army-site .pats-section--elevated article[class*="border"],
-html.light-theme .army-site .pats-section--elevated li > a[class*="border"],
+html.light-theme .army-site .pats-section--elevated li>a[class*="border"],
 html[data-site-theme="day"] .army-site .pats-highlight-cell,
 html[data-site-theme="day"] .army-site .tac-mission-card,
 html[data-site-theme="day"] .army-site .pats-rule-card,
 html[data-site-theme="day"] .army-site .pats-panel,
-html[data-site-theme="day"]
-  .army-site
-  .pats-section--dark
-  [class*="border-[var(--pats-border)]"]:not(.pats-home-schedule):not(.pats-data-table),
+html[data-site-theme="day"] .army-site .pats-section--dark [class*="border-[var(--pats-border)]"]:not(.pats-home-schedule):not(.pats-data-table),
 html[data-site-theme="day"] .army-site .army-home article,
-html[data-site-theme="day"] .army-site .army-home li > a,
+html[data-site-theme="day"] .army-site .army-home li>a,
 html[data-site-theme="day"] .army-site .pats-section--elevated article[class*="border"],
-html[data-site-theme="day"] .army-site .pats-section--elevated li > a[class*="border"] {
+html[data-site-theme="day"] .army-site .pats-section--elevated li>a[class*="border"] {
   background: var(--lt-forest-card) !important;
   border: 1px solid var(--lt-forest-card-border) !important;
   box-shadow: var(--lt-drill-card-shadow) !important;
@@ -7604,46 +7413,38 @@ html[data-site-theme="day"] .army-site .pats-section--elevated li > a[class*="bo
 }
 
 
-html.light-theme .army-site :is(
-    .tac-mission-card,
-    .pats-pillar-card,
-    .pats-highlight-cell,
-    .paf-card,
-    .paf-value-card,
-    .pats-rule-card,
-    .pats-doc-card,
-    .pats-panel
-  ):hover,
-html.light-theme .army-site :is(
-    .tac-mission-card,
-    .pats-pillar-card,
-    .pats-highlight-cell,
-    .paf-card,
-    .paf-value-card,
-    .pats-rule-card,
-    .pats-doc-card,
-    .pats-panel
-  ):focus-within,
-html[data-site-theme="day"] .army-site :is(
-    .tac-mission-card,
-    .pats-pillar-card,
-    .pats-highlight-cell,
-    .paf-card,
-    .paf-value-card,
-    .pats-rule-card,
-    .pats-doc-card,
-    .pats-panel
-  ):hover,
-html[data-site-theme="day"] .army-site :is(
-    .tac-mission-card,
-    .pats-pillar-card,
-    .pats-highlight-cell,
-    .paf-card,
-    .paf-value-card,
-    .pats-rule-card,
-    .pats-doc-card,
-    .pats-panel
-  ):focus-within {
+html.light-theme .army-site :is(.tac-mission-card,
+  .pats-pillar-card,
+  .pats-highlight-cell,
+  .paf-card,
+  .paf-value-card,
+  .pats-rule-card,
+  .pats-doc-card,
+  .pats-panel):hover,
+html.light-theme .army-site :is(.tac-mission-card,
+  .pats-pillar-card,
+  .pats-highlight-cell,
+  .paf-card,
+  .paf-value-card,
+  .pats-rule-card,
+  .pats-doc-card,
+  .pats-panel):focus-within,
+html[data-site-theme="day"] .army-site :is(.tac-mission-card,
+  .pats-pillar-card,
+  .pats-highlight-cell,
+  .paf-card,
+  .paf-value-card,
+  .pats-rule-card,
+  .pats-doc-card,
+  .pats-panel):hover,
+html[data-site-theme="day"] .army-site :is(.tac-mission-card,
+  .pats-pillar-card,
+  .pats-highlight-cell,
+  .paf-card,
+  .paf-value-card,
+  .pats-rule-card,
+  .pats-doc-card,
+  .pats-panel):focus-within {
   transform: translateY(-8px) translateZ(0) !important;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18) !important;
   background: var(--lt-forest-card-hover) !important;
@@ -7723,13 +7524,11 @@ html[data-site-theme="day"] .army-site .pats-gold-rule--center {
   height: 3px !important;
   margin-top: 0.75rem !important;
   margin-bottom: 1rem !important;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--lt-gold-bright) 20%,
-    var(--lt-gold-bright) 80%,
-    transparent
-  ) !important;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--lt-gold-bright) 20%,
+      var(--lt-gold-bright) 80%,
+      transparent) !important;
   opacity: 1 !important;
 }
 
@@ -7858,14 +7657,10 @@ html[data-site-theme="day"] .army-site .quaid-strip-attribution {
 
 html.light-theme .army-site .army-home [class*="bg-white/"],
 html.light-theme .army-site .pats-inner-page-shell [class*="bg-white/"],
-html.light-theme
-  .army-site
-  [class*="bg-white/"]:not(.pats-page-hero *):not(.pats-hero *):not(.scroll-deck__hero *),
+html.light-theme .army-site [class*="bg-white/"]:not(.pats-page-hero *):not(.pats-hero *):not(.scroll-deck__hero *),
 html[data-site-theme="day"] .army-site .army-home [class*="bg-white/"],
 html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-white/"],
-html[data-site-theme="day"]
-  .army-site
-  [class*="bg-white/"]:not(.pats-page-hero *):not(.pats-hero *):not(.scroll-deck__hero *) {
+html[data-site-theme="day"] .army-site [class*="bg-white/"]:not(.pats-page-hero *):not(.pats-hero *):not(.scroll-deck__hero *) {
   background: var(--lt-white) !important;
   backdrop-filter: none !important;
 }
@@ -7912,8 +7707,8 @@ html[data-site-theme="day"] .army-site .army-home ul[class~="divide-y"] {
 }
 
 
-html.light-theme .army-site .army-home ul[class~="divide-y"] > li:hover,
-html[data-site-theme="day"] .army-site .army-home ul[class~="divide-y"] > li:hover {
+html.light-theme .army-site .army-home ul[class~="divide-y"]>li:hover,
+html[data-site-theme="day"] .army-site .army-home ul[class~="divide-y"]>li:hover {
   background: var(--lt-forest-card-hover) !important;
 }
 
@@ -7929,11 +7724,11 @@ html.light-theme .army-site .pats-panel,
 html.light-theme .army-site .army-home article,
 html.light-theme .army-site .army-home article h3,
 html.light-theme .army-site .army-home article [class~="text-white"],
-html.light-theme .army-site .army-home li > a,
-html.light-theme .army-site .army-home li > a [class~="text-white"],
+html.light-theme .army-site .army-home li>a,
+html.light-theme .army-site .army-home li>a [class~="text-white"],
 html.light-theme .army-site .pats-section--elevated article:not(.tac-edition-row) h3,
 html.light-theme .army-site .pats-section--elevated article:not(.tac-edition-row) [class~="text-white"],
-html.light-theme .army-site .pats-section--elevated li > a [class~="text-white"],
+html.light-theme .army-site .pats-section--elevated li>a [class~="text-white"],
 html[data-site-theme="day"] .army-site .tac-mission-card,
 html[data-site-theme="day"] .army-site .tac-mission-card h3,
 html[data-site-theme="day"] .army-site .tac-mission-card [class~="text-white"],
@@ -7944,39 +7739,39 @@ html[data-site-theme="day"] .army-site .pats-panel,
 html[data-site-theme="day"] .army-site .army-home article,
 html[data-site-theme="day"] .army-site .army-home article h3,
 html[data-site-theme="day"] .army-site .army-home article [class~="text-white"],
-html[data-site-theme="day"] .army-site .army-home li > a,
-html[data-site-theme="day"] .army-site .army-home li > a [class~="text-white"],
+html[data-site-theme="day"] .army-site .army-home li>a,
+html[data-site-theme="day"] .army-site .army-home li>a [class~="text-white"],
 html[data-site-theme="day"] .army-site .pats-section--elevated article:not(.tac-edition-row) h3,
 html[data-site-theme="day"] .army-site .pats-section--elevated article:not(.tac-edition-row) [class~="text-white"],
-html[data-site-theme="day"] .army-site .pats-section--elevated li > a [class~="text-white"] {
+html[data-site-theme="day"] .army-site .pats-section--elevated li>a [class~="text-white"] {
   color: var(--lt-forest-card-text) !important;
 }
 
 
 html.light-theme .army-site .army-home article .pats-body,
 html.light-theme .army-site .army-home article p,
-html.light-theme .army-site .army-home li > a p,
+html.light-theme .army-site .army-home li>a p,
 html.light-theme .army-site .pats-section--elevated article:not(.tac-edition-row) .pats-body,
 html[data-site-theme="day"] .army-site .army-home article .pats-body,
 html[data-site-theme="day"] .army-site .army-home article p,
-html[data-site-theme="day"] .army-site .army-home li > a p,
+html[data-site-theme="day"] .army-site .army-home li>a p,
 html[data-site-theme="day"] .army-site .pats-section--elevated article:not(.tac-edition-row) .pats-body {
   color: var(--lt-forest-card-muted) !important;
 }
 
 
 html.light-theme .army-site .army-home article [class*="text-[var(--pats-gold)]"],
-html.light-theme .army-site .army-home li > a [class*="text-[var(--pats-gold)]"],
+html.light-theme .army-site .army-home li>a [class*="text-[var(--pats-gold)]"],
 html[data-site-theme="day"] .army-site .army-home article [class*="text-[var(--pats-gold)]"],
-html[data-site-theme="day"] .army-site .army-home li > a [class*="text-[var(--pats-gold)]"] {
+html[data-site-theme="day"] .army-site .army-home li>a [class*="text-[var(--pats-gold)]"] {
   color: var(--lt-gold-bright) !important;
 }
 
 
 html.light-theme .army-site .pats-section--elevated article a[class*="text-[var(--pats-gold)]"],
-html.light-theme .army-site .pats-section--elevated li > a:hover,
+html.light-theme .army-site .pats-section--elevated li>a:hover,
 html[data-site-theme="day"] .army-site .pats-section--elevated article a[class*="text-[var(--pats-gold)]"],
-html[data-site-theme="day"] .army-site .pats-section--elevated li > a[class*="border"]:hover {
+html[data-site-theme="day"] .army-site .pats-section--elevated li>a[class*="border"]:hover {
   border-color: rgba(200, 168, 75, 0.45) !important;
 }
 
@@ -7998,12 +7793,10 @@ html[data-site-theme="day"] .army-site .tac-mission-card .tac-difficulty {
 
 html.light-theme .army-site .tac-mission-card__veil,
 html[data-site-theme="day"] .army-site .tac-mission-card__veil {
-  background: linear-gradient(
-    165deg,
-    rgba(26, 36, 27, 0.15) 0%,
-    rgba(26, 36, 27, 0.72) 55%,
-    rgba(20, 28, 22, 0.92) 100%
-  ) !important;
+  background: linear-gradient(165deg,
+      rgba(26, 36, 27, 0.15) 0%,
+      rgba(26, 36, 27, 0.72) 55%,
+      rgba(20, 28, 22, 0.92) 100%) !important;
 }
 
 
@@ -8163,12 +7956,10 @@ html.light-theme .army-site .paf-footer,
 html.light-theme .army-site .paf-footer--photo28,
 html[data-site-theme="day"] .army-site .paf-footer,
 html[data-site-theme="day"] .army-site .paf-footer--photo28 {
-  background: linear-gradient(
-    180deg,
-    var(--lt-footer-bg-top) 0%,
-    var(--lt-footer-bg) 48%,
-    var(--lt-footer-bg-bottom) 100%
-  ) !important;
+  background: linear-gradient(180deg,
+      var(--lt-footer-bg-top) 0%,
+      var(--lt-footer-bg) 48%,
+      var(--lt-footer-bg-bottom) 100%) !important;
   border-top: 2px solid rgba(200, 168, 75, 0.45) !important;
 }
 
@@ -8192,12 +7983,10 @@ html[data-site-theme="day"] .army-site .paf-footer__photo {
 
 html.light-theme .army-site .paf-footer__shade,
 html[data-site-theme="day"] .army-site .paf-footer__shade {
-  background: linear-gradient(
-    180deg,
-    rgba(26, 36, 27, 0.26) 0%,
-    rgba(22, 30, 24, 0.4) 45%,
-    rgba(18, 26, 20, 0.54) 100%
-  ) !important;
+  background: linear-gradient(180deg,
+      rgba(26, 36, 27, 0.26) 0%,
+      rgba(22, 30, 24, 0.4) 45%,
+      rgba(18, 26, 20, 0.54) 100%) !important;
   opacity: 1 !important;
 }
 
@@ -8478,12 +8267,10 @@ html[data-site-theme="day"] [class~="bg-brand-black"] {
 html.light-theme .army-site .pats-page-hero__overlay,
 html[data-site-theme="day"] .army-site .pats-page-hero__overlay {
   background:
-    linear-gradient(
-      to bottom,
+    linear-gradient(to bottom,
       rgba(26, 26, 24, 0.45) 0%,
       rgba(26, 26, 24, 0.2) 50%,
-      rgba(26, 26, 24, 0.75) 100%
-    ),
+      rgba(26, 26, 24, 0.75) 100%),
     linear-gradient(to right, rgba(26, 26, 24, 0.4) 0%, transparent 55%);
 }
 
@@ -8546,18 +8333,16 @@ html[data-site-theme="day"] .army-site .pats-page-hero__meta {
   padding: 0;
   border: none !important;
   border-top: none !important;
-  background: linear-gradient(
-    90deg,
-    var(--lt-stats-band, #1a241b) 0%,
-    var(--lt-stats-band-mid, #243028) 50%,
-    var(--lt-stats-band, #1a241b) 100%
-  ) !important;
+  background: linear-gradient(90deg,
+      var(--lt-stats-band, #1a241b) 0%,
+      var(--lt-stats-band-mid, #243028) 50%,
+      var(--lt-stats-band, #1a241b) 100%) !important;
   box-shadow: none !important;
 }
 
 
-html.light-theme .army-site .pats-page-hero__meta > div,
-html[data-site-theme="day"] .army-site .pats-page-hero__meta > div {
+html.light-theme .army-site .pats-page-hero__meta>div,
+html[data-site-theme="day"] .army-site .pats-page-hero__meta>div {
   border-right-color: rgba(255, 255, 255, 0.12) !important;
 }
 
@@ -8580,28 +8365,10 @@ html[data-site-theme="day"] .army-site .pats-page-hero__meta dd {
 
 
 
-html.light-theme
-  .army-site
-  .pats-inner-page-shell
-  .pats-page-hero
-  + .pats-section,
-html.light-theme
-  .army-site
-  .pats-inner-page-shell
-  > .space-y-0
-  > .pats-page-hero
-  + .pats-section,
-html[data-site-theme="day"]
-  .army-site
-  .pats-inner-page-shell
-  .pats-page-hero
-  + .pats-section,
-html[data-site-theme="day"]
-  .army-site
-  .pats-inner-page-shell
-  > .space-y-0
-  > .pats-page-hero
-  + .pats-section {
+html.light-theme .army-site .pats-inner-page-shell .pats-page-hero+.pats-section,
+html.light-theme .army-site .pats-inner-page-shell>.space-y-0>.pats-page-hero+.pats-section,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-page-hero+.pats-section,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell>.space-y-0>.pats-page-hero+.pats-section {
   box-shadow: none;
 }
 
@@ -8694,16 +8461,12 @@ html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow {
 
 html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell {
-  display: block !important;
-  gap: 0 !important;
-  padding-bottom: 0 !important;
   background: var(--lt-parchment) !important;
   color: var(--lt-body) !important;
 }
 
 
-html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell > .space-y-0,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell > .space-y-0 {
+.army-site:not(.dashboard-day) .pats-inner-page-shell>.space-y-0 {
   display: block !important;
   gap: 0 !important;
 }
@@ -9041,10 +8804,10 @@ html[data-site-theme="day"] .army-site .operational-map__route {
 }
 
 
-html.light-theme .army-site .operational-map__route > p,
-html.light-theme .army-site .operational-map__glossary > p,
-html[data-site-theme="day"] .army-site .operational-map__route > p,
-html[data-site-theme="day"] .army-site .operational-map__glossary > p {
+html.light-theme .army-site .operational-map__route>p,
+html.light-theme .army-site .operational-map__glossary>p,
+html[data-site-theme="day"] .army-site .operational-map__route>p,
+html[data-site-theme="day"] .army-site .operational-map__glossary>p {
   color: var(--lt-olive) !important;
   font-size: var(--pats-type-section-eyebrow, 1.0625rem) !important;
   font-weight: 700 !important;
@@ -9244,14 +9007,14 @@ html[data-site-theme="day"] .army-site .tac-contingent-drawer [class*="text-whit
 }
 
 
-html.light-theme .army-site .tac-contingent-drawer > button,
-html[data-site-theme="day"] .army-site .tac-contingent-drawer > button {
+html.light-theme .army-site .tac-contingent-drawer>button,
+html[data-site-theme="day"] .army-site .tac-contingent-drawer>button {
   color: var(--lt-olive) !important;
 }
 
 
-html.light-theme .army-site .tac-contingent-drawer > button:hover,
-html[data-site-theme="day"] .army-site .tac-contingent-drawer > button:hover {
+html.light-theme .army-site .tac-contingent-drawer>button:hover,
+html[data-site-theme="day"] .army-site .tac-contingent-drawer>button:hover {
   color: var(--lt-heading) !important;
 }
 
@@ -9379,30 +9142,12 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-whit
 }
 
 
-html.light-theme
-  .army-site
-  .pats-inner-page-shell
-  [class*="bg-brand-night-2"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
-html.light-theme
-  .army-site
-  .pats-inner-page-shell
-  [class*="bg-brand-night"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
-html.light-theme
-  .army-site
-  .pats-inner-page-shell
-  [class*="bg-brand-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
-html[data-site-theme="day"]
-  .army-site
-  .pats-inner-page-shell
-  [class*="bg-brand-night-2"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
-html[data-site-theme="day"]
-  .army-site
-  .pats-inner-page-shell
-  [class*="bg-brand-night"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
-html[data-site-theme="day"]
-  .army-site
-  .pats-inner-page-shell
-  [class*="bg-brand-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip) {
+html.light-theme .army-site .pats-inner-page-shell [class*="bg-brand-night-2"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+html.light-theme .army-site .pats-inner-page-shell [class*="bg-brand-night"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+html.light-theme .army-site .pats-inner-page-shell [class*="bg-brand-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-brand-night-2"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-brand-night"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="bg-brand-olive/"]:not(.operational-map__route):not(.operational-map__route *):not(.tac-edition-row):not(.tac-nation-chip) {
   background: var(--lt-forest-card) !important;
   border-color: var(--lt-forest-card-border) !important;
   color: var(--lt-forest-card-text) !important;
@@ -9457,10 +9202,10 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section-head
 }
 
 
-html.light-theme .army-home .pats-section__inner > div > .pats-body,
-html.light-theme .army-site .pats-inner-page-shell .pats-section__inner > div > .pats-body,
-html[data-site-theme="day"] .army-home .pats-section__inner > div > .pats-body,
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inner > div > .pats-body {
+html.light-theme .army-home .pats-section__inner>div>.pats-body,
+html.light-theme .army-site .pats-inner-page-shell .pats-section__inner>div>.pats-body,
+html[data-site-theme="day"] .army-home .pats-section__inner>div>.pats-body,
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inner>div>.pats-body {
   font-size: var(--pats-type-body) !important;
 }
 
@@ -9492,10 +9237,10 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inn
 
 
 html.light-theme .army-home .pats-section-heading .pats-eyebrow,
-html.light-theme .army-home .pats-mission > .pats-eyebrow,
+html.light-theme .army-home .pats-mission>.pats-eyebrow,
 html.light-theme .army-site .pats-inner-page-shell .pats-section-heading .pats-eyebrow,
 html[data-site-theme="day"] .army-home .pats-section-heading .pats-eyebrow,
-html[data-site-theme="day"] .army-home .pats-mission > .pats-eyebrow,
+html[data-site-theme="day"] .army-home .pats-mission>.pats-eyebrow,
 html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section-heading .pats-eyebrow {
   font-size: var(--pats-type-section-eyebrow, 1.0625rem) !important;
   font-weight: 700 !important;
@@ -9516,13 +9261,11 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule--c
   height: 3px !important;
   margin-top: 0.75rem !important;
   margin-bottom: 1rem !important;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--lt-gold-bright) 20%,
-    var(--lt-gold-bright) 80%,
-    transparent
-  ) !important;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--lt-gold-bright) 20%,
+      var(--lt-gold-bright) 80%,
+      transparent) !important;
 }
 
 
@@ -9577,8 +9320,9 @@ html[data-site-theme="day"] .army-home .pats-section--mission .pats-section__bac
 
 
 @media (hover: hover) {
+
   .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:hover,
-.army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
+  .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
     z-index: 2;
   }
 }
@@ -9724,17 +9468,17 @@ html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-sche
 
 
 html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule__row,
-html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule > li,
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule>li,
 html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule__row,
-html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule > li {
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule>li {
   color: var(--lt-heading) !important;
 }
 
 
 html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule__row:hover,
-html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule > li:hover,
+html.light-theme .cinematic-site.army-site .army-home .pats-home-schedule>li:hover,
 html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule__row:hover,
-html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule > li:hover {
+html[data-site-theme="day"] .cinematic-site.army-site .army-home .pats-home-schedule>li:hover {
   background: rgba(200, 168, 75, 0.06) !important;
 }
 
@@ -9817,10 +9561,8 @@ html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   background: #f4f1ea !important;
 }
 
-.army-home .pats-section--mission-showcase.pats-section--has-bg
-  .pats-section__backdrop,
-.army-home .pats-section--mission-showcase.pats-section--has-bg
-  .pats-section__backdrop-layer {
+.army-home .pats-section--mission-showcase.pats-section--has-bg .pats-section__backdrop,
+.army-home .pats-section--mission-showcase.pats-section--has-bg .pats-section__backdrop-layer {
   display: none !important;
 }
 
@@ -9863,11 +9605,9 @@ html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse 85% 60% at 50% 50%,
-    transparent 50%,
-    rgba(26, 36, 27, 0.03) 100%
-  );
+  background: radial-gradient(ellipse 85% 60% at 50% 50%,
+      transparent 50%,
+      rgba(26, 36, 27, 0.03) 100%);
 }
 
 .pats-mission-showcase__grid {
@@ -9981,7 +9721,7 @@ html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   text-align: center;
 }
 
-.pats-mission-showcase__col--content .pats-mission > .pats-eyebrow::before {
+.pats-mission-showcase__col--content .pats-mission>.pats-eyebrow::before {
   content: none;
   display: none;
 }
@@ -10096,18 +9836,12 @@ html[data-site-theme="day"] .army-home .pats-mission-showcase .pats-mission__mot
   color: #9a7a0a !important;
 }
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-home
-  .pats-mission-showcase
-  .pats-mission__quote {
+html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-mission-showcase .pats-mission__quote {
   color: #1a2e1f;
   text-shadow: none;
 }
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-home
-  .pats-mission-showcase
-  .pats-body {
+html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-mission-showcase .pats-body {
   color: #4a5248;
 }
 
@@ -10304,12 +10038,10 @@ html[data-site-theme="day"] .army-home .pats-section--video-gallery {
 .pats-video-gallery__card-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 8, 20, 0.55) 0%,
-    rgba(0, 8, 20, 0.18) 38%,
-    transparent 68%
-  );
+  background: linear-gradient(to top,
+      rgba(0, 8, 20, 0.55) 0%,
+      rgba(0, 8, 20, 0.18) 38%,
+      transparent 68%);
   pointer-events: none;
 }
 
@@ -10352,12 +10084,10 @@ html[data-site-theme="day"] .army-home .pats-section--video-gallery {
   z-index: -1;
   height: 100%;
   min-height: 5.5rem;
-  background: linear-gradient(
-    to top,
-    rgba(0, 6, 18, 0.96) 0%,
-    rgba(0, 6, 18, 0.72) 55%,
-    transparent 100%
-  );
+  background: linear-gradient(to top,
+      rgba(0, 6, 18, 0.96) 0%,
+      rgba(0, 6, 18, 0.72) 55%,
+      transparent 100%);
 }
 
 
@@ -10468,9 +10198,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__subti
 
 
 
-html:not(.light-theme):not([data-site-theme="day"])
-  .cinematic-site.army-site
-  .pats-video-gallery__subtitle {
+html:not(.light-theme):not([data-site-theme="day"]) .cinematic-site.army-site .pats-video-gallery__subtitle {
   color: #1a1a1a !important;
 }
 
@@ -10575,7 +10303,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-video-gallery__more 
   min-height: 280px;
 }
 
-.forest-card-grid__cell > * {
+.forest-card-grid__cell>* {
   flex: 1 1 auto;
   width: 100%;
   min-height: 280px;
@@ -10717,8 +10445,8 @@ html[data-site-theme="day"] .tac-mission-carousel__arrow {
   isolation: isolate;
 }
 
-.forest-carousel__slide > *,
-.tac-mission-carousel__slide > *,
+.forest-carousel__slide>*,
+.tac-mission-carousel__slide>*,
 .forest-card-slide-host {
   width: 100%;
   min-width: 0;
@@ -10740,6 +10468,7 @@ html[data-site-theme="day"] .tac-mission-carousel__arrow {
 }
 
 @media (max-width: 480px) {
+
   .forest-carousel__slide,
   .tac-mission-carousel__slide {
     flex: 0 0 min(280px, calc(100vw - 5.5rem));
@@ -10750,12 +10479,12 @@ html[data-site-theme="day"] .tac-mission-carousel__arrow {
   }
 }
 
-.army-site:not(.dashboard-day) :is(.pats-section__inner, .pats-section) > :is(.forest-carousel, .forest-card-grid) {
+.army-site:not(.dashboard-day) :is(.pats-section__inner, .pats-section)> :is(.forest-carousel, .forest-card-grid) {
   margin-inline: auto;
   width: 100%;
 }
 
-.army-site:not(.dashboard-day) :is(.pats-section__inner, .pats-section) > div:has(> .forest-carousel) {
+.army-site:not(.dashboard-day) :is(.pats-section__inner, .pats-section)>div:has(> .forest-carousel) {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -10767,7 +10496,7 @@ html[data-site-theme="day"] .tac-mission-carousel__arrow {
   overflow: visible !important;
 }
 
-.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section:has(.forest-carousel) > * {
+.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section:has(.forest-carousel)>* {
   overflow: visible;
 }
 
@@ -10783,13 +10512,11 @@ html[data-site-theme="day"] .tac-mission-carousel__arrow {
    specificity, so its position is not load-bearing. Dies with
    daylight-theme in phase 4.
    ============================================================ */
-:is(
-    .pats-panel,
-    .pats-highlight-cell,
-    .tac-mission-card,
-    .tac-edition-row,
-    .pats-rule-card
-  ) {
+:is(.pats-panel,
+  .pats-highlight-cell,
+  .tac-mission-card,
+  .tac-edition-row,
+  .pats-rule-card) {
   color: var(--lt-forest-card-text, #e8e4d8);
 }
 
@@ -10875,7 +10602,7 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
   --admin-heading: #0f172a;
   --admin-body: #0f172a;
   --admin-muted: #0f172a;
-  
+
   --admin-accent: #3d5230;
   --admin-accent-strong: #2f4025;
   --admin-accent-light: #4d6340;
@@ -11471,59 +11198,44 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 
 
 
-.admin-theme
-  :is(
-    .admin-data-table,
-    .admin-users-table,
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-units-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table,
-    .tac-admin-table
-  )
-  tbody
-  tr:nth-child(odd) {
+.admin-theme :is(.admin-data-table,
+  .admin-users-table,
+  .admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-units-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table,
+  .tac-admin-table) tbody tr:nth-child(odd) {
   background: #ffffff !important;
 }
 
 
-.admin-theme
-  :is(
-    .admin-data-table,
-    .admin-users-table,
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-units-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table,
-    .tac-admin-table
-  )
-  tbody
-  tr:nth-child(even) {
+.admin-theme :is(.admin-data-table,
+  .admin-users-table,
+  .admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-units-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table,
+  .tac-admin-table) tbody tr:nth-child(even) {
   background: #f9f9f9 !important;
 }
 
 
-.admin-theme
-  :is(
-    .admin-data-table,
-    .admin-users-table,
-    .admin-payments-table,
-    .admin-key-dates-table,
-    .admin-news-table,
-    .admin-ticker-table,
-    .admin-units-table,
-    .admin-user-detail-payments-table,
-    .admin-dashboard-recent-table,
-    .tac-admin-table
-  )
-  tbody
-  tr:hover,
+.admin-theme :is(.admin-data-table,
+  .admin-users-table,
+  .admin-payments-table,
+  .admin-key-dates-table,
+  .admin-news-table,
+  .admin-ticker-table,
+  .admin-units-table,
+  .admin-user-detail-payments-table,
+  .admin-dashboard-recent-table,
+  .tac-admin-table) tbody tr:hover,
 .admin-theme tbody tr.admin-row-hover:hover {
   background: #f3f4f6 !important;
 }
@@ -11588,15 +11300,13 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 
 
 
-.admin-theme :is(
-  [class~="text-gray-400"],
+.admin-theme :is([class~="text-gray-400"],
   [class~="text-gray-500"],
   [class~="text-gray-600"],
   [class~="text-gray-700"],
   [class~="text-slate-400"],
   [class~="text-slate-500"],
-  [class~="text-slate-600"]
-) {
+  [class~="text-slate-600"]) {
   color: #0f172a !important;
 }
 
@@ -12061,6 +11771,7 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -12089,18 +11800,12 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 }
 
 
-.admin-theme
-  .admin-dashboard-recent-table
-  tbody
-  tr:nth-child(even) {
+.admin-theme .admin-dashboard-recent-table tbody tr:nth-child(even) {
   background: #f9fafb !important;
 }
 
 
-.admin-theme
-  .admin-dashboard-recent-table
-  tbody
-  tr:nth-child(even):hover {
+.admin-theme .admin-dashboard-recent-table tbody tr:nth-child(even):hover {
   background: #f8faff !important;
 }
 
@@ -12178,6 +11883,7 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -12251,8 +11957,7 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
    stripes at (0,3,0) deliberately beat these). Dies with the
    theme sheets in phase 4.
    ============================================================ */
-html:not(.light-theme):not([data-site-theme="day"])
-  :is(.army-site:not(.dashboard-day), .cinematic-site.army-site):not(.admin-theme) {
+html:not(.light-theme):not([data-site-theme="day"]) :is(.army-site:not(.dashboard-day), .cinematic-site.army-site):not(.admin-theme) {
   --pats-zebra-odd-bg: rgba(212, 175, 55, 0.07);
   --pats-zebra-even-bg: rgba(255, 255, 255, 0.04);
   --pats-zebra-row-border: rgba(255, 255, 255, 0.06);
@@ -12267,27 +11972,21 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
   --pats-zebra-row-border: rgba(0, 0, 0, 0.07);
 }
 
-:is(
-    .pats-data-table__row,
-    .pats-home-schedule__row,
-    .pats-home-schedule > li
-  ):nth-child(odd) {
+:is(.pats-data-table__row,
+  .pats-home-schedule__row,
+  .pats-home-schedule > li):nth-child(odd) {
   background-color: var(--pats-zebra-odd-bg) !important;
 }
 
-:is(
-    .pats-data-table__row,
-    .pats-home-schedule__row,
-    .pats-home-schedule > li
-  ):nth-child(even) {
+:is(.pats-data-table__row,
+  .pats-home-schedule__row,
+  .pats-home-schedule > li):nth-child(even) {
   background-color: var(--pats-zebra-even-bg) !important;
 }
 
-:is(
-    .pats-data-table__row,
-    .pats-home-schedule__row,
-    .pats-home-schedule > li
-  ) {
+:is(.pats-data-table__row,
+  .pats-home-schedule__row,
+  .pats-home-schedule > li) {
   border-bottom-color: var(--pats-zebra-row-border) !important;
 }
 
@@ -12312,8 +12011,10 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
 html.light-theme .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats),
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) {
   border-top: none !important;
-  padding-top: var(--pats-section-pad-y, 3rem) !important; /* SECTION SPACING LOCKED */
-  padding-bottom: var(--pats-section-pad-y, 3rem) !important; /* SECTION SPACING LOCKED */
+  padding-top: var(--pats-section-pad-y, 3rem) !important;
+  /* SECTION SPACING LOCKED */
+  padding-bottom: var(--pats-section-pad-y, 3rem) !important;
+  /* SECTION SPACING LOCKED */
   background: var(--lt-parchment, #f4f1ea) !important;
 }
 
@@ -12326,6 +12027,13 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section--stats 
 /* Wide content column — transparent, no card chrome */
 html.light-theme .army-site:not(.dashboard-day) .pats-section__inner,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section__inner {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.army-site:not(.dashboard-day) .pats-section__inner {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -12334,12 +12042,10 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section__inner 
   margin-right: auto !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
-  padding-left: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-left, 0px)) !important; /* SECTION SPACING LOCKED */
-  padding-right: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-right, 0px)) !important; /* SECTION SPACING LOCKED */
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  padding-left: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-left, 0px)) !important;
+  /* SECTION SPACING LOCKED */
+  padding-right: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-right, 0px)) !important;
+  /* SECTION SPACING LOCKED */
 }
 
 /* Alternating full-width bands */
@@ -12372,34 +12078,31 @@ html[data-site-theme="day"] .army-site .pats-section--elevated {
 
 html.light-theme .army-site .pats-section--mission,
 html[data-site-theme="day"] .army-site .pats-section--mission {
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    var(--lt-parchment, #f4f1ea) 100%
-  ) !important;
+  background: linear-gradient(180deg,
+      #ffffff 0%,
+      var(--lt-parchment, #f4f1ea) 100%) !important;
 }
 
 /* Subtle band separators (not boxes) */
-html.light-theme .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) + .pats-section:not(.pats-section--stats),
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) + .pats-section:not(.pats-section--stats) {
+html.light-theme .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats)+.pats-section:not(.pats-section--stats),
+html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats)+.pats-section:not(.pats-section--stats) {
   box-shadow: inset 0 1px 0 rgba(200, 168, 75, 0.12);
 }
 
 /* Stats — full-bleed forest strip */
 html.light-theme .army-site:not(.dashboard-day) .pats-section--stats,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section--stats {
-  background: linear-gradient(
-    90deg,
-    var(--lt-stats-band, #1a241b) 0%,
-    var(--lt-stats-band-mid, #243028) 50%,
-    var(--lt-stats-band, #1a241b) 100%
-  ) !important;
+  background: linear-gradient(90deg,
+      var(--lt-stats-band, #1a241b) 0%,
+      var(--lt-stats-band-mid, #243028) 50%,
+      var(--lt-stats-band, #1a241b) 100%) !important;
   border-top: none !important;
   border-bottom: none !important;
   padding: 0.75rem 0 !important;
 }
 
 @media (min-width: 640px) {
+
   html.light-theme .army-site:not(.dashboard-day) .pats-section--stats,
   html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section--stats {
     padding: 0.875rem 0 !important;
@@ -12415,8 +12118,10 @@ html[data-site-theme="day"] .army-site .pats-section--stats .pats-section__inner
   box-shadow: none !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
-  padding-left: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-left, 0px)) !important; /* SECTION SPACING LOCKED */
-  padding-right: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-right, 0px)) !important; /* SECTION SPACING LOCKED */
+  padding-left: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-left, 0px)) !important;
+  /* SECTION SPACING LOCKED */
+  padding-right: max(var(--pats-section-pad-x, 1.25rem), env(safe-area-inset-right, 0px)) !important;
+  /* SECTION SPACING LOCKED */
 }
 
 /* Mission watermark — no frosted inner panel */
@@ -12444,12 +12149,15 @@ html[data-site-theme="day"] .army-home.scroll-deck .scroll-deck-layer--first.pat
 html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell,
 html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell {
   background: var(--lt-parchment, #f4f1ea) !important;
+}
+
+.army-site:not(.dashboard-day) .pats-inner-page-shell {
+  display: block !important;
   gap: 0 !important;
   padding: 0 !important;
 }
 
-html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section {
+.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section {
   margin-left: 0 !important;
   margin-right: 0 !important;
   max-width: none !important;
@@ -12460,14 +12168,12 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   overflow: visible !important;
 }
 
-html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section + .pats-section,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section + .pats-section {
+.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section+.pats-section {
   box-shadow: inset 0 1px 0 rgba(200, 168, 75, 0.12);
 }
 
 /* Use full section width — no extra nested max-width shells */
-html.light-theme .army-site .pats-inner-page-shell .pats-section__inner > :is([class*="max-w-5xl"], [class*="max-w-6xl"]),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inner > :is([class*="max-w-5xl"], [class*="max-w-6xl"]) {
+.army-site .pats-inner-page-shell .pats-section__inner> :is([class*="max-w-5xl"], [class*="max-w-6xl"]) {
   max-width: 100% !important;
   width: 100% !important;
   margin-left: 0 !important;
@@ -12523,11 +12229,9 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inn
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    165deg,
-    rgba(26, 36, 27, 0.12) 0%,
-    rgba(20, 28, 22, 0.55) 100%
-  );
+  background: linear-gradient(165deg,
+      rgba(26, 36, 27, 0.12) 0%,
+      rgba(20, 28, 22, 0.55) 100%);
 }
 
 .tac-mission-card__inner {
@@ -12574,6 +12278,7 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section__inn
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
 
@@ -12709,12 +12414,8 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-section .tac-edition
   padding-bottom: var(--pats-section-pad-y) !important;
 }
 
-html.light-theme
-  .army-site:not(.dashboard-day)
-  .pats-section:not(.pats-section--stats),
-html[data-site-theme="day"]
-  .army-site:not(.dashboard-day)
-  .pats-section:not(.pats-section--stats) {
+html.light-theme .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats),
+html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) {
   padding-top: var(--pats-section-pad-y) !important;
   padding-bottom: var(--pats-section-pad-y) !important;
 }
@@ -12730,14 +12431,9 @@ html[data-site-theme="day"]
 }
 
 .army-site:not(.dashboard-day) .pats-inner-page-shell,
-.army-site:not(.dashboard-day) .pats-inner-page-shell > .space-y-0,
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell,
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  > .space-y-0 {
+.army-site:not(.dashboard-day) .pats-inner-page-shell>.space-y-0,
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell,
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell>.space-y-0 {
   gap: 0 !important;
 }
 
@@ -12758,34 +12454,21 @@ html:not(.light-theme):not([data-site-theme="day"])
 
 .army-site:not(.dashboard-day) .pats-section__inner {
   box-sizing: border-box;
-  padding-left: max(
-    var(--pats-section-pad-x),
-    env(safe-area-inset-left, 0px)
-  ) !important;
-  padding-right: max(
-    var(--pats-section-pad-x),
-    env(safe-area-inset-right, 0px)
-  ) !important;
+  padding-left: max(var(--pats-section-pad-x),
+      env(safe-area-inset-left, 0px)) !important;
+  padding-right: max(var(--pats-section-pad-x),
+      env(safe-area-inset-right, 0px)) !important;
 }
 
-html.light-theme
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  .pats-section:not(.pats-section--stats),
-html[data-site-theme="day"]
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell
-  .pats-section:not(.pats-section--stats) {
+.army-site:not(.dashboard-day) .pats-inner-page-shell .pats-section:not(.pats-section--stats) {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
 
-.army-site:not(.dashboard-day) :is(
-    .pats-highlight-grid,
-    .pats-stats,
-    .forest-card-grid,
-    .forest-carousel
-  ) {
+.army-site:not(.dashboard-day) :is(.pats-highlight-grid,
+  .pats-stats,
+  .forest-card-grid,
+  .forest-carousel) {
   overflow: visible !important;
   max-width: 100%;
   box-sizing: border-box;
@@ -12842,41 +12525,21 @@ html[data-site-theme="day"]
 }
 
 /* Marquee band — 32px in hero and scrolled states (colors change on scroll only) */
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker.announcement-ticker,
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-viewport,
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-track {
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker.announcement-ticker,
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-viewport,
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-track {
   height: 32px;
   min-height: 32px;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-viewport,
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-track,
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-segment {
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-viewport,
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-track,
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-segment {
   display: flex;
   align-items: center;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-track {
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-track {
   /* 35% slower than the previous 20s. */
   animation: announcement-ticker-scroll-rtl 27s linear infinite;
 }
@@ -12896,109 +12559,55 @@ html[data-site-theme="day"] .army-site .pats-site-chrome--marquee-scrolled {
 }
 
 /* Night — deep midnight scrolled marquee (distinct from day olive) */
-html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
-  .army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled {
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled {
   --pats-marquee-scrolled-bg: #1a1a2e;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker.announcement-ticker {
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker.announcement-ticker {
   background: var(--pats-marquee-scrolled-bg) !important;
   background-color: var(--pats-marquee-scrolled-bg) !important;
   box-shadow: none !important;
 }
 
-html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
-  .army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker.announcement-ticker {
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker.announcement-ticker {
   border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
 }
 
-html.light-theme
-  .army-site
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker.announcement-ticker,
-html[data-site-theme="day"]
-  .army-site
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker.announcement-ticker {
+html.light-theme .army-site .pats-site-chrome--marquee-scrolled .pats-hero-ticker.announcement-ticker,
+html[data-site-theme="day"] .army-site .pats-site-chrome--marquee-scrolled .pats-hero-ticker.announcement-ticker {
   border-bottom: 1px solid #b8960c !important;
 }
 
-html.light-theme
-  .army-site
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment,
-html[data-site-theme="day"]
-  .army-site
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment {
+html.light-theme .army-site .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment,
+html[data-site-theme="day"] .army-site .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment {
   letter-spacing: 0.03em;
 }
 
-html.light-theme
-  .army-site
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment
-  > span
-  > span:first-child,
-html[data-site-theme="day"]
-  .army-site
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment
-  > span
-  > span:first-child {
+html.light-theme .army-site .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment>span>span:first-child,
+html[data-site-theme="day"] .army-site .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment>span>span:first-child {
   color: #f0c93a !important;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-viewport {
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-viewport {
   background: transparent !important;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment {
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment {
   text-shadow: none !important;
 }
 
 /* ◆ separators — white */
-.army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment
-  > span
-  > span:first-child {
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment>span>span:first-child {
   color: var(--pats-marquee-scrolled-body) !important;
 }
 
 /* Message body — white */
-.army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment
-  > span
-  > span:last-child {
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment>span>span:last-child {
   color: var(--pats-marquee-scrolled-body) !important;
 }
 
 /* Highlighted / urgent lines — yellow-green */
-.army-site:not(.dashboard-day)
-  .pats-site-chrome--marquee-scrolled
-  .pats-hero-ticker
-  .announcement-ticker-segment
-  > span
-  > span:last-child[class*="tactical-brass"] {
+.army-site:not(.dashboard-day) .pats-site-chrome--marquee-scrolled .pats-hero-ticker .announcement-ticker-segment>span>span:last-child[class*="tactical-brass"] {
   color: var(--pats-marquee-scrolled-accent) !important;
 }
 
@@ -13009,7 +12618,7 @@ html[data-site-theme="day"]
   min-height: 100dvh;
 }
 
-.cinematic-site.page-shell > #main-content {
+.cinematic-site.page-shell>#main-content {
   display: block;
   flex: 1 1 auto;
   width: 100%;
@@ -13137,9 +12746,7 @@ html.site-theme-day .army-site:not(.dashboard-day) .pats-site-footer {
   border-top: 2px solid #b8960c !important;
 }
 
-html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day)
-  .army-site:not(.dashboard-day)
-  .pats-site-footer {
+html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-site:not(.dashboard-day) .pats-site-footer {
   border-top-color: rgba(212, 175, 55, 0.85);
 }
 
@@ -13157,30 +12764,18 @@ html:has(.pats-site-body--inner .pats-form-page) {
   scroll-snap-type: none;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-body--inner:has(.pats-auth-shell),
-.army-site:not(.dashboard-day)
-  .pats-site-body--inner:has(.pats-form-page) {
+.army-site:not(.dashboard-day) .pats-site-body--inner:has(.pats-auth-shell),
+.army-site:not(.dashboard-day) .pats-site-body--inner:has(.pats-form-page) {
   min-height: 100dvh;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-body--inner:has(.pats-auth-shell)
-  .pats-site-footer,
-.army-site:not(.dashboard-day)
-  .pats-site-body--inner:has(.pats-form-page)
-  .pats-site-footer {
+.army-site:not(.dashboard-day) .pats-site-body--inner:has(.pats-auth-shell) .pats-site-footer,
+.army-site:not(.dashboard-day) .pats-site-body--inner:has(.pats-form-page) .pats-site-footer {
   scroll-snap-align: none;
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-body--inner:has(.pats-auth-shell)
-  .pats-site-footer
-  .paf-footer,
-.army-site:not(.dashboard-day)
-  .pats-site-body--inner:has(.pats-form-page)
-  .pats-site-footer
-  .paf-footer {
+.army-site:not(.dashboard-day) .pats-site-body--inner:has(.pats-auth-shell) .pats-site-footer .paf-footer,
+.army-site:not(.dashboard-day) .pats-site-body--inner:has(.pats-form-page) .pats-site-footer .paf-footer {
   min-height: auto;
 }
 
@@ -13197,7 +12792,8 @@ html:has(.pats-site-body--inner .pats-form-page) {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  transform: scale(0.85); /* make it slightly smaller than full fit */
+  transform: scale(0.85);
+  /* make it slightly smaller than full fit */
 }
 
 .army-site:not(.dashboard-day) .pats-site-footer .paf-footer__shade {
@@ -13633,35 +13229,36 @@ html.motion-active .animate-on-scroll.reveal-delay-3 {
   transition-delay: 0.3s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(1) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(1) {
   transition-delay: 0.05s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(2) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(2) {
   transition-delay: 0.15s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(3) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(3) {
   transition-delay: 0.25s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(4) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(4) {
   transition-delay: 0.35s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(5) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(5) {
   transition-delay: 0.45s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(6) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(6) {
   transition-delay: 0.55s;
 }
 
-html.motion-active .stagger-children.in-view > .animate-on-scroll:nth-child(n + 7) {
+html.motion-active .stagger-children.in-view>.animate-on-scroll:nth-child(n + 7) {
   transition-delay: 0.65s;
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   html.motion-active .animate-on-scroll,
   html.motion-active .reveal {
     opacity: 1 !important;
@@ -13837,6 +13434,7 @@ html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--soli
 
 /* —— Button hover (card lift: pats-card-surface.css) —— */
 @media (prefers-reduced-motion: no-preference) {
+
   .pats-btn,
   .army-btn,
   .operational-map__term {
@@ -13897,36 +13495,24 @@ body {
 }
 
 /* —— Marquee: 12 / 13 / 14px + no vertical clip —— */
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-segment {
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-segment {
   font-size: 12px;
   line-height: 1.3;
 }
 
 @media (min-width: 640px) {
-  .army-site:not(.dashboard-day)
-    .pats-site-chrome
-    .pats-hero-ticker
-    .announcement-ticker-segment {
+  .army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-segment {
     font-size: 13px;
   }
 }
 
 @media (min-width: 1024px) {
-  .army-site:not(.dashboard-day)
-    .pats-site-chrome
-    .pats-hero-ticker
-    .announcement-ticker-segment {
+  .army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-segment {
     font-size: 14px;
   }
 }
 
-.army-site:not(.dashboard-day)
-  .pats-site-chrome
-  .pats-hero-ticker
-  .announcement-ticker-viewport {
+.army-site:not(.dashboard-day) .pats-site-chrome .pats-hero-ticker .announcement-ticker-viewport {
   overflow: hidden;
 }
 
@@ -14024,20 +13610,14 @@ body {
   }
 
   /* Keep compact sun/moon switch — do not stretch like nav links */
-  .army-site:not(.dashboard-day)
-    .pats-header--menu-open
-    .pats-nav__panel-links
-    .pats-nav__theme-switch {
+  .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links .pats-nav__theme-switch {
     flex-shrink: 0;
     width: var(--pats-theme-switch-w) !important;
     height: var(--pats-theme-switch-h) !important;
     max-width: var(--pats-theme-switch-w);
   }
 
-  .army-site:not(.dashboard-day)
-    .pats-header--menu-open
-    .pats-nav__panel-links
-    .pats-nav__theme-btn {
+  .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links .pats-nav__theme-btn {
     min-width: 0 !important;
     min-height: 0 !important;
     width: 100%;
@@ -14048,10 +13628,7 @@ body {
     box-shadow: none !important;
   }
 
-  .army-site:not(.dashboard-day)
-    .pats-header--menu-open
-    .pats-nav__panel-links
-    .pats-nav__theme-icon {
+  .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links .pats-nav__theme-icon {
     width: 0.6875rem !important;
     height: 0.6875rem !important;
   }
@@ -14060,8 +13637,10 @@ body {
 /* —— Section padding — locked in pats-section-spacing.css —— */
 @media (max-width: 767px) {
   .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) {
-    padding-top: 3rem !important; /* SECTION SPACING LOCKED — py-12 */
-    padding-bottom: 3rem !important; /* SECTION SPACING LOCKED */
+    padding-top: 3rem !important;
+    /* SECTION SPACING LOCKED — py-12 */
+    padding-bottom: 3rem !important;
+    /* SECTION SPACING LOCKED */
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -14069,8 +13648,10 @@ body {
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) {
-    padding-top: 4rem !important; /* SECTION SPACING LOCKED — md:py-16 */
-    padding-bottom: 4rem !important; /* SECTION SPACING LOCKED */
+    padding-top: 4rem !important;
+    /* SECTION SPACING LOCKED — md:py-16 */
+    padding-bottom: 4rem !important;
+    /* SECTION SPACING LOCKED */
     padding-left: 2rem;
     padding-right: 2rem;
   }
@@ -14108,7 +13689,7 @@ body {
     flex-wrap: wrap;
   }
 
-  .army-site:not(.dashboard-day) .pats-page-hero__meta > div {
+  .army-site:not(.dashboard-day) .pats-page-hero__meta>div {
     flex: 1 1 50%;
     min-width: min(100%, 9rem);
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
@@ -14140,6 +13721,7 @@ body {
 
 /* —— Forms: full width + 16px inputs (iOS) —— */
 @media (max-width: 639px) {
+
   .pats-portal input:not([type="checkbox"]):not([type="radio"]),
   .pats-portal select,
   .pats-portal textarea,
@@ -14279,30 +13861,26 @@ body {
   --pats-card-lift-duration: 0.3s;
 }
 
-.army-site:not(.dashboard-day) :is(
-    .forest-card-grid,
-    .pats-highlight-grid,
-    .pats-stats,
-    .pats-image-grid,
-    .pats-video-grid
-  ) {
+.army-site:not(.dashboard-day) :is(.forest-card-grid,
+  .pats-highlight-grid,
+  .pats-stats,
+  .pats-image-grid,
+  .pats-video-grid) {
   align-items: stretch;
 }
 
-.army-site:not(.dashboard-day) :is(
-    .tac-mission-card,
-    .pats-pillar-card,
-    .pats-highlight-cell,
-    .paf-card,
-    .paf-value-card,
-    .pats-doc-card,
-    .pats-panel:not(.pats-panel--tile),
-    .hover-lift-card:not(.pats-rule-card):not(.pats-panel--tile),
-    .forest-card-grid__cell > .tac-mission-card,
-    .forest-card-grid__cell > .pats-pillar-card,
-    .forest-carousel__slide .tac-mission-card,
-    .forest-carousel__slide .pats-pillar-card
-  ) {
+.army-site:not(.dashboard-day) :is(.tac-mission-card,
+  .pats-pillar-card,
+  .pats-highlight-cell,
+  .paf-card,
+  .paf-value-card,
+  .pats-doc-card,
+  .pats-panel:not(.pats-panel--tile),
+  .hover-lift-card:not(.pats-rule-card):not(.pats-panel--tile),
+  .forest-card-grid__cell > .tac-mission-card,
+  .forest-card-grid__cell > .pats-pillar-card,
+  .forest-carousel__slide .tac-mission-card,
+  .forest-carousel__slide .pats-pillar-card) {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -14365,24 +13943,22 @@ body {
   gap: 0.75rem;
 }
 
-.army-site:not(.dashboard-day) :is(
-    .tac-mission-card,
-    .pats-pillar-card,
-    .pats-highlight-cell,
-    .paf-card,
-    .paf-value-card,
-    .pats-rule-card,
-    .pats-doc-card,
-    .pats-panel,
-    .hover-lift-card:not(.pats-rule-card),
-    .pats-image-card,
-    .pats-video-card,
-    .tac-edition-row,
-    .forest-card-grid__cell .tac-mission-card,
-    .forest-card-grid__cell .pats-pillar-card,
-    .forest-carousel__slide .tac-mission-card,
-    .forest-carousel__slide .pats-pillar-card
-  ) {
+.army-site:not(.dashboard-day) :is(.tac-mission-card,
+  .pats-pillar-card,
+  .pats-highlight-cell,
+  .paf-card,
+  .paf-value-card,
+  .pats-rule-card,
+  .pats-doc-card,
+  .pats-panel,
+  .hover-lift-card:not(.pats-rule-card),
+  .pats-image-card,
+  .pats-video-card,
+  .tac-edition-row,
+  .forest-card-grid__cell .tac-mission-card,
+  .forest-card-grid__cell .pats-pillar-card,
+  .forest-carousel__slide .tac-mission-card,
+  .forest-carousel__slide .pats-pillar-card) {
   transform: translateZ(0);
   transition:
     transform var(--pats-card-lift-duration) var(--pats-card-lift-ease),
@@ -14392,28 +13968,27 @@ body {
 }
 
 @media (hover: hover) {
-  .army-site:not(.dashboard-day) :is(
-      .tac-mission-card:hover,
-      .tac-mission-card:focus-visible,
-      .pats-pillar-card:hover,
-      .pats-pillar-card:focus-visible,
-      .pats-highlight-cell:hover,
-      .pats-highlight-cell:focus-visible,
-      .paf-card:hover,
-      .paf-value-card:hover,
-      .pats-rule-card:hover,
-      .pats-doc-card:hover,
-      .pats-panel:hover,
-      .hover-lift-card:hover,
-      .hover-lift-card:focus-within,
-      .pats-image-card:hover,
-      .pats-video-card:hover,
-      .tac-edition-row:hover,
-      .forest-card-grid__cell .tac-mission-card:hover,
-      .forest-card-grid__cell .pats-pillar-card:hover,
-      .forest-carousel__slide .tac-mission-card:hover,
-      .forest-carousel__slide .pats-pillar-card:hover
-    ) {
+
+  .army-site:not(.dashboard-day) :is(.tac-mission-card:hover,
+    .tac-mission-card:focus-visible,
+    .pats-pillar-card:hover,
+    .pats-pillar-card:focus-visible,
+    .pats-highlight-cell:hover,
+    .pats-highlight-cell:focus-visible,
+    .paf-card:hover,
+    .paf-value-card:hover,
+    .pats-rule-card:hover,
+    .pats-doc-card:hover,
+    .pats-panel:hover,
+    .hover-lift-card:hover,
+    .hover-lift-card:focus-within,
+    .pats-image-card:hover,
+    .pats-video-card:hover,
+    .tac-edition-row:hover,
+    .forest-card-grid__cell .tac-mission-card:hover,
+    .forest-card-grid__cell .pats-pillar-card:hover,
+    .forest-carousel__slide .tac-mission-card:hover,
+    .forest-carousel__slide .pats-pillar-card:hover) {
     transform: translateY(var(--pats-card-lift-y)) translateZ(0) !important;
     box-shadow: var(--pats-card-lift-shadow) !important;
     z-index: 2;
@@ -14421,15 +13996,14 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .army-site:not(.dashboard-day) :is(
-      .tac-mission-card:hover,
-      .pats-pillar-card:hover,
-      .pats-highlight-cell:hover,
-      .paf-card:hover,
-      .pats-image-card:hover,
-      .forest-carousel__slide .tac-mission-card:hover,
-      .forest-carousel__slide .pats-pillar-card:hover
-    ) {
+
+  .army-site:not(.dashboard-day) :is(.tac-mission-card:hover,
+    .pats-pillar-card:hover,
+    .pats-highlight-cell:hover,
+    .paf-card:hover,
+    .pats-image-card:hover,
+    .forest-carousel__slide .tac-mission-card:hover,
+    .forest-carousel__slide .pats-pillar-card:hover) {
     transform: translateZ(0) !important;
   }
 }
@@ -14466,8 +14040,9 @@ body {
 }
 
 @media (hover: hover) {
+
   .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:hover,
-.army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
+  .army-site:not(.dashboard-day) .army-home #careers .pats-image-card:focus-visible {
     z-index: 2;
   }
 }
@@ -14580,7 +14155,7 @@ body {
 }
 
 /* Footer keeps dark-theme gradient/noise layers in markup — hide on day dashboard */
-.cinematic-site.dashboard-day .cinematic-footer > .absolute.inset-0 {
+.cinematic-site.dashboard-day .cinematic-footer>.absolute.inset-0 {
   display: none;
 }
 
@@ -14841,6 +14416,7 @@ body:has(.dashboard-day) [role="alertdialog"] {
     opacity: 0;
     transform: translateY(24px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -15033,7 +14609,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
 }
 
 
-.pats-awards-standings__table tbody tr + tr {
+.pats-awards-standings__table tbody tr+tr {
   border-top: 1px solid rgba(0, 0, 0, 0.07);
 }
 
@@ -15052,7 +14628,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
 
 
 /* Medal category cell — colour-keyed left edge + dot per tier. */
-.pats-awards-standings__tier-row > th {
+.pats-awards-standings__tier-row>th {
   box-shadow: inset 3px 0 0 0 var(--tier-color, #2d5a1e);
 }
 
@@ -15060,12 +14636,15 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
 .pats-awards-standings__tier-row--gold {
   --tier-color: #d4af37;
 }
+
 .pats-awards-standings__tier-row--silver {
   --tier-color: #9ca3af;
 }
+
 .pats-awards-standings__tier-row--bronze {
   --tier-color: #cd7f32;
 }
+
 .pats-awards-standings__tier-row--certificate {
   --tier-color: #2d5a1e;
 }
@@ -15186,7 +14765,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
     background: #ffffff;
   }
 
-  .pats-awards-standings__table tbody tr + tr {
+  .pats-awards-standings__table tbody tr+tr {
     border-top: 1px solid rgba(0, 0, 0, 0.09);
   }
 
@@ -15200,7 +14779,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
     padding: 0.75rem 1rem;
   }
 
-  .pats-awards-standings__tier-row > th {
+  .pats-awards-standings__tier-row>th {
     box-shadow: none;
     background: #f8faf5;
     border-bottom: 1px solid rgba(0, 0, 0, 0.07);
@@ -15596,15 +15175,9 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-sidebar .pp-logo
 /* The public inner-page shell renders a *light* content band by default.
  * Neutralise it wherever it wraps this module so the dashboard bleeds full
  * dark, edge to edge, in every theme (night / day / light). */
-html:not(.light-theme):not([data-site-theme="day"])
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell:has(> .exercise-contour),
-html.light-theme
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell:has(> .exercise-contour),
-html[data-site-theme="day"]
-  .army-site:not(.dashboard-day)
-  .pats-inner-page-shell:has(> .exercise-contour) {
+html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-day) .pats-inner-page-shell:has(> .exercise-contour),
+html.light-theme .army-site:not(.dashboard-day) .pats-inner-page-shell:has(> .exercise-contour),
+html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shell:has(> .exercise-contour) {
   display: block !important;
   gap: 0 !important;
   padding: 0 !important;
@@ -15651,7 +15224,7 @@ html[data-site-theme="day"]
   z-index: 0;
 }
 
-.exercise-contour > * {
+.exercise-contour>* {
   position: relative;
   z-index: 1;
 }
@@ -15661,6 +15234,7 @@ html[data-site-theme="day"]
   margin: 0 auto;
   padding: 0 1rem 5rem;
 }
+
 @media (min-width: 640px) {
   .ec-shell {
     padding: 0 1.5rem 6rem;
@@ -15671,9 +15245,11 @@ html[data-site-theme="day"]
 .ec-section {
   padding-top: 3.5rem;
 }
+
 .ec-section-head {
   margin-bottom: 1.75rem;
 }
+
 .ec-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -15685,12 +15261,14 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: var(--ec-gold) !important;
 }
+
 .ec-eyebrow::before {
   content: "";
   width: 26px;
   height: 2px;
   background: linear-gradient(90deg, var(--ec-gold), transparent);
 }
+
 .ec-section-title {
   margin-top: 0.6rem;
   font-family: var(--font-barlow, system-ui), sans-serif;
@@ -15701,6 +15279,7 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: #ffffff !important;
 }
+
 .ec-section-sub {
   margin-top: 0.6rem;
   max-width: 46rem;
@@ -15715,6 +15294,7 @@ html[data-site-theme="day"]
 .ec-hero {
   padding: 4.5rem 0 1rem;
 }
+
 .ec-hero__badge {
   display: inline-flex;
   align-items: center;
@@ -15730,6 +15310,7 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: var(--ec-gold-bright) !important;
 }
+
 .ec-hero__badge-dot {
   width: 7px;
   height: 7px;
@@ -15738,10 +15319,19 @@ html[data-site-theme="day"]
   box-shadow: 0 0 0 3px rgba(216, 181, 73, 0.2);
   animation: ec-pulse 2.4s ease-in-out infinite;
 }
+
 @keyframes ec-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
 }
+
 .ec-hero__title {
   margin-top: 1.25rem;
   font-family: var(--font-barlow, system-ui), sans-serif;
@@ -15752,9 +15342,11 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: #ffffff !important;
 }
+
 .ec-hero__title span {
   color: var(--ec-gold) !important;
 }
+
 .ec-hero__lede {
   margin-top: 1.15rem;
   max-width: 44rem;
@@ -15762,9 +15354,13 @@ html[data-site-theme="day"]
   line-height: 1.7;
   color: var(--ec-khaki) !important;
 }
+
 @media (min-width: 640px) {
-  .ec-hero__lede { font-size: 1.08rem; }
+  .ec-hero__lede {
+    font-size: 1.08rem;
+  }
 }
+
 .ec-hero__rule {
   margin-top: 1.75rem;
   height: 1px;
@@ -15780,12 +15376,20 @@ html[data-site-theme="day"]
   gap: 0.85rem;
   margin-top: 2rem;
 }
+
 @media (min-width: 700px) {
-  .ec-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ec-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
+
 @media (min-width: 1024px) {
-  .ec-stats { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; }
+  .ec-stats {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1rem;
+  }
 }
+
 .ec-stat {
   position: relative;
   padding: 1.1rem 1rem 1.15rem;
@@ -15795,10 +15399,12 @@ html[data-site-theme="day"]
   overflow: hidden;
   transition: transform 0.25s var(--ec-ease, cubic-bezier(0.16, 1, 0.3, 1)), border-color 0.25s;
 }
+
 .ec-stat:hover {
   transform: translateY(-3px);
   border-color: rgba(197, 168, 128, 0.4);
 }
+
 .ec-stat__icon {
   display: inline-flex;
   padding: 0.5rem;
@@ -15807,6 +15413,7 @@ html[data-site-theme="day"]
   color: var(--ec-gold-bright) !important;
   margin-bottom: 0.7rem;
 }
+
 .ec-stat__value {
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 1.35rem;
@@ -15814,6 +15421,7 @@ html[data-site-theme="day"]
   line-height: 1.05;
   color: #ffffff !important;
 }
+
 .ec-stat__label {
   margin-top: 0.35rem;
   font-size: 0.75rem;
@@ -15821,6 +15429,7 @@ html[data-site-theme="day"]
   letter-spacing: 0.03em;
   color: var(--ec-sand) !important;
 }
+
 .ec-stat__hint {
   margin-top: 0.15rem;
   font-size: 0.68rem;
@@ -15835,12 +15444,19 @@ html[data-site-theme="day"]
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
 }
+
 @media (min-width: 640px) {
-  .ec-overview { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ec-overview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
 @media (min-width: 1024px) {
-  .ec-overview { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ec-overview {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
+
 .ec-ov-card {
   padding: 1.4rem;
   border: 1px solid var(--ec-line);
@@ -15848,10 +15464,12 @@ html[data-site-theme="day"]
   background: linear-gradient(180deg, var(--ec-panel) 0%, var(--ec-raised) 100%);
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
+
 .ec-ov-card:hover {
   transform: translateY(-3px);
   border-color: rgba(197, 168, 128, 0.4);
 }
+
 .ec-ov-card__icon {
   display: inline-flex;
   padding: 0.6rem;
@@ -15860,12 +15478,14 @@ html[data-site-theme="day"]
   color: var(--ec-gold-bright) !important;
   margin-bottom: 0.9rem;
 }
+
 .ec-ov-card__title {
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
   color: #ffffff !important;
 }
+
 .ec-ov-card__body {
   margin-top: 0.5rem;
   font-size: 0.9rem;
@@ -15881,9 +15501,14 @@ html[data-site-theme="day"]
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
+
 @media (min-width: 900px) {
-  .ec-timeline { grid-template-columns: 1.15fr 1fr; align-items: start; }
+  .ec-timeline {
+    grid-template-columns: 1.15fr 1fr;
+    align-items: start;
+  }
 }
+
 .ec-tl-track {
   position: relative;
   max-height: 30rem;
@@ -15892,11 +15517,16 @@ html[data-site-theme="day"]
   scrollbar-width: thin;
   scrollbar-color: var(--ec-brass) transparent;
 }
-.ec-tl-track::-webkit-scrollbar { width: 6px; }
+
+.ec-tl-track::-webkit-scrollbar {
+  width: 6px;
+}
+
 .ec-tl-track::-webkit-scrollbar-thumb {
   background: rgba(197, 168, 128, 0.4);
   border-radius: 999px;
 }
+
 .ec-tl-item {
   position: relative;
   display: flex;
@@ -15910,14 +15540,17 @@ html[data-site-theme="day"]
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
+
 .ec-tl-item:hover {
   background: rgba(255, 255, 255, 0.04);
   border-color: var(--ec-line);
 }
+
 .ec-tl-item[data-active="true"] {
   background: rgba(197, 168, 128, 0.1);
   border-color: rgba(197, 168, 128, 0.4);
 }
+
 .ec-tl-marker {
   position: relative;
   display: flex;
@@ -15925,6 +15558,7 @@ html[data-site-theme="day"]
   align-items: center;
   padding-top: 0.15rem;
 }
+
 .ec-tl-dot {
   width: 13px;
   height: 13px;
@@ -15934,29 +15568,37 @@ html[data-site-theme="day"]
   flex-shrink: 0;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
+
 .ec-tl-item[data-active="true"] .ec-tl-dot {
   background: var(--ec-gold);
   box-shadow: 0 0 0 4px rgba(216, 181, 73, 0.18);
 }
+
 .ec-tl-line {
   flex: 1;
   width: 2px;
   margin-top: 3px;
   background: linear-gradient(180deg, var(--ec-line), transparent);
 }
+
 .ec-tl-num {
   font-family: var(--font-mono, monospace);
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   color: var(--ec-brass) !important;
 }
+
 .ec-tl-label {
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--ec-sand) !important;
 }
-.ec-tl-item[data-active="true"] .ec-tl-label { color: #ffffff !important; }
+
+.ec-tl-item[data-active="true"] .ec-tl-label {
+  color: #ffffff !important;
+}
+
 .ec-tl-phase {
   font-size: 0.68rem;
   color: var(--ec-khaki) !important;
@@ -15972,6 +15614,7 @@ html[data-site-theme="day"]
     radial-gradient(600px 200px at 100% 0%, rgba(61, 82, 48, 0.25), transparent 70%),
     linear-gradient(180deg, var(--ec-panel-2) 0%, var(--ec-raised) 100%);
 }
+
 .ec-tl-detail__phase {
   display: inline-block;
   padding: 0.28rem 0.7rem;
@@ -15984,6 +15627,7 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: var(--ec-gold-bright) !important;
 }
+
 .ec-tl-detail__num {
   margin-top: 1rem;
   font-family: var(--font-barlow, system-ui), sans-serif;
@@ -15992,6 +15636,7 @@ html[data-site-theme="day"]
   line-height: 1;
   color: rgba(197, 168, 128, 0.25) !important;
 }
+
 .ec-tl-detail__title {
   margin-top: 0.35rem;
   font-family: var(--font-barlow, system-ui), sans-serif;
@@ -16000,6 +15645,7 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: #ffffff !important;
 }
+
 .ec-tl-detail__body {
   margin-top: 0.75rem;
   font-size: 0.95rem;
@@ -16018,11 +15664,13 @@ html[data-site-theme="day"]
   justify-content: space-between;
   margin-bottom: 1.5rem;
 }
+
 .ec-search {
   position: relative;
   flex: 1 1 15rem;
   max-width: 22rem;
 }
+
 .ec-search__icon {
   position: absolute;
   left: 0.75rem;
@@ -16030,6 +15678,7 @@ html[data-site-theme="day"]
   transform: translateY(-50%);
   color: var(--ec-khaki);
 }
+
 .ec-search input {
   width: 100%;
   padding: 0.6rem 0.9rem 0.6rem 2.25rem;
@@ -16041,46 +15690,31 @@ html[data-site-theme="day"]
   outline: none;
   transition: border-color 0.2s ease;
 }
-.ec-search input::placeholder { color: var(--ec-khaki); }
-.ec-search input:focus { border-color: rgba(197, 168, 128, 0.5); }
+
+.ec-search input::placeholder {
+  color: var(--ec-khaki);
+}
+
+.ec-search input:focus {
+  border-color: rgba(197, 168, 128, 0.5);
+}
 
 /* The sitewide dark-page form rule (pats-inner-pages.css / daylight-theme.css)
  * forces every text input to white-bg + near-black text at high specificity.
  * Re-assert the dark search field by mirroring that selector + adding
  * .exercise-contour so we outrank it in night, day AND light themes. */
-.army-site:not(.dashboard-day)
-  .exercise-contour
-  .ec-search
-  input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
-html.light-theme
-  .army-site
-  .exercise-contour
-  .ec-search
-  input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
-html[data-site-theme="day"]
-  .army-site
-  .exercise-contour
-  .ec-search
-  input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]) {
+.army-site:not(.dashboard-day) .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+html.light-theme .army-site .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]) {
   background: var(--ec-raised) !important;
   color: #ffffff !important;
   border-color: var(--ec-line) !important;
   font-size: 0.9rem !important;
 }
-.army-site:not(.dashboard-day)
-  .exercise-contour
-  .ec-search
-  input:not([type="checkbox"]):not([type="radio"])::placeholder,
-html.light-theme
-  .army-site
-  .exercise-contour
-  .ec-search
-  input:not([type="checkbox"]):not([type="radio"])::placeholder,
-html[data-site-theme="day"]
-  .army-site
-  .exercise-contour
-  .ec-search
-  input:not([type="checkbox"]):not([type="radio"])::placeholder {
+
+.army-site:not(.dashboard-day) .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"])::placeholder,
+html.light-theme .army-site .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"])::placeholder,
+html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"])::placeholder {
   color: var(--ec-khaki) !important;
 }
 
@@ -16089,6 +15723,7 @@ html[data-site-theme="day"]
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
 .ec-chip {
   padding: 0.42rem 0.85rem;
   border: 1px solid var(--ec-line);
@@ -16103,7 +15738,12 @@ html[data-site-theme="day"]
   transition: all 0.2s ease;
   white-space: nowrap;
 }
-.ec-chip:hover { color: var(--ec-sand) !important; border-color: rgba(197, 168, 128, 0.35); }
+
+.ec-chip:hover {
+  color: var(--ec-sand) !important;
+  border-color: rgba(197, 168, 128, 0.35);
+}
+
 .ec-chip[data-active="true"] {
   background: rgba(197, 168, 128, 0.14);
   border-color: var(--ec-brass);
@@ -16115,12 +15755,19 @@ html[data-site-theme="day"]
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
 }
+
 @media (min-width: 640px) {
-  .ec-events { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ec-events {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
 @media (min-width: 1024px) {
-  .ec-events { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ec-events {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
+
 .ec-card {
   display: flex;
   flex-direction: column;
@@ -16130,17 +15777,20 @@ html[data-site-theme="day"]
   background: linear-gradient(180deg, var(--ec-panel) 0%, var(--ec-raised) 100%);
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
+
 .ec-card:hover {
   transform: translateY(-4px);
   border-color: rgba(197, 168, 128, 0.45);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
 }
+
 .ec-card__top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
 }
+
 .ec-card__icon {
   display: inline-flex;
   padding: 0.6rem;
@@ -16148,6 +15798,7 @@ html[data-site-theme="day"]
   background: rgba(61, 82, 48, 0.4);
   color: var(--ec-gold-bright) !important;
 }
+
 .ec-marks {
   display: inline-flex;
   flex-direction: column;
@@ -16158,12 +15809,14 @@ html[data-site-theme="day"]
   background: rgba(197, 168, 128, 0.08);
   line-height: 1;
 }
+
 .ec-marks__val {
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--ec-gold-bright) !important;
 }
+
 .ec-marks__unit {
   margin-top: 2px;
   font-size: 0.55rem;
@@ -16172,6 +15825,7 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: var(--ec-khaki) !important;
 }
+
 .ec-card__title {
   margin-top: 1rem;
   font-family: var(--font-barlow, system-ui), sans-serif;
@@ -16180,6 +15834,7 @@ html[data-site-theme="day"]
   line-height: 1.2;
   color: #ffffff !important;
 }
+
 .ec-card__summary {
   margin-top: 0.5rem;
   flex: 1;
@@ -16187,12 +15842,14 @@ html[data-site-theme="day"]
   line-height: 1.55;
   color: var(--ec-khaki) !important;
 }
+
 .ec-card__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 1rem;
 }
+
 .ec-tag {
   display: inline-flex;
   align-items: center;
@@ -16206,8 +15863,14 @@ html[data-site-theme="day"]
   color: var(--ec-khaki) !important;
   background: rgba(255, 255, 255, 0.03);
 }
-.ec-tag--duration { color: var(--ec-sand) !important; }
-.ec-tag--cat { color: var(--ec-brass) !important; }
+
+.ec-tag--duration {
+  color: var(--ec-sand) !important;
+}
+
+.ec-tag--cat {
+  color: var(--ec-brass) !important;
+}
 
 /* difficulty pills */
 .ec-diff {
@@ -16221,6 +15884,7 @@ html[data-site-theme="day"]
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
+
 .ec-diff::before {
   content: "";
   width: 6px;
@@ -16228,10 +15892,26 @@ html[data-site-theme="day"]
   border-radius: 999px;
   background: currentColor;
 }
-.ec-diff--Foundational { color: #7fb87a !important; background: rgba(111, 160, 106, 0.14); }
-.ec-diff--Standard { color: #d8b549 !important; background: rgba(216, 181, 73, 0.14); }
-.ec-diff--Advanced { color: #e0985a !important; background: rgba(224, 152, 90, 0.14); }
-.ec-diff--Extreme { color: #e07a63 !important; background: rgba(224, 122, 99, 0.16); }
+
+.ec-diff--Foundational {
+  color: #7fb87a !important;
+  background: rgba(111, 160, 106, 0.14);
+}
+
+.ec-diff--Standard {
+  color: #d8b549 !important;
+  background: rgba(216, 181, 73, 0.14);
+}
+
+.ec-diff--Advanced {
+  color: #e0985a !important;
+  background: rgba(224, 152, 90, 0.14);
+}
+
+.ec-diff--Extreme {
+  color: #e07a63 !important;
+  background: rgba(224, 122, 99, 0.16);
+}
 
 .ec-card__btn {
   display: inline-flex;
@@ -16251,11 +15931,13 @@ html[data-site-theme="day"]
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease, gap 0.2s ease;
 }
+
 .ec-card__btn:hover {
   background: rgba(197, 168, 128, 0.16);
   border-color: var(--ec-brass);
   gap: 0.65rem;
 }
+
 .ec-empty {
   grid-column: 1 / -1;
   padding: 3rem 1rem;
@@ -16292,11 +15974,13 @@ html[data-site-theme="day"]
     linear-gradient(180deg, #141a12 0%, #0d110c 100%) !important;
   color: var(--ec-sand) !important;
 }
+
 .ec-modal__head {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
 }
+
 .ec-modal__icon {
   display: inline-flex;
   padding: 0.75rem;
@@ -16305,6 +15989,7 @@ html[data-site-theme="day"]
   color: var(--ec-gold-bright) !important;
   flex-shrink: 0;
 }
+
 .ec-modal__title {
   font-family: var(--font-barlow, system-ui), sans-serif !important;
   font-size: 1.4rem !important;
@@ -16312,18 +15997,21 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: #ffffff !important;
 }
+
 .ec-modal__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-top: 0.6rem;
 }
+
 .ec-modal__body {
   margin-top: 1.25rem;
   font-size: 0.95rem;
   line-height: 1.7;
   color: var(--ec-sand) !important;
 }
+
 .ec-modal__section-label {
   margin: 1.5rem 0 0.75rem;
   font-family: var(--font-mono, monospace);
@@ -16333,16 +16021,19 @@ html[data-site-theme="day"]
   text-transform: uppercase;
   color: var(--ec-gold) !important;
 }
+
 .ec-breakdown {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
+
 .ec-breakdown__row {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
+
 .ec-breakdown__label {
   flex-shrink: 0;
   width: 12rem;
@@ -16350,6 +16041,7 @@ html[data-site-theme="day"]
   font-size: 0.85rem;
   color: var(--ec-sand) !important;
 }
+
 .ec-breakdown__bar {
   flex: 1;
   height: 8px;
@@ -16357,11 +16049,13 @@ html[data-site-theme="day"]
   background: rgba(255, 255, 255, 0.06);
   overflow: hidden;
 }
+
 .ec-breakdown__fill {
   height: 100%;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--ec-brass), var(--ec-gold));
 }
+
 .ec-breakdown__val {
   flex-shrink: 0;
   width: 3rem;
@@ -16371,6 +16065,7 @@ html[data-site-theme="day"]
   font-weight: 700;
   color: var(--ec-gold-bright) !important;
 }
+
 .ec-modal__total {
   display: flex;
   align-items: center;
@@ -16381,7 +16076,11 @@ html[data-site-theme="day"]
   font-size: 0.85rem;
   color: var(--ec-khaki) !important;
 }
-.ec-modal__total b { color: var(--ec-gold-bright) !important; font-size: 1.05rem; }
+
+.ec-modal__total b {
+  color: var(--ec-gold-bright) !important;
+  font-size: 1.05rem;
+}
 
 /* ================================================================== *
  * Equipment
@@ -16391,18 +16090,26 @@ html[data-site-theme="day"]
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
 }
+
 @media (min-width: 640px) {
-  .ec-equip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ec-equip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
 @media (min-width: 1024px) {
-  .ec-equip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ec-equip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
+
 .ec-equip-card {
   padding: 1.3rem;
   border: 1px solid var(--ec-line);
   border-radius: 14px;
   background: linear-gradient(180deg, var(--ec-panel) 0%, var(--ec-raised) 100%);
 }
+
 .ec-equip-card__head {
   display: flex;
   align-items: center;
@@ -16411,6 +16118,7 @@ html[data-site-theme="day"]
   margin-bottom: 0.85rem;
   border-bottom: 1px solid var(--ec-line-soft);
 }
+
 .ec-equip-card__icon {
   display: inline-flex;
   padding: 0.5rem;
@@ -16418,23 +16126,27 @@ html[data-site-theme="day"]
   background: rgba(197, 168, 128, 0.12);
   color: var(--ec-gold-bright) !important;
 }
+
 .ec-equip-card__title {
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 1rem;
   font-weight: 700;
   color: #ffffff !important;
 }
+
 .ec-equip-card__count {
   margin-left: auto;
   font-family: var(--font-mono, monospace);
   font-size: 0.7rem;
   color: var(--ec-khaki) !important;
 }
+
 .ec-equip-list {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
+
 .ec-equip-item {
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--ec-line-soft);
@@ -16444,6 +16156,7 @@ html[data-site-theme="day"]
   color: var(--ec-sand) !important;
   transition: border-color 0.2s ease, color 0.2s ease;
 }
+
 .ec-equip-item:hover {
   border-color: rgba(197, 168, 128, 0.4);
   color: var(--ec-gold-bright) !important;
@@ -16457,12 +16170,19 @@ html[data-site-theme="day"]
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 0.85rem;
 }
+
 @media (min-width: 640px) {
-  .ec-rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ec-rules {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
 @media (min-width: 1024px) {
-  .ec-rules { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ec-rules {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
+
 .ec-rule {
   display: flex;
   gap: 0.8rem;
@@ -16472,18 +16192,42 @@ html[data-site-theme="day"]
   border-radius: 11px;
   background: linear-gradient(180deg, var(--ec-panel) 0%, var(--ec-raised) 100%);
 }
-.ec-rule__icon { flex-shrink: 0; margin-top: 1px; }
+
+.ec-rule__icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 .ec-rule__text {
   font-size: 0.86rem;
   line-height: 1.5;
   color: var(--ec-sand) !important;
 }
-.ec-rule--info { border-left-color: var(--ec-brass); }
-.ec-rule--info .ec-rule__icon { color: var(--ec-brass) !important; }
-.ec-rule--warning { border-left-color: var(--ec-alert); }
-.ec-rule--warning .ec-rule__icon { color: var(--ec-alert) !important; }
-.ec-rule--critical { border-left-color: var(--ec-red); background: linear-gradient(180deg, rgba(139, 58, 42, 0.16), var(--ec-raised)); }
-.ec-rule--critical .ec-rule__icon { color: var(--ec-red) !important; }
+
+.ec-rule--info {
+  border-left-color: var(--ec-brass);
+}
+
+.ec-rule--info .ec-rule__icon {
+  color: var(--ec-brass) !important;
+}
+
+.ec-rule--warning {
+  border-left-color: var(--ec-alert);
+}
+
+.ec-rule--warning .ec-rule__icon {
+  color: var(--ec-alert) !important;
+}
+
+.ec-rule--critical {
+  border-left-color: var(--ec-red);
+  background: linear-gradient(180deg, rgba(139, 58, 42, 0.16), var(--ec-raised));
+}
+
+.ec-rule--critical .ec-rule__icon {
+  color: var(--ec-red) !important;
+}
 
 /* ================================================================== *
  * Orientation
@@ -16493,12 +16237,19 @@ html[data-site-theme="day"]
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 0.85rem;
 }
+
 @media (min-width: 640px) {
-  .ec-orient { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ec-orient {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
 @media (min-width: 1024px) {
-  .ec-orient { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ec-orient {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
+
 .ec-orient-card {
   padding: 1.2rem;
   border: 1px solid var(--ec-line);
@@ -16506,10 +16257,12 @@ html[data-site-theme="day"]
   background: linear-gradient(180deg, var(--ec-panel) 0%, var(--ec-raised) 100%);
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
+
 .ec-orient-card:hover {
   transform: translateY(-3px);
   border-color: rgba(197, 168, 128, 0.4);
 }
+
 .ec-orient-card__icon {
   display: inline-flex;
   padding: 0.6rem;
@@ -16518,18 +16271,21 @@ html[data-site-theme="day"]
   color: var(--ec-gold-bright) !important;
   margin-bottom: 0.8rem;
 }
+
 .ec-orient-card__title {
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 0.98rem;
   font-weight: 700;
   color: #ffffff !important;
 }
+
 .ec-orient-card__body {
   margin-top: 0.4rem;
   font-size: 0.83rem;
   line-height: 1.55;
   color: var(--ec-khaki) !important;
 }
+
 .ec-orient__banner {
   margin-bottom: 1.75rem;
   padding: 1.25rem 1.4rem;
@@ -16559,29 +16315,29 @@ html[data-site-theme="day"]
 
 .admin-theme,
 .admin-theme.pats-dashboard {
-  
+
   --admin-bg: #eef0eb;
   --admin-bg-gradient: linear-gradient(180deg, #eff1ec 0%, #e9ece5 100%);
   --admin-surface: #ffffff;
   --admin-border: #e4e7e0;
   --admin-border-strong: #e0e3db;
 
-  
+
   --admin-heading: #18221c;
   --admin-body: #2a332a;
   --admin-muted: #5a655c;
   --admin-faint: #9aa298;
   --cp-ink-muted: #5a655c;
 
-  
-  --admin-accent: #1e5a3a; 
+
+  --admin-accent: #1e5a3a;
   --admin-accent-strong: #17492f;
   --admin-accent-soft: #f4f8f4;
   --admin-brass: #c9a84c;
   --admin-brass-ink: #9a6711;
   --admin-link: #1e5a3a;
 
-  
+
   --admin-shadow-card: 0 1px 2px rgba(20, 30, 24, 0.05);
   --admin-shadow-hover: 0 8px 22px rgba(20, 30, 24, 0.09);
   --admin-focus-ring: 0 0 0 3px rgba(201, 168, 76, 0.14);
@@ -16669,11 +16425,9 @@ html[data-site-theme="day"]
 
 
 .admin-theme .admin-sidebar-link[data-active="true"] {
-  background: linear-gradient(
-    90deg,
-    rgba(201, 168, 76, 0.18),
-    rgba(201, 168, 76, 0.06)
-  ) !important;
+  background: linear-gradient(90deg,
+      rgba(201, 168, 76, 0.18),
+      rgba(201, 168, 76, 0.06)) !important;
   color: #ffffff !important;
   font-weight: 650 !important;
 }
@@ -16969,8 +16723,7 @@ html[data-site-theme="day"]
 
 
 
-.admin-theme :is(
-  .admin-data-table,
+.admin-theme :is(.admin-data-table,
   .admin-users-table,
   .admin-payments-table,
   .admin-key-dates-table,
@@ -16979,8 +16732,7 @@ html[data-site-theme="day"]
   .admin-units-table,
   .admin-user-detail-payments-table,
   .admin-dashboard-recent-table,
-  .tac-admin-table
-) thead th {
+  .tac-admin-table) thead th {
   background: #fafbf8 !important;
   color: #9aa298 !important;
   font-size: 10.5px !important;
@@ -16992,8 +16744,7 @@ html[data-site-theme="day"]
 
 
 
-.admin-theme :is(
-  .admin-data-table,
+.admin-theme :is(.admin-data-table,
   .admin-users-table,
   .admin-payments-table,
   .admin-key-dates-table,
@@ -17002,14 +16753,12 @@ html[data-site-theme="day"]
   .admin-units-table,
   .admin-user-detail-payments-table,
   .admin-dashboard-recent-table,
-  .tac-admin-table
-) tbody tr:nth-child(even) {
+  .tac-admin-table) tbody tr:nth-child(even) {
   background: #fafbf8 !important;
 }
 
 
-.admin-theme :is(
-  .admin-data-table,
+.admin-theme :is(.admin-data-table,
   .admin-users-table,
   .admin-payments-table,
   .admin-key-dates-table,
@@ -17018,8 +16767,7 @@ html[data-site-theme="day"]
   .admin-units-table,
   .admin-user-detail-payments-table,
   .admin-dashboard-recent-table,
-  .tac-admin-table
-) tbody tr:hover,
+  .tac-admin-table) tbody tr:hover,
 .admin-theme tbody tr.admin-row-hover:hover {
   background: #f4f6f1 !important;
 }
@@ -17073,18 +16821,22 @@ html[data-site-theme="day"]
   background: #e9f5ed !important;
   color: #12722f !important;
 }
+
 .participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-pending {
   background: #fbf2e0 !important;
   color: #9a6711 !important;
 }
+
 .participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-review {
   background: #e9f0fd !important;
   color: #1d4ed8 !important;
 }
+
 .participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-rejected {
   background: #fcebe9 !important;
   color: #b42318 !important;
 }
+
 .participant-portal.pp :is(.ops-status-pill, .ops-status-badge, .ops-status-badge-table).ops-status-neutral {
   background: #f0f1ec !important;
   color: #5a655c !important;
@@ -17340,18 +17092,30 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
 
 
 
-.admin-theme .admin-users-col-participant { width: auto; }
+.admin-theme .admin-users-col-participant {
+  width: auto;
+}
 
-.admin-theme .admin-users-col-unit { width: 22%; }
+.admin-theme .admin-users-col-unit {
+  width: 22%;
+}
 
-.admin-theme .admin-users-col-app { width: 17%; }
+.admin-theme .admin-users-col-app {
+  width: 17%;
+}
 
-.admin-theme .admin-users-col-pay { width: 14%; }
+.admin-theme .admin-users-col-pay {
+  width: 14%;
+}
 
-.admin-theme .admin-users-col-actions { width: 104px; }
+.admin-theme .admin-users-col-actions {
+  width: 104px;
+}
 
 
-.admin-theme .admin-users-cell-participant { padding: 11px 20px !important; }
+.admin-theme .admin-users-cell-participant {
+  padding: 11px 20px !important;
+}
 
 
 .admin-theme .admin-users-participant {
@@ -17472,11 +17236,15 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
 }
 
 @media (min-width: 700px) {
-  .admin-theme .admin-team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-theme .admin-team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1080px) {
-  .admin-theme .admin-team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .admin-theme .admin-team-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .admin-theme .admin-team-card {
@@ -17550,9 +17318,15 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   letter-spacing: 0.04em;
 }
 
-.admin-theme .admin-team-card-status--active { background: #e9f5ed; color: #15803d; }
+.admin-theme .admin-team-card-status--active {
+  background: #e9f5ed;
+  color: #15803d;
+}
 
-.admin-theme .admin-team-card-status--pending { background: #fbf2e0; color: #9a6711; }
+.admin-theme .admin-team-card-status--pending {
+  background: #fbf2e0;
+  color: #9a6711;
+}
 
 .admin-theme .admin-team-card-captain {
   display: flex;
@@ -17564,7 +17338,10 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   border: 1px solid #eef0ea;
 }
 
-.admin-theme .admin-team-card-captain-text { min-width: 0; flex: 1 1 auto; }
+.admin-theme .admin-team-card-captain-text {
+  min-width: 0;
+  flex: 1 1 auto;
+}
 
 .admin-theme .admin-team-card-captain-name {
   display: flex;
@@ -17615,7 +17392,9 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   white-space: nowrap;
 }
 
-.admin-theme .admin-team-card-link:hover { color: #17492f; }
+.admin-theme .admin-team-card-link:hover {
+  color: #17492f;
+}
 
 .admin-theme .admin-team-empty {
   padding: 40px;
@@ -17626,7 +17405,9 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   border-radius: 14px;
 }
 
-.admin-theme .admin-users-col-actions { width: 96px; }
+.admin-theme .admin-users-col-actions {
+  width: 96px;
+}
 
 
 
@@ -17792,13 +17573,22 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
 }
 
 .participant-portal .portal-timeline__pill--completed,
-.pats-portal .portal-timeline__pill--completed { background: #e9f5ed; color: #15803d; }
+.pats-portal .portal-timeline__pill--completed {
+  background: #e9f5ed;
+  color: #15803d;
+}
 
 .participant-portal .portal-timeline__pill--upcoming,
-.pats-portal .portal-timeline__pill--upcoming { background: #fbf2e0; color: #9a6711; }
+.pats-portal .portal-timeline__pill--upcoming {
+  background: #fbf2e0;
+  color: #9a6711;
+}
 
 .participant-portal .portal-timeline__pill--scheduled,
-.pats-portal .portal-timeline__pill--scheduled { background: #f0f1ec; color: #5a655c; }
+.pats-portal .portal-timeline__pill--scheduled {
+  background: #f0f1ec;
+  color: #5a655c;
+}
 
 
 
@@ -17838,13 +17628,25 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   white-space: nowrap;
 }
 
-.admin-theme .admin-role-pill--admin { background: #f8f1d9; color: #8a6d12; }
+.admin-theme .admin-role-pill--admin {
+  background: #f8f1d9;
+  color: #8a6d12;
+}
 
-.admin-theme .admin-role-pill--mtd { background: #e9f5ed; color: #15803d; }
+.admin-theme .admin-role-pill--mtd {
+  background: #e9f5ed;
+  color: #15803d;
+}
 
-.admin-theme .admin-role-pill--sdbs { background: #f0f1ec; color: #5a655c; }
+.admin-theme .admin-role-pill--sdbs {
+  background: #f0f1ec;
+  color: #5a655c;
+}
 
-.admin-theme .admin-role-pill--user { background: #e9f0fd; color: #1d4ed8; }
+.admin-theme .admin-role-pill--user {
+  background: #e9f0fd;
+  color: #1d4ed8;
+}
 
 .admin-theme .admin-account-status::before {
   content: "";
@@ -17854,9 +17656,15 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   background: currentColor;
 }
 
-.admin-theme .admin-account-status--active { background: #e9f5ed; color: #15803d; }
+.admin-theme .admin-account-status--active {
+  background: #e9f5ed;
+  color: #15803d;
+}
 
-.admin-theme .admin-account-status--suspended { background: #fcebe9; color: #b42318; }
+.admin-theme .admin-account-status--suspended {
+  background: #fcebe9;
+  color: #b42318;
+}
 
 
 
@@ -17872,10 +17680,12 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
 
 
 @keyframes admin-pulse-dot {
+
   0%,
   100% {
     box-shadow: 0 0 0 3px rgba(34, 163, 91, 0.16);
   }
+
   50% {
     box-shadow: 0 0 0 5px rgba(34, 163, 91, 0.08);
   }
@@ -18576,6 +18386,7 @@ html:has(.dashboard-day) body {
 }
 
 @media (min-width: 1024px) {
+
   /* Grid places sidebar + main side-by-side; window is locked so only
      pp-main (the scroll container) scrolls — sidebar stays pinned. */
   .pp .pp-shell {
@@ -18610,6 +18421,7 @@ html:has(.dashboard-day) body {
 }
 
 @media (min-width: 1024px) {
+
   /* pp-main IS the scroll container — window is locked, only this scrolls */
   .pp .pp-main {
     height: 100dvh;
@@ -18620,12 +18432,19 @@ html:has(.dashboard-day) body {
     scrollbar-color: rgba(21, 97, 59, 0.22) transparent;
   }
 
-  .pp .pp-main::-webkit-scrollbar { width: 5px; }
-  .pp .pp-main::-webkit-scrollbar-track { background: transparent; }
+  .pp .pp-main::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .pp .pp-main::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   .pp .pp-main::-webkit-scrollbar-thumb {
     background: rgba(21, 97, 59, 0.22);
     border-radius: 999px;
   }
+
   .pp .pp-main::-webkit-scrollbar-thumb:hover {
     background: rgba(21, 97, 59, 0.4);
   }
@@ -18661,6 +18480,7 @@ html:has(.dashboard-day) body {
 }
 
 @media (min-width: 1024px) {
+
   /* Sidebar stays in grid column — window scroll is locked so it never moves */
   .pp .pp-sidebar {
     position: sticky;
@@ -18672,6 +18492,7 @@ html:has(.dashboard-day) body {
     scrollbar-width: none;
     z-index: 20;
   }
+
   .pp .pp-sidebar::-webkit-scrollbar {
     display: none;
   }
@@ -19103,12 +18924,10 @@ html:has(.dashboard-day) body {
   border-radius: var(--pp-radius);
   color: #fff;
   /* Premium muted institutional green */
-  background: linear-gradient(
-    135deg,
-    rgba(38, 57, 45, 0.96) 0%,
-    rgba(26, 40, 31, 0.98) 52%,
-    rgba(20, 31, 24, 0.99) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(38, 57, 45, 0.96) 0%,
+      rgba(26, 40, 31, 0.98) 52%,
+      rgba(20, 31, 24, 0.99) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--pp-shadow-lift), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   -webkit-backdrop-filter: blur(12px);
@@ -19116,7 +18935,7 @@ html:has(.dashboard-day) body {
 }
 
 /* Left block must shrink freely so the aside never overflows */
-.pp .pp-hero > div:first-child {
+.pp .pp-hero>div:first-child {
   flex: 1 1 0;
   min-width: 0;
 }
@@ -19130,26 +18949,23 @@ html:has(.dashboard-day) body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.12) 0%,
-    transparent 34%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      transparent 34%);
   pointer-events: none;
 }
+
 .pp .pp-hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    120% 150% at 100% 0%,
-    rgba(216, 185, 104, 0.2),
-    transparent 55%
-  );
+  background: radial-gradient(120% 150% at 100% 0%,
+      rgba(216, 185, 104, 0.2),
+      transparent 55%);
   pointer-events: none;
 }
 
-.pp .pp-hero > * {
+.pp .pp-hero>* {
   position: relative;
   z-index: 1;
 }
@@ -19194,6 +19010,7 @@ html:has(.dashboard-day) body {
   .pp .pp-hero {
     align-items: flex-start;
   }
+
   .pp .pp-hero__aside {
     flex-direction: row;
     flex-wrap: wrap;
@@ -19250,28 +19067,35 @@ html:has(.dashboard-day) body {
 .participant-portal.pp .pp-hero .pp-hero__eyebrow {
   color: var(--pp-nav-accent) !important;
 }
+
 .participant-portal.pp .pp-hero .pp-hero__title {
   color: #ffffff !important;
 }
+
 .participant-portal.pp .pp-hero .pp-hero__meta {
   color: rgba(255, 255, 255, 0.86) !important;
 }
+
 .participant-portal.pp .pp-hero .pp-hero__chip,
 .participant-portal.pp .pp-hero .pp-hero__chip * {
   color: #ffffff !important;
 }
+
 .participant-portal.pp .pp-hero .pp-hero__chip--pending,
 .participant-portal.pp .pp-hero .pp-hero__chip--pending * {
   color: #f2e2b6 !important;
 }
+
 .participant-portal.pp .pp-hero .pp-hero__team,
 .participant-portal.pp .pp-hero .pp-hero__team * {
   color: #ffffff !important;
 }
+
 .participant-portal.pp .pp-sidebar,
 .participant-portal.pp .pp-sidebar :is(a, p, span, li, button, svg, svg *) {
   color: var(--pp-nav-text) !important;
 }
+
 .participant-portal.pp .pp-sidebar .pp-nav__link.is-active,
 .participant-portal.pp .pp-sidebar .pp-nav__link.is-active :is(span, svg, svg *),
 .participant-portal.pp .pp-sidebar .pp-nav__link:hover,
@@ -19470,6 +19294,7 @@ html:has(.dashboard-day) body {
   background: var(--pp-primary-soft);
   border-color: rgba(21, 97, 59, 0.2);
 }
+
 .pp .pp-step--done .pp-step__dot {
   background: var(--pp-primary);
   border-color: var(--pp-primary);
@@ -19481,6 +19306,7 @@ html:has(.dashboard-day) body {
   border-color: rgba(21, 97, 59, 0.45);
   box-shadow: 0 0 0 3px rgba(21, 97, 59, 0.1);
 }
+
 .pp .pp-step--current .pp-step__dot {
   background: var(--pp-primary);
   border-color: var(--pp-primary);
@@ -19491,11 +19317,13 @@ html:has(.dashboard-day) body {
   background: var(--pp-warning-soft);
   border-color: rgba(180, 83, 9, 0.28);
 }
+
 .pp .pp-step--attention .pp-step__dot {
   background: #fff;
   border-color: var(--pp-warning);
   color: var(--pp-warning);
 }
+
 .pp .pp-step--attention .pp-step__name {
   color: #7c3a06;
 }
@@ -19505,6 +19333,7 @@ html:has(.dashboard-day) body {
   display: flex;
   flex-direction: column;
 }
+
 .pp .pp-stepnav {
   display: flex;
   flex-wrap: wrap;
@@ -19518,15 +19347,18 @@ html:has(.dashboard-day) body {
   background: var(--pp-surface);
   box-shadow: var(--pp-shadow-sm);
 }
+
 .pp .pp-stepnav__group {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
 }
+
 .pp .pp-stepnav__group--end {
   margin-left: auto;
 }
+
 .pp .pp-stepnav__progress {
   order: -1;
   flex: 1 1 100%;
@@ -19538,6 +19370,7 @@ html:has(.dashboard-day) body {
   text-transform: uppercase;
   color: var(--pp-muted);
 }
+
 .pp .pp-stepnav__ghost {
   display: inline-flex;
   align-items: center;
@@ -19552,10 +19385,12 @@ html:has(.dashboard-day) body {
   text-decoration: none;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
+
 .pp .pp-stepnav__ghost:hover {
   background: var(--pp-primary-soft);
   border-color: rgba(21, 97, 59, 0.4);
 }
+
 .pp .pp-stepnav__next {
   display: inline-flex;
   align-items: center;
@@ -19570,15 +19405,18 @@ html:has(.dashboard-day) body {
   box-shadow: 0 1px 2px rgba(16, 32, 24, 0.14);
   transition: filter 0.15s ease;
 }
+
 .pp .pp-stepnav__next:hover {
   filter: brightness(1.08);
 }
+
 .pp .pp-stepnav__next--locked {
   background: #ecefec;
   color: var(--pp-muted);
   cursor: not-allowed;
   box-shadow: none;
 }
+
 .pp .pp-stepnav__done {
   display: inline-flex;
   align-items: center;
@@ -19591,6 +19429,7 @@ html:has(.dashboard-day) body {
   font-size: 0.8125rem;
   font-weight: 800;
 }
+
 @media (min-width: 640px) {
   .pp .pp-stepnav__progress {
     order: 0;
@@ -19601,11 +19440,13 @@ html:has(.dashboard-day) body {
 .pp .pp-step--locked {
   opacity: 0.75;
 }
+
 .pp .pp-step--locked .pp-step__dot {
   background: var(--pp-surface-3);
   border-color: var(--pp-border-strong);
   color: var(--pp-faint);
 }
+
 .pp .pp-step--locked .pp-step__name {
   color: var(--pp-muted);
 }
@@ -19668,22 +19509,27 @@ html:has(.dashboard-day) body {
   background: var(--pp-success-soft);
   border-color: rgba(21, 115, 71, 0.24);
 }
+
 .pp .pp-status--confirmed .pp-status__icon {
   background: rgba(21, 115, 71, 0.14);
   color: var(--pp-success);
 }
+
 .pp .pp-status--approved {
   background: var(--pp-brass-soft);
   border-color: rgba(169, 129, 42, 0.3);
 }
+
 .pp .pp-status--approved .pp-status__icon {
   background: rgba(169, 129, 42, 0.16);
   color: var(--pp-brass-strong);
 }
+
 .pp .pp-status--attention {
   background: var(--pp-danger-soft);
   border-color: rgba(180, 35, 24, 0.24);
 }
+
 .pp .pp-status--attention .pp-status__icon {
   background: rgba(180, 35, 24, 0.12);
   color: var(--pp-danger);
@@ -19824,9 +19670,11 @@ html:has(.dashboard-day) body {
   padding: 0.7rem 0;
   border-bottom: 1px solid var(--pp-border);
 }
+
 .pp .pp-news__item:last-child {
   border-bottom: none;
 }
+
 .pp .pp-news__item:first-child {
   padding-top: 0;
 }
@@ -19838,6 +19686,7 @@ html:has(.dashboard-day) body {
   text-decoration: none;
   transition: color 0.15s ease;
 }
+
 .pp .pp-news__link:hover {
   color: var(--pp-primary);
 }
@@ -19874,6 +19723,7 @@ html:has(.dashboard-day) body {
   border-color: var(--pp-primary);
   box-shadow: var(--pp-shadow-sm);
 }
+
 .pp .pp-btn--primary:hover:not(:disabled) {
   background: var(--pp-primary-hover);
   border-color: var(--pp-primary-hover);
@@ -19885,6 +19735,7 @@ html:has(.dashboard-day) body {
   color: var(--pp-ink) !important;
   border-color: var(--pp-border-strong);
 }
+
 .pp .pp-btn--ghost:hover {
   background: var(--pp-surface-2);
 }
@@ -19905,6 +19756,7 @@ html:has(.dashboard-day) body {
   box-shadow: none;
   transform: none;
 }
+
 .pp .pp-btn:disabled:hover,
 .pp .pp-btn[aria-disabled="true"]:hover {
   background: #e8ece7;
@@ -19918,6 +19770,7 @@ html:has(.dashboard-day) body {
   color: var(--pp-primary);
   text-decoration: none;
 }
+
 .pp .pp-link:hover {
   color: var(--pp-primary-hover);
   text-decoration: underline;
@@ -19935,16 +19788,19 @@ html:has(.dashboard-day) body {
   font-weight: 600;
   border: 1px solid transparent;
 }
+
 .pp .pp-badge--success {
   background: var(--pp-success-soft);
   color: var(--pp-success);
   border-color: rgba(21, 115, 71, 0.22);
 }
+
 .pp .pp-badge--warning {
   background: var(--pp-warning-soft);
   color: #7c3a06;
   border-color: rgba(180, 83, 9, 0.24);
 }
+
 .pp .pp-badge--neutral {
   background: var(--pp-surface-3);
   color: var(--pp-muted);
@@ -19957,6 +19813,7 @@ html:has(.dashboard-day) body {
 .pp .pp-page-header {
   margin-bottom: 1rem;
 }
+
 .pp .pp-page-title {
   margin: 0.4rem 0 0;
   font-size: 1.55rem;
@@ -19965,6 +19822,7 @@ html:has(.dashboard-day) body {
   line-height: 1.15;
   color: var(--pp-ink) !important;
 }
+
 .pp .pp-page-sub {
   margin: 0.45rem 0 0;
   max-width: 46rem;
@@ -19990,6 +19848,7 @@ html:has(.dashboard-day) body {
   color: var(--pp-primary) !important;
   text-decoration: none;
 }
+
 .pp .portal-back-link:hover {
   color: var(--pp-primary-hover) !important;
   text-decoration: underline;
@@ -20008,6 +19867,7 @@ html:has(.dashboard-day) body {
   padding: 1.35rem 1.4rem !important;
   margin-top: 0.5rem !important;
 }
+
 .pp .portal-card-muted {
   background: var(--pp-surface-2) !important;
   border: 1px solid var(--pp-border) !important;
@@ -20023,12 +19883,14 @@ html:has(.dashboard-day) body {
   letter-spacing: -0.02em !important;
   color: var(--pp-ink) !important;
 }
+
 .pp .portal-h2 {
   font-size: 1.0625rem !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
   color: var(--pp-ink) !important;
 }
+
 .pp .portal-section-title,
 .pp .participant-dash-section-title {
   font-size: 1.0625rem !important;
@@ -20036,6 +19898,7 @@ html:has(.dashboard-day) body {
   letter-spacing: -0.01em !important;
   color: var(--pp-ink) !important;
 }
+
 .pp .portal-subtitle {
   font-size: 0.625rem !important;
   font-weight: 700 !important;
@@ -20043,16 +19906,20 @@ html:has(.dashboard-day) body {
   text-transform: uppercase !important;
   color: var(--pp-muted) !important;
 }
+
 .pp .portal-muted {
   color: var(--pp-muted) !important;
 }
+
 .pp .portal-body {
   color: var(--pp-body) !important;
 }
+
 .pp .portal-link {
   color: var(--pp-primary) !important;
   font-weight: 600 !important;
 }
+
 .pp .portal-link:hover {
   color: var(--pp-primary-hover) !important;
 }
@@ -20068,21 +19935,25 @@ html:has(.dashboard-day) body {
   font-size: 0.8125rem !important;
   line-height: 1.55 !important;
 }
+
 .pp .portal-alert-warning {
   background: var(--pp-warning-soft) !important;
   border-left-color: var(--pp-brass) !important;
   color: #6b3f08 !important;
 }
+
 .pp .portal-alert-success {
   background: var(--pp-success-soft) !important;
   border-left-color: var(--pp-success) !important;
   color: #14532d !important;
 }
+
 .pp .portal-alert-info {
   background: var(--pp-info-soft) !important;
   border-left-color: var(--pp-info) !important;
   color: #0f4c6b !important;
 }
+
 .pp .portal-alert-error {
   background: var(--pp-danger-soft) !important;
   border-left-color: var(--pp-danger) !important;
@@ -20098,6 +19969,7 @@ html:has(.dashboard-day) body {
   background: #ffffff !important;
   color: var(--pp-ink) !important;
 }
+
 .pp input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus-visible,
 .pp textarea:focus-visible,
 .pp select:focus-visible {
@@ -20114,12 +19986,14 @@ html:has(.dashboard-day) body {
   font-weight: 600;
   color: var(--pp-body);
 }
+
 .pp .pp-file {
   display: block;
   width: 100%;
   font-size: 0.8125rem;
   color: var(--pp-muted);
 }
+
 .pp .pp-file::file-selector-button {
   margin-right: 0.75rem;
   border: 0;
@@ -20131,9 +20005,11 @@ html:has(.dashboard-day) body {
   padding: 0.45rem 0.75rem;
   cursor: pointer;
 }
+
 .pp .pp-file::file-selector-button:hover {
   background: #d8e6dd;
 }
+
 .pp .pp-doc {
   display: flex;
   align-items: center;
@@ -20144,11 +20020,13 @@ html:has(.dashboard-day) body {
   background: var(--pp-surface-2);
   border-radius: var(--pp-radius-xs);
 }
+
 .pp .pp-doc__label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--pp-ink);
 }
+
 .pp .pp-doc__name {
   margin-top: 0.1rem;
   font-size: 0.75rem;
@@ -20157,6 +20035,7 @@ html:has(.dashboard-day) body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .pp .pp-badge--success a,
 .pp a.pp-badge--success {
   text-decoration: none;
@@ -20166,9 +20045,11 @@ html:has(.dashboard-day) body {
 .pp [class~="bg-emerald-700"] {
   background-color: var(--pp-primary) !important;
 }
+
 .pp .hover\:bg-emerald-800:hover {
   background-color: var(--pp-primary-hover) !important;
 }
+
 .pp [class~="text-emerald-700"] {
   color: var(--pp-primary) !important;
 }
@@ -20281,8 +20162,7 @@ html:has(.dashboard-day) body {
   color: #c2620e;
 }
 
-.admin-theme
-  .portal-table-action-btn--warning.portal-table-action-btn:hover:not(:disabled) {
+.admin-theme .portal-table-action-btn--warning.portal-table-action-btn:hover:not(:disabled) {
   border-color: #eab308;
   background: #fdf6e7;
   color: #9a6711;
@@ -20294,8 +20174,7 @@ html:has(.dashboard-day) body {
   color: #0369a1;
 }
 
-.admin-theme
-  .portal-table-action-btn--info.portal-table-action-btn:hover:not(:disabled) {
+.admin-theme .portal-table-action-btn--info.portal-table-action-btn:hover:not(:disabled) {
   border-color: #38bdf8;
   background: #eef7fd;
   color: #075985;
@@ -20352,11 +20231,13 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   border-bottom: 1px solid var(--ec-line);
   background: var(--ec-panel-2);
 }
+
 .exercise-contour .ec-card__thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .exercise-contour .ec-marks--onthumb {
   position: absolute;
   right: 0.6rem;
@@ -20365,6 +20246,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   border-color: rgba(197, 168, 128, 0.4);
   backdrop-filter: blur(4px);
 }
+
 .exercise-contour .ec-modal__media {
   margin: 0.25rem 0 0.5rem;
   aspect-ratio: 16 / 9;
@@ -20372,6 +20254,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   border-radius: 10px;
   border: 1px solid var(--ec-line);
 }
+
 .exercise-contour .ec-modal__media img {
   width: 100%;
   height: 100%;
@@ -20389,6 +20272,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   border: 1px solid var(--pats-border, rgba(197, 168, 128, 0.25));
   border-radius: 10px;
 }
+
 .pats-announcement-detail__media img {
   display: block;
   width: 100%;
@@ -20399,6 +20283,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
 .announcement-ticker--speaker .announcement-ticker-viewport {
   padding-left: 3.35rem;
 }
+
 .announcement-ticker-speaker {
   position: absolute;
   left: 0;
@@ -20410,31 +20295,37 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   justify-content: center;
   width: 2.7rem;
   color: #fff;
-  background: linear-gradient(90deg, #d32f2f 0%, #a11414 100%);
+  background: #C8A84B;
   box-shadow:
     2px 0 12px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.08) inset;
 }
+
 .announcement-ticker-speaker svg {
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
   animation: announcement-speaker-pulse 2.4s ease-in-out infinite;
 }
+
 @keyframes announcement-speaker-pulse {
+
   0%,
   100% {
     transform: scale(1);
     opacity: 0.92;
   }
+
   50% {
     transform: scale(1.12);
     opacity: 1;
   }
 }
+
 .announcement-ticker-link {
   color: inherit;
   text-decoration: none;
   transition: color 0.15s ease;
 }
+
 .announcement-ticker-link:hover .announcement-ticker-item {
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -20446,6 +20337,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   flex-direction: column;
   gap: 0.75rem;
 }
+
 .registered-map__stage {
   position: relative;
   /* Was hidden — it clipped the country tooltip near the map edges. The map
@@ -20455,21 +20347,22 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   border: 1px solid var(--pats-border, rgba(197, 168, 128, 0.25));
   border-radius: 14px;
   background:
-    radial-gradient(
-      120% 120% at 50% 0%,
+    radial-gradient(120% 120% at 50% 0%,
       rgba(45, 90, 30, 0.18) 0%,
-      transparent 60%
-    ),
+      transparent 60%),
     linear-gradient(180deg, #0a1410 0%, #0b1a12 100%);
 }
+
 .registered-map__svg {
   width: 100%;
 }
+
 .registered-map__svg svg {
   display: block;
   width: 100%;
   height: auto;
 }
+
 .registered-map__tooltip {
   /* Placement (left/top) is computed in JS and already viewport-clamped, so no
      transform offset here. Sits above the map art and the site chrome. */
@@ -20485,6 +20378,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   backdrop-filter: blur(4px);
   pointer-events: none;
 }
+
 .registered-map__tooltip-title {
   margin: 0 0 0.35rem;
   font-family: var(--font-barlow, system-ui), sans-serif;
@@ -20494,6 +20388,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   text-transform: uppercase;
   color: #e6cf7f;
 }
+
 .registered-map__tooltip-list {
   display: flex;
   flex-direction: column;
@@ -20502,6 +20397,7 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   padding: 0;
   list-style: none;
 }
+
 .registered-map__tooltip-list li {
   display: flex;
   align-items: flex-start;
@@ -20511,23 +20407,27 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   line-height: 1.35;
   color: rgba(255, 255, 255, 0.88);
 }
+
 .registered-map__tooltip-name {
   min-width: 0;
   /* Wrap long team names instead of truncating so nothing is hidden. */
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+
 .registered-map__tooltip-year {
   flex-shrink: 0;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   color: var(--pats-gold, #c8a84b);
 }
+
 .registered-map__tooltip-more {
   margin: 0.35rem 0 0;
   font-size: 0.72rem;
   color: rgba(255, 255, 255, 0.6);
 }
+
 .registered-map__caption {
   margin: 0;
   text-align: center;
@@ -20542,15 +20442,20 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
    selectors restore the intended colors without adding `!important`. */
 html.light-theme .participant-portal.pats-portal .pp-proof-filerow__icon,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__icon {
-  color: #047857; /* emerald-700 */
+  color: #047857;
+  /* emerald-700 */
 }
+
 html.light-theme .participant-portal.pats-portal .pp-proof-filerow__action,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__action {
-  color: #475569; /* slate-600 */
+  color: #475569;
+  /* slate-600 */
 }
+
 html.light-theme .participant-portal.pats-portal .pp-proof-filerow__action:hover,
 html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__action:hover {
-  color: #047857; /* emerald-700 */
+  color: #047857;
+  /* emerald-700 */
 }
 
 
@@ -20724,6 +20629,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__a
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
 }
 
@@ -20735,6 +20641,7 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__a
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   overflow: hidden;
 }
 
@@ -20745,19 +20652,23 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__a
 
 /* Honour reduced-motion: keep the colour/shadow affordances, drop the travel. */
 @media (prefers-reduced-motion: reduce) {
+
   .pats-announce-card,
   .pats-announce-card__media img,
   .pats-announce-more svg {
     transition: none;
   }
+
   .pats-announce-card:hover,
   .pats-announce-card:focus-visible {
     transform: none;
   }
+
   .pats-announce-card:hover .pats-announce-card__media img,
   .pats-announce-card:focus-visible .pats-announce-card__media img {
     transform: none;
   }
+
   .pats-announce-card:hover .pats-announce-more svg,
   .pats-announce-card:focus-visible .pats-announce-more svg {
     transform: none;
@@ -20985,7 +20896,7 @@ html[lang="ar"] h4 {
 /* Body copy: heavier + larger + looser line-height so it isn't thin/cramped. */
 html[lang="ar"] .pats-body,
 html[lang="ar"] .pats-body--bright,
-html[lang="ar"] .pats-page-hero__title + p,
+html[lang="ar"] .pats-page-hero__title+p,
 html[lang="ar"] p,
 html[lang="ar"] li,
 html[lang="ar"] td,
@@ -21052,22 +20963,27 @@ html[lang="ar"] .pats-footer-brand__title {
 [dir="rtl"] .announcement-ticker-track {
   animation-direction: reverse;
 }
+
 [dir="rtl"] .announcement-ticker-speaker {
   left: auto;
   right: 0;
 }
+
 [dir="rtl"] .announcement-ticker-viewport {
   padding-left: 0;
   padding-right: 0.75rem;
 }
+
 [dir="rtl"] .announcement-ticker--speaker .announcement-ticker-viewport {
   padding-left: 0;
   padding-right: 3.35rem;
 }
+
 @media (min-width: 640px) {
   [dir="rtl"] .announcement-ticker-viewport {
     padding-right: 1rem;
   }
+
   [dir="rtl"] .announcement-ticker--speaker .announcement-ticker-viewport {
     padding-right: 3.35rem;
   }
@@ -21087,22 +21003,27 @@ html[data-site-theme="day"] .registered-map__tooltip {
   box-shadow: 0 16px 36px rgba(20, 26, 20, 0.22);
   backdrop-filter: none;
 }
+
 html.light-theme .registered-map__tooltip-title,
 html[data-site-theme="day"] .registered-map__tooltip-title {
   color: #8a6d00;
 }
+
 html.light-theme .registered-map__tooltip-list li,
 html[data-site-theme="day"] .registered-map__tooltip-list li {
   color: #1c2119;
 }
+
 html.light-theme .registered-map__tooltip-name,
 html[data-site-theme="day"] .registered-map__tooltip-name {
   color: #24301c;
 }
+
 html.light-theme .registered-map__tooltip-year,
 html[data-site-theme="day"] .registered-map__tooltip-year {
   color: #b8941f;
 }
+
 html.light-theme .registered-map__tooltip-more,
 html[data-site-theme="day"] .registered-map__tooltip-more {
   color: #4a5245;
@@ -21244,13 +21165,16 @@ html[data-site-theme="day"] .registered-map__tooltip-more {
 .pats-awards-hero-card--gold .pats-awards-hero-card__badge {
   background: #d4af37;
 }
+
 .pats-awards-hero-card--silver .pats-awards-hero-card__badge {
   background: #b8bcc2;
 }
+
 .pats-awards-hero-card--bronze .pats-awards-hero-card__badge {
   background: #cd7f32;
   color: #fff;
 }
+
 .pats-awards-hero-card--certificate .pats-awards-hero-card__badge {
   background: #2d5a1e;
   color: #fff;

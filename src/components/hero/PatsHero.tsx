@@ -12,7 +12,6 @@ const HERO_IMAGES = [
   "/media/pats/crops/hero-hmz1.jpeg",
   "/media/pats/crops/home3.jpeg",
   "/media/pats/crops/hero-hmz2.jpeg",
-  "/media/pats/crops/home5.jpeg",
 ];
 
 type Props = {
