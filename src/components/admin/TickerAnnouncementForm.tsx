@@ -10,6 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  TranslationFields,
+  useTranslationDraft,
+} from "@/components/admin/TranslationFields";
+import type { TranslationSeed } from "@/lib/admin-translations";
+import {
   EMPTY_TICKER_FORM,
   formFromTicker,
   payloadFromTickerForm,
@@ -21,10 +26,12 @@ import { TOAST } from "@/lib/toast";
 export function TickerAnnouncementForm({
   announcementId,
   initial,
+  initialTranslations,
   defaultSortOrder = 0,
 }: {
   announcementId?: string;
   initial?: SerializedTicker;
+  initialTranslations?: TranslationSeed;
   defaultSortOrder?: number;
   /** Accepted for compatibility with callers; no longer used by the form. */
   scrollDurationSec?: number;
@@ -33,6 +40,7 @@ export function TickerAnnouncementForm({
 }) {
   const router = useRouter();
   const isNew = !announcementId;
+  const translations = useTranslationDraft({ seed: initialTranslations });
 
   const [form, setForm] = useState<TickerFormState>(() => {
     if (initial) return formFromTicker(initial);
@@ -60,7 +68,10 @@ export function TickerAnnouncementForm({
         {
           method: isNew ? "POST" : "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({
+            ...payload,
+            translations: translations.payload(),
+          }),
         }
       );
 
@@ -153,6 +164,15 @@ export function TickerAnnouncementForm({
                 Lower numbers appear first.
               </p>
             </div>
+          </div>
+
+          <div className="mt-4">
+            <TranslationFields
+              model="TickerAnnouncement"
+              draft={translations}
+              idPrefix={`ticker-t-${announcementId ?? "new"}`}
+              description="Type the marquee message for each language. Anything left blank falls back to English on the public site."
+            />
           </div>
 
           <div className="mt-[0.9rem] flex flex-wrap gap-2 [&_.ops-btn-approve]:!border-[var(--portal-approve)] [&_.ops-btn-approve]:!bg-[var(--portal-approve)] [&_.ops-btn-approve]:!text-white [&_.ops-btn-approve:hover]:!border-[var(--portal-approve-hover)] [&_.ops-btn-approve:hover]:!bg-[var(--portal-approve-hover)] [&_.ops-btn-approve:disabled]:!border-slate-300 [&_.ops-btn-approve:disabled]:!bg-slate-200 [&_.ops-btn-approve:disabled]:!text-slate-900 [&_.ops-btn-approve:disabled]:!opacity-100 [&_.ops-btn-secondary]:!border-gray-300 [&_.ops-btn-secondary]:!bg-white [&_.ops-btn-secondary]:!text-slate-600">

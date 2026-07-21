@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { TickerAnnouncementForm } from "@/components/admin/admin-dynamic";
 import { adminNavLabel } from "@/lib/admin-navigation";
+import { buildTranslationSeed } from "@/lib/admin-translations";
 import { syncExpiredTickerStatuses } from "@/lib/ticker-data";
 import { serializeTickerRow } from "@/lib/ticker-form-helpers";
 import { getTickerPreviewContext } from "@/lib/ticker-settings";
@@ -27,10 +28,17 @@ export default async function AdminTickerEditPage({ params }: PageProps) {
     notFound();
   }
 
+  const translationSeed = await buildTranslationSeed(
+    "TickerAnnouncement",
+    row.id,
+    { message: row.message }
+  );
+
   return (
     <TickerAnnouncementForm
       announcementId={row.id}
       initial={serializeTickerRow(row)}
+      initialTranslations={translationSeed}
       scrollDurationSec={preview.scrollDurationSec}
       homepageReferenceCharCount={preview.homepageReferenceCharCount}
     />

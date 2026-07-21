@@ -72,6 +72,9 @@ const FIELD_SPECS: {
     label: { label: "Label", kind: "input" },
     value: { label: "Value", kind: "textarea", rows: 3 },
   },
+  TickerAnnouncement: {
+    message: { label: "Message", kind: "textarea", rows: 3 },
+  },
 };
 
 /** English names for the admin console; the native label comes from config. */

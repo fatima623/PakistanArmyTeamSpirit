@@ -50,9 +50,12 @@ export const TRANSLATABLE_FIELDS = {
   NewsPost: ["title", "content"],
   GalleryImage: ["title", "caption"],
   KeyDate: ["label", "value"],
+  // The scrolling marquee text. `TickerAnnouncement.message` is the only
+  // free-text field; priority/visibility/status are fixed vocab, never stored.
+  TickerAnnouncement: ["message"],
 } as const satisfies Record<string, readonly string[]>;
 
-/** "Event" | "NewsPost" | "GalleryImage" | "KeyDate" — matches Translation.model. */
+/** "Event" | "NewsPost" | "GalleryImage" | "KeyDate" | "TickerAnnouncement" — matches Translation.model. */
 export type TranslatableModel = keyof typeof TRANSLATABLE_FIELDS;
 
 /** The translatable field names of a given model, as a union of literals. */

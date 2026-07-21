@@ -6,6 +6,11 @@ import {
   requireAdmin,
   requireJsonContentType,
 } from "@/lib/api-helpers";
+import {
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
+import { deleteTranslationsFor } from "@/lib/i18n/content-translations";
 import { prisma } from "@/lib/prisma";
 import { revalidateTickerPaths } from "@/lib/revalidate-public";
 import { TickerAnnouncementSchema } from "@/lib/validations";
@@ -45,6 +50,17 @@ export async function PUT(request: Request, context: RouteContext) {
       },
     });
 
+    const translations = parseTranslationsInput(
+      "TickerAnnouncement",
+      body?.translations
+    );
+    await saveTranslations({
+      model: "TickerAnnouncement",
+      recordId: ticker.id,
+      translations,
+      source: { message: ticker.message },
+    });
+
     revalidateTickerPaths();
 
     return NextResponse.json({ ticker });
@@ -66,6 +82,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
     }
 
     await prisma.tickerAnnouncement.delete({ where: { id } });
+    await deleteTranslationsFor("TickerAnnouncement", id);
 
     revalidateTickerPaths();
 

@@ -6,14 +6,13 @@ import {
   AnnouncementTicker,
   type MarqueeItem,
 } from "@/components/cinematic/AnnouncementTicker";
-import { getRequestPathname } from "@/lib/request-pathname";
-import { getLatestNews } from "@/lib/site-data";
-import { TICKER_SCROLL_DURATION_SEC } from "@/lib/ticker";
-import {
-  applyTranslations,
-  getTranslations,
-} from "@/lib/i18n/content-translations";
+import { getLocalizedPublicTickerItems } from "@/lib/cached-public-data";
 import { getLocale } from "@/lib/i18n/get-dictionary";
+import { getRequestPathname } from "@/lib/request-pathname";
+import {
+  resolveTickerVisibilityContext,
+  TICKER_SCROLL_DURATION_SEC,
+} from "@/lib/ticker";
 
 export type PublicChrome = {
   nav: ReactNode;
@@ -21,32 +20,31 @@ export type PublicChrome = {
   siteTicker: ReactNode | null;
 };
 
-/** Load nav, footer, and the announcements marquee together. */
+/**
+ * Load nav, footer, and the top marquee together.
+ *
+ * The marquee is driven by the admin **Ticker Messages** system (not the
+ * Announcements/News feed, which lives on the participant dashboard), localized
+ * per language — the translation is applied outside the per-context ticker
+ * cache so each locale gets its own text, falling back to English.
+ */
 export async function loadPublicChrome(): Promise<PublicChrome> {
-  const [pathname, locale, announcements] = await Promise.all([
+  const [pathname, locale] = await Promise.all([
     getRequestPathname(),
     getLocale(),
-    getLatestNews(12).catch(() => []),
   ]);
 
-  // Localize the marquee titles with admin-supplied translations, mirroring the
-  // /announcements list. Done here (not inside getLatestNews' unstable_cache,
-  // which is keyed per-fetch not per-locale) so each language gets its own text;
-  // the `slug` stays untranslated (it is the /announcements/[slug] lookup key).
-  const translations = await getTranslations(
-    "NewsPost",
-    announcements.map((a) => a.id),
-    locale
-  ).catch(() => new Map());
+  const context = resolveTickerVisibilityContext(pathname, false);
+  const tickerItems = await getLocalizedPublicTickerItems(context, locale).catch(
+    () => []
+  );
 
-  const marqueeItems: MarqueeItem[] = announcements.map((a) => {
-    const localized = applyTranslations(a, translations.get(a.id));
-    return {
-      id: a.id,
-      message: localized.title,
-      href: `/announcements/${a.slug}`,
-    };
-  });
+  const marqueeItems: MarqueeItem[] = tickerItems.map((item) => ({
+    id: item.id,
+    message: item.message,
+    priority: item.priority,
+    isUrgent: item.isUrgent,
+  }));
 
   const siteTicker =
     marqueeItems.length > 0 ? (

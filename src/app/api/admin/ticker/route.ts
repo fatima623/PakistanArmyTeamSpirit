@@ -6,6 +6,10 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { prisma } from "@/lib/prisma";
+import {
+  parseTranslationsInput,
+  saveTranslations,
+} from "@/lib/admin-translations";
 import { revalidateTickerPaths } from "@/lib/revalidate-public";
 import { listAllTickerAnnouncements } from "@/lib/ticker-data";
 import { TickerAnnouncementSchema } from "@/lib/validations";
@@ -42,6 +46,17 @@ export async function POST(request: Request) {
         shortLabel: null,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
       },
+    });
+
+    const translations = parseTranslationsInput(
+      "TickerAnnouncement",
+      body?.translations
+    );
+    await saveTranslations({
+      model: "TickerAnnouncement",
+      recordId: ticker.id,
+      translations,
+      source: { message: ticker.message },
     });
 
     revalidateTickerPaths();
