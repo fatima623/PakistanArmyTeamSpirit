@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { COMPETITION_NAME, SITE_NAME } from "@/lib/branding";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
@@ -29,14 +27,6 @@ export async function ArmyFooter() {
             <span className="pats-footer-bar__tagline">
               {COMPETITION_NAME} · {SITE_NAME}
             </span>
-          </div>
-          <div className="pats-footer-bar__actions">
-            <Link href="/event/register" prefetch className="pats-footer-bar__btn">
-              {f.registerNow}
-            </Link>
-            <a href="https://ispr.gov.pk" target="_blank" rel="noopener noreferrer" className="pats-footer-bar__btn">
-              {f.contactUs}
-            </a>
           </div>
         </div>
 

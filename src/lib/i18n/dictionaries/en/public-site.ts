@@ -70,7 +70,7 @@ export const publicSite = {
 
   footer: {
     isprWebsite: "ISPR Website",
-    registerNow: "Register now",
+    // registerNow: "Register now",
     contactUs: "Contact us",
     disclaimer:
       "Authorized use only. Official portal for PATS Competition participation.",

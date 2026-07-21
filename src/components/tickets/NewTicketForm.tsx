@@ -163,7 +163,7 @@ export function NewTicketForm({
         <Button
           type="button"
           variant="outline"
-          className="!rounded-lg border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900"
+          className="!rounded-lg border-slate-300 bg-slate-100 !text-black hover:bg-slate-200 hover:!text-black"
           onClick={() => {
             reset();
             setOpen(false);

@@ -19,7 +19,7 @@ export const home = {
     motto: HERO_MOTTO,
     description:
       "International Pakistan Army Team Spirit — a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit among partner nations.",
-    cta: "Register your team",
+    // cta: "Register your team",
     scrollHint: "Scroll down",
   },
 
@@ -36,7 +36,7 @@ export const home = {
     imageAlt: "PATS international competition marks",
     quote: "PERSEVERANCE ACCLAIMED THROUGH TEAM SPIRIT",
     body:
-      "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA — PATS. The main aim is a demanding patrolling exercise to assess and enhance tactical and mental abilities — participants must be prepared mentally and physically. Teams must achieve proficiency in minor operations, endurance, and prowess in basic drills and procedures.",
+      "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA PATS. The main aim is a demanding patrolling exercise to assess and enhance tactical and mental abilities — participants must be prepared mentally and physically. Teams must achieve proficiency in minor operations, endurance, and prowess in basic drills and procedures.",
   },
 
   careers: {
@@ -56,7 +56,7 @@ export const home = {
     eyebrow: "About PATS",
     title: "Competition overview",
     lead:
-      "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA — PATS. Perseverance acclaimed through Team Spirit.",
+      "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA PATS. Perseverance acclaimed through Team Spirit.",
     imageAlt: "PATS competition overview",
     points: [
       {
@@ -69,7 +69,7 @@ export const home = {
       },
       {
         title: "Scored battlefield events",
-        body: "Tests reflect sub-conventional operations — navigation, CTR, CBRN, assault, medical, fires, and endurance under a combined marks scheme.",
+        body: "Tests reflect sub-conventional operations navigation, CTR, CBRN, assault, medical, fires, and endurance under a combined marks scheme.",
       },
     ],
   },

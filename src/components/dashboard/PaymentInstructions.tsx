@@ -267,7 +267,7 @@ export function PaymentInstructions({ settings }: Props) {
                 />
               ) : null}
               <span
-                className="z-[1] flex h-[26px] w-[26px] flex-none items-center justify-center rounded-full border border-amber-400 bg-white text-[0.75rem] font-bold text-amber-700"
+                className="z-[1] flex h-[26px] w-[26px] flex-none items-center justify-center rounded-full border border-amber-400 bg-white text-[0.75rem] font-bold !text-black"
                 aria-hidden
               >
                 {i + 1}
