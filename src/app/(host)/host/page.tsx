@@ -343,7 +343,8 @@ export default async function HostDashboardPage() {
 
       {/* —— Teams table —————————————————————————————————— */}
       <section className={adminDataTableShell}>
-        <table className={adminDataTable}>
+        <div className="overflow-x-auto">
+        <table className={`${adminDataTable} min-w-[720px]`}>
           <colgroup>
             <col className="w-[22%]" />
             <col className="w-[18%]" />
@@ -442,6 +443,7 @@ export default async function HostDashboardPage() {
             )}
           </tbody>
         </table>
+        </div>
       </section>
     </div>
   );

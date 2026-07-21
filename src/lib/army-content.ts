@@ -3,8 +3,7 @@
  * Uses processed crops plus selected official MEDIA PATS source imagery.
  */
 
-import registerCard33 from "../../MEDIA PATS/33.webp";
-import aboutFeature35 from "../../MEDIA PATS/35.webp";
+import registerCard35 from "../../MEDIA PATS/35.webp";
 import internationalCard36 from "../../MEDIA PATS/36.webp";
 import operationsCard37 from "../../MEDIA PATS/37.jpg";
 import {
@@ -59,7 +58,7 @@ export const CAREER_TRACKS = [
     description:
       "Submit roster, unit details, and liaison information through the official portal.",
     href: "/event/register",
-    image: registerCard33.src,
+    image: registerCard35.src,
   },
   {
     id: "operations",
@@ -93,4 +92,4 @@ export const MISSION_MOTTO = PATS_MOTTO;
 /** Homepage mission triptych — soldier portrait slot (replace when final asset is ready). */
 export const MISSION_SOLDIER_PLACEHOLDER = operationsCard37.src;
 
-export const ABOUT_FEATURE_IMAGE = "/media/pats/crops/pats9.jpeg";
+export const ABOUT_FEATURE_IMAGE = "/images/HMZ_9144.JPG.jpeg";

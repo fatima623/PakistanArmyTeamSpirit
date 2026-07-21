@@ -50,13 +50,19 @@ import type { TranslationSeed } from "@/lib/admin-translations";
 
 function slugify(title: string) {
 
-  return title
+  const base = title
 
     .toLowerCase()
 
     .replace(/[^a-z0-9]+/g, "-")
 
     .replace(/(^-|-$)/g, "");
+
+  // Non-Latin titles (Arabic, Urdu, Cyrillic, Chinese, …) reduce to an empty
+  // string, which fails the slug validation (`^[a-z0-9-]+$`). Fall back to a
+  // stable generated slug so the post can still be created; the admin can edit
+  // the Slug field to override it.
+  return base || `post-${Date.now()}`;
 
 }
 
@@ -533,9 +539,23 @@ export function NewsPostForm({
 
       if (!res.ok) {
 
-        const data = await res.json();
+        // Non-JSON responses (e.g. an HTML error page) must not throw here, or
+        // the catch below swallows the real cause into a generic toast.
+        const data = await res.json().catch(() => null);
 
-        toast.error(data.error ?? TOAST.GENERIC_ERROR);
+        // A 400 from Zod returns { errors: { field: [msg, …] } } — surface the
+        // per-field messages so the admin can see exactly what to fix instead
+        // of a generic "Something went wrong".
+        const fieldErrors =
+          data && typeof data.errors === "object" && data.errors
+            ? Object.entries(data.errors as Record<string, unknown>)
+                .map(([field, msgs]) =>
+                  `${field}: ${Array.isArray(msgs) ? msgs.join(", ") : String(msgs)}`
+                )
+                .join(" · ")
+            : null;
+
+        toast.error(fieldErrors ?? data?.error ?? TOAST.GENERIC_ERROR);
 
         return;
 

@@ -1,8 +1,5 @@
-import awardsGrid from "../../MEDIA PATS/Awards.webp";
-import goldMedal from "../../MEDIA PATS/Gold medal.webp";
 import silverMedal from "../../MEDIA PATS/Silver medal.webp";
 import innerPageHero38 from "../../MEDIA PATS/38.webp";
-import awardsFeature32 from "../../MEDIA PATS/32.webp";
 import mediaPats28 from "../../MEDIA PATS/28.webp";
 
 /** Processed PATS media — crops from MEDIA PATS via scripts/process-pats-media.py */
@@ -38,8 +35,8 @@ export const PATS_CROP = {
   videoConcept: `${BASE}/crops/video-concept.webp`,
   videoGallery: `${BASE}/crops/video-gallery.webp`,
   videoOperations: `${BASE}/crops/video-operations.webp`,
-  /** MEDIA PATS/32 — awards showcase feature */
-  awardsFeature: awardsFeature32.src,
+  /** Awards showcase feature (was MEDIA PATS/32, since removed) */
+  awardsFeature: "/media/pats/crops/award-certificate.webp",
   footerTexture: `${BASE}/crops/footer-texture.webp`,
   galleryHero: `${BASE}/crops/gallery-hero.webp`,
   galleryAlt: `${BASE}/crops/gallery-alt.webp`,
@@ -58,10 +55,10 @@ export const PATS_CROP = {
   photo28Footer: `${BASE}/crops/photo-28-footer.webp?v=2`,
   /** MEDIA PATS/28 — full-color source (archival; has white paper) */
   photo28Full: `${BASE}/crops/photo-28.webp`,
-  /** MEDIA PATS/Awards.png — 2×2 medal / certificate sprite (1480×1062) */
-  awardsGrid: awardsGrid.src,
-  /** MEDIA PATS/Gold medal.png */
-  goldMedal: goldMedal.src,
+  /** Awards / certificate imagery (was MEDIA PATS/Awards, since removed) */
+  awardsGrid: "/awards/certificate.webp",
+  /** Gold medal (was MEDIA PATS/Gold medal, since removed) */
+  goldMedal: "/awards/pats-medal-gold.png",
   /** MEDIA PATS/Silver medal.png */
   silverMedal: silverMedal.src,
   /** Split from Awards.png — bronze & certificate quadrants */

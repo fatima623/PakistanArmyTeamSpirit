@@ -65,7 +65,11 @@ export function AdminLayout({
       )}
 
       <div className="admin-layout-main">
-        <AdminHeader title={headerTitle} userInitials={userInitials} />
+        <AdminHeader
+          title={headerTitle}
+          userInitials={userInitials}
+          onMenuClick={() => setSidebarOpen(true)}
+        />
         <main
           id="main-content"
           className="admin-layout-content"

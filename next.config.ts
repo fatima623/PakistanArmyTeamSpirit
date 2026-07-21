@@ -45,6 +45,11 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     scrollRestoration: true,
+    // Requests that pass through middleware are buffered with a 10MB default
+    // cap; anything larger is truncated and `request.formData()` fails to parse.
+    // Gallery video uploads allow up to 128MB (MAX_GALLERY_VIDEO_BYTES) plus a
+    // poster image and form fields, so the whole multipart body needs headroom.
+    middlewareClientMaxBodySize: "160mb",
     optimizePackageImports: [
       "lucide-react",
       "framer-motion",

@@ -676,7 +676,7 @@ function EditDialog({
         </DialogHeader>
 
         {slide ? (
-          <div className="grid grid-cols-2 gap-[0.85rem]">
+          <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
             <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
               <label htmlFor="he-title">Title *</label>
               <Input
