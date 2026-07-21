@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -129,14 +128,6 @@ export function PatsHero({ exerciseYear, slides }: Props) {
           </h1>
           <p className="pats-hero__subline">{t.home.hero.description}</p>
         </div>
-
-        <Link
-          href="/event/register"
-          className="pats-hero__cta hero-register-btn"
-          prefetch
-        >
-          {t.home.hero.cta}
-        </Link>
       </div>
 
       <a

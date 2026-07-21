@@ -75,7 +75,6 @@ export const publicSite: typeof enPublicSite = {
 
   footer: {
     isprWebsite: "موقع ISPR",
-    registerNow: "سجّل الآن",
     contactUs: "اتصل بنا",
     disclaimer:
       "الاستخدام المصرّح به فقط. البوابة الرسمية للمشاركة في مسابقة PATS.",

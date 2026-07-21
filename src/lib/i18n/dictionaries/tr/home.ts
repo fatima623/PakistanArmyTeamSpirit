@@ -10,7 +10,6 @@ export const home: typeof enHome = {
     motto: "Sarsılmaz iman, bitmeyen amel, âlemi fetheden sevgi",
     description:
       "Uluslararası Pakistan Ordusu Takım Ruhu (PATS) — ortak ülkeler arasında taktik ustalığı, dayanıklılığı ve takım ruhunu sınayan 60 saatlik bir devriye tatbikatı.",
-    cta: "Takımınızı kaydedin",
     scrollHint: "Aşağı kaydırın",
   },
 

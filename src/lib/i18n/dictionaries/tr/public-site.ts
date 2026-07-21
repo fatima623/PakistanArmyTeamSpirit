@@ -65,7 +65,6 @@ export const publicSite: typeof enPublicSite = {
 
   footer: {
     isprWebsite: "ISPR Web Sitesi",
-    registerNow: "Şimdi kaydolun",
     contactUs: "Bize ulaşın",
     disclaimer:
       "Yalnızca yetkili kullanım içindir. PATS Yarışması katılımı için resmî portal.",
