@@ -7,6 +7,7 @@ import {
 } from "@/lib/api-helpers";
 import { prisma } from "@/lib/prisma";
 import {
+  autoTranslateMissing,
   parseTranslationsInput,
   saveTranslations,
 } from "@/lib/admin-translations";
@@ -57,6 +58,10 @@ export async function POST(request: Request) {
       recordId: ticker.id,
       translations,
       source: { message: ticker.message },
+    });
+    // Auto-translate the message into any language the admin left blank.
+    await autoTranslateMissing("TickerAnnouncement", ticker.id, {
+      message: { text: ticker.message },
     });
 
     revalidateTickerPaths();

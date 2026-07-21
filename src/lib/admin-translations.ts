@@ -12,6 +12,10 @@ import {
   type TranslationFieldMap,
   type TranslationLocale,
 } from "@/lib/i18n/content-translations";
+import {
+  autoTranslateEnabled,
+  machineTranslate,
+} from "@/lib/i18n/machine-translate";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 
 /**
@@ -178,6 +182,73 @@ export async function saveTranslations<M extends TranslatableModel>(input: {
     const values = translations[locale];
     if (!values) continue;
     await setTranslations({ model, recordId, locale, values, source: normalized });
+  }
+}
+
+/**
+ * Fill in the translations an admin did NOT provide, using the local machine
+ * translation engine (see machine-translate.ts). No-op when the engine is not
+ * configured. A locale/field that already has a (manual) translation is left
+ * untouched — hand-written text always wins over the machine.
+ *
+ * Call this AFTER `saveTranslations` so manual entries are already stored and
+ * are correctly skipped here. Best-effort: a field the engine cannot translate
+ * is simply left to fall back to English.
+ */
+export async function autoTranslateMissing<M extends TranslatableModel>(
+  model: M,
+  recordId: string,
+  source: Partial<
+    Record<TranslatableField<M>, { text: string | null | undefined; html?: boolean }>
+  >
+): Promise<void> {
+  if (!autoTranslateEnabled()) return;
+
+  const existing = await getAllTranslationsFor(model, recordId);
+
+  const normalizedSource: Partial<Record<TranslatableField<M>, string>> = {};
+  const entries = Object.entries(source) as [
+    string,
+    { text?: string | null; html?: boolean } | undefined,
+  ][];
+  for (const [field, spec] of entries) {
+    const text = spec?.text;
+    if (typeof text === "string" && text.trim()) {
+      normalizedSource[field as TranslatableField<M>] = text;
+    }
+  }
+
+  for (const locale of TRANSLATION_LOCALES) {
+    const have = (existing.get(locale) ?? {}) as Record<
+      string,
+      { value: string } | undefined
+    >;
+    const values: Record<string, string> = {};
+    let any = false;
+
+    for (const [field, spec] of entries) {
+      const text = spec?.text;
+      if (typeof text !== "string" || !text.trim()) continue;
+      if (have[field]?.value?.trim()) continue; // manual translation wins
+
+      const translated = await machineTranslate(text, locale, {
+        html: spec?.html,
+      });
+      if (translated) {
+        values[field] = translated;
+        any = true;
+      }
+    }
+
+    if (any) {
+      await setTranslations({
+        model,
+        recordId,
+        locale,
+        values: values as TranslationFieldMap<M>,
+        source: normalizedSource,
+      });
+    }
   }
 }
 

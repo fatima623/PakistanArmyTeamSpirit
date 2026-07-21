@@ -6,6 +6,7 @@ import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { deleteNewsPdfFile } from "@/lib/storage/news-pdf";
 import { deleteNewsImageFile } from "@/lib/storage/news-image";
 import {
+  autoTranslateMissing,
   parseTranslationsInput,
   saveTranslations,
 } from "@/lib/admin-translations";
@@ -82,6 +83,10 @@ export async function PUT(request: Request, context: RouteContext) {
       recordId: id,
       translations,
       source: { title: post.title, content: post.content },
+    });
+    await autoTranslateMissing("NewsPost", id, {
+      title: { text: post.title },
+      content: { text: post.content, html: true },
     });
 
     revalidateNewsPaths();

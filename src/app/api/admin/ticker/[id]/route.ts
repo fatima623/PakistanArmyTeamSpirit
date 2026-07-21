@@ -7,6 +7,7 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import {
+  autoTranslateMissing,
   parseTranslationsInput,
   saveTranslations,
 } from "@/lib/admin-translations";
@@ -59,6 +60,9 @@ export async function PUT(request: Request, context: RouteContext) {
       recordId: ticker.id,
       translations,
       source: { message: ticker.message },
+    });
+    await autoTranslateMissing("TickerAnnouncement", ticker.id, {
+      message: { text: ticker.message },
     });
 
     revalidateTickerPaths();

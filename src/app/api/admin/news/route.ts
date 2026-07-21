@@ -4,6 +4,7 @@ import { revalidateNewsPaths } from "@/lib/revalidate-public";
 import { NewsPostSchema } from "@/lib/validations";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import {
+  autoTranslateMissing,
   parseTranslationsInput,
   saveTranslations,
 } from "@/lib/admin-translations";
@@ -70,6 +71,11 @@ export async function POST(request: Request) {
       recordId: post.id,
       translations,
       source: { title: post.title, content: post.content },
+    });
+    // Auto-translate title + body into any language left blank.
+    await autoTranslateMissing("NewsPost", post.id, {
+      title: { text: post.title },
+      content: { text: post.content, html: true },
     });
 
     revalidateNewsPaths();
