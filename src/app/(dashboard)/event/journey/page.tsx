@@ -215,6 +215,7 @@ export default async function JourneyPage({
           nationality={user.nationality}
           unit={user.unit}
           t={t.registration}
+          unitOptions={t.unit.options}
           locale={locale}
         />
       </section>
@@ -282,6 +283,7 @@ export default async function JourneyPage({
           nationality={user.nationality}
           unit={user.unit}
           t={t.registration}
+          unitOptions={t.unit.options}
           locale={locale}
         />
       </section>

@@ -36,6 +36,7 @@ import { ARM_OPTIONS } from "@/lib/form-options";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { apiErrorMessage, translateApiMessage } from "@/lib/i18n/api-error-i18n";
 import { translateUnitName } from "@/lib/i18n/unit-name-i18n";
+import { translateUnitOption } from "@/lib/i18n/unit-option-i18n";
 
 type UnitEditValues = z.infer<typeof UnitUpdateSchema>;
 
@@ -85,23 +86,6 @@ export function UnitEditForm({
   const { t, locale } = useI18n();
   const u = t.unit;
   const [submitting, setSubmitting] = useState(false);
-
-  const unitTypeLabels: Record<"Regular" | "Reserve", string> = {
-    Regular: u.options.regular,
-    Reserve: u.options.reserve,
-  };
-  const branchLabels: Record<"Army" | "Navy" | "Air Force", string> = {
-    Army: u.options.army,
-    Navy: u.options.navy,
-    "Air Force": u.options.airForce,
-  };
-  // Arm is a fixed vocabulary — localize the option labels while the stored
-  // value stays the canonical English token. Unknown values fall back to raw.
-  const armLabels: Record<string, string> = {
-    Combat: u.options.combat,
-    "Combat Support": u.options.combatSupport,
-    "Combat Service Support": u.options.combatServiceSupport,
-  };
 
   // Localize zod validation messages (from UnitUpdateSchema) to the active
   // locale via the shared api-error dictionary.
@@ -280,7 +264,7 @@ export function UnitEditForm({
                   <div key={opt} className="flex items-center gap-2">
                     <RadioGroupItem value={opt} id={`unitType-${opt}`} />
                     <label htmlFor={`unitType-${opt}`} className="text-sm">
-                      {unitTypeLabels[opt]}
+                      {translateUnitOption(opt, u.options)}
                     </label>
                   </div>
                 ))}
@@ -299,7 +283,7 @@ export function UnitEditForm({
                   <div key={opt} className="flex items-center gap-2">
                     <RadioGroupItem value={opt} id={`branch-${opt}`} />
                     <label htmlFor={`branch-${opt}`} className="text-sm">
-                      {branchLabels[opt]}
+                      {translateUnitOption(opt, u.options)}
                     </label>
                   </div>
                 ))}
@@ -339,7 +323,7 @@ export function UnitEditForm({
                     <SelectContent>
                       {ARM_OPTIONS.map((opt) => (
                         <SelectItem key={opt} value={opt}>
-                          {armLabels[opt] ?? opt}
+                          {translateUnitOption(opt, u.options)}
                         </SelectItem>
                       ))}
                     </SelectContent>

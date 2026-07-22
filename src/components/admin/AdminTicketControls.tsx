@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { FileText, Loader2, Paperclip, Send, Smile } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -56,22 +56,35 @@ export function TicketReplyForm({ ticketId }: { ticketId: string }) {
 
   return (
     <form onSubmit={handleReply} className="admin-ticket-reply">
-      <Textarea
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        rows={4}
-        placeholder="Reply to the participant…"
-        maxLength={5000}
-        className="admin-textarea"
-      />
-      <div className="flex justify-end">
+      <div className="flex items-end gap-2 rounded-2xl border border-brand-line/70 bg-white px-3 py-2 shadow-[0_1px_2px_rgba(20,30,24,0.04)] transition-colors focus-within:border-green-600/60">
+        <div
+          className="flex items-center gap-1.5 pb-2 text-muted-foreground"
+          aria-hidden
+        >
+          <Smile className="h-[1.05rem] w-[1.05rem]" />
+          <Paperclip className="h-[1.05rem] w-[1.05rem]" />
+          <FileText className="h-[1.05rem] w-[1.05rem]" />
+        </div>
+        <Textarea
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          rows={1}
+          placeholder="Type your reply…"
+          maxLength={5000}
+          className="min-h-[2.4rem] flex-1 resize-none self-center border-0 bg-transparent px-0 py-1.5 text-[0.9rem] shadow-none focus-visible:ring-0 md:text-[0.9rem]"
+        />
         <Button
           type="submit"
           variant="adminPrimary"
           size="sm"
           disabled={sending || !body.trim()}
+          className="shrink-0"
         >
-          {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {sending ? (
+            <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+          ) : (
+            <Send className="mr-1.5 h-4 w-4" aria-hidden />
+          )}
           Send reply
         </Button>
       </div>

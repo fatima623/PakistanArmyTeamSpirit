@@ -200,6 +200,7 @@ export default async function EventDashboardPage() {
             nationality={user.nationality}
             unit={user.unit}
             t={t.registration}
+            unitOptions={t.unit.options}
             locale={locale}
           />
 

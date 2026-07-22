@@ -13,6 +13,10 @@ import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 const ALL = "all";
+const MEDIA_IMAGES = "images";
+const MEDIA_VIDEOS = "videos";
+
+type MediaFilter = typeof MEDIA_IMAGES | typeof MEDIA_VIDEOS;
 
 export type GalleryItem = {
   id: string;
@@ -52,6 +56,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
   const { dayTheme } = useSiteTheme();
   const strings = t.publicSite.gallery;
   const [filter, setFilter] = useState(ALL);
+  const [mediaFilter, setMediaFilter] = useState<MediaFilter>(MEDIA_IMAGES);
   const [openAlbum, setOpenAlbum] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const reduce = useReducedMotion();
@@ -62,6 +67,7 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const rightSecRef = useRef<HTMLDivElement>(null);
   const imageFrameRef = useRef<HTMLDivElement>(null);
+  const mediaTabsRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -106,10 +112,22 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
     return found || albums[0];
   }, [albums, selectedCategory]);
 
+  const activeMediaItems = useMemo(
+    () =>
+      activeCategory?.items.filter((item) =>
+        mediaFilter === MEDIA_VIDEOS ? isVideo(item) : !isVideo(item)
+      ) ?? [],
+    [activeCategory, mediaFilter]
+  );
+
   // Reset selected image index when category changes
   useEffect(() => {
     setSelectedImageIndex(0);
   }, [activeCategory?.category]);
+
+  useEffect(() => {
+    setSelectedImageIndex(0);
+  }, [mediaFilter, activeCategory?.category]);
 
   useEffect(() => {
     if (sidebarRef.current) sidebarRef.current.style.setProperty("border-radius", "8px", "important");
@@ -131,11 +149,43 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
         activeBadge.style.setProperty("color", "var(--pats-gold)", "important");
       }
     }
-  }, [filter, openAlbum, activeIndex, activeCategory]);
+
+    // Same treatment for the Images/Videos media tabs: force the selected tab's
+    // label + count gold (they sit on a dark background), and clear the forced
+    // colour from the others so they revert to their default token when a
+    // different tab is selected.
+    const mediaButtons = mediaTabsRef.current?.querySelectorAll<HTMLButtonElement>("button");
+    mediaButtons?.forEach((btn) => {
+      const isActive = btn.getAttribute("aria-pressed") === "true";
+      const label = btn.querySelector("span:first-child") as HTMLSpanElement | null;
+      const badge = btn.querySelector("span:last-child") as HTMLSpanElement | null;
+      for (const el of [btn, label, badge]) {
+        if (!el) continue;
+        if (isActive) {
+          el.style.setProperty("color", "var(--pats-gold)", "important");
+        } else {
+          el.style.removeProperty("color");
+        }
+      }
+    });
+  }, [filter, openAlbum, activeIndex, activeCategory, mediaFilter]);
+
+  const mediaTabs = [
+    {
+      key: MEDIA_IMAGES,
+      label: strings.imagesTab,
+      count: activeCategory?.items.filter((item) => !isVideo(item)).length ?? 0,
+    },
+    {
+      key: MEDIA_VIDEOS,
+      label: strings.videosTab,
+      count: activeCategory?.items.filter((item) => isVideo(item)).length ?? 0,
+    },
+  ] as const;
 
   const cycleMainImage = (dir: 1 | -1) => {
-    if (!activeCategory || activeCategory.items.length === 0) return;
-    const len = activeCategory.items.length;
+    if (!activeCategory || activeMediaItems.length === 0) return;
+    const len = activeMediaItems.length;
     setSelectedImageIndex((prev) => (prev + dir + len) % len);
   };
 
@@ -354,14 +404,50 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                     {translateGalleryCategory(activeCategory.category, locale)}
                   </h2>
                 </div>
-                {activeCategory.items.length > 1 ? (
+                {activeMediaItems.length > 1 ? (
                   <p className={cn(
                     "font-mono text-xs tracking-wider",
                     dayTheme ? "text-brand-olive-dark/60" : "text-brand-sand/60"
                   )}>
-                    {selectedImageIndex + 1} / {activeCategory.items.length}
+                    {selectedImageIndex + 1} / {activeMediaItems.length}
                   </p>
                 ) : null}
+              </div>
+
+              <div ref={mediaTabsRef} className="mt-4 flex flex-wrap gap-2">
+                {mediaTabs.map((tab) => {
+                  const activeTab = mediaFilter === tab.key;
+                  return (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => setMediaFilter(tab.key)}
+                      aria-pressed={activeTab}
+                      className={cn(
+                        "inline-flex min-h-10 items-center justify-between gap-2 rounded-[2px] border px-4 py-2 font-condensed text-xs font-bold uppercase tracking-wider transition-all duration-300",
+                        activeTab
+                          ? "border-brand-olive-dark bg-brand-olive-dark text-[var(--pats-gold)]"
+                          : dayTheme
+                            ? "border-brand-olive-dark/15 bg-white text-brand-olive-dark hover:border-brand-olive-dark/30 hover:bg-brand-olive-dark/5"
+                            : "border-white/10 bg-transparent text-brand-sand hover:border-white/20 hover:bg-white/5 hover:text-white"
+                      )}
+                    >
+                      <span>{tab.label}</span>
+                      <span
+                        className={cn(
+                          "rounded-full px-2 py-0.5 text-[10px] font-mono",
+                          activeTab
+                            ? "bg-brand-night/60 text-[var(--pats-gold)]"
+                            : dayTheme
+                              ? "bg-brand-olive-dark/10 text-brand-olive-dark/75"
+                              : "bg-brand-night/40 text-brand-sand/70"
+                        )}
+                      >
+                        {tab.count}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Main Image Slider */}
@@ -372,17 +458,17 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                   dayTheme ? "border-brand-olive-dark/10" : "border-white/5"
                 )}
               >
-                {activeCategory.items[selectedImageIndex] ? (
+                {activeMediaItems[selectedImageIndex] ? (
                   <>
-                    {isVideo(activeCategory.items[selectedImageIndex]) ? (
+                    {isVideo(activeMediaItems[selectedImageIndex]) ? (
                       // Video plays in place with native controls — wrapping it
                       // in the lightbox button would swallow every click on the
                       // scrubber and volume slider.
                       <video
-                        key={activeCategory.items[selectedImageIndex].id}
-                        src={activeCategory.items[selectedImageIndex].image}
+                        key={activeMediaItems[selectedImageIndex].id}
+                        src={activeMediaItems[selectedImageIndex].image}
                         poster={
-                          activeCategory.items[selectedImageIndex].poster ??
+                          activeMediaItems[selectedImageIndex].poster ??
                           undefined
                         }
                         controls
@@ -397,20 +483,32 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                           setOpenAlbum(activeCategory.category);
                           setActiveIndex(selectedImageIndex);
                         }}
-                        className="w-full h-full relative"
+                        className="group/video relative h-full w-full cursor-pointer"
                       >
                         <Image
-                          src={activeCategory.items[selectedImageIndex].image}
-                          alt={activeCategory.items[selectedImageIndex].title}
+                          src={activeMediaItems[selectedImageIndex].image}
+                          alt={activeMediaItems[selectedImageIndex].title}
                           fill
                           className="object-contain transition-transform duration-500 ease-mechanical hover:scale-[1.01]"
                           sizes="(max-width: 1024px) 100vw, 80vw"
                           priority
                         />
+                        <span
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/45 opacity-90 transition-opacity duration-300 group-hover/video:opacity-100"
+                          aria-hidden
+                        />
+                        <span
+                          className="pointer-events-none absolute inset-0 grid place-items-center"
+                          aria-hidden
+                        >
+                          <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/80 bg-black/35 text-white shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover/video:scale-105">
+                            <Play className="ml-1 h-7 w-7 fill-current" />
+                          </span>
+                        </span>
                       </button>
                     )}
 
-                    {activeCategory.items.length > 1 ? (
+                    {activeMediaItems.length > 1 ? (
                       <>
                         <button
                           type="button"
@@ -434,17 +532,21 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full gap-2 text-brand-sand/50">
                     <ImageOff size={32} />
-                    <p className="font-condensed text-xs uppercase tracking-wider">{strings.empty}</p>
+                    <p className="font-condensed text-xs uppercase tracking-wider">
+                      {mediaFilter === MEDIA_VIDEOS
+                        ? strings.noVideosAvailable
+                        : strings.noImagesAvailable}
+                    </p>
                   </div>
                 )}
               </div>
 
               {/* Current Image Details */}
-              {activeCategory.items[selectedImageIndex] && (
+              {activeMediaItems[selectedImageIndex] && (
                 <div className="flex flex-col gap-1 px-1">
-                  {metaLine(activeCategory.items[selectedImageIndex], locale) ? (
+                  {metaLine(activeMediaItems[selectedImageIndex], locale) ? (
                     <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-[var(--pats-gold)]">
-                      {metaLine(activeCategory.items[selectedImageIndex], locale)}
+                      {metaLine(activeMediaItems[selectedImageIndex], locale)}
                     </p>
                   ) : null}
                   {/* <h3 className={cn(
@@ -453,19 +555,19 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                   )}>
                     {activeCategory.items[selectedImageIndex].title}
                   </h3> */}
-                  {activeCategory.items[selectedImageIndex].caption ? (
+                  {activeMediaItems[selectedImageIndex].caption ? (
                     <p className={cn(
                       "font-condensed text-sm mt-1 leading-relaxed",
                       dayTheme ? "text-brand-olive-dark/85" : "text-brand-sand/85"
                     )}>
-                      {activeCategory.items[selectedImageIndex].caption}
+                      {activeMediaItems[selectedImageIndex].caption}
                     </p>
                   ) : null}
                 </div>
               )}
 
               {/* Thumbnails Row */}
-              {activeCategory.items.length > 1 ? (
+              {activeMediaItems.length > 1 ? (
                 <div className={cn(
                   "flex flex-col gap-2 border-t pt-4",
                   dayTheme ? "border-brand-olive-dark/10" : "border-white/5"
@@ -477,13 +579,13 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                     Select Image
                   </p>
                   <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10">
-                    {activeCategory.items.map((item, idx) => (
+                    {activeMediaItems.map((item, idx) => (
                       <button
                         key={item.id}
                         type="button"
                         onClick={() => setSelectedImageIndex(idx)}
                         className={cn(
-                          "relative w-20 h-14 rounded-md overflow-hidden shrink-0 border-2 transition-all duration-300",
+                          "group/thumb relative h-14 w-20 shrink-0 overflow-hidden rounded-md border-2 transition-all duration-300 cursor-pointer hover:scale-[1.03] hover:shadow-md",
                           selectedImageIndex === idx
                             ? "border-[var(--pats-gold)] opacity-100 scale-105"
                             : "border-transparent opacity-60 hover:opacity-90"
@@ -509,10 +611,12 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                               />
                             )}
                             <span
-                              className="absolute inset-0 grid place-items-center bg-black/25"
+                              className="absolute inset-0 grid place-items-center bg-[linear-gradient(to_top,rgba(0,0,0,0.42),rgba(0,0,0,0.16))]"
                               aria-hidden
                             >
-                              <Play className="h-4 w-4 translate-x-[1px] text-white drop-shadow" />
+                              <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/80 bg-black/35 text-white shadow-[0_6px_16px_rgba(0,0,0,0.28)] transition-transform duration-300 group-hover/thumb:scale-105">
+                                <Play className="ml-0.5 h-4 w-4 fill-current drop-shadow" />
+                              </span>
                             </span>
                           </>
                         ) : (

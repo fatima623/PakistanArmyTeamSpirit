@@ -1,33 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Menu, Settings } from "lucide-react";
+import { Bell, Settings } from "lucide-react";
 
 import { AdminUserMenu } from "@/components/admin/AdminUserMenu";
 
 export function AdminHeader({
   title,
   userInitials,
-  onMenuClick,
 }: {
   title: string;
   userInitials: string;
-  onMenuClick?: () => void;
 }) {
   return (
     <header className="admin-header-bar admin-layout-header flex flex-shrink-0 items-center justify-between gap-3 sm:gap-4">
-      <div className="flex min-w-0 flex-1 items-center gap-2">
-        <button
-          type="button"
-          className="admin-header-iconbtn shrink-0 lg:hidden"
-          aria-label="Open navigation menu"
-          onClick={onMenuClick}
-        >
-          <Menu className="h-[18px] w-[18px]" aria-hidden />
-        </button>
-        <div className="admin-header-titlewrap min-w-0">
-          <h1 className="admin-heading truncate">{title}</h1>
-        </div>
+      <div className="admin-header-titlewrap min-w-0 flex-1">
+        <h1 className="admin-heading truncate">{title}</h1>
       </div>
 
       <div className="admin-header-actions flex flex-shrink-0 items-center gap-2">

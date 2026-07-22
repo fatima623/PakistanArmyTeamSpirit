@@ -27,12 +27,16 @@ export const publicSite = {
     subtitle:
       "Documentary archive of international PATS editions — delegations, ceremonies, and operational heritage.",
     allArchives: "All archives",
+    imagesTab: "Images",
+    videosTab: "Videos",
     photos: (count: number) => `${count} ${count === 1 ? "Photo" : "Photos"}`,
     // Hero meta-strip <dt> labels. Distinct from `eyebrow`/`allArchives`, which
     // are the hero kicker and the "show everything" filter chip respectively.
     metaPhotosLabel: "Photographs",
     metaYearsLabel: "Years covered",
     empty: "The gallery is being updated. Check back soon.",
+    noImagesAvailable: "No images available for this category.",
+    noVideosAvailable: "No videos available for this category.",
     close: "Close",
     previous: "Previous",
     next: "Next",

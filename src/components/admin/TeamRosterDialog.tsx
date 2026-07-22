@@ -37,7 +37,7 @@ export function TeamRosterDialog({
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[88vh] max-w-3xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.14)]">
+        <DialogContent dir="ltr" className="max-h-[88vh] max-w-3xl overflow-y-auto border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.14)]">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-[1rem] font-bold tracking-[-0.01em] text-slate-900">
               <Users2 size={16} className="text-green-800" aria-hidden />

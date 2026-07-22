@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
+import { ArrowLeft, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { FormFieldAdmin } from "@/components/admin/FormFieldAdmin";
@@ -137,6 +137,115 @@ export function KeyDatesManager({
 
   const canAdd = addForm.label.trim().length > 0 && addForm.value.trim().length > 0;
 
+  // Adding a key date takes over the whole view with a centered, form-only
+  // layout (matching /admin/ticker/new) — the list of existing dates is hidden
+  // while you fill in a new one.
+  if (showAddForm) {
+    return (
+      <div className="mx-auto flex w-full max-w-[52rem] flex-col gap-[0.85rem] pb-8">
+        <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+          <div className="min-w-0 flex-[1_1_16rem]">
+            <button
+              type="button"
+              onClick={() => setShowAddForm(false)}
+              className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800"
+            >
+              <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+              Back to key dates
+            </button>
+            <h1 className="m-0 text-[1.375rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
+              Add a new key date
+            </h1>
+            <p className="mt-1 text-[0.8rem] leading-[1.4] text-muted-foreground">
+              Give each entry a short label (shown in the left column on the
+              public page) and a value (the date or description shown beside it).
+            </p>
+          </div>
+        </header>
+
+        <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+          <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+            <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
+              Key date
+            </h3>
+          </div>
+          <div className="flex flex-col gap-5 px-[1.1rem] pb-4 pt-[0.9rem]">
+            <FormFieldAdmin
+              label="Label"
+              required
+              hint='Short heading, e.g. "JLs" or "Refunds".'
+            >
+              <Input
+                value={addForm.label}
+                onChange={(e) =>
+                  setAddForm((f) => ({ ...f, label: e.target.value }))
+                }
+                className={adminInput}
+                placeholder="e.g. Junior Leaders Seminar"
+              />
+            </FormFieldAdmin>
+
+            <FormFieldAdmin
+              label="Value"
+              required
+              hint="The date or text visitors will read next to the label."
+            >
+              <Textarea
+                value={addForm.value}
+                onChange={(e) =>
+                  setAddForm((f) => ({ ...f, value: e.target.value }))
+                }
+                className={adminTextarea}
+                rows={4}
+                placeholder="e.g. 31 July 2026"
+              />
+            </FormFieldAdmin>
+
+            <FormFieldAdmin label="Display order" className="max-w-32">
+              <Input
+                type="number"
+                min={0}
+                value={addForm.sortOrder}
+                onChange={(e) =>
+                  setAddForm((f) => ({
+                    ...f,
+                    sortOrder: parseInt(e.target.value, 10) || 0,
+                  }))
+                }
+                className={adminInput}
+              />
+            </FormFieldAdmin>
+
+            <TranslationFields
+              model="KeyDate"
+              draft={addTranslations}
+              idPrefix="kd-t-new"
+            />
+          </div>
+        </section>
+
+        <div className="flex flex-wrap justify-end gap-3">
+          <Button
+            type="button"
+            variant="adminOutline"
+            onClick={() => setShowAddForm(false)}
+            disabled={saving}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={addKeyDate}
+            disabled={saving || !canAdd}
+            variant="adminPrimary"
+          >
+            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Add key date
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6 pb-8">
       <section className="admin-surface p-8">
@@ -148,22 +257,9 @@ export function KeyDatesManager({
               label and value you enter.
             </p>
           </div>
-          <Button
-            variant="adminPrimary"
-            onClick={() => setShowAddForm((v) => !v)}
-            aria-expanded={showAddForm}
-          >
-            {showAddForm ? (
-              <>
-                <X className="mr-2 h-4 w-4" aria-hidden />
-                Close
-              </>
-            ) : (
-              <>
-                <Plus className="mr-2 h-4 w-4" aria-hidden />
-                Add key date
-              </>
-            )}
+          <Button variant="adminPrimary" onClick={() => setShowAddForm(true)}>
+            <Plus className="mr-2 h-4 w-4" aria-hidden />
+            Add key date
           </Button>
         </header>
 
@@ -324,99 +420,6 @@ export function KeyDatesManager({
           </table>
         </div>
       </section>
-
-      {showAddForm ? (
-      <section className="admin-surface p-8" aria-labelledby="add-key-date-heading">
-        <h3 id="add-key-date-heading" className="mb-1.5 text-lg font-bold text-brand-ink">Add a new key date</h3>
-        <p className="mb-6 max-w-[36rem] text-sm leading-[1.55] text-muted-foreground">
-          Give each entry a short <strong>label</strong> (shown in the left column on
-          the public page) and a <strong>value</strong> (the date or description
-          shown beside it). Use <strong>display order</strong> to control sort
-          position — lower numbers appear first.
-        </p>
-
-        <div className="flex max-w-[40rem] flex-col gap-5">
-          <FormFieldAdmin
-            label="Label"
-            required
-            hint='Short heading, e.g. "JLs" or "Refunds".'
-          >
-            <Input
-              value={addForm.label}
-              onChange={(e) =>
-                setAddForm((f) => ({ ...f, label: e.target.value }))
-              }
-              className={adminInput}
-              placeholder="e.g. Junior Leaders Seminar"
-            />
-          </FormFieldAdmin>
-
-          <FormFieldAdmin
-            label="Value"
-            required
-            hint="The date or text visitors will read next to the label."
-          >
-            <Textarea
-              value={addForm.value}
-              onChange={(e) =>
-                setAddForm((f) => ({ ...f, value: e.target.value }))
-              }
-              className={adminTextarea}
-              rows={4}
-              placeholder="e.g. 31 July 2026"
-            />
-          </FormFieldAdmin>
-
-          <FormFieldAdmin
-            label="Display order"
-            
-            className="max-w-32"
-          >
-            <Input
-              type="number"
-              min={0}
-              value={addForm.sortOrder}
-              onChange={(e) =>
-                setAddForm((f) => ({
-                  ...f,
-                  sortOrder: parseInt(e.target.value, 10) || 0,
-                }))
-              }
-              className={adminInput}
-            />
-          </FormFieldAdmin>
-
-          <TranslationFields
-            model="KeyDate"
-            draft={addTranslations}
-            idPrefix="kd-t-new"
-          />
-        </div>
-
-        <div className="mt-7 flex flex-wrap items-center gap-3 border-t border-black/[0.06] pt-6">
-          <Button
-            onClick={addKeyDate}
-            disabled={saving || !canAdd}
-            variant="adminPrimary"
-          >
-            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Add key date
-          </Button>
-          <Button
-            type="button"
-            variant="adminOutline"
-            onClick={() => setShowAddForm(false)}
-            disabled={saving}
-          >
-            Cancel
-          </Button>
-          <p className="min-w-0 flex-[1_1_12rem] text-[0.8125rem] text-muted-foreground">
-            Required: label and value. The new entry will appear in the table above
-            after you save.
-          </p>
-        </div>
-      </section>
-      ) : null}
     </div>
   );
 }

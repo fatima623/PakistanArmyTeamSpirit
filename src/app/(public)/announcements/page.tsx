@@ -14,7 +14,6 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { getAnnouncements } from "@/lib/site-data";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { formatDateLong } from "@/lib/utils";
-import { cn } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -121,9 +120,7 @@ export default async function AnnouncementsPage({ searchParams }: PageProps) {
               </div>
             </article>
           </ScrollReveal>
-        ) : null}
-
-        {announcements.length === 0 ? (
+        ) : announcements.length === 0 ? (
           <div className="pats-announce-empty">
             <p className="pats-body">{a11n.empty}</p>
           </div>
@@ -134,11 +131,7 @@ export default async function AnnouncementsPage({ searchParams }: PageProps) {
                 <Link
                   key={a.id}
                   href={`/announcements?selected=${encodeURIComponent(a.slug)}`}
-                  aria-current={selected?.slug === a.slug ? "page" : undefined}
-                  className={cn(
-                    "pats-announce-card",
-                    selected?.slug === a.slug && "pats-announce-card--selected"
-                  )}
+                  className="pats-announce-card"
                 >
                   <div className="pats-announce-card__media">
                     {a.imagePath ? (

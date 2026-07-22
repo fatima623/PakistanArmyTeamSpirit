@@ -2,6 +2,7 @@ import { displayCountry, isInternationalParticipant } from "@/lib/participant-co
 import { formatDateShort } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Locale } from "@/lib/i18n/config";
+import { translateUnitOption } from "@/lib/i18n/unit-option-i18n";
 
 type UnitSummary = {
   unitName: string;
@@ -19,6 +20,8 @@ type Props = {
   nationality: string | null;
   unit: UnitSummary;
   t: Dictionary["registration"];
+  /** `t.unit.options` — localizes the stored English branch enum for display. */
+  unitOptions: Dictionary["unit"]["options"];
   locale: Locale;
 };
 
@@ -32,6 +35,7 @@ export function ParticipantRegistrationDetailsCard({
   nationality,
   unit,
   t,
+  unitOptions,
   locale,
 }: Props) {
   return (
@@ -81,7 +85,7 @@ export function ParticipantRegistrationDetailsCard({
           <div>
             <dt className="pp-dl__term">{t.branchFormation}</dt>
             <dd className="pp-dl__desc">
-              {unit.branch}
+              {translateUnitOption(unit.branch, unitOptions)}
               {unit.bdeOrFmn ? ` · ${unit.bdeOrFmn}` : ""}
             </dd>
           </div>

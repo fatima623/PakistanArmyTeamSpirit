@@ -375,6 +375,19 @@ export const AdminUserUpdateSchema = z.object({
   country: z.string().trim().min(1, "Required").max(100, "Too long").optional(),
   customCountry: z.string().max(100, "Too long").optional(),
   nationality: z.string().trim().max(100, "Too long").optional().nullable(),
+  /* Participant Unit / CO fields — an admin may edit them for role "user"
+     accounts. Absent fields leave the stored Unit row untouched (the route only
+     upserts the keys that were actually sent). */
+  unitType: z.enum(["Regular", "Reserve"]).optional(),
+  branch: z.enum(["Army", "Navy", "Air Force"]).optional(),
+  unitName: z.string().trim().max(200, "Too long").optional(),
+  arm: z.string().trim().max(100, "Too long").optional(),
+  secondPocEmail: z.string().email("Valid email required").optional().or(z.literal("")),
+  thirdPocEmail: z.string().email("Valid email required").optional().or(z.literal("")),
+  additionalInfo: z.string().max(5000, "Too long").optional().nullable(),
+  coName: z.string().trim().max(200, "Too long").optional(),
+  coEmail: z.string().email("Valid email required").optional().or(z.literal("")),
+  coPhone: z.string().trim().max(50, "Too long").optional(),
 })
   .refine((d) => !d.country?.trim() || isValidCountry(d.country), {
     message: "Select a valid country",
@@ -409,6 +422,17 @@ export const AdminCreateUserSchema = z
     country: z.string().max(100, "Too long").optional(),
     customCountry: z.string().max(100, "Too long").optional(),
     nationality: z.string().max(100, "Too long").optional(),
+    // Participant Unit / CO fields (required for role "user" — see superRefine).
+    unitType: z.enum(["Regular", "Reserve"]).optional(),
+    branch: z.enum(["Army", "Navy", "Air Force"]).optional(),
+    unitName: z.string().trim().max(200, "Too long").optional(),
+    arm: z.string().trim().max(100, "Too long").optional(),
+    secondPocEmail: z.string().email("Valid email required").optional().or(z.literal("")),
+    thirdPocEmail: z.string().email("Valid email required").optional().or(z.literal("")),
+    additionalInfo: z.string().max(5000, "Too long").optional(),
+    coName: z.string().trim().max(200, "Too long").optional(),
+    coEmail: z.string().email("Valid email required").optional().or(z.literal("")),
+    coPhone: z.string().trim().max(50, "Too long").optional(),
   })
   .refine((d) => d.role !== "user" || (d.country?.trim().length ?? 0) > 0, {
     message: "Required for participants",
@@ -433,7 +457,31 @@ export const AdminCreateUserSchema = z
       );
     },
     { message: "Required for international participants", path: ["nationality"] }
-  );
+  )
+  .superRefine((d, ctx) => {
+    /* Participant accounts carry a full Unit record — mirror the public
+       registration's required Unit/CO fields so an admin-created participant is
+       never left without them. Staff roles skip this entirely. */
+    if (d.role !== "user") return;
+    const required: Array<{ field: string; value: unknown; message: string }> = [
+      { field: "unitType", value: d.unitType, message: "Required" },
+      { field: "branch", value: d.branch, message: "Required" },
+      { field: "unitName", value: d.unitName, message: "Required" },
+      { field: "arm", value: d.arm, message: "Required" },
+      { field: "coName", value: d.coName, message: "Required" },
+      { field: "coEmail", value: d.coEmail, message: "Valid email required" },
+      { field: "coPhone", value: d.coPhone, message: "Required" },
+    ];
+    for (const { field, value, message } of required) {
+      if (typeof value !== "string" || !value.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message,
+          path: [field],
+        });
+      }
+    }
+  });
 
 /**
  * Create a Host Formation together with its single `host`-role login account.

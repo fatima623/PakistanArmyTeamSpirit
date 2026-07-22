@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import {
   ArrowDown,
+  ArrowLeft,
   ArrowUp,
   Eye,
   EyeOff,
@@ -117,6 +118,22 @@ export function HeroSlidesManager({
     }
   };
 
+  // Adding a hero image takes over the whole view with a centered, form-only
+  // layout (matching /admin/ticker/new) — the list of existing slides is
+  // hidden while you fill in a new one.
+  if (showForm) {
+    return (
+      <UploadForm
+        nextOrder={slides.length}
+        onCreated={(slide) => {
+          upsert(slide);
+          setShowForm(false);
+        }}
+        onCancel={() => setShowForm(false)}
+      />
+    );
+  }
+
   return (
     <div className="grid gap-5">
       <section className="rounded-[14px] border border-brand-line bg-white px-[1.4rem] pb-6 pt-5 shadow-[0_1px_3px_rgba(20,26,20,0.06)]">
@@ -128,15 +145,9 @@ export function HeroSlidesManager({
               Unpublish a slide to pull it without deleting it.
             </p>
           </div>
-          <Button variant="adminPrimary" onClick={() => setShowForm((v) => !v)}>
-            {showForm ? (
-              "Close"
-            ) : (
-              <>
-                <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
-                Add slide
-              </>
-            )}
+          <Button variant="adminPrimary" onClick={() => setShowForm(true)}>
+            <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
+            Add slide
           </Button>
         </header>
 
@@ -145,19 +156,6 @@ export function HeroSlidesManager({
             No slides are published — the home page is showing its built-in
             fallback images.
           </p>
-        ) : null}
-
-        {showForm ? (
-          <div className="mb-[1.35rem] border-b border-brand-line pb-[1.35rem]">
-            <UploadForm
-              nextOrder={slides.length}
-              onCreated={(slide) => {
-                upsert(slide);
-                setShowForm(false);
-              }}
-              onCancel={() => setShowForm(false)}
-            />
-          </div>
         ) : null}
 
         {slides.length === 0 ? (
@@ -288,7 +286,7 @@ function UploadForm({
 }: {
   nextOrder: number;
   onCreated: (slide: AdminHeroSlide) => void;
-  onCancel?: () => void;
+  onCancel: () => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -361,122 +359,153 @@ function UploadForm({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[280px_1fr] min-[820px]:items-start">
-      <div className="flex flex-col gap-1.5">
-        <label className="text-[0.8rem] font-semibold text-brand-ink">
-          Image *
-        </label>
-        <button
-          type="button"
-          className="relative flex min-h-[170px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
-          onClick={() => fileRef.current?.click()}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            pickFile(e.dataTransfer.files?.[0] ?? null);
-          }}
-        >
-          {preview ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={preview} alt="Preview" />
-          ) : (
-            <>
-              <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
-              <span className="text-[0.82rem] font-semibold text-brand-ink">
-                Click or drop to upload
-              </span>
-              <span className="text-[0.72rem] text-brand-ink-muted">
-                JPG, PNG or WEBP · up to 16 MB
-              </span>
-            </>
-          )}
-          <input
-            ref={fileRef}
-            type="file"
-            accept={ACCEPT_HERO}
-            className="sr-only"
-            onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
-          />
-        </button>
-        <p className="text-[0.72rem] text-brand-ink-muted">
-          The hero is full-bleed and cropped to the viewport — landscape images
-          around 2560×1440 work best.
-        </p>
-      </div>
+    <div className="mx-auto flex w-full max-w-[52rem] flex-col gap-[0.85rem] pb-8">
+      <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="min-w-0 flex-[1_1_16rem]">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800"
+          >
+            <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+            Back to hero images
+          </button>
+          <h1 className="m-0 text-[1.375rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
+            Add hero image
+          </h1>
+          <p className="mt-1 text-[0.8rem] leading-[1.4] text-muted-foreground">
+            Upload an image and give it an admin title. Published slides
+            crossfade on the home page hero, in display order.
+          </p>
+        </div>
+      </header>
 
-      <div>
-        <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
-          <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="h-title">Title *</label>
-            <Input
-              id="h-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="admin-input"
-              placeholder="e.g. Opening parade — wide shot"
-            />
-            <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
-              Admin-only label so you can tell slides apart. Not shown publicly.
-            </p>
-          </div>
-          <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="h-alt">Alt text</label>
-            <Input
-              id="h-alt"
-              value={alt}
-              onChange={(e) => setAlt(e.target.value)}
-              className="admin-input"
-              placeholder="Optional description for screen readers"
-            />
-          </div>
-          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="h-order">Display order</label>
-            <Input
-              id="h-order"
-              type="number"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="admin-input"
-            />
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
+            Hero image
+          </h3>
+        </div>
+        <div className="flex flex-col gap-5 px-[1.1rem] pb-4 pt-[0.9rem]">
+          <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[280px_1fr] min-[820px]:items-start">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[0.8rem] font-semibold text-brand-ink">
+                Image *
+              </label>
+              <button
+                type="button"
+                className="relative flex min-h-[170px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+                onClick={() => fileRef.current?.click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  pickFile(e.dataTransfer.files?.[0] ?? null);
+                }}
+              >
+                {preview ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={preview} alt="Preview" />
+                ) : (
+                  <>
+                    <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
+                    <span className="text-[0.82rem] font-semibold text-brand-ink">
+                      Click or drop to upload
+                    </span>
+                    <span className="text-[0.72rem] text-brand-ink-muted">
+                      JPG, PNG or WEBP · up to 16 MB
+                    </span>
+                  </>
+                )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept={ACCEPT_HERO}
+                  className="sr-only"
+                  onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+                />
+              </button>
+              <p className="text-[0.72rem] text-brand-ink-muted">
+                The hero is full-bleed and cropped to the viewport — landscape
+                images around 2560×1440 work best.
+              </p>
+            </div>
+
+            <div>
+              <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
+                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="h-title">Title *</label>
+                  <Input
+                    id="h-title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="admin-input"
+                    placeholder="e.g. Opening parade — wide shot"
+                  />
+                  <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
+                    Admin-only label so you can tell slides apart. Not shown
+                    publicly.
+                  </p>
+                </div>
+                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="h-alt">Alt text</label>
+                  <Input
+                    id="h-alt"
+                    value={alt}
+                    onChange={(e) => setAlt(e.target.value)}
+                    className="admin-input"
+                    placeholder="Optional description for screen readers"
+                  />
+                </div>
+                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="h-order">Display order</label>
+                  <Input
+                    id="h-order"
+                    type="number"
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-3 flex items-center gap-3">
+                <Switch
+                  id="h-published"
+                  checked={published}
+                  onCheckedChange={setPublished}
+                  className="data-[state=checked]:bg-brand-olive"
+                />
+                <label
+                  htmlFor="h-published"
+                  className="text-sm text-brand-ink-muted"
+                >
+                  {published
+                    ? "Published — appears in the hero"
+                    : "Draft — hidden"}
+                </label>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="mt-3 flex items-center gap-3">
-          <Switch
-            id="h-published"
-            checked={published}
-            onCheckedChange={setPublished}
-            className="data-[state=checked]:bg-brand-olive"
-          />
-          <label htmlFor="h-published" className="text-sm text-brand-ink-muted">
-            {published ? "Published — appears in the hero" : "Draft — hidden"}
-          </label>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button onClick={submit} disabled={submitting} variant="adminPrimary">
-            {submitting ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Upload className="mr-2 h-4 w-4" />
-            )}
-            Add slide
+      <div className="flex flex-wrap justify-end gap-3">
+        {file ? (
+          <Button variant="adminOutline" onClick={reset} disabled={submitting}>
+            Clear
           </Button>
-          {file ? (
-            <Button variant="adminOutline" onClick={reset} disabled={submitting}>
-              Clear
-            </Button>
-          ) : null}
-          {onCancel ? (
-            <Button
-              variant="adminOutline"
-              onClick={onCancel}
-              disabled={submitting}
-            >
-              Cancel
-            </Button>
-          ) : null}
-        </div>
+        ) : null}
+        <Button variant="adminOutline" onClick={onCancel} disabled={submitting}>
+          Cancel
+        </Button>
+        <Button onClick={submit} disabled={submitting} variant="adminPrimary">
+          {submitting ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Upload className="mr-2 h-4 w-4" />
+          )}
+          Add slide
+        </Button>
       </div>
     </div>
   );
@@ -670,7 +699,7 @@ function EditDialog({
 
   return (
     <Dialog open={Boolean(slide)} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-lg">
+      <DialogContent dir="ltr" className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Edit hero slide</DialogTitle>
         </DialogHeader>

@@ -289,6 +289,84 @@ export async function PUT(request: Request, context: RouteContext) {
       data.rejectionReason = parsed.data.rejectionReason;
     }
 
+    /* Participant Unit / CO fields — admin-only (profile-class) and only for
+       participants. Upserted, so a participant created before this form existed
+       (with no Unit row) still gets one; only the keys actually sent are
+       updated, while a fresh create fills the retired legacy columns. */
+    const unitFieldsPresent =
+      parsed.data.unitType !== undefined ||
+      parsed.data.branch !== undefined ||
+      parsed.data.unitName !== undefined ||
+      parsed.data.arm !== undefined ||
+      parsed.data.secondPocEmail !== undefined ||
+      parsed.data.thirdPocEmail !== undefined ||
+      parsed.data.additionalInfo !== undefined ||
+      parsed.data.coName !== undefined ||
+      parsed.data.coEmail !== undefined ||
+      parsed.data.coPhone !== undefined;
+
+    if (unitFieldsPresent) {
+      if (!isAdmin) {
+        throw new ApiError("Only administrators can edit unit details", 403);
+      }
+      const targetRole = parsed.data.role ?? existing.role;
+      if (targetRole !== PARTICIPANT_ROLE) {
+        throw new ApiError("Unit details apply to participants only", 400);
+      }
+
+      const unitUpdate: Record<string, unknown> = {};
+      if (parsed.data.unitType !== undefined)
+        unitUpdate.unitType = parsed.data.unitType;
+      if (parsed.data.branch !== undefined)
+        unitUpdate.branch = parsed.data.branch;
+      if (parsed.data.unitName !== undefined)
+        unitUpdate.unitName = parsed.data.unitName;
+      if (parsed.data.arm !== undefined) unitUpdate.arm = parsed.data.arm;
+      if (parsed.data.secondPocEmail !== undefined)
+        unitUpdate.secondPocEmail = parsed.data.secondPocEmail || null;
+      if (parsed.data.thirdPocEmail !== undefined)
+        unitUpdate.thirdPocEmail = parsed.data.thirdPocEmail || null;
+      if (parsed.data.additionalInfo !== undefined)
+        unitUpdate.additionalInfo = parsed.data.additionalInfo || null;
+      if (parsed.data.coName !== undefined)
+        unitUpdate.coName = parsed.data.coName;
+      if (parsed.data.coEmail !== undefined)
+        unitUpdate.coEmail = parsed.data.coEmail;
+      if (parsed.data.coPhone !== undefined)
+        unitUpdate.coPhone = parsed.data.coPhone;
+
+      data.unit = {
+        upsert: {
+          create: {
+            unitType: parsed.data.unitType ?? "Regular",
+            branch: parsed.data.branch ?? "Army",
+            unitName: parsed.data.unitName ?? "",
+            arm: parsed.data.arm ?? "",
+            secondPocEmail: parsed.data.secondPocEmail || null,
+            thirdPocEmail: parsed.data.thirdPocEmail || null,
+            additionalInfo: parsed.data.additionalInfo || null,
+            coName: parsed.data.coName ?? "",
+            coEmail: parsed.data.coEmail ?? "",
+            coPhone: parsed.data.coPhone ?? "",
+            jointPatrol: false,
+            bdeOrFmn: "",
+            divOrFmn: "",
+            service: "",
+            unitAddress: "",
+            postcode: "",
+            telephoneMil: "",
+            telephoneCiv: "",
+            coRank: "",
+            coSalutations: null,
+            canAccommodateIntl: false,
+            preferredIntlPatrol: null,
+            longStandingRelation: false,
+          },
+          update: unitUpdate,
+        },
+      };
+    }
+
     const user = await prisma.user.update({
       where: { id },
       data,

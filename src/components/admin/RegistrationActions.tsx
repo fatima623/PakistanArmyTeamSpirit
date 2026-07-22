@@ -205,6 +205,7 @@ function RegistrationActionDialog({
   return (
     <Dialog open={!!action} onOpenChange={(o) => !loading && onOpenChange(o)}>
       <DialogContent
+        dir="ltr"
         className={cn(
           "border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.14)]",
           meta.needsReason ? "max-w-md" : "max-w-[400px]"
@@ -506,7 +507,7 @@ export function RegistrationRowAction({
           if (!o) setAction(null);
         }}
       >
-        <DialogContent className="max-w-md border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.14)]">
+        <DialogContent dir="ltr" className="max-w-md border-brand-line bg-white text-brand-ink shadow-[0_8px_30px_rgba(28,33,25,0.14)]">
           <DialogTitle className="text-[1rem] font-bold tracking-[-0.01em] text-slate-900">
             Registration verification
           </DialogTitle>

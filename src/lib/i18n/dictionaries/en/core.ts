@@ -219,7 +219,7 @@ export const core = {
     actionRequired: "Action required",
     title: "Confirm your participation",
     description:
-      "Before entering the Participant Dashboard, please confirm whether your team will be available to participate in the exercise. Confirming grants access to the next registration stages. Rejecting signs you out — you may log back in and confirm any time before the deadline below.",
+      "Before entering the Participant Dashboard, please confirm whether your team will be available to participate in the exercise. Confirming grants access to the next registration stages. Rejecting signs you out, you may log back in and confirm any time before the deadline below.",
     previouslyDeclined:
       "You previously rejected the registration. You can still confirm before the deadline expires.",
     confirmationDeadline: "Confirmation deadline",

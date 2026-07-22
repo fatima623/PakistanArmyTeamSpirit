@@ -202,6 +202,41 @@ export async function POST(request: Request) {
         emailVerifiedAt: now,
         privacyAccepted: true,
         privacyAcceptedAt: now,
+        /* Participants carry a full Unit record (staff accounts do not). The
+           validated payload guarantees the required Unit/CO fields for role
+           "user"; the retired legacy columns get the same neutral defaults the
+           public registration route uses so the NOT NULL schema is satisfied. */
+        ...(staff
+          ? {}
+          : {
+              unit: {
+                create: {
+                  unitType: parsed.data.unitType ?? "Regular",
+                  branch: parsed.data.branch ?? "Army",
+                  unitName: parsed.data.unitName ?? "",
+                  arm: parsed.data.arm ?? "",
+                  secondPocEmail: parsed.data.secondPocEmail || null,
+                  thirdPocEmail: parsed.data.thirdPocEmail || null,
+                  additionalInfo: parsed.data.additionalInfo ?? null,
+                  coName: parsed.data.coName ?? "",
+                  coEmail: parsed.data.coEmail ?? "",
+                  coPhone: parsed.data.coPhone ?? "",
+                  jointPatrol: false,
+                  bdeOrFmn: "",
+                  divOrFmn: "",
+                  service: "",
+                  unitAddress: "",
+                  postcode: "",
+                  telephoneMil: "",
+                  telephoneCiv: "",
+                  coRank: "",
+                  coSalutations: null,
+                  canAccommodateIntl: false,
+                  preferredIntlPatrol: null,
+                  longStandingRelation: false,
+                },
+              },
+            }),
       },
       select: { id: true },
     });

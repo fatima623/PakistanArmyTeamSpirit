@@ -15,16 +15,12 @@ import {
   filterChipClasses,
 } from "@/lib/admin-ui";
 import {
-  TICKET_CATEGORY_LABELS,
-  TICKET_PRIORITY_LABELS,
   TICKET_STATUS,
   TICKET_STATUS_LABELS,
   normalizeTicketStatus,
-  type TicketCategory,
-  type TicketPriority,
 } from "@/lib/constants";
 import { adminNavLabel } from "@/lib/admin-navigation";
-import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
+import { AdminTicketRow } from "@/components/tickets/AdminTicketRow";
 
 export const metadata: Metadata = {
   title: adminNavLabel("tickets"),
@@ -51,10 +47,6 @@ const FILTER_TONE: Record<string, string> = {
   [TICKET_STATUS.CLOSED]: "rejected",
 };
 
-function ticketRef(id: string): string {
-  return `TK-${id.slice(-5).toUpperCase()}`;
-}
-
 function timeAgo(date: Date, now: Date): string {
   const mins = Math.max(0, Math.round((now.getTime() - date.getTime()) / 60000));
   if (mins < 60) return `${mins || 1}m ago`;
@@ -73,7 +65,7 @@ export default async function AdminTicketsPage({
   searchParams: SearchParams;
 }) {
   const params = await searchParams;
-  const status = params.status ?? "all";
+  const status = params.status ?? TICKET_STATUS.OPEN;
   const search = params.search ?? "";
   const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
 
@@ -153,52 +145,30 @@ export default async function AdminTicketsPage({
               <thead className="admin-table-head">
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Ref</th>
                   <th scope="col">Subject</th>
                   <th scope="col">Category</th>
                   <th scope="col">Priority</th>
                   <th scope="col">Requester</th>
                   <th scope="col">Updated</th>
                   <th scope="col">Status</th>
+                  <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {tickets.map((t, i) => (
-                  <tr key={t.id} className="admin-row-hover">
-                    <td className="admin-tickets-muted">
-                      {(page - 1) * PAGE_SIZE + i + 1}
-                    </td>
-                    <td className="admin-tickets-ref">{ticketRef(t.id)}</td>
-                    <td>
-                      <Link
-                        href={`/admin/tickets/${t.id}`}
-                        className="admin-tickets-subject"
-                      >
-                        {t.subject}
-                      </Link>
-                    </td>
-                    <td className="admin-tickets-muted">
-                      {TICKET_CATEGORY_LABELS[t.category as TicketCategory] ??
-                        t.category}
-                    </td>
-                    <td>
-                      <span
-                        className={`admin-tag-priority admin-tag-priority--${t.priority.toLowerCase()}`}
-                      >
-                        {TICKET_PRIORITY_LABELS[t.priority as TicketPriority] ??
-                          t.priority}
-                      </span>
-                    </td>
-                    <td className="admin-tickets-requester">
-                      {t.user.firstName} {t.user.lastName}
-                    </td>
-                    <td className="admin-tickets-muted">
-                      {timeAgo(t.lastReplyAt, now)}
-                    </td>
-                    <td>
-                      <TicketStatusBadge status={t.status} />
-                    </td>
-                  </tr>
+                  <AdminTicketRow
+                    key={t.id}
+                    ticket={{
+                      id: t.id,
+                      subject: t.subject,
+                      category: t.category,
+                      status: t.status,
+                      priority: t.priority,
+                      requester: `${t.user.firstName} ${t.user.lastName}`,
+                      updated: timeAgo(t.lastReplyAt, now),
+                      num: (page - 1) * PAGE_SIZE + i + 1,
+                    }}
+                  />
                 ))}
               </tbody>
             </table>

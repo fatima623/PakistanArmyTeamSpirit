@@ -99,7 +99,13 @@ export default async function ParticipantTicketDetailPage({
           />
         </div>
 
-        <TicketThread messages={ticket.messages} staffLabel={tk.staffTag} />
+        <div className="rounded-2xl bg-slate-50/80 p-3 sm:p-4">
+          <TicketThread
+            messages={ticket.messages}
+            staffLabel={tk.staffTag}
+            locale={locale}
+          />
+        </div>
 
         <TicketReplyBox ticketId={ticket.id} closed={closed} />
       </div>

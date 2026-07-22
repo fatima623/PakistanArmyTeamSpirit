@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import {
+  ArrowLeft,
   Eye,
   EyeOff,
   Film,
@@ -112,6 +113,21 @@ export function GalleryManager({
       );
     });
 
+  // Adding media takes over the whole view with a centered, form-only layout
+  // (matching /admin/ticker/new) — the gallery grid is hidden while you fill in
+  // a new item. Editing still happens in its own dialog over the grid.
+  if (showForm) {
+    return (
+      <UploadForm
+        onCreated={(img) => {
+          upsert(img);
+          setShowForm(false);
+        }}
+        onCancel={() => setShowForm(false)}
+      />
+    );
+  }
+
   return (
     <div className="grid gap-5">
       <section className="rounded-[14px] border border-brand-line bg-white px-[1.4rem] pb-6 pt-5 shadow-[0_1px_3px_rgba(20,26,20,0.06)]">
@@ -123,32 +139,11 @@ export function GalleryManager({
               gallery.
             </p>
           </div>
-          <Button
-            variant="adminPrimary"
-            onClick={() => setShowForm((v) => !v)}
-          >
-            {showForm ? (
-              "Close"
-            ) : (
-              <>
-                <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
-                Add media
-              </>
-            )}
+          <Button variant="adminPrimary" onClick={() => setShowForm(true)}>
+            <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
+            Add media
           </Button>
         </header>
-
-        {showForm ? (
-          <div className="mb-[1.35rem] border-b border-brand-line pb-[1.35rem]">
-            <UploadForm
-              onCreated={(img) => {
-                upsert(img);
-                setShowForm(false);
-              }}
-              onCancel={() => setShowForm(false)}
-            />
-          </div>
-        ) : null}
 
         {images.length === 0 ? (
           <div className="rounded-xl border border-dashed border-brand-line px-4 py-10 text-center text-brand-ink-muted">
@@ -387,198 +382,223 @@ function UploadForm({
   };
 
   return (
-    <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[260px_1fr] min-[820px]:items-start">
-      <div className="flex flex-col gap-1.5">
-        <label className="text-[0.8rem] font-semibold text-brand-ink">
-          Photo or video *
-        </label>
-        <button
-          type="button"
-          className="relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_video]:absolute [&_video]:inset-0 [&_video]:h-full [&_video]:w-full [&_video]:object-cover"
-          onClick={() => fileRef.current?.click()}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            pickFile(e.dataTransfer.files?.[0] ?? null);
-          }}
-        >
-          {preview && file ? (
-            isVideoFile(file) ? (
-              <video src={preview} muted playsInline preload="metadata" />
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={preview} alt="Preview" />
-            )
-          ) : (
-            <>
-              <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
-              <span className="text-[0.82rem] font-semibold text-brand-ink">
-                Click or drop to upload a photo or video
-              </span>
-              <span className="text-[0.72rem] text-brand-ink-muted">
-                JPG, PNG, WEBP, GIF up to 8 MB · MP4, WEBM, MOV up to 128 MB
-              </span>
-            </>
-          )}
-          <input
-            ref={fileRef}
-            type="file"
-            accept={ACCEPT_MEDIA}
-            className="sr-only"
-            onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
-          />
-        </button>
+    <div className="mx-auto flex w-full max-w-[52rem] flex-col gap-[0.85rem] pb-8">
+      <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="min-w-0 flex-[1_1_16rem]">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800"
+          >
+            <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+            Back to gallery
+          </button>
+          <h1 className="m-0 text-[1.375rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
+            Add gallery item
+          </h1>
+          <p className="mt-1 text-[0.8rem] leading-[1.4] text-muted-foreground">
+            Upload a photo or video, add its details, and choose where it
+            appears in the public gallery.
+          </p>
+        </div>
+      </header>
 
-        {file && isVideoFile(file) ? (
-          <div className="mt-1 rounded-xl border border-brand-line bg-brand-parchment/40 p-2.5">
-            <div className="mb-1.5 flex items-center gap-1.5 text-[0.78rem] font-semibold text-brand-ink">
-              <Film className="h-3.5 w-3.5 text-brand-olive" aria-hidden />
-              Poster frame
-            </div>
-            <div className="flex items-center gap-2.5">
-              <div className="relative h-12 w-[4.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
-                {posterPreview ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={posterPreview} alt="Poster preview" />
+      <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+        <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
+            Media details
+          </h3>
+        </div>
+        <div className="flex flex-col gap-5 px-[1.1rem] pb-4 pt-[0.9rem]">
+          <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[260px_1fr] min-[820px]:items-start">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[0.8rem] font-semibold text-brand-ink">
+                Photo or video *
+              </label>
+              <button
+                type="button"
+                className="relative flex min-h-[240px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_video]:absolute [&_video]:inset-0 [&_video]:h-full [&_video]:w-full [&_video]:object-cover"
+                onClick={() => fileRef.current?.click()}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  pickFile(e.dataTransfer.files?.[0] ?? null);
+                }}
+              >
+                {preview && file ? (
+                  isVideoFile(file) ? (
+                    <video src={preview} muted playsInline preload="metadata" />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={preview} alt="Preview" />
+                  )
                 ) : (
-                  <span className="grid h-full w-full place-items-center text-brand-ink-muted">
-                    <Film className="h-4 w-4" aria-hidden />
-                  </span>
+                  <>
+                    <ImagePlus className="h-8 w-8 text-brand-olive" aria-hidden />
+                    <span className="text-[0.82rem] font-semibold text-brand-ink">
+                      Click or drop to upload a photo or video
+                    </span>
+                    <span className="text-[0.72rem] text-brand-ink-muted">
+                      JPG, PNG, WEBP, GIF up to 8 MB · MP4, WEBM, MOV up to 128 MB
+                    </span>
+                  </>
                 )}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept={ACCEPT_MEDIA}
+                  className="sr-only"
+                  onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+                />
+              </button>
+
+              {file && isVideoFile(file) ? (
+                <div className="mt-1 rounded-xl border border-brand-line bg-brand-parchment/40 p-2.5">
+                  <div className="mb-1.5 flex items-center gap-1.5 text-[0.78rem] font-semibold text-brand-ink">
+                    <Film className="h-3.5 w-3.5 text-brand-olive" aria-hidden />
+                    Poster frame
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <div className="relative h-12 w-[4.5rem] shrink-0 overflow-hidden rounded-lg border border-brand-line bg-brand-parchment-2 [&_img]:h-full [&_img]:w-full [&_img]:object-cover">
+                      {posterPreview ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={posterPreview} alt="Poster preview" />
+                      ) : (
+                        <span className="grid h-full w-full place-items-center text-brand-ink-muted">
+                          <Film className="h-4 w-4" aria-hidden />
+                        </span>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <button
+                        type="button"
+                        onClick={() => posterRef.current?.click()}
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-1.5 text-[0.78rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
+                      >
+                        <Upload className="h-3.5 w-3.5" aria-hidden />
+                        {poster ? "Change poster" : "Choose poster"}
+                      </button>
+                      <p className="mt-1 truncate text-[0.7rem] text-brand-ink-muted">
+                        {poster
+                          ? poster.name
+                          : "Optional — the thumbnail shown before the video plays."}
+                      </p>
+                    </div>
+                  </div>
+                  <input
+                    ref={posterRef}
+                    type="file"
+                    accept={ACCEPT_IMAGE}
+                    className="sr-only"
+                    onChange={(e) => pickPoster(e.target.files?.[0] ?? null)}
+                  />
+                </div>
+              ) : null}
+            </div>
+
+            <div>
+              <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
+                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="g-title">Title *</label>
+                  <Input
+                    id="g-title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="admin-input"
+                    placeholder="e.g. 5th International PATS — Opening"
+                  />
+                </div>
+                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="g-year">Year</label>
+                  <Input
+                    id="g-year"
+                    type="number"
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    className="admin-input"
+                    placeholder="2022"
+                  />
+                </div>
+                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="g-category">Category</label>
+                  <Input
+                    id="g-category"
+                    list={CATEGORY_LIST_ID}
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="admin-input"
+                    placeholder="e.g. Opening Ceremony"
+                  />
+                  <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
+                    Groups the image into an album on the public gallery. Pick a
+                    suggestion or type your own.
+                  </p>
+                  <CategoryOptions />
+                </div>
+                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="g-order">Display order</label>
+                  <Input
+                    id="g-order"
+                    type="number"
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="g-caption">Caption</label>
+                  <Textarea
+                    id="g-caption"
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
+                    rows={2}
+                    className="admin-input"
+                    placeholder="Optional short description shown with the image."
+                  />
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <button
-                  type="button"
-                  onClick={() => posterRef.current?.click()}
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-1.5 text-[0.78rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
-                >
-                  <Upload className="h-3.5 w-3.5" aria-hidden />
-                  {poster ? "Change poster" : "Choose poster"}
-                </button>
-                <p className="mt-1 truncate text-[0.7rem] text-brand-ink-muted">
-                  {poster
-                    ? poster.name
-                    : "Optional — the thumbnail shown before the video plays."}
-                </p>
+
+              <div className="mt-3">
+                <TranslationFields
+                  model="GalleryImage"
+                  draft={translations}
+                  idPrefix="g-t-new"
+                />
+              </div>
+
+              <div className="mt-3 flex items-center gap-3">
+                <Switch
+                  id="g-published"
+                  checked={published}
+                  onCheckedChange={setPublished}
+                  className="data-[state=checked]:bg-brand-olive"
+                />
+                <label htmlFor="g-published" className="text-sm text-brand-ink-muted">
+                  {published ? "Published — visible on the public gallery" : "Draft — hidden"}
+                </label>
               </div>
             </div>
-            <input
-              ref={posterRef}
-              type="file"
-              accept={ACCEPT_IMAGE}
-              className="sr-only"
-              onChange={(e) => pickPoster(e.target.files?.[0] ?? null)}
-            />
-          </div>
-        ) : null}
-      </div>
-
-      <div>
-        <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
-          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="g-title">Title *</label>
-            <Input
-              id="g-title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="admin-input"
-              placeholder="e.g. 5th International PATS — Opening"
-            />
-          </div>
-          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="g-year">Year</label>
-            <Input
-              id="g-year"
-              type="number"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              className="admin-input"
-              placeholder="2022"
-            />
-          </div>
-          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="g-category">Category</label>
-            <Input
-              id="g-category"
-              list={CATEGORY_LIST_ID}
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="admin-input"
-              placeholder="e.g. Opening Ceremony"
-            />
-            <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
-              Groups the image into an album on the public gallery. Pick a
-              suggestion or type your own.
-            </p>
-            <CategoryOptions />
-          </div>
-          <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="g-order">Display order</label>
-            <Input
-              id="g-order"
-              type="number"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="admin-input"
-            />
-          </div>
-          <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-            <label htmlFor="g-caption">Caption</label>
-            <Textarea
-              id="g-caption"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              rows={2}
-              className="admin-input"
-              placeholder="Optional short description shown with the image."
-            />
           </div>
         </div>
+      </section>
 
-        <div className="mt-3">
-          <TranslationFields
-            model="GalleryImage"
-            draft={translations}
-            idPrefix="g-t-new"
-          />
-        </div>
-
-        <div className="mt-3 flex items-center gap-3">
-          <Switch
-            id="g-published"
-            checked={published}
-            onCheckedChange={setPublished}
-            className="data-[state=checked]:bg-brand-olive"
-          />
-          <label htmlFor="g-published" className="text-sm text-brand-ink-muted">
-            {published ? "Published — visible on the public gallery" : "Draft — hidden"}
-          </label>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button onClick={submit} disabled={submitting} variant="adminPrimary">
-            {submitting ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Upload className="mr-2 h-4 w-4" />
-            )}
-            Add media
+      <div className="flex flex-wrap justify-end gap-3">
+        {file ? (
+          <Button variant="adminOutline" onClick={reset} disabled={submitting}>
+            Clear
           </Button>
-          {file ? (
-            <Button variant="adminOutline" onClick={reset} disabled={submitting}>
-              Clear
-            </Button>
-          ) : null}
-          {onCancel ? (
-            <Button
-              variant="adminOutline"
-              onClick={onCancel}
-              disabled={submitting}
-            >
-              Cancel
-            </Button>
-          ) : null}
-        </div>
+        ) : null}
+        <Button variant="adminOutline" onClick={onCancel} disabled={submitting}>
+          Cancel
+        </Button>
+        <Button onClick={submit} disabled={submitting} variant="adminPrimary">
+          {submitting ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Upload className="mr-2 h-4 w-4" />
+          )}
+          Add media
+        </Button>
       </div>
     </div>
   );
@@ -826,7 +846,7 @@ function EditDialog({
 
   return (
     <Dialog open={Boolean(image)} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-lg">
+      <DialogContent dir="ltr" className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{currentIsVideo ? "Edit video" : "Edit image"}</DialogTitle>
         </DialogHeader>

@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Paperclip, Send, Smile } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
 /**
- * Reply + close controls for a participant's own ticket.
- * Closed tickets render a read-only notice instead.
+ * Chat-style reply bar for a participant's own ticket: a rounded pill holding a
+ * (decorative) emoji + paperclip and a green circular send button. Enter sends,
+ * Shift+Enter inserts a newline. A secondary "Close ticket" link sits above the
+ * bar. Closed tickets render a read-only notice instead.
  */
 export function TicketReplyBox({
   ticketId,
@@ -27,16 +27,21 @@ export function TicketReplyBox({
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
   const [closing, setClosing] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   if (closed) {
-    return (
-      <p className="portal-muted mt-4 text-sm">{tk.reply.closedNotice}</p>
-    );
+    return <p className="portal-muted text-[0.9rem]">{tk.reply.closedNotice}</p>;
   }
 
-  const handleReply = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!body.trim()) return;
+  const autoSize = () => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 128)}px`;
+  };
+
+  const sendReply = async () => {
+    if (!body.trim() || sending) return;
     setSending(true);
     try {
       const res = await fetch(`/api/tickets/${ticketId}/messages`, {
@@ -46,6 +51,7 @@ export function TicketReplyBox({
       });
       if (res.ok) {
         setBody("");
+        if (textareaRef.current) textareaRef.current.style.height = "auto";
         router.refresh();
         return;
       }
@@ -55,6 +61,18 @@ export function TicketReplyBox({
       toast.error(t.common.toasts.genericError);
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleReply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await sendReply();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      void sendReply();
     }
   };
 
@@ -78,33 +96,60 @@ export function TicketReplyBox({
   };
 
   return (
-    <form onSubmit={handleReply} className="mt-5 space-y-3">
-      <Textarea
-        value={body}
-        onChange={(e) => setBody(e.target.value)}
-        rows={4}
-        placeholder={tk.reply.placeholder}
-        maxLength={5000}
-      />
-      <div className="flex justify-between gap-3">
-        <Button
+    <div>
+      <div className="mb-2 flex justify-end">
+        <button
           type="button"
-          variant="outline"
           onClick={handleClose}
           disabled={closing || sending}
+          className="inline-flex items-center gap-1.5 text-[0.8rem] font-medium text-slate-500 underline-offset-4 transition-colors hover:text-slate-700 hover:underline disabled:opacity-50"
         >
-          {closing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {closing && (
+            <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+          )}
           {tk.reply.closeTicket}
-        </Button>
-        <Button
-          type="submit"
-          className="cp-btn-primary px-6"
-          disabled={sending || !body.trim()}
-        >
-          {sending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {tk.reply.sendReply}
-        </Button>
+        </button>
       </div>
-    </form>
+
+      <form
+        onSubmit={handleReply}
+        className="flex items-end gap-2 rounded-[1.75rem] border border-slate-200 bg-white px-3 py-2 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
+      >
+        <Smile
+          className="mb-1.5 h-[1.35rem] w-[1.35rem] shrink-0 text-slate-300"
+          aria-hidden
+        />
+        <textarea
+          ref={textareaRef}
+          value={body}
+          onChange={(e) => {
+            setBody(e.target.value);
+            autoSize();
+          }}
+          onKeyDown={handleKeyDown}
+          rows={1}
+          placeholder={tk.reply.placeholder}
+          maxLength={5000}
+          style={{ backgroundColor: "transparent" }}
+          className="max-h-32 flex-1 resize-none self-center border-0 py-1 text-[0.9rem] leading-[1.4] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0"
+        />
+        <Paperclip
+          className="mb-1.5 h-[1.35rem] w-[1.35rem] shrink-0 text-slate-300"
+          aria-hidden
+        />
+        <button
+          type="submit"
+          disabled={sending || !body.trim()}
+          aria-label={tk.reply.sendReply}
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm transition-colors hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {sending ? (
+            <Loader2 className="h-[1.05rem] w-[1.05rem] animate-spin" aria-hidden />
+          ) : (
+            <Send className="h-[1.05rem] w-[1.05rem]" aria-hidden />
+          )}
+        </button>
+      </form>
+    </div>
   );
 }

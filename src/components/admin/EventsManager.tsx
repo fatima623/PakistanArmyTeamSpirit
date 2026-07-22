@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import {
+  ArrowLeft,
   Eye,
   EyeOff,
   ImagePlus,
@@ -77,6 +78,46 @@ export function EventsManager({
       );
     });
 
+  // Adding an event takes over the whole view with a centered, form-only
+  // layout (matching /admin/ticker/new) — the grid of existing events is
+  // hidden while you fill in a new one. Editing still uses the Dialog below.
+  if (showForm) {
+    return (
+      <div className="mx-auto flex w-full max-w-[52rem] flex-col gap-[0.85rem] pb-8">
+        <header className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3 rounded-[14px] border border-brand-line/60 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+          <div className="min-w-0 flex-[1_1_16rem]">
+            <button
+              type="button"
+              onClick={() => setShowForm(false)}
+              className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800"
+            >
+              <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
+              Back to events
+            </button>
+            <h1 className="m-0 text-[1.375rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
+              Add event
+            </h1>
+            <p className="mt-1 text-[0.8rem] leading-[1.4] text-muted-foreground">
+              Create a competition event shown on the public Events Detail page.
+            </p>
+          </div>
+        </header>
+
+        <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
+          <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
+            <EventForm
+              onSaved={(ev) => {
+                upsert(ev);
+                setShowForm(false);
+              }}
+              onCancel={() => setShowForm(false)}
+            />
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="grid gap-5">
       <section className="rounded-[14px] border border-brand-line bg-white px-[1.4rem] pb-6 pt-5 shadow-[0_1px_3px_rgba(20,26,20,0.06)]">
@@ -88,29 +129,11 @@ export function EventsManager({
               first.
             </p>
           </div>
-          <Button variant="adminPrimary" onClick={() => setShowForm((v) => !v)}>
-            {showForm ? (
-              "Close"
-            ) : (
-              <>
-                <Plus className="mr-2 h-4 w-4" aria-hidden />
-                Add event
-              </>
-            )}
+          <Button variant="adminPrimary" onClick={() => setShowForm(true)}>
+            <Plus className="mr-2 h-4 w-4" aria-hidden />
+            Add event
           </Button>
         </header>
-
-        {showForm ? (
-          <div className="mb-[1.35rem] border-b border-brand-line pb-[1.35rem]">
-            <EventForm
-              onSaved={(ev) => {
-                upsert(ev);
-                setShowForm(false);
-              }}
-              onCancel={() => setShowForm(false)}
-            />
-          </div>
-        ) : null}
 
         {events.length === 0 ? (
           <div className="rounded-xl border border-dashed border-brand-line px-4 py-10 text-center text-brand-ink-muted">
@@ -187,7 +210,7 @@ export function EventsManager({
       </section>
 
       <Dialog open={Boolean(editing)} onOpenChange={(o) => !o && setEditing(null)}>
-        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+        <DialogContent dir="ltr" className="max-h-[90vh] max-w-2xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit event</DialogTitle>
           </DialogHeader>
@@ -254,6 +277,10 @@ function EventForm({
   const [preview, setPreview] = useState<string | null>(
     initial?.thumbnailPath ? thumbUrl(initial.thumbnailPath) : null
   );
+  // Set when the admin clears an existing thumbnail — the save step then issues
+  // a DELETE so the removal actually persists (clearing the preview alone did
+  // nothing server-side).
+  const [removeImage, setRemoveImage] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const pickFile = (f: File | null) => {
@@ -263,6 +290,7 @@ function EventForm({
       return;
     }
     setFile(f);
+    setRemoveImage(false);
     setPreview(URL.createObjectURL(f));
   };
 
@@ -320,6 +348,22 @@ function EventForm({
           if (!imgRes.ok) {
             toast.error(
               imgData.error ?? "Event saved but the thumbnail could not be replaced."
+            );
+            onSaved(latest, false);
+            return;
+          }
+          latest = imgData.event as AdminEvent;
+          replaced = true;
+        } else if (removeImage && initial.thumbnailPath) {
+          // No new file, but the admin cleared the existing thumbnail — delete
+          // it server-side so the card falls back to the icon.
+          const imgRes = await fetch(`/api/admin/events/${initial.id}/image`, {
+            method: "DELETE",
+          });
+          const imgData = await imgRes.json().catch(() => ({}));
+          if (!imgRes.ok) {
+            toast.error(
+              imgData.error ?? "Event saved but the thumbnail could not be removed."
             );
             onSaved(latest, false);
             return;
@@ -412,6 +456,7 @@ function EventForm({
               onClick={() => {
                 setFile(null);
                 setPreview(null);
+                setRemoveImage(true);
                 if (fileRef.current) fileRef.current.value = "";
               }}
             >

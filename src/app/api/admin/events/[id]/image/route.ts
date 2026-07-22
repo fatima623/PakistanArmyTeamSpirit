@@ -59,3 +59,29 @@ export async function POST(request: Request, context: RouteContext) {
     return handleApiError(error);
   }
 }
+
+export async function DELETE(_request: Request, context: RouteContext) {
+  try {
+    await requireAdmin();
+    const { id } = await context.params;
+
+    const existing = await prisma.event.findUnique({ where: { id } });
+    if (!existing) throw new ApiError("Event not found", 404);
+
+    if (existing.thumbnailPath)
+      await deleteEventImageFile(existing.thumbnailPath);
+    const event = await prisma.event.update({
+      where: { id },
+      data: {
+        thumbnailPath: null,
+        thumbnailMimeType: null,
+        thumbnailFileSize: null,
+      },
+      select: EVENT_ADMIN_SELECT,
+    });
+    revalidateEventPaths();
+    return NextResponse.json({ event });
+  } catch (error) {
+    return handleApiError(error);
+  }
+}
