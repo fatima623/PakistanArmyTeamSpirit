@@ -134,7 +134,7 @@ export function AnnouncementTicker({
             className="announcement-ticker-segment font-condensed font-semibold uppercase tracking-[0.06em] text-white sm:tracking-[0.08em]"
             aria-hidden
           >
-            <TickerItems items={items} interactive={false} />
+            <TickerItems items={items} />
           </div>
         </div>
       </div>

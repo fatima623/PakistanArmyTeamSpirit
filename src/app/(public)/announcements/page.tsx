@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarDays } from "lucide-react";
 
 import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
@@ -12,9 +12,15 @@ import {
 } from "@/lib/i18n/content-translations";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { getAnnouncements } from "@/lib/site-data";
+import { sanitizeNewsContent } from "@/lib/sanitize-news";
 import { formatDateLong } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export const revalidate = 3600;
+
+type PageProps = {
+  searchParams: Promise<{ selected?: string | string[] }>;
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getDictionary();
@@ -25,12 +31,16 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function AnnouncementsPage() {
+export default async function AnnouncementsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
   const [posts, { t, locale }] = await Promise.all([
     getAnnouncements(),
     getDictionary(),
   ]);
   const a11n = t.publicSite.announcements;
+  const selectedSlug = Array.isArray(params.selected)
+    ? params.selected[0]
+    : params.selected;
 
   // Translated OUTSIDE the unstable_cache'd fetch in site-data: that cache is
   // keyed per-fetch, not per-locale, so caching a localized list there would
@@ -48,6 +58,10 @@ export default async function AnnouncementsPage() {
   const announcements = posts.map((p) =>
     applyTranslations(p, translations.get(p.id))
   );
+  const selected = selectedSlug
+    ? announcements.find((a) => a.slug === selectedSlug)
+    : undefined;
+  const selectedContent = selected ? sanitizeNewsContent(selected.content) : "";
 
   return (
     <>
@@ -61,6 +75,54 @@ export default async function AnnouncementsPage() {
       />
 
       <PatsSection variant="navy">
+        {selected ? (
+          <ScrollReveal>
+            <article className="pats-prose-panel pats-announce-article mb-6">
+              <p className="pats-announce-date pats-announce-article__date">
+                <CalendarDays aria-hidden />
+                {formatDateLong(selected.publishedAt, locale)}
+              </p>
+
+              {selected.imagePath ? (
+                <div className="pats-announcement-detail__media">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/uploads/${selected.imagePath}`} alt={selected.title} />
+                </div>
+              ) : null}
+
+              <div
+                className="cinematic-prose pats-body pats-announce-article__body"
+                dangerouslySetInnerHTML={{ __html: selectedContent }}
+              />
+
+              {selected.pdfPath ? (
+                <p className="pats-announce-article__pdf">
+                  <a
+                    href={`/api/news-pdf/${selected.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="pats-btn inline-flex"
+                  >
+                    {a11n.downloadPdf}
+                    {selected.pdfOriginalName ? (
+                      <span className="ml-2 font-normal opacity-70">
+                        ({selected.pdfOriginalName})
+                      </span>
+                    ) : null}
+                  </a>
+                </p>
+              ) : null}
+
+              <div className="pats-announce-article__foot">
+                <Link href="/announcements" className="pats-announce-back">
+                  <ArrowLeft aria-hidden />
+                  {a11n.backToList}
+                </Link>
+              </div>
+            </article>
+          </ScrollReveal>
+        ) : null}
+
         {announcements.length === 0 ? (
           <div className="pats-announce-empty">
             <p className="pats-body">{a11n.empty}</p>
@@ -71,8 +133,12 @@ export default async function AnnouncementsPage() {
               {announcements.map((a, i) => (
                 <Link
                   key={a.id}
-                  href={`/announcements/${a.slug}`}
-                  className="pats-announce-card"
+                  href={`/announcements?selected=${encodeURIComponent(a.slug)}`}
+                  aria-current={selected?.slug === a.slug ? "page" : undefined}
+                  className={cn(
+                    "pats-announce-card",
+                    selected?.slug === a.slug && "pats-announce-card--selected"
+                  )}
                 >
                   <div className="pats-announce-card__media">
                     {a.imagePath ? (

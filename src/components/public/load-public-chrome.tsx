@@ -28,10 +28,10 @@ export type PublicChrome = {
  * Load nav, footer, and the top marquee together.
  *
  * The marquee mirrors the public **Announcements** page (NewsPost): the same
- * admin-entered announcements scroll here, each linking to its detail page.
- * Posts past their expiry date drop out of the marquee but stay listed on
- * /announcements as an archive. The admin **Ticker Messages** system feeds
- * the participant dashboard's Latest Updates card instead.
+ * admin-entered announcements scroll here, each linking to the announcements
+ * list page. Posts past their expiry date drop out of the marquee but stay
+ * listed on /announcements as an archive. The admin **Ticker Messages**
+ * system feeds the participant dashboard's Latest Updates card instead.
  */
 export async function loadPublicChrome(): Promise<PublicChrome> {
   const [pathname, locale] = await Promise.all([
@@ -64,7 +64,7 @@ export async function loadPublicChrome(): Promise<PublicChrome> {
     return {
       id: post.id,
       message: localized.title,
-      href: `/announcements/${post.slug}`,
+      href: "/announcements",
     };
   });
 
