@@ -1520,7 +1520,7 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 }
 
 .cinematic-site.dashboard-day input,
-.cinematic-site.dashboard-day textarea,
+.cinematic-site.dashboard-day textarea:not(.ticket-reply-field),
 .cinematic-site.dashboard-day select {
   @apply border-brand-line bg-white placeholder:text-slate-400;
   color: #1c2119;
@@ -6624,12 +6624,33 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 
 .pats-portal input,
 .pats-portal select,
-.pats-portal textarea {
+.pats-portal textarea:not(.ticket-reply-field) {
   background: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.85) !important;
   color: #0a0f08 !important;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+/* Chat-style ticket reply: the rounded pill IS the box, so the textarea inside
+   it stays borderless / transparent (opts out of the form-field rules above)
+   and shows a slim, arrow-less scrollbar instead of the native one. */
+.ticket-reply-field {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.4) transparent;
+}
+
+.ticket-reply-field::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ticket-reply-field::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 999px;
+}
+
+.ticket-reply-field::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 
@@ -6646,7 +6667,7 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 
 .admin-theme.pats-dashboard input:not([type="checkbox"]):not([type="radio"]),
 .admin-theme.pats-dashboard select,
-.admin-theme.pats-dashboard textarea {
+.admin-theme.pats-dashboard textarea:not(.ticket-reply-field) {
   background: #FFFFFF !important;
   border: 1px solid #E2E8F0 !important;
   color: #1E293B !important;
@@ -19700,7 +19721,8 @@ html:has(.dashboard-day) body {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--pp-muted);
+  /* Black labels so the field names read distinctly from their values. */
+  color: var(--pp-ink);
 }
 
 .pp .pp-dl__desc {

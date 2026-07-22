@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Paperclip, Send, Smile } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 
 import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
@@ -10,9 +10,9 @@ import { useI18n } from "@/lib/i18n/I18nProvider";
 
 /**
  * Chat-style reply bar for a participant's own ticket: a rounded pill holding a
- * (decorative) emoji + paperclip and a green circular send button. Enter sends,
- * Shift+Enter inserts a newline. A secondary "Close ticket" link sits above the
- * bar. Closed tickets render a read-only notice instead.
+ * single-line auto-growing textarea and a green circular send button. Enter
+ * sends, Shift+Enter inserts a newline. A secondary "Close ticket" link sits
+ * above the bar. Closed tickets render a read-only notice instead.
  */
 export function TicketReplyBox({
   ticketId,
@@ -113,12 +113,8 @@ export function TicketReplyBox({
 
       <form
         onSubmit={handleReply}
-        className="flex items-end gap-2 rounded-[1.75rem] border border-slate-200 bg-white px-3 py-2 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
+        className="flex items-end gap-2 rounded-[1.75rem] border border-slate-200 bg-white px-4 py-2 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
       >
-        <Smile
-          className="mb-1.5 h-[1.35rem] w-[1.35rem] shrink-0 text-slate-300"
-          aria-hidden
-        />
         <textarea
           ref={textareaRef}
           value={body}
@@ -131,11 +127,7 @@ export function TicketReplyBox({
           placeholder={tk.reply.placeholder}
           maxLength={5000}
           style={{ backgroundColor: "transparent" }}
-          className="max-h-32 flex-1 resize-none self-center border-0 py-1 text-[0.9rem] leading-[1.4] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0"
-        />
-        <Paperclip
-          className="mb-1.5 h-[1.35rem] w-[1.35rem] shrink-0 text-slate-300"
-          aria-hidden
+          className="ticket-reply-field max-h-32 flex-1 resize-none self-center overflow-y-auto border-0 py-1 text-[0.9rem] leading-[1.4] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0"
         />
         <button
           type="submit"

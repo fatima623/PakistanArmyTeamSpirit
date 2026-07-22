@@ -52,4 +52,9 @@ export const tickets: typeof enTickets = {
     sendReply: "إرسال الرد",
     toastClosed: "تم إغلاق التذكرة",
   },
+  actions: {
+    resolve: "حل",
+    close: "إغلاق",
+    toastResolved: "تم وضع علامة على التذكرة كمحلولة",
+  },
 };

@@ -60,4 +60,9 @@ export const tickets: typeof enTickets = {
     sendReply: "Отправить ответ",
     toastClosed: "Обращение закрыто",
   },
+  actions: {
+    resolve: "Решить",
+    close: "Закрыть",
+    toastResolved: "Обращение отмечено как решённое",
+  },
 };

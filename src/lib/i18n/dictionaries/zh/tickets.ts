@@ -53,4 +53,9 @@ export const tickets: typeof enTickets = {
     sendReply: "发送回复",
     toastClosed: "工单已关闭",
   },
+  actions: {
+    resolve: "解决",
+    close: "关闭",
+    toastResolved: "工单已标记为已解决",
+  },
 };

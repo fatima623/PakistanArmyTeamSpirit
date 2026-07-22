@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronRight, MessageSquare, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronRight, Loader2, MessageSquare, Plus } from "lucide-react";
+import { toast } from "sonner";
 
 import { NewTicketForm } from "@/components/tickets/NewTicketForm";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n/I18nProvider";
-import { normalizeTicketStatus } from "@/lib/constants";
+import { normalizeTicketStatus, TICKET_STATUS } from "@/lib/constants";
 
 export type SupportTicketListItem = {
   id: string;
@@ -22,7 +24,9 @@ export type SupportTicketListItem = {
 /**
  * Participant support view. While the new-ticket form is open the existing
  * ticket list is hidden to keep focus on composing; once the form closes
- * (cancel or submit) the list returns.
+ * (cancel or submit) the list returns. Each open ticket carries inline
+ * "Resolve" / "Close" actions so participants can wrap up a thread without
+ * opening it.
  */
 export function SupportTicketsPanel({
   tickets,
@@ -30,8 +34,35 @@ export function SupportTicketsPanel({
   tickets: SupportTicketListItem[];
 }) {
   const [creating, setCreating] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const router = useRouter();
   const { t: i18n } = useI18n();
   const tk = i18n.tickets;
+
+  const updateStatus = async (
+    id: string,
+    status: string,
+    successMsg: string
+  ) => {
+    setBusyId(id);
+    try {
+      const res = await fetch(`/api/tickets/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) {
+        toast.success(successMsg);
+        router.refresh();
+        return;
+      }
+      toast.error(i18n.common.toasts.genericError);
+    } catch {
+      toast.error(i18n.common.toasts.genericError);
+    } finally {
+      setBusyId(null);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -65,40 +96,98 @@ export function SupportTicketsPanel({
           </div>
         ) : (
           <ul className="m-0 flex list-none flex-col gap-[0.6rem] p-0">
-            {tickets.map((t) => (
-              <li key={t.id}>
-                <Link
-                  href={`/event/tickets/${t.id}`}
-                  className="group flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-[1.1rem] py-[0.8rem] no-underline shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-[border-color,box-shadow,background] duration-150 hover:border-slate-300 hover:shadow-[0_3px_12px_rgba(15,23,42,0.09)]"
-                >
-                  <span className="support-ticket__icon" aria-hidden>
-                    <MessageSquare className="h-4 w-4" />
-                  </span>
-                  <div className="min-w-0 flex-auto">
-                    <div className="truncate text-[0.92rem] font-semibold leading-[1.35] text-slate-800">
-                      {t.subject}
+            {tickets.map((t) => {
+              const status = normalizeTicketStatus(t.status);
+              const canResolve =
+                status === TICKET_STATUS.OPEN ||
+                status === TICKET_STATUS.IN_PROGRESS;
+              const canClose = status !== TICKET_STATUS.CLOSED;
+              const busy = busyId === t.id;
+
+              return (
+                <li key={t.id} className="flex flex-wrap items-center gap-2">
+                  <Link
+                    href={`/event/tickets/${t.id}`}
+                    className="group flex min-w-0 flex-auto items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-[1.1rem] py-[0.8rem] no-underline shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-[border-color,box-shadow,background] duration-150 hover:border-slate-300 hover:shadow-[0_3px_12px_rgba(15,23,42,0.09)]"
+                  >
+                    <span className="support-ticket__icon" aria-hidden>
+                      <MessageSquare className="h-4 w-4" />
+                    </span>
+                    <div className="min-w-0 flex-auto">
+                      <div className="truncate text-[0.92rem] font-semibold leading-[1.35] text-slate-800">
+                        {t.subject}
+                      </div>
+                      <div className="mt-[0.2rem] text-[0.76rem] leading-[1.4] !text-slate-500">
+                        {tk.panel.listMeta(
+                          t.categoryLabel,
+                          t.messageCount,
+                          t.updatedLabel
+                        )}
+                      </div>
                     </div>
-                    <div className="mt-[0.2rem] text-[0.76rem] leading-[1.4] !text-slate-500">
-                      {tk.panel.listMeta(t.categoryLabel, t.messageCount, t.updatedLabel)}
+                    <div className="inline-flex shrink-0 items-center gap-[0.65rem]">
+                      <TicketStatusBadge
+                        status={t.status}
+                        label={
+                          tk.statuses[
+                            normalizeTicketStatus(
+                              t.status
+                            ) as keyof typeof tk.statuses
+                          ]
+                        }
+                      />
+                      <ChevronRight
+                        className="h-4 w-4 text-slate-400 transition-transform duration-150 group-hover:translate-x-[2px]"
+                        aria-hidden
+                      />
                     </div>
-                  </div>
-                  <div className="inline-flex shrink-0 items-center gap-[0.65rem]">
-                    <TicketStatusBadge
-                      status={t.status}
-                      label={
-                        tk.statuses[
-                          normalizeTicketStatus(t.status) as keyof typeof tk.statuses
-                        ]
-                      }
-                    />
-                    <ChevronRight
-                      className="h-4 w-4 text-slate-400 transition-transform duration-150 group-hover:translate-x-[2px]"
-                      aria-hidden
-                    />
-                  </div>
-                </Link>
-              </li>
-            ))}
+                  </Link>
+
+                  {canResolve || canClose ? (
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {busy ? (
+                        <Loader2
+                          className="h-4 w-4 animate-spin text-slate-400"
+                          aria-hidden
+                        />
+                      ) : null}
+                      {canResolve ? (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateStatus(
+                              t.id,
+                              TICKET_STATUS.RESOLVED,
+                              tk.actions.toastResolved
+                            )
+                          }
+                          disabled={busy}
+                          className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-[0.74rem] font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {tk.actions.resolve}
+                        </button>
+                      ) : null}
+                      {canClose ? (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateStatus(
+                              t.id,
+                              TICKET_STATUS.CLOSED,
+                              tk.reply.toastClosed
+                            )
+                          }
+                          disabled={busy}
+                          className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[0.74rem] font-semibold text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {tk.actions.close}
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         )
       ) : null}

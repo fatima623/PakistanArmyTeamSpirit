@@ -5,19 +5,8 @@ import { ArrowLeft } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 import { requireConfirmedParticipant } from "@/lib/require-participant";
-import { formatDateTime } from "@/lib/utils";
-import {
-  TICKET_CATEGORY_LABELS,
-  TICKET_STATUS,
-  normalizeTicketStatus,
-  type TicketCategory,
-} from "@/lib/constants";
+import { TICKET_STATUS } from "@/lib/constants";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
-import {
-  TicketPriorityTag,
-  TicketStatusBadge,
-} from "@/components/tickets/TicketStatusBadge";
 import { TicketThread } from "@/components/tickets/TicketThread";
 import { TicketReplyBox } from "@/components/tickets/TicketReplyBox";
 
@@ -42,10 +31,13 @@ export default async function ParticipantTicketDetailPage({
       id: true,
       userId: true,
       subject: true,
-      category: true,
       status: true,
-      priority: true,
-      createdAt: true,
+      user: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
       messages: {
         orderBy: { createdAt: "asc" },
         select: {
@@ -64,42 +56,37 @@ export default async function ParticipantTicketDetailPage({
   }
 
   const closed = ticket.status === TICKET_STATUS.CLOSED;
+  const fullName = `${ticket.user.firstName} ${ticket.user.lastName}`.trim();
+  const initials =
+    `${ticket.user.firstName?.[0] ?? ""}${ticket.user.lastName?.[0] ?? ""}`
+      .toUpperCase()
+      .trim() || "?";
 
   return (
-    <>
+    <div className="mx-auto flex w-full max-w-3xl flex-col">
       <Link href="/event/tickets" className="portal-back-link mb-4">
         <ArrowLeft className="h-4 w-4" aria-hidden />
         {tk.detail.backToSupport}
       </Link>
-      <div className="mb-6 flex items-start justify-between gap-4">
-        <PatsPortalHeader
-          title={ticket.subject}
-          subtitle={tk.detail.subtitle(
-            tk.categories[ticket.category as keyof typeof tk.categories] ??
-              TICKET_CATEGORY_LABELS[ticket.category as TicketCategory] ??
-              ticket.category,
-            formatDateTime(ticket.createdAt, locale)
-          )}
-        />
-      </div>
 
-      <div className="portal-form-card">
-        <div className="mb-5 flex flex-wrap items-center gap-3 border-b border-brand-line pb-4">
-          <TicketStatusBadge
-            status={ticket.status}
-            label={tk.statuses[normalizeTicketStatus(ticket.status)]}
-          />
-          <TicketPriorityTag
-            priority={ticket.priority}
-            label={
-              tk.priorities[ticket.priority as keyof typeof tk.priorities] ??
-              tk.priorities.NORMAL
-            }
-            format={tk.priorityTag}
-          />
-        </div>
+      <div className="flex flex-col overflow-hidden rounded-2xl border border-brand-line bg-white shadow-sm">
+        {/* WhatsApp-style header — stays put while the conversation scrolls */}
+        <header className="flex items-center gap-3 border-b border-brand-line bg-white px-4 py-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[0.95rem] font-bold text-white">
+            {initials}
+          </span>
+          <div className="min-w-0 flex-1">
+            <h1 className="m-0 truncate text-[1.05rem] font-bold leading-[1.3] tracking-[-0.02em] text-slate-900">
+              {ticket.subject}
+            </h1>
+            <p className="m-0 truncate text-[0.82rem] text-slate-500">
+              {fullName}
+            </p>
+          </div>
+        </header>
 
-        <div className="rounded-2xl bg-slate-50/80 p-3 sm:p-4">
+        {/* Scrollable conversation */}
+        <div className="max-h-[60vh] overflow-y-auto bg-slate-50/70 px-3 py-4 sm:px-5">
           <TicketThread
             messages={ticket.messages}
             staffLabel={tk.staffTag}
@@ -107,8 +94,11 @@ export default async function ParticipantTicketDetailPage({
           />
         </div>
 
-        <TicketReplyBox ticketId={ticket.id} closed={closed} />
+        {/* Reply composer — stays put at the bottom */}
+        <div className="border-t border-brand-line bg-white px-3 py-3 sm:px-5">
+          <TicketReplyBox ticketId={ticket.id} closed={closed} />
+        </div>
       </div>
-    </>
+    </div>
   );
 }

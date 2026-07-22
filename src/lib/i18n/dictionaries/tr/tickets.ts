@@ -52,4 +52,9 @@ export const tickets: typeof enTickets = {
     sendReply: "Yanıt gönder",
     toastClosed: "Talep kapatıldı",
   },
+  actions: {
+    resolve: "Çöz",
+    close: "Kapat",
+    toastResolved: "Talep çözüldü olarak işaretlendi",
+  },
 };

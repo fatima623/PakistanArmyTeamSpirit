@@ -50,4 +50,9 @@ export const tickets = {
     sendReply: "Send reply",
     toastClosed: "Ticket closed",
   },
+  actions: {
+    resolve: "Resolve",
+    close: "Close",
+    toastResolved: "Ticket marked resolved",
+  },
 };
