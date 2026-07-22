@@ -18,7 +18,7 @@ export const home = {
      */
     motto: HERO_MOTTO,
     description:
-      "International Pakistan Army Team Spirit — a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit among partner nations.",
+      "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit among partner nations.",
     // cta: "Register your team",
     scrollHint: "Scroll down",
   },

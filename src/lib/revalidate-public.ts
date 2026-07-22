@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 /** Invalidate public pages after admin content changes. */
 export function revalidatePublicSite() {
@@ -16,6 +16,11 @@ export function revalidateNewsPaths() {
   // from the full route cache.
   revalidatePath("/announcements/[slug]", "page");
   revalidatePath("/admin/news");
+  // Announcements also scroll in the site-wide marquee (public chrome), so an
+  // edit must refresh the cached rows and every ISR'd public page, not just
+  // the announcement routes themselves.
+  revalidateTag("announcements");
+  revalidatePath("/", "layout");
 }
 
 export function revalidateGalleryPaths() {
@@ -42,8 +47,8 @@ export function revalidateKeyDatesPaths() {
 }
 
 export function revalidateTickerPaths() {
-  revalidatePublicSite();
-  revalidatePath("/event/login");
+  // Ticker messages only surface on the participant dashboard now — the
+  // public marquee scrolls Announcements (see revalidateNewsPaths).
   revalidatePath("/event/dashboard");
   revalidatePath("/admin/ticker");
 }

@@ -28,7 +28,7 @@ import {
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { getTranslations, applyTranslations } from "@/lib/i18n/content-translations";
+import { getLocalizedPublicTickerItems } from "@/lib/cached-public-data";
 import { translateDataEntryLabel } from "@/lib/i18n/data-entry-period-i18n";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -42,7 +42,7 @@ export default async function EventDashboardPage() {
 
   const [
     user,
-    newsPosts,
+    tickerUpdates,
     settings,
     siteSettings,
     dataEntryPeriods,
@@ -84,12 +84,10 @@ export default async function EventDashboardPage() {
           _count: { select: { teamMembers: true } },
         },
       }),
-      prisma.newsPost.findMany({
-        where: { published: true },
-        orderBy: { publishedAt: "desc" },
-        take: 5,
-        select: { id: true, slug: true, title: true, publishedAt: true },
-      }),
+      // Admin "Ticker Messages" — the participant-facing update feed (the
+      // public marquee scrolls Announcements instead). Localized inside the
+      // helper, admin-controlled order, expired messages already dropped.
+      getLocalizedPublicTickerItems(locale).catch(() => []),
       prisma.siteSettings.findUnique({
         where: { id: "singleton" },
         select: { feeNoticeText: true },
@@ -104,17 +102,7 @@ export default async function EventDashboardPage() {
     redirect("/event/login");
   }
 
-  // Admin-entered news titles are single-language in the DB; substitute an
-  // admin-authored translation for the active locale where one exists, falling
-  // back to English otherwise (mirrors the public announcements/news pages).
-  const newsTranslations = await getTranslations(
-    "NewsPost",
-    newsPosts.map((p) => p.id),
-    locale
-  );
-  const localizedNews = newsPosts.map((p) =>
-    applyTranslations(p, newsTranslations.get(p.id))
-  );
+  const latestUpdates = tickerUpdates.slice(0, 5);
 
   const stage = resolveParticipantJourneyStage({
     applicationStatus: user.applicationStatus,
@@ -266,12 +254,12 @@ export default async function EventDashboardPage() {
             </section>
           ) : null}
 
-          <section className="pp-card" aria-labelledby="dashboard-news-heading" style={{ borderRadius: "1rem", overflow: "hidden" }}>
+          <section className="pp-card" aria-labelledby="dashboard-updates-heading" style={{ borderRadius: "1rem", overflow: "hidden" }}>
             <div className="pp-card__head">
               <div>
                 <p className="pp-eyebrow">{t.dashboard.updatesEyebrow}</p>
                 <h2
-                  id="dashboard-news-heading"
+                  id="dashboard-updates-heading"
                   className="pp-card__title"
                   style={{ marginTop: "0.15rem" }}
                 >
@@ -279,17 +267,15 @@ export default async function EventDashboardPage() {
                 </h2>
               </div>
             </div>
-            {localizedNews.length === 0 ? (
+            {latestUpdates.length === 0 ? (
               <p className="pp-muted">{t.dashboard.noNews}</p>
             ) : (
               <ul className="pp-news">
-                {localizedNews.map((post) => (
-                  <li key={post.id} className="pp-news__item">
-                    <Link href={`/news/${post.slug}`} className="pp-news__link">
-                      {post.title}
-                    </Link>
+                {latestUpdates.map((item) => (
+                  <li key={item.id} className="pp-news__item">
+                    <span className="pp-news__link">{item.message}</span>
                     <span className="pp-news__date">
-                      {formatDateShort(post.publishedAt, locale)}
+                      {formatDateShort(item.createdAt, locale)}
                     </span>
                   </li>
                 ))}

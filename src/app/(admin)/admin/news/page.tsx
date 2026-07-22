@@ -76,11 +76,12 @@ export default async function AdminNewsPage({
               <table className="admin-data-table min-w-[36rem]">
                 <colgroup>
                   <col className="w-[6%]" />
-                  <col className="w-[32%]" />
-                  <col className="w-[18%]" />
+                  <col className="w-[28%]" />
+                  <col className="w-[16%]" />
+                  <col className="w-[13%]" />
+                  <col className="w-[13%]" />
+                  <col className="w-[10%]" />
                   <col className="w-[14%]" />
-                  <col className="w-[12%]" />
-                  <col className="w-[18%]" />
                 </colgroup>
                 <thead>
                   <tr>
@@ -88,6 +89,7 @@ export default async function AdminNewsPage({
                     <th scope="col" className="!text-left">Title</th>
                     <th scope="col">PDF</th>
                     <th scope="col">Date</th>
+                    <th scope="col">Expiry</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                   </tr>
@@ -127,6 +129,26 @@ export default async function AdminNewsPage({
                       </td>
                       <td className="tabular-nums">
                         {formatDateShort(post.publishedAt)}
+                      </td>
+                      <td className="tabular-nums">
+                        {post.expiresAt ? (
+                          <span
+                            className={
+                              post.expiresAt.getTime() <= Date.now()
+                                ? "text-amber-700"
+                                : undefined
+                            }
+                            title={
+                              post.expiresAt.getTime() <= Date.now()
+                                ? "Expired — no longer scrolling in the marquee"
+                                : "Leaves the marquee on this date"
+                            }
+                          >
+                            {formatDateShort(post.expiresAt)}
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground/50">—</span>
+                        )}
                       </td>
                       <td>
                         <span

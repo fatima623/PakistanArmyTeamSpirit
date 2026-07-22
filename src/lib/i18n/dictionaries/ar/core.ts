@@ -77,8 +77,8 @@ export const core: typeof enCore = {
     deadlinesEyebrow: "المواعيد النهائية",
     timeline: "الجدول الزمني",
     updatesEyebrow: "التحديثات",
-    latestNews: "أحدث الأخبار",
-    noNews: "لا توجد أخبار بعد.",
+    latestNews: "أحدث التحديثات",
+    noNews: "لا توجد تحديثات بعد.",
     timelinePanel: {
       closed: "مغلق",
       dueToday: "الموعد النهائي اليوم",

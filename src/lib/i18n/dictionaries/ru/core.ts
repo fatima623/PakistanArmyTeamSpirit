@@ -75,9 +75,9 @@ export const core: typeof enCore = {
     noPeriods: "Периоды пока не запланированы.",
     deadlinesEyebrow: "Сроки",
     timeline: "График",
-    updatesEyebrow: "Новости",
-    latestNews: "Последние новости",
-    noNews: "Новостей пока нет.",
+    updatesEyebrow: "Обновления",
+    latestNews: "Последние обновления",
+    noNews: "Обновлений пока нет.",
     timelinePanel: {
       closed: "Закрыто",
       dueToday: "Сегодня последний день",

@@ -186,6 +186,15 @@ export const NewsPostSchema = z.object({
     .regex(/^[a-z0-9-]+$/, "Slug must be lowercase with hyphens only"),
   content: z.string().min(1, "Content required"),
   publishedAt: z.union([z.string().datetime(), z.coerce.date()]),
+  expiresAt: z
+    .union([z.string(), z.literal(""), z.null()])
+    .optional()
+    .transform((v) => {
+      if (v == null || v === "") return null;
+      const d = new Date(v);
+      if (Number.isNaN(d.getTime())) return null;
+      return d.toISOString();
+    }),
   published: z.boolean().optional(),
 });
 

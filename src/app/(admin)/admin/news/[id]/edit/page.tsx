@@ -41,6 +41,7 @@ export default async function AdminNewsEditPage({ params }: PageProps) {
           slug: post.slug,
           content: post.content,
           publishedAt: post.publishedAt,
+          expiresAt: post.expiresAt,
           published: post.published,
           hasPdf: Boolean(post.pdfPath),
           pdfReadable,

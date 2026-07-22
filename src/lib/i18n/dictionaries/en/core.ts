@@ -67,8 +67,8 @@ export const core = {
     deadlinesEyebrow: "Deadlines",
     timeline: "Timeline",
     updatesEyebrow: "Updates",
-    latestNews: "Latest news",
-    noNews: "No news posts yet.",
+    latestNews: "Latest updates",
+    noNews: "No updates yet.",
     timelinePanel: {
       closed: "Closed",
       dueToday: "Due today",

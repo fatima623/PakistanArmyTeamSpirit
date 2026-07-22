@@ -56,7 +56,8 @@ export async function PUT(request: Request, context: RouteContext) {
       throw new ApiError("News post not found", 404);
     }
 
-    const { title, slug, content, publishedAt, published } = parsed.data;
+    const { title, slug, content, publishedAt, expiresAt, published } =
+      parsed.data;
 
     if (slug !== existing.slug) {
       const slugTaken = await prisma.newsPost.findUnique({ where: { slug } });
@@ -74,6 +75,7 @@ export async function PUT(request: Request, context: RouteContext) {
         slug,
         content: sanitizeNewsContent(content),
         publishedAt: new Date(publishedAt),
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
         ...(published !== undefined ? { published } : {}),
       },
     });

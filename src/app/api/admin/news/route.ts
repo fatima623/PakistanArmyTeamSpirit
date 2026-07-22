@@ -43,7 +43,8 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, slug, content, publishedAt, published } = parsed.data;
+    const { title, slug, content, publishedAt, expiresAt, published } =
+      parsed.data;
 
     const existing = await prisma.newsPost.findUnique({ where: { slug } });
     if (existing) {
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
         slug,
         content: sanitizeNewsContent(content),
         publishedAt: new Date(publishedAt),
+        expiresAt: expiresAt ? new Date(expiresAt) : null,
         published: published ?? true,
       },
     });

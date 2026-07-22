@@ -174,7 +174,7 @@ const getCachedAnnouncementRows = unstable_cache(
     }
   },
   ["announcements"],
-  { revalidate: SITE_DATA_REVALIDATE_SEC }
+  { revalidate: SITE_DATA_REVALIDATE_SEC, tags: ["announcements"] }
 );
 
 /** All published announcements (NewsPost) for the public /announcements page. */

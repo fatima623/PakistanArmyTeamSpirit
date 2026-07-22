@@ -4,7 +4,6 @@ import {
   parseTickerScrollSpeed,
   sumTickerMessageChars,
   tickerScrollDurationSec,
-  TICKER_VISIBILITY,
   type TickerScrollSpeed,
 } from "@/lib/ticker";
 
@@ -23,11 +22,11 @@ export async function getTickerScrollDurationSec(
   return tickerScrollDurationSec(speed, { reducedMotion });
 }
 
-/** Homepage loop duration + content width reference for admin preview. */
+/** Marquee loop duration + content width reference for admin preview. */
 export async function getTickerPreviewContext() {
   const [scrollDurationSec, items] = await Promise.all([
     getTickerScrollDurationSec(),
-    getPublicTickerItems(TICKER_VISIBILITY.HOMEPAGE),
+    getPublicTickerItems(),
   ]);
   return {
     scrollDurationSec,

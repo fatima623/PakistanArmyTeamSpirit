@@ -67,8 +67,8 @@ export const core: typeof enCore = {
     deadlinesEyebrow: "截止日期",
     timeline: "时间线",
     updatesEyebrow: "动态",
-    latestNews: "最新消息",
-    noNews: "暂无新闻发布。",
+    latestNews: "最新动态",
+    noNews: "暂无动态。",
     timelinePanel: {
       closed: "已截止",
       dueToday: "今日截止",

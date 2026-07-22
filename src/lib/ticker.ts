@@ -1,4 +1,10 @@
-/** Operational ticker / marquee configuration (no hardcoded messages). */
+/**
+ * Ticker Messages configuration (no hardcoded messages).
+ *
+ * Admin-entered ticker messages surface on the PARTICIPANT dashboard (the
+ * Latest Updates card). The public marquee scrolls Announcements (NewsPost)
+ * instead — only the scroll-speed constants below are shared with it.
+ */
 
 export const TICKER_PRIORITY = {
   CRITICAL: "CRITICAL",
@@ -19,6 +25,10 @@ export const TICKER_STATUS = {
 
 export type TickerStatus = (typeof TICKER_STATUS)[keyof typeof TICKER_STATUS];
 
+/**
+ * Legacy per-surface targeting. The column still exists on old rows, but every
+ * ticker message now feeds the participant dashboard regardless of its value.
+ */
 export const TICKER_VISIBILITY = {
   HOMEPAGE: "HOMEPAGE",
   LOGIN: "LOGIN",
@@ -28,8 +38,6 @@ export const TICKER_VISIBILITY = {
 
 export type TickerVisibility =
   (typeof TICKER_VISIBILITY)[keyof typeof TICKER_VISIBILITY];
-
-export type TickerVisibilityContext = Exclude<TickerVisibility, "GLOBAL">;
 
 export const TICKER_PRIORITY_LABELS: Record<TickerPriority, string> = {
   CRITICAL: "Critical",
@@ -45,14 +53,7 @@ export const TICKER_STATUS_LABELS: Record<TickerStatus, string> = {
   EXPIRED: "Expired",
 };
 
-export const TICKER_VISIBILITY_LABELS: Record<TickerVisibility, string> = {
-  HOMEPAGE: "Homepage only",
-  LOGIN: "Login page",
-  DASHBOARD_BANNER: "Dashboard banner",
-  GLOBAL: "Global",
-};
-
-/** Lower number = higher precedence in the public marquee. */
+/** Lower number = higher precedence in the displayed list. */
 export const TICKER_PRIORITY_RANK: Record<TickerPriority, number> = {
   CRITICAL: 0,
   HIGH: 1,
@@ -133,20 +134,9 @@ export type PublicTickerItem = {
   message: string;
   priority: TickerPriority;
   isUrgent: boolean;
+  /** ISO timestamp — the date shown next to the message on the dashboard. */
+  createdAt: string;
 };
-
-export function resolveTickerVisibilityContext(
-  pathname: string,
-  dayTheme: boolean
-): TickerVisibilityContext {
-  if (dayTheme) {
-    return TICKER_VISIBILITY.DASHBOARD_BANNER;
-  }
-  if (pathname.startsWith("/event/login")) {
-    return TICKER_VISIBILITY.LOGIN;
-  }
-  return TICKER_VISIBILITY.HOMEPAGE;
-}
 
 export function isTickerExpired(
   expiresAt: Date | string | null | undefined,
@@ -187,14 +177,5 @@ export function compareTickersForDisplay<
   if (a.sortOrder !== b.sortOrder) return a.sortOrder - b.sortOrder;
   return (
     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-  );
-}
-
-export function visibilityMatchesContext(
-  visibility: string,
-  context: TickerVisibilityContext
-): boolean {
-  return (
-    visibility === TICKER_VISIBILITY.GLOBAL || visibility === context
   );
 }

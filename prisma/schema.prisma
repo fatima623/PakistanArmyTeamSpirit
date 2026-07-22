@@ -301,6 +301,11 @@ model NewsPost {
   content         String   @db.Text
   published       Boolean  @default(true)
   publishedAt     DateTime @default(now())
+  /**
+   * After this instant the announcement stops scrolling in the public marquee
+   * (it stays on /announcements as an archive). Null = never expires.
+   */
+  expiresAt       DateTime?
   pdfPath         String?
   pdfOriginalName String?
   pdfMimeType     String?

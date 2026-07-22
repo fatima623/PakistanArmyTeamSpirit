@@ -4,8 +4,6 @@ import {
   isTickerExpired,
   type PublicTickerItem,
   TICKER_STATUS,
-  type TickerVisibilityContext,
-  visibilityMatchesContext,
 } from "@/lib/ticker";
 
 /** Mark active rows past expiry as EXPIRED (admin list accuracy). */
@@ -24,8 +22,13 @@ export async function syncExpiredTickerStatuses(now = new Date()) {
   });
 }
 
+/**
+ * Active, unexpired ticker messages for the participant dashboard's Latest
+ * Updates card. The legacy per-surface `visibility` column is ignored — every
+ * live message reaches participants (the public marquee scrolls Announcements
+ * instead).
+ */
 export async function getPublicTickerItems(
-  context: TickerVisibilityContext,
   now = new Date()
 ): Promise<PublicTickerItem[]> {
   const rows = await prisma.tickerAnnouncement.findMany({
@@ -39,7 +42,6 @@ export async function getPublicTickerItems(
   });
 
   return rows
-    .filter((row) => visibilityMatchesContext(row.visibility, context))
     .filter((row) => !isTickerExpired(row.expiresAt, now))
     .sort(compareTickersForDisplay)
     .map((row) => ({
@@ -47,6 +49,7 @@ export async function getPublicTickerItems(
       message: row.message,
       priority: row.priority as PublicTickerItem["priority"],
       isUrgent: row.isUrgent,
+      createdAt: row.createdAt.toISOString(),
     }));
 }
 

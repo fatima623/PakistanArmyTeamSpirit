@@ -179,6 +179,8 @@ export function NewsPostForm({
 
     publishedAt: Date;
 
+    expiresAt?: Date | string | null;
+
     published: boolean;
 
     pdfOriginalName?: string | null;
@@ -242,6 +244,10 @@ export function NewsPostForm({
 
     initial ? toDatetimeLocal(initial.publishedAt) : ""
 
+  );
+
+  const [expiresAt, setExpiresAt] = useState(
+    initial?.expiresAt ? toDatetimeLocal(new Date(initial.expiresAt)) : ""
   );
 
   const [slugManual, setSlugManual] = useState(!!initial?.slug);
@@ -514,6 +520,8 @@ export function NewsPostForm({
         content: prepareContentForSave(content),
 
         publishedAt: new Date(publishedAt).toISOString(),
+
+        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : null,
 
         published,
 
@@ -819,7 +827,7 @@ export function NewsPostForm({
 
                   {published
 
-                    ? "Published — visible on homepage and news pages"
+                    ? "Published — visible on the announcements page and the scrolling marquee"
 
                     : "Draft — hidden from visitors"}
 
@@ -852,6 +860,36 @@ export function NewsPostForm({
               className="admin-input max-w-sm"
 
             />
+
+          </div>
+
+          <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted mt-4">
+
+            <label htmlFor="news-expires-at">Expiry date</label>
+
+            <Input
+
+              id="news-expires-at"
+
+              type="datetime-local"
+
+              value={expiresAt}
+
+              onChange={(e) => setExpiresAt(e.target.value)}
+
+              className="admin-input max-w-sm"
+
+            />
+
+            <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900">
+
+              Optional. After this date the announcement stops scrolling in the
+
+              site marquee — it stays listed on the Announcements page. Leave
+
+              blank to keep it in the marquee until unpublished.
+
+            </p>
 
           </div>
 

@@ -56,7 +56,7 @@ export function TickerAnnouncementForm({
 
   const handleSave = async () => {
     if (!form.message.trim()) {
-      toast.error("Announcement message is required.");
+      toast.error("Ticker message text is required.");
       return;
     }
 
@@ -96,17 +96,21 @@ export function TickerAnnouncementForm({
         <div className="min-w-0 flex-[1_1_16rem]">
           <Link href="/admin/ticker" className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800">
             <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-            Back to announcements
+            Back to ticker messages
           </Link>
           <h1 className="m-0 flex flex-wrap items-center gap-2 text-[1.15rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
-            {isNew ? "Add announcement" : "Edit announcement"}
+            {isNew ? "Add ticker message" : "Edit ticker message"}
           </h1>
+          <p className="mt-1 text-[0.8125rem] text-muted-foreground">
+            Shown to participants in the Latest updates card on their
+            dashboard.
+          </p>
         </div>
       </header>
 
       <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
         <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
-          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Announcement</h3>
+          <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">Ticker message</h3>
         </div>
         <div className="px-[1.1rem] pb-4 pt-[0.9rem]">
           <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
@@ -122,7 +126,7 @@ export function TickerAnnouncementForm({
               className="admin-input min-h-[6rem]"
               rows={4}
               maxLength={500}
-              placeholder="Operational announcement text…"
+              placeholder="Short update for participants…"
             />
             <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900 text-right">
               {form.message.length}/500
@@ -142,7 +146,8 @@ export function TickerAnnouncementForm({
                 className="admin-input"
               />
               <p className="mt-2 text-[0.8rem] leading-[1.4] text-slate-900">
-                Leave blank to run until you remove it.
+                After this date the message disappears from the participant
+                dashboard. Leave blank to run until you remove it.
               </p>
             </div>
             <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y">
@@ -171,7 +176,7 @@ export function TickerAnnouncementForm({
               model="TickerAnnouncement"
               draft={translations}
               idPrefix={`ticker-t-${announcementId ?? "new"}`}
-              description="Type the marquee message for each language. Anything left blank falls back to English on the public site."
+              description="Type the message for each language. Anything left blank falls back to English on the participant dashboard."
             />
           </div>
 
@@ -185,7 +190,7 @@ export function TickerAnnouncementForm({
               {submitting && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />
               )}
-              {isNew ? "Create announcement" : "Save changes"}
+              {isNew ? "Create ticker message" : "Save changes"}
             </Button>
             <Button
               type="button"

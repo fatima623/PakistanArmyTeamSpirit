@@ -6,16 +6,12 @@ import {
 } from "@/lib/cached-public-data";
 import { getLocale } from "@/lib/i18n/get-dictionary";
 import { getRequestPathname } from "@/lib/request-pathname";
-import { resolveTickerVisibilityContext } from "@/lib/ticker";
 
 export async function ArmyNavAsync({ dayTheme = false }: { dayTheme?: boolean }) {
   const pathname = await getRequestPathname();
-  const context = resolveTickerVisibilityContext(pathname, dayTheme);
   if (dayTheme) {
     const [tickerItems, tickerScrollDurationSec] = await Promise.all([
-      getLocale().then((locale) =>
-        getLocalizedPublicTickerItems(context, locale)
-      ),
+      getLocale().then((locale) => getLocalizedPublicTickerItems(locale)),
       getCachedTickerScrollDurationSec(),
     ]);
     return (

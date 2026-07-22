@@ -27,19 +27,11 @@ import {
   TICKER_STATUS,
   TICKER_STATUS_LABELS,
   type TickerPriority,
-  type TickerVisibility,
 } from "@/lib/ticker";
 import { useDebouncedValue } from "@/lib/hooks/use-debounced-value";
 import { cn } from "@/lib/utils";
 
 export type { SerializedTicker } from "@/lib/ticker-form-helpers";
-
-const VISIBILITY_SHORT: Record<TickerVisibility, string> = {
-  HOMEPAGE: "Home",
-  LOGIN: "Login",
-  DASHBOARD_BANNER: "Dashboard",
-  GLOBAL: "Global",
-};
 
 const STATUS_FILTER_OPTIONS = [
   { value: "all", label: "All statuses" },
@@ -160,13 +152,18 @@ export function TickerManager({
       <div className="admin-surface flex flex-col gap-6 p-8">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="[&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[40rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground [&_strong]:font-semibold [&_strong]:text-brand-olive-dark">
-            <h2>Announcements</h2>
-            
+            <h2>Ticker Messages</h2>
+            <p>
+              Short updates shown to participants in the{" "}
+              <strong>Latest updates</strong> card on their dashboard. The
+              public site marquee scrolls <strong>Announcements</strong>{" "}
+              instead — manage those under Announcements.
+            </p>
           </div>
           <Button type="button" variant="adminPrimary" asChild>
             <Link href="/admin/ticker/new">
               <Plus className="mr-2 h-4 w-4" aria-hidden />
-              Add announcement
+              Add ticker message
             </Link>
           </Button>
         </header>
@@ -179,7 +176,7 @@ export function TickerManager({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className={adminInput}
-              aria-label="Search announcements"
+              aria-label="Search ticker messages"
             />
           </div>
           <div className="flex flex-shrink-0 flex-wrap items-center gap-3 [&_.admin-input]:min-w-[11rem]">
@@ -219,7 +216,6 @@ export function TickerManager({
               <col className="w-auto" />
               <col className="w-[6.75rem]" />
               <col className="w-[6.75rem]" />
-              <col className="w-[6.5rem]" />
               <col className="w-[10.5rem]" />
               <col className="w-[11.5rem]" />
             </colgroup>
@@ -231,7 +227,6 @@ export function TickerManager({
                 </th>
                 <th scope="col">Priority</th>
                 <th scope="col">Status</th>
-                <th scope="col">Visibility</th>
                 <th scope="col" className="!pr-6">
                   Expiry
                 </th>
@@ -243,17 +238,17 @@ export function TickerManager({
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-10 text-center text-muted-foreground">
+                  <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
                     <div className="flex flex-col items-center gap-4">
                       <p>
                         {tickers.length === 0
-                          ? "No announcements yet."
-                          : "No announcements match your filters."}
+                          ? "No ticker messages yet."
+                          : "No ticker messages match your filters."}
                       </p>
                       {tickers.length === 0 ? (
                         <Button type="button" variant="adminPrimary" asChild>
                           <Link href="/admin/ticker/new">
-                            Create first announcement
+                            Create first ticker message
                           </Link>
                         </Button>
                       ) : null}
@@ -285,7 +280,7 @@ export function TickerManager({
                             className={cn(adminInput, "!w-[4.25rem] !min-h-9 !px-2 text-center font-semibold tabular-nums")}
                             value={orderValueForRow(t)}
                             disabled={orderSavingId === t.id}
-                            aria-label="Display order for announcement"
+                            aria-label="Display order for ticker message"
                             onChange={(e) =>
                               setOrderDrafts((prev) => ({
                                 ...prev,
@@ -334,10 +329,6 @@ export function TickerManager({
                           {TICKER_STATUS_LABELS[effective]}
                         </span>
                       </td>
-                      <td className="text-[0.8125rem]">
-                        {VISIBILITY_SHORT[t.visibility as TickerVisibility] ??
-                          t.visibility}
-                      </td>
                       <td
                         className={cn(
                           "whitespace-nowrap !pr-6 text-[0.8125rem] tabular-nums",
@@ -350,7 +341,7 @@ export function TickerManager({
                         <div
                           className={adminTableActionsCenter}
                           role="group"
-                          aria-label="Announcement actions"
+                          aria-label="Ticker message actions"
                         >
                           <Button
                             type="button"
@@ -361,15 +352,15 @@ export function TickerManager({
                           >
                             <Link
                               href={`/admin/ticker/${t.id}/edit`}
-                              aria-label="Edit announcement"
-                              title="Edit announcement"
+                              aria-label="Edit ticker message"
+                              title="Edit ticker message"
                             >
                               <Pencil className="h-4 w-4" aria-hidden />
                             </Link>
                           </Button>
                           <ConfirmDialog
-                            title="Delete announcement?"
-                            description="This will be removed from all public surfaces."
+                            title="Delete ticker message?"
+                            description="This will be removed from the participant dashboard."
                             confirmLabel="Delete"
                             onConfirm={() => deleteTicker(t.id)}
                             trigger={
@@ -378,8 +369,8 @@ export function TickerManager({
                                 size="sm"
                                 variant="adminDestructive"
                                 className="portal-table-action-btn portal-table-action-btn--danger portal-table-action-btn--icon"
-                                aria-label="Delete announcement"
-                                title="Delete announcement"
+                                aria-label="Delete ticker message"
+                                title="Delete ticker message"
                               >
                                 <Trash2 className="h-4 w-4" aria-hidden />
                               </Button>
