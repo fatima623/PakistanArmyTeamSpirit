@@ -1226,6 +1226,620 @@ const TEXT: Record<string, Translations> = {
     zh: "武装冲突法",
   },
   afteractionreview: { ru: "Разбор после выполнения задачи", tr: "Harekât sonrası değerlendirme", ar: "المراجعة بعد التنفيذ", zh: "行动后总结" },
+
+  // ══ /familiarization — pre-arrival brief ════════════════════════════════
+  // Everything below is fed by `@/lib/familiarization-content`. Kept in this
+  // module rather than the marketing dictionary for the same reason as the
+  // rest of the file: the content is one English data module read by several
+  // call sites, translated on the way out.
+
+  // ── Route legs ──────────────────────────────────────────────────────────
+  teamsreporttotheassemblyareaandtheexercisebeginsimmediatelythereisnoacclimatisationwindowoncethepatrolisreceived:
+    {
+      ru: "Команды прибывают в район сбора, и учение начинается немедленно — после приёма патруля времени на акклиматизацию не предусмотрено.",
+      tr: "Takımlar toplanma bölgesine katılır ve tatbikat hemen başlar; devriye teslim alındıktan sonra alışma süresi verilmez.",
+      ar: "تلتحق الفرق بمنطقة التجمع ويبدأ التمرين فورًا — ولا تُمنح مهلة للتأقلم بعد استلام الدورية.",
+      zh: "各队到集结地域报到后演习立即开始——巡逻队接收后不设适应期。",
+    },
+  infiltrationstartpointtohideout: {
+    ru: "Проникновение — от исходного пункта до укрытия",
+    tr: "Sızma — Başlangıç noktasından saklanma yerine",
+    ar: "التسلل — من نقطة البداية إلى المخبأ",
+    zh: "渗透——自出发点至隐蔽地",
+  },
+  thelongestlegteamsinfiltratethroughterroristdominatedterritorytothehideoutnavigatingwithoutanyelectronicaid:
+    {
+      ru: "Самый протяжённый участок. Команды проникают через контролируемую террористами территорию к укрытию, ориентируясь без каких-либо электронных средств.",
+      tr: "En uzun etap. Takımlar, hiçbir elektronik yardımcı kullanmadan yön bularak teröristlerin hâkim olduğu bölgeden saklanma yerine sızar.",
+      ar: "أطول مرحلة. تتسلل الفرق عبر الأراضي الخاضعة لسيطرة الإرهابيين إلى المخبأ، مع الملاحة دون أي وسيلة إلكترونية.",
+      zh: "最长的一段。各队在不使用任何电子助航手段的情况下，穿越恐怖分子控制区渗透至隐蔽地。",
+    },
+  hideouttotarget: {
+    ru: "От укрытия к объекту",
+    tr: "Saklanma yerinden hedefe",
+    ar: "من المخبأ إلى الهدف",
+    zh: "自隐蔽地至目标",
+  },
+  occupationofthehideoutpatrolbasedrillshelicopterlandingzoneselectionandquickbattleordersforthereconnaissance:
+    {
+      ru: "Занятие укрытия, действия на базе патруля, выбор вертолётной площадки и отдача коротких боевых приказов на разведку.",
+      tr: "Saklanma yerinin işgali, devriye üs faaliyetleri, helikopter iniş bölgesi seçimi ve keşif için kısa muharebe emirleri.",
+      ar: "احتلال المخبأ، وإجراءات قاعدة الدورية، واختيار منطقة هبوط المروحيات، وإصدار أوامر القتال السريعة للاستطلاع.",
+      zh: "占领隐蔽地、巡逻基地作业、直升机着陆区选定，以及为侦察下达简令。",
+    },
+  aftertheclosetargetreccethepatrolexfiltratessubmitsthectrreportandworksthroughtheremainingscoredeventsonthewayback:
+    {
+      ru: "После разведки объекта с близкого расстояния патруль отходит, представляет отчёт CTR и выполняет оставшиеся оцениваемые этапы на обратном пути.",
+      tr: "Yakın hedef keşfinden sonra devriye geri çekilir, CTR raporunu teslim eder ve dönüş yolunda kalan puanlı etkinlikleri icra eder.",
+      ar: "بعد استطلاع الهدف من مسافة قريبة تنسحب الدورية وتسلّم تقرير CTR وتنفّذ ما تبقّى من الفعاليات المُقيَّمة في طريق العودة.",
+      zh: "近距离目标侦察结束后，巡逻队实施撤离、提交 CTR 报告，并在回程途中完成其余计分课目。",
+    },
+  terminalspeedmarch: {
+    ru: "Завершающий марш-бросок",
+    tr: "Bitiş sürat yürüyüşü",
+    ar: "المسير السريع الختامي",
+    zh: "终点急行军",
+  },
+  afinalspeedmarchoveradefinedroadortrackintotheterminalareacarryingacasualtyloadbeforeterminalinspectionanddebrief:
+    {
+      ru: "Заключительный марш-бросок по обозначенной дороге или тропе в конечный район с переноской условного пострадавшего, после чего проводятся итоговый смотр и разбор.",
+      tr: "Bitiş bölgesine, belirlenmiş bir yol veya patika üzerinden yaralı yükü taşınarak yapılan son sürat yürüyüşü; ardından bitiş denetimi ve değerlendirme yapılır.",
+      ar: "مسير سريع أخير على طريق أو ممر محدد إلى المنطقة الختامية مع حمل مصاب، يليه التفتيش الختامي والمناقشة.",
+      zh: "沿指定道路或小路负载伤员进行最后一段急行军进入终点地域，随后进行终点检查与讲评。",
+    },
+
+  // Leg distances (rendered next to each leg title).
+  "2325km": { ru: "23–25 км", tr: "23–25 km", ar: "23–25 كم", zh: "23–25 公里" },
+  "1518km": { ru: "15–18 км", tr: "15–18 km", ar: "15–18 كم", zh: "15–18 公里" },
+  "912km": { ru: "9–12 км", tr: "9–12 km", ar: "9–12 كم", zh: "9–12 公里" },
+  "5km": { ru: "5 км", tr: "5 km", ar: "5 كم", zh: "5 公里" },
+
+  // ── Terrain profile ─────────────────────────────────────────────────────
+  exercisearea: { ru: "Район учения", tr: "Tatbikat bölgesi", ar: "منطقة التمرين", zh: "演习地域" },
+  "30squarekilometres": {
+    ru: "≈30 кв. км",
+    tr: "≈30 kilometrekare",
+    ar: "≈30 كيلومترًا مربعًا",
+    zh: "约 30 平方公里",
+  },
+  weather: { ru: "Погода", tr: "Hava durumu", ar: "الطقس", zh: "天气" },
+  coldwithfogexpected: {
+    ru: "Холодно, ожидается туман",
+    tr: "Soğuk, sis bekleniyor",
+    ar: "بارد مع توقّع الضباب",
+    zh: "寒冷，预计有雾",
+  },
+  temperature: { ru: "Температура", tr: "Sıcaklık", ar: "درجة الحرارة", zh: "气温" },
+  "516c": { ru: "5–16 °C", tr: "5–16 °C", ar: "5–16 °م", zh: "5–16 °C" },
+  semimountainscuttingsandplains: {
+    ru: "Полугорная местность, выемки и равнины.",
+    tr: "Yarı dağlık arazi, yarmalar ve ovalar.",
+    ar: "أرض شبه جبلية وحفر ومناطق سهلية.",
+    zh: "半山地、切割地形与平原。",
+  },
+  smallandmediumsizedbuiltupareas: {
+    ru: "Небольшие и средние населённые пункты.",
+    tr: "Küçük ve orta büyüklükte meskûn mahaller.",
+    ar: "مناطق مبنية صغيرة ومتوسطة الحجم.",
+    zh: "中小型居民地。",
+  },
+  narrowroadsandtracks: {
+    ru: "Узкие дороги и тропы.",
+    tr: "Dar yollar ve patikalar.",
+    ar: "طرق وممرات ضيقة.",
+    zh: "狭窄道路与小路。",
+  },
+  theterraindemandsahighdegreeofenduranceandnavigationskillteamsshouldprepareforsustainedmovementovermixedgroundincoldfoggyconditions:
+    {
+      ru: "Местность требует высокой выносливости и навыков ориентирования — командам следует готовиться к длительному передвижению по смешанному рельефу в холодных и туманных условиях.",
+      tr: "Arazi yüksek düzeyde dayanıklılık ve yön bulma becerisi gerektirir; takımlar soğuk ve sisli koşullarda karışık zeminde sürekli harekete hazırlanmalıdır.",
+      ar: "تتطلب الأرض قدرًا عاليًا من الجَلَد ومهارة الملاحة — وعلى الفرق الاستعداد لحركة متواصلة فوق أرض متنوعة في أجواء باردة وضبابية.",
+      zh: "该地形对耐力与导航能力要求很高——各队应为在寒冷多雾条件下于混合地形持续机动做好准备。",
+    },
+
+  // ── Weapons & equipment: clothing, weapons and personal kit ─────────────
+  combatdressuniform: {
+    ru: "Полевая форма",
+    tr: "Muharebe kıyafeti / üniforma",
+    ar: "بدلة قتال / زي رسمي",
+    zh: "作战服／制服",
+  },
+  fieldcap: { ru: "Полевое кепи", tr: "Arazi şapkası", ar: "قبعة ميدانية", zh: "作训帽" },
+  tshirt: { ru: "Футболка", tr: "Tişört", ar: "قميص قصير", zh: "T 恤" },
+  sockspair: { ru: "Носки (пара)", tr: "Çorap (çift)", ar: "جوارب (زوج)", zh: "袜子（双）" },
+  bootpairs: { ru: "Ботинки (пары)", tr: "Bot (çift)", ar: "أحذية (أزواج)", zh: "作战靴（双）" },
+  housewifekit: { ru: "Швейный набор", tr: "Dikiş seti", ar: "طقم خياطة", zh: "针线包" },
+  antisnakebitekit: {
+    ru: "Противозмеиный набор",
+    tr: "Yılan sokması seti",
+    ar: "طقم مضاد للدغ الأفاعي",
+    zh: "抗蛇毒急救包",
+  },
+  shopperplasticforwaste: {
+    ru: "Пластиковый пакет для мусора",
+    tr: "Atık için plastik poşet",
+    ar: "كيس بلاستيكي للنفايات",
+    zh: "垃圾用塑料袋",
+  },
+  submachinegunwith3sparemagazines: {
+    ru: "Пистолет-пулемёт с 3 × запасными магазинами",
+    tr: "Hafif makineli tabanca ve 3 × yedek şarjör",
+    ar: "رشاش خفيف مع 3 × مخازن احتياطية",
+    zh: "冲锋枪及 3 个备用弹匣",
+  },
+  ammunitionsmg: {
+    ru: "Боеприпасы (SMG)",
+    tr: "Mühimmat (SMG)",
+    ar: "ذخيرة (SMG)",
+    zh: "弹药（SMG）",
+  },
+  submachinegunsling: {
+    ru: "Ремень для пистолета-пулемёта",
+    tr: "Hafif makineli tabanca kayışı",
+    ar: "حمّالة الرشاش الخفيف",
+    zh: "冲锋枪背带",
+  },
+  submachineguncleaningkit: {
+    ru: "Набор для чистки пистолета-пулемёта",
+    tr: "Hafif makineli tabanca temizlik seti",
+    ar: "طقم تنظيف الرشاش الخفيف",
+    zh: "冲锋枪擦拭工具",
+  },
+  messtinfoodpan: { ru: "Котелок / судок", tr: "Yemek kabı / sefertası", ar: "وعاء طعام / صحن ميداني", zh: "饭盒／餐盘" },
+  raincoat: { ru: "Плащ-дождевик", tr: "Yağmurluk", ar: "معطف مطر", zh: "雨衣" },
+  groundsheet: { ru: "Подстилка", tr: "Yer muşambası", ar: "مفرش أرضي", zh: "地垫" },
+  rationpackownarrangements: {
+    ru: "Сухой паёк / за счёт команды",
+    tr: "Kumanya / kendi imkânlarıyla",
+    ar: "حزمة إعاشة / بترتيب ذاتي",
+    zh: "口粮包／自行准备",
+  },
+  harrissetwith2batteries: {
+    ru: "Радиостанция Harris с 2 × аккумуляторами",
+    tr: "Harris telsiz seti ve 2 × batarya",
+    ar: "جهاز Harris مع 2 × بطارية",
+    zh: "Harris 电台及 2 块电池",
+  },
+  entrenchingtools: { ru: "Шанцевый инструмент", tr: "İstihkâm aleti", ar: "أدوات حفر", zh: "工兵锹" },
+  fieldshelldressingtourniquet: {
+    ru: "Перевязочный пакет + жгут",
+    tr: "Sargı bezi + turnike",
+    ar: "ضماد ميداني + رباط ضاغط",
+    zh: "急救敷料＋止血带",
+  },
+  lightmachinegunwithnightsight: {
+    ru: "Ручной пулемёт (LMG) с ночным прицелом",
+    tr: "LMG ve gece nişangâhı",
+    ar: "رشاش خفيف (LMG) مع منظار ليلي",
+    zh: "轻机枪（LMG）及夜视瞄具",
+  },
+  ammunitionlmg: {
+    ru: "Боеприпасы (LMG)",
+    tr: "Mühimmat (LMG)",
+    ar: "ذخيرة (LMG)",
+    zh: "弹药（LMG）",
+  },
+  minemarkers: { ru: "Знаки обозначения мин", tr: "Mayın işaretleyicileri", ar: "علامات الألغام", zh: "地雷标示物" },
+  wirecutter: { ru: "Кусачки", tr: "Tel makası", ar: "قاطع أسلاك", zh: "断线钳" },
+  sectionfirstaidkitbag: {
+    ru: "Сумка с аптечкой отделения",
+    tr: "Manga ilk yardım çantası",
+    ar: "حقيبة إسعافات أولية للفصيلة",
+    zh: "分队急救包",
+  },
+  mineprodder: { ru: "Щуп для поиска мин", tr: "Mayın sondası", ar: "مِسبار ألغام", zh: "探雷针" },
+
+  // ── Weapons & equipment: navigation, technical and specialist stores ────
+  mapcase: { ru: "Планшет для карт", tr: "Harita çantası", ar: "حافظة خرائط", zh: "图囊" },
+  compass: { ru: "Компас", tr: "Pusula", ar: "بوصلة", zh: "指北针" },
+  nightvisiongoggles: {
+    ru: "Очки ночного видения",
+    tr: "Gece görüş gözlüğü",
+    ar: "نظارات رؤية ليلية",
+    zh: "夜视仪",
+  },
+  serviceprotractor: { ru: "Артиллерийский транспортир", tr: "Ölçüm gönyesi", ar: "منقلة عسكرية", zh: "军用量角器" },
+  mapset: { ru: "Комплект карт", tr: "Harita takımı", ar: "طقم خرائط", zh: "地图册" },
+  binocular: { ru: "Бинокль", tr: "Dürbün", ar: "منظار", zh: "望远镜" },
+  writingmaterial: { ru: "Письменные принадлежности", tr: "Yazı malzemesi", ar: "أدوات كتابة", zh: "书写用具" },
+  pocketknife: { ru: "Складной нож", tr: "Çakı", ar: "سكين جيب", zh: "折叠刀" },
+  bigpack: { ru: "Большой рюкзак", tr: "Büyük sırt çantası", ar: "حقيبة ظهر كبيرة", zh: "大背囊" },
+  handcuffs: { ru: "Наручники", tr: "Kelepçe", ar: "أصفاد", zh: "手铐" },
+  "9millimetrerope45m": {
+    ru: "Верёвка 9 мм (45 м)",
+    tr: "9 milimetre halat (45 m)",
+    ar: "حبل 9 مم (45 م)",
+    zh: "9 毫米绳（45 米）",
+  },
+  "4millimetrerope45m": {
+    ru: "Верёвка 4 мм (45 м)",
+    tr: "4 milimetre halat (45 m)",
+    ar: "حبل 4 مم (45 م)",
+    zh: "4 毫米绳（45 米）",
+  },
+  voicerecorder: { ru: "Диктофон", tr: "Ses kayıt cihazı", ar: "مسجّل صوت", zh: "录音机" },
+  feelerstick: { ru: "Щуп-палка", tr: "Yoklama çubuğu", ar: "عصا استشعار", zh: "探路棍" },
+  dagger: { ru: "Кинжал", tr: "Hançer", ar: "خنجر", zh: "匕首" },
+  fishreel: { ru: "Катушка со шнуром", tr: "Olta makarası", ar: "بكرة صيد", zh: "渔线轮" },
+  letterh: { ru: "Знак «H»", tr: "«H» işareti", ar: "علامة الحرف H", zh: "「H」标识" },
+  windsock: { ru: "Ветроуказатель", tr: "Rüzgâr tulumu", ar: "كُم الرياح", zh: "风向袋" },
+  helmet: { ru: "Каска", tr: "Kask", ar: "خوذة", zh: "头盔" },
+  beviesbags: { ru: "Бивачные мешки", tr: "Bivi torbası", ar: "أكياس مبيت", zh: "露营睡袋套" },
+  paracord20m: { ru: "Паракорд 20 м", tr: "Para kordon 20 m", ar: "حبل باراكورد 20 م", zh: "伞绳 20 米" },
+  pulley: { ru: "Блок-ролик", tr: "Makara", ar: "بكرة", zh: "滑轮" },
+  glovespairs: { ru: "Перчатки (пары)", tr: "Eldiven (çift)", ar: "قفازات (أزواج)", zh: "手套（双）" },
+  rappellingglovespair: {
+    ru: "Спусковые перчатки (пара)",
+    tr: "İniş eldiveni (çift)",
+    ar: "قفازات إنزال (زوج)",
+    zh: "速降手套（双）",
+  },
+  camouflagekit: { ru: "Маскировочный набор", tr: "Kamuflaj seti", ar: "طقم تمويه", zh: "伪装套件" },
+  smokegrenades: { ru: "Дымовые гранаты", tr: "Sis bombası", ar: "قنابل دخانية", zh: "发烟手榴弹" },
+  handgrenades: { ru: "Ручные гранаты", tr: "El bombası", ar: "قنابل يدوية", zh: "手榴弹" },
+  headcomforter: { ru: "Шарф-труба", tr: "Boyunluk", ar: "غطاء رأس ورقبة", zh: "头颈套巾" },
+  safetyrope: { ru: "Страховочная верёвка", tr: "Emniyet halatı", ar: "حبل أمان", zh: "安全绳" },
+  dringclosed: { ru: "Карабин D закрытый", tr: "Kapalı D halka", ar: "حلقة D مغلقة", zh: "闭口 D 型环" },
+  dringopen: { ru: "Карабин D открытый", tr: "Açık D halka", ar: "حلقة D مفتوحة", zh: "开口 D 型环" },
+
+  // Scale values that are not plain counts.
+  "120each": { ru: "по 120", tr: "her biri 120", ar: "120 لكل فرد", zh: "各 120" },
+  "1000rds": { ru: "1000 патр.", tr: "1000 fişek", ar: "1000 طلقة", zh: "1000 发" },
+
+  // ── Coordinating points (additions beyond OPERATIONAL_RULES) ────────────
+  infiltrationdraws: {
+    ru: "Жеребьёвка на проникновение",
+    tr: "Sızma kurası",
+    ar: "قرعة التسلل",
+    zh: "渗透抽签",
+  },
+  drawsareheldtofixthesequenceinwhichteamsinfiltratefromthestartpointtothehideout: {
+    ru: "Жеребьёвка определяет очерёдность, в которой команды проникают от исходного пункта к укрытию.",
+    tr: "Takımların Başlangıç noktasından saklanma yerine sızma sırasını belirlemek için kura çekilir.",
+    ar: "تُجرى قرعة لتحديد ترتيب تسلل الفرق من نقطة البداية إلى المخبأ.",
+    zh: "通过抽签确定各队自出发点渗透至隐蔽地的先后顺序。",
+  },
+  unauthorizedcontact: {
+    ru: "Несанкционированные контакты",
+    tr: "İzinsiz temas",
+    ar: "الاتصال غير المصرح به",
+    zh: "未经许可的接触",
+  },
+  interactionwithunauthorizedindividualsisnotpermittedatanystageoftheexercise: {
+    ru: "Взаимодействие с посторонними лицами не допускается ни на одном этапе учения.",
+    tr: "Yetkisiz kişilerle etkileşime tatbikatın hiçbir aşamasında izin verilmez.",
+    ar: "لا يُسمح بالتعامل مع أفراد غير مصرح لهم في أي مرحلة من مراحل التمرين.",
+    zh: "演习任何阶段均不得与未经许可的人员接触。",
+  },
+  openfireprohibited: {
+    ru: "Разведение огня запрещено",
+    tr: "Açık ateş yasak",
+    ar: "يُحظر إشعال النار",
+    zh: "禁止明火",
+  },
+  lightingofopenfireanywhereintheexerciseareaisprohibited: {
+    ru: "Разведение открытого огня в любом месте района учения запрещено.",
+    tr: "Tatbikat sahasının herhangi bir yerinde açık ateş yakmak yasaktır.",
+    ar: "يُحظر إشعال النار المكشوفة في أي مكان داخل منطقة التمرين.",
+    zh: "演习地域内任何地点均禁止生明火。",
+  },
+  antisnakebitekits: {
+    ru: "Противозмеиные наборы",
+    tr: "Yılan sokması setleri",
+    ar: "أطقم مضادة للدغ الأفاعي",
+    zh: "抗蛇毒急救包",
+  },
+  allranksmustcarryantisnakebitekitsandtorchesthroughouttheexercise: {
+    ru: "Все военнослужащие обязаны иметь при себе противозмеиные наборы и фонари в течение всего учения.",
+    tr: "Tüm personel, tatbikat boyunca yılan sokması seti ve el feneri taşımak zorundadır.",
+    ar: "على جميع الرتب حمل أطقم مضادة للدغ الأفاعي ومصابيح يدوية طوال التمرين.",
+    zh: "全体人员在演习全程须携带抗蛇毒急救包与手电。",
+  },
+  attachmentwithalocalunit: {
+    ru: "Прикомандирование к местной части",
+    tr: "Yerel birliğe iltihak",
+    ar: "الإلحاق بوحدة محلية",
+    zh: "编配至当地部队",
+  },
+  eachteamisattachedtoalocalunitthatacclimatisesandtrainsitinfiringwithpakistanarmyweaponsoranyothereventtheteamrequests:
+    {
+      ru: "Каждая команда прикомандировывается к местной части, которая обеспечивает акклиматизацию и обучение стрельбе из вооружения Пакистанской армии, а также проведение любых других мероприятий по запросу команды.",
+      tr: "Her takım; kendisini alıştıran ve Pakistan Ordusu silahlarıyla atış ya da takımın talep ettiği başka bir faaliyet konusunda eğiten bir yerel birliğe iltihak eder.",
+      ar: "يُلحق كل فريق بوحدة محلية تتولى تأقلمه وتدريبه على الرماية بأسلحة الجيش الباكستاني أو أي نشاط آخر يطلبه الفريق.",
+      zh: "各队均编配至当地一支部队，由其组织适应性训练并教授使用巴基斯坦陆军武器射击，或队伍提出的其他课目。",
+    },
+
+  // ── Dos ─────────────────────────────────────────────────────────────────
+  carryantisnakebitekitsandtorchesatalltimesduringtheexercise: {
+    ru: "Постоянно имейте при себе противозмеиный набор и фонарь на протяжении всего учения.",
+    tr: "Tatbikat boyunca her zaman yılan sokması seti ve el feneri taşıyın.",
+    ar: "احمل أطقمًا مضادة للدغ الأفاعي ومصابيح يدوية طوال مدة التمرين.",
+    zh: "演习全程始终携带抗蛇毒急救包与手电。",
+  },
+  obeypakistanslawsandshowrespectforlocalcustomsthroughoutthevisit: {
+    ru: "Соблюдайте законы Пакистана и уважайте местные обычаи в течение всего визита.",
+    tr: "Ziyaret boyunca Pakistan yasalarına uyun ve yerel geleneklere saygı gösterin.",
+    ar: "التزم بقوانين باكستان وأظهر احترامًا للعادات المحلية طوال الزيارة.",
+    zh: "访问期间遵守巴基斯坦法律并尊重当地风俗。",
+  },
+  buryallwasteintheteamsblackplasticbagsandpresentthematthefinishpoint: {
+    ru: "Собирайте весь мусор в чёрные пластиковые пакеты команды и предъявляйте их на финише.",
+    tr: "Tüm atıkları takımın siyah plastik poşetlerinde toplayın ve bitiş noktasında ibraz edin.",
+    ar: "اجمع جميع النفايات في الأكياس البلاستيكية السوداء الخاصة بالفريق وقدّمها عند نقطة النهاية.",
+    zh: "将全部垃圾装入本队黑色塑料袋，并在终点出示。",
+  },
+  exerciseduecautionwhenmovingnearoracrosswaterchannels: {
+    ru: "Соблюдайте необходимую осторожность при движении вблизи водных каналов и при их пересечении.",
+    tr: "Su kanallarının yakınında veya üzerinden geçerken gereken dikkati gösterin.",
+    ar: "توخَّ الحذر اللازم عند التحرك قرب المجاري المائية أو عبورها.",
+    zh: "在水渠附近或穿越水渠时应格外谨慎。",
+  },
+  completeprearrivalfamiliarizationonfiringnavigationandmapreadingsignalequipmentcbrnafosandareaorientation:
+    {
+      ru: "До прибытия пройдите ознакомительную подготовку по стрельбе, навигации и чтению карты, средствам связи, CBRN, AFOS и ориентированию на местности.",
+      tr: "Varıştan önce atış, arazide yön bulma ve harita okuma, muhabere cihazları, CBRN, AFOS ve bölge oryantasyonu konularında tanıtım eğitimini tamamlayın.",
+      ar: "أكمل التدريب التعريفي قبل الوصول على الرماية والملاحة وقراءة الخرائط وأجهزة الاتصال وCBRN وAFOS والتعرف على المنطقة.",
+      zh: "抵达前完成射击、导航与识图、通信器材、CBRN、AFOS 及地域认知等认知训练。",
+    },
+  communicateanychangeinparticipantranksinthefinallistby15december2025: {
+    ru: "Сообщите обо всех изменениях в званиях участников в окончательном списке до 15 декабря 2025 года.",
+    tr: "Katılımcı rütbelerindeki her türlü değişikliği 15 Aralık 2025 tarihine kadar nihai listede bildirin.",
+    ar: "أبلغ عن أي تغيير في رتب المشاركين ضمن القائمة النهائية بحلول 15 ديسمبر 2025.",
+    zh: "参赛人员军衔如有变更，须于 2025 年 12 月 15 日前在最终名单中告知。",
+  },
+  carrythefull200kgteamloadincludingfilledwaterbottlesammunitionandtheissuedtracker: {
+    ru: "Переносите полный командный груз 200 кг, включая заполненные фляги, боеприпасы и выданный трекер.",
+    tr: "Dolu matara, mühimmat ve verilen takip cihazı dâhil 200 kg'lık takım yükünün tamamını taşıyın.",
+    ar: "احمل حمولة الفريق كاملة البالغة 200 كجم، شاملة قوارير المياه المملوءة والذخيرة وجهاز التتبع المُسلَّم.",
+    zh: "携带全队 200 公斤全部负重，含注满的水壶、弹药与配发的追踪器。",
+  },
+
+  // ── Don'ts ──────────────────────────────────────────────────────────────
+  donotcarryorusegpsoranyunauthorizednavigationalaidincludingwatchesandphonesthismeansdisqualification: {
+    ru: "Не берите с собой и не используйте GPS или любые несанкционированные средства навигации, включая часы и телефоны, — это влечёт дисквалификацию.",
+    tr: "GPS veya saat ve telefon dâhil izinsiz hiçbir seyrüsefer yardımcısını taşımayın ve kullanmayın — bu diskalifiye anlamına gelir.",
+    ar: "لا تحمل أو تستخدم GPS أو أي وسيلة ملاحة غير مصرح بها، بما في ذلك الساعات والهواتف — فهذا يعني الاستبعاد.",
+    zh: "不得携带或使用 GPS 及任何未经许可的助航器材，包括手表与手机——违者取消资格。",
+  },
+  donotenterbuildupareasallbuasarestrictlyoutofbounds: {
+    ru: "Не входите в населённые пункты; все BUA строго закрыты для доступа.",
+    tr: "Meskûn mahallere girmeyin; tüm BUA'lar kesinlikle yasak bölgedir.",
+    ar: "لا تدخل المناطق المبنية؛ فجميع BUA محظورة تمامًا.",
+    zh: "不得进入居民地；所有 BUA 均为严格禁入区。",
+  },
+  donotseekhelpfromciviliansorlocalsatanypoint: {
+    ru: "Ни при каких обстоятельствах не обращайтесь за помощью к гражданским лицам или местным жителям.",
+    tr: "Hiçbir aşamada sivillerden veya yöre halkından yardım istemeyin.",
+    ar: "لا تطلب المساعدة من المدنيين أو الأهالي في أي وقت.",
+    zh: "任何时候均不得向平民或当地居民求助。",
+  },
+  donotinteractwithunauthorizedindividuals: {
+    ru: "Не вступайте в контакт с посторонними лицами.",
+    tr: "Yetkisiz kişilerle etkileşime girmeyin.",
+    ar: "لا تتعامل مع أفراد غير مصرح لهم.",
+    zh: "不得与未经许可的人员接触。",
+  },
+  donotlightanopenfireanywhereintheexercisearea: {
+    ru: "Не разводите открытый огонь нигде в районе учения.",
+    tr: "Tatbikat sahasının hiçbir yerinde açık ateş yakmayın.",
+    ar: "لا تُشعل نارًا مكشوفة في أي مكان داخل منطقة التمرين.",
+    zh: "演习地域内任何地点均不得生明火。",
+  },
+  donotthrowwasteorlitterintheexercisearea: {
+    ru: "Не выбрасывайте мусор и не сорите в районе учения.",
+    tr: "Tatbikat sahasına atık veya çöp atmayın.",
+    ar: "لا تُلقِ النفايات أو المخلفات في منطقة التمرين.",
+    zh: "不得在演习地域丢弃垃圾或废弃物。",
+  },
+  donotshedanypartofthescheduledweightrandomweightchecksarecarriedoutduringtheexercise: {
+    ru: "Не сбрасывайте никакую часть установленного веса — в ходе учения проводятся выборочные проверки веса.",
+    tr: "Öngörülen ağırlığın hiçbir parçasını bırakmayın — tatbikat sırasında rastgele ağırlık kontrolleri yapılır.",
+    ar: "لا تتخلص من أي جزء من الوزن المقرر — تُجرى فحوص وزن عشوائية خلال التمرين.",
+    zh: "不得丢弃规定负重的任何部分——演习期间将进行随机称重检查。",
+  },
+  donotbatheorswiminriversorwaterchannelswhilemoving: {
+    ru: "Не купайтесь и не плавайте в реках и каналах во время движения.",
+    tr: "Hareket hâlindeyken nehirlerde veya su kanallarında yıkanmayın ve yüzmeyin.",
+    ar: "لا تستحم أو تسبح في الأنهار أو المجاري المائية أثناء التحرك.",
+    zh: "行进途中不得在河流或水渠中洗浴或游泳。",
+  },
+  donotexpectfoodresupplythisisasurvivalexerciseandnoreplenishmentispermitted: {
+    ru: "Не рассчитывайте на пополнение продовольствия — это учение на выживание, и пополнение запасов не допускается.",
+    tr: "Yiyecek ikmali beklemeyin — bu bir hayatta kalma tatbikatıdır ve ikmale izin verilmez.",
+    ar: "لا تتوقع إعادة تموين بالغذاء — فهذا تمرين بقاء ولا يُسمح بأي تموين.",
+    zh: "不得期待食品补给——本演习为生存演习，不允许任何补给。",
+  },
+  donotarrangeindependentmediacoveragethepakistanarmyprovidespicturesandclipsbeforedeparture: {
+    ru: "Не организуйте самостоятельное освещение в СМИ; Пакистанская армия предоставляет фотографии и видеоматериалы перед отъездом.",
+    tr: "Bağımsız medya çekimi düzenlemeyin; fotoğraf ve video kayıtları ayrılıştan önce Pakistan Ordusu tarafından verilir.",
+    ar: "لا تُرتّب تغطية إعلامية مستقلة؛ إذ يوفّر الجيش الباكستاني الصور والمقاطع قبل المغادرة.",
+    zh: "不得自行安排媒体报道；巴基斯坦陆军将在离境前提供照片与视频。",
+  },
+
+  // ── Facilitation, medical & legal ──────────────────────────────────────
+  boardinginpakistanarmyaccommodationneartheexerciseareawithallnecessaryfacilities: {
+    ru: "Размещение в расположении Пакистанской армии вблизи района учения со всеми необходимыми удобствами.",
+    tr: "Tatbikat sahasına yakın Pakistan Ordusu tesislerinde, gerekli tüm imkânlarla konaklama.",
+    ar: "الإقامة في مساكن الجيش الباكستاني قرب منطقة التمرين مع جميع المرافق اللازمة.",
+    zh: "在演习地域附近的巴基斯坦陆军营区住宿，配备全部必要设施。",
+  },
+  weaponsammunitionandalltypesofequipmentrequiredforthecompetition: {
+    ru: "Вооружение, боеприпасы и все виды снаряжения, необходимые для соревнования.",
+    tr: "Yarışma için gerekli silah, mühimmat ve her türlü teçhizat.",
+    ar: "الأسلحة والذخيرة وجميع أنواع المعدات اللازمة للمسابقة.",
+    zh: "竞赛所需的武器、弹药与各类装备。",
+  },
+  mapsfortheexercisearea: {
+    ru: "Карты района учения.",
+    tr: "Tatbikat sahasına ait haritalar.",
+    ar: "خرائط منطقة التمرين.",
+    zh: "演习地域地图。",
+  },
+  internetfacilityattheaccommodation: {
+    ru: "Доступ в интернет в месте размещения.",
+    tr: "Konaklama yerinde internet imkânı.",
+    ar: "خدمة الإنترنت في مكان الإقامة.",
+    zh: "住宿地点提供网络。",
+  },
+  completemedicalcoverisprovidedbythepakistanarmyfromarrivaluntildeparture: {
+    ru: "Полное медицинское обеспечение предоставляется Пакистанской армией с момента прибытия и до отъезда.",
+    tr: "Varıştan ayrılışa kadar tam sağlık desteği Pakistan Ordusu tarafından sağlanır.",
+    ar: "يوفّر الجيش الباكستاني تغطية طبية كاملة من الوصول وحتى المغادرة.",
+    zh: "自抵达至离境，由巴基斯坦陆军提供完整医疗保障。",
+  },
+  medicalevacuationtotherespectivecountryremainstheresponsibilityoftherespectiveteamanditsmanagement: {
+    ru: "Медицинская эвакуация в страну команды остаётся ответственностью самой команды и её руководства.",
+    tr: "İlgili ülkeye tıbbi tahliye, ilgili takımın ve yönetiminin sorumluluğundadır.",
+    ar: "يظل الإجلاء الطبي إلى الدولة المعنية من مسؤولية الفريق المعني وإدارته.",
+    zh: "后送回本国的医疗转运由各队及其管理人员自行负责。",
+  },
+  participantsobeypakistanslawsandrespectlocalcustoms: {
+    ru: "Участники соблюдают законы Пакистана и уважают местные обычаи.",
+    tr: "Katılımcılar Pakistan yasalarına uyar ve yerel geleneklere saygı gösterir.",
+    ar: "يلتزم المشاركون بقوانين باكستان ويحترمون العادات المحلية.",
+    zh: "参赛人员遵守巴基斯坦法律并尊重当地风俗。",
+  },
+  participantsareselfresponsibleforanypossibleinjuryorlossandshallnotseekcompensation: {
+    ru: "Участники самостоятельно несут ответственность за возможные травмы или потери и не вправе требовать компенсации.",
+    tr: "Katılımcılar olası yaralanma veya kayıplardan kendileri sorumludur ve tazminat talep edemez.",
+    ar: "يتحمّل المشاركون مسؤولية أي إصابة أو خسارة محتملة ولا يجوز لهم المطالبة بتعويض.",
+    zh: "参赛人员对可能发生的伤害或损失自行负责，不得要求赔偿。",
+  },
+  independentmediacoverageisprohibitedthepakistanarmyprovidespicturesandclipstoparticipantsbeforedeparture:
+    {
+      ru: "Самостоятельное освещение в СМИ запрещено; Пакистанская армия предоставляет участникам фотографии и видеоматериалы перед отъездом.",
+      tr: "Bağımsız medya çekimi yasaktır; fotoğraf ve video kayıtları ayrılıştan önce Pakistan Ordusu tarafından katılımcılara verilir.",
+      ar: "تُحظر التغطية الإعلامية المستقلة؛ ويوفّر الجيش الباكستاني الصور والمقاطع للمشاركين قبل المغادرة.",
+      zh: "禁止自行安排媒体报道；巴基斯坦陆军将在离境前向参赛人员提供照片与视频。",
+    },
+
+  // ── Information required from teams ────────────────────────────────────
+  "15december2025": {
+    ru: "15 декабря 2025 года",
+    tr: "15 Aralık 2025",
+    ar: "15 ديسمبر 2025",
+    zh: "2025 年 12 月 15 日",
+  },
+  modeoftravelbytheteam: {
+    ru: "Способ перемещения команды.",
+    tr: "Takımın seyahat şekli.",
+    ar: "وسيلة سفر الفريق.",
+    zh: "队伍的出行方式。",
+  },
+  rankwiselistsoftheteamandofficialsincludingbloodgroups: {
+    ru: "Списки команды и должностных лиц по званиям с указанием групп крови.",
+    tr: "Takımın ve görevlilerin kan grupları dâhil rütbe sıralı listeleri.",
+    ar: "قوائم الفريق والمسؤولين حسب الرتب، شاملة فصائل الدم.",
+    zh: "按军衔排列的队员与官员名单，含血型。",
+  },
+  copiesofpassports: {
+    ru: "Копии паспортов.",
+    tr: "Pasaport kopyaları.",
+    ar: "نسخ من جوازات السفر.",
+    zh: "护照复印件。",
+  },
+  flightscheduleoftheteamarrivingforthecompetition: {
+    ru: "График перелёта команды, прибывающей на соревнование.",
+    tr: "Yarışmaya gelen takımın uçuş programı.",
+    ar: "جدول رحلات الفريق القادم للمسابقة.",
+    zh: "参赛队伍抵达的航班时刻。",
+  },
+  anychangeintherankofparticipantsbyacountrymustbecommunicatedinthefinallisttobesharedby15december2025: {
+    ru: "Любое изменение званий участников со стороны страны должно быть отражено в окончательном списке, представляемом до 15 декабря 2025 года.",
+    tr: "Bir ülkenin katılımcı rütbelerinde yaptığı her değişiklik, 15 Aralık 2025 tarihine kadar paylaşılacak nihai listede bildirilmelidir.",
+    ar: "يجب إبلاغ أي تغيير في رتب المشاركين من قِبل الدولة ضمن القائمة النهائية التي تُشارَك بحلول 15 ديسمبر 2025.",
+    zh: "参赛国如变更参赛人员军衔，须在 2025 年 12 月 15 日前提交的最终名单中说明。",
+  },
+
+  // ── Team composition (TEAM_ROLES) ──────────────────────────────────────
+  // Ranks are given as the local equivalent; "Equivalent" stays generic
+  // because participating nations use different rank titles.
+  teamleader: { ru: "Командир команды", tr: "Takım komutanı", ar: "قائد الفريق", zh: "队长" },
+  "1captainsubaltern": {
+    ru: "1 × капитан / младший офицер",
+    tr: "1 × yüzbaşı / astsubay üstü genç subay",
+    ar: "1 × نقيب / ضابط صغير",
+    zh: "1 × 上尉 / 尉级军官",
+  },
+  team2ndincommand: {
+    ru: "Заместитель командира команды",
+    tr: "Takım ikinci amiri",
+    ar: "نائب قائد الفريق",
+    zh: "副队长",
+  },
+  "1sergeantequivalent": {
+    ru: "1 × сержант / эквивалент",
+    tr: "1 × astsubay / eşdeğeri",
+    ar: "1 × رقيب / ما يعادله",
+    zh: "1 × 中士 / 同等军衔",
+  },
+  teamnco: {
+    ru: "Сержантский состав команды",
+    tr: "Takım astsubayı",
+    ar: "ضابط صف الفريق",
+    zh: "队军士",
+  },
+  "1corporalequivalent": {
+    ru: "1 × капрал / эквивалент",
+    tr: "1 × onbaşı / eşdeğeri",
+    ar: "1 × عريف / ما يعادله",
+    zh: "1 × 下士 / 同等军衔",
+  },
+  lightmachinegunno1: {
+    ru: "Пулемётчик (LMG) № 1",
+    tr: "LMG No.1",
+    ar: "رامي الرشاش الخفيف (LMG) رقم 1",
+    zh: "轻机枪（LMG）一号手",
+  },
+  lightmachinegunno2: {
+    ru: "Пулемётчик (LMG) № 2",
+    tr: "LMG No.2",
+    ar: "رامي الرشاش الخفيف (LMG) رقم 2",
+    zh: "轻机枪（LMG）二号手",
+  },
+  "1soldierequivalent": {
+    ru: "1 × солдат / эквивалент",
+    tr: "1 × er / eşdeğeri",
+    ar: "1 × جندي / ما يعادله",
+    zh: "1 × 士兵 / 同等军衔",
+  },
+  "2soldierequivalent": {
+    ru: "2 × солдата / эквивалент",
+    tr: "2 × er / eşdeğeri",
+    ar: "2 × جندي / ما يعادله",
+    zh: "2 × 士兵 / 同等军衔",
+  },
+  signaloperator: { ru: "Связист", tr: "Muhabereci", ar: "عامل اللاسلكي", zh: "通信员" },
+  rifleman: { ru: "Стрелок", tr: "Tüfekçi", ar: "رامي بندقية", zh: "步枪手" },
+  reserve: { ru: "Резерв", tr: "Yedek", ar: "الاحتياط", zh: "预备队员" },
+  "1captainsubaltern1sergeantsoldier": {
+    ru: "1 × капитан / младший офицер + 1 × сержант / солдат",
+    tr: "1 × yüzbaşı / genç subay + 1 × astsubay / er",
+    ar: "1 × نقيب / ضابط صغير + 1 × رقيب / جندي",
+    zh: "1 × 上尉 / 尉级军官 + 1 × 中士 / 士兵",
+  },
+  teammanager: { ru: "Руководитель команды", tr: "Takım sorumlusu", ar: "مدير الفريق", zh: "领队" },
+  "1major": { ru: "1 × майор", tr: "1 × binbaşı", ar: "1 × رائد", zh: "1 × 少校" },
+
+  // ── Familiarization training modules ───────────────────────────────────
+  firingzeroingcompetitionweapons: {
+    ru: "Стрельба и приведение к нормальному бою (оружие соревнования)",
+    tr: "Atış / sıfırlama (yarışma silahları)",
+    ar: "الرماية / ضبط التصويب (أسلحة المسابقة)",
+    zh: "射击／校枪（竞赛用武器）",
+  },
+  navigationmapreading: {
+    ru: "Навигация и чтение карты",
+    tr: "Arazide yön bulma / harita okuma",
+    ar: "الملاحة / قراءة الخرائط",
+    zh: "导航／识图用图",
+  },
+  areaorientation: {
+    ru: "Ориентирование на местности",
+    tr: "Bölge oryantasyonu",
+    ar: "التعرف على المنطقة",
+    zh: "地域认知",
+  },
 };
 
 /**

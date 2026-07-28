@@ -13,6 +13,7 @@ export function publicNavLabels(t: Dictionary): Record<string, string> {
     "/operations": t.publicSite.nav.operations,
     "/exercise-contour": t.publicSite.nav.exerciseContour,
     "/international": t.publicSite.nav.international,
+    "/familiarization": t.publicSite.nav.familiarization,
     "/awards": t.publicSite.nav.awards,
     "/gallery": t.publicSite.nav.gallery,
     "/announcements": t.publicSite.nav.announcements,

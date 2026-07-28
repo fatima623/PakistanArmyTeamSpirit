@@ -154,6 +154,135 @@ export const marketing: typeof enMarketing = {
     },
   },
 
+  // English pending translation review — the familiarization brief carries
+  // military terminology that needs a subject-matter check per locale.
+  familiarization: {
+    meta: {
+      title: "PATS Tanıtımı",
+      description:
+        "Katılımcı birlikler için varış öncesi brifing — PATS konsepti, arazi ve güzergâh, takım teşkilatı, silah ve teçhizat kadrosu ve koordinasyon esasları.",
+    },
+
+    hero: {
+      eyebrow: "Varış öncesi brifing",
+      title: "PATS Tanıtımı",
+      subtitle:
+        "Katılımcı bir birliğin varıştan önce ihtiyaç duyduğu her şey — tatbikatın konsepti, arazi ve güzergâh, takım teşkilatı, silah ve teçhizat kadrosu ve uygulamayı düzenleyen koordinasyon esasları.",
+      metaDuration: "Tatbikat",
+      metaDurationValue: "60 saat",
+      metaDistance: "İntikal",
+      metaDistanceValue: "50–60 km",
+      metaTeam: "Devriye",
+      metaTeamValue: "8 personel",
+    },
+
+    anchorsAria: "Bu sayfadaki bölümler",
+    anchors: {
+      concept: "Konsept",
+      terrain: "Arazi",
+      route: "Güzergâh",
+      team: "Takım",
+      equipment: "Teçhizat",
+      training: "Eğitim",
+      coordination: "Koordinasyon",
+      "dos-donts": "Yapılacaklar ve yasaklar",
+      facilitation: "Destek",
+    },
+
+    concept: {
+      eyebrow: "Konsept",
+      title: "PATS Konsepti",
+      description:
+        "Konvansiyonel olmayan bir senaryo altında yürütülen, görev ve vazife odaklı bir devriye yarışması; kesintisiz 60 saatlik bir tatbikat boyunca taktik uzmanlığı, dayanıklılığı ve askerî nitelikleri değerlendirir.",
+      imageAlt:
+        "PATS konsept şeması: toplanma bölgesi, teröristlerin hâkim olduğu bölgeden saklanma yerine ve hedefe uzanan sızma güzergâhı, geri çekilme etabı ve bitiş sürat yürüyüşü ile her kontrol noktasında icra edilen görevler.",
+      imageCaption:
+        "PATS Konsepti — Ana Planlama Konferansı'nda yayımlanan brifing şeması.",
+    },
+
+    terrain: {
+      eyebrow: "Arazi",
+      title: "Arazi yapısı",
+      description:
+        "Devriyenin kat ettiği arazi ve beklenen koşullar — kıyafet, ayakkabı ve soğuk hava düzenine karar vermeden önce okuyun.",
+      groundTitle: "Zemin",
+      demandTitle: "Devriyeden beklenenler",
+    },
+
+    route: {
+      eyebrow: "Güzergâh",
+      title: "Tatbikatın düzeni",
+      description:
+        "Devriye; toplanma bölgesinden sızma, saklanma yeri, yakın hedef keşfi ve geri çekilme aşamalarıyla bitiş bölgesine intikal eder.",
+      distanceLabel: "Mesafe",
+      totalLabel: "Toplam intikal",
+      totalValue: "50–60 km",
+    },
+
+    team: {
+      eyebrow: "Teşkilat",
+      title: "Takım teşkilatı",
+      description:
+        "Her ülke bir devriye çıkarır — sekiz kişilik bir keşif takımı ile bir yedek çift ve bir takım sorumlusu.",
+      roleHeading: "Görev",
+      strengthHeading: "Mevcut",
+      noteLabel: "Not",
+    },
+
+    equipment: {
+      eyebrow: "Kadro",
+      title: "Silah ve teçhizat",
+      description:
+        "Her personelin taşıdığı ve takım başına verilen tam kadro. Miktarlar verildiği gibidir; yolda hiçbir parça bırakılamaz ve tatbikat sırasında rastgele ağırlık kontrolleri yapılır.",
+      itemHeading: "Malzeme",
+      indlHeading: "Personel başına",
+      teamHeading: "Takım başına",
+      notApplicable: "Uygulanmaz",
+      groups: {
+        personal: "Kıyafet, silah ve şahsi teçhizat",
+        stores: "Seyrüsefer, teknik ve özel malzeme",
+      },
+      note: "Takımın toplam yükü, dolu matara, mühimmat ve verilen takip cihazı dâhil 200 kg'dır. Kalan teçhizat, yayımlanan talimatlara göredir.",
+    },
+
+    training: {
+      eyebrow: "Oryantasyon",
+      title: "Tanıtım eğitimi",
+      description:
+        "Uluslararası takımlar için, tatbikat bölgesine intikalden önce tamamlanan yarışma öncesi oryantasyon; özellikle şu konulara ağırlık verilir:",
+    },
+
+    coordination: {
+      eyebrow: "Koordinasyon",
+      title: "Koordinasyon esasları",
+      description:
+        "Ana Planlama Konferansı'nda yayımlanan talimatlar. Uyulmaması puan cezası veya diskalifiye ile sonuçlanabilir.",
+    },
+
+    dosDonts: {
+      eyebrow: "Davranış",
+      title: "Yapılacaklar ve yasaklar",
+      description:
+        "Ziyaret süresince her katılımcı için geçerli olan yükümlülükler ve yasaklar.",
+      dos: "Yapılacaklar",
+      donts: "Yasaklar",
+    },
+
+    facilitation: {
+      eyebrow: "Destek",
+      title: "Destek, sağlık ve hukuk",
+      description:
+        "Pakistan Ordusu'nun sağladıkları, sağlık sorumluluğunun sınırı ve katılımcı tüm uluslara bildirilen hukuki durum.",
+      facilitationTitle: "Pakistan Ordusu tarafından sağlanır",
+      medicalTitle: "Sağlık desteği",
+      legalTitle: "Hukuki hususlar",
+      informationTitle: "Takımlardan istenen bilgiler",
+      informationDeadline: (deadline: string): string =>
+        `Son tarih: ${deadline}`,
+    },
+
+  },
+
   carousel: {
     prev: "Önceki kartlar",
     next: "Sonraki kartlar",

@@ -149,6 +149,132 @@ export const marketing: typeof enMarketing = {
     },
   },
 
+  // English pending translation review — the familiarization brief carries
+  // military terminology that needs a subject-matter check per locale.
+  familiarization: {
+    meta: {
+      title: "PATS 认知简介",
+      description:
+        "参赛分队抵达前的简报——PATS 构想、地形与路线、队伍编成、武器装备配发标准与协同要点。",
+    },
+
+    hero: {
+      eyebrow: "抵达前简报",
+      title: "PATS 认知简介",
+      subtitle:
+        "参赛分队抵达前所需的全部内容——演习构想、地形与路线、队伍编成、武器与装备配发标准，以及规范演习行动的协同要点。",
+      metaDuration: "演习",
+      metaDurationValue: "60 小时",
+      metaDistance: "行程",
+      metaDistanceValue: "50–60 公里",
+      metaTeam: "巡逻队",
+      metaTeamValue: "8 人",
+    },
+
+    anchorsAria: "本页各节",
+    anchors: {
+      concept: "构想",
+      terrain: "地形",
+      route: "路线",
+      team: "编成",
+      equipment: "装备",
+      training: "训练",
+      coordination: "协同",
+      "dos-donts": "应做与禁止",
+      facilitation: "保障",
+    },
+
+    concept: {
+      eyebrow: "构想",
+      title: "PATS 构想",
+      description:
+        "以任务和课目为导向的巡逻竞赛，在非常规作战想定下实施，通过连续 60 小时的演习考核战术素养、耐力与军人品质。",
+      imageAlt:
+        "PATS 构想示意图：集结地域、经恐怖分子控制区通往隐蔽地与目标的渗透路线、撤离段与终点急行军，以及在各检查点执行的课目。",
+      imageCaption: "PATS 构想——主要计划会议下发的简报示意图。",
+    },
+
+    terrain: {
+      eyebrow: "地形",
+      title: "地形概况",
+      description:
+        "巡逻队所经地形及预期气候条件——在确定着装、鞋靴与寒区行动方式之前请先阅读。",
+      groundTitle: "地表类型",
+      demandTitle: "对巡逻队的要求",
+    },
+
+    route: {
+      eyebrow: "路线",
+      title: "演习编排",
+      description:
+        "巡逻队自集结地域出发，依次经渗透、隐蔽地、近距离目标侦察与撤离，抵达终点地域。",
+      distanceLabel: "距离",
+      totalLabel: "总行程",
+      totalValue: "50–60 公里",
+    },
+
+    team: {
+      eyebrow: "编制",
+      title: "队伍编成",
+      description:
+        "每国派出一支巡逻队——8 人侦察队，另配 1 组预备队员与 1 名领队。",
+      roleHeading: "职务",
+      strengthHeading: "员额",
+      noteLabel: "备注",
+    },
+
+    equipment: {
+      eyebrow: "配发标准",
+      title: "武器与装备",
+      description:
+        "每名队员随身携带以及每队配发的完整标准。数量以配发为准：途中不得丢弃任何物品，演习期间将进行随机称重检查。",
+      itemHeading: "物品",
+      indlHeading: "每人",
+      teamHeading: "每队",
+      notApplicable: "不适用",
+      groups: {
+        personal: "服装、武器与个人携行具",
+        stores: "导航、技术与专用器材",
+      },
+      note: "全队总负重 200 公斤，含注满的水壶、弹药与配发的追踪器。其余装备按下发的指示执行。",
+    },
+
+    training: {
+      eyebrow: "适应训练",
+      title: "认知训练",
+      description:
+        "国际队伍在进入演习地域前完成的赛前适应训练，重点包括：",
+    },
+
+    coordination: {
+      eyebrow: "协同",
+      title: "协同要点",
+      description:
+        "主要计划会议下发的指示。未按规定执行可能被扣分或取消资格。",
+    },
+
+    dosDonts: {
+      eyebrow: "行为规范",
+      title: "应做与禁止",
+      description: "访问期间对每名参赛人员均适用的义务与禁令。",
+      dos: "应做",
+      donts: "禁止",
+    },
+
+    facilitation: {
+      eyebrow: "保障",
+      title: "保障、医疗与法律",
+      description:
+        "巴基斯坦陆军提供的保障、医疗责任的界限，以及向所有参赛国通报的法律立场。",
+      facilitationTitle: "由巴基斯坦陆军提供",
+      medicalTitle: "医疗保障",
+      legalTitle: "法律事项",
+      informationTitle: "各队须提交的信息",
+      informationDeadline: (deadline: string): string => `截止日期：${deadline}`,
+    },
+
+  },
+
   carousel: {
     prev: "上一组卡片",
     next: "下一组卡片",

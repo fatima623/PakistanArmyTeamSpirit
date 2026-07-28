@@ -29,13 +29,13 @@ const BOOKLET_SECTIONS: readonly {
 }[] = [
   { page: 3, key: "overview", href: "/#mission" },
   { page: 5, key: "history", href: "/international" },
-  { page: 6, key: "concept", href: "/#mission" },
-  { page: 7, key: "layout", href: "/operations" },
+  { page: 6, key: "concept", href: "/familiarization#concept" },
+  { page: 7, key: "layout", href: "/familiarization#events" },
   { page: 8, key: "conduct", href: "/operations" },
-  { page: 17, key: "teamComposition", href: "/awards" },
+  { page: 17, key: "teamComposition", href: "/familiarization#team" },
   { page: 18, key: "scoresAwards", href: "/awards" },
-  { page: 19, key: "weaponEquipment", href: "/operations" },
-  { page: 21, key: "coordinatingPoints", href: "/operations" },
+  { page: 19, key: "weaponEquipment", href: "/familiarization#team" },
+  { page: 21, key: "coordinatingPoints", href: "/familiarization#coordination" },
 ];
 
 export default async function DocumentsPage() {

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 
-import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { AwardsResultsRoll } from "@/components/awards/AwardsResultsRoll";
 import { AwardsShowcase } from "@/components/awards/AwardsShowcase";
 import { PatsPageHero } from "@/components/pats/PatsPageHero";
 import { PatsSection } from "@/components/pats/PatsSection";
-import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { getAwardsRoll } from "@/lib/awards";
 
@@ -39,28 +37,6 @@ export default async function AwardsPage() {
         )}
       </PatsSection>
 
-      <PatsSection variant="elevated" className="pats-awards-page-section">
-        <ScrollReveal>
-          <PatsSectionHeading
-            eyebrow={p.teamEyebrow}
-            title={p.teamTitle}
-            description={p.teamDescription}
-          />
-        </ScrollReveal>
-        <div className="pats-awards-team-card">
-          <div className="pats-data-table">
-            {p.teamRoles.map((row) => (
-              <div
-                key={row.role}
-                className="pats-data-table__row pats-data-table__row--split"
-              >
-                <div className="pats-data-table__label">{row.role}</div>
-                <div className="pats-data-table__value">{row.qty}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </PatsSection>
     </div>
   );
 }

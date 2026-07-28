@@ -3,6 +3,7 @@
 const PAGE_BANNER_PATHS = new Set([
   "/operations",
   "/international",
+  "/familiarization",
   "/awards",
   "/announcements",
   "/gallery",
@@ -39,6 +40,7 @@ export function pathnameIsCinematicFullWidth(pathname: string): boolean {
   if (pathname === "/") return true;
   if (pathname.startsWith("/operations")) return true;
   if (pathname.startsWith("/international")) return true;
+  if (pathname.startsWith("/familiarization")) return true;
   if (pathname.startsWith("/awards")) return true;
   if (pathname.startsWith("/gallery")) return true;
   if (pathname.startsWith("/announcements")) return true;

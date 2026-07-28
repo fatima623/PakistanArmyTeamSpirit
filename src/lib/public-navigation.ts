@@ -18,6 +18,7 @@ export const PUBLIC_NAV_ITEMS: PublicNavItem[] = [
   // { href: "/exercise-contour", label: "Exercise Contour" },
   { href: "/events-detail", label: "Events Detail" },
   { href: "/international", label: "International Participation" },
+  { href: "/familiarization", label: "Familiarization of PATS" },
   { href: "/awards", label: "Awards" },
   { href: "/gallery", label: "Gallery" },
   { href: "/announcements", label: "Announcements" },

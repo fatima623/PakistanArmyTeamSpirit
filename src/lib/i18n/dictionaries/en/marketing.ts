@@ -8,6 +8,7 @@
 // this section does not own, so it cannot be reshaped — and their free text is
 // localized by `@/lib/i18n/pats-content-i18n` instead.
 
+import type { FamiliarizationAnchor } from "@/lib/familiarization-content";
 import type { DrillCategory, DrillPhase, TacticalDrill } from "@/lib/pats-content";
 
 export const marketing = {
@@ -173,6 +174,143 @@ export const marketing = {
       weaponEquipment: "Weapon & equipment",
       coordinatingPoints: "Coordinating points",
     },
+  },
+
+  /**
+   * /familiarization — the pre-arrival brief. Page chrome only; the terrain,
+   * route, team, equipment, coordination and do/don't rows come from
+   * `@/lib/familiarization-content` (and, through it, `@/lib/pats-content`)
+   * and are localized by `@/lib/i18n/pats-content-i18n`.
+   */
+  familiarization: {
+    meta: {
+      title: "Familiarization of PATS",
+      description:
+        "Pre-arrival brief for participating contingents — concept of PATS, terrain and route, team composition, the weapons and equipment scale, and coordinating points.",
+    },
+
+    hero: {
+      eyebrow: "Pre-arrival brief",
+      title: "Familiarization of PATS",
+      subtitle:
+        "Everything a participating contingent needs before arrival — the concept of the exercise, the ground and the route, team composition, the weapons and equipment scale, and the coordinating points that govern conduct.",
+      metaDuration: "Exercise",
+      metaDurationValue: "60 hours",
+      metaDistance: "Traverse",
+      metaDistanceValue: "50–60 km",
+      metaTeam: "Patrol",
+      metaTeamValue: "8 members",
+    },
+
+    /** Sticky in-page rail. Keys match `FAMILIARIZATION_ANCHORS`. */
+    anchorsAria: "Sections on this page",
+    anchors: {
+      concept: "Concept",
+      terrain: "Terrain",
+      route: "Route",
+      team: "Team",
+      equipment: "Equipment",
+      training: "Training",
+      coordination: "Coordination",
+      "dos-donts": "Dos & Don'ts",
+      facilitation: "Facilitation",
+    } as Record<FamiliarizationAnchor, string>,
+
+    concept: {
+      eyebrow: "Concept",
+      title: "Concept of PATS",
+      description:
+        "A mission- and task-oriented patrolling competition run under a sub-conventional scenario, assessing tactical expertise, endurance and soldierly attributes over a continuous 60-hour exercise.",
+      /** Alt text for the concept briefing diagram. */
+      imageAlt:
+        "Concept diagram of PATS: the assembly area, the infiltration route through the terrorist-dominated area to the hideout and target, the exfiltration leg and the terminal speed march, with the tasks conducted at each checkpoint.",
+      imageCaption:
+        "Concept of PATS — briefing diagram issued at the Main Planning Conference.",
+    },
+
+    terrain: {
+      eyebrow: "Ground",
+      title: "Terrain profile",
+      description:
+        "The ground the patrol crosses and the conditions expected on it — read this before deciding clothing, footwear and cold-weather routine.",
+      groundTitle: "Ground",
+      demandTitle: "Demands on the patrol",
+    },
+
+    route: {
+      eyebrow: "Route",
+      title: "Layout of the exercise",
+      description:
+        "The patrol moves from the assembly area through infiltration, the hideout, close target reconnaissance and exfiltration to the terminal area.",
+      distanceLabel: "Distance",
+      totalLabel: "Total traverse",
+      totalValue: "50–60 km",
+    },
+
+    team: {
+      eyebrow: "Organization",
+      title: "Team composition",
+      description:
+        "Each nation fields one patrol — an eight-member reconnaissance team plus a reserve pair and a team manager.",
+      roleHeading: "Appointment",
+      strengthHeading: "Strength",
+      noteLabel: "Note",
+    },
+
+    equipment: {
+      eyebrow: "Scale",
+      title: "Weapons & equipment",
+      description:
+        "The full scale carried by each participant and held once per team. Quantities are as issued — nothing may be shed en route, and random weight checks are carried out during the exercise.",
+      itemHeading: "Items",
+      indlHeading: "Per Indl",
+      teamHeading: "Per Team",
+      /** Screen-reader text for the "—" shown where a row is not scaled. */
+      notApplicable: "Not applicable",
+      /** Table captions, keyed by `EquipmentGroup.id`. */
+      groups: {
+        personal: "Clothing, weapons and personal kit",
+        stores: "Navigation, technical and specialist stores",
+      } as Record<string, string>,
+      note: "Total team load is 200 kg including filled water bottles, ammunition and the issued tracker. Remaining equipment is as per the issued instructions.",
+    },
+
+    training: {
+      eyebrow: "Orientation",
+      title: "Familiarization training",
+      description:
+        "Pre-competition orientation for international teams, completed before movement into the exercise area, with special emphasis on:",
+    },
+
+    coordination: {
+      eyebrow: "Coordination",
+      title: "Coordinating points",
+      description:
+        "Instructions issued at the Main Planning Conference. Failure to comply may carry a points penalty or disqualification.",
+    },
+
+    dosDonts: {
+      eyebrow: "Conduct",
+      title: "Dos & Don'ts",
+      description:
+        "The obligations and prohibitions that apply to every participant for the duration of the visit.",
+      dos: "Do",
+      donts: "Don't",
+    },
+
+    facilitation: {
+      eyebrow: "Support",
+      title: "Facilitation, medical & legal",
+      description:
+        "What the Pakistan Army provides, where medical responsibility sits, and the legal position communicated to all participating nations.",
+      facilitationTitle: "Provided by the Pakistan Army",
+      medicalTitle: "Medical cover",
+      legalTitle: "Legal aspects",
+      informationTitle: "Information required from teams",
+      /** e.g. "Due by 15 December 2025" */
+      informationDeadline: (deadline: string): string => `Due by ${deadline}`,
+    },
+
   },
 
   /** Shared arrows for the ForestCardCarousel (only /operations mounts it today). */

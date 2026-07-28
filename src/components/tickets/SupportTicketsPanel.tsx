@@ -178,7 +178,7 @@ export function SupportTicketsPanel({
                             )
                           }
                           disabled={busy}
-                          className="rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-[0.74rem] font-semibold text-slate-600 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                          className="rounded-md border border-red-200 bg-red-50 px-2.5 py-1.5 text-[0.74rem] font-semibold text-red-700 transition-colors hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {tk.actions.close}
                         </button>

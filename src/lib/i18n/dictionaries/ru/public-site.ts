@@ -24,6 +24,8 @@ export const publicSite: typeof enPublicSite = {
     operations: "Операции",
     exerciseContour: "Контур учений",
     international: "Международное участие",
+    // English pending translation review — military terminology.
+    familiarization: "Ознакомление с PATS",
     awards: "Награды",
     gallery: "Галерея",
     announcements: "Объявления",

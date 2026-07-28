@@ -42,24 +42,10 @@ export default async function InternationalPage() {
         </ScrollReveal>
       </PatsSection>
 
-      <PatsSection variant="deepest">
-        <ScrollReveal>
-          <PatsSectionHeading
-            eyebrow={p.orientationEyebrow}
-            title={p.orientationTitle}
-            description={p.orientationDescription}
-          />
-        </ScrollReveal>
-        <div className="pats-orientation-grid mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {p.orientationModules.map((mod) => (
-            <div key={mod} className="pats-panel pats-panel--tile">
-              <p className="pats-panel__label">{mod}</p>
-            </div>
-          ))}
-        </div>
-      </PatsSection>
+      {/* Familiarization training used to sit here; it now lives with the rest
+          of the pre-arrival brief on /familiarization. */}
 
-      <PatsSection variant="navy">
+      <PatsSection variant="deepest">
         <ScrollReveal>
           <PatsSectionHeading
             eyebrow={p.historyEyebrow}

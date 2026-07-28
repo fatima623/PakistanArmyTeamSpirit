@@ -13,6 +13,7 @@ export const publicSite = {
     operations: "Operations",
     exerciseContour: "Exercise Contour",
     international: "International Participation",
+    familiarization: "Familiarization of PATS",
     awards: "Awards",
     gallery: "Gallery",
     announcements: "Announcements",

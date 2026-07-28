@@ -68,6 +68,7 @@ export const PUBLIC_NAV = [
   { href: "/", label: "Home" },
   { href: "/operations", label: "Operations" },
   { href: "/international", label: "International" },
+  { href: "/familiarization", label: "Familiarization of PATS" },
   { href: "/awards", label: "Awards" },
   { href: "/gallery", label: "Gallery" },
   { href: "/documents", label: "Documents" },

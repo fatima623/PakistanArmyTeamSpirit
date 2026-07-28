@@ -7486,18 +7486,18 @@ html[data-site-theme="day"] .army-site .pats-highlight-cell__value {
 
 
 
-html.light-theme .army-site:not(.dashboard-day) .pats-eyebrow,
-html.light-theme .army-site .pats-eyebrow,
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-eyebrow,
-html[data-site-theme="day"] .army-site .pats-eyebrow {
+html.light-theme .army-site:not(.dashboard-day) .pats-eyebrow:not(.fam-page *),
+html.light-theme .army-site .pats-eyebrow:not(.fam-page *),
+html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-eyebrow:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-eyebrow:not(.fam-page *) {
   color: var(--lt-eyebrow) !important;
 }
 
 
 html.light-theme .army-site .pats-section-heading .pats-eyebrow,
-html.light-theme .army-site .pats-page-hero .pats-eyebrow,
+html.light-theme .army-site .pats-page-hero .pats-eyebrow:not(.fam-page *),
 html[data-site-theme="day"] .army-site .pats-section-heading .pats-eyebrow,
-html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow {
+html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow:not(.fam-page *) {
   color: var(--lt-olive) !important;
   font-size: var(--pats-type-section-eyebrow, 1.0625rem) !important;
   font-weight: 700 !important;
@@ -7536,11 +7536,11 @@ html[data-site-theme="day"] .army-site ul.pats-body span {
 }
 
 
-html.light-theme .army-site:not(.dashboard-day) .pats-gold-rule,
-html.light-theme .army-site .pats-gold-rule,
-html.light-theme .army-site .pats-gold-rule--center,
-html[data-site-theme="day"] .army-site .pats-gold-rule,
-html[data-site-theme="day"] .army-site .pats-gold-rule--center {
+html.light-theme .army-site:not(.dashboard-day) .pats-gold-rule:not(.fam-page *),
+html.light-theme .army-site .pats-gold-rule:not(.fam-page *),
+html.light-theme .army-site .pats-gold-rule--center:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-gold-rule:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-gold-rule--center:not(.fam-page *) {
   width: 3.5rem !important;
   height: 3px !important;
   margin-top: 0.75rem !important;
@@ -7693,14 +7693,14 @@ html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) [
 }
 
 
-html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.tac-mission-card):not(.pats-page-hero__crumb a),
-html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.tac-mission-card):not(.pats-page-hero__crumb a) {
+html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.tac-mission-card):not(.pats-page-hero__crumb a):not(.fam-page *),
+html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.tac-mission-card):not(.pats-page-hero__crumb a):not(.fam-page *) {
   color: var(--lt-olive);
 }
 
 
-html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.pats-page-hero__crumb a):hover,
-html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.pats-page-hero__crumb a):hover {
+html.light-theme .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.pats-page-hero__crumb a):not(.fam-page *):hover,
+html[data-site-theme="day"] .army-site :is(.army-home, .pats-inner-page-shell) a:not(.pats-btn):not(.pats-page-hero__crumb a):not(.fam-page *):hover {
   color: var(--lt-olive-dark);
 }
 
@@ -8348,8 +8348,8 @@ html[data-site-theme="day"] .army-site .pats-page-hero__stage {
 }
 
 
-html.light-theme .army-site .pats-page-hero__meta,
-html[data-site-theme="day"] .army-site .pats-page-hero__meta {
+html.light-theme .army-site .pats-page-hero__meta:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-page-hero__meta:not(.fam-page *) {
   margin: 0;
   padding: 0;
   border: none !important;
@@ -8376,8 +8376,8 @@ html[data-site-theme="day"] .army-site .pats-page-hero__meta dt {
 }
 
 
-html.light-theme .army-site .pats-page-hero__meta dd,
-html[data-site-theme="day"] .army-site .pats-page-hero__meta dd {
+html.light-theme .army-site .pats-page-hero__meta dd:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-page-hero__meta dd:not(.fam-page *) {
   color: var(--lt-gold-bright, #c8a84b) !important;
   font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif !important;
   font-size: clamp(1.75rem, 3.5vw, 2.25rem) !important;
@@ -8472,9 +8472,9 @@ html[data-site-theme="day"] .army-site button[role="radio"] {
 
 
 html.light-theme .army-site .pats-page-hero .pats-body--bright,
-html.light-theme .army-site .pats-page-hero .pats-eyebrow,
+html.light-theme .army-site .pats-page-hero .pats-eyebrow:not(.fam-page *),
 html[data-site-theme="day"] .army-site .pats-page-hero .pats-body--bright,
-html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow {
+html[data-site-theme="day"] .army-site .pats-page-hero .pats-eyebrow:not(.fam-page *) {
   color: #ffffff !important;
 }
 
@@ -8735,13 +8735,13 @@ html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) [clas
 
 
 
-html.light-theme .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *, .pats-gallery-tile *)),
-html.light-theme .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *)),
+html.light-theme .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *, .pats-gallery-tile *, .fam-page *)),
+html.light-theme .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .fam-page *)),
 html.light-theme .cinematic-site.army-site .pats-form-page :is(p, li, span, label):not([class*="text-red"]),
 html.light-theme .cinematic-site.army-site .pats-prose-panel :is(p, li, span),
 html.light-theme .cinematic-site.army-site .cp-form-card:not(.pats-login-card) :is(p, li, span, label):not([class*="text-red"]),
-html[data-site-theme="day"] .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *, .pats-gallery-tile *)),
-html[data-site-theme="day"] .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *)),
+html[data-site-theme="day"] .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *, .pats-gallery-tile *, .fam-page *)),
+html[data-site-theme="day"] .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .fam-page *)),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-form-page :is(p, li, span, label):not([class*="text-red"]),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-prose-panel :is(p, li, span),
 html[data-site-theme="day"] .cinematic-site.army-site .cp-form-card:not(.pats-login-card) :is(p, li, span, label):not([class*="text-red"]) {
@@ -8750,12 +8750,12 @@ html[data-site-theme="day"] .cinematic-site.army-site .cp-form-card:not(.pats-lo
 
 
 html.light-theme .cinematic-site.army-site .pats-section .pats-section-heading .pats-section-title,
-html.light-theme .cinematic-site.army-site .pats-section h2:not(:is(.pats-auth-shell__intro *, .pats-login-card *, .pats-video-gallery__title)),
-html.light-theme .cinematic-site.army-site .pats-section h3:not(:is(.tac-mission-card__title, .pats-pillar-card__title, .pats-pillar-card h3, .pats-home-featured-news__title, .pats-home-featured-news h3, .pats-image-card__title, .pats-video-card__title, .paf-card h3, .pats-rule-card h3, .pats-doc-card h3, .pats-panel .pats-section-title, .pats-panel .pats-panel__label, .pats-panel h3, .tac-edition-row__title, .pats-awards-hero-card__name)),
+html.light-theme .cinematic-site.army-site .pats-section h2:not(:is(.pats-auth-shell__intro *, .pats-login-card *, .pats-video-gallery__title, .fam-page *)),
+html.light-theme .cinematic-site.army-site .pats-section h3:not(:is(.tac-mission-card__title, .pats-pillar-card__title, .pats-pillar-card h3, .pats-home-featured-news__title, .pats-home-featured-news h3, .pats-image-card__title, .pats-video-card__title, .paf-card h3, .pats-rule-card h3, .pats-doc-card h3, .pats-panel .pats-section-title, .pats-panel .pats-panel__label, .pats-panel h3, .tac-edition-row__title, .pats-awards-hero-card__name, .fam-page *)),
 html.light-theme .cinematic-site.army-site .pats-prose-panel h2,
 html[data-site-theme="day"] .cinematic-site.army-site .pats-section .pats-section-heading .pats-section-title,
-html[data-site-theme="day"] .cinematic-site.army-site .pats-section h2:not(:is(.pats-auth-shell__intro *, .pats-login-card *, .pats-video-gallery__title)),
-html[data-site-theme="day"] .cinematic-site.army-site .pats-section h3:not(:is(.tac-mission-card__title, .pats-pillar-card__title, .pats-pillar-card h3, .pats-home-featured-news__title, .pats-home-featured-news h3, .pats-image-card__title, .pats-video-card__title, .paf-card h3, .pats-rule-card h3, .pats-doc-card h3, .pats-panel .pats-section-title, .pats-panel .pats-panel__label, .pats-panel h3, .tac-edition-row__title, .pats-awards-hero-card__name)),
+html[data-site-theme="day"] .cinematic-site.army-site .pats-section h2:not(:is(.pats-auth-shell__intro *, .pats-login-card *, .pats-video-gallery__title, .fam-page *)),
+html[data-site-theme="day"] .cinematic-site.army-site .pats-section h3:not(:is(.tac-mission-card__title, .pats-pillar-card__title, .pats-pillar-card h3, .pats-home-featured-news__title, .pats-home-featured-news h3, .pats-image-card__title, .pats-video-card__title, .paf-card h3, .pats-rule-card h3, .pats-doc-card h3, .pats-panel .pats-section-title, .pats-panel .pats-panel__label, .pats-panel h3, .tac-edition-row__title, .pats-awards-hero-card__name, .fam-page *)),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-prose-panel h2 {
   color: var(--lt-heading) !important;
 }
@@ -9241,9 +9241,9 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-feature-titl
 
 
 html.light-theme .army-home .pats-eyebrow,
-html.light-theme .army-site .pats-inner-page-shell .pats-eyebrow,
+html.light-theme .army-site .pats-inner-page-shell .pats-eyebrow:not(.fam-page *),
 html[data-site-theme="day"] .army-home .pats-eyebrow,
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-eyebrow {
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-eyebrow:not(.fam-page *) {
   color: var(--lt-olive) !important;
   letter-spacing: 0.2em;
 }
@@ -9270,14 +9270,14 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-section-head
 }
 
 
-html.light-theme .army-home .pats-gold-rule,
-html.light-theme .army-home .pats-gold-rule--center,
-html.light-theme .army-site .pats-inner-page-shell .pats-gold-rule,
-html.light-theme .army-site .pats-inner-page-shell .pats-gold-rule--center,
-html[data-site-theme="day"] .army-home .pats-gold-rule,
-html[data-site-theme="day"] .army-home .pats-gold-rule--center,
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule,
-html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule--center {
+html.light-theme .army-home .pats-gold-rule:not(.fam-page *),
+html.light-theme .army-home .pats-gold-rule--center:not(.fam-page *),
+html.light-theme .army-site .pats-inner-page-shell .pats-gold-rule:not(.fam-page *),
+html.light-theme .army-site .pats-inner-page-shell .pats-gold-rule--center:not(.fam-page *),
+html[data-site-theme="day"] .army-home .pats-gold-rule:not(.fam-page *),
+html[data-site-theme="day"] .army-home .pats-gold-rule--center:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell .pats-gold-rule--center:not(.fam-page *) {
   width: 3.5rem !important;
   height: 3px !important;
   margin-top: 0.75rem !important;
@@ -12029,8 +12029,8 @@ html[data-site-theme="day"] :is(.army-site, .cinematic-site.army-site),
  * Content breathes edge-to-edge inside wide bands; forest cards stay as accents only.
  */
 
-html.light-theme .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats),
-html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats) {
+html.light-theme .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats):not(.fam-page *),
+html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-section:not(.pats-section--stats):not(.fam-page *) {
   border-top: none !important;
   padding-top: var(--pats-section-pad-y, 3rem) !important;
   /* SECTION SPACING LOCKED */
@@ -12083,17 +12083,17 @@ html[data-site-theme="day"] .army-home #updates {
   background: #ffffff !important;
 }
 
-html.light-theme .army-site .pats-section--dark,
-html.light-theme .army-site .pats-section--navy,
-html.light-theme .army-site .pats-section--deepest,
-html[data-site-theme="day"] .army-site .pats-section--dark,
-html[data-site-theme="day"] .army-site .pats-section--navy,
-html[data-site-theme="day"] .army-site .pats-section--deepest {
+html.light-theme .army-site .pats-section--dark:not(.fam-page *),
+html.light-theme .army-site .pats-section--navy:not(.fam-page *),
+html.light-theme .army-site .pats-section--deepest:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-section--dark:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-section--navy:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-section--deepest:not(.fam-page *) {
   background: var(--lt-warm, #f0ebe3) !important;
 }
 
-html.light-theme .army-site .pats-section--elevated,
-html[data-site-theme="day"] .army-site .pats-section--elevated {
+html.light-theme .army-site .pats-section--elevated:not(.fam-page *),
+html[data-site-theme="day"] .army-site .pats-section--elevated:not(.fam-page *) {
   background: var(--lt-sage, #e8efe4) !important;
 }
 
@@ -15192,8 +15192,8 @@ html[data-site-theme="day"] .participant-portal.pats-portal .portal-back-link:ho
 
 
 
-html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *) {
+html.light-theme .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not(.pp-dl__term):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(p, li, span, label, dd, dt, small, time, blockquote, figcaption):not(.pp-dl__term):not([class*="text-red"]):not([class*="text-emerald"]):not([class*="text-amber"]):not([class*="text-sky"]):not(.portal-link):not(.portal-back-link):not([class*="badge"]):not([class*="pill"]):not(svg):not(svg *):not(.pp-sidebar):not(.pp-sidebar *):not(.pp-hero):not(.pp-hero *) {
   color: #475569 !important;
 }
 
@@ -21533,4 +21533,805 @@ html[lang="ar"] .army-site:not(.dashboard-day) .pats-footer-bar__btn {
 [dir="rtl"] .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__menu-btn {
   margin-left: 0;
   margin-right: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Familiarization of PATS (/familiarization)
+
+   One-page pre-arrival brief. The page runs on its own blue-and-white
+   palette and its own `fam-*` vocabulary rather than the shared
+   `pats-panel` / `pats-rule-card` / `pats-section-heading` surfaces: those
+   are pinned to the site's gold-and-olive accent by forced (importance-
+   flagged) light-theme rules, and overriding them would mean adding more of
+   the same — scripts/css-guardrails.mjs only ratchets that count down.
+
+   Every colour resolves from the --fam-* custom properties declared below,
+   so the light theme is a single variable block rather than a parallel set
+   of rules. Logical properties (padding-inline-start / inset-inline-start)
+   keep markers on the correct side in Arabic RTL.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.army-site .fam-page {
+  /* Blue-on-navy: the page's own accent, replacing --pats-gold. */
+  --fam-accent: #7db8f0;
+  --fam-accent-soft: rgba(125, 184, 240, 0.14);
+  --fam-heading: #ffffff;
+  --fam-text: rgba(255, 255, 255, 0.92);
+  --fam-muted: rgba(255, 255, 255, 0.7);
+  --fam-surface: rgba(255, 255, 255, 0.045);
+  --fam-surface-2: rgba(255, 255, 255, 0.08);
+  --fam-border: rgba(148, 196, 240, 0.26);
+  --fam-border-strong: rgba(148, 196, 240, 0.5);
+  --fam-thead-bg: rgba(125, 184, 240, 0.16);
+  --fam-thead-text: #cfe4fa;
+  --fam-danger: #f0a49c;
+  --fam-danger-border: rgba(224, 120, 110, 0.42);
+  --fam-danger-surface: rgba(120, 40, 36, 0.2);
+  --fam-shadow: none;
+  /* Accent for text sitting on the hero photo / meta band — dark in both
+     themes, so this stays light blue either way. */
+  --fam-on-media: #9fd0ff;
+
+  /* Section bands: blue rather than the site's default warm/navy mix. */
+  --pats-bg-deepest: #0c1826;
+  --pats-bg-dark: #102336;
+  --pats-bg-navy: #143049;
+  --pats-bg-elevated: #17395a;
+}
+
+html.light-theme .army-site .fam-page,
+html[data-site-theme="day"] .army-site .fam-page,
+html.site-theme-day .army-site .fam-page {
+  --fam-accent: #1d4f91;
+  --fam-accent-soft: rgba(29, 79, 145, 0.08);
+  --fam-heading: #10263c;
+  --fam-text: #33465b;
+  --fam-muted: #5b6f85;
+  --fam-surface: #ffffff;
+  --fam-surface-2: #f2f7fd;
+  --fam-border: #d3e2f2;
+  --fam-border-strong: #a9c7e6;
+  --fam-thead-bg: #1d4f91;
+  --fam-thead-text: #ffffff;
+  --fam-danger: #a3302a;
+  --fam-danger-border: rgba(163, 48, 42, 0.3);
+  --fam-danger-surface: #fdf3f2;
+  --fam-shadow: 0 1px 2px rgba(16, 38, 60, 0.05), 0 8px 24px rgba(16, 38, 60, 0.05);
+  --fam-on-media: #9fd0ff;
+
+  --pats-bg-deepest: #ffffff;
+  --pats-bg-dark: #f5f9fd;
+  --pats-bg-navy: #eaf2fb;
+  --pats-bg-elevated: #ffffff;
+}
+
+/* The shared page banner keeps its layout; only its gold accents are recoloured
+   (the matching site-wide rules carry a `:not(.fam-page *)` exemption). */
+.army-site:not(.dashboard-day) .fam-page .pats-gold-rule,
+.army-site:not(.dashboard-day) .fam-page .pats-gold-rule--center {
+  background: var(--fam-on-media);
+}
+
+.army-site:not(.dashboard-day) .fam-page .pats-page-hero__meta {
+  background: linear-gradient(90deg, #0c1826 0%, #17395a 50%, #0c1826 100%);
+}
+
+.army-site:not(.dashboard-day) .fam-page .pats-page-hero__meta dd {
+  color: var(--fam-on-media);
+}
+
+.army-site:not(.dashboard-day) .fam-page .pats-page-hero .pats-eyebrow {
+  color: var(--fam-on-media);
+}
+
+/* ── Layout: use the available width ─────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-page .fam-inner {
+  max-width: 96rem;
+}
+
+/* Anchored sections sit under both the site nav and the sticky rail. */
+.army-site:not(.dashboard-day) .fam-page .pats-section[id] {
+  scroll-margin-top: calc(var(--pats-nav-height, 4.5rem) + 3.5rem);
+}
+
+/* Consistent vertical rhythm between a heading and the block it introduces.
+   The heading is wrapped in <ScrollReveal>, hence the `.reveal` selector. */
+.army-site:not(.dashboard-day) .fam-page .fam-heading + *,
+.army-site:not(.dashboard-day) .fam-page .pats-section__inner > .reveal + * {
+  margin-top: 2rem;
+}
+
+/* ── Sticky section rail ─────────────────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-anchor-nav {
+  position: sticky;
+  top: var(--pats-nav-height, 4.5rem);
+  z-index: 20;
+  border-top: 1px solid var(--fam-border);
+  border-bottom: 1px solid var(--fam-border);
+  background: var(--pats-bg-navy);
+}
+
+.army-site:not(.dashboard-day) .fam-anchor-nav__inner {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  max-width: 96rem;
+  margin: 0 auto;
+  padding: 0.5rem 1.5rem;
+  scrollbar-width: none;
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .fam-anchor-nav__inner {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-anchor-nav__inner::-webkit-scrollbar {
+  display: none;
+}
+
+.army-site:not(.dashboard-day) .fam-anchor-nav__link {
+  flex: 0 0 auto;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fam-muted);
+  white-space: nowrap;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+@media (hover: hover) {
+  .army-site:not(.dashboard-day) .fam-anchor-nav__link:hover {
+    color: var(--fam-heading);
+    border-color: var(--fam-border);
+    background: var(--fam-accent-soft);
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-anchor-nav__link--active {
+  color: var(--fam-accent);
+  border-color: var(--fam-border-strong);
+  background: var(--fam-accent-soft);
+}
+
+html.light-theme .army-site .fam-anchor-nav__link--active,
+html[data-site-theme="day"] .army-site .fam-anchor-nav__link--active {
+  background: var(--fam-accent);
+  border-color: var(--fam-accent);
+  color: #ffffff;
+}
+
+/* ── Section heading ─────────────────────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-heading {
+  max-width: 62rem;
+}
+
+.army-site:not(.dashboard-day) .fam-eyebrow {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-rule {
+  width: 3rem;
+  height: 3px;
+  margin: 0.625rem 0 0.875rem;
+  border: 0;
+  background: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-title {
+  font-family: var(--font-bebas), var(--font-barlow), system-ui, sans-serif;
+  font-size: clamp(1.9rem, 1.2rem + 2vw, 3rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  color: var(--fam-heading);
+}
+
+.army-site:not(.dashboard-day) .fam-lede {
+  margin-top: 0.875rem;
+  max-width: 60ch;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--fam-muted);
+}
+
+.army-site:not(.dashboard-day) .fam-subheading {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-note {
+  margin-top: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fam-muted);
+}
+
+/* ── Concept diagram ─────────────────────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-diagram {
+  margin: 2rem 0 0;
+  border: 1px solid var(--fam-border);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 0.75rem;
+  box-shadow: var(--fam-shadow);
+}
+
+@media (min-width: 768px) {
+  .army-site:not(.dashboard-day) .fam-diagram {
+    padding: 1.25rem;
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-diagram__frame {
+  overflow-x: auto;
+}
+
+.army-site:not(.dashboard-day) .fam-diagram__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+/* Below `md` the diagram would shrink past legibility, so it keeps a minimum
+   width and the frame scrolls instead. */
+@media (max-width: 767px) {
+  .army-site:not(.dashboard-day) .fam-diagram__image {
+    width: 40rem;
+    max-width: none;
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-diagram__caption {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+  color: #4a5c6f;
+}
+
+/* ── Terrain profile ─────────────────────────────────────────────────── */
+
+/* A single panel with internal dividers: the terrain brief is only five short
+   facts, and giving each its own card made the section far taller than the
+   content warranted. */
+.army-site:not(.dashboard-day) .fam-terrain {
+  overflow: hidden;
+  border: 1px solid var(--fam-border);
+  border-radius: 12px;
+  background: var(--fam-surface);
+  box-shadow: var(--fam-shadow);
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__facts {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-bottom: 1px solid var(--fam-border);
+  background: var(--fam-accent-soft);
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__fact {
+  padding: 0.7rem 1.25rem;
+  border-inline-start: 1px solid var(--fam-border);
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__fact:first-child {
+  border-inline-start: 0;
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__fact dt {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fam-muted);
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__fact dd {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__split {
+  display: grid;
+}
+
+@media (min-width: 900px) {
+  .army-site:not(.dashboard-day) .fam-terrain__split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__block {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--fam-border);
+}
+
+@media (min-width: 900px) {
+  .army-site:not(.dashboard-day) .fam-terrain__block + .fam-terrain__block {
+    border-top: 0;
+    border-inline-start: 1px solid var(--fam-border);
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__label {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fam-muted);
+}
+
+.army-site:not(.dashboard-day) .fam-terrain__text {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fam-text);
+}
+
+.army-site:not(.dashboard-day) .fam-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.army-site:not(.dashboard-day) .fam-tags > li {
+  border: 1px solid var(--fam-border);
+  border-radius: 999px;
+  background: var(--fam-surface-2);
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: var(--fam-text);
+}
+
+/* ── Cards ───────────────────────────────────────────────────────────── */
+
+/* Cards stretch to the tallest in their row (no fixed heights — the row height
+   is still whatever its own content needs), so every row reads as a band. */
+.army-site:not(.dashboard-day) .fam-grid {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.army-site:not(.dashboard-day) .fam-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.army-site:not(.dashboard-day) .fam-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+}
+
+.army-site:not(.dashboard-day) .fam-card {
+  border: 1px solid var(--fam-border);
+  border-radius: 10px;
+  background: var(--fam-surface);
+  padding: 1rem 1.125rem;
+  box-shadow: var(--fam-shadow);
+}
+
+.army-site:not(.dashboard-day) .fam-card--wide {
+  margin-top: 1rem;
+}
+
+.army-site:not(.dashboard-day) .fam-card__label {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-card__body {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fam-text);
+}
+
+/* ── Bullet lists ────────────────────────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-bullets {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.army-site:not(.dashboard-day) .fam-bullets--columns {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .army-site:not(.dashboard-day) .fam-bullets--columns {
+    columns: 2;
+    column-gap: 2rem;
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-bullets > li {
+  position: relative;
+  padding-inline-start: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fam-text);
+  break-inside: avoid;
+}
+
+.army-site:not(.dashboard-day) .fam-bullets--columns > li {
+  margin-bottom: 0.5rem;
+}
+
+.army-site:not(.dashboard-day) .fam-bullets > li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0.6em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--fam-accent);
+}
+
+/* ── Route legs ──────────────────────────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-leg-list {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.army-site:not(.dashboard-day) .fam-leg {
+  display: flex;
+  gap: 0.875rem;
+  border: 1px solid var(--fam-border);
+  border-radius: 10px;
+  background: var(--fam-surface);
+  padding: 0.875rem 1.125rem;
+  box-shadow: var(--fam-shadow);
+}
+
+.army-site:not(.dashboard-day) .fam-leg__index {
+  flex: 0 0 1.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.875rem;
+  border-radius: 50%;
+  background: var(--fam-accent);
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+html:not(.light-theme):not([data-site-theme="day"])
+  .army-site
+  .fam-leg__index {
+  color: #0c1826;
+}
+
+.army-site:not(.dashboard-day) .fam-leg__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.army-site:not(.dashboard-day) .fam-leg__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+}
+
+.army-site:not(.dashboard-day) .fam-leg__title {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fam-heading);
+}
+
+.army-site:not(.dashboard-day) .fam-leg__distance {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--fam-accent);
+  white-space: nowrap;
+}
+
+.army-site:not(.dashboard-day) .fam-leg__distance-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fam-muted);
+}
+
+.army-site:not(.dashboard-day) .fam-leg__text {
+  margin-top: 0.35rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fam-text);
+}
+
+.army-site:not(.dashboard-day) .fam-total {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  border-top: 2px solid var(--fam-border-strong);
+  padding-top: 0.875rem;
+}
+
+.army-site:not(.dashboard-day) .fam-total__label {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fam-muted);
+}
+
+.army-site:not(.dashboard-day) .fam-total__value {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fam-accent);
+}
+
+/* ── Tables (team composition, weapons & equipment) ──────────────────── */
+
+.army-site:not(.dashboard-day) .fam-equipment {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.army-site:not(.dashboard-day) .fam-equipment__group {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.army-site:not(.dashboard-day) .fam-equipment__split {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (min-width: 960px) {
+  .army-site:not(.dashboard-day) .fam-equipment__split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--fam-border);
+  border-radius: 10px;
+  background: var(--fam-surface);
+  box-shadow: var(--fam-shadow);
+}
+
+.army-site:not(.dashboard-day) .fam-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+/* The equipment pair is split evenly, so at most one row of height separates
+   the two tables — letting them fill the stretched cell closes that gap and
+   the bottom edges line up exactly. */
+.army-site:not(.dashboard-day) .fam-equipment__split .fam-table {
+  height: 100%;
+}
+
+.army-site:not(.dashboard-day) .fam-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--fam-thead-bg);
+  padding: 0.6rem 0.875rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: start;
+  color: var(--fam-thead-text);
+  white-space: nowrap;
+}
+
+.army-site:not(.dashboard-day) .fam-table tbody th {
+  padding: 0.55rem 0.875rem;
+  font-weight: 500;
+  text-align: start;
+  line-height: 1.45;
+  color: var(--fam-text);
+}
+
+.army-site:not(.dashboard-day) .fam-table tbody td {
+  padding: 0.55rem 0.875rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--fam-accent);
+  white-space: nowrap;
+}
+
+.army-site:not(.dashboard-day) .fam-table tbody tr + tr > * {
+  border-top: 1px solid var(--fam-border);
+}
+
+.army-site:not(.dashboard-day) .fam-table tbody tr:nth-child(even) > * {
+  background: var(--fam-surface-2);
+}
+
+.army-site:not(.dashboard-day) .fam-table__num {
+  text-align: end;
+  width: 1%;
+}
+
+/* ── Familiarization training modules ────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-module-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.army-site:not(.dashboard-day) .fam-module {
+  border: 1px solid var(--fam-border);
+  border-inline-start: 3px solid var(--fam-accent);
+  border-radius: 8px;
+  background: var(--fam-surface);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--fam-text);
+  box-shadow: var(--fam-shadow);
+}
+
+/* ── Dos & Don'ts ────────────────────────────────────────────────────── */
+
+.army-site:not(.dashboard-day) .fam-dos-donts {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .fam-dos-donts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card {
+  border: 1px solid var(--fam-border);
+  border-radius: 10px;
+  background: var(--fam-surface);
+  padding: 1.125rem 1.25rem;
+  box-shadow: var(--fam-shadow);
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card--dont {
+  border-color: var(--fam-danger-border);
+  background: var(--fam-danger-surface);
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card__title {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card--do .fam-dos-card__title {
+  color: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card--dont .fam-dos-card__title {
+  color: var(--fam-danger);
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card__list {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.875rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card__list > li {
+  position: relative;
+  padding-inline-start: 1.4rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--fam-text);
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card__list > li::before {
+  position: absolute;
+  inset-inline-start: 0;
+  font-weight: 700;
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card--do .fam-dos-card__list > li::before {
+  content: "✓";
+  color: var(--fam-accent);
+}
+
+.army-site:not(.dashboard-day) .fam-dos-card--dont .fam-dos-card__list > li::before {
+  content: "✕";
+  color: var(--fam-danger);
+}
+
+/* ── Arabic: drop Latin tracking / uppercasing on the heading classes ─── */
+
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-anchor-nav__link,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-eyebrow,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-subheading,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-title,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-terrain__fact dt,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-terrain__label,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-card__label,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-leg__title,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-leg__distance-label,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-total__label,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-dos-card__title,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-table thead th,
+html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
+  letter-spacing: normal;
+  text-transform: none;
 }
