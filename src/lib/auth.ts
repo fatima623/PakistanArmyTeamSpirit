@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { authConfig } from "@/lib/auth-config";
 import { assertParticipantMayLogin } from "@/lib/auth-login";
 import {
   AccountLockedError,
@@ -10,37 +11,18 @@ import {
   getSessionLifetimeMs,
   LOGIN_FAILED_ATTEMPT_LIMIT,
   LOGIN_LOCKOUT_MS,
-  LONG_SESSION_MS,
-  TOKEN_REFRESH_THRESHOLD_MS,
 } from "@/lib/auth-security";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/validations";
 
+/**
+ * Full Node-runtime auth. Session/cookie/callback settings come from
+ * `authConfig` so the Edge middleware instance in `@/lib/auth-edge` decodes
+ * exactly the cookies this one issues — only the database-backed Credentials
+ * provider is added on top. Never import this from `src/middleware.ts`.
+ */
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
-  trustHost: true,
-  session: {
-    strategy: "jwt",
-    maxAge: Math.floor(LONG_SESSION_MS / 1000),
-    updateAge: 60 * 60,
-  },
-  pages: {
-    signIn: "/event/login",
-  },
-  cookies: {
-    sessionToken: {
-      name:
-        process.env.NODE_ENV === "production"
-          ? "__Secure-authjs.session-token"
-          : "authjs.session-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-  },
+  ...authConfig,
   providers: [
     Credentials({
       name: "credentials",
@@ -151,37 +133,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.approved = user.approved;
-        token.firstName = user.firstName;
-        token.lastName = user.lastName;
-        token.isEmailVerified = Boolean(user.isEmailVerified);
-        token.rememberMe = Boolean(user.rememberMe);
-        token.sessionExpiresAt = user.sessionExpiresAt;
-      } else if (token.rememberMe && token.sessionExpiresAt) {
-        const expiresAt = new Date(token.sessionExpiresAt as string).getTime();
-        const now = Date.now();
-        if (expiresAt - now <= TOKEN_REFRESH_THRESHOLD_MS) {
-          token.sessionExpiresAt = new Date(now + LONG_SESSION_MS).toISOString();
-        }
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
-        session.user.approved = token.approved as boolean;
-        session.user.firstName = token.firstName as string;
-        session.user.lastName = token.lastName as string;
-        session.user.isEmailVerified = Boolean(token.isEmailVerified);
-      }
-      session.sessionExpiresAt = token.sessionExpiresAt as string | undefined;
-      return session;
-    },
-  },
 });
