@@ -11,6 +11,7 @@ import {
   TICKER_VISIBILITY,
 } from "../src/lib/ticker";
 import { saveNewsPdf } from "../src/lib/storage/news-pdf";
+import { seedContent } from "./seed-content";
 
 /** Minimal valid PDF for the sole seeded news attachment (2025 results). */
 function buildSeedNewsPdf(): Buffer {
@@ -416,48 +417,9 @@ async function main() {
     },
   });
 
-  const keyDates = [
-    { label: "DIN", value: "January 2026", sortOrder: 0, date: new Date("2026-01-15") },
-    {
-      label: "Opening date for applications",
-      value:
-        "27 February 2026 for all teams (including International Patrols (IPs))",
-      sortOrder: 1,
-      date: new Date("2026-02-27"),
-    },
-    {
-      label: "Closing dates",
-      value:
-        "UK Applications - 2359 5 June 2026\nIPs to register - 2359 1 May 2026",
-      sortOrder: 2,
-    },
-    {
-      label: "Participation (incl phase) confirmed by",
-      value: "UK Applications - 2359hrs 19 June 2026",
-      sortOrder: 3,
-    },
-    {
-      label:
-        "Confirmed places to be communicated to IP Team Managers and Defence Attaches by",
-      value: "2359 hrs 29 May 2026",
-      sortOrder: 4,
-    },
-    { label: "JIs", value: "31 July 2026", sortOrder: 5, date: new Date("2026-07-31") },
-    {
-      label: "WngOs",
-      value: "Dispatched D-21 from deployment date.",
-      sortOrder: 6,
-    },
-    {
-      label: "Refunds",
-      value:
-        "Withdrawals received prior to the Warning Order being issued will be eligible for a refund.",
-      sortOrder: 7,
-    },
-  ];
-
-  await prisma.keyDate.deleteMany();
-  await prisma.keyDate.createMany({ data: keyDates });
+  // Events, key dates, gallery items and hero slides — the live public-site
+  // content, carried over from the local `pats` database with its original ids.
+  await seedContent(prisma);
 
   await prisma.newsPost.deleteMany({
     where: { slug: "cambrian-patrol-2025-results" },
