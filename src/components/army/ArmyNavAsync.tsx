@@ -26,5 +26,5 @@ export async function ArmyNavAsync({ dayTheme = false }: { dayTheme?: boolean })
 
   return <ArmyNavbar pathname={pathname} />;
 
-  // dgdbdfbgbf
+  // dgdbdfbgbfwacdasdvsvd
 }
