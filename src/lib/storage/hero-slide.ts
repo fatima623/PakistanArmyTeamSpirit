@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { unlink } from "fs/promises";
 import path from "path";
 
 import type { Prisma } from "@prisma/client";
@@ -101,6 +101,8 @@ export type HeroImageSaveResult = {
   imagePath: string;
   imageMimeType: string;
   imageFileSize: number;
+  /** Binary persisted to the DB and served back via /uploads/[...path]. */
+  imageData: Uint8Array<ArrayBuffer>;
 };
 
 export async function saveHeroImage(input: {
@@ -111,17 +113,12 @@ export async function saveHeroImage(input: {
   const { id, buffer, declaredMime } = input;
   const mime = validateHeroImageBuffer(buffer, declaredMime);
 
-  const root = getHeroStorageRoot();
-  await mkdir(root, { recursive: true });
-
-  const relativePath = heroRelativePath(id, mime);
-  const absolutePath = path.join(root, path.basename(relativePath));
-  await writeFile(absolutePath, buffer);
-
+  // Persisted to the DB (imageData) instead of disk for serverless hosts.
   return {
-    imagePath: relativePath,
+    imagePath: heroRelativePath(id, mime),
     imageMimeType: mime,
     imageFileSize: buffer.length,
+    imageData: new Uint8Array(buffer),
   };
 }
 

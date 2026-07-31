@@ -68,7 +68,12 @@ export async function DELETE(_request: Request, context: RouteContext) {
     if (post.imagePath) await deleteNewsImageFile(post.imagePath);
     const updated = await prisma.newsPost.update({
       where: { id },
-      data: { imagePath: null, imageMimeType: null, imageFileSize: null },
+      data: {
+        imagePath: null,
+        imageMimeType: null,
+        imageFileSize: null,
+        imageData: null,
+      },
     });
     revalidateNewsPaths();
     return NextResponse.json({ post: updated });

@@ -3,10 +3,8 @@ import Link from "next/link";
 import { Pencil, Plus } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { isAdminNewsPdfReadable } from "@/lib/serve-admin-news-pdf";
 import { formatDateShort } from "@/lib/utils";
 import { DeletePostButton } from "@/components/admin/DeletePostButton";
-import { NewsPdfOpenLink } from "@/components/admin/NewsPdfOpenLink";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import { Button } from "@/components/ui/button";
 import { adminTableActionsCenter, adminUsersPagination } from "@/lib/admin-ui";
@@ -39,24 +37,13 @@ export default async function AdminNewsPage({
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
-  const pdfReadableById = new Map(
-    await Promise.all(
-      posts.map(async (post) => [
-        post.id,
-        post.pdfPath
-          ? await isAdminNewsPdfReadable(post.id, post.pdfPath)
-          : false,
-      ] as const)
-    )
-  );
-
   return (
     <div className="pb-8">
       <div className="admin-surface flex flex-col gap-7 p-8">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="[&>h2]:text-[1.75rem] [&>h2]:font-bold [&>h2]:tracking-[-0.01em] [&>h2]:text-brand-ink [&>p]:mt-1.5 [&>p]:max-w-[36rem] [&>p]:text-sm [&>p]:leading-normal [&>p]:text-muted-foreground">
             <h2>News posts</h2>
-            <p>Manage public announcements and PDF downloads for visitors.</p>
+            <p>Manage public announcements for visitors.</p>
           </div>
           <Link href="/admin/news/new">
             <Button variant="adminPrimary">
@@ -76,18 +63,16 @@ export default async function AdminNewsPage({
               <table className="admin-data-table min-w-[36rem]">
                 <colgroup>
                   <col className="w-[6%]" />
-                  <col className="w-[28%]" />
-                  <col className="w-[16%]" />
-                  <col className="w-[13%]" />
-                  <col className="w-[13%]" />
-                  <col className="w-[10%]" />
-                  <col className="w-[14%]" />
+                  <col className="w-[34%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[12%]" />
+                  <col className="w-[18%]" />
                 </colgroup>
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col" className="!text-left">Title</th>
-                    <th scope="col">PDF</th>
                     <th scope="col">Date</th>
                     <th scope="col">Expiry</th>
                     <th scope="col">Status</th>
@@ -107,25 +92,6 @@ export default async function AdminNewsPage({
                         >
                           {post.title}
                         </Link>
-                      </td>
-                      <td>
-                        <div className="flex items-center justify-center">
-                          {pdfReadableById.get(post.id) ? (
-                            <NewsPdfOpenLink
-                              postId={post.id}
-                              fileName={post.pdfOriginalName}
-                            />
-                          ) : post.pdfPath ? (
-                            <span
-                              className="text-[0.8125rem] text-muted-foreground/70"
-                              title="PDF record exists but file is missing on server — edit post to re-upload"
-                            >
-                              File missing
-                            </span>
-                          ) : (
-                            <span className="text-[0.8125rem] text-muted-foreground/70">—</span>
-                          )}
-                        </div>
                       </td>
                       <td className="tabular-nums">
                         {formatDateShort(post.publishedAt)}

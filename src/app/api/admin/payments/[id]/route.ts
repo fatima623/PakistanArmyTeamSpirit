@@ -122,7 +122,6 @@ export async function PUT(request: Request, context: RouteContext) {
       verifiedById: session.user.id,
     });
 
-    const isReject = status === PAYMENT_STATUS.REJECTED;
     const isReturned = status === PAYMENT_STATUS.RETURNED;
 
     const payment = await prisma.$transaction(async (tx) => {
@@ -131,11 +130,7 @@ export async function PUT(request: Request, context: RouteContext) {
         data: updateData,
       });
 
-      if (
-        statusChanged &&
-        (isReject || isReturned) &&
-        updateData.rejectionReason
-      ) {
+      if (statusChanged && isReturned && updateData.rejectionReason) {
         await tx.paymentRejectionHistory.create({
           data: {
             paymentId: id,
@@ -159,7 +154,7 @@ export async function PUT(request: Request, context: RouteContext) {
       action: `payment_status_${status.toLowerCase()}`,
       actorId: session.user.id,
       metadata:
-        isReject || isReturned
+        isReturned
           ? {
               status,
               rejectionReason: updateData.rejectionReason,

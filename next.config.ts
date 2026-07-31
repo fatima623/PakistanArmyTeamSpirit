@@ -67,32 +67,10 @@ const nextConfig: NextConfig = {
     if (process.env.NODE_ENV !== "production") {
       return [];
     }
-    // Inline PDF routes need permissive object-src so the browser can render in-tab.
-    const inlinePdfHeaders = [
-      { key: "X-DNS-Prefetch-Control", value: "on" },
-      {
-        key: "Strict-Transport-Security",
-        value: "max-age=63072000; includeSubDomains; preload",
-      },
-      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-      { key: "X-Content-Type-Options", value: "nosniff" },
-      {
-        key: "Content-Security-Policy",
-        value: "default-src 'none'; object-src 'self'",
-      },
-    ];
     return [
       {
         source: "/(.*)",
         headers: securityHeaders,
-      },
-      {
-        source: "/api/admin/news-pdf/:path*",
-        headers: inlinePdfHeaders,
-      },
-      {
-        source: "/api/news-pdf/:path*",
-        headers: inlinePdfHeaders,
       },
     ];
   },

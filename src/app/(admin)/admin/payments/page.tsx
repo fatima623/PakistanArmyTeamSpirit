@@ -25,6 +25,7 @@ import {
   PAYMENT_STATUS,
   PAYMENT_STATUS_FILTER_LABELS,
   LEGACY_PAYMENT_STATUS,
+  normalizePaymentStatus,
 } from "@/lib/constants";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
@@ -47,7 +48,6 @@ const VALID_PAYMENT_STATUSES = new Set<string>([
   PAYMENT_STATUS.SUBMITTED,
   PAYMENT_STATUS.UNDER_REVIEW,
   PAYMENT_STATUS.VERIFIED,
-  PAYMENT_STATUS.REJECTED,
   PAYMENT_STATUS.RETURNED,
 ]);
 
@@ -87,31 +87,35 @@ export default async function AdminPaymentsPage({
   } else if (status !== "all") {
     where.status = status;
   }
-  if (search) {
-    where.OR = [
-      { transactionReference: { contains: search } },
-      {
-        user: {
-          OR: [
-            { email: { contains: search } },
-            { firstName: { contains: search } },
-            { lastName: { contains: search } },
-          ],
+  const searchOr: Prisma.PaymentWhereInput["OR"] = search
+    ? [
+        { transactionReference: { contains: search } },
+        {
+          user: {
+            OR: [
+              { email: { contains: search } },
+              { firstName: { contains: search } },
+              { lastName: { contains: search } },
+            ],
+          },
         },
-      },
-    ];
-  }
+      ]
+    : undefined;
+  if (searchOr) where.OR = searchOr;
+
+  // Chip counts share the current search scope but ignore the status filter, so
+  // each count stays stable as you switch chips (mirrors participation requests).
+  const countWhere: Prisma.PaymentWhereInput = searchOr ? { OR: searchOr } : {};
 
   const filters = [
     "all",
     PAYMENT_STATUS.SUBMITTED,
     PAYMENT_STATUS.UNDER_REVIEW,
     PAYMENT_STATUS.VERIFIED,
-    PAYMENT_STATUS.REJECTED,
     PAYMENT_STATUS.RETURNED,
   ] as const;
 
-  const [payments, totalCount] = await Promise.all([
+  const [payments, statusGroups] = await Promise.all([
     prisma.payment.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -131,8 +135,21 @@ export default async function AdminPaymentsPage({
         },
       },
     }),
-    prisma.payment.count({ where }),
+    prisma.payment.groupBy({
+      by: ["status"],
+      where: countWhere,
+      _count: { _all: true },
+    }),
   ]);
+
+  // Tally per-status chip counts, folding legacy APPROVED into VERIFIED.
+  const statusCounts: Record<string, number> = {};
+  let allCount = 0;
+  for (const g of statusGroups) {
+    const norm = normalizePaymentStatus(g.status);
+    statusCounts[norm] = (statusCounts[norm] ?? 0) + g._count._all;
+    allCount += g._count._all;
+  }
 
   return (
     <div className={adminPaymentsPage}>
@@ -157,15 +174,18 @@ export default async function AdminPaymentsPage({
             className={adminPaymentsFilterTabs}
             aria-label="Filter payments"
           >
-            {filters.map((f) => (
-              <Link
-                key={f}
-                href={`/admin/payments?status=${f}&search=${encodeURIComponent(search)}`}
-                className={filterChipClasses(f, status === f)}
-              >
-                {PAYMENT_STATUS_FILTER_LABELS[f] ?? f}
-              </Link>
-            ))}
+            {filters.map((f) => {
+              const count = f === "all" ? allCount : statusCounts[f] ?? 0;
+              return (
+                <Link
+                  key={f}
+                  href={`/admin/payments?status=${f}&search=${encodeURIComponent(search)}`}
+                  className={filterChipClasses(f, status === f)}
+                >
+                  {PAYMENT_STATUS_FILTER_LABELS[f] ?? f} ({count})
+                </Link>
+              );
+            })}
           </nav>
         </section>
 

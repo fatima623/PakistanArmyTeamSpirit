@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 
 import { buildTranslationSeed } from "@/lib/admin-translations";
 import { prisma } from "@/lib/prisma";
-import { isAdminNewsPdfReadable } from "@/lib/serve-admin-news-pdf";
 import { NewsPostForm } from "@/components/admin/admin-dynamic";
 import { adminNavLabel } from "@/lib/admin-navigation";
 
@@ -20,10 +19,6 @@ export default async function AdminNewsEditPage({ params }: PageProps) {
   if (!post) {
     notFound();
   }
-
-  const pdfReadable = post.pdfPath
-    ? await isAdminNewsPdfReadable(post.id, post.pdfPath)
-    : false;
 
   // Seeded here rather than fetched by the form: this editor is already a
   // server route, so the translations arrive with the first paint.
@@ -43,10 +38,6 @@ export default async function AdminNewsEditPage({ params }: PageProps) {
           publishedAt: post.publishedAt,
           expiresAt: post.expiresAt,
           published: post.published,
-          hasPdf: Boolean(post.pdfPath),
-          pdfReadable,
-          pdfOriginalName: post.pdfOriginalName,
-          pdfFileSize: post.pdfFileSize,
           hasImage: Boolean(post.imagePath),
           imagePath: post.imagePath,
         }}

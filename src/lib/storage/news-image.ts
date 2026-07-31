@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { unlink } from "fs/promises";
 import path from "path";
 
 export const MAX_NEWS_IMAGE_BYTES = 8 * 1024 * 1024; // 8 MB
@@ -91,6 +91,8 @@ export type NewsImageSaveResult = {
   imagePath: string;
   imageMimeType: string;
   imageFileSize: number;
+  /** Binary persisted to the DB and served back via /uploads/[...path]. */
+  imageData: Uint8Array<ArrayBuffer>;
 };
 
 export async function saveNewsImage(input: {
@@ -105,18 +107,12 @@ export async function saveNewsImage(input: {
   }
   const mime = validateNewsImageBuffer(buffer, declaredMime);
 
-  const root = getNewsImageStorageRoot();
-  await mkdir(root, { recursive: true });
-
-  const relativePath = newsImageRelativePath(id, mime);
-  const fileName = path.basename(relativePath);
-  const absolutePath = path.join(root, fileName);
-  await writeFile(absolutePath, buffer);
-
+  // Persisted to the DB (imageData) instead of disk for serverless hosts.
   return {
-    imagePath: relativePath,
+    imagePath: newsImageRelativePath(id, mime),
     imageMimeType: mime,
     imageFileSize: buffer.length,
+    imageData: new Uint8Array(buffer),
   };
 }
 

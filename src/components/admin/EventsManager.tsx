@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 
 import {
-  TranslationFields,
+  // TranslationFields, // translations UI hidden per request (do not delete)
   useTranslationDraft,
 } from "@/components/admin/TranslationFields";
 import { contourIcon } from "@/components/exercise-contour/icon-map";
@@ -662,11 +662,13 @@ function EventForm({
         </div>
       </div>
 
+      {/* Translations UI hidden per request (do not delete)
       <TranslationFields
         model="Event"
         draft={translations}
         idPrefix={`ev-t-${initial?.id ?? "new"}`}
       />
+      */}
 
       <div className="flex items-center gap-3">
         <Switch

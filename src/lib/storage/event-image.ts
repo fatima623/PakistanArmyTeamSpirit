@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { unlink } from "fs/promises";
 import path from "path";
 
 import type { Prisma } from "@prisma/client";
@@ -135,6 +135,8 @@ export type EventImageSaveResult = {
   thumbnailPath: string;
   thumbnailMimeType: string;
   thumbnailFileSize: number;
+  /** Binary persisted to the DB and served back via /uploads/[...path]. */
+  thumbnailData: Uint8Array<ArrayBuffer>;
 };
 
 export async function saveEventImage(input: {
@@ -149,18 +151,12 @@ export async function saveEventImage(input: {
   }
   const mime = validateEventImageBuffer(buffer, declaredMime);
 
-  const root = getEventStorageRoot();
-  await mkdir(root, { recursive: true });
-
-  const relativePath = eventImageRelativePath(id, mime);
-  const fileName = path.basename(relativePath);
-  const absolutePath = path.join(root, fileName);
-  await writeFile(absolutePath, buffer);
-
+  // Persisted to the DB (thumbnailData) instead of disk for serverless hosts.
   return {
-    thumbnailPath: relativePath,
+    thumbnailPath: eventImageRelativePath(id, mime),
     thumbnailMimeType: mime,
     thumbnailFileSize: buffer.length,
+    thumbnailData: new Uint8Array(buffer),
   };
 }
 

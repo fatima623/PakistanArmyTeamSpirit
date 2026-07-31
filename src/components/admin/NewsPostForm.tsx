@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, CheckCircle2, Eye, FileText, Globe, ImagePlus, Loader2, Pencil, Upload, X } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Eye, Globe, ImagePlus, Loader2, Pencil, X } from "lucide-react";
 
 import { toast } from "sonner";
 
@@ -24,13 +24,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 
 import { cn } from "@/lib/utils";
-import { getAdminNewsPdfUrl } from "@/lib/open-news-pdf";
-
-import {
-  INVALID_NEWS_PDF_MESSAGE,
-  MAX_NEWS_PDF_BYTES,
-  MIN_NEWS_PDF_BYTES,
-} from "@/lib/news-pdf-constants";
 
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
 
@@ -109,16 +102,11 @@ export function NewsPostForm({
     publishedAt: Date;
     expiresAt?: Date | string | null;
     published: boolean;
-    pdfOriginalName?: string | null;
-    pdfFileSize?: number | null;
-    hasPdf?: boolean;
-    pdfReadable?: boolean;
     hasImage?: boolean;
     imagePath?: string | null;
   };
 }) {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const isNew = !postId;
   const [title, setTitle] = useState(initial?.title ?? "");
@@ -163,18 +151,6 @@ export function NewsPostForm({
 
   const [submitting, setSubmitting] = useState(false);
 
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
-
-  const [removePdf, setRemovePdf] = useState(false);
-
-  const [attachedName, setAttachedName] = useState(
-    initial?.pdfOriginalName ?? null
-  );
-
-  const [attachedSize, setAttachedSize] = useState<number | null>(
-    initial?.pdfFileSize ?? null
-  );
-
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [removeImage, setRemoveImage] = useState(false);
@@ -182,9 +158,6 @@ export function NewsPostForm({
   const [imagePreview, setImagePreview] = useState<string | null>(
     initial?.imagePath ? `/uploads/${initial.imagePath}` : null
   );
-
-  const hasExistingPdf =
-    Boolean(initial?.hasPdf && attachedName) && !removePdf && !pdfFile;
 
   const previewHtml = sanitizeNewsContent(prepareContentForSave(content));
 
@@ -198,71 +171,6 @@ export function NewsPostForm({
     if (!isNew || publishedAt) return;
     setPublishedAt(toDatetimeLocal(new Date()));
   }, [isNew, publishedAt]);
-
-  const onPickPdf = (file: File | null) => {
-    if (!file) return;
-    if (file.type !== "application/pdf") {
-      toast.error(INVALID_NEWS_PDF_MESSAGE);
-      return;
-    }
-    if (file.size <= MIN_NEWS_PDF_BYTES) {
-      toast.error(INVALID_NEWS_PDF_MESSAGE);
-      return;
-    }
-    if (file.size > MAX_NEWS_PDF_BYTES) {
-      toast.error("PDF must be 10 MB or smaller.");
-      return;
-    }
-    setPdfFile(file);
-    setRemovePdf(false);
-    setAttachedName(file.name);
-    setAttachedSize(file.size);
-  };
-
-  const clearPdfSelection = () => {
-    setPdfFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    if (initial?.hasPdf && !removePdf) {
-      setAttachedName(initial.pdfOriginalName ?? null);
-      setAttachedSize(initial.pdfFileSize ?? null);
-    } else {
-      setAttachedName(null);
-      setAttachedSize(null);
-    }
-  };
-
-  const markRemovePdf = () => {
-    setRemovePdf(true);
-    setPdfFile(null);
-    setAttachedName(null);
-    setAttachedSize(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const syncPdf = async (id: string) => {
-    if (removePdf && initial?.hasPdf) {
-      const res = await fetch(`/api/admin/news/${id}/pdf`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        throw new Error("PDF_REMOVE_FAILED");
-      }
-    }
-    if (pdfFile) {
-      const formData = new FormData();
-      formData.append("file", pdfFile);
-      const res = await fetch(`/api/admin/news/${id}/pdf`, {
-        method: "POST",
-        body: formData,
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(
-          typeof data.error === "string" ? data.error : "PDF_UPLOAD_FAILED"
-        );
-      }
-    }
-  };
 
   const onPickImage = (file: File | null) => {
     if (!file) return;
@@ -365,21 +273,6 @@ export function NewsPostForm({
 
       const data = await res.json();
       const savedId = isNew ? data.post.id : postId!;
-
-      if (pdfFile || (removePdf && initial?.hasPdf)) {
-        try {
-          await syncPdf(savedId);
-        } catch (err) {
-          toast.error(
-            err instanceof Error && err.message !== "PDF_UPLOAD_FAILED"
-              ? err.message
-              : "Post saved but PDF could not be updated. Try editing the post."
-          );
-          router.push("/admin/news");
-          router.refresh();
-          return;
-        }
-      }
 
       if (imageFile || (removeImage && initial?.hasImage)) {
         try {

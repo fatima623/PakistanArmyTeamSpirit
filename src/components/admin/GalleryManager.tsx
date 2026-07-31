@@ -16,7 +16,7 @@ import {
 import { toast } from "sonner";
 
 import {
-  TranslationFields,
+  // TranslationFields, // translations UI hidden per request (do not delete)
   useTranslationDraft,
 } from "@/components/admin/TranslationFields";
 import { Button } from "@/components/ui/button";
@@ -558,6 +558,7 @@ function UploadForm({
                 </div>
               </div>
 
+              {/* Translations UI hidden per request (do not delete)
               <div className="mt-3">
                 <TranslationFields
                   model="GalleryImage"
@@ -565,6 +566,7 @@ function UploadForm({
                   idPrefix="g-t-new"
                 />
               </div>
+              */}
 
               <div className="mt-3 flex items-center gap-3">
                 <Switch
@@ -1014,6 +1016,7 @@ function EditDialog({
                 className="admin-input"
               />
             </div>
+            {/* Translations UI hidden per request (do not delete)
             <div className="col-span-full">
               <TranslationFields
                 model="GalleryImage"
@@ -1021,6 +1024,7 @@ function EditDialog({
                 idPrefix={`g-t-${image.id}`}
               />
             </div>
+            */}
           </div>
         ) : null}
 

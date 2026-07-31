@@ -76,6 +76,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
         thumbnailPath: null,
         thumbnailMimeType: null,
         thumbnailFileSize: null,
+        thumbnailData: null,
       },
       select: EVENT_ADMIN_SELECT,
     });

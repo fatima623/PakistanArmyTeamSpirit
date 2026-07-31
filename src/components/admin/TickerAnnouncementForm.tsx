@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  TranslationFields,
+  // TranslationFields, // translations UI hidden per request (do not delete)
   useTranslationDraft,
 } from "@/components/admin/TranslationFields";
 import type { TranslationSeed } from "@/lib/admin-translations";
@@ -171,6 +171,7 @@ export function TickerAnnouncementForm({
             </div>
           </div>
 
+          {/* Translations UI hidden per request (do not delete)
           <div className="mt-4">
             <TranslationFields
               model="TickerAnnouncement"
@@ -179,6 +180,7 @@ export function TickerAnnouncementForm({
               description="Type the message for each language. Anything left blank falls back to English on the participant dashboard."
             />
           </div>
+          */}
 
           <div className="mt-[0.9rem] flex flex-wrap gap-2 [&_.ops-btn-approve]:!border-[var(--portal-approve)] [&_.ops-btn-approve]:!bg-[var(--portal-approve)] [&_.ops-btn-approve]:!text-white [&_.ops-btn-approve:hover]:!border-[var(--portal-approve-hover)] [&_.ops-btn-approve:hover]:!bg-[var(--portal-approve-hover)] [&_.ops-btn-approve:disabled]:!border-slate-300 [&_.ops-btn-approve:disabled]:!bg-slate-200 [&_.ops-btn-approve:disabled]:!text-slate-900 [&_.ops-btn-approve:disabled]:!opacity-100 [&_.ops-btn-secondary]:!border-gray-300 [&_.ops-btn-secondary]:!bg-white [&_.ops-btn-secondary]:!text-slate-600">
             <Button

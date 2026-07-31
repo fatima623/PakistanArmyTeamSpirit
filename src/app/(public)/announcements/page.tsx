@@ -94,24 +94,6 @@ export default async function AnnouncementsPage({ searchParams }: PageProps) {
                 dangerouslySetInnerHTML={{ __html: selectedContent }}
               />
 
-              {selected.pdfPath ? (
-                <p className="pats-announce-article__pdf">
-                  <a
-                    href={`/api/news-pdf/${selected.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="pats-btn inline-flex"
-                  >
-                    {a11n.downloadPdf}
-                    {selected.pdfOriginalName ? (
-                      <span className="ml-2 font-normal opacity-70">
-                        ({selected.pdfOriginalName})
-                      </span>
-                    ) : null}
-                  </a>
-                </p>
-              ) : null}
-
               <div className="pats-announce-article__foot">
                 <Link href="/announcements" className="pats-announce-back">
                   <ArrowLeft aria-hidden />

@@ -8,7 +8,6 @@ import { APPLICATION_STATUS } from "@/lib/constants";
 const COLORS: Record<string, string> = {
   [APPLICATION_STATUS.APPROVED]: "#3d5230",
   [APPLICATION_STATUS.PENDING]: "#b8941f",
-  [APPLICATION_STATUS.REJECTED]: "#c2703d",
 };
 
 const DEFAULT_COLOR = "#4f7096";

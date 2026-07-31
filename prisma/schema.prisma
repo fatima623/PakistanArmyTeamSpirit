@@ -316,6 +316,8 @@ model NewsPost {
   imagePath       String?
   imageMimeType   String?
   imageFileSize   Int?
+  /** Cover-image binary stored in the DB (LONGBLOB) for serverless compatibility. */
+  imageData       Bytes?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -346,6 +348,8 @@ model Event {
   thumbnailPath     String?
   thumbnailMimeType String?
   thumbnailFileSize Int?
+  /** Thumbnail binary stored in the DB (LONGBLOB) for serverless compatibility. */
+  thumbnailData     Bytes?
   sortOrder         Int      @default(0)
   published         Boolean  @default(true)
   createdAt         DateTime @default(now())
@@ -373,12 +377,19 @@ model GalleryImage {
   imageMimeType String
   imageFileSize Int
   /**
+   * The media binary, stored in the DB so uploads work on serverless hosts
+   * (Vercel) whose filesystem is read-only/ephemeral. Null on legacy rows that
+   * are still served from the /uploads disk fallback. Maps to MySQL LONGBLOB.
+   */
+  imageData     Bytes?
+  /**
    * Poster frame for video items (served from /uploads/gallery). Null for stills,
    * and optional for video — the grid falls back to a generic play tile.
    */
   posterPath     String?
   posterMimeType String?
   posterFileSize Int?
+  posterData     Bytes?
   sortOrder     Int      @default(0)
   published     Boolean  @default(true)
   createdAt     DateTime @default(now())
@@ -397,6 +408,8 @@ model HeroSlide {
   imagePath     String
   imageMimeType String
   imageFileSize Int
+  /** Image binary stored in the DB (LONGBLOB) for serverless compatibility. */
+  imageData     Bytes?
   sortOrder     Int      @default(0)
   published     Boolean  @default(true)
   createdAt     DateTime @default(now())

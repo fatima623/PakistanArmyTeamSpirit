@@ -24,7 +24,7 @@ const STAT_CONFIG = [
     href: "/admin/users?filter=approved",
   },
   {
-    label: "Awaiting review",
+    label: "Pending",
     hint: "Applications pending",
     key: "pending" as const,
     tone: "amber" as const,

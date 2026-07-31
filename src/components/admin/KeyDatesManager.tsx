@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { FormFieldAdmin } from "@/components/admin/FormFieldAdmin";
 import {
-  TranslationFields,
+  // TranslationFields, // translations UI hidden per request (do not delete)
   useTranslationDraft,
 } from "@/components/admin/TranslationFields";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -216,11 +216,13 @@ export function KeyDatesManager({
               />
             </FormFieldAdmin>
 
+            {/* Translations UI hidden per request (do not delete)
             <TranslationFields
               model="KeyDate"
               draft={addTranslations}
               idPrefix="kd-t-new"
             />
+            */}
           </div>
         </section>
 
@@ -400,6 +402,7 @@ export function KeyDatesManager({
                       </>
                     )}
                   </tr>
+                  {/* Translations edit row hidden per request (do not delete)
                   {editingId === kd.id ? (
                     // Full-width row: four narrow table cells cannot hold a
                     // four-language editor legibly.
@@ -413,6 +416,7 @@ export function KeyDatesManager({
                       </td>
                     </tr>
                   ) : null}
+                  */}
                   </Fragment>
                 ))
               )}

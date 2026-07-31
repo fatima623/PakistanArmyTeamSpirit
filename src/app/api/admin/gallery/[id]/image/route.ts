@@ -82,6 +82,7 @@ export async function POST(request: Request, context: RouteContext) {
           posterPath: null,
           posterMimeType: null,
           posterFileSize: null,
+          posterData: null,
         };
       }
 

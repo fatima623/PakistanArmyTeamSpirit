@@ -8,7 +8,8 @@ import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
 import { APPLICATION_STATUS, PAYMENT_STATUS } from "@/lib/constants";
 import {
   getKpiSparklines,
-  getRegistrationsByMonth,
+  getRegistrationsByCountry,
+  getRegistrationsByYear,
   getStatusDistribution,
 } from "@/lib/admin-dashboard-charts";
 import { adminNavLabel } from "@/lib/admin-navigation";
@@ -41,6 +42,7 @@ export default async function AdminOverviewPage() {
     pendingPayments,
     recentRegistrations,
     registrationActivity,
+    registrationCountry,
     pipeline,
     kpiSparklines,
   ] = await Promise.all([
@@ -79,7 +81,8 @@ export default async function AdminOverviewPage() {
         unit: { select: { unitName: true } },
       },
     }),
-    getRegistrationsByMonth("6m"),
+    getRegistrationsByYear(),
+    getRegistrationsByCountry(),
     getStatusDistribution(),
     getKpiSparklines(),
   ]);
@@ -103,6 +106,7 @@ export default async function AdminOverviewPage() {
 
       <AdminDashboardCharts
         initialRegistrationActivity={registrationActivity}
+        initialRegistrationCountry={registrationCountry}
         initialPipeline={pipeline.data}
         initialPipelineTotal={pipeline.total}
       />

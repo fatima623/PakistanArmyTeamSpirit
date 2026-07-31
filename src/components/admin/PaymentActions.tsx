@@ -9,7 +9,6 @@ import {
   Loader2,
   RotateCcw,
   SquarePen,
-  XCircle,
   type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -26,7 +25,9 @@ import { PAYMENT_STATUS, normalizePaymentStatus } from "@/lib/constants";
 import { TOAST } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
-type ActionKey = "verify" | "review" | "return" | "reject";
+// "reject" was removed — MT can verify, mark under review, or return for
+// correction. RETURNED replaces the old REJECTED "send back" flow.
+type ActionKey = "verify" | "review" | "return";
 
 type ActionMeta = {
   status: string;
@@ -97,25 +98,9 @@ const ACTIONS: Record<ActionKey, ActionMeta> = {
     card: "border-orange-200 bg-orange-50/50 hover:border-orange-400 hover:bg-orange-50",
     cardIcon: "text-orange-600",
   },
-  reject: {
-    status: PAYMENT_STATUS.REJECTED,
-    title: "Reject Proof",
-    cardLabel: "Reject Proof",
-    cardHint: "Reject this payment proof",
-    prompt: (name) => `Reject ${name}'s payment proof.`,
-    note: "Your message below is shown to the participant.",
-    needsReason: true,
-    success: "Payment proof rejected",
-    confirmLabel: "Reject with message",
-    icon: XCircle,
-    disc: "bg-red-100 text-red-600",
-    confirmBtn: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300",
-    card: "border-red-200 bg-red-50/50 hover:border-red-400 hover:bg-red-50",
-    cardIcon: "text-red-600",
-  },
 };
 
-const ACTION_ORDER: ActionKey[] = ["verify", "review", "return", "reject"];
+const ACTION_ORDER: ActionKey[] = ["verify", "review", "return"];
 
 /**
  * Decision statuses. Once a payment reaches one of these, a decision has been
@@ -126,7 +111,6 @@ const ACTION_ORDER: ActionKey[] = ["verify", "review", "return", "reject"];
 const PAYMENT_DECIDED: string[] = [
   PAYMENT_STATUS.VERIFIED,
   PAYMENT_STATUS.RETURNED,
-  PAYMENT_STATUS.REJECTED,
 ];
 
 /**

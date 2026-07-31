@@ -20,12 +20,12 @@ const PIPELINE_LABELS: Record<ApplicationStatus, string> = {
   [APPLICATION_STATUS.REJECTED]: "Rejected",
 };
 
+// "Under Review" and "Rejected" stages were removed from the pipeline per
+// request; only these active stages are surfaced on the dashboard donut.
 const PIPELINE_ORDER: ApplicationStatus[] = [
   APPLICATION_STATUS.APPROVED,
   APPLICATION_STATUS.PENDING,
-  APPLICATION_STATUS.UNDER_REVIEW,
   APPLICATION_STATUS.RETURNED,
-  APPLICATION_STATUS.REJECTED,
 ];
 
 export function parseRegistrationRange(
@@ -118,6 +118,64 @@ export async function getRegistrationsByMonth(
   }
 
   return rows;
+}
+
+export type RegistrationYearRow = { year: string; count: number };
+
+/**
+ * Registration counts grouped by calendar year of sign-up — real data only, no
+ * demo fallback. Covers every year from the first registration to the current
+ * year so the bar chart keeps a continuous axis with no gaps.
+ */
+export async function getRegistrationsByYear(): Promise<RegistrationYearRow[]> {
+  const users = await prisma.user.findMany({
+    where: { role: PARTICIPANT_ROLE },
+    select: { createdAt: true },
+  });
+
+  if (users.length === 0) return [];
+
+  const counts = new Map<number, number>();
+  let minYear = Infinity;
+  const currentYear = new Date().getUTCFullYear();
+  for (const u of users) {
+    const y = u.createdAt.getUTCFullYear();
+    counts.set(y, (counts.get(y) ?? 0) + 1);
+    if (y < minYear) minYear = y;
+  }
+
+  const startYear = Number.isFinite(minYear) ? minYear : currentYear;
+  const rows: RegistrationYearRow[] = [];
+  for (let y = startYear; y <= currentYear; y++) {
+    rows.push({ year: String(y), count: counts.get(y) ?? 0 });
+  }
+  return rows;
+}
+
+export type RegistrationCountryRow = { country: string; count: number };
+
+/**
+ * Registration counts grouped by participant country — real data only, ordered
+ * by count (desc). Participants with no country recorded fall into
+ * "Unspecified".
+ */
+export async function getRegistrationsByCountry(): Promise<
+  RegistrationCountryRow[]
+> {
+  const users = await prisma.user.findMany({
+    where: { role: PARTICIPANT_ROLE },
+    select: { country: true },
+  });
+
+  const counts = new Map<string, number>();
+  for (const u of users) {
+    const key = u.country?.trim() || "Unspecified";
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+
+  return [...counts.entries()]
+    .map(([country, count]) => ({ country, count }))
+    .sort((a, b) => b.count - a.count || a.country.localeCompare(b.country));
 }
 
 export type KpiSparklines = {

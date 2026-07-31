@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { revalidateNewsPaths } from "@/lib/revalidate-public";
 import { NewsPostSchema } from "@/lib/validations";
 import { sanitizeNewsContent } from "@/lib/sanitize-news";
-import { deleteNewsPdfFile } from "@/lib/storage/news-pdf";
 import { deleteNewsImageFile } from "@/lib/storage/news-image";
 import {
   autoTranslateMissing,
@@ -109,7 +108,6 @@ export async function DELETE(_request: Request, context: RouteContext) {
       throw new ApiError("News post not found", 404);
     }
 
-    await deleteNewsPdfFile(existing.pdfPath, id);
     await deleteNewsImageFile(existing.imagePath);
     await prisma.newsPost.delete({ where: { id } });
     // No FK on Translation — orphan rows are this route's responsibility.

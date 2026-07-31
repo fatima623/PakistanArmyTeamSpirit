@@ -520,12 +520,13 @@ export const PaymentSubmitSchema = z.object({
 
 /** Shape-only validation; rejection reason rules are enforced in the admin payment API with DB context. */
 export const AdminPaymentUpdateSchema = z.object({
+  // "REJECTED" intentionally omitted — payment rejection was removed. The API
+  // accepts verify / review / RETURNED (send back for correction) only.
   status: z.enum([
     "PENDING",
     "SUBMITTED",
     "UNDER_REVIEW",
     "VERIFIED",
-    "REJECTED",
     "RETURNED",
     "APPROVED",
   ]),

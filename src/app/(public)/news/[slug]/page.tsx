@@ -72,23 +72,6 @@ export default async function NewsArticlePage({ params }: PageProps) {
             className="cinematic-prose pats-body space-y-4"
             dangerouslySetInnerHTML={{ __html: safeContent }}
           />
-          {post.pdfPath ? (
-            <p className="mt-8">
-              <a
-                href={`/api/news-pdf/${post.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pats-btn inline-flex"
-              >
-                {N.downloadPdf}
-                {post.pdfOriginalName ? (
-                  <span className="ml-2 font-normal opacity-70">
-                    ({post.pdfOriginalName})
-                  </span>
-                ) : null}
-              </a>
-            </p>
-          ) : null}
         </div>
       </PatsSection>
     </div>

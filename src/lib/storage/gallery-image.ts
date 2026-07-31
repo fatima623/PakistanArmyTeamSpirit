@@ -1,5 +1,5 @@
 import { existsSync } from "fs";
-import { mkdir, unlink, writeFile } from "fs/promises";
+import { unlink } from "fs/promises";
 import path from "path";
 
 import type { Prisma } from "@prisma/client";
@@ -212,6 +212,8 @@ export type GalleryImageSaveResult = {
   imagePath: string;
   imageMimeType: string;
   imageFileSize: number;
+  /** Binary persisted to the DB and served back via /uploads/[...path]. */
+  imageData: Uint8Array<ArrayBuffer>;
 };
 
 export type GalleryMediaSaveResult = GalleryImageSaveResult & {
@@ -230,18 +232,13 @@ export async function saveGalleryImage(input: {
   }
   const mime = validateGalleryImageBuffer(buffer, declaredMime);
 
-  const root = getGalleryStorageRoot();
-  await mkdir(root, { recursive: true });
-
-  const relativePath = galleryRelativePath(id, mime);
-  const fileName = path.basename(relativePath);
-  const absolutePath = path.join(root, fileName);
-  await writeFile(absolutePath, buffer);
-
+  // Persisted to the DB (imageData) instead of disk so uploads work on
+  // serverless hosts; imagePath stays the logical key + public-URL tail.
   return {
-    imagePath: relativePath,
+    imagePath: galleryRelativePath(id, mime),
     imageMimeType: mime,
     imageFileSize: buffer.length,
+    imageData: new Uint8Array(buffer),
   };
 }
 
@@ -254,17 +251,11 @@ export async function saveGalleryMedia(input: {
   const { id, buffer, declaredMime } = input;
   const { mime, mediaType } = validateGalleryMediaBuffer(buffer, declaredMime);
 
-  const root = getGalleryStorageRoot();
-  await mkdir(root, { recursive: true });
-
-  const relativePath = galleryRelativePath(id, mime);
-  const absolutePath = path.join(root, path.basename(relativePath));
-  await writeFile(absolutePath, buffer);
-
   return {
-    imagePath: relativePath,
+    imagePath: galleryRelativePath(id, mime),
     imageMimeType: mime,
     imageFileSize: buffer.length,
+    imageData: new Uint8Array(buffer),
     mediaType,
   };
 }
@@ -273,6 +264,8 @@ export type GalleryPosterSaveResult = {
   posterPath: string;
   posterMimeType: string;
   posterFileSize: number;
+  /** Binary persisted to the DB and served back via /uploads/[...path]. */
+  posterData: Uint8Array<ArrayBuffer>;
 };
 
 /** Poster frames are always stills, so they reuse the image validator. */
@@ -288,17 +281,11 @@ export async function saveGalleryPoster(input: {
   }
   const mime = validateGalleryImageBuffer(buffer, declaredMime);
 
-  const root = getGalleryStorageRoot();
-  await mkdir(root, { recursive: true });
-
-  const relativePath = galleryPosterRelativePath(id, mime);
-  const absolutePath = path.join(root, path.basename(relativePath));
-  await writeFile(absolutePath, buffer);
-
   return {
-    posterPath: relativePath,
+    posterPath: galleryPosterRelativePath(id, mime),
     posterMimeType: mime,
     posterFileSize: buffer.length,
+    posterData: new Uint8Array(buffer),
   };
 }
 
