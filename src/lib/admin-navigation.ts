@@ -34,6 +34,13 @@ export const ADMIN_NAV_ITEMS = [
     group: "Operations",
   },
   {
+    key: "international",
+    href: "/admin/international",
+    label: "International Participation",
+    roles: ALL_STAFF,
+    group: "Operations",
+  },
+  {
     key: "teamRequests",
     href: "/admin/team-requests",
     label: "Team Size Requests",

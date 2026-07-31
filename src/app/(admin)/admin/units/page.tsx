@@ -13,18 +13,10 @@ export const metadata: Metadata = {
   title: adminNavLabel("units"),
 };
 
-/** Bucket for teams whose captain has no country recorded. */
-const COUNTRY_UNSPECIFIED = "Not specified";
-
 type SearchParams = Promise<{
   search?: string;
-  country?: string;
   year?: string;
 }>;
-
-function teamCountry(country: string | null | undefined): string {
-  return country?.trim() || COUNTRY_UNSPECIFIED;
-}
 
 /** Filter-chip styling (no dependency on the payment/user chip palettes). */
 function chipClass(active: boolean): string {
@@ -33,14 +25,9 @@ function chipClass(active: boolean): string {
     : "rounded-full border border-brand-line bg-white px-3 py-1 text-[0.8rem] font-medium text-brand-ink no-underline transition-colors hover:border-brand-olive/50";
 }
 
-function buildUnitsHref(params: {
-  search: string;
-  country: string;
-  year: string;
-}): string {
+function buildUnitsHref(params: { search: string; year: string }): string {
   const q = new URLSearchParams();
   if (params.search) q.set("search", params.search);
-  if (params.country) q.set("country", params.country);
   if (params.year) q.set("year", params.year);
   const s = q.toString();
   return s ? `/admin/units?${s}` : "/admin/units";
@@ -53,7 +40,6 @@ export default async function AdminUnitsPage({
 }) {
   const params = await searchParams;
   const search = params.search ?? "";
-  const country = params.country ?? "";
   const year = params.year ?? "";
 
   const where: Prisma.UnitWhereInput = search
@@ -104,43 +90,22 @@ export default async function AdminUnitsPage({
     orderBy: { createdAt: "desc" },
   });
 
-  // Real country + registration-year for every team (search-scoped).
+  // Registration-year for every team (search-scoped).
   const rows = units.map((u) => ({
     unit: u,
-    country: teamCountry(u.user.country),
     year: u.createdAt.getUTCFullYear(),
   }));
 
-  const countryList = [...new Set(rows.map((r) => r.country))].sort((a, b) =>
-    a === COUNTRY_UNSPECIFIED
-      ? 1
-      : b === COUNTRY_UNSPECIFIED
-        ? -1
-        : a.localeCompare(b)
-  );
   const yearList = [...new Set(rows.map((r) => r.year))].sort((a, b) => b - a);
   const yearNum = year ? Number(year) : null;
 
-  // Each dimension's counts ignore its own filter so the numbers stay stable
-  // as you switch chips: country counts respect the selected year, and vice
-  // versa — giving both "teams by country" and "teams by country + year".
-  const countryScoped = rows.filter((r) => !yearNum || r.year === yearNum);
-  const countryCounts = new Map<string, number>();
-  for (const r of countryScoped) {
-    countryCounts.set(r.country, (countryCounts.get(r.country) ?? 0) + 1);
-  }
-
-  const yearScoped = rows.filter((r) => !country || r.country === country);
   const yearCounts = new Map<number, number>();
-  for (const r of yearScoped) {
+  for (const r of rows) {
     yearCounts.set(r.year, (yearCounts.get(r.year) ?? 0) + 1);
   }
 
   const filteredUnits = rows
-    .filter(
-      (r) =>
-        (!country || r.country === country) && (!yearNum || r.year === yearNum)
-    )
+    .filter((r) => !yearNum || r.year === yearNum)
     .map((r) => r.unit);
 
   const exportRows = filteredUnits.map((u) => ({
@@ -167,7 +132,6 @@ export default async function AdminUnitsPage({
         />
         <span className="whitespace-nowrap px-0.5 text-[0.78rem] font-semibold text-muted-foreground">
           {filteredUnits.length} {filteredUnits.length === 1 ? "team" : "teams"}
-          {country ? ` from ${country}` : ""}
           {year ? ` in ${year}` : ""}
         </span>
         <AdminExportButton
@@ -187,29 +151,6 @@ export default async function AdminUnitsPage({
         />
       </section>
 
-      <section className="mb-3">
-        <p className="mb-1.5 text-[0.72rem] font-bold uppercase tracking-[0.05em] text-muted-foreground">
-          Registered teams by country
-        </p>
-        <nav className="flex flex-wrap gap-2" aria-label="Filter teams by country">
-          <Link
-            href={buildUnitsHref({ search, country: "", year })}
-            className={chipClass(country === "")}
-          >
-            All ({countryScoped.length})
-          </Link>
-          {countryList.map((c) => (
-            <Link
-              key={c}
-              href={buildUnitsHref({ search, country: c, year })}
-              className={chipClass(country === c)}
-            >
-              {c} ({countryCounts.get(c) ?? 0})
-            </Link>
-          ))}
-        </nav>
-      </section>
-
       {yearList.length > 1 ? (
         <section className="mb-4">
           <p className="mb-1.5 text-[0.72rem] font-bold uppercase tracking-[0.05em] text-muted-foreground">
@@ -217,15 +158,15 @@ export default async function AdminUnitsPage({
           </p>
           <nav className="flex flex-wrap gap-2" aria-label="Filter teams by year">
             <Link
-              href={buildUnitsHref({ search, country, year: "" })}
+              href={buildUnitsHref({ search, year: "" })}
               className={chipClass(year === "")}
             >
-              All ({yearScoped.length})
+              All ({rows.length})
             </Link>
             {yearList.map((y) => (
               <Link
                 key={y}
-                href={buildUnitsHref({ search, country, year: String(y) })}
+                href={buildUnitsHref({ search, year: String(y) })}
                 className={chipClass(year === String(y))}
               >
                 {y} ({yearCounts.get(y) ?? 0})

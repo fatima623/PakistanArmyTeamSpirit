@@ -152,32 +152,6 @@ export async function getRegistrationsByYear(): Promise<RegistrationYearRow[]> {
   return rows;
 }
 
-export type RegistrationCountryRow = { country: string; count: number };
-
-/**
- * Registration counts grouped by participant country — real data only, ordered
- * by count (desc). Participants with no country recorded fall into
- * "Unspecified".
- */
-export async function getRegistrationsByCountry(): Promise<
-  RegistrationCountryRow[]
-> {
-  const users = await prisma.user.findMany({
-    where: { role: PARTICIPANT_ROLE },
-    select: { country: true },
-  });
-
-  const counts = new Map<string, number>();
-  for (const u of users) {
-    const key = u.country?.trim() || "Unspecified";
-    counts.set(key, (counts.get(key) ?? 0) + 1);
-  }
-
-  return [...counts.entries()]
-    .map(([country, count]) => ({ country, count }))
-    .sort((a, b) => b.count - a.count || a.country.localeCompare(b.country));
-}
-
 export type KpiSparklines = {
   total: number[];
   approved: number[];
