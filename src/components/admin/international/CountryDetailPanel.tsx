@@ -1,18 +1,9 @@
 "use client";
 
-import { ChevronRight, Globe, X } from "lucide-react";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Globe, X } from "lucide-react";
 
 import { CountryFlag } from "@/components/ui/CountryFlag";
-import type { CountryParticipation } from "@/lib/international-participation-types";
+import type { ParticipatingCountry } from "@/lib/international-participation-types";
 
 const TEXT = "rgb(236,240,248)";
 const MUTED = "rgb(148,163,190)";
@@ -50,7 +41,7 @@ export function CountryDetailPanel({
   onClose,
   onSelectYear,
 }: {
-  country: CountryParticipation | null;
+  country: ParticipatingCountry | null;
   year: number;
   rank: number | null;
   onClose: () => void;
@@ -69,12 +60,6 @@ export function CountryDetailPanel({
       </div>
     );
   }
-
-  const teamsThisYear = country.byYear[year] ?? 0;
-  const chartData = country.years.map((y) => ({
-    year: String(y),
-    teams: country.byYear[y] ?? 0,
-  }));
 
   return (
     <div className="flex flex-col gap-4">
@@ -111,13 +96,13 @@ export function CountryDetailPanel({
 
       {/* Stat grid */}
       <div className="grid grid-cols-2 gap-2.5">
-        <StatBox label={`Total Teams (${year})`} value={teamsThisYear} />
+        <StatBox label={`Total Teams (${year})`} value={country.teamCount} />
         <StatBox label={`Rank (${year})`} value={rank ? `#${rank}` : "—"} />
-        <StatBox label="First Participation" value={country.firstYear} />
-        <StatBox label="Total Participations" value={country.totalParticipations} />
+        <StatBox label="Region" value={country.region} />
+        <StatBox label="ISO-2" value={country.iso2 || "—"} />
       </div>
 
-      {/* Teams over the years */}
+      {/* Teams list */}
       <div
         className="rounded-2xl px-4 pb-3 pt-3.5"
         style={{ background: CARD, border: `1px solid ${BORDER}` }}
@@ -126,94 +111,24 @@ export function CountryDetailPanel({
           className="mb-2 text-[12px] font-semibold uppercase tracking-[0.04em]"
           style={{ color: MUTED }}
         >
-          Teams Over the Years
+          Teams Registered
         </p>
-        <ResponsiveContainer width="100%" height={140}>
-          <LineChart data={chartData} margin={{ top: 6, right: 10, left: -18, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
-            <XAxis
-              dataKey="year"
-              tick={{ fill: MUTED, fontSize: 11 }}
-              axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
-              tickLine={false}
-            />
-            <YAxis
-              allowDecimals={false}
-              width={34}
-              tick={{ fill: MUTED, fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
-            <Tooltip
-              cursor={{ stroke: "rgba(255,255,255,0.16)" }}
-              contentStyle={{
-                borderRadius: 8,
-                border: "1px solid rgba(255,255,255,0.12)",
-                background: "rgb(17,23,40)",
-                color: TEXT,
-              }}
-              labelStyle={{ color: MUTED }}
-              itemStyle={{ color: BLUE }}
-              formatter={(v) => [`${v ?? 0} teams`, "Teams"]}
-            />
-            <Line
-              type="monotone"
-              dataKey="teams"
-              stroke={BLUE}
-              strokeWidth={2.4}
-              dot={{ r: 3, fill: BLUE, strokeWidth: 0 }}
-              activeDot={{ r: 5 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Year-wise list */}
-      <div
-        className="rounded-2xl px-2 py-2"
-        style={{ background: CARD, border: `1px solid ${BORDER}` }}
-      >
-        <p
-          className="px-2 pb-1.5 pt-1.5 text-[12px] font-semibold uppercase tracking-[0.04em]"
-          style={{ color: MUTED }}
-        >
-          Year Wise Teams List
-        </p>
-        <ul className="flex flex-col">
-          {country.years
-            .slice()
-            .sort((a, b) => b - a)
-            .map((y) => {
-              const active = y === year;
-              return (
-                <li key={y}>
-                  <button
-                    type="button"
-                    onClick={() => onSelectYear(y)}
-                    className="flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left transition-colors"
-                    style={{
-                      background: active ? "rgba(96,165,250,0.14)" : "transparent",
-                    }}
-                  >
-                    <span
-                      className="text-[13px] font-semibold"
-                      style={{ color: active ? BLUE : TEXT }}
-                    >
-                      {y}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <span
-                        className="text-[13px] font-semibold tabular-nums"
-                        style={{ color: MUTED }}
-                      >
-                        {country.byYear[y] ?? 0} Teams
-                      </span>
-                      <ChevronRight className="h-3.5 w-3.5" style={{ color: FAINT }} />
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
+        <ul className="flex flex-wrap gap-2">
+          {country.teams.length > 0 ? (
+            country.teams.map((team) => (
+              <li
+                key={team}
+                className="rounded-full px-3 py-1 text-[12px] font-medium"
+                style={{ background: "rgba(255,255,255,0.06)", color: TEXT }}
+              >
+                {team}
+              </li>
+            ))
+          ) : (
+            <li className="text-[13px]" style={{ color: MUTED }}>
+              No team names available.
+            </li>
+          )}
         </ul>
       </div>
     </div>

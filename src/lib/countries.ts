@@ -178,7 +178,7 @@ const OTHER_COUNTRIES = [
   "Tonga",
   "Trinidad and Tobago",
   "Tunisia",
-  "Turkey",
+  "Turkiye",
   "Turkmenistan",
   "Tuvalu",
   "Uganda",
