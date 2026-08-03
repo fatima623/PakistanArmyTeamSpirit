@@ -41,12 +41,10 @@ const OBSERVER: RegisteredTeam = {
 
 /**
  * 9th PATS roster (see the official participation slide):
- *   - Pakistan hosts.
  *   - 15 friendly nations field competing contingents (Saudi Arabia sends 4).
  *   - Several nations also — or only — attend as observers.
  */
 export const PREDEFINED_PARTICIPANTS: RegisteredCountry[] = [
-  { country: "Pakistan", teams: [{ name: "Host contingent", year: EDITION_YEAR }] },
   { country: "Bahrain", teams: [...contingents(), OBSERVER] },
   { country: "Belarus", teams: contingents() },
   { country: "Bangladesh", teams: [...contingents(), OBSERVER] },

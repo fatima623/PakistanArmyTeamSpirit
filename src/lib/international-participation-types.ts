@@ -4,32 +4,34 @@
  * Kept in their own module (no `server-only`, no Prisma) so both the server
  * aggregation lib (`international-participation.ts`) and the client dashboard
  * components can import them without pulling server code into the browser bundle.
+ *
+ * The dashboard mirrors the public website's International Participation map:
+ * the current-edition roster of nations and each nation's teams. It is a single
+ * edition (year) — no historical multi-year data.
  */
 
 import type { Region } from "@/lib/country-region";
 
-/** One country's participation across every year we have data for. */
-export type CountryParticipation = {
+/** One participating nation in the current edition. */
+export type ParticipatingCountry = {
   /** ISO-3166 alpha-2 (upper-case), or "" when the name doesn't resolve. */
   iso2: string;
   /** Display name. */
   name: string;
   region: Region;
-  /** Team count keyed by year (only years with ≥1 team are present). */
-  byYear: Record<number, number>;
-  /** Years the country participated, ascending. */
-  years: number[];
-  /** Earliest participation year. */
-  firstYear: number;
-  /** Total teams summed across all years. */
-  totalTeams: number;
-  /** Distinct years participated. */
-  totalParticipations: number;
+  /** Number of teams (contingents + observers) fielded. */
+  teamCount: number;
+  /** Team labels exactly as shown on the website (e.g. "National contingent"). */
+  teams: string[];
 };
 
 export type InternationalParticipation = {
-  /** All years with data, descending (newest first). */
-  years: number[];
-  /** Every participating country, sorted by name. */
-  countries: CountryParticipation[];
+  /** The edition year (e.g. 2026). */
+  year: number;
+  /** Total teams across all nations. */
+  totalTeams: number;
+  /** Number of participating nations. */
+  totalCountries: number;
+  /** Every participating nation, sorted by name. */
+  countries: ParticipatingCountry[];
 };
