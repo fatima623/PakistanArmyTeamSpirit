@@ -39,13 +39,11 @@ export function CountryDetailPanel({
   year,
   rank,
   onClose,
-  onSelectYear,
 }: {
   country: ParticipatingCountry | null;
   year: number;
   rank: number | null;
   onClose: () => void;
-  onSelectYear: (year: number) => void;
 }) {
   if (!country) {
     return (
