@@ -44,8 +44,11 @@ export const portalTableActionIconDanger =
 
 /** Participation requests / user management */
 export const adminUsersPage = "flex w-full flex-col";
+/* Below `lg` the panel drops its card chrome (radius, side borders, drop
+   shadow) and its horizontal inset so the table runs edge-to-edge on phones;
+   the desktop card is unchanged from `lg` up. */
 export const adminUsersPanel =
-  "flex w-full flex-col gap-3.5 rounded-2xl border border-black/[0.04] bg-white px-[1.125rem] pb-[1.125rem] pt-4 shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_32px_rgba(0,0,0,0.06)]";
+  "flex w-full flex-col gap-3.5 border-black/[0.04] bg-white px-2 pb-[1.125rem] pt-4 lg:rounded-2xl lg:border lg:px-[1.125rem] lg:shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_32px_rgba(0,0,0,0.06)]";
 export const adminUsersControls = "flex flex-col gap-2.5";
 export const adminUsersToolbar = adminUsersControls;
 export const adminUsersToolbarSearch =
@@ -68,8 +71,10 @@ export const adminApproveBtnStyles =
 
 /** Payment verification */
 export const adminPaymentsPage = "flex w-full flex-col pb-6";
-export const adminPaymentsPanel = "admin-surface flex w-full flex-col gap-5 p-6 shadow-[0_2px_12px_rgba(15,23,42,0.05)]";
-export const adminPaymentsControls = "flex flex-col gap-3.5 rounded-xl border border-slate-200 bg-slate-50 px-[1.125rem] py-4";
+export const adminPaymentsPanel =
+  "admin-surface flex w-full flex-col gap-5 p-2 lg:p-6 lg:shadow-[0_2px_12px_rgba(15,23,42,0.05)]";
+export const adminPaymentsControls =
+  "flex flex-col gap-3.5 border-slate-200 bg-slate-50 px-2 py-3 lg:rounded-xl lg:border lg:px-[1.125rem] lg:py-4";
 export const adminPaymentsToolbarSearch = "grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5";
 export const adminPaymentsFilterTabs = "flex w-full flex-wrap items-center gap-2.5";
 

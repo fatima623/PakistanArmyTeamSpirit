@@ -785,10 +785,15 @@ export function TeamRosterManager({
                 onClick={() => setPage(p)}
                 aria-label={tm.aria.page(p + 1)}
                 aria-current={p === safePage ? "page" : undefined}
-                className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-bold transition-colors ${
-                  p === safePage
-                    ? "bg-emerald-700 !text-white"
-                    : "border border-slate-200 bg-white !text-slate-700 hover:bg-slate-50"
+                /* `pp-pager-btn` owns the colours outright. The previous
+                   `bg-emerald-700` relied on the portal's global remap
+                   (`.pp [class~="bg-emerald-700"]{background:var(--pp-primary)!important}`),
+                   which resolves to `transparent` whenever --pp-primary is not
+                   in scope — leaving the white page number invisible on the
+                   light card. The class below carries a literal fallback so the
+                   chip is always green-on-white or white-on-green. */
+                className={`pp-pager-btn ${
+                  p === safePage ? "pp-pager-btn--active" : ""
                 }`}
               >
                 {p + 1}

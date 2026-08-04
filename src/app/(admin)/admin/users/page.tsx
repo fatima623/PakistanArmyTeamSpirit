@@ -4,6 +4,7 @@ import { Users2 } from "lucide-react";
 import { Prisma } from "@prisma/client";
 
 import { AdminExportButton } from "@/components/admin/AdminExportButton";
+import { AdminStatusFilterSelect } from "@/components/admin/AdminStatusFilterSelect";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import {
   CountryFilterSelect,
@@ -311,9 +312,26 @@ export default async function AdminUsersPage({
               Participation Requests
             </h2>
 
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex w-full flex-wrap items-center gap-1.5 lg:w-auto">
+              {/* Phones get the same filters as a dropdown — the chip row wrapped
+                  to four lines and pushed the table off-screen. */}
+              <AdminStatusFilterSelect
+                className="admin-input h-10 w-full lg:hidden"
+                ariaLabel="Filter by overall status"
+                value={filter}
+                options={chips.map((chip) => ({
+                  value: chip.key,
+                  label: `${chip.label} (${chip.status ? statusCounts[chip.status] : allCount})`,
+                  href: buildHref({
+                    filter: chip.key,
+                    search,
+                    payStatus,
+                    country,
+                  }),
+                }))}
+              />
               <nav
-                className="flex flex-wrap items-center gap-1.5"
+                className="hidden flex-wrap items-center gap-1.5 lg:flex"
                 aria-label="Filter by overall status"
               >
                 {chips.map((chip) => {

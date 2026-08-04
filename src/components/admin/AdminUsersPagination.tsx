@@ -75,8 +75,11 @@ export function AdminUsersPagination({
               href={pageHref(basePath, p, filter, search, filterParam, extraQuery)}
               className={cn(
                 "inline-flex h-9 w-9 min-w-9 items-center justify-center rounded-lg border border-brand-line/60 bg-white p-0 text-slate-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-colors hover:border-brand-olive/30 hover:bg-slate-50 hover:text-green-800 text-sm font-semibold",
+                // `!text-white` (not plain `text-white`): the admin theme's
+                // link/typography rules outrank a bare utility here, which left
+                // the current page number dark-on-dark-green and unreadable.
                 p === page &&
-                  "border-green-800 bg-green-800 text-white shadow-[0_2px_8px_rgba(22,101,52,0.3)] hover:border-green-900 hover:bg-green-900 hover:text-white"
+                  "border-green-800 bg-green-800 !text-white shadow-[0_2px_8px_rgba(22,101,52,0.3)] hover:border-green-900 hover:bg-green-900 hover:!text-white"
               )}
               aria-current={p === page ? "page" : undefined}
             >

@@ -3366,11 +3366,32 @@ html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-s
 
 html.light-theme .army-site .pats-header--compact .pats-nav,
 html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav {
-  background: rgba(250, 250, 247, 0.96) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-bottom: 2px solid #b8960c !important;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+  background: var(--pats-nav-day-bg, rgba(250, 250, 247, 0.96)) !important;
+  backdrop-filter: var(--pats-nav-day-blur, blur(16px)) !important;
+  -webkit-backdrop-filter: var(--pats-nav-day-blur, blur(16px)) !important;
+  border-bottom: var(--pats-nav-day-border, 2px solid #b8960c) !important;
+  box-shadow: var(--pats-nav-day-shadow, 0 2px 20px rgba(0, 0, 0, 0.08)) !important;
+}
+
+
+/* Phones, day theme: the near-white bar sat on light page content with almost
+   no edge, so the nav read as part of the page even though its text was legible.
+   A frosted grey pane — heavier blur, a grey tint, a real divider and a lifted
+   shadow — separates it without darkening the (dark) nav text. Values are set on
+   the custom properties above so no extra important-flagged declaration is
+   needed (see scripts/css-guardrails.mjs). Desktop keeps the original bar. */
+@media (max-width: 1023px) {
+  html.light-theme .army-site .pats-header .pats-nav,
+  html[data-site-theme="day"] .army-site .pats-header .pats-nav {
+    --pats-nav-day-bg: linear-gradient(
+      180deg,
+      rgba(233, 235, 232, 0.86) 0%,
+      rgba(221, 224, 220, 0.82) 100%
+    );
+    --pats-nav-day-blur: blur(18px) saturate(140%);
+    --pats-nav-day-border: 1px solid rgba(90, 99, 88, 0.30);
+    --pats-nav-day-shadow: 0 6px 22px rgba(20, 28, 22, 0.20);
+  }
 }
 
 
@@ -4110,11 +4131,11 @@ html:not(.light-theme):not([data-site-theme="day"]):not(.site-theme-day) .army-s
 
 html.light-theme .army-site .pats-header--menu-open.pats-header--compact .pats-nav,
 html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--compact .pats-nav {
-  background: rgba(250, 250, 247, 0.96) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-bottom: 2px solid #b8960c !important;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+  background: var(--pats-nav-day-bg, rgba(250, 250, 247, 0.96)) !important;
+  backdrop-filter: var(--pats-nav-day-blur, blur(16px)) !important;
+  -webkit-backdrop-filter: var(--pats-nav-day-blur, blur(16px)) !important;
+  border-bottom: var(--pats-nav-day-border, 2px solid #b8960c) !important;
+  box-shadow: var(--pats-nav-day-shadow, 0 2px 20px rgba(0, 0, 0, 0.08)) !important;
 }
 
 
@@ -6604,11 +6625,11 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 
 
 .admin-theme.pats-dashboard .admin-page-content {
-  padding: 1.5rem;
+  padding: 0.5rem;
 }
 
 
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
   .admin-theme.pats-dashboard .admin-page-content {
     padding: 2rem;
   }
@@ -10742,8 +10763,22 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 }
 
 
+/* Padding is driven by a custom property so the mobile override below can shrink
+   it without a second important-flagged declaration (see css-guardrails.mjs).
+   On phones the admin content runs edge-to-edge — the 24px gutter plus the
+   panel's own card inset wasted roughly a fifth of a 375px screen. */
 .admin-theme .admin-page-content {
-  padding: 24px !important;
+  padding: var(--admin-page-pad, 24px) !important;
+}
+
+.admin-theme .admin-page-content {
+  --admin-page-pad: 8px;
+}
+
+@media (min-width: 1024px) {
+  .admin-theme .admin-page-content {
+    --admin-page-pad: 24px;
+  }
 }
 
 
@@ -11168,14 +11203,28 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 
 
 
+/* Card chrome is expressed through custom properties so the phone override
+   below can flatten a top-level panel to full-bleed without a second
+   important-flagged declaration (see scripts/css-guardrails.mjs). */
 .admin-theme .admin-surface,
 .admin-theme .admin-data-table-shell,
 .admin-theme .admin-settings-card,
 .admin-theme .portal-card {
   background: #ffffff !important;
-  border: 1px solid var(--admin-border) !important;
-  border-radius: 16px !important;
-  box-shadow: var(--admin-shadow-card) !important;
+  border: var(--admin-surface-border, 1px solid var(--admin-border)) !important;
+  border-radius: var(--admin-surface-radius, 16px) !important;
+  box-shadow: var(--admin-surface-shadow, var(--admin-shadow-card)) !important;
+}
+
+/* Phones: the outermost panel on a page runs edge-to-edge instead of floating
+   as a rounded card inside a gutter. Nested surfaces keep their own chrome. */
+@media (max-width: 1023px) {
+  .admin-theme .admin-page-content > .admin-surface,
+  .admin-theme .admin-page-content > * > .admin-surface {
+    --admin-surface-radius: 0px;
+    --admin-surface-border: 0 solid transparent;
+    --admin-surface-shadow: none;
+  }
 }
 
 
@@ -13468,11 +13517,11 @@ html.light-theme .army-site .pats-header--solid .pats-nav,
 html.light-theme .army-site .pats-header--menu-open.pats-header--solid .pats-nav,
 html[data-site-theme="day"] .army-site .pats-header--solid .pats-nav,
 html[data-site-theme="day"] .army-site .pats-header--menu-open.pats-header--solid .pats-nav {
-  background: rgba(250, 250, 247, 0.96) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  border-bottom: 2px solid #b8960c !important;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08) !important;
+  background: var(--pats-nav-day-bg, rgba(250, 250, 247, 0.96)) !important;
+  backdrop-filter: var(--pats-nav-day-blur, blur(16px)) !important;
+  -webkit-backdrop-filter: var(--pats-nav-day-blur, blur(16px)) !important;
+  border-bottom: var(--pats-nav-day-border, 2px solid #b8960c) !important;
+  box-shadow: var(--pats-nav-day-shadow, 0 2px 20px rgba(0, 0, 0, 0.08)) !important;
 }
 
 /* —— Button hover (card lift: pats-card-surface.css) —— */
@@ -20241,6 +20290,38 @@ html:has(.dashboard-day) body {
 .pp .pp-badge--success a,
 .pp a.pp-badge--success {
   text-decoration: none;
+}
+
+/* Roster page-number chips (Team Registration → member pages).
+   Colours are declared here rather than through Tailwind utilities so they
+   cannot be knocked out by the `bg-emerald-700` remap below: that rule resolves
+   to `transparent` if --pp-primary is out of scope, which left the white "1"/"2"
+   invisible. Literal fallbacks keep the chip readable in every theme. */
+.pp .pp-pager-btn {
+  display: inline-flex;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.pp .pp-pager-btn:hover {
+  background-color: #f8fafc;
+}
+
+.pp .pp-pager-btn--active,
+.pp .pp-pager-btn--active:hover {
+  border-color: var(--pp-primary, #15613b);
+  background-color: var(--pp-primary, #15613b);
+  color: #ffffff;
 }
 
 /* align emerald primary buttons (used by migrated managers) to the brand green */

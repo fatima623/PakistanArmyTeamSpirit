@@ -5,7 +5,8 @@ import { Prisma } from "@prisma/client";
 import { Eye } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { formatDateShort } from "@/lib/utils";
+import { cn, formatDateShort } from "@/lib/utils";
+import { AdminStatusFilterSelect } from "@/components/admin/AdminStatusFilterSelect";
 import { PaymentStatusBadge } from "@/components/admin/StatusBadges";
 import { PaymentRowAction } from "@/components/admin/PaymentActions";
 import { FilterMemory } from "@/components/admin/FilterMemory";
@@ -170,8 +171,19 @@ export default async function AdminPaymentsPage({
               iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-muted-foreground/70"
             />
           </div>
+          {/* Phones get the filters as a dropdown; the chip row is desktop-only. */}
+          <AdminStatusFilterSelect
+            className="admin-input h-10 w-full lg:hidden"
+            ariaLabel="Filter payments"
+            value={status}
+            options={filters.map((f) => ({
+              value: f,
+              label: `${PAYMENT_STATUS_FILTER_LABELS[f] ?? f} (${f === "all" ? allCount : statusCounts[f] ?? 0})`,
+              href: `/admin/payments?status=${f}&search=${encodeURIComponent(search)}`,
+            }))}
+          />
           <nav
-            className={adminPaymentsFilterTabs}
+            className={cn(adminPaymentsFilterTabs, "hidden lg:flex")}
             aria-label="Filter payments"
           >
             {filters.map((f) => {
