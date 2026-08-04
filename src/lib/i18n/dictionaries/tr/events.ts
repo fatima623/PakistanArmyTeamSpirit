@@ -23,6 +23,7 @@ export const events: typeof enEvents = {
     searchPlaceholder: "Etkinliklerde ara…",
     searchAria: "Yarışma etkinliklerinde arama yap",
     all: "Tümü",
+    categoryAria: "Kategoriye göre filtrele",
   },
 
   summary: (serials, marks) =>

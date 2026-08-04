@@ -29,6 +29,7 @@ export const events: typeof enEvents = {
     searchPlaceholder: "Поиск испытаний…",
     searchAria: "Поиск по соревновательным испытаниям",
     all: "Все",
+    categoryAria: "Фильтр по категории",
   },
 
   summary: (serials, marks) =>

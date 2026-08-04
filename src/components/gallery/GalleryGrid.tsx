@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ChevronLeft, ChevronRight, ImageOff, Play, X, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageOff, Maximize2, Play, X, ArrowLeft } from "lucide-react";
 
 import { compareCategories, UNCATEGORISED_LABEL } from "@/lib/gallery-categories";
 import { translateGalleryCategory } from "@/lib/i18n/gallery-category-i18n";
@@ -326,7 +326,29 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
           )}>
             Categories
           </p>
-          <div className="flex flex-col gap-1 max-h-[50vh] lg:max-h-[70vh] overflow-y-auto pr-1">
+
+          {/* Mobile: a compact dropdown instead of the full open list, so the
+              category picker doesn't push the gallery far down the page. The
+              open button list below is shown from `lg` up (desktop unchanged). */}
+          <select
+            aria-label="Select category"
+            value={activeCategory?.category ?? ""}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className={cn(
+              "lg:hidden w-full rounded-[4px] border px-3 py-2.5 font-condensed text-xs font-bold uppercase tracking-wider outline-none focus-visible:ring-2 focus-visible:ring-[var(--pats-gold)]",
+              dayTheme
+                ? "bg-white border-brand-olive-dark/20 text-brand-olive-dark"
+                : "bg-brand-night/70 border-white/15 text-brand-sand"
+            )}
+          >
+            {albums.map((a) => (
+              <option key={a.category} value={a.category}>
+                {translateGalleryCategory(a.category, locale)} ({a.items.length})
+              </option>
+            ))}
+          </select>
+
+          <div className="hidden lg:flex lg:flex-col gap-1 max-h-[50vh] lg:max-h-[70vh] overflow-y-auto pr-1">
             {albums.map((a) => {
               const isActiveCategory = activeCategory?.category === a.category;
               return (
@@ -497,12 +519,15 @@ export function GalleryGrid({ items }: { items: GalleryItem[] }) {
                           className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-black/20 to-black/45 opacity-90 transition-opacity duration-300 group-hover/video:opacity-100"
                           aria-hidden
                         />
+                        {/* Images open in the lightbox — the cue is an
+                            EXPAND/view icon, never the video Play glyph (that
+                            is reserved for actual videos). */}
                         <span
                           className="pointer-events-none absolute inset-0 grid place-items-center"
                           aria-hidden
                         >
                           <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/80 bg-black/35 text-white shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform duration-300 group-hover/video:scale-105">
-                            <Play className="ml-1 h-7 w-7 fill-current" />
+                            <Maximize2 className="h-6 w-6" />
                           </span>
                         </span>
                       </button>

@@ -221,31 +221,26 @@ export function EventsDetailView({ events }: { events: PublicEvent[] }) {
                 aria-label={t.events.filters.searchAria}
               />
             </div>
+            {/* Categories are a dropdown on every viewport: the chip row grew
+                past a dozen entries and wrapped into several lines, pushing the
+                event cards off-screen on phones. Difficulty stays as chips —
+                it is a short, fixed set. */}
             <div className="ec-chips">
-              <button
-                type="button"
-                className="ec-chip"
-                data-active={
-                  difficulty === ALL && category === ALL ? "true" : undefined
+              <select
+                className="ec-select"
+                aria-label={t.events.filters.categoryAria}
+                value={category}
+                onChange={(e) =>
+                  setCategory(e.target.value as EventCategory | typeof ALL)
                 }
-                onClick={() => {
-                  setCategory(ALL);
-                  setDifficulty(ALL);
-                }}
               >
-                {t.events.filters.all}
-              </button>
-              {EVENT_CATEGORIES.map((c) => (
-                <button
-                  key={c}
-                  type="button"
-                  className="ec-chip"
-                  data-active={category === c ? "true" : undefined}
-                  onClick={() => setCategory((prev) => (prev === c ? ALL : c))}
-                >
-                  {translateEventCategory(c, locale)}
-                </button>
-              ))}
+                <option value={ALL}>{t.events.filters.all}</option>
+                {EVENT_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {translateEventCategory(c, locale)}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 

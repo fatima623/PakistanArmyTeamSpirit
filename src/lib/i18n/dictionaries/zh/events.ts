@@ -22,6 +22,7 @@ export const events: typeof enEvents = {
     searchPlaceholder: "搜索活动…",
     searchAria: "搜索竞赛活动",
     all: "全部",
+    categoryAria: "按类别筛选",
   },
 
   summary: (serials, marks) => `${serials} 项计分科目 · 共 ${marks} 分`,

@@ -28,6 +28,8 @@ export const events = {
     searchAria: "Search competition events",
     // Chip that clears both the category and the difficulty filter.
     all: "All",
+    /** Label for the category <select> that replaces the chip row. */
+    categoryAria: "Filter by category",
   },
 
   /** Result-count line, e.g. "27 scored serials · 1900 total marks". */

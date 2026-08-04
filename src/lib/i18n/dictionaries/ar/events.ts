@@ -31,6 +31,7 @@ export const events: typeof enEvents = {
     searchPlaceholder: "البحث في الفعاليات…",
     searchAria: "البحث في الفعاليات التنافسية",
     all: "الكل",
+    categoryAria: "تصفية حسب الفئة",
   },
 
   summary: (serials, marks) =>

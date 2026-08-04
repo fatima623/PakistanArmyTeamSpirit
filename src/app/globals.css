@@ -3730,6 +3730,28 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
   .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__panel-links {
     overflow-x: visible;
   }
+
+  /* Mobile hamburger panel is a vertical stack; the language + theme controls
+     belong at the TOP of it (above the page links), not buried at the bottom.
+     `order` reorders only this flex column — the desktop inline row (>=1024px,
+     where these sit at the far right) is untouched. */
+  .army-site:not(.dashboard-day)
+    .pats-header--menu-open
+    .pats-nav__panel-links
+    .pats-nav__lang {
+    order: -2;
+    margin-top: 0;
+  }
+
+  .army-site:not(.dashboard-day)
+    .pats-header--menu-open
+    .pats-nav__panel-links
+    .pats-nav__theme {
+    order: -1;
+    margin: 0 0 0.35rem;
+    padding: 0;
+    border-left: none;
+  }
 }
 
 
@@ -14837,6 +14859,31 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-awards-hero-card__fo
 }
 
 
+/* The awards standings table is a LIGHT card (white / cream tier pills) that
+   sits on the dark public pages. The sitewide dark-page rule
+   `.cinematic-site:not(.dashboard-day) :is(p,li,span,…) { color: #fff }` has
+   specificity (0,2,1) and was beating these components' own (0,1,0) colours —
+   painting white text on the near-white pills, i.e. invisible standings.
+   Re-assert the intended dark text at (0,3,0) so it wins on specificity alone,
+   with no override flag needed (see scripts/css-guardrails.mjs). */
+.cinematic-site:not(.dashboard-day) .pats-awards-standings__tier,
+.cinematic-site:not(.dashboard-day) .pats-awards-standings__min,
+.cinematic-site:not(.dashboard-day) .pats-awards-standings__country-name {
+  color: #1a1a1a;
+}
+
+.cinematic-site:not(.dashboard-day) .pats-awards-standings__band {
+  color: #64748b;
+}
+
+.cinematic-site:not(.dashboard-day) .pats-awards-standings__country-score {
+  color: #4a5245;
+}
+
+.cinematic-site:not(.dashboard-day) .pats-awards-standings__none {
+  color: #94a3b8;
+}
+
 .pats-awards-standings__none {
   font-size: 0.8125rem;
   font-style: italic;
@@ -15836,6 +15883,22 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+/* Category picker. A native <select> so phones get the OS wheel/sheet; the
+   sitewide dark-page rule paints selects white-on-dark-text, so only the
+   geometry is set here to sit level with the search field and chips. */
+.ec-select {
+  min-width: 11rem;
+  max-width: 100%;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--ec-line);
+  border-radius: 10px;
+  font-family: var(--font-barlow, system-ui), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
 }
 
 .ec-chip {
@@ -20506,17 +20569,35 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
    it to ~150px tall and the highlighted nations become unreadable. Render it at
    a legible size and let it scroll sideways instead. The scroll container is the
    SVG wrapper (not the stage) so the absolutely-positioned tooltip — a sibling
-   of the wrapper — is never clipped. */
+   of the wrapper — is never clipped. A VISIBLE scrollbar is kept (mirroring the
+   familiarization "Concept of PATS" diagram) so users realise the map scrolls. */
 @media (max-width: 767px) {
   .registered-map__svg {
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    /* Firefox: a thin, always-present bar tinted to the map's green/gold. */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(230, 207, 127, 0.55) rgba(255, 255, 255, 0.08);
+    padding-bottom: 0.35rem;
   }
 
   .registered-map__svg::-webkit-scrollbar {
-    display: none;
+    height: 8px;
+  }
+
+  .registered-map__svg::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+  }
+
+  .registered-map__svg::-webkit-scrollbar-thumb {
+    background: rgba(230, 207, 127, 0.55);
+    border-radius: 999px;
+  }
+
+  .registered-map__svg::-webkit-scrollbar-thumb:hover {
+    background: rgba(230, 207, 127, 0.75);
   }
 
   .registered-map__svg > svg {
