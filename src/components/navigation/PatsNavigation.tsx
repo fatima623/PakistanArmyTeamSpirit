@@ -213,7 +213,8 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const isDesktop = useIsDesktopNav();
   const { dayTheme } = useSiteTheme();
   const { scrolled: chromeScrolled, pastHero } = useSiteChromeScroll();
-  const isSolid = overHeroMedia ? chromeScrolled || pastHero : true;
+  const forceSolidMobileMenu = dayTheme && !isDesktop && menuOpen;
+  const isSolid = overHeroMedia ? chromeScrolled || pastHero || forceSolidMobileMenu : true;
   const isScrolled = isSolid;
   const isCompact = isSolid;
   const isShrunk = overHeroMedia ? pastHero : true;
