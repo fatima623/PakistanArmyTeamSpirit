@@ -23,6 +23,28 @@ import { cn } from "@/lib/utils";
 
 const DROPDOWN_CLOSE_MS = 150;
 
+/** The viewport at which the nav switches from the mobile hamburger panel to the
+ *  inline desktop link row — kept in sync with the `1024px` CSS breakpoints. */
+const DESKTOP_NAV_QUERY = "(min-width: 1024px)";
+
+/** Tracks whether the desktop (inline) nav layout is active. Starts `false` so
+ *  the server render and first client paint agree (mobile-first), then reads the
+ *  real match on mount — mirroring the existing "reveal links after mount"
+ *  behaviour without introducing a hydration mismatch. */
+function useIsDesktopNav(): boolean {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(DESKTOP_NAV_QUERY);
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
+
 function PafMenuIcon() {
   return (
     <span className="pats-nav__menu-icon" aria-hidden>
@@ -188,6 +210,7 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const isHome = pathname === "/";
   const overHeroMedia = pathnameHasHeroOverlay(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
+  const isDesktop = useIsDesktopNav();
   const { dayTheme } = useSiteTheme();
   const { scrolled: chromeScrolled, pastHero } = useSiteChromeScroll();
   const isSolid = overHeroMedia ? chromeScrolled || pastHero : true;
@@ -195,13 +218,40 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const isCompact = isSolid;
   const isShrunk = overHeroMedia ? pastHero : true;
 
+  // On DESKTOP the link row is revealed inline as the header goes solid on
+  // scroll (and stays shown on non-hero pages). On MOBILE that same `menuOpen`
+  // state drives a full-screen hamburger panel, so it must NOT be tied to scroll
+  // — the panel opens only when the user taps the menu button.
   useEffect(() => {
-    if (isScrolled) {
-      setMenuOpen(true);
-    } else {
-      setMenuOpen(false);
-    }
-  }, [isScrolled]);
+    if (!isDesktop) return;
+    setMenuOpen(isScrolled);
+  }, [isScrolled, isDesktop]);
+
+  // Collapse the panel whenever we cross below the desktop breakpoint so a menu
+  // left open on desktop doesn't reappear as an auto-opened mobile panel.
+  useEffect(() => {
+    if (!isDesktop) setMenuOpen(false);
+  }, [isDesktop]);
+
+  // Lock body scroll while the mobile panel is open so only the nav is
+  // interactive; scrolling resumes when it closes. Desktop is never locked.
+  useEffect(() => {
+    if (!menuOpen || isDesktop) return;
+    const { documentElement: html, body } = document;
+    const prev = {
+      htmlOverflow: html.style.overflow,
+      bodyOverflow: body.style.overflow,
+      bodyTouch: body.style.touchAction,
+    };
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.touchAction = "none";
+    return () => {
+      html.style.overflow = prev.htmlOverflow;
+      body.style.overflow = prev.bodyOverflow;
+      body.style.touchAction = prev.bodyTouch;
+    };
+  }, [menuOpen, isDesktop]);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 

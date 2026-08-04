@@ -51,6 +51,12 @@ const COUNTRY_NAMES_BY_ISO2: Record<string, Translations> = {
     ar: "المملكة العربية السعودية",
     zh: "沙特阿拉伯",
   },
+  AE: {
+    ru: "Объединённые Арабские Эмираты",
+    tr: "Birleşik Arap Emirlikleri",
+    ar: "الإمارات العربية المتحدة",
+    zh: "阿拉伯联合酋长国",
+  },
   MV: { ru: "Мальдивы", tr: "Maldivler", ar: "المالديف", zh: "马尔代夫" },
   MY: { ru: "Малайзия", tr: "Malezya", ar: "ماليزيا", zh: "马来西亚" },
   MA: { ru: "Марокко", tr: "Fas", ar: "المغرب", zh: "摩洛哥" },

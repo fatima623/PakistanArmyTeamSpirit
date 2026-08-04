@@ -1,20 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Settings } from "lucide-react";
+import { Bell, Menu, Settings } from "lucide-react";
 
 import { AdminUserMenu } from "@/components/admin/AdminUserMenu";
 
 export function AdminHeader({
   title,
   userInitials,
+  onMenuClick,
 }: {
   title: string;
   userInitials: string;
+  /** Opens the off-canvas sidebar on mobile (< lg). Absent on desktop chrome. */
+  onMenuClick?: () => void;
 }) {
   return (
     <header className="admin-header-bar admin-layout-header flex flex-shrink-0 items-center justify-between gap-3 sm:gap-4">
-      <div className="admin-header-titlewrap min-w-0 flex-1">
+      <div className="admin-header-titlewrap flex min-w-0 flex-1 items-center gap-2">
+        {onMenuClick ? (
+          <button
+            type="button"
+            className="admin-header-iconbtn lg:hidden"
+            aria-label="Open navigation menu"
+            title="Menu"
+            onClick={onMenuClick}
+          >
+            <Menu className="h-[18px] w-[18px]" aria-hidden />
+          </button>
+        ) : null}
         <h1 className="admin-heading truncate">{title}</h1>
       </div>
 

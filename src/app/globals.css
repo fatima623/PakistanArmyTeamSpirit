@@ -20502,6 +20502,28 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   height: auto;
 }
 
+/* Mobile: the world map is ~2.33:1, so fitting it to a phone's width collapses
+   it to ~150px tall and the highlighted nations become unreadable. Render it at
+   a legible size and let it scroll sideways instead. The scroll container is the
+   SVG wrapper (not the stage) so the absolutely-positioned tooltip — a sibling
+   of the wrapper — is never clipped. */
+@media (max-width: 767px) {
+  .registered-map__svg {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .registered-map__svg::-webkit-scrollbar {
+    display: none;
+  }
+
+  .registered-map__svg > svg {
+    min-width: 640px;
+  }
+}
+
 .registered-map__tooltip {
   /* Placement (left/top) is computed in JS and already viewport-clamped, so no
      transform offset here. Sits above the map art and the site chrome. */

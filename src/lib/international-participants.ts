@@ -41,7 +41,7 @@ const OBSERVER: RegisteredTeam = {
 
 /**
  * 9th PATS roster (see the official participation slide):
- *   - 15 friendly nations field competing contingents (Saudi Arabia sends 4).
+ *   - 15 friendly nations field competing contingents (the UAE sends 4).
  *   - Several nations also — or only — attend as observers.
  */
 export const PREDEFINED_PARTICIPANTS: RegisteredCountry[] = [
@@ -50,14 +50,14 @@ export const PREDEFINED_PARTICIPANTS: RegisteredCountry[] = [
   { country: "Bangladesh", teams: [...contingents(), OBSERVER] },
   { country: "Egypt", teams: [...contingents(), OBSERVER] },
   { country: "Jordan", teams: contingents() },
-  { country: "Saudi Arabia", teams: [...contingents(4), OBSERVER] },
+  { country: "United Arab Emirates", teams: [...contingents(4), OBSERVER] },
   { country: "Maldives", teams: [...contingents(), OBSERVER] },
   { country: "Malaysia", teams: [...contingents(), OBSERVER] },
   { country: "Morocco", teams: contingents() },
   { country: "Nepal", teams: contingents() },
   { country: "Qatar", teams: contingents() },
   { country: "Sri Lanka", teams: contingents() },
-  { country: "Turkey", teams: [...contingents(), OBSERVER] },
+  { country: "Turkiye", teams: [...contingents(), OBSERVER] },
   { country: "United States", teams: contingents() },
   { country: "Uzbekistan", teams: contingents() },
   { country: "Indonesia", teams: [OBSERVER] },

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
@@ -39,6 +39,23 @@ export function AdminLayout({
     : (title ?? adminNavLabelForPath(pathname));
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Close the off-canvas drawer on navigation so it never lingers over the new
+  // page (the sidebar stays mounted across route changes).
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll while the mobile drawer is open (desktop keeps the sidebar
+  // docked, so the lock is scoped to the open state only).
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [sidebarOpen]);
+
   return (
     <div className="admin-layout admin-theme pats-dashboard min-h-screen">
       <aside
@@ -65,7 +82,11 @@ export function AdminLayout({
       )}
 
       <div className="admin-layout-main">
-        <AdminHeader title={headerTitle} userInitials={userInitials} />
+        <AdminHeader
+          title={headerTitle}
+          userInitials={userInitials}
+          onMenuClick={() => setSidebarOpen(true)}
+        />
         <main
           id="main-content"
           className="admin-layout-content"
