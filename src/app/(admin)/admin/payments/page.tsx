@@ -202,7 +202,9 @@ export default async function AdminPaymentsPage({
         </section>
 
         <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-          <table className="admin-data-table min-w-[44rem]">
+          {/* Below `lg` the class widens the scroll track and opens the cell
+              gutters — six columns on a 44rem track left them touching. */}
+          <table className="admin-data-table admin-payments-scroll-table min-w-[44rem]">
             <colgroup>
               <col className="w-[28%]" />
               <col className="w-[15%]" />
@@ -268,7 +270,10 @@ export default async function AdminPaymentsPage({
                       <td className="!text-left break-all font-mono text-[0.8125rem] text-slate-900">
                         {p.transactionReference ?? "—"}
                       </td>
-                      <td className="!overflow-visible !px-1.5">
+                      {/* px-1.5 stays un-flagged so the mobile gutter rule in
+                          globals.css can widen it; desktop keeps the tight
+                          padding this centred badge column needs. */}
+                      <td className="!overflow-visible px-1.5">
                         <div className="flex w-full min-w-0 items-center justify-center">
                           <PaymentStatusBadge
                             status={p.status}

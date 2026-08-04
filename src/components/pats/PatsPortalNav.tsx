@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   ClipboardList,
@@ -10,9 +11,11 @@ import {
   LayoutDashboard,
   LifeBuoy,
   LogOut,
+  Menu,
   Plane,
   Shield,
   Users,
+  X,
 } from "lucide-react";
 
 import { logoutAction } from "@/lib/actions/auth";
@@ -56,6 +59,13 @@ export function PatsPortalNav({
 }) {
   const pathname = usePathname();
   const { t } = useI18n();
+  // Below `lg` the sidebar collapses to a bar and the links drop down over the
+  // page; the drawer must never survive into the route it just opened.
+  const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
   const gates: Record<NavGate, boolean> = {
     always: true,
     payment: showPaymentLink,
@@ -70,7 +80,22 @@ export function PatsPortalNav({
       : 0;
 
   return (
-    <nav className="pp-sidebar" aria-label={t.nav.ariaLabel}>
+    <nav
+      className={cn("pp-sidebar", menuOpen && "pp-sidebar--open")}
+      aria-label={t.nav.ariaLabel}
+    >
+      {/* Leading corner on phones; `display: none` above `lg`, where the
+          sidebar is a permanent grid column. */}
+      <button
+        type="button"
+        className="pp-sidebar__menu-btn"
+        aria-label={t.nav.menu}
+        aria-expanded={menuOpen}
+        onClick={() => setMenuOpen((v) => !v)}
+      >
+        {menuOpen ? <X aria-hidden /> : <Menu aria-hidden />}
+      </button>
+
       <div className="pp-sidebar__brand">
         <span className="pp-sidebar__mark" aria-hidden>
           <Shield className="h-5 w-5" />
@@ -81,55 +106,60 @@ export function PatsPortalNav({
         </div>
       </div>
 
-      {stageLabel && stageStep ? (
-        <div className="pp-progress">
-          <div className="pp-progress__row">
-            <span className="pp-progress__label">{stageLabel}</span>
-            <span className="pp-progress__step">
-              {stageTone === "confirmed"
-                ? t.nav.done
-                : `${stageStep.current}/${stageStep.total}`}
-            </span>
+      {/* `display: contents` above `lg`, so the three blocks below keep the
+          exact flex layout they had before this wrapper existed. Below `lg` it
+          is the drop-down surface. */}
+      <div className="pp-sidebar__panel">
+        {stageLabel && stageStep ? (
+          <div className="pp-progress">
+            <div className="pp-progress__row">
+              <span className="pp-progress__label">{stageLabel}</span>
+              <span className="pp-progress__step">
+                {stageTone === "confirmed"
+                  ? t.nav.done
+                  : `${stageStep.current}/${stageStep.total}`}
+              </span>
+            </div>
+            <div className="pp-progress__track">
+              <div className="pp-progress__fill" style={{ width: `${pct}%` }} />
+            </div>
           </div>
-          <div className="pp-progress__track">
-            <div className="pp-progress__fill" style={{ width: `${pct}%` }} />
-          </div>
+        ) : null}
+
+        <div className="pp-nav">
+          <p className="pp-nav__label">{t.nav.menu}</p>
+          <ul className="pp-nav__list">
+            {links.map((link) => {
+              const active =
+                pathname === link.href ||
+                (link.href !== "/event/dashboard" && pathname.startsWith(link.href));
+              const Icon = link.Icon;
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    prefetch
+                    className={cn("pp-nav__link", active && "is-active")}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    <Icon className="pp-nav__icon" aria-hidden />
+                    <span>{t.nav[link.labelKey]}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-      ) : null}
 
-      <div className="pp-nav">
-        <p className="pp-nav__label">{t.nav.menu}</p>
-        <ul className="pp-nav__list">
-          {links.map((link) => {
-            const active =
-              pathname === link.href ||
-              (link.href !== "/event/dashboard" && pathname.startsWith(link.href));
-            const Icon = link.Icon;
-            return (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  prefetch
-                  className={cn("pp-nav__link", active && "is-active")}
-                  aria-current={active ? "page" : undefined}
-                >
-                  <Icon className="pp-nav__icon" aria-hidden />
-                  <span>{t.nav[link.labelKey]}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      <div className="pp-sidebar__foot">
-        <LanguageSwitcher />
-        <form action={logoutAction}>
-          <button type="submit" className="pp-logout">
-            <LogOut className="pp-nav__icon" aria-hidden />
-            <span>{t.nav.logout}</span>
-          </button>
-        </form>
+        <div className="pp-sidebar__foot">
+          <LanguageSwitcher />
+          <form action={logoutAction}>
+            <button type="submit" className="pp-logout">
+              <LogOut className="pp-nav__icon" aria-hidden />
+              <span>{t.nav.logout}</span>
+            </button>
+          </form>
+        </div>
       </div>
     </nav>
   );
