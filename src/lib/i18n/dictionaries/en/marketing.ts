@@ -186,14 +186,14 @@ export const marketing = {
     meta: {
       title: "Familiarization of PATS",
       description:
-        "Pre-arrival brief for participating contingents — concept of PATS, terrain and route, team composition, the weapons and equipment scale, and coordinating points.",
+        "Pre-arrival brief for participating contingents — concept of PATS, the route, team composition, the weapons and equipment scale, and familiarization training.",
     },
 
     hero: {
       eyebrow: "Pre-arrival brief",
       title: "Familiarization of PATS",
       subtitle:
-        "Everything a participating contingent needs before arrival — the concept of the exercise, the ground and the route, team composition, the weapons and equipment scale, and the coordinating points that govern conduct.",
+        "Everything a participating contingent needs before arrival — the concept of the exercise, the route, team composition, the weapons and equipment scale, and the familiarization training completed before movement.",
       metaDuration: "Exercise",
       metaDurationValue: "60 hours",
       metaDistance: "Traverse",
@@ -206,14 +206,10 @@ export const marketing = {
     anchorsAria: "Sections on this page",
     anchors: {
       concept: "Concept",
-      terrain: "Terrain",
       route: "Route",
       team: "Team",
       equipment: "Equipment",
       training: "Training",
-      coordination: "Coordination",
-      "dos-donts": "Dos & Don'ts",
-      facilitation: "Facilitation",
     } as Record<FamiliarizationAnchor, string>,
 
     concept: {
@@ -226,15 +222,6 @@ export const marketing = {
         "Concept diagram of PATS: the assembly area, the infiltration route through the terrorist-dominated area to the hideout and target, the exfiltration leg and the terminal speed march, with the tasks conducted at each checkpoint.",
       imageCaption:
         "Concept of PATS — briefing diagram issued at the Main Planning Conference.",
-    },
-
-    terrain: {
-      eyebrow: "Ground",
-      title: "Terrain profile",
-      description:
-        "The ground the patrol crosses and the conditions expected on it — read this before deciding clothing, footwear and cold-weather routine.",
-      groundTitle: "Ground",
-      demandTitle: "Demands on the patrol",
     },
 
     route: {
@@ -280,35 +267,6 @@ export const marketing = {
       title: "Familiarization training",
       description:
         "Pre-competition orientation for international teams, completed before movement into the exercise area, with special emphasis on:",
-    },
-
-    coordination: {
-      eyebrow: "Coordination",
-      title: "Coordinating points",
-      description:
-        "Instructions issued at the Main Planning Conference. Failure to comply may carry a points penalty or disqualification.",
-    },
-
-    dosDonts: {
-      eyebrow: "Conduct",
-      title: "Dos & Don'ts",
-      description:
-        "The obligations and prohibitions that apply to every participant for the duration of the visit.",
-      dos: "Do",
-      donts: "Don't",
-    },
-
-    facilitation: {
-      eyebrow: "Support",
-      title: "Facilitation, medical & legal",
-      description:
-        "What the Pakistan Army provides, where medical responsibility sits, and the legal position communicated to all participating nations.",
-      facilitationTitle: "Provided by the Pakistan Army",
-      medicalTitle: "Medical cover",
-      legalTitle: "Legal aspects",
-      informationTitle: "Information required from teams",
-      /** e.g. "Due by 15 December 2025" */
-      informationDeadline: (deadline: string): string => `Due by ${deadline}`,
     },
 
   },

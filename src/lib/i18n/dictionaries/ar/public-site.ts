@@ -157,17 +157,13 @@ export const publicSite: typeof enPublicSite = {
       metaSince: "منذ",
       metaSinceValue: "2016",
       metaEditions: "النسخ",
-      metaEditionsValue: "8 دولية",
+      metaEditionsValue: "9 دولية",
       metaReach: "النطاق",
       metaReachValue: "متعدد المسارح",
       mapEyebrow: "خريطة المسرح",
       mapTitle: "الدول المسجَّلة",
       mapDescription:
         "الدول التي لديها فرق مسجَّلة في المسابقة. مرّر المؤشر فوق دولة مميزة لعرض فرقها وسنة تسجيلها.",
-      historyEyebrow: "التاريخ",
-      historyTitle: "الجدول الزمني للنسخ",
-      historyDescription:
-        "المشاركة الدولية عبر النسخ المتتالية للمسابقة.",
       orientationEyebrow: "التهيئة",
       orientationTitle: "التدريب التعريفي",
       orientationDescription:
@@ -179,11 +175,6 @@ export const publicSite: typeof enPublicSite = {
         "الدفاع الكيميائي والبيولوجي والإشعاعي والنووي (CBRN)",
         "AFOS / ATGP",
         "الاستطلاع الأرضي للمنطقة",
-      ],
-      historyNarrative: [
-        "بدأت PATS منذ عام 2005 كتمرين ملاحي يركّز على التحمل واللياقة البدنية.",
-        "أُدمجت الدروس المستفادة من عمليات مكافحة الإرهاب في صورة فعاليات واقعية وسيناريوهات ميدانية — عمليات دون تكتيكية في بيئات تقليدية وغير تقليدية.",
-        "أدى الاهتمام المتزايد من الدول الصديقة إلى إطلاق PATS الدولية عام 2016، بما يتيح تبادل الخبرات الثرية والتعلّم المتبادل.",
       ],
       mapAria: "خريطة العالم للدول المسجَّلة",
       mapCaption: (count: number) =>

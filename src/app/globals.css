@@ -22568,6 +22568,13 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
   }
 }
 
+@media (min-width: 1024px) {
+  .admin-theme .admin-header-titlewrap > .admin-header-iconbtn,
+  .admin-theme .admin-header-titlewrap > .admin-heading {
+    display: none !important;
+  }
+}
+
 /* KPI tiles: two per row on phones, with the padding/gap dialled back so the
    pair still reads comfortably at half width. */
 @media (max-width: 639px) {

@@ -7,15 +7,13 @@
  * rather than re-authors:
  *
  *   - `TEAM_ROLES`          → team composition table       (@/lib/pats-content)
- *   - `OPERATIONAL_RULES`   → coordinating points          (@/lib/pats-content)
  *   - `ORIENTATION_MODULES` → pre-arrival familiarization  (@/lib/pats-content)
  *
  * The scored-event catalogue is deliberately NOT shown here — it lives on
  * /operations, which is the page built around it.
  *
  * Only material with no existing home on the site is declared here: the route
- * legs, the weapons/equipment scale, the explicit do / don't split, and the
- * facilitation, medical and legal aspects. The familiarization-training modules
+ * legs and the weapons/equipment scale. The familiarization-training modules
  * moved here from /international and are re-exported below so the page has a
  * single import.
  *
@@ -24,7 +22,7 @@
  * falls back to English for anything it does not recognise.
  */
 
-import { OPERATIONAL_RULES, ORIENTATION_MODULES } from "@/lib/pats-content";
+import { ORIENTATION_MODULES } from "@/lib/pats-content";
 
 /**
  * Pre-arrival familiarization training. Previously a section on
@@ -84,33 +82,6 @@ export const CONCEPT_LEGS = [
     body: "A final speed march over a defined road or track into the terminal area, carrying a casualty load, before terminal inspection and debrief.",
   },
 ] as const;
-
-/* ------------------------------------------------------------------ *
- * Terrain profile
- * ------------------------------------------------------------------ */
-
-/**
- * The ground the patrol crosses and the conditions expected on it. Teams use
- * this to decide clothing, footwear and cold-weather routine before travelling,
- * so the numbers are stated exactly as briefed.
- */
-export const TERRAIN_PROFILE = {
-  /** Measurable facts, shown as a stat band. */
-  facts: [
-    { label: "Exercise area", value: "≈30 square kilometres" },
-    { label: "Weather", value: "Cold, with fog expected" },
-    { label: "Temperature", value: "5–16 °C" },
-  ],
-  /** Ground types the patrol moves across. */
-  ground: [
-    "Semi-mountains, cuttings and plains.",
-    "Small and medium sized built-up areas.",
-    "Narrow roads and tracks.",
-  ],
-  /** What that ground asks of the team. */
-  demand:
-    "The terrain demands a high degree of endurance and navigation skill — teams should prepare for sustained movement over mixed ground in cold, foggy conditions.",
-} as const;
 
 /* ------------------------------------------------------------------ *
  * Weapons & equipment
@@ -222,120 +193,6 @@ export const TEAM_COMPOSITION_NOTE =
   "Any change in the rank of participants by a country must be communicated in the final list, to be shared by 15 December 2025.";
 
 /* ------------------------------------------------------------------ *
- * Coordinating points
- * ------------------------------------------------------------------ */
-
-/**
- * Coordination instructions briefed at the Main Planning Conference that are
- * not already covered by `OPERATIONAL_RULES`. Merged with that list by
- * `COORDINATING_POINTS` below so the page renders one continuous set.
- */
-const ADDITIONAL_COORDINATION = [
-  {
-    id: "draws",
-    title: "Infiltration draws",
-    body: "Draws are held to fix the sequence in which teams infiltrate from the Start Point to the hideout.",
-  },
-  {
-    id: "unauthorized",
-    title: "Unauthorized contact",
-    body: "Interaction with unauthorized individuals is not permitted at any stage of the exercise.",
-  },
-  {
-    id: "open-fire",
-    title: "Open fire prohibited",
-    body: "Lighting of open fire anywhere in the exercise area is prohibited.",
-  },
-  {
-    id: "snakebite",
-    title: "Anti-snakebite kits",
-    body: "All ranks must carry anti-snakebite kits and torches throughout the exercise.",
-  },
-  {
-    id: "local-unit",
-    title: "Attachment with a local unit",
-    body: "Each team is attached to a local unit that acclimatises and trains it in firing with Pakistan Army weapons, or any other event the team requests.",
-  },
-] as const;
-
-export type CoordinatingPoint = {
-  id: string;
-  title: string;
-  body: string;
-};
-
-/** Coordinating points: existing operational rules plus the additions above. */
-export const COORDINATING_POINTS: readonly CoordinatingPoint[] = [
-  ...OPERATIONAL_RULES,
-  ...ADDITIONAL_COORDINATION,
-];
-
-/* ------------------------------------------------------------------ *
- * Dos & Don'ts
- * ------------------------------------------------------------------ */
-
-/** Affirmative obligations on every participating contingent. */
-export const DOS = [
-  "Carry anti-snakebite kits and torches at all times during the exercise.",
-  "Obey Pakistan's laws and show respect for local customs throughout the visit.",
-  "Bury all waste in the team's black plastic bags and present them at the finish point.",
-  "Exercise due caution when moving near or across water channels.",
-  "Complete pre-arrival familiarization on firing, navigation and map reading, signal equipment, CBRN, AFOS and area orientation.",
-  "Communicate any change in participant ranks in the final list by 15 December 2025.",
-  "Carry the full 200 kg team load, including filled water bottles, ammunition and the issued tracker.",
-] as const;
-
-/** Prohibitions — several of these carry a points penalty or disqualification. */
-export const DONTS = [
-  "Do not carry or use GPS or any unauthorized navigational aid, including watches and phones — this means disqualification.",
-  "Do not enter build-up areas; all BUAs are strictly out of bounds.",
-  "Do not seek help from civilians or locals at any point.",
-  "Do not interact with unauthorized individuals.",
-  "Do not light an open fire anywhere in the exercise area.",
-  "Do not throw waste or litter in the exercise area.",
-  "Do not shed any part of the scheduled weight — random weight checks are carried out during the exercise.",
-  "Do not bathe or swim in rivers or water channels while moving.",
-  "Do not expect food resupply — this is a survival exercise and no replenishment is permitted.",
-  "Do not arrange independent media coverage; the Pakistan Army provides pictures and clips before departure.",
-] as const;
-
-/* ------------------------------------------------------------------ *
- * Facilitation, medical & legal
- * ------------------------------------------------------------------ */
-
-/** What the Pakistan Army provides to visiting contingents. */
-export const FACILITATION = [
-  "Boarding in Pakistan Army accommodation near the exercise area with all necessary facilities.",
-  "Weapons, ammunition and all types of equipment required for the competition.",
-  "Maps for the exercise area.",
-  "Internet facility at the accommodation.",
-] as const;
-
-/** Medical cover and the boundary of responsibility. */
-export const MEDICAL = [
-  "Complete medical cover is provided by the Pakistan Army from arrival until departure.",
-  "Medical evacuation to the respective country remains the responsibility of the respective team and its management.",
-] as const;
-
-/** Legal position communicated to all participating nations. */
-export const LEGAL = [
-  "Participants obey Pakistan's laws and respect local customs.",
-  "Participants are self-responsible for any possible injury or loss and shall not seek compensation.",
-  "Independent media coverage is prohibited; the Pakistan Army provides pictures and clips to participants before departure.",
-] as const;
-
-/** Information each international team submits ahead of arrival. */
-export const INFORMATION_REQUIRED = {
-  deadline: "15 December 2025",
-  items: [
-    "Mode of travel by the team.",
-    "Rank-wise lists of the team and officials, including blood groups.",
-    "Copies of passports.",
-    "Flight schedule of the team arriving for the competition.",
-  ],
-} as const;
-
-/* ------------------------------------------------------------------ *
  * In-page anchors
  * ------------------------------------------------------------------ */
 
@@ -345,14 +202,10 @@ export const INFORMATION_REQUIRED = {
  */
 export const FAMILIARIZATION_ANCHORS = [
   "concept",
-  "terrain",
   "route",
   "team",
   "equipment",
   "training",
-  "coordination",
-  "dos-donts",
-  "facilitation",
 ] as const;
 
 export type FamiliarizationAnchor = (typeof FAMILIARIZATION_ANCHORS)[number];

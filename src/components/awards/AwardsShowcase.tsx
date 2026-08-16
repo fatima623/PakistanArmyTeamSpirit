@@ -197,7 +197,6 @@ export function AwardsShowcase() {
               <tr>
                 <th scope="col">{p.colMedal}</th>
                 <th scope="col">{p.colMinimum}</th>
-                <th scope="col">{p.colCountries}</th>
               </tr>
             </thead>
             <tbody>
@@ -222,29 +221,6 @@ export function AwardsShowcase() {
                     <span className="pats-awards-standings__band">
                       {medalRange[tier.id]}
                     </span>
-                  </td>
-                  <td data-label={p.colCountries}>
-                    {tier.countries.length > 0 ? (
-                      <ul className="pats-awards-standings__countries">
-                        {tier.countries.map((c) => (
-                          <li
-                            key={c.team}
-                            className="pats-awards-standings__country"
-                          >
-                            <span className="pats-awards-standings__country-name">
-                              {c.nation}
-                            </span>
-                            <span className="pats-awards-standings__country-score">
-                              {c.score.toFixed(1)}%
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <span className="pats-awards-standings__none">
-                        {p.noTeams}
-                      </span>
-                    )}
                   </td>
                 </tr>
               ))}

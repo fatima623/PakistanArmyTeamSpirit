@@ -148,17 +148,13 @@ export const publicSite: typeof enPublicSite = {
       metaSince: "Başlangıç",
       metaSinceValue: "2016",
       metaEditions: "Dönemler",
-      metaEditionsValue: "8 uluslararası",
+      metaEditionsValue: "9 uluslararası",
       metaReach: "Erişim",
       metaReachValue: "Çok alanlı",
       mapEyebrow: "Harekât haritası",
       mapTitle: "Kayıtlı uluslar",
       mapDescription:
         "Yarışmaya takım kaydı yaptıran ülkeler. Takımlarını ve kayıt yıllarını görmek için vurgulanan bir ülkenin üzerine gelin.",
-      historyEyebrow: "Tarihçe",
-      historyTitle: "Dönem zaman çizelgesi",
-      historyDescription:
-        "Yarışmanın ardışık dönemlerindeki uluslararası katılım.",
       orientationEyebrow: "Oryantasyon",
       orientationTitle: "Tanıtım eğitimi",
       orientationDescription:
@@ -170,11 +166,6 @@ export const publicSite: typeof enPublicSite = {
         "KBRN (CBRN)",
         "AFOS / ATGP",
         "Arazi oryantasyonu",
-      ],
-      historyNarrative: [
-        "PATS, 2005 yılında dayanıklılık ve fiziksel kondisyonu öne çıkaran bir seyrüsefer tatbikatı olarak başladı.",
-        "Terörle mücadele harekâtlarından çıkarılan dersler, gerçekçi etkinlikler ve muharebe senaryoları olarak tatbikata dâhil edildi — konvansiyonel ve konvansiyonel olmayan ortamlarda sub-taktik harekâtlar.",
-        "Dost ülkelerin artan ilgisi, zengin tecrübelerin paylaşıldığı ve karşılıklı öğrenmenin sağlandığı Uluslararası PATS'ın (2016) doğmasına yol açtı.",
       ],
       mapAria: "Kayıtlı ulusların dünya haritası",
       mapCaption: (count: number) =>

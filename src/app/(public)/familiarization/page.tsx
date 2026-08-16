@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { ScrollReveal } from "@/components/army/ScrollReveal";
-import { DosDontsPanels } from "@/components/familiarization/DosDontsPanels";
 import { FamiliarizationAnchorNav } from "@/components/familiarization/FamiliarizationAnchorNav";
 import { FamiliarizationHeading } from "@/components/familiarization/FamiliarizationHeading";
 import { WeaponsEquipmentTables } from "@/components/familiarization/WeaponsEquipmentTables";
@@ -11,14 +10,8 @@ import { PatsSection } from "@/components/pats/PatsSection";
 import {
   CONCEPT_DIAGRAM,
   CONCEPT_LEGS,
-  COORDINATING_POINTS,
-  FACILITATION,
   FAMILIARIZATION_ANCHORS,
-  INFORMATION_REQUIRED,
-  LEGAL,
-  MEDICAL,
   TEAM_COMPOSITION_NOTE,
-  TERRAIN_PROFILE,
   TRAINING_MODULES,
 } from "@/lib/familiarization-content";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -45,8 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
  * Everything on this page is a view over content that already exists in
  * `@/lib/pats-content` (drills, team roles, operational rules, training
  * modules), extended by `@/lib/familiarization-content` with the material that
- * had no home yet — route legs, the weapons & equipment scale, the do/don't
- * split, and the facilitation, medical and legal aspects.
+ * had no home yet — the route legs and the weapons & equipment scale.
  *
  * The page runs on its own blue-and-white palette and its own `fam-*` class
  * vocabulary (see globals.css). It does not reuse the shared `pats-panel` /
@@ -110,52 +102,8 @@ export default async function FamiliarizationPage() {
         </figure>
       </PatsSection>
 
-      {/* ── Terrain profile ──────────────────────────────────────────── */}
-      <PatsSection id="terrain" variant="dark" innerClassName="fam-inner">
-        <ScrollReveal>
-          <FamiliarizationHeading
-            eyebrow={fam.terrain.eyebrow}
-            title={fam.terrain.title}
-            description={fam.terrain.description}
-          />
-        </ScrollReveal>
-
-        {/* One panel with internal dividers rather than five separate cards —
-            the terrain brief is short, and boxing each line made it bulky. */}
-        <div className="fam-terrain">
-          <dl className="fam-terrain__facts">
-            {TERRAIN_PROFILE.facts.map((fact) => (
-              <div key={fact.label} className="fam-terrain__fact">
-                <dt>{translatePatsText(fact.label, locale)}</dt>
-                <dd>{translatePatsText(fact.value, locale)}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="fam-terrain__split">
-            <div className="fam-terrain__block">
-              <p className="fam-terrain__label">{fam.terrain.groundTitle}</p>
-              <ul className="fam-tags">
-                {translatePatsList(TERRAIN_PROFILE.ground, locale).map(
-                  (item) => (
-                    <li key={item}>{item}</li>
-                  )
-                )}
-              </ul>
-            </div>
-
-            <div className="fam-terrain__block">
-              <p className="fam-terrain__label">{fam.terrain.demandTitle}</p>
-              <p className="fam-terrain__text">
-                {translatePatsText(TERRAIN_PROFILE.demand, locale)}
-              </p>
-            </div>
-          </div>
-        </div>
-      </PatsSection>
-
       {/* ── Route legs ───────────────────────────────────────────────── */}
-      <PatsSection id="route" variant="elevated" innerClassName="fam-inner">
+      <PatsSection id="route" variant="dark" innerClassName="fam-inner">
         <ScrollReveal>
           <FamiliarizationHeading
             eyebrow={fam.route.eyebrow}
@@ -281,105 +229,6 @@ export default async function FamiliarizationPage() {
             </li>
           ))}
         </ul>
-      </PatsSection>
-
-      {/* ── Coordinating points ──────────────────────────────────────── */}
-      <PatsSection id="coordination" variant="deepest" innerClassName="fam-inner">
-        <ScrollReveal>
-          <FamiliarizationHeading
-            eyebrow={fam.coordination.eyebrow}
-            title={fam.coordination.title}
-            description={fam.coordination.description}
-          />
-        </ScrollReveal>
-
-        <div className="fam-grid fam-grid--3">
-          {COORDINATING_POINTS.map((point) => (
-            <div key={point.id} className="fam-card">
-              <h3 className="fam-card__label">
-                {translatePatsText(point.title, locale)}
-              </h3>
-              <p className="fam-card__body">
-                {translatePatsText(point.body, locale)}
-              </p>
-            </div>
-          ))}
-        </div>
-      </PatsSection>
-
-      {/* ── Dos & Don'ts ─────────────────────────────────────────────── */}
-      <PatsSection id="dos-donts" variant="dark" innerClassName="fam-inner">
-        <ScrollReveal>
-          <FamiliarizationHeading
-            eyebrow={fam.dosDonts.eyebrow}
-            title={fam.dosDonts.title}
-            description={fam.dosDonts.description}
-          />
-        </ScrollReveal>
-
-        <DosDontsPanels
-          locale={locale}
-          dosTitle={fam.dosDonts.dos}
-          dontsTitle={fam.dosDonts.donts}
-        />
-      </PatsSection>
-
-      {/* ── Facilitation, medical & legal ────────────────────────────── */}
-      <PatsSection id="facilitation" variant="navy" innerClassName="fam-inner">
-        <ScrollReveal>
-          <FamiliarizationHeading
-            eyebrow={fam.facilitation.eyebrow}
-            title={fam.facilitation.title}
-            description={fam.facilitation.description}
-          />
-        </ScrollReveal>
-
-        <div className="fam-grid fam-grid--3">
-          <div className="fam-card">
-            <p className="fam-card__label">
-              {fam.facilitation.facilitationTitle}
-            </p>
-            <ul className="fam-bullets">
-              {translatePatsList(FACILITATION, locale).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="fam-card">
-            <p className="fam-card__label">{fam.facilitation.medicalTitle}</p>
-            <ul className="fam-bullets">
-              {translatePatsList(MEDICAL, locale).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="fam-card">
-            <p className="fam-card__label">{fam.facilitation.legalTitle}</p>
-            <ul className="fam-bullets">
-              {translatePatsList(LEGAL, locale).map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="fam-card fam-card--wide">
-          <p className="fam-card__label">{fam.facilitation.informationTitle}</p>
-          <p className="fam-card__body">
-            {fam.facilitation.informationDeadline(
-              translatePatsText(INFORMATION_REQUIRED.deadline, locale)
-            )}
-          </p>
-          <ul className="fam-bullets fam-bullets--columns">
-            {translatePatsList(INFORMATION_REQUIRED.items, locale).map(
-              (item) => (
-                <li key={item}>{item}</li>
-              )
-            )}
-          </ul>
-        </div>
       </PatsSection>
     </div>
   );

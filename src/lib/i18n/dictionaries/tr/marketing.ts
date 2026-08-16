@@ -160,14 +160,14 @@ export const marketing: typeof enMarketing = {
     meta: {
       title: "PATS Tanıtımı",
       description:
-        "Katılımcı birlikler için varış öncesi brifing — PATS konsepti, arazi ve güzergâh, takım teşkilatı, silah ve teçhizat kadrosu ve koordinasyon esasları.",
+        "Katılımcı birlikler için varış öncesi brifing — PATS konsepti, güzergâh, takım teşkilatı, silah ve teçhizat kadrosu ve tanıtım eğitimi.",
     },
 
     hero: {
       eyebrow: "Varış öncesi brifing",
       title: "PATS Tanıtımı",
       subtitle:
-        "Katılımcı bir birliğin varıştan önce ihtiyaç duyduğu her şey — tatbikatın konsepti, arazi ve güzergâh, takım teşkilatı, silah ve teçhizat kadrosu ve uygulamayı düzenleyen koordinasyon esasları.",
+        "Katılımcı bir birliğin varıştan önce ihtiyaç duyduğu her şey — tatbikatın konsepti, güzergâh, takım teşkilatı, silah ve teçhizat kadrosu ve intikalden önce tamamlanan tanıtım eğitimi.",
       metaDuration: "Tatbikat",
       metaDurationValue: "60 saat",
       metaDistance: "İntikal",
@@ -179,14 +179,10 @@ export const marketing: typeof enMarketing = {
     anchorsAria: "Bu sayfadaki bölümler",
     anchors: {
       concept: "Konsept",
-      terrain: "Arazi",
       route: "Güzergâh",
       team: "Takım",
       equipment: "Teçhizat",
       training: "Eğitim",
-      coordination: "Koordinasyon",
-      "dos-donts": "Yapılacaklar ve yasaklar",
-      facilitation: "Destek",
     },
 
     concept: {
@@ -198,15 +194,6 @@ export const marketing: typeof enMarketing = {
         "PATS konsept şeması: toplanma bölgesi, teröristlerin hâkim olduğu bölgeden saklanma yerine ve hedefe uzanan sızma güzergâhı, geri çekilme etabı ve bitiş sürat yürüyüşü ile her kontrol noktasında icra edilen görevler.",
       imageCaption:
         "PATS Konsepti — Ana Planlama Konferansı'nda yayımlanan brifing şeması.",
-    },
-
-    terrain: {
-      eyebrow: "Arazi",
-      title: "Arazi yapısı",
-      description:
-        "Devriyenin kat ettiği arazi ve beklenen koşullar — kıyafet, ayakkabı ve soğuk hava düzenine karar vermeden önce okuyun.",
-      groundTitle: "Zemin",
-      demandTitle: "Devriyeden beklenenler",
     },
 
     route: {
@@ -250,35 +237,6 @@ export const marketing: typeof enMarketing = {
       title: "Tanıtım eğitimi",
       description:
         "Uluslararası takımlar için, tatbikat bölgesine intikalden önce tamamlanan yarışma öncesi oryantasyon; özellikle şu konulara ağırlık verilir:",
-    },
-
-    coordination: {
-      eyebrow: "Koordinasyon",
-      title: "Koordinasyon esasları",
-      description:
-        "Ana Planlama Konferansı'nda yayımlanan talimatlar. Uyulmaması puan cezası veya diskalifiye ile sonuçlanabilir.",
-    },
-
-    dosDonts: {
-      eyebrow: "Davranış",
-      title: "Yapılacaklar ve yasaklar",
-      description:
-        "Ziyaret süresince her katılımcı için geçerli olan yükümlülükler ve yasaklar.",
-      dos: "Yapılacaklar",
-      donts: "Yasaklar",
-    },
-
-    facilitation: {
-      eyebrow: "Destek",
-      title: "Destek, sağlık ve hukuk",
-      description:
-        "Pakistan Ordusu'nun sağladıkları, sağlık sorumluluğunun sınırı ve katılımcı tüm uluslara bildirilen hukuki durum.",
-      facilitationTitle: "Pakistan Ordusu tarafından sağlanır",
-      medicalTitle: "Sağlık desteği",
-      legalTitle: "Hukuki hususlar",
-      informationTitle: "Takımlardan istenen bilgiler",
-      informationDeadline: (deadline: string): string =>
-        `Son tarih: ${deadline}`,
     },
 
   },

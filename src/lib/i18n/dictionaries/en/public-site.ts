@@ -154,17 +154,13 @@ export const publicSite = {
       metaSince: "Since",
       metaSinceValue: "2016",
       metaEditions: "Editions",
-      metaEditionsValue: "8 international",
+      metaEditionsValue: "9 international",
       metaReach: "Reach",
       metaReachValue: "Multi-theatre",
       mapEyebrow: "Theatre map",
       mapTitle: "Registered nations",
       mapDescription:
         "Countries with teams registered for the competition. Hover a highlighted nation to see its teams and the year they registered.",
-      historyEyebrow: "History",
-      historyTitle: "Edition timeline",
-      historyDescription:
-        "International participation across successive editions of the competition.",
       orientationEyebrow: "Orientation",
       orientationTitle: "Familiarization training",
       orientationDescription:
@@ -178,11 +174,6 @@ export const publicSite = {
         "CBRN",
         "AFOS / ATGP",
         "Area orientation",
-      ],
-      historyNarrative: [
-        "Since 2005, PATS began as a navigation exercise emphasizing endurance and physical fitness.",
-        "Lessons from counter-terrorism operations were incorporated as realistic events and battlefield scenarios — sub-tactical operations in conventional and sub-conventional environments.",
-        "Growing interest from friendly countries led to International PATS (2016), sharing rich experiences and learning mutually.",
       ],
       mapAria: "World map of registered nations",
       mapCaption: (count: number) =>

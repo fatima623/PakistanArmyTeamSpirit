@@ -155,14 +155,14 @@ export const marketing: typeof enMarketing = {
     meta: {
       title: "PATS 认知简介",
       description:
-        "参赛分队抵达前的简报——PATS 构想、地形与路线、队伍编成、武器装备配发标准与协同要点。",
+        "参赛分队抵达前的简报——PATS 构想、路线、队伍编成、武器装备配发标准与认知训练。",
     },
 
     hero: {
       eyebrow: "抵达前简报",
       title: "PATS 认知简介",
       subtitle:
-        "参赛分队抵达前所需的全部内容——演习构想、地形与路线、队伍编成、武器与装备配发标准，以及规范演习行动的协同要点。",
+        "参赛分队抵达前所需的全部内容——演习构想、路线、队伍编成、武器与装备配发标准，以及行动前完成的认知训练。",
       metaDuration: "演习",
       metaDurationValue: "60 小时",
       metaDistance: "行程",
@@ -174,14 +174,10 @@ export const marketing: typeof enMarketing = {
     anchorsAria: "本页各节",
     anchors: {
       concept: "构想",
-      terrain: "地形",
       route: "路线",
       team: "编成",
       equipment: "装备",
       training: "训练",
-      coordination: "协同",
-      "dos-donts": "应做与禁止",
-      facilitation: "保障",
     },
 
     concept: {
@@ -192,15 +188,6 @@ export const marketing: typeof enMarketing = {
       imageAlt:
         "PATS 构想示意图：集结地域、经恐怖分子控制区通往隐蔽地与目标的渗透路线、撤离段与终点急行军，以及在各检查点执行的课目。",
       imageCaption: "PATS 构想——主要计划会议下发的简报示意图。",
-    },
-
-    terrain: {
-      eyebrow: "地形",
-      title: "地形概况",
-      description:
-        "巡逻队所经地形及预期气候条件——在确定着装、鞋靴与寒区行动方式之前请先阅读。",
-      groundTitle: "地表类型",
-      demandTitle: "对巡逻队的要求",
     },
 
     route: {
@@ -244,33 +231,6 @@ export const marketing: typeof enMarketing = {
       title: "认知训练",
       description:
         "国际队伍在进入演习地域前完成的赛前适应训练，重点包括：",
-    },
-
-    coordination: {
-      eyebrow: "协同",
-      title: "协同要点",
-      description:
-        "主要计划会议下发的指示。未按规定执行可能被扣分或取消资格。",
-    },
-
-    dosDonts: {
-      eyebrow: "行为规范",
-      title: "应做与禁止",
-      description: "访问期间对每名参赛人员均适用的义务与禁令。",
-      dos: "应做",
-      donts: "禁止",
-    },
-
-    facilitation: {
-      eyebrow: "保障",
-      title: "保障、医疗与法律",
-      description:
-        "巴基斯坦陆军提供的保障、医疗责任的界限，以及向所有参赛国通报的法律立场。",
-      facilitationTitle: "由巴基斯坦陆军提供",
-      medicalTitle: "医疗保障",
-      legalTitle: "法律事项",
-      informationTitle: "各队须提交的信息",
-      informationDeadline: (deadline: string): string => `截止日期：${deadline}`,
     },
 
   },

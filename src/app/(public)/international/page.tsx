@@ -43,22 +43,8 @@ export default async function InternationalPage() {
       </PatsSection>
 
       {/* Familiarization training used to sit here; it now lives with the rest
-          of the pre-arrival brief on /familiarization. */}
-
-      <PatsSection variant="deepest">
-        <ScrollReveal>
-          <PatsSectionHeading
-            eyebrow={p.historyEyebrow}
-            title={p.historyTitle}
-            description={p.historyDescription}
-          />
-        </ScrollReveal>
-        <div className="pats-body mt-8 max-w-3xl space-y-4">
-          {p.historyNarrative.map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
-        </div>
-      </PatsSection>
+          of the pre-arrival brief on /familiarization. The edition timeline that
+          followed the map has been retired. */}
     </div>
   );
 }
