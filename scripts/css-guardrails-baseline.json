@@ -2,14 +2,14 @@
   "cssFiles": [
     "src/app/globals.css"
   ],
-  "importantCount": 1685,
+  "importantCount": 1686,
   "importantByFile": {
-    "src/app/globals.css": 1685
+    "src/app/globals.css": 1686
   },
   "cssImports": [
     "src/app/layout.tsx -> ./globals.css",
     "src/css.d.ts -> @/app/foo.css"
   ],
-  "hexInTsx": 69,
+  "hexInTsx": 68,
   "hexInTailwindConfig": 0
 }
