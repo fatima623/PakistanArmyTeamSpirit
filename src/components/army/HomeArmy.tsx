@@ -11,7 +11,6 @@ import { PatsMissionShowcase } from "@/components/pats/PatsMissionShowcase";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
 import { ABOUT_FEATURE_IMAGE, CAREER_TRACKS } from "@/lib/army-content";
-import { PATS_CROP } from "@/lib/media";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
   translateKeyDateLabel,
@@ -68,12 +67,10 @@ export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
         />
       </PatsSection>
 
-      <PatsSection
-        id="careers"
-        variant="light"
-        backgroundImage={PATS_CROP.photo28}
-        backgroundFit="contain"
-      >
+      {/* No `backgroundImage`: the crop it pointed at (bg-28-logos.webp) was
+          never shipped, so the backdrop <img> rendered as a broken-image icon
+          in the corner of the section. */}
+      <PatsSection id="careers" variant="light">
         <ScrollReveal>
           <PatsSectionHeading
             eyebrow={t.home.careers.eyebrow}

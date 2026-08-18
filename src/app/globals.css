@@ -8779,12 +8779,12 @@ html[data-site-theme="day"] .army-site .cp-form-card:not(.pats-login-card) [clas
 
 
 html.light-theme .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *, .pats-gallery-tile *, .fam-page *)),
-html.light-theme .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .fam-page *)),
+html.light-theme .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-gallery-tile *, .fam-page *)),
 html.light-theme .cinematic-site.army-site .pats-form-page :is(p, li, span, label):not([class*="text-red"]),
 html.light-theme .cinematic-site.army-site .pats-prose-panel :is(p, li, span),
 html.light-theme .cinematic-site.army-site .cp-form-card:not(.pats-login-card) :is(p, li, span, label):not([class*="text-red"]),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-section :is(p, li, span, label, dd, dt):not([class*="text-red"]):not(:is(.tac-mission-card *, .pats-pillar-card *, .pats-home-featured-news *, .pats-highlight-cell *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-panel *, .pats-home-schedule *, .pats-data-table *, .tac-edition-row *, .tac-nation-chip *, .pats-awards-hero-card *, .pats-video-gallery *, .pats-gallery-tile *, .fam-page *)),
-html[data-site-theme="day"] .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .fam-page *)),
+html[data-site-theme="day"] .cinematic-site.army-site .pats-inner-page-shell :is(p, li, span, label):not([class*="text-red"]):not(:is(.pats-page-hero *, .pats-panel *, .tac-edition-row *, .tac-nation-chip *, .tac-mission-card *, .pats-highlight-cell *, .pats-pillar-card *, .paf-card *, .pats-rule-card *, .pats-doc-card *, .pats-gallery-tile *, .fam-page *)),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-form-page :is(p, li, span, label):not([class*="text-red"]),
 html[data-site-theme="day"] .cinematic-site.army-site .pats-prose-panel :is(p, li, span),
 html[data-site-theme="day"] .cinematic-site.army-site .cp-form-card:not(.pats-login-card) :is(p, li, span, label):not([class*="text-red"]) {
@@ -9184,24 +9184,24 @@ html[data-site-theme="day"] .army-site .tac-world-map {
 }
 
 
-html.light-theme .army-site .pats-inner-page-shell [class~="text-white"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html.light-theme .army-site .pats-inner-page-shell [class*="text-white/"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class~="text-white"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)) {
+html.light-theme .army-site .pats-inner-page-shell [class~="text-white"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html.light-theme .army-site .pats-inner-page-shell [class*="text-white/"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class~="text-white"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)) {
   color: var(--lt-heading) !important;
 }
 
 
-html.light-theme .army-site .pats-inner-page-shell [class*="text-white/65"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html.light-theme .army-site .pats-inner-page-shell [class*="text-white/70"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html.light-theme .army-site .pats-inner-page-shell [class*="text-white/75"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html.light-theme .army-site .pats-inner-page-shell [class*="text-white/80"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html.light-theme .army-site .pats-inner-page-shell [class*="text-white/85"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/65"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/70"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/75"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/80"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)),
-html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/85"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *)) {
+html.light-theme .army-site .pats-inner-page-shell [class*="text-white/65"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html.light-theme .army-site .pats-inner-page-shell [class*="text-white/70"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html.light-theme .army-site .pats-inner-page-shell [class*="text-white/75"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html.light-theme .army-site .pats-inner-page-shell [class*="text-white/80"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html.light-theme .army-site .pats-inner-page-shell [class*="text-white/85"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/65"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/70"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/75"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/80"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)),
+html[data-site-theme="day"] .army-site .pats-inner-page-shell [class*="text-white/85"]:not(:is(.pats-panel, .pats-panel *, .pats-highlight-cell, .pats-highlight-cell *, .tac-mission-card, .tac-mission-card *, .pats-pillar-card, .pats-pillar-card *, .paf-card, .paf-card *, .pats-rule-card, .pats-rule-card *, .pats-doc-card, .pats-doc-card *, .pats-page-hero__meta, .pats-page-hero__meta *, .tac-edition-row, .tac-edition-row *, .pats-gallery-tile, .pats-gallery-tile *)) {
   color: var(--lt-body) !important;
 }
 
@@ -9609,20 +9609,23 @@ html[data-site-theme="day"] .army-site .pats-inner-page-shell .forest-carousel {
    the section padding on top/bottom at (0,4,0). Verified via
    27 live+synthetic signature hashes on the homepage.
    ============================================================ */
+/* No section panel: the beige band drew a second, square-cornered box behind
+   the rounded `__grid` card, so the section read as two stacked panels. Only
+   the rounded card is painted now. */
 .army-home .pats-section--mission-showcase {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   padding: clamp(3rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem) !important;
-  background: #f4f1ea !important;
-  border-top: 1px solid rgba(184, 150, 12, 0.22);
-  border-bottom: 1px solid rgba(26, 46, 31, 0.06);
+  background: transparent !important;
+  border-top: none;
+  border-bottom: none;
 }
 
 html.light-theme .army-home .pats-section--mission-showcase,
 html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   padding: clamp(3rem, 5vw, 4.5rem) clamp(1.5rem, 4vw, 4rem) !important;
-  background: #f4f1ea !important;
+  background: transparent !important;
 }
 
 .army-home .pats-section--mission-showcase.pats-section--has-bg .pats-section__backdrop,
@@ -9686,7 +9689,9 @@ html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   padding: clamp(1.75rem, 3vw, 2.75rem);
   border-radius: 20px;
   border: 1px solid rgba(184, 150, 12, 0.18);
-  background: rgba(255, 255, 255, 0.78);
+  /* Opaque: this card is the section's only panel now, so it can no longer
+     borrow opacity from a band behind it. */
+  background: #fbfaf6;
   box-shadow:
     0 4px 24px rgba(26, 46, 31, 0.06),
     0 1px 0 rgba(255, 255, 255, 0.9) inset;
@@ -15396,8 +15401,15 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   display: block !important;
   gap: 0 !important;
   padding: 0 !important;
-  background: #0b0e0c !important;
-  color: #ecece6 !important;
+  /* Values come from the theme tokens below so day/light gets a light band
+     instead of a second important-flagged override. */
+  background: var(--ec-shell-bg) !important;
+  color: var(--ec-shell-ink) !important;
+}
+
+html {
+  --ec-shell-bg: #0b0e0c;
+  --ec-shell-ink: #ecece6;
 }
 
 .exercise-contour {
@@ -15416,11 +15428,41 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   --ec-red: #cf6a52;
   --ec-green: #6fa06a;
 
-  position: relative;
-  background:
+  /* Theme-swappable tokens. Every colour that used to sit inline in the rules
+     below resolves through one of these, so the light/day theme is a palette
+     swap (see the `html.light-theme` block at the end of this module) rather
+     than a second set of important-flagged overrides. */
+  --ec-ink-strong: #ffffff;
+  --ec-grid-line: rgba(197, 168, 128, 0.05);
+  --ec-tint-1: rgba(255, 255, 255, 0.02);
+  --ec-tint-2: rgba(255, 255, 255, 0.03);
+  --ec-tint-3: rgba(255, 255, 255, 0.04);
+  --ec-tint-4: rgba(255, 255, 255, 0.06);
+  --ec-chip-green: rgba(61, 82, 48, 0.4);
+  --ec-chip-green-soft: rgba(61, 82, 48, 0.35);
+  --ec-chip-brass: rgba(197, 168, 128, 0.12);
+  --ec-thumb-badge-bg: rgba(11, 14, 12, 0.82);
+  --ec-card-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  --ec-tl-detail-wash: rgba(61, 82, 48, 0.25);
+  --ec-ghost-num: rgba(197, 168, 128, 0.25);
+  --ec-diff-foundational: #7fb87a;
+  --ec-diff-foundational-bg: rgba(111, 160, 106, 0.14);
+  --ec-diff-standard: #d8b549;
+  --ec-diff-standard-bg: rgba(216, 181, 73, 0.14);
+  --ec-diff-advanced: #e0985a;
+  --ec-diff-advanced-bg: rgba(224, 152, 90, 0.14);
+  --ec-diff-extreme: #e07a63;
+  --ec-diff-extreme-bg: rgba(224, 122, 99, 0.16);
+  --ec-page-bg:
     radial-gradient(1200px 600px at 80% -10%, rgba(61, 82, 48, 0.22), transparent 60%),
     radial-gradient(900px 500px at -10% 10%, rgba(197, 168, 128, 0.08), transparent 55%),
     linear-gradient(180deg, #0c100b 0%, #0b0e0c 100%);
+  --ec-modal-bg:
+    radial-gradient(700px 240px at 100% 0%, rgba(61, 82, 48, 0.22), transparent 70%),
+    linear-gradient(180deg, #141a12 0%, #0d110c 100%);
+
+  position: relative;
+  background: var(--ec-page-bg);
   color: var(--ec-sand);
   overflow: hidden;
 }
@@ -15431,8 +15473,8 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(197, 168, 128, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(197, 168, 128, 0.05) 1px, transparent 1px);
+    linear-gradient(var(--ec-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ec-grid-line) 1px, transparent 1px);
   background-size: 46px 46px;
   mask-image: radial-gradient(circle at 50% 0%, black, transparent 85%);
   pointer-events: none;
@@ -15492,7 +15534,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   line-height: 1.05;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-section-sub {
@@ -15555,7 +15597,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   line-height: 0.98;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-hero__title span {
@@ -15624,7 +15666,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   display: inline-flex;
   padding: 0.5rem;
   border-radius: 9px;
-  background: rgba(197, 168, 128, 0.12);
+  background: var(--ec-chip-brass);
   color: var(--ec-gold-bright) !important;
   margin-bottom: 0.7rem;
 }
@@ -15634,7 +15676,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   font-size: 1.35rem;
   font-weight: 800;
   line-height: 1.05;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-stat__label {
@@ -15689,7 +15731,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   display: inline-flex;
   padding: 0.6rem;
   border-radius: 10px;
-  background: rgba(61, 82, 48, 0.35);
+  background: var(--ec-chip-green-soft);
   color: var(--ec-gold-bright) !important;
   margin-bottom: 0.9rem;
 }
@@ -15698,7 +15740,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-ov-card__body {
@@ -15757,7 +15799,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
 }
 
 .ec-tl-item:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--ec-tint-3);
   border-color: var(--ec-line);
 }
 
@@ -15811,7 +15853,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
 }
 
 .ec-tl-item[data-active="true"] .ec-tl-label {
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-tl-phase {
@@ -15826,7 +15868,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   border: 1px solid var(--ec-line);
   border-radius: 16px;
   background:
-    radial-gradient(600px 200px at 100% 0%, rgba(61, 82, 48, 0.25), transparent 70%),
+    radial-gradient(600px 200px at 100% 0%, var(--ec-tl-detail-wash), transparent 70%),
     linear-gradient(180deg, var(--ec-panel-2) 0%, var(--ec-raised) 100%);
 }
 
@@ -15849,7 +15891,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   font-size: 2.75rem;
   font-weight: 900;
   line-height: 1;
-  color: rgba(197, 168, 128, 0.25) !important;
+  color: var(--ec-ghost-num) !important;
 }
 
 .ec-tl-detail__title {
@@ -15858,7 +15900,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   font-size: 1.5rem;
   font-weight: 800;
   text-transform: uppercase;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-tl-detail__body {
@@ -15900,7 +15942,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
   border: 1px solid var(--ec-line);
   border-radius: 10px;
   background: var(--ec-raised);
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
   font-size: 0.9rem;
   outline: none;
   transition: border-color 0.2s ease;
@@ -15922,7 +15964,7 @@ html[data-site-theme="day"] .army-site:not(.dashboard-day) .pats-inner-page-shel
 html.light-theme .army-site .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
 html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]) {
   background: var(--ec-raised) !important;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
   border-color: var(--ec-line) !important;
   font-size: 0.9rem !important;
 }
@@ -16012,7 +16054,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
 .ec-card:hover {
   transform: translateY(-4px);
   border-color: rgba(197, 168, 128, 0.45);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--ec-card-shadow);
 }
 
 .ec-card__top {
@@ -16026,7 +16068,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   display: inline-flex;
   padding: 0.6rem;
   border-radius: 10px;
-  background: rgba(61, 82, 48, 0.4);
+  background: var(--ec-chip-green);
   color: var(--ec-gold-bright) !important;
 }
 
@@ -16063,7 +16105,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   font-size: 1.1rem;
   font-weight: 700;
   line-height: 1.2;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-card__summary {
@@ -16092,7 +16134,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   letter-spacing: 0.04em;
   border: 1px solid var(--ec-line-soft);
   color: var(--ec-khaki) !important;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--ec-tint-2);
 }
 
 .ec-tag--duration {
@@ -16125,23 +16167,23 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
 }
 
 .ec-diff--Foundational {
-  color: #7fb87a !important;
-  background: rgba(111, 160, 106, 0.14);
+  color: var(--ec-diff-foundational) !important;
+  background: var(--ec-diff-foundational-bg);
 }
 
 .ec-diff--Standard {
-  color: #d8b549 !important;
-  background: rgba(216, 181, 73, 0.14);
+  color: var(--ec-diff-standard) !important;
+  background: var(--ec-diff-standard-bg);
 }
 
 .ec-diff--Advanced {
-  color: #e0985a !important;
-  background: rgba(224, 152, 90, 0.14);
+  color: var(--ec-diff-advanced) !important;
+  background: var(--ec-diff-advanced-bg);
 }
 
 .ec-diff--Extreme {
-  color: #e07a63 !important;
-  background: rgba(224, 122, 99, 0.16);
+  color: var(--ec-diff-extreme) !important;
+  background: var(--ec-diff-extreme-bg);
 }
 
 .ec-card__btn {
@@ -16193,6 +16235,21 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   --ec-alert: #d09a2c;
   --ec-red: #cf6a52;
   --ec-green: #6fa06a;
+  --ec-ink-strong: #ffffff;
+  --ec-tint-2: rgba(255, 255, 255, 0.03);
+  --ec-tint-4: rgba(255, 255, 255, 0.06);
+  --ec-chip-green: rgba(61, 82, 48, 0.4);
+  --ec-diff-foundational: #7fb87a;
+  --ec-diff-foundational-bg: rgba(111, 160, 106, 0.14);
+  --ec-diff-standard: #d8b549;
+  --ec-diff-standard-bg: rgba(216, 181, 73, 0.14);
+  --ec-diff-advanced: #e0985a;
+  --ec-diff-advanced-bg: rgba(224, 152, 90, 0.14);
+  --ec-diff-extreme: #e07a63;
+  --ec-diff-extreme-bg: rgba(224, 122, 99, 0.16);
+  --ec-modal-bg:
+    radial-gradient(700px 240px at 100% 0%, rgba(61, 82, 48, 0.22), transparent 70%),
+    linear-gradient(180deg, #141a12 0%, #0d110c 100%);
 
   max-width: 40rem !important;
   width: calc(100vw - 2rem);
@@ -16200,9 +16257,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   overflow-y: auto;
   border: 1px solid var(--ec-line) !important;
   border-radius: 16px !important;
-  background:
-    radial-gradient(700px 240px at 100% 0%, rgba(61, 82, 48, 0.22), transparent 70%),
-    linear-gradient(180deg, #141a12 0%, #0d110c 100%) !important;
+  background: var(--ec-modal-bg) !important;
   color: var(--ec-sand) !important;
 }
 
@@ -16216,7 +16271,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   display: inline-flex;
   padding: 0.75rem;
   border-radius: 12px;
-  background: rgba(61, 82, 48, 0.4);
+  background: var(--ec-chip-green);
   color: var(--ec-gold-bright) !important;
   flex-shrink: 0;
 }
@@ -16226,7 +16281,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   font-size: 1.4rem !important;
   font-weight: 800 !important;
   text-transform: uppercase;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-modal__meta {
@@ -16277,7 +16332,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   flex: 1;
   height: 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--ec-tint-4);
   overflow: hidden;
 }
 
@@ -16354,7 +16409,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   display: inline-flex;
   padding: 0.5rem;
   border-radius: 9px;
-  background: rgba(197, 168, 128, 0.12);
+  background: var(--ec-chip-brass);
   color: var(--ec-gold-bright) !important;
 }
 
@@ -16362,7 +16417,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-equip-card__count {
@@ -16382,7 +16437,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--ec-line-soft);
   border-radius: 7px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--ec-tint-1);
   font-size: 0.78rem;
   color: var(--ec-sand) !important;
   transition: border-color 0.2s ease, color 0.2s ease;
@@ -16498,7 +16553,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   display: inline-flex;
   padding: 0.6rem;
   border-radius: 10px;
-  background: rgba(61, 82, 48, 0.4);
+  background: var(--ec-chip-green);
   color: var(--ec-gold-bright) !important;
   margin-bottom: 0.8rem;
 }
@@ -16507,7 +16562,7 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   font-family: var(--font-barlow, system-ui), sans-serif;
   font-size: 0.98rem;
   font-weight: 700;
-  color: #ffffff !important;
+  color: var(--ec-ink-strong) !important;
 }
 
 .ec-orient-card__body {
@@ -16528,6 +16583,80 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   font-size: 0.95rem;
   line-height: 1.65;
   color: var(--ec-sand) !important;
+}
+
+/* ================================================================== *
+ * Exercise Contour / Events Detail — LIGHT (day) theme.
+ * The module used to force its dark palette in every theme; the page
+ * ignored the site's white theme entirely. Nothing here re-states a
+ * rule: it only redefines the tokens the rules above already read, so
+ * text/panel contrast flips wholesale. `.ec-modal` is listed
+ * separately because the dialog portals to <body>, outside
+ * `.exercise-contour`.
+ * ================================================================== */
+html.light-theme,
+html[data-site-theme="day"] {
+  --ec-shell-bg: #eef2ea;
+  --ec-shell-ink: #1f2b1c;
+}
+
+html.light-theme .exercise-contour,
+html[data-site-theme="day"] .exercise-contour,
+html.light-theme .ec-modal,
+html[data-site-theme="day"] .ec-modal {
+  --ec-carbon: #eef2ea;
+  --ec-raised: #ffffff;
+  --ec-panel: #ffffff;
+  --ec-panel-2: #f3f6f0;
+  --ec-line: rgba(61, 82, 48, 0.2);
+  --ec-line-soft: rgba(26, 36, 27, 0.1);
+  --ec-brass: #7d6128;
+  --ec-gold: #7a5f10;
+  --ec-gold-bright: #5e4a0b;
+  --ec-khaki: #4b5a45;
+  --ec-sand: #1f2b1c;
+  --ec-ink-strong: #101a0e;
+  --ec-alert: #8a6410;
+  --ec-red: #9c3a24;
+  --ec-green: #2f6b33;
+
+  --ec-grid-line: rgba(61, 82, 48, 0.06);
+  --ec-tint-1: rgba(26, 36, 27, 0.02);
+  --ec-tint-2: rgba(26, 36, 27, 0.04);
+  --ec-tint-3: rgba(26, 36, 27, 0.05);
+  --ec-tint-4: rgba(26, 36, 27, 0.1);
+  --ec-chip-green: rgba(61, 82, 48, 0.12);
+  --ec-chip-green-soft: rgba(61, 82, 48, 0.1);
+  --ec-chip-brass: rgba(197, 168, 128, 0.24);
+  /* The marks badge sits on top of the card photo — it needs its own light
+     ground in day mode or the (now dark) marks text lands on near-black. */
+  --ec-thumb-badge-bg: rgba(252, 253, 250, 0.92);
+  --ec-card-shadow: 0 14px 30px rgba(26, 46, 31, 0.12);
+  --ec-tl-detail-wash: rgba(61, 82, 48, 0.08);
+  --ec-ghost-num: rgba(125, 97, 40, 0.3);
+
+  --ec-diff-foundational: #2f6b33;
+  --ec-diff-foundational-bg: rgba(47, 107, 51, 0.12);
+  --ec-diff-standard: #7a5f10;
+  --ec-diff-standard-bg: rgba(216, 181, 73, 0.22);
+  --ec-diff-advanced: #8f5117;
+  --ec-diff-advanced-bg: rgba(224, 152, 90, 0.2);
+  --ec-diff-extreme: #9c3a24;
+  --ec-diff-extreme-bg: rgba(224, 122, 99, 0.2);
+
+  --ec-page-bg:
+    radial-gradient(1200px 600px at 80% -10%, rgba(61, 82, 48, 0.07), transparent 60%),
+    radial-gradient(900px 500px at -10% 10%, rgba(197, 168, 128, 0.14), transparent 55%),
+    linear-gradient(180deg, #f6f8f3 0%, #eef2ea 100%);
+  --ec-modal-bg:
+    radial-gradient(700px 240px at 100% 0%, rgba(61, 82, 48, 0.07), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #f4f7f1 100%);
+}
+
+/* Critical rule card: the dark maroon wash reads as mud on a white panel. */
+html.light-theme .ec-rule--critical,
+html[data-site-theme="day"] .ec-rule--critical {
+  background: linear-gradient(180deg, rgba(156, 58, 36, 0.09), var(--ec-raised));
 }
 
 /* ============================================================
@@ -18570,6 +18699,14 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
   --pp-nav-active: rgba(255, 255, 255, 0.12);
   --pp-nav-accent: #e2c67a;
 
+  /* type scale ---------------------------------------------------------- *
+   * The panel was authored at ~13px while the admin cockpit renders its body
+   * text at --pats-type-body (18px), and both shells sit inside the same
+   * `zoom: 0.8` box — so the participant side read a third smaller than admin
+   * on identical screens. Every pp-scoped font-size is multiplied by this one
+   * knob; change it here to retune the whole panel. */
+  --pp-type-scale: 1.3;
+
   /* geometry ----------------------------------------------------------- */
   --pp-radius: 12px;
   --pp-radius-sm: 8px;
@@ -18764,7 +18901,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-sidebar__brand-title {
-  font-size: 0.9375rem;
+  font-size: calc(0.9375rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: 0.01em;
   color: var(--pp-nav-text-strong) !important;
@@ -18773,7 +18910,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-sidebar__brand-sub {
   margin-top: 0.15rem;
-  font-size: 0.6875rem;
+  font-size: calc(0.6875rem * var(--pp-type-scale));
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -18797,7 +18934,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-progress__label {
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   font-weight: 600;
   color: rgba(255, 255, 255, 0.86) !important;
   min-width: 0;
@@ -18808,7 +18945,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-progress__step {
   flex-shrink: 0;
-  font-size: 0.6875rem;
+  font-size: calc(0.6875rem * var(--pp-type-scale));
   font-weight: 700;
   padding: 0.1rem 0.45rem;
   border-radius: var(--pp-radius-pill);
@@ -18834,7 +18971,7 @@ html:has(.dashboard-day) body {
 .pp .pp-nav__label {
   padding: 0 0.6rem;
   margin-bottom: 0.4rem;
-  font-size: 0.6875rem;
+  font-size: calc(0.6875rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -18856,7 +18993,7 @@ html:has(.dashboard-day) body {
   gap: 0.7rem;
   padding: 0.4rem 0.6rem;
   border-radius: var(--pp-radius-xs);
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 500;
   text-decoration: none;
   border: 1px solid transparent;
@@ -18913,7 +19050,7 @@ html:has(.dashboard-day) body {
   width: 100%;
   padding: 0.6rem 0.65rem;
   border-radius: var(--pp-radius-xs);
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 500;
   background: transparent;
   border: 1px solid transparent;
@@ -18985,7 +19122,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-lang__label {
-  font-size: 0.625rem;
+  font-size: calc(0.625rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -18993,7 +19130,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-lang__value {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -19046,7 +19183,7 @@ html:has(.dashboard-day) body {
   border-radius: var(--pp-radius-xs);
   background: transparent;
   color: var(--pp-nav-text);
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 600;
   text-align: left;
   cursor: pointer;
@@ -19089,7 +19226,7 @@ html:has(.dashboard-day) body {
 
 /* -------------------------------------------------------------- typography */
 .pp .pp-eyebrow {
-  font-size: 0.6875rem;
+  font-size: calc(0.6875rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -19097,7 +19234,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-h2 {
-  font-size: 1.0625rem;
+  font-size: calc(1.0625rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--pp-ink);
@@ -19106,7 +19243,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-muted {
   color: var(--pp-muted);
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   line-height: 1.55;
 }
 
@@ -19129,7 +19266,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-card__title {
-  font-size: 1.0625rem;
+  font-size: calc(1.0625rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--pp-ink);
@@ -19138,7 +19275,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-card__desc {
   margin-top: 0.2rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   color: var(--pp-muted);
   line-height: 1.5;
 }
@@ -19208,7 +19345,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-hero__eyebrow {
-  font-size: 0.6875rem;
+  font-size: calc(0.6875rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -19217,7 +19354,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-hero__title {
   margin-top: 0.35rem;
-  font-size: clamp(1.25rem, 4vw, 1.6rem);
+  font-size: calc(clamp(1.25rem, 4vw, 1.6rem) * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -19228,7 +19365,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-hero__meta {
   margin-top: 0.4rem;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   color: rgba(255, 255, 255, 0.75);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -19262,7 +19399,7 @@ html:has(.dashboard-day) body {
   gap: 0.4rem;
   padding: 0.4rem 0.8rem;
   border-radius: var(--pp-radius-pill);
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   font-weight: 600;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -19282,7 +19419,7 @@ html:has(.dashboard-day) body {
   gap: 0.45rem;
   padding: 0.45rem 0.85rem;
   border-radius: var(--pp-radius-pill);
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 600;
   text-decoration: none;
   color: #fff;
@@ -19377,7 +19514,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-stat__label {
-  font-size: 0.6875rem;
+  font-size: calc(0.6875rem * var(--pp-type-scale));
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -19386,7 +19523,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-stat__value {
   margin-top: 0.15rem;
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--pp-type-scale));
   font-weight: 700;
   color: var(--pp-ink);
   line-height: 1.2;
@@ -19413,7 +19550,7 @@ html:has(.dashboard-day) body {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-muted);
 }
@@ -19491,7 +19628,7 @@ html:has(.dashboard-day) body {
   height: 1.75rem;
   border-radius: 50%;
   flex-shrink: 0;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 700;
   background: #fff;
   border: 1.5px solid var(--pp-border-strong);
@@ -19504,7 +19641,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-step__name {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-ink);
   display: flex;
@@ -19520,7 +19657,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-step__sub {
   margin-top: 0.15rem;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   line-height: 1.45;
   /* Darkened from --pp-muted to clear WCAG AA (4.5:1) on the tinted step cards. */
   color: #4d5a50;
@@ -19601,7 +19738,7 @@ html:has(.dashboard-day) body {
   flex: 1 1 100%;
   margin: 0;
   text-align: center;
-  font-size: 0.68rem;
+  font-size: calc(0.68rem * var(--pp-type-scale));
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -19617,7 +19754,7 @@ html:has(.dashboard-day) body {
   border: 1px solid var(--pp-border-strong);
   background: var(--pp-surface);
   color: var(--pp-primary);
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 700;
   text-decoration: none;
   transition: background 0.15s ease, border-color 0.15s ease;
@@ -19636,7 +19773,7 @@ html:has(.dashboard-day) body {
   border-radius: var(--pp-radius-sm);
   background: var(--pp-primary);
   color: #fff;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 800;
   text-decoration: none;
   box-shadow: 0 1px 2px rgba(16, 32, 24, 0.14);
@@ -19663,7 +19800,7 @@ html:has(.dashboard-day) body {
   border: 1px solid rgba(21, 97, 59, 0.35);
   background: var(--pp-primary-soft);
   color: var(--pp-primary);
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 800;
 }
 
@@ -19722,7 +19859,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-status__title {
-  font-size: 1rem;
+  font-size: calc(1rem * var(--pp-type-scale));
   font-weight: 700;
   color: var(--pp-ink);
   line-height: 1.3;
@@ -19730,14 +19867,14 @@ html:has(.dashboard-day) body {
 
 .pp .pp-status__text {
   margin-top: 0.2rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   line-height: 1.5;
   color: var(--pp-body);
 }
 
 .pp .pp-status__meta {
   margin-top: 0.35rem;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-muted);
 }
@@ -19776,7 +19913,7 @@ html:has(.dashboard-day) body {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 700;
   color: var(--pp-success);
 }
@@ -19785,7 +19922,7 @@ html:has(.dashboard-day) body {
 .pp .pp-alert {
   border-radius: var(--pp-radius-sm);
   padding: 0.9rem 1.1rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   line-height: 1.55;
   border: 1px solid var(--pp-border);
   border-left: 3px solid var(--pp-muted);
@@ -19840,7 +19977,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-dl__term {
-  font-size: 0.625rem;
+  font-size: calc(0.625rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -19850,7 +19987,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-dl__desc {
   margin-top: 0.3rem;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 500;
   color: var(--pp-ink);
   word-break: break-word;
@@ -19878,19 +20015,19 @@ html:has(.dashboard-day) body {
 
 .pp .pp-dates__date {
   flex-shrink: 0;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 700;
   color: var(--pp-primary-ink);
   min-width: 6.5rem;
 }
 
 .pp .pp-dates__label {
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   color: var(--pp-body);
 }
 
 .pp .pp-note {
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-danger);
 }
@@ -19918,7 +20055,7 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-news__link {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-ink);
   text-decoration: none;
@@ -19932,7 +20069,7 @@ html:has(.dashboard-day) body {
 .pp .pp-news__date {
   display: block;
   margin-top: 0.2rem;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   color: var(--pp-muted);
 }
 
@@ -19944,7 +20081,7 @@ html:has(.dashboard-day) body {
   gap: 0.5rem;
   padding: 0.6rem 1.15rem;
   border-radius: var(--pp-radius-xs);
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -20036,7 +20173,7 @@ html:has(.dashboard-day) body {
   gap: 0.3rem;
   padding: 0.2rem 0.6rem;
   border-radius: var(--pp-radius-pill);
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   font-weight: 600;
   border: 1px solid transparent;
 }
@@ -20078,7 +20215,7 @@ html:has(.dashboard-day) body {
 
 .pp .pp-page-title {
   margin: 0.4rem 0 0;
-  font-size: 1.55rem;
+  font-size: calc(1.55rem * var(--pp-type-scale));
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -20088,7 +20225,7 @@ html:has(.dashboard-day) body {
 .pp .pp-page-sub {
   margin: 0.45rem 0 0;
   max-width: 46rem;
-  font-size: 0.9rem;
+  font-size: calc(0.9rem * var(--pp-type-scale));
   line-height: 1.55;
   color: var(--pp-muted) !important;
 }
@@ -20105,7 +20242,7 @@ html:has(.dashboard-day) body {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-primary) !important;
   text-decoration: none;
@@ -20140,14 +20277,14 @@ html:has(.dashboard-day) body {
 .pp .portal-h1 {
   border: 0 !important;
   padding: 0 !important;
-  font-size: 1.5rem !important;
+  font-size: calc(1.5rem * var(--pp-type-scale)) !important;
   font-weight: 700 !important;
   letter-spacing: -0.02em !important;
   color: var(--pp-ink) !important;
 }
 
 .pp .portal-h2 {
-  font-size: 1.0625rem !important;
+  font-size: calc(1.0625rem * var(--pp-type-scale)) !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
   color: var(--pp-ink) !important;
@@ -20155,14 +20292,14 @@ html:has(.dashboard-day) body {
 
 .pp .portal-section-title,
 .pp .participant-dash-section-title {
-  font-size: 1.0625rem !important;
+  font-size: calc(1.0625rem * var(--pp-type-scale)) !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em !important;
   color: var(--pp-ink) !important;
 }
 
 .pp .portal-subtitle {
-  font-size: 0.625rem !important;
+  font-size: calc(0.625rem * var(--pp-type-scale)) !important;
   font-weight: 700 !important;
   letter-spacing: 0.08em !important;
   text-transform: uppercase !important;
@@ -20194,7 +20331,7 @@ html:has(.dashboard-day) body {
   border-radius: var(--pp-radius-sm) !important;
   border: 1px solid var(--pp-border) !important;
   border-left-width: 3px !important;
-  font-size: 0.8125rem !important;
+  font-size: calc(0.8125rem * var(--pp-type-scale)) !important;
   line-height: 1.55 !important;
 }
 
@@ -20244,7 +20381,7 @@ html:has(.dashboard-day) body {
 .pp .pp-label {
   display: block;
   margin-bottom: 0.35rem;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-body);
 }
@@ -20252,7 +20389,7 @@ html:has(.dashboard-day) body {
 .pp .pp-file {
   display: block;
   width: 100%;
-  font-size: 0.8125rem;
+  font-size: calc(0.8125rem * var(--pp-type-scale));
   color: var(--pp-muted);
 }
 
@@ -20262,7 +20399,7 @@ html:has(.dashboard-day) body {
   border-radius: 6px;
   background: var(--pp-primary-soft);
   color: var(--pp-primary);
-  font-size: 0.72rem;
+  font-size: calc(0.72rem * var(--pp-type-scale));
   font-weight: 700;
   padding: 0.45rem 0.75rem;
   cursor: pointer;
@@ -20284,14 +20421,14 @@ html:has(.dashboard-day) body {
 }
 
 .pp .pp-doc__label {
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 600;
   color: var(--pp-ink);
 }
 
 .pp .pp-doc__name {
   margin-top: 0.1rem;
-  font-size: 0.75rem;
+  font-size: calc(0.75rem * var(--pp-type-scale));
   color: var(--pp-muted);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -20319,7 +20456,7 @@ html:has(.dashboard-day) body {
   border-radius: 0.5rem;
   background-color: #ffffff;
   color: #334155;
-  font-size: 0.875rem;
+  font-size: calc(0.875rem * var(--pp-type-scale));
   font-weight: 700;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
@@ -20536,20 +20673,26 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
   position: absolute;
   right: 0.6rem;
   bottom: 0.6rem;
-  background: rgba(11, 14, 12, 0.82);
+  background: var(--ec-thumb-badge-bg);
   border-color: rgba(197, 168, 128, 0.4);
   backdrop-filter: blur(4px);
 }
 
-.exercise-contour .ec-modal__media {
+/* Scoped to `.ec-modal`, NOT `.exercise-contour`: the dialog portals to
+   <body>, so an `.exercise-contour`-prefixed selector never matched and each
+   image fell back to its intrinsic size — small uploads rendered as postage
+   stamps next to full-width ones. */
+.ec-modal .ec-modal__media {
   margin: 0.25rem 0 0.5rem;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 10px;
   border: 1px solid var(--ec-line);
+  background: var(--ec-panel-2);
 }
 
-.exercise-contour .ec-modal__media img {
+.ec-modal .ec-modal__media img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -22787,7 +22930,7 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
   .pp .pp-step__dot {
     width: 1.5rem;
     height: 1.5rem;
-    font-size: 0.75rem;
+    font-size: calc(0.75rem * var(--pp-type-scale));
   }
 
   .pp .pp-journey__head {

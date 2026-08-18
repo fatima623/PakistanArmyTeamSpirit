@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, LogOut, Menu, Settings } from "lucide-react";
+import { LogOut, Menu, Settings } from "lucide-react";
 
 import { AdminUserMenu } from "@/components/admin/AdminUserMenu";
 import { logoutAction } from "@/lib/actions/auth";
@@ -37,15 +37,6 @@ export function AdminHeader({
       </div>
 
       <div className="admin-header-actions flex flex-shrink-0 items-center gap-2">
-        <button
-          type="button"
-          className="admin-header-iconbtn"
-          aria-label="Notifications"
-          title="Notifications"
-        >
-          <Bell className="h-[18px] w-[18px]" aria-hidden />
-          <span className="admin-header-iconbtn-dot" aria-hidden />
-        </button>
         <Link
           href="/admin/settings"
           className="admin-header-iconbtn hidden lg:inline-flex"
