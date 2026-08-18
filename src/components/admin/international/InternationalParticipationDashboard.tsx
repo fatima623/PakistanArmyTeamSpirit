@@ -202,9 +202,8 @@ export function InternationalParticipationDashboard({
         iso2: c.iso2,
         name: c.name,
         count: c.teamCount,
-        years: (historyByCountry.get(c.name) ?? []).map((h) => h.year),
       })),
-    [scopedCountries, historyByCountry]
+    [scopedCountries]
   );
 
   const selectedCountry = useMemo(

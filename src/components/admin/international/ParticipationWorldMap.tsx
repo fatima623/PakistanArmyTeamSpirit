@@ -12,8 +12,6 @@ export type MapDatum = {
   iso2: string;
   name: string;
   count: number;
-  /** Editions this country took part in, newest first. */
-  years: number[];
 };
 
 const SVG_NS = "http://www.w3.org/2000/svg";
@@ -33,7 +31,15 @@ const PARTICIPANT_GREEN = "rgb(61,82,48)";
 const PARTICIPANT_STROKE = "rgb(47,64,37)";
 const SELECT_STROKE = "rgb(184,148,31)";
 
-type Tooltip = { x: number; y: number; datum: MapDatum };
+type Tooltip = { x: number; y: number; flip: boolean; datum: MapDatum };
+
+/**
+ * The stage clips its overflow, so the bubble is kept inside it: clamped
+ * horizontally by roughly half its width, and flipped below the cursor when
+ * there is no room for it above (which also keeps it off the legend).
+ */
+const TOOLTIP_HALF_WIDTH = 90;
+const TOOLTIP_FLIP_BELOW = 72;
 
 /** Union bounding box of a country's paths, or null when it can't be measured. */
 function unionBox(
@@ -234,7 +240,17 @@ export function ParticipationWorldMap({
         const place = (clientX: number, clientY: number) => {
           const stage = stageRef.current?.getBoundingClientRect();
           if (!stage) return;
-          setTooltip({ x: clientX - stage.left, y: clientY - stage.top, datum });
+          const x = clientX - stage.left;
+          const y = clientY - stage.top;
+          setTooltip({
+            x: Math.min(
+              Math.max(x, TOOLTIP_HALF_WIDTH),
+              stage.width - TOOLTIP_HALF_WIDTH
+            ),
+            y,
+            flip: y < TOOLTIP_FLIP_BELOW,
+            datum,
+          });
         };
         const onEnter = (e: Event) => {
           if (!isSelected) p.style.filter = "brightness(1.14)";
@@ -316,6 +332,7 @@ export function ParticipationWorldMap({
         {tooltip ? (
           <div
             className="intl-map__tooltip"
+            data-flip={tooltip.flip ? "true" : "false"}
             style={{ left: tooltip.x, top: tooltip.y }}
             role="tooltip"
           >
@@ -324,11 +341,6 @@ export function ParticipationWorldMap({
               {tooltip.datum.count} team{tooltip.datum.count === 1 ? "" : "s"} ·{" "}
               {label}
             </p>
-            {tooltip.datum.years.length > 1 ? (
-              <p className="intl-map__tooltip-years">
-                Editions: {tooltip.datum.years.join(", ")}
-              </p>
-            ) : null}
           </div>
         ) : null}
       </div>

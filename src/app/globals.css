@@ -23234,7 +23234,6 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
 .admin-theme .intl-dash .intl-table tbody tr.intl-table__row[data-selected="true"] > td,
 .admin-theme.pats-dashboard .intl-dash .intl-table tbody tr.intl-table__row[data-selected="true"] > td {
   background: var(--intl-green-soft);
-  box-shadow: inset 3px 0 0 0 var(--intl-green-mid);
 }
 
 .admin-theme .intl-dash .intl-table .intl-table__rank {
@@ -23319,7 +23318,9 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
 .intl-map__legend {
   position: absolute;
   left: 12px;
-  top: 12px;
+  /* Bottom-left: tooltips open above the cursor, so a top-left legend kept
+     getting covered by them. */
+  bottom: 12px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -23371,6 +23372,11 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
   box-shadow: 0 10px 26px rgba(20, 34, 18, 0.28);
 }
 
+/* No room above the cursor — open downwards instead of being clipped. */
+.intl-map__tooltip[data-flip="true"] {
+  transform: translate(-50%, 14px);
+}
+
 .intl-map__tooltip-title {
   font-size: 12px;
   font-weight: 700;
@@ -23383,13 +23389,6 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
   font-weight: 600;
   line-height: 1.35;
   color: #cfe3bd;
-}
-
-.intl-map__tooltip-years {
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 1.35;
-  color: #a8c295;
 }
 
 /* --- Country detail panel ------------------------------------------------- */
