@@ -156,6 +156,9 @@ export const publicSite: typeof enPublicSite = {
         "AFOS / ATGP",
         "地形勘察",
       ],
+      mapYearLabel: "届次",
+      mapYearAll: "全部届次",
+      mapYearAria: "按届次年份筛选地图",
       mapAria: "已注册国家的世界地图",
       mapCaption: (count: number) =>
         `已呈现 ${count} 个国家——将鼠标悬停在高亮的国家上可查看其队伍。`,

@@ -1,46 +1,107 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   COUNTRY_NAME_TO_ISO2,
   normalizeCountryKey,
 } from "@/lib/country-iso";
 
-/** One country's team count for the selected year. */
-export type MapDatum = { iso2: string; name: string; count: number };
+/** One country's team count for the selected year (or year range). */
+export type MapDatum = {
+  iso2: string;
+  name: string;
+  count: number;
+  /** Editions this country took part in, newest first. */
+  years: number[];
+};
 
-/** Choropleth buckets — matches the legend, magenta (highest) → blue (lowest). */
-const BUCKETS = [
-  { min: 100, label: "100+", color: "rgb(214,93,196)" },
-  { min: 51, label: "51–100", color: "rgb(150,96,214)" },
-  { min: 21, label: "21–50", color: "rgb(88,101,214)" },
-  { min: 11, label: "11–20", color: "rgb(56,116,222)" },
-  { min: 1, label: "1–10", color: "rgb(45,96,168)" },
-  { min: 0, label: "0", color: "rgb(31,42,66)" },
-] as const;
+const SVG_NS = "http://www.w3.org/2000/svg";
+const XLINK_NS = "http://www.w3.org/1999/xlink";
 
-const BASE_FILL = "rgb(31,42,66)";
-const BASE_STROKE = "rgba(148,163,190,0.18)";
-const SELECT_STROKE = "rgb(230,207,127)";
+/**
+ * Palette. The admin shell is a light, green-accented theme (green sidebar,
+ * `--admin-accent`), so the map is painted in that family rather than the
+ * slate/blue choropleth it used to carry. Colors stay in rgb() form for the
+ * "no raw hex in .tsx" guardrail.
+ */
+const IDLE_FILL = "rgb(232,238,229)";
+const IDLE_STROKE = "rgb(255,255,255)";
+const OCEAN = "rgb(246,249,244)";
+/** Green base behind every flag so a missing/slow image still reads as taking part. */
+const PARTICIPANT_GREEN = "rgb(61,82,48)";
+const PARTICIPANT_STROKE = "rgb(47,64,37)";
+const SELECT_STROKE = "rgb(184,148,31)";
 
-function bucketColor(count: number): string {
-  for (const b of BUCKETS) {
-    if (count >= b.min) return b.color;
+type Tooltip = { x: number; y: number; datum: MapDatum };
+
+/** Union bounding box of a country's paths, or null when it can't be measured. */
+function unionBox(
+  paths: SVGPathElement[]
+): { x: number; y: number; w: number; h: number } | null {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const p of paths) {
+    const b = p.getBBox();
+    minX = Math.min(minX, b.x);
+    minY = Math.min(minY, b.y);
+    maxX = Math.max(maxX, b.x + b.width);
+    maxY = Math.max(maxY, b.y + b.height);
   }
-  return BASE_FILL;
+  const w = maxX - minX;
+  const h = maxY - minY;
+  if (!Number.isFinite(w) || !Number.isFinite(h) || w <= 0 || h <= 0) return null;
+  return { x: minX, y: minY, w, h };
 }
 
-type Tooltip = { x: number; y: number; name: string; count: number };
+/** Fill the union bounding box of a country's paths with its flag image. */
+function buildFlagPattern(
+  defs: SVGDefsElement,
+  id: string,
+  paths: SVGPathElement[],
+  flagUrl: string
+): boolean {
+  const box = unionBox(paths);
+  if (!box) return false;
+
+  const pattern = document.createElementNS(SVG_NS, "pattern");
+  pattern.setAttribute("id", id);
+  pattern.setAttribute("data-intl-flag", "true");
+  pattern.setAttribute("patternUnits", "userSpaceOnUse");
+  pattern.setAttribute("x", `${box.x}`);
+  pattern.setAttribute("y", `${box.y}`);
+  pattern.setAttribute("width", `${box.w}`);
+  pattern.setAttribute("height", `${box.h}`);
+
+  const bg = document.createElementNS(SVG_NS, "rect");
+  bg.setAttribute("width", `${box.w}`);
+  bg.setAttribute("height", `${box.h}`);
+  bg.setAttribute("fill", PARTICIPANT_GREEN);
+  pattern.appendChild(bg);
+
+  const img = document.createElementNS(SVG_NS, "image");
+  img.setAttribute("href", flagUrl);
+  img.setAttributeNS(XLINK_NS, "href", flagUrl);
+  img.setAttribute("width", `${box.w}`);
+  img.setAttribute("height", `${box.h}`);
+  img.setAttribute("preserveAspectRatio", "xMidYMid slice");
+  pattern.appendChild(img);
+
+  defs.appendChild(pattern);
+  return true;
+}
 
 export function ParticipationWorldMap({
   data,
-  year,
+  label,
   selectedName,
   onSelect,
 }: {
   data: MapDatum[];
-  year: number;
+  /** Period the map is showing, e.g. "2026" or "2016–2026". */
+  label: string;
   selectedName: string | null;
   onSelect: (name: string) => void;
 }) {
@@ -81,6 +142,14 @@ export function ParticipationWorldMap({
     const svgEl = containerRef.current.querySelector("svg");
     if (!svgEl) return;
 
+    let defs = svgEl.querySelector("defs");
+    if (!defs) {
+      defs = document.createElementNS(SVG_NS, "defs");
+      svgEl.prepend(defs);
+    }
+    // Drop the previous year's flag patterns before repainting.
+    defs.querySelectorAll("[data-intl-flag]").forEach((n) => n.remove());
+
     const byIso = new Map<string, MapDatum>();
     const byName = new Map<string, MapDatum>();
     for (const d of data) {
@@ -90,6 +159,13 @@ export function ParticipationWorldMap({
 
     const paths = Array.from(svgEl.querySelectorAll<SVGPathElement>("path"));
     const cleanups: Array<() => void> = [];
+
+    // Group every matched path by country so one flag pattern spans all of a
+    // nation's islands and exclaves instead of repeating per shape.
+    const grouped = new Map<
+      string,
+      { datum: MapDatum; iso: string; paths: SVGPathElement[] }
+    >();
 
     for (const p of paths) {
       const id = (p.id || "").toUpperCase();
@@ -104,135 +180,155 @@ export function ParticipationWorldMap({
       p.style.transition = "filter 120ms ease";
 
       if (!match) {
-        p.setAttribute("fill", BASE_FILL);
-        p.setAttribute("stroke", BASE_STROKE);
+        p.setAttribute("fill", IDLE_FILL);
+        p.setAttribute("fill-opacity", "1");
+        p.setAttribute("stroke", IDLE_STROKE);
         p.style.cursor = "default";
         p.style.filter = "";
+        p.removeAttribute("tabindex");
+        p.removeAttribute("role");
+        p.removeAttribute("aria-label");
         continue;
       }
 
-      const isSelected = match.name === selectedName;
-      p.setAttribute("fill", bucketColor(match.count));
-      p.setAttribute("stroke", isSelected ? SELECT_STROKE : "rgba(9,13,24,0.55)");
-      p.setAttribute("stroke-width", isSelected ? "1.1" : "0.5");
-      p.style.cursor = "pointer";
-      p.style.filter = isSelected ? "brightness(1.18)" : "";
-      p.setAttribute("tabindex", "0");
-      p.setAttribute("role", "button");
-      p.setAttribute(
-        "aria-label",
-        `${match.name}: ${match.count} team${match.count === 1 ? "" : "s"} in ${year}`
-      );
+      const key = iso || nameKey;
+      const entry = grouped.get(key) ?? { datum: match, iso, paths: [] };
+      entry.paths.push(p);
+      grouped.set(key, entry);
+    }
 
-      const place = (clientX: number, clientY: number) => {
-        const stage = stageRef.current?.getBoundingClientRect();
-        if (!stage) return;
-        setTooltip({
-          x: clientX - stage.left,
-          y: clientY - stage.top,
-          name: match.name,
-          count: match.count,
-        });
-      };
-      const onEnter = (e: Event) => {
-        if (!isSelected) p.style.filter = "brightness(1.22)";
-        const me = e as MouseEvent;
-        place(me.clientX, me.clientY);
-      };
-      const onMove = (e: Event) => {
-        const me = e as MouseEvent;
-        place(me.clientX, me.clientY);
-      };
-      const onLeave = () => {
-        if (!isSelected) p.style.filter = "";
-        setTooltip(null);
-      };
-      const onClick = () => onSelect(match.name);
-      const onKey = (e: Event) => {
-        const ke = e as KeyboardEvent;
-        if (ke.key === "Enter" || ke.key === " ") {
-          ke.preventDefault();
-          onSelect(match.name);
+    for (const [key, { datum, iso, paths: cps }] of grouped) {
+      let fill = PARTICIPANT_GREEN;
+      if (iso) {
+        const patternId = `admin-flag-${key}`;
+        if (
+          buildFlagPattern(
+            defs as SVGDefsElement,
+            patternId,
+            cps,
+            `/flags/${iso.toLowerCase()}.png`
+          )
+        ) {
+          fill = `url(#${patternId})`;
         }
-      };
+      }
 
-      p.addEventListener("mouseenter", onEnter);
-      p.addEventListener("mousemove", onMove);
-      p.addEventListener("mouseleave", onLeave);
-      p.addEventListener("click", onClick);
-      p.addEventListener("keydown", onKey);
-      cleanups.push(() => {
-        p.removeEventListener("mouseenter", onEnter);
-        p.removeEventListener("mousemove", onMove);
-        p.removeEventListener("mouseleave", onLeave);
-        p.removeEventListener("click", onClick);
-        p.removeEventListener("keydown", onKey);
-      });
+      const isSelected = datum.name === selectedName;
+
+      for (const p of cps) {
+        p.setAttribute("fill", fill);
+        p.setAttribute("fill-opacity", "1");
+        p.setAttribute("stroke", isSelected ? SELECT_STROKE : PARTICIPANT_STROKE);
+        p.setAttribute("stroke-width", isSelected ? "1.2" : "0.5");
+        p.style.cursor = "pointer";
+        p.style.filter = isSelected ? "brightness(1.12)" : "";
+        p.setAttribute("tabindex", "0");
+        p.setAttribute("role", "button");
+        p.setAttribute(
+          "aria-label",
+          `${datum.name}: ${datum.count} team${
+            datum.count === 1 ? "" : "s"
+          } in ${label}`
+        );
+
+        const place = (clientX: number, clientY: number) => {
+          const stage = stageRef.current?.getBoundingClientRect();
+          if (!stage) return;
+          setTooltip({ x: clientX - stage.left, y: clientY - stage.top, datum });
+        };
+        const onEnter = (e: Event) => {
+          if (!isSelected) p.style.filter = "brightness(1.14)";
+          const me = e as MouseEvent;
+          place(me.clientX, me.clientY);
+        };
+        const onMove = (e: Event) => {
+          const me = e as MouseEvent;
+          place(me.clientX, me.clientY);
+        };
+        const onLeave = () => {
+          if (!isSelected) p.style.filter = "";
+          setTooltip(null);
+        };
+        const onFocus = () => {
+          const b = p.getBoundingClientRect();
+          place(b.left + b.width / 2, b.top);
+        };
+        const onClick = () => onSelect(datum.name);
+        const onKey = (e: Event) => {
+          const ke = e as KeyboardEvent;
+          if (ke.key === "Enter" || ke.key === " ") {
+            ke.preventDefault();
+            onSelect(datum.name);
+          }
+        };
+
+        p.addEventListener("mouseenter", onEnter);
+        p.addEventListener("mousemove", onMove);
+        p.addEventListener("mouseleave", onLeave);
+        p.addEventListener("focus", onFocus);
+        p.addEventListener("blur", onLeave);
+        p.addEventListener("click", onClick);
+        p.addEventListener("keydown", onKey);
+        cleanups.push(() => {
+          p.removeEventListener("mouseenter", onEnter);
+          p.removeEventListener("mousemove", onMove);
+          p.removeEventListener("mouseleave", onLeave);
+          p.removeEventListener("focus", onFocus);
+          p.removeEventListener("blur", onLeave);
+          p.removeEventListener("click", onClick);
+          p.removeEventListener("keydown", onKey);
+        });
+      }
     }
 
     return () => cleanups.forEach((fn) => fn());
-  }, [svgReady, data, selectedName, onSelect, year]);
+  }, [svgReady, data, selectedName, onSelect, label]);
+
+  const hideTooltip = useCallback(() => setTooltip(null), []);
 
   return (
-    <div className="relative">
+    <div className="intl-map">
       <div
         ref={stageRef}
-        className="relative h-[300px] w-full overflow-hidden sm:h-[360px] lg:h-[420px]"
+        onMouseLeave={hideTooltip}
+        className="intl-map__stage"
+        style={{ background: OCEAN }}
       >
         <div
           ref={containerRef}
-          className="h-full w-full"
-          aria-label={`World map of participating nations in ${year}`}
+          className="intl-map__svg"
+          aria-label={`World map of participating nations in ${label}`}
           role="img"
         />
 
-        {/* Legend */}
-        <div
-          className="pointer-events-none absolute left-3 top-3 flex flex-col gap-1 rounded-lg px-2.5 py-2"
-          style={{
-            background: "rgba(9,13,24,0.72)",
-            border: "1px solid rgba(255,255,255,0.08)",
-          }}
-        >
-          {BUCKETS.map((b) => (
-            <div key={b.label} className="flex items-center gap-2">
-              <span
-                className="h-2.5 w-2.5 rounded-[3px]"
-                style={{ background: b.color }}
-              />
-              <span
-                className="text-[10px] font-medium leading-none"
-                style={{ color: "rgb(148,163,190)" }}
-              >
-                {b.label}
-              </span>
-            </div>
-          ))}
+        {/* Legend — flags mark participants, so the key explains the two states. */}
+        <div className="intl-map__legend">
+          <span className="intl-map__legend-row">
+            <span className="intl-map__legend-swatch intl-map__legend-swatch--on" />
+            Participating nation
+          </span>
+          <span className="intl-map__legend-row">
+            <span className="intl-map__legend-swatch intl-map__legend-swatch--off" />
+            No participation
+          </span>
         </div>
 
         {tooltip ? (
           <div
-            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+12px)] whitespace-nowrap rounded-lg px-2.5 py-1.5"
-            style={{
-              left: tooltip.x,
-              top: tooltip.y,
-              background: "rgb(17,23,40)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.45)",
-            }}
+            className="intl-map__tooltip"
+            style={{ left: tooltip.x, top: tooltip.y }}
+            role="tooltip"
           >
-            <p
-              className="text-[12px] font-semibold leading-tight"
-              style={{ color: "rgb(236,240,248)" }}
-            >
-              {tooltip.name}
+            <p className="intl-map__tooltip-title">{tooltip.datum.name}</p>
+            <p className="intl-map__tooltip-meta">
+              {tooltip.datum.count} team{tooltip.datum.count === 1 ? "" : "s"} ·{" "}
+              {label}
             </p>
-            <p
-              className="text-[11px] font-medium leading-tight"
-              style={{ color: "rgb(120,180,255)" }}
-            >
-              {tooltip.count} team{tooltip.count === 1 ? "" : "s"} · {year}
-            </p>
+            {tooltip.datum.years.length > 1 ? (
+              <p className="intl-map__tooltip-years">
+                Editions: {tooltip.datum.years.join(", ")}
+              </p>
+            ) : null}
           </div>
         ) : null}
       </div>

@@ -41,14 +41,21 @@ export type CountryCode =
   | "MA" | "NP" | "IQ" | "TH" | "QA" | "US" | "KZ" | "BH" | "PK" | "BY"
   | "AZ" | "GH" | "MV";
 
+/**
+ * Rosters for the completed International PATS editions, transcribed from the
+ * official "PREV PARTICIPATION" slide. `src/lib/international-editions.ts`
+ * carries the same history with per-nation team counts and the current (9th)
+ * edition — keep the two in step when a new edition is added.
+ */
 export const INTERNATIONAL_EDITIONS = [
-  { edition: 2, year: 2017, countries: ["CN", "TR", "JO", "MY", "GB", "LK"] as CountryCode[] },
-  { edition: 3, year: 2020, countries: ["SA", "LK", "ZA", "TR"] as CountryCode[] },
-  { edition: 4, year: 2021, countries: ["JO", "LK", "TR", "UZ"] as CountryCode[] },
-  { edition: 5, year: 2022, countries: ["KE", "SA", "JO", "LK", "TR", "MA", "NP", "UZ"] as CountryCode[] },
-  { edition: 6, year: 2023, countries: ["SA", "IQ", "JO", "TH", "QA", "US", "MA", "KZ", "UZ"] as CountryCode[] },
-  { edition: 7, year: 2024, countries: ["BH", "JO", "KZ", "SA", "PK", "MA", "QA", "TR", "MY", "TH", "US", "LK", "UZ"] as CountryCode[] },
-  { edition: 8, year: 2025, countries: ["LK", "TR", "NP", "UZ", "BH", "SA", "MA", "CN", "US", "PK", "BY"] as CountryCode[] },
+  { edition: 1, year: 2016, countries: ["LK"] as CountryCode[] },
+  { edition: 2, year: 2017, countries: ["LK", "TR", "JO", "CN", "GB", "MY"] as CountryCode[] },
+  { edition: 3, year: 2020, countries: ["LK", "TR", "ZA", "SA"] as CountryCode[] },
+  { edition: 4, year: 2021, countries: ["LK", "TR", "JO", "UZ"] as CountryCode[] },
+  { edition: 5, year: 2022, countries: ["LK", "TR", "JO", "SA", "UZ", "MA", "NP", "KE"] as CountryCode[] },
+  { edition: 6, year: 2023, countries: ["IQ", "TH", "JO", "SA", "UZ", "MA", "US", "KZ", "BH", "QA"] as CountryCode[] },
+  { edition: 7, year: 2024, countries: ["LK", "TR", "JO", "SA", "UZ", "MA", "MV", "KZ", "BH", "QA", "TH", "US"] as CountryCode[] },
+  { edition: 8, year: 2025, countries: ["LK", "TR", "NP", "SA", "UZ", "MA", "MV", "CN", "BH", "QA", "BY", "US"] as CountryCode[] },
 ] as const;
 
 export const COUNTRY_NAMES: Record<CountryCode, string> = {

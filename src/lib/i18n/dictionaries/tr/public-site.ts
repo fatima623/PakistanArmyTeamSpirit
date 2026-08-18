@@ -167,6 +167,9 @@ export const publicSite: typeof enPublicSite = {
         "AFOS / ATGP",
         "Arazi oryantasyonu",
       ],
+      mapYearLabel: "Dönem",
+      mapYearAll: "Tüm dönemler",
+      mapYearAria: "Haritayı dönem yılına göre filtrele",
       mapAria: "Kayıtlı ulusların dünya haritası",
       mapCaption: (count: number) =>
         `${count} ulus temsil ediliyor — takımlarını görmek için vurgulanan bir ülkenin üzerine gelin.`,

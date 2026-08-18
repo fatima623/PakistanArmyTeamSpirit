@@ -22841,3 +22841,801 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
     display: contents;
   }
 }
+
+
+/* ==========================================================================
+   ADMIN — INTERNATIONAL PARTICIPATION (/admin/international)
+   --------------------------------------------------------------------------
+   The dashboard used to render as a dark slate/blue card dropped into the
+   light admin shell. Two things broke there: `.admin-theme h1/h2/h3` forces
+   `--admin-heading` (near-black) at top priority, so every heading vanished
+   against the dark card, and `.admin-theme.pats-dashboard tr:hover td` painted
+   a near-white hover that swallowed the light-on-dark table text.
+
+   So the whole panel is now light and green — the same family as the sidebar
+   and `--admin-accent` — and the row hover is a light green wash that leaves
+   the dark row text fully legible. Selectors are specific enough to win over
+   the generic `.admin-theme.pats-dashboard` table rules on specificity alone
+   (see scripts/css-guardrails.mjs — the override-flag count may only go down).
+   ========================================================================== */
+
+.intl-dash {
+  --intl-green: #2f4025;
+  --intl-green-mid: #3d5230;
+  --intl-green-bright: #2e7d32;
+  --intl-green-soft: #eef5ec;
+  --intl-green-hover: #e4f0e0;
+  --intl-gold: #b8941f;
+  --intl-ink: #16281a;
+  --intl-body: #35443a;
+  --intl-muted: #5d6f60;
+  --intl-surface: #ffffff;
+  --intl-surface-2: #f7faf5;
+  --intl-border: #dbe4d6;
+
+  border-radius: 16px;
+  border: 1px solid var(--intl-border);
+  background: linear-gradient(180deg, #fbfdf9 0%, #f4f8f1 100%);
+  padding: 18px;
+}
+
+@media (min-width: 640px) {
+  .intl-dash {
+    padding: 22px;
+  }
+}
+
+.intl-dash__header {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 1024px) {
+  .intl-dash__header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* `.admin-theme h1` forces the heading colour token; restate the size/weight
+   here so the title does not fall into the admin type-scale hijack. */
+.admin-theme .intl-dash .intl-dash__title {
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.intl-dash__subtitle {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--intl-muted);
+}
+
+.intl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  border-radius: 999px;
+  border: 1px solid var(--intl-green-mid);
+  background: var(--intl-surface);
+  padding: 8px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--intl-green-mid);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.intl-btn:hover {
+  background: var(--intl-green-soft);
+  color: var(--intl-green);
+}
+
+/* --- Year (edition) filter ------------------------------------------------ */
+
+.intl-years {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface);
+  padding: 10px 12px;
+}
+
+.intl-years__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--intl-muted);
+}
+
+.intl-years__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.intl-year-chip {
+  border-radius: 999px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface-2);
+  padding: 5px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--intl-body);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.intl-year-chip:hover {
+  background: var(--intl-green-hover);
+  border-color: var(--intl-green-mid);
+  color: var(--intl-green);
+}
+
+.intl-year-chip[data-active="true"] {
+  background: var(--intl-green-mid);
+  border-color: var(--intl-green);
+  color: #ffffff;
+}
+
+.intl-year-chip:focus-visible {
+  outline: 2px solid var(--intl-green-bright);
+  outline-offset: 2px;
+}
+
+/* --- Stat cards ----------------------------------------------------------- */
+
+.intl-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .intl-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .intl-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.intl-stat {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface);
+  padding: 14px 16px;
+}
+
+.intl-stat__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--intl-green-soft);
+  color: var(--intl-green-mid);
+}
+
+.intl-stat__icon--green {
+  background: #e6f2e4;
+  color: #2f6b32;
+}
+
+.intl-stat__icon--teal {
+  background: #e2f1ee;
+  color: #256b5f;
+}
+
+.intl-stat__icon--lime {
+  background: #edf3dd;
+  color: #4e6b1f;
+}
+
+.intl-stat__icon--moss {
+  background: #e8f0e2;
+  color: #3d5230;
+}
+
+.intl-stat__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--intl-muted);
+}
+
+.intl-stat__value {
+  margin-top: 3px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--intl-ink);
+}
+
+.intl-stat__hint {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--intl-muted);
+}
+
+/* --- Cards ---------------------------------------------------------------- */
+
+.intl-card {
+  border-radius: 16px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface);
+  padding: 14px;
+}
+
+.intl-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+
+.intl-card__eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--intl-green-mid);
+}
+
+.intl-card__meta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--intl-muted);
+}
+
+.intl-card__toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 2px 2px 12px;
+}
+
+@media (min-width: 640px) {
+  .intl-card__toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.admin-theme .intl-dash .intl-card__title {
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.intl-input,
+.intl-select {
+  height: 36px;
+  border-radius: 9px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface-2);
+  padding: 0 11px;
+  font-size: 13px;
+  color: var(--intl-ink);
+}
+
+.intl-input {
+  width: 180px;
+}
+
+.intl-input::placeholder {
+  color: var(--intl-muted);
+}
+
+.intl-input:focus,
+.intl-select:focus {
+  outline: 2px solid var(--intl-green-bright);
+  outline-offset: 1px;
+}
+
+/* --- Summary table -------------------------------------------------------- */
+
+.intl-table-wrap {
+  overflow-x: auto;
+}
+
+.intl-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+}
+
+.admin-theme .intl-dash .intl-table thead th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--intl-muted);
+}
+
+/* Year band: the summary is grouped newest edition first, so each block opens
+   with the year it belongs to. */
+.admin-theme .intl-dash .intl-table .intl-table__group th {
+  padding: 9px 12px;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  background: var(--intl-green-soft);
+  color: var(--intl-green);
+}
+
+.intl-table__group-year {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.intl-table__group-edition {
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--intl-green-mid);
+}
+
+.intl-table__group-count {
+  margin-left: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--intl-muted);
+}
+
+.admin-theme .intl-dash .intl-table tbody tr.intl-table__row > td {
+  padding: 9px 12px;
+  border-top-width: 1px;
+  border-top-style: solid;
+  background: transparent;
+  transition: background-color 0.12s ease;
+}
+
+.intl-table__row {
+  cursor: pointer;
+}
+
+/* Light-green hover (the shell's default was a near-white wash that hid the
+   row content). Text colours are untouched, so nothing is obscured. */
+.admin-theme .intl-dash .intl-table tbody tr.intl-table__row:hover > td,
+.admin-theme.pats-dashboard .intl-dash .intl-table tbody tr.intl-table__row:hover > td {
+  background: var(--intl-green-hover);
+}
+
+.admin-theme .intl-dash .intl-table tbody tr.intl-table__row[data-selected="true"] > td,
+.admin-theme.pats-dashboard .intl-dash .intl-table tbody tr.intl-table__row[data-selected="true"] > td {
+  background: var(--intl-green-soft);
+  box-shadow: inset 3px 0 0 0 var(--intl-green-mid);
+}
+
+.admin-theme .intl-dash .intl-table .intl-table__rank {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--intl-muted);
+}
+
+.intl-table__country {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.intl-table__flag {
+  flex-shrink: 0;
+  width: 24px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid var(--intl-border);
+}
+
+.admin-theme .intl-dash .intl-table .intl-table__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--intl-ink);
+}
+
+.admin-theme .intl-dash .intl-table .intl-table__teams {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--intl-green-bright);
+}
+
+.admin-theme .intl-dash .intl-table .intl-table__region {
+  font-size: 13px;
+  color: var(--intl-body);
+}
+
+.admin-theme .intl-dash .intl-table .intl-table__empty {
+  padding: 32px 12px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--intl-muted);
+}
+
+/* --- World map ------------------------------------------------------------ */
+
+.intl-map__stage {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--intl-border);
+}
+
+@media (min-width: 640px) {
+  .intl-map__stage {
+    height: 380px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .intl-map__stage {
+    height: 440px;
+  }
+}
+
+.intl-map__svg {
+  height: 100%;
+  width: 100%;
+}
+
+.intl-map__svg svg {
+  height: 100%;
+  width: 100%;
+}
+
+.intl-map__legend {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  pointer-events: none;
+  border-radius: 10px;
+  border: 1px solid var(--intl-border);
+  background: rgba(255, 255, 255, 0.94);
+  padding: 8px 10px;
+}
+
+.intl-map__legend-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: #2c3b30;
+}
+
+.intl-map__legend-swatch {
+  width: 12px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid #cfd9c9;
+}
+
+.intl-map__legend-swatch--on {
+  background: linear-gradient(135deg, #3d5230 0%, #6d8a55 100%);
+  border-color: #2f4025;
+}
+
+.intl-map__legend-swatch--off {
+  background: #e8eee5;
+}
+
+/* Dark-green tooltip: white text on a solid green ground stays readable over
+   any flag it happens to sit on. */
+.intl-map__tooltip {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 12px));
+  white-space: nowrap;
+  border-radius: 9px;
+  border: 1px solid #24361f;
+  background: #22331c;
+  padding: 7px 11px;
+  box-shadow: 0 10px 26px rgba(20, 34, 18, 0.28);
+}
+
+.intl-map__tooltip-title {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.intl-map__tooltip-meta {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #cfe3bd;
+}
+
+.intl-map__tooltip-years {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #a8c295;
+}
+
+/* --- Country detail panel ------------------------------------------------- */
+
+.intl-panel {
+  border-radius: 14px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface);
+  padding: 13px 15px;
+}
+
+.intl-panel--empty {
+  display: flex;
+  min-height: 240px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.intl-panel__empty-icon {
+  width: 30px;
+  height: 30px;
+  color: #8ea184;
+}
+
+.intl-panel__empty-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--intl-muted);
+}
+
+.intl-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.intl-panel__flag {
+  flex-shrink: 0;
+  width: 40px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid var(--intl-border);
+}
+
+.intl-panel__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--intl-ink);
+}
+
+.intl-panel__region {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--intl-muted);
+}
+
+.intl-panel__close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--intl-green-soft);
+  color: var(--intl-green-mid);
+  transition: background-color 0.15s ease;
+}
+
+.intl-panel__close:hover {
+  background: var(--intl-green-hover);
+}
+
+.intl-panel__title {
+  margin-bottom: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--intl-green-mid);
+}
+
+.intl-panel__muted {
+  font-size: 13px;
+  color: var(--intl-muted);
+}
+
+.intl-statbox {
+  border-radius: 12px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-surface);
+  padding: 10px 12px;
+}
+
+.intl-statbox__label {
+  margin-bottom: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--intl-muted);
+}
+
+.intl-statbox__value {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--intl-ink);
+}
+
+.intl-chip {
+  border-radius: 999px;
+  border: 1px solid var(--intl-border);
+  background: var(--intl-green-soft);
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--intl-green);
+}
+
+.intl-history {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.intl-history__row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  border-radius: 8px;
+  padding: 5px 8px;
+}
+
+.intl-history__row:nth-child(odd) {
+  background: var(--intl-surface-2);
+}
+
+.intl-history__year {
+  min-width: 40px;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--intl-ink);
+}
+
+.intl-history__edition {
+  flex: 1;
+  font-size: 12px;
+  color: var(--intl-body);
+}
+
+.intl-history__teams {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--intl-green-bright);
+}
+
+
+/* ==========================================================================
+   Public International Participation map — edition (year) filter
+   The map now carries every International PATS edition (1st Intl 2016 through
+   the current roster), so it needs a way to look at one year at a time. Chips
+   sit above the map stage and re-paint it in place.
+   ========================================================================== */
+
+.registered-map__years {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.registered-map__years-label {
+  font-family: var(--font-oswald), "Oswald", system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(197, 168, 128, 0.85);
+}
+
+.registered-map__years-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.registered-map__year {
+  border-radius: 999px;
+  border: 1px solid rgba(197, 168, 128, 0.28);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.28rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  color: rgba(235, 235, 235, 0.82);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.registered-map__year:hover {
+  border-color: rgba(197, 168, 128, 0.6);
+  background: rgba(45, 90, 30, 0.28);
+  color: #ffffff;
+}
+
+.registered-map__year[data-active="true"] {
+  border-color: rgba(230, 207, 127, 0.75);
+  background: rgba(45, 90, 30, 0.75);
+  color: #ffffff;
+}
+
+.registered-map__year:focus-visible {
+  outline: 2px solid rgba(230, 207, 127, 0.9);
+  outline-offset: 2px;
+}
+
+/* Day theme: the section sits on parchment, so the chips flip to ink-on-light. */
+html.light-theme .registered-map__years-label,
+html[data-site-theme="day"] .registered-map__years-label {
+  color: #4a5245;
+}
+
+html.light-theme .registered-map__year,
+html[data-site-theme="day"] .registered-map__year {
+  border-color: rgba(61, 82, 48, 0.28);
+  background: rgba(255, 255, 255, 0.75);
+  color: #1c2119;
+}
+
+html.light-theme .registered-map__year:hover,
+html[data-site-theme="day"] .registered-map__year:hover {
+  border-color: rgba(61, 82, 48, 0.55);
+  background: rgba(61, 82, 48, 0.12);
+  color: #1c2119;
+}
+
+html.light-theme .registered-map__year[data-active="true"],
+html[data-site-theme="day"] .registered-map__year[data-active="true"] {
+  border-color: #2f4025;
+  background: #3d5230;
+  color: #ffffff;
+}

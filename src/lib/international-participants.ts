@@ -1,16 +1,23 @@
 /**
- * Predefined PATS participating nations shown on the International Participation
- * map by default. These are the confirmed 9th PATS contingents and observers.
+ * PATS participating nations shown on the International Participation map,
+ * derived from the edition history in `international-editions.ts`.
  *
- * The map merges this static set with the live, DB-derived list from
+ * Two exports feed the map:
+ *   - `PREDEFINED_PARTICIPANTS` — the current-edition (9th PATS) contingents
+ *     and observers.
+ *   - `HISTORICAL_PARTICIPANTS` — every previous edition (1st Intl 2016 →
+ *     8th Intl 2025), so the map and the admin dashboard carry the full
+ *     year-wise record rather than a single edition.
+ *
+ * The map merges both with the live, DB-derived list from
  * `/api/public/registered-countries`, so:
  *   - the map always initialises with these nations (even before anyone
  *     registers, and even if the database is unavailable), and
  *   - any country added later through the admin panel / database appears
  *     automatically — no code change required.
  *
- * Every `country` name here must normalise to an entry in
- * `COUNTRY_NAME_TO_ISO2` so it resolves to a flag and a `world.svg` shape.
+ * Every country name resolves through `COUNTRY_NAME_TO_ISO2`, so each one has a
+ * flag and a `world.svg` shape.
  */
 
 import {
@@ -19,51 +26,56 @@ import {
   type RegisteredCountry,
   type RegisteredTeam,
 } from "@/lib/country-iso";
+import {
+  CURRENT_EDITION,
+  CURRENT_EDITION_YEAR,
+  PATS_EDITIONS,
+  type EditionCountry,
+  type PatsEdition,
+} from "@/lib/international-editions";
 
-/** Edition year for the predefined (9th PATS) contingents. */
-const EDITION_YEAR = 2026;
+export { CURRENT_EDITION_YEAR };
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
 
-/** `n` competing contingents for a nation, numbered when more than one. */
-function contingents(n = 1): RegisteredTeam[] {
-  if (n <= 1) return [{ name: "National contingent", year: EDITION_YEAR }];
-  return Array.from({ length: n }, (_, i) => ({
-    name: `National contingent ${ROMAN[i] ?? i + 1}`,
-    year: EDITION_YEAR,
+/** Team labels for one nation in one edition (contingents, then observers). */
+export function editionTeamNames(entry: EditionCountry): string[] {
+  const names: string[] = [];
+  if (entry.contingents === 1) {
+    names.push("National contingent");
+  } else {
+    for (let i = 0; i < entry.contingents; i += 1) {
+      names.push(`National contingent ${ROMAN[i] ?? i + 1}`);
+    }
+  }
+  if (entry.observer) names.push("Observer delegation");
+  return names;
+}
+
+/** One edition as the `RegisteredCountry[]` shape the map consumes. */
+export function editionToRegisteredCountries(
+  edition: PatsEdition
+): RegisteredCountry[] {
+  return edition.countries.map((c) => ({
+    country: c.country,
+    teams: editionTeamNames(c).map(
+      (name): RegisteredTeam => ({ name, year: edition.year })
+    ),
   }));
 }
 
-const OBSERVER: RegisteredTeam = {
-  name: "Observer delegation",
-  year: EDITION_YEAR,
-};
+/** 9th PATS roster — contingents and observers for the current edition. */
+export const PREDEFINED_PARTICIPANTS: RegisteredCountry[] =
+  editionToRegisteredCountries(CURRENT_EDITION);
 
-/**
- * 9th PATS roster (see the official participation slide):
- *   - 15 friendly nations field competing contingents (the UAE sends 4).
- *   - Several nations also — or only — attend as observers.
- */
-export const PREDEFINED_PARTICIPANTS: RegisteredCountry[] = [
-  { country: "Bahrain", teams: [...contingents(), OBSERVER] },
-  { country: "Belarus", teams: contingents() },
-  { country: "Bangladesh", teams: [...contingents(), OBSERVER] },
-  { country: "Egypt", teams: [...contingents(), OBSERVER] },
-  { country: "Jordan", teams: contingents() },
-  { country: "United Arab Emirates", teams: [...contingents(4), OBSERVER] },
-  { country: "Maldives", teams: [...contingents(), OBSERVER] },
-  { country: "Malaysia", teams: [...contingents(), OBSERVER] },
-  { country: "Morocco", teams: contingents() },
-  { country: "Nepal", teams: contingents() },
-  { country: "Qatar", teams: contingents() },
-  { country: "Sri Lanka", teams: contingents() },
-  { country: "Turkiye", teams: [...contingents(), OBSERVER] },
-  { country: "United States", teams: contingents() },
-  { country: "Uzbekistan", teams: contingents() },
-  { country: "Indonesia", teams: [OBSERVER] },
-  { country: "Myanmar", teams: [OBSERVER] },
-  { country: "Thailand", teams: [OBSERVER] },
-];
+/** Every previous edition (1st Intl 2016 → 8th Intl 2025), newest first. */
+export const HISTORICAL_PARTICIPANTS: RegisteredCountry[] =
+  mergeRegisteredCountries(
+    ...PATS_EDITIONS.filter((e) => e.year !== CURRENT_EDITION_YEAR)
+      .slice()
+      .sort((a, b) => b.year - a.year)
+      .map(editionToRegisteredCountries)
+  );
 
 /** Stable identity for a country: its ISO-2 code, or its normalised name. */
 function countryKey(name: string): string {
@@ -86,9 +98,9 @@ function dedupeTeams(teams: RegisteredTeam[]): RegisteredTeam[] {
 /**
  * Merge several country lists into one, keyed by ISO-2 (falling back to the
  * normalised name). Countries appearing in more than one list are combined into
- * a single entry whose teams are the union of all sources — so a predefined
- * nation that also has real registered teams shows both, with no duplicate
- * country marker. The first list's display name wins for a given key.
+ * a single entry whose teams are the union of all sources — so a nation that
+ * took part in several editions shows every year's teams under one country
+ * marker. The first list's display name wins for a given key.
  */
 export function mergeRegisteredCountries(
   ...lists: RegisteredCountry[][]

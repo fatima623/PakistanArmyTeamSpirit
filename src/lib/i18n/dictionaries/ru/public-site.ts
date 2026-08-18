@@ -178,6 +178,9 @@ export const publicSite: typeof enPublicSite = {
         "AFOS / ATGP",
         "Ориентирование на местности",
       ],
+      mapYearLabel: "Выпуск",
+      mapYearAll: "Все выпуски",
+      mapYearAria: "Фильтровать карту по году выпуска",
       mapAria: "Карта мира зарегистрированных стран",
       mapCaption: (count: number) =>
         `Представлено стран: ${count} — наведите курсор на выделенную страну, чтобы увидеть её команды.`,

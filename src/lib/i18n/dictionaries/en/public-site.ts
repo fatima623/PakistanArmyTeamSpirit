@@ -175,6 +175,9 @@ export const publicSite = {
         "AFOS / ATGP",
         "Area orientation",
       ],
+      mapYearLabel: "Edition",
+      mapYearAll: "All editions",
+      mapYearAria: "Filter the map by edition year",
       mapAria: "World map of registered nations",
       mapCaption: (count: number) =>
         `${count} nation${count === 1 ? "" : "s"} represented — hover a highlighted country to see its teams.`,

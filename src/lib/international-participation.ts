@@ -2,18 +2,20 @@
  * Aggregated International Participation dataset for the admin dashboard.
  *
  * This is the SAME data the public site's International Participation map uses,
- * reshaped per-country:
- *   - The 2026 (9th PATS) roster — `PREDEFINED_PARTICIPANTS`
- *     (international-participants.ts), with real per-country contingent/observer
- *     counts, and
+ * reshaped per-edition and then per-country:
+ *   - Every International PATS edition — `PATS_EDITIONS`
+ *     (international-editions.ts), from the 1st Intl (Mar 2016) through the
+ *     9th Intl (2026) roster, with real per-country contingent/observer counts,
+ *     and
  *   - Live registrations — participants (role "user") who registered a unit or
- *     completed team registration, grouped by country. Mirrors
+ *     completed team registration, grouped by country and bucketed into the
+ *     edition year they registered in. Mirrors
  *     `/api/public/registered-countries` exactly.
  *
- * It is a single edition only (no historical multi-year data). No fabricated
- * numbers: every team counted here comes from the website's own data. If the
- * database is unavailable the predefined roster is still returned, so the
- * dashboard never renders empty.
+ * No fabricated numbers: every team counted here comes from the official
+ * participation slides or the website's own data. If the database is
+ * unavailable the static edition history is still returned, so the dashboard
+ * never renders empty.
  */
 
 import "server-only";
@@ -24,11 +26,19 @@ import {
   type RegisteredTeam,
 } from "@/lib/country-iso";
 import { regionForIso2 } from "@/lib/country-region";
+import {
+  CURRENT_EDITION_YEAR,
+  editionTeamCount,
+  PATS_EDITIONS,
+} from "@/lib/international-editions";
 import type {
+  EditionParticipation,
   InternationalParticipation,
   ParticipatingCountry,
 } from "@/lib/international-participation-types";
 import {
+  editionToRegisteredCountries,
+  HISTORICAL_PARTICIPANTS,
   mergeRegisteredCountries,
   PREDEFINED_PARTICIPANTS,
 } from "@/lib/international-participants";
@@ -36,16 +46,13 @@ import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 
 export type {
+  EditionParticipation,
   InternationalParticipation,
   ParticipatingCountry,
 } from "@/lib/international-participation-types";
 
-/**
- * Registered countries = the 2026 predefined roster merged with live DB
- * registrations. Kept identical to `src/app/api/public/registered-countries`
- * so the admin dashboard and the public map agree to the team.
- */
-export async function getRegisteredCountries(): Promise<RegisteredCountry[]> {
+/** Live, DB-derived teams grouped by country (empty when the DB is down). */
+async function getLiveCountries(): Promise<RegisteredCountry[]> {
   try {
     const users = await prisma.user.findMany({
       where: { role: PARTICIPANT_ROLE, country: { not: null } },
@@ -71,33 +78,38 @@ export async function getRegisteredCountries(): Promise<RegisteredCountry[]> {
       byCountry.set(country, list);
     }
 
-    const dynamicCountries: RegisteredCountry[] = [...byCountry.entries()].map(
-      ([country, teams]) => ({ country, teams })
-    );
-
-    return mergeRegisteredCountries(PREDEFINED_PARTICIPANTS, dynamicCountries);
+    return [...byCountry.entries()].map(([country, teams]) => ({
+      country,
+      teams,
+    }));
   } catch {
-    return mergeRegisteredCountries(PREDEFINED_PARTICIPANTS);
+    return [];
   }
 }
 
 /**
- * Build the current-edition dataset straight from the website's registered
- * countries — one entry per nation, with its team labels and count.
+ * Registered countries = the full edition history merged with live DB
+ * registrations. Kept identical to `src/app/api/public/registered-countries`
+ * so the admin dashboard and the public map agree to the team.
  */
-export async function getInternationalParticipation(): Promise<InternationalParticipation> {
-  const registered = await getRegisteredCountries();
+export async function getRegisteredCountries(): Promise<RegisteredCountry[]> {
+  const live = await getLiveCountries();
+  return mergeRegisteredCountries(
+    PREDEFINED_PARTICIPANTS,
+    HISTORICAL_PARTICIPANTS,
+    live
+  );
+}
 
-  let year = 0;
-  const countries: ParticipatingCountry[] = [];
-
-  for (const c of registered) {
+/** Turn one edition's `RegisteredCountry[]` into ranked `ParticipatingCountry[]`. */
+function toParticipatingCountries(
+  countries: RegisteredCountry[]
+): ParticipatingCountry[] {
+  const out: ParticipatingCountry[] = [];
+  for (const c of countries) {
     if (c.teams.length === 0) continue;
     const iso2 = countryNameToIso2(c.country);
-    for (const t of c.teams) {
-      if (t.year > year) year = t.year;
-    }
-    countries.push({
+    out.push({
       iso2,
       name: c.country,
       region: iso2 ? regionForIso2(iso2) : "Other",
@@ -105,14 +117,78 @@ export async function getInternationalParticipation(): Promise<InternationalPart
       teams: c.teams.map((t) => t.name),
     });
   }
+  out.sort((a, b) => a.name.localeCompare(b.name));
+  return out;
+}
 
-  countries.sort((a, b) => a.name.localeCompare(b.name));
-  const totalTeams = countries.reduce((sum, c) => sum + c.teamCount, 0);
+/**
+ * Build the year-wise dataset: one entry per International PATS edition, newest
+ * first, with live registrations folded into the edition year they belong to.
+ */
+export async function getInternationalParticipation(): Promise<InternationalParticipation> {
+  const live = await getLiveCountries();
+
+  // Live teams bucketed by the year they registered in, so a 2026 sign-up lands
+  // on the 2026 edition and never inflates a historic one.
+  const liveByYear = new Map<number, RegisteredCountry[]>();
+  for (const c of live) {
+    for (const t of c.teams) {
+      const bucket = liveByYear.get(t.year) ?? [];
+      bucket.push({ country: c.country, teams: [t] });
+      liveByYear.set(t.year, bucket);
+    }
+  }
+
+  const editions: EditionParticipation[] = PATS_EDITIONS.slice()
+    .sort((a, b) => b.year - a.year)
+    .map((edition) => {
+      const merged = mergeRegisteredCountries(
+        editionToRegisteredCountries(edition),
+        liveByYear.get(edition.year) ?? []
+      );
+      const countries = toParticipatingCountries(merged);
+      const attributed = countries.reduce((n, c) => n + c.teamCount, 0);
+      const official = editionTeamCount(edition);
+      return {
+        edition: edition.edition,
+        year: edition.year,
+        month: edition.month,
+        totalTeams: Math.max(attributed, official),
+        totalCountries: countries.length,
+        teamsUnattributed: official > attributed,
+        countries,
+      };
+    });
+
+  // Any live registration from a year with no PATS edition on record still
+  // deserves a bucket, so nothing registered through the admin panel is lost.
+  const knownYears = new Set(editions.map((e) => e.year));
+  for (const [year, entries] of liveByYear) {
+    if (knownYears.has(year)) continue;
+    const countries = toParticipatingCountries(
+      mergeRegisteredCountries(entries)
+    );
+    if (countries.length === 0) continue;
+    editions.push({
+      edition: 0,
+      year,
+      month: "",
+      totalTeams: countries.reduce((n, c) => n + c.teamCount, 0),
+      totalCountries: countries.length,
+      teamsUnattributed: false,
+      countries,
+    });
+  }
+  editions.sort((a, b) => b.year - a.year);
+
+  const current =
+    editions.find((e) => e.year === CURRENT_EDITION_YEAR) ?? editions[0]!;
 
   return {
-    year: year || new Date().getFullYear(),
-    totalTeams,
-    totalCountries: countries.length,
-    countries,
+    year: current.year,
+    totalTeams: current.totalTeams,
+    totalCountries: current.totalCountries,
+    countries: current.countries,
+    editions,
   };
 }

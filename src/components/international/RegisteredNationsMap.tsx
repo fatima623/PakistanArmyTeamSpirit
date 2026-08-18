@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import {
   COUNTRY_NAME_TO_ISO2,
@@ -71,6 +71,7 @@ function buildFlagPattern(
 
   const pattern = document.createElementNS(SVG_NS, "pattern");
   pattern.setAttribute("id", id);
+  pattern.setAttribute("data-flag-pattern", "true");
   pattern.setAttribute("patternUnits", "userSpaceOnUse");
   pattern.setAttribute("x", `${minX}`);
   pattern.setAttribute("y", `${minY}`);
@@ -107,6 +108,8 @@ export function RegisteredNationsMap() {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [countries, setCountries] = useState<RegisteredCountry[]>([]);
+  /** Edition year the map is filtered to, or "all" for the full record. */
+  const [year, setYear] = useState<number | "all">("all");
   const [svgReady, setSvgReady] = useState(false);
   const [tooltip, setTooltip] = useState<Tooltip | null>(null);
   // Final tooltip offset (relative to the stage) after viewport-edge clamping.
@@ -130,6 +133,25 @@ export function RegisteredNationsMap() {
       active = false;
     };
   }, []);
+
+  /** Every edition year present in the data, newest first. */
+  const years = useMemo(() => {
+    const set = new Set<number>();
+    for (const c of countries) for (const t of c.teams) set.add(t.year);
+    return [...set].sort((a, b) => b - a);
+  }, [countries]);
+
+  /**
+   * Countries painted on the map. With a year selected, only nations that
+   * fielded a team that year are shown — and each keeps just that year's teams,
+   * so the tooltip and the caption match the filter.
+   */
+  const visibleCountries = useMemo(() => {
+    if (year === "all") return countries;
+    return countries
+      .map((c) => ({ ...c, teams: c.teams.filter((t) => t.year === year) }))
+      .filter((c) => c.teams.length > 0);
+  }, [countries, year]);
 
   // 2) Load + inject the world SVG once.
   useEffect(() => {
@@ -164,7 +186,7 @@ export function RegisteredNationsMap() {
 
     const byIso = new Map<string, RegisteredCountry>();
     const byName = new Map<string, RegisteredCountry>();
-    for (const c of countries) {
+    for (const c of visibleCountries) {
       const iso = countryNameToIso2(c.country);
       if (iso) byIso.set(iso, c);
       byName.set(normalizeCountryKey(c.country), c);
@@ -174,6 +196,9 @@ export function RegisteredNationsMap() {
       svgEl.querySelectorAll<SVGPathElement>("path")
     );
     const defs = ensureDefs(svgEl as SVGSVGElement);
+    // Switching year repaints the map, so drop the previous run's patterns
+    // instead of stacking a new set on top of them.
+    defs.querySelectorAll("[data-flag-pattern]").forEach((n) => n.remove());
     const cleanups: Array<() => void> = [];
 
     // Group matched paths by their country key.
@@ -197,8 +222,13 @@ export function RegisteredNationsMap() {
       p.setAttribute("stroke-linejoin", "round");
 
       if (!match) {
+        // Also clears the interactive attributes a previous year may have set.
         p.setAttribute("fill", "rgba(226,232,222,0.10)");
         p.style.cursor = "default";
+        p.style.filter = "";
+        p.removeAttribute("tabindex");
+        p.removeAttribute("role");
+        p.removeAttribute("aria-label");
         continue;
       }
 
@@ -291,7 +321,7 @@ export function RegisteredNationsMap() {
     // `m`/`locale` feed the per-country aria-labels, so the paint must re-run
     // when the language changes. Both are stable per locale (the provider
     // memoizes its value and the dictionaries are module constants).
-  }, [svgReady, countries, m, locale]);
+  }, [svgReady, visibleCountries, m, locale]);
 
   // 4) Position the tooltip: prefer above the cursor, flip below when it would
   //    clip the top, and clamp fully inside the viewport on every axis so the
@@ -320,10 +350,44 @@ export function RegisteredNationsMap() {
     setTipPos({ left: leftV - stage.left, top: topV - stage.top });
   }, [tooltip]);
 
-  const registeredCount = countries.length;
+  const registeredCount = visibleCountries.length;
 
   return (
     <div className="registered-map">
+      {years.length > 1 ? (
+        <div
+          className="registered-map__years"
+          role="group"
+          aria-label={m?.mapYearAria ?? "Filter the map by edition year"}
+        >
+          <span className="registered-map__years-label">
+            {m?.mapYearLabel ?? "Edition"}
+          </span>
+          <div className="registered-map__years-chips">
+            <button
+              type="button"
+              onClick={() => setYear("all")}
+              aria-pressed={year === "all"}
+              data-active={year === "all"}
+              className="registered-map__year"
+            >
+              {m?.mapYearAll ?? "All editions"}
+            </button>
+            {years.map((y) => (
+              <button
+                key={y}
+                type="button"
+                onClick={() => setYear(y)}
+                aria-pressed={year === y}
+                data-active={year === y}
+                className="registered-map__year"
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
       <div ref={stageRef} className="registered-map__stage">
         <div
           ref={containerRef}

@@ -2,76 +2,93 @@
 
 import { useCallback, useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
-import { Activity, Download, Globe, Layers, Users } from "lucide-react";
+import { Activity, CalendarRange, Download, Globe, Layers, Users } from "lucide-react";
 
 import { CountryFlag } from "@/components/ui/CountryFlag";
 import { REGIONS, type Region } from "@/lib/country-region";
 import type {
+  EditionParticipation,
   InternationalParticipation,
   ParticipatingCountry,
 } from "@/lib/international-participation-types";
 
-import { CountryDetailPanel } from "./CountryDetailPanel";
+import { CountryDetailPanel, type CountryEdition } from "./CountryDetailPanel";
 import { ParticipationWorldMap, type MapDatum } from "./ParticipationWorldMap";
 
-const C = {
-  text: "rgb(236,240,248)",
-  muted: "rgb(148,163,190)",
-  faint: "rgb(107,120,148)",
-  card: "rgba(255,255,255,0.04)",
-  border: "rgba(255,255,255,0.09)",
-  borderSoft: "rgba(255,255,255,0.07)",
-  green: "rgb(74,222,128)",
-  teal: "rgb(45,212,191)",
-  lime: "rgb(132,204,22)",
-  emerald: "rgb(52,211,153)",
-};
+/** "All editions" sentinel for the year filter. */
+const ALL = "all" as const;
+type YearFilter = number | typeof ALL;
 
 function csvCell(value: string | number): string {
   const s = String(value);
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
+/** 1 -> "1st", 2 -> "2nd", 3 -> "3rd", everything else -> "nth". */
+function ordinal(n: number): string {
+  const rem100 = n % 100;
+  if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+  switch (n % 10) {
+    case 1:
+      return `${n}st`;
+    case 2:
+      return `${n}nd`;
+    case 3:
+      return `${n}rd`;
+    default:
+      return `${n}th`;
+  }
+}
+
 function StatCard({
   label,
   value,
   icon: Icon,
-  accent,
+  tone,
   hint,
 }: {
   label: string;
   value: string;
   icon: LucideIcon;
-  accent: string;
+  tone: "green" | "teal" | "lime" | "moss";
   hint: string;
 }) {
   return (
-    <div
-      className="flex items-start gap-3 rounded-2xl px-4 py-3.5"
-      style={{ background: C.card, border: `1px solid ${C.border}` }}
-    >
-      <span
-        className="grid h-10 w-10 shrink-0 place-items-center rounded-xl"
-        style={{ background: `color-mix(in srgb, ${accent} 18%, transparent)` }}
-      >
-        <Icon className="h-5 w-5" style={{ color: accent }} />
+    <div className="intl-stat">
+      <span className={`intl-stat__icon intl-stat__icon--${tone}`}>
+        <Icon className="h-5 w-5" aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="text-[12px] font-medium" style={{ color: C.muted }}>
-          {label}
-        </p>
-        <p
-          className="mt-0.5 text-[26px] font-bold leading-none tracking-tight"
-          style={{ color: C.text }}
-        >
-          {value}
-        </p>
-        <p className="mt-1.5 text-[11px] font-medium leading-none" style={{ color: C.faint }}>
-          {hint}
-        </p>
+        <p className="intl-stat__label">{label}</p>
+        <p className="intl-stat__value">{value}</p>
+        <p className="intl-stat__hint">{hint}</p>
       </div>
     </div>
   );
+}
+
+/** One country rolled up across every edition it appeared in. */
+function aggregateAllEditions(
+  editions: EditionParticipation[]
+): ParticipatingCountry[] {
+  const byName = new Map<string, ParticipatingCountry>();
+  for (const ed of editions) {
+    for (const c of ed.countries) {
+      const existing = byName.get(c.name);
+      if (existing) {
+        existing.teamCount += c.teamCount;
+        existing.teams = existing.teams.concat(
+          c.teams.map((t) => `${t} (${ed.year})`)
+        );
+      } else {
+        byName.set(c.name, {
+          ...c,
+          teams: c.teams.map((t) => `${t} (${ed.year})`),
+        });
+      }
+    }
+  }
+  return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function InternationalParticipationDashboard({
@@ -79,142 +96,231 @@ export function InternationalParticipationDashboard({
 }: {
   data: InternationalParticipation;
 }) {
-  const { year, totalCountries, totalTeams } = data;
+  const editions = data.editions;
+  const years = useMemo(() => editions.map((e) => e.year), [editions]);
 
+  const [year, setYear] = useState<YearFilter>(data.year);
   const [region, setRegion] = useState<Region | "all">("all");
   const [search, setSearch] = useState("");
-  const [selectedName, setSelectedName] = useState<string | null>(() => {
-    // Default-select the nation fielding the most teams.
-    let best: ParticipatingCountry | null = null;
-    for (const c of data.countries) {
-      if (!best || c.teamCount > best.teamCount) best = c;
-    }
-    return best?.name ?? null;
-  });
+  const [selectedName, setSelectedName] = useState<string | null>(null);
 
-  // Nations ranked by team count (ties broken by name).
-  const ranked = useMemo(
-    () =>
-      [...data.countries]
-        .sort((a, b) => b.teamCount - a.teamCount || a.name.localeCompare(b.name))
-        .map((c, i) => ({ c, rank: i + 1 })),
-    [data.countries]
+  /** The edition currently in focus, or null when showing every edition. */
+  const activeEdition = useMemo(
+    () => (year === ALL ? null : editions.find((e) => e.year === year) ?? null),
+    [editions, year]
   );
 
-  const rankByName = useMemo(() => {
-    const m = new Map<string, number>();
-    for (const r of ranked) m.set(r.c.name, r.rank);
-    return m;
-  }, [ranked]);
+  /** Countries in scope: one edition's roster, or every nation ever. */
+  const scopedCountries = useMemo(
+    () =>
+      activeEdition
+        ? activeEdition.countries
+        : aggregateAllEditions(editions),
+    [activeEdition, editions]
+  );
 
+  /** Editions each country appeared in, newest first — powers the detail panel. */
+  const historyByCountry = useMemo(() => {
+    const m = new Map<string, CountryEdition[]>();
+    for (const ed of editions) {
+      for (const c of ed.countries) {
+        const list = m.get(c.name) ?? [];
+        list.push({ year: ed.year, edition: ed.edition, teams: c.teams });
+        m.set(c.name, list);
+      }
+    }
+    for (const list of m.values()) list.sort((a, b) => b.year - a.year);
+    return m;
+  }, [editions]);
+
+  const periodLabel =
+    year === ALL
+      ? years.length > 1
+        ? `${Math.min(...years)}–${Math.max(...years)}`
+        : String(years[0] ?? data.year)
+      : String(year);
+
+  const totalCountries = scopedCountries.length;
+  const totalTeams = activeEdition
+    ? activeEdition.totalTeams
+    : scopedCountries.reduce((n, c) => n + c.teamCount, 0);
   const avgTeams = totalCountries ? totalTeams / totalCountries : 0;
   const regionsRepresented = useMemo(
-    () => new Set(data.countries.map((c) => c.region)).size,
-    [data.countries]
+    () => new Set(scopedCountries.map((c) => c.region)).size,
+    [scopedCountries]
   );
 
   const regionOptions = useMemo(() => {
-    const present = new Set(data.countries.map((c) => c.region));
+    const present = new Set(scopedCountries.map((c) => c.region));
     return REGIONS.filter((r) => present.has(r));
-  }, [data.countries]);
+  }, [scopedCountries]);
 
-  const tableRows = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return ranked.filter((r) => {
-      if (region !== "all" && r.c.region !== region) return false;
-      if (q && !r.c.name.toLowerCase().includes(q)) return false;
+  /** Ranks within the current scope (ties broken by name). */
+  const rankByName = useMemo(() => {
+    const m = new Map<string, number>();
+    [...scopedCountries]
+      .sort((a, b) => b.teamCount - a.teamCount || a.name.localeCompare(b.name))
+      .forEach((c, i) => m.set(c.name, i + 1));
+    return m;
+  }, [scopedCountries]);
+
+  const matchesFilters = useCallback(
+    (c: ParticipatingCountry) => {
+      const q = search.trim().toLowerCase();
+      if (region !== "all" && c.region !== region) return false;
+      if (q && !c.name.toLowerCase().includes(q)) return false;
       return true;
-    });
-  }, [ranked, region, search]);
+    },
+    [region, search]
+  );
+
+  /**
+   * Summary rows, newest edition first. With "All editions" selected the table
+   * is grouped year-by-year (2026 on top, then 2025, …) so the year-wise split
+   * is visible at a glance; a single-year filter renders one ranked group.
+   */
+  const groups = useMemo(() => {
+    const source = activeEdition ? [activeEdition] : editions;
+    return source
+      .map((ed) => {
+        const rows = [...ed.countries]
+          .filter(matchesFilters)
+          .sort(
+            (a, b) => b.teamCount - a.teamCount || a.name.localeCompare(b.name)
+          )
+          .map((c, i) => ({ c, rank: i + 1 }));
+        return { edition: ed, rows };
+      })
+      .filter((g) => g.rows.length > 0);
+  }, [activeEdition, editions, matchesFilters]);
+
+  const hasRows = groups.some((g) => g.rows.length > 0);
 
   const mapData: MapDatum[] = useMemo(
-    () => data.countries.map((c) => ({ iso2: c.iso2, name: c.name, count: c.teamCount })),
-    [data.countries]
+    () =>
+      scopedCountries.map((c) => ({
+        iso2: c.iso2,
+        name: c.name,
+        count: c.teamCount,
+        years: (historyByCountry.get(c.name) ?? []).map((h) => h.year),
+      })),
+    [scopedCountries, historyByCountry]
   );
 
   const selectedCountry = useMemo(
-    () => data.countries.find((c) => c.name === selectedName) ?? null,
-    [data.countries, selectedName]
+    () => scopedCountries.find((c) => c.name === selectedName) ?? null,
+    [scopedCountries, selectedName]
   );
 
   const onSelect = useCallback((name: string) => setSelectedName(name), []);
 
   const handleExport = useCallback(() => {
-    const header = ["Rank", "Country", "Region", "Teams"];
-    const body = tableRows.map((r) => [r.rank, r.c.name, r.c.region, r.c.teamCount]);
+    const header = ["Year", "Edition", "Rank", "Country", "Region", "Teams"];
+    const body = groups.flatMap((g) =>
+      g.rows.map((r) => [
+        g.edition.year,
+        g.edition.edition > 0 ? `${ordinal(g.edition.edition)} Intl` : "—",
+        r.rank,
+        r.c.name,
+        r.c.region,
+        r.c.teamCount,
+      ])
+    );
     const csv = [header, ...body].map((row) => row.map(csvCell).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `international-participation-${year}.csv`;
+    a.download = `international-participation-${
+      year === ALL ? "all-editions" : year
+    }.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }, [tableRows, year]);
-
-  const cardStyle = { background: C.card, border: `1px solid ${C.border}` };
+  }, [groups, year]);
 
   return (
-    <div
-      className="intl-dash rounded-2xl p-4 sm:p-5"
-      dir="ltr"
-      style={{
-        background: "linear-gradient(180deg, rgb(12,20,16) 0%, rgb(8,13,11) 100%)",
-        border: `1px solid ${C.borderSoft}`,
-      }}
-    >
+    <div className="intl-dash" dir="ltr">
       {/* Header */}
-      <header className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <header className="intl-dash__header">
         <div>
-          <h1
-            className="text-[22px] font-bold leading-none tracking-tight"
-            style={{ color: C.text }}
-          >
-            International Participation
-          </h1>
-          <p className="mt-1.5 text-[13px]" style={{ color: C.muted }}>
-            Countries-wise teams on the world map · {year} edition
+          <h1 className="intl-dash__title">International Participation</h1>
+          <p className="intl-dash__subtitle">
+            Countries-wise teams on the world map ·{" "}
+            {activeEdition
+              ? `${ordinal(activeEdition.edition)} Intl PATS · ${activeEdition.month} ${activeEdition.year}`
+              : `all editions · ${periodLabel}`}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleExport}
-          className="flex items-center gap-2 self-start rounded-full px-3.5 py-2 text-[13px] font-semibold transition-colors"
-          style={{ border: `1px solid ${C.border}`, color: C.text }}
-        >
-          <Download className="h-4 w-4" />
+        <button type="button" onClick={handleExport} className="intl-btn">
+          <Download className="h-4 w-4" aria-hidden />
           Export Report
         </button>
       </header>
 
+      {/* Year filter — drives the whole page: stats, map, table and detail panel. */}
+      <section className="intl-years" aria-label="Filter by edition year">
+        <span className="intl-years__label">
+          <CalendarRange className="h-4 w-4" aria-hidden />
+          Edition
+        </span>
+        <div className="intl-years__chips">
+          <button
+            type="button"
+            onClick={() => setYear(ALL)}
+            aria-pressed={year === ALL}
+            className="intl-year-chip"
+            data-active={year === ALL}
+          >
+            All editions
+          </button>
+          {editions.map((ed) => (
+            <button
+              key={ed.year}
+              type="button"
+              onClick={() => setYear(ed.year)}
+              aria-pressed={year === ed.year}
+              className="intl-year-chip"
+              data-active={year === ed.year}
+              title={
+                ed.edition > 0
+                  ? `${ordinal(ed.edition)} International PATS — ${ed.month} ${ed.year}`
+                  : `${ed.year} registrations`
+              }
+            >
+              {ed.year}
+            </button>
+          ))}
+        </div>
+      </section>
+
       {/* Stat cards */}
-      <section className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="intl-stats">
         <StatCard
           label="Total Countries"
           value={String(totalCountries)}
           icon={Globe}
-          accent={C.green}
-          hint={`Nations in ${year}`}
+          tone="green"
+          hint={year === ALL ? "Nations across all editions" : `Nations in ${year}`}
         />
         <StatCard
           label="Total Teams"
           value={String(totalTeams)}
           icon={Users}
-          accent={C.teal}
+          tone="teal"
           hint="Contingents + observers"
         />
         <StatCard
           label="Avg Teams / Country"
           value={avgTeams.toFixed(1)}
           icon={Activity}
-          accent={C.lime}
-          hint="Across all nations"
+          tone="lime"
+          hint={`Across ${periodLabel}`}
         />
         <StatCard
           label="Regions Represented"
           value={String(regionsRepresented)}
           icon={Layers}
-          accent={C.emerald}
+          tone="moss"
           hint="World regions"
         />
       </section>
@@ -223,31 +329,28 @@ export function InternationalParticipationDashboard({
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="flex flex-col gap-4 lg:col-span-2">
           {/* Map */}
-          <section className="rounded-2xl p-3" style={cardStyle}>
-            <div className="mb-1 flex items-center justify-between px-1">
-              <p
-                className="text-[13px] font-semibold uppercase tracking-[0.05em]"
-                style={{ color: C.muted }}
-              >
-                Countries-wise Teams · {year}
+          <section className="intl-card">
+            <div className="intl-card__head">
+              <p className="intl-card__eyebrow">
+                Countries-wise Teams · {periodLabel}
               </p>
-              <span className="text-[12px] font-medium" style={{ color: C.faint }}>
+              <span className="intl-card__meta">
                 {totalCountries} nations · {totalTeams} teams
               </span>
             </div>
             <ParticipationWorldMap
               data={mapData}
-              year={year}
+              label={periodLabel}
               selectedName={selectedName}
               onSelect={onSelect}
             />
           </section>
 
-          {/* Summary table */}
-          <section className="rounded-2xl" style={cardStyle}>
-            <div className="flex flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-[15px] font-bold" style={{ color: C.text }}>
-                All Countries Summary ({year})
+          {/* Summary table — newest edition first */}
+          <section className="intl-card">
+            <div className="intl-card__toolbar">
+              <h2 className="intl-card__title">
+                All Countries Summary ({periodLabel})
               </h2>
               <div className="flex flex-wrap items-center gap-2">
                 <input
@@ -256,23 +359,13 @@ export function InternationalParticipationDashboard({
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search country..."
                   aria-label="Search country"
-                  className="h-9 w-[180px] rounded-lg px-3 text-[13px] outline-none"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: `1px solid ${C.border}`,
-                    color: C.text,
-                  }}
+                  className="intl-input"
                 />
                 <select
                   value={region}
                   onChange={(e) => setRegion(e.target.value as Region | "all")}
                   aria-label="Filter by region"
-                  className="h-9 rounded-lg px-2.5 text-[13px] outline-none"
-                  style={{
-                    background: "rgb(15,25,19)",
-                    border: `1px solid ${C.border}`,
-                    color: C.text,
-                  }}
+                  className="intl-select"
                 >
                   <option value="all">All Regions</option>
                   {regionOptions.map((r) => (
@@ -284,79 +377,75 @@ export function InternationalParticipationDashboard({
               </div>
             </div>
 
-            <div className="mt-3 overflow-x-auto px-1 pb-2">
-              <table className="w-full min-w-[460px] border-collapse">
+            <div className="intl-table-wrap">
+              <table className="intl-table">
                 <thead>
                   <tr>
-                    {["Rank", "Country", `Teams ${year}`, "Region"].map((h) => (
-                      <th
-                        key={h}
-                        className="px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.04em]"
-                        style={{ color: C.faint }}
-                      >
-                        {h}
-                      </th>
-                    ))}
+                    <th scope="col">Rank</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Teams</th>
+                    <th scope="col">Region</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {tableRows.length === 0 ? (
+                {hasRows ? (
+                  groups.map((g) => (
+                    <tbody key={g.edition.year}>
+                      <tr className="intl-table__group">
+                        <th scope="colgroup" colSpan={4}>
+                          <span className="intl-table__group-year">
+                            {g.edition.year}
+                          </span>
+                          {g.edition.edition > 0 ? (
+                            <span className="intl-table__group-edition">
+                              {ordinal(g.edition.edition)} International PATS ·{" "}
+                              {g.edition.month} {g.edition.year}
+                            </span>
+                          ) : (
+                            <span className="intl-table__group-edition">
+                              Registrations
+                            </span>
+                          )}
+                          <span className="intl-table__group-count">
+                            {g.edition.totalCountries} nations ·{" "}
+                            {g.edition.totalTeams} teams
+                            {g.edition.teamsUnattributed
+                              ? " (official total; per-nation split not published)"
+                              : ""}
+                          </span>
+                        </th>
+                      </tr>
+                      {g.rows.map((r) => (
+                        <tr
+                          key={`${g.edition.year}-${r.c.name}`}
+                          onClick={() => onSelect(r.c.name)}
+                          className="intl-table__row"
+                          data-selected={r.c.name === selectedName}
+                        >
+                          <td className="intl-table__rank">{r.rank}</td>
+                          <td>
+                            <span className="intl-table__country">
+                              <CountryFlag
+                                country={r.c.name}
+                                className="intl-table__flag"
+                              />
+                              <span className="intl-table__name">{r.c.name}</span>
+                            </span>
+                          </td>
+                          <td className="intl-table__teams">{r.c.teamCount}</td>
+                          <td className="intl-table__region">{r.c.region}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  ))
+                ) : (
+                  <tbody>
                     <tr>
-                      <td
-                        colSpan={4}
-                        className="px-3 py-8 text-center text-[13px]"
-                        style={{ color: C.muted }}
-                      >
+                      <td colSpan={4} className="intl-table__empty">
                         No countries match these filters.
                       </td>
                     </tr>
-                  ) : (
-                    tableRows.map((r) => {
-                      const selected = r.c.name === selectedName;
-                      return (
-                        <tr
-                          key={r.c.name}
-                          onClick={() => onSelect(r.c.name)}
-                          className={`cursor-pointer${selected ? " intl-row-active" : ""}`}
-                          style={{ borderTop: `1px solid ${C.borderSoft}` }}
-                        >
-                          <td
-                            className="px-3 py-2.5 text-[13px] font-bold"
-                            style={{ color: C.muted }}
-                          >
-                            {r.rank}
-                          </td>
-                          <td className="px-3 py-2.5">
-                            <span className="flex items-center gap-2.5">
-                              <CountryFlag
-                                country={r.c.name}
-                                className="h-4 w-6 shrink-0 rounded-[2px] border border-[rgba(255,255,255,0.14)]"
-                              />
-                              <span
-                                className="text-[13px] font-semibold"
-                                style={{ color: C.text }}
-                              >
-                                {r.c.name}
-                              </span>
-                            </span>
-                          </td>
-                          <td
-                            className="px-3 py-2.5 text-[13px] font-bold tabular-nums"
-                            style={{ color: C.green }}
-                          >
-                            {r.c.teamCount}
-                          </td>
-                          <td
-                            className="px-3 py-2.5 text-[13px]"
-                            style={{ color: C.muted }}
-                          >
-                            {r.c.region}
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
+                  </tbody>
+                )}
               </table>
             </div>
           </section>
@@ -367,8 +456,15 @@ export function InternationalParticipationDashboard({
           <div className="lg:sticky lg:top-4">
             <CountryDetailPanel
               country={selectedCountry}
-              year={year}
-              rank={selectedCountry ? rankByName.get(selectedCountry.name) ?? null : null}
+              periodLabel={periodLabel}
+              rank={
+                selectedCountry ? rankByName.get(selectedCountry.name) ?? null : null
+              }
+              history={
+                selectedCountry
+                  ? historyByCountry.get(selectedCountry.name) ?? []
+                  : []
+              }
               onClose={() => setSelectedName(null)}
             />
           </div>

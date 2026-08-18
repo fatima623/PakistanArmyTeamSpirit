@@ -29,11 +29,13 @@ export function ParticipationTimeline() {
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h3 className="tac-edition-row__title font-display text-lg font-bold uppercase">
               {ed.edition}
-              {ed.edition === 2
-                ? "nd"
-                : ed.edition === 3
-                  ? "rd"
-                  : "th"}{" "}
+              {ed.edition === 1
+                ? "st"
+                : ed.edition === 2
+                  ? "nd"
+                  : ed.edition === 3
+                    ? "rd"
+                    : "th"}{" "}
               International PATS — {ed.year}
             </h3>
             <span className="tac-edition-row__meta font-condensed text-sm font-bold uppercase tracking-wider">

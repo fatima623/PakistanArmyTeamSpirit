@@ -176,6 +176,9 @@ export const publicSite: typeof enPublicSite = {
         "AFOS / ATGP",
         "الاستطلاع الأرضي للمنطقة",
       ],
+      mapYearLabel: "الدورة",
+      mapYearAll: "كل الدورات",
+      mapYearAria: "تصفية الخريطة حسب سنة الدورة",
       mapAria: "خريطة العالم للدول المسجَّلة",
       mapCaption: (count: number) =>
         `${plural(count, {

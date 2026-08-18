@@ -5,55 +5,44 @@ import { Globe, X } from "lucide-react";
 import { CountryFlag } from "@/components/ui/CountryFlag";
 import type { ParticipatingCountry } from "@/lib/international-participation-types";
 
-const TEXT = "rgb(236,240,248)";
-const MUTED = "rgb(148,163,190)";
-const FAINT = "rgb(107,120,148)";
-const BLUE = "rgb(96,165,250)";
-const CARD = "rgba(255,255,255,0.04)";
-const BORDER = "rgba(255,255,255,0.09)";
+/** One edition a country took part in, used for the appearances list. */
+export type CountryEdition = {
+  year: number;
+  edition: number;
+  teams: string[];
+};
 
 function StatBox({ label, value }: { label: string; value: string | number }) {
   return (
-    <div
-      className="rounded-xl px-3 py-2.5"
-      style={{ background: CARD, border: `1px solid ${BORDER}` }}
-    >
-      <p
-        className="mb-1 text-[11px] font-medium leading-none"
-        style={{ color: MUTED }}
-      >
-        {label}
-      </p>
-      <p
-        className="text-[20px] font-bold leading-none tracking-tight"
-        style={{ color: TEXT }}
-      >
-        {value}
-      </p>
+    <div className="intl-statbox">
+      <p className="intl-statbox__label">{label}</p>
+      <p className="intl-statbox__value">{value}</p>
     </div>
   );
 }
 
 export function CountryDetailPanel({
   country,
-  year,
+  periodLabel,
   rank,
+  history,
   onClose,
 }: {
   country: ParticipatingCountry | null;
-  year: number;
+  /** Period the surrounding dashboard is filtered to, e.g. "2026". */
+  periodLabel: string;
   rank: number | null;
+  /** Every edition this country appeared in, newest first. */
+  history: CountryEdition[];
   onClose: () => void;
 }) {
   if (!country) {
     return (
-      <div
-        className="flex h-full min-h-[280px] flex-col items-center justify-center rounded-2xl px-6 text-center"
-        style={{ background: CARD, border: `1px solid ${BORDER}` }}
-      >
-        <Globe className="mb-3 h-8 w-8" style={{ color: FAINT }} aria-hidden />
-        <p className="text-[13px] font-medium" style={{ color: MUTED }}>
-          Select a country on the map or table to see its participation history.
+      <div className="intl-panel intl-panel--empty">
+        <Globe className="intl-panel__empty-icon" aria-hidden />
+        <p className="intl-panel__empty-text">
+          Select a country on the map or in the table to see its participation
+          history.
         </p>
       </div>
     );
@@ -62,31 +51,17 @@ export function CountryDetailPanel({
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div
-        className="flex items-center gap-3 rounded-2xl px-4 py-3"
-        style={{ background: CARD, border: `1px solid ${BORDER}` }}
-      >
-        <CountryFlag
-          country={country.name}
-          className="h-7 w-10 shrink-0 rounded-[4px] border border-[rgba(255,255,255,0.14)]"
-        />
+      <div className="intl-panel intl-panel__header">
+        <CountryFlag country={country.name} className="intl-panel__flag" />
         <div className="min-w-0 flex-1">
-          <p
-            className="truncate text-[15px] font-bold leading-tight"
-            style={{ color: TEXT }}
-          >
-            {country.name}
-          </p>
-          <p className="text-[11px] font-medium" style={{ color: FAINT }}>
-            {country.region}
-          </p>
+          <p className="intl-panel__name">{country.name}</p>
+          <p className="intl-panel__region">{country.region}</p>
         </div>
         <button
           type="button"
           onClick={onClose}
           aria-label="Close country details"
-          className="grid h-7 w-7 place-items-center rounded-lg transition-colors"
-          style={{ background: "rgba(255,255,255,0.06)", color: MUTED }}
+          className="intl-panel__close"
         >
           <X className="h-4 w-4" />
         </button>
@@ -94,41 +69,65 @@ export function CountryDetailPanel({
 
       {/* Stat grid */}
       <div className="grid grid-cols-2 gap-2.5">
-        <StatBox label={`Total Teams (${year})`} value={country.teamCount} />
-        <StatBox label={`Rank (${year})`} value={rank ? `#${rank}` : "—"} />
-        <StatBox label="Region" value={country.region} />
+        <StatBox label={`Teams (${periodLabel})`} value={country.teamCount} />
+        <StatBox label={`Rank (${periodLabel})`} value={rank ? `#${rank}` : "—"} />
+        <StatBox label="Appearances" value={history.length} />
         <StatBox label="ISO-2" value={country.iso2 || "—"} />
       </div>
 
-      {/* Teams list */}
-      <div
-        className="rounded-2xl px-4 pb-3 pt-3.5"
-        style={{ background: CARD, border: `1px solid ${BORDER}` }}
-      >
-        <p
-          className="mb-2 text-[12px] font-semibold uppercase tracking-[0.04em]"
-          style={{ color: MUTED }}
-        >
-          Teams Registered
-        </p>
+      {/* Teams list for the selected period */}
+      <div className="intl-panel">
+        <p className="intl-panel__title">Teams · {periodLabel}</p>
         <ul className="flex flex-wrap gap-2">
           {country.teams.length > 0 ? (
-            country.teams.map((team) => (
-              <li
-                key={team}
-                className="rounded-full px-3 py-1 text-[12px] font-medium"
-                style={{ background: "rgba(255,255,255,0.06)", color: TEXT }}
-              >
+            country.teams.map((team, i) => (
+              <li key={`${team}-${i}`} className="intl-chip">
                 {team}
               </li>
             ))
           ) : (
-            <li className="text-[13px]" style={{ color: MUTED }}>
-              No team names available.
-            </li>
+            <li className="intl-panel__muted">No team names available.</li>
           )}
         </ul>
       </div>
+
+      {/* Year-wise participation record */}
+      <div className="intl-panel">
+        <p className="intl-panel__title">Participation by edition</p>
+        {history.length > 0 ? (
+          <ul className="intl-history">
+            {history.map((h) => (
+              <li key={h.year} className="intl-history__row">
+                <span className="intl-history__year">{h.year}</span>
+                <span className="intl-history__edition">
+                  {h.edition > 0 ? `${ordinal(h.edition)} Intl` : "Registered"}
+                </span>
+                <span className="intl-history__teams">
+                  {h.teams.length} team{h.teams.length === 1 ? "" : "s"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="intl-panel__muted">No editions on record.</p>
+        )}
+      </div>
     </div>
   );
+}
+
+/** 1 -> "1st", 2 -> "2nd", 3 -> "3rd", everything else -> "nth". */
+function ordinal(n: number): string {
+  const rem100 = n % 100;
+  if (rem100 >= 11 && rem100 <= 13) return `${n}th`;
+  switch (n % 10) {
+    case 1:
+      return `${n}st`;
+    case 2:
+      return `${n}nd`;
+    case 3:
+      return `${n}rd`;
+    default:
+      return `${n}th`;
+  }
 }
