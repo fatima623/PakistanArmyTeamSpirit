@@ -16,7 +16,6 @@ import { prisma } from "@/lib/prisma";
 import { getAdminRole } from "@/lib/admin-session";
 import {
   PARTICIPANT_ROLE,
-  ROLES,
   canApproveRegistration,
 } from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
@@ -107,13 +106,12 @@ export default async function AdminUsersPage({
   const viewerRole = await getAdminRole();
   const page = Math.max(1, parseInt(params.page ?? "1", 10) || 1);
   const search = params.search ?? "";
-  // Pending is the participation-requests landing view: the page always opens
-  // on Pending new requests (Under Review for MT). An explicit ?filter= in the
-  // URL still wins. The remembered-filter cookie no longer overrides this, so a
-  // prior "Approved" click never becomes the default.
-  const roleDefaultFilter =
-    viewerRole === ROLES.MTD ? "under_review" : "pending";
-  const filter = params.filter ?? roleDefaultFilter;
+  // Pending is the participation-requests landing view for every directorate,
+  // MT included: the queue that needs action is the new requests, not the ones
+  // already picked up. An explicit ?filter= in the URL still wins, and the
+  // remembered-filter cookie does not override this, so a prior "Approved"
+  // click never becomes the default.
+  const filter = params.filter ?? "pending";
   const appStatus = params.appStatus ?? "";
   const payStatus = params.payStatus ?? "all";
 

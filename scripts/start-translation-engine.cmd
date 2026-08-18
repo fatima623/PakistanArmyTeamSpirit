@@ -23,6 +23,16 @@ if not defined LT_EXE call :try "D:\PATSF\lt-venv"
 
 if not defined LT_EXE goto :missing
 
+REM A venv only stores the ABSOLUTE path of the interpreter it was built
+REM from; uninstalling that Python leaves every .exe shim in the venv dead
+REM with a bare "No Python at ..." message. Catch that here instead.
+for %%D in ("%LT_EXE%\..\..") do set "LT_ROOT=%%~fD"
+set "LT_HOME="
+if exist "%LT_ROOT%\pyvenv.cfg" (
+  for /f "tokens=1,* delims== " %%A in ('findstr /b /c:"home" "%LT_ROOT%\pyvenv.cfg"') do set "LT_HOME=%%B"
+)
+if defined LT_HOME if not exist "%LT_HOME%\python.exe" goto :deadbase
+
 set PYTHONUTF8=1
 set PYTHONIOENCODING=utf-8
 
@@ -34,6 +44,27 @@ exit /b %ERRORLEVEL%
 if defined LT_EXE exit /b 0
 if exist "%~1\Scripts\libretranslate.exe" set "LT_EXE=%~1\Scripts\libretranslate.exe"
 exit /b 0
+
+:deadbase
+echo.
+echo   The virtualenv at "%LT_ROOT%" is orphaned.
+echo.
+echo   It was built against  %LT_HOME%\python.exe
+echo   which is no longer installed, so every command inside it fails
+echo   with "No Python at ...".
+echo.
+echo   Its packages are compiled for that exact Python version, so the
+echo   quickest fix is to reinstall it (3.10 or 3.11, NOT 3.13+) from
+echo   https://www.python.org/downloads/ and, if it lands somewhere else,
+echo   update the "home" and "executable" lines in:
+echo     %LT_ROOT%\pyvenv.cfg
+echo.
+echo   Rebuilding from scratch also works but re-downloads the models:
+echo     rmdir /s /q "%LT_ROOT%"
+echo     python -m venv "%LT_ROOT%"
+echo     "%LT_ROOT%\Scripts\python.exe" -m pip install libretranslate
+echo.
+exit /b 1
 
 :missing
 echo.
