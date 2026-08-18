@@ -17,10 +17,12 @@ import { ClientToaster } from "@/components/ClientToaster";
 import { Providers } from "@/components/providers";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/branding";
 import { localeDir, normalizeLocale, LOCALE_COOKIE } from "@/lib/i18n/config";
+import { getRequestPathnameOrNull } from "@/lib/request-pathname";
 import {
   DEFAULT_SITE_THEME,
   parseSiteTheme,
   SITE_THEME_COOKIE,
+  themeForPathname,
 } from "@/lib/site-theme";
 import "./globals.css";
 
@@ -132,8 +134,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const initialSiteTheme = parseSiteTheme(
+  // The stored preference only decides the HOME page; every other route is
+  // pinned to the light theme (see themeForPathname).
+  const themePreference = parseSiteTheme(
     cookieStore.get(SITE_THEME_COOKIE)?.value ?? DEFAULT_SITE_THEME
+  );
+  // A null pathname means the middleware matcher skipped this route; "/" is in
+  // the matcher, so that can only be a non-home page — which is light either way.
+  const initialSiteTheme = themeForPathname(
+    (await getRequestPathnameOrNull()) ?? "",
+    themePreference
   );
   const dayThemeClass =
     initialSiteTheme === "day" ? "site-theme-day light-theme" : "";
@@ -155,7 +165,7 @@ export default async function RootLayout({
       >
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var m=document.cookie.match(/(?:^|; )${SITE_THEME_COOKIE}=(day|night)/);var portal=/^\\/event\\/(dashboard|payment|edit|team|tickets|timeline)/.test(location.pathname);var t=portal?"day":(m?m[1]:"night");var d=t==="day";document.documentElement.dataset.siteTheme=t;document.documentElement.classList.toggle("site-theme-day",d);document.documentElement.classList.toggle("light-theme",d);}catch(e){}})();document.documentElement.classList.add("page-loading");`,
+            __html: `(function(){try{var m=document.cookie.match(/(?:^|; )${SITE_THEME_COOKIE}=(day|night)/);var home=location.pathname==="/";var t=home?(m?m[1]:"night"):"day";var d=t==="day";document.documentElement.dataset.siteTheme=t;document.documentElement.classList.toggle("site-theme-day",d);document.documentElement.classList.toggle("light-theme",d);}catch(e){}})();document.documentElement.classList.add("page-loading");`,
           }}
         />
         <Providers initialSiteTheme={initialSiteTheme}>{children}</Providers>

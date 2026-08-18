@@ -317,7 +317,9 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
                 label={loginLabel}
               />
               {i18n ? <PublicLanguageSwitcher /> : null}
-              <SiteThemeToggle />
+              {/* Day/night is a home-page choice only — every other route is
+                  pinned to the light theme, so the switch would be inert. */}
+              {isHome ? <SiteThemeToggle /> : null}
             </nav>
           ) : null}
 

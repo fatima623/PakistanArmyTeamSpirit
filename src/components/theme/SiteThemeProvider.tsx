@@ -13,12 +13,12 @@ import { usePathname } from "next/navigation";
 
 import {
   DEFAULT_SITE_THEME,
+  pathnameAllowsThemeChoice,
   SITE_THEME_CHANGE_EVENT,
   SITE_THEME_STORAGE_KEY,
   siteThemeCookieValue,
   type SiteTheme,
 } from "@/lib/site-theme";
-import { pathnameIsParticipantPortalApp } from "@/lib/participant-portal-paths";
 
 type SiteThemeContextValue = {
   theme: SiteTheme;
@@ -61,9 +61,11 @@ export function SiteThemeProvider({
   const [theme, setThemeState] = useState<SiteTheme>(initialTheme);
   const pathname = usePathname();
 
-  // The participant portal is an institutional light surface — force day mode on
-  // its routes regardless of the site-wide preference (which stays untouched).
-  const forcedDay = pathnameIsParticipantPortalApp(pathname);
+  // The day/night switch is a home-page feature. Every other route — public
+  // inner pages, auth, the participant portal, admin — is an institutional
+  // light surface and renders day mode regardless of the site-wide preference
+  // (which stays untouched, so returning home restores the visitor's choice).
+  const forcedDay = !pathnameAllowsThemeChoice(pathname);
   const effectiveTheme: SiteTheme = forcedDay ? "day" : theme;
 
   useEffect(() => {
@@ -73,8 +75,9 @@ export function SiteThemeProvider({
   const setTheme = useCallback(
     (next: SiteTheme) => {
       setThemeState(next);
-      // On forced-day routes the toggle only updates the stored preference; the
-      // portal keeps rendering light until the visitor navigates away.
+      // Off the home page the toggle is not rendered at all; if something else
+      // sets the theme there, only the stored preference moves — the page keeps
+      // rendering light until the visitor returns home.
       if (!forcedDay) {
         applySiteThemeToDocument(next);
       } else {
