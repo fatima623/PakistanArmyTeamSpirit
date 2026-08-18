@@ -4,7 +4,7 @@ import {
   hasInternalProof,
   hasLegacyPublicProof,
   readLegacyPublicProof,
-  readPaymentProofByInternalPath,
+  readPaymentProofFromDisk,
   type PaymentProofFilePayload,
 } from "@/lib/storage/payment-proof";
 
@@ -17,6 +17,9 @@ export async function loadPaymentProofForPayment(
     select: {
       id: true,
       userId: true,
+      // Explicit select overrides the global `omit` that keeps this LONGBLOB
+      // out of ordinary payment queries.
+      proofData: true,
       internalFilePath: true,
       proofFileName: true,
       proofMimeType: true,
@@ -34,13 +37,26 @@ export async function loadPaymentProofForPayment(
     throw new Error("FORBIDDEN");
   }
 
-  let payload: PaymentProofFilePayload;
+  // DB blob first: it is the only copy that survives a serverless deploy. Disk
+  // and the legacy public folder remain as fallbacks for pre-blob rows.
+  let payload: PaymentProofFilePayload | null = payment.proofData
+    ? {
+        buffer: Buffer.from(payment.proofData),
+        mimeType: payment.proofMimeType ?? "application/octet-stream",
+        fileName:
+          payment.proofOriginalFileName ??
+          payment.internalFilePath?.split("/").pop() ??
+          "payment-proof",
+      }
+    : null;
 
-  if (hasInternalProof(payment) && payment.internalFilePath) {
-    payload = await readPaymentProofByInternalPath(payment.internalFilePath);
-  } else if (hasLegacyPublicProof(payment) && payment.proofFileName) {
+  if (!payload && hasInternalProof(payment) && payment.internalFilePath) {
+    payload = await readPaymentProofFromDisk(payment.internalFilePath);
+  }
+  if (!payload && hasLegacyPublicProof(payment) && payment.proofFileName) {
     payload = await readLegacyPublicProof(payment.proofFileName);
-  } else {
+  }
+  if (!payload) {
     throw new Error("NO_PROOF");
   }
 

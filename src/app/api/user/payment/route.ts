@@ -145,6 +145,7 @@ export async function POST(request: Request) {
         paymentDate: parsed.data.paymentDate,
         transactionReference: parsed.data.transactionReference,
         internalFilePath: proofUpload.internalFilePath,
+        proofData: proofUpload.proofData,
         proofOriginalFileName: proofUpload.originalFileName,
         proofMimeType: proofUpload.mimeType,
         proofFileSize: proofUpload.fileSize,

@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
  * modules), extended by `@/lib/familiarization-content` with the material that
  * had no home yet — the route legs and the weapons & equipment scale.
  *
- * The page runs on its own blue-and-white palette and its own `fam-*` class
+ * The page runs on its own green-and-white palette and its own `fam-*` class
  * vocabulary (see globals.css). It does not reuse the shared `pats-panel` /
  * `pats-rule-card` surfaces, because those are pinned to the site's gold accent
  * by `!important` light-theme rules.

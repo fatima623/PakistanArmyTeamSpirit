@@ -12,7 +12,7 @@ type Props = {
  *
  * Deliberately NOT `PatsSectionHeading`: the site-wide heading is locked to the
  * gold/olive accent by `!important` light-theme rules in globals.css, and this
- * page runs on the blue-and-white palette. Keeping a local heading gives the
+ * page runs on the green-and-white palette. Keeping a local heading gives the
  * page its own accent without adding another `!important` to the stylesheet
  * (see scripts/css-guardrails.mjs — the count only ratchets down).
  */

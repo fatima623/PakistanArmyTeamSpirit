@@ -245,7 +245,7 @@ export function UnitEditForm({
             <div className="text-[0.95rem] font-bold text-slate-800">
               {u.sections.unitDetails}
             </div>
-            <div className="mt-0.5 text-[0.75rem] text-slate-500">
+            <div className="mt-0.5 text-[0.75rem] text-gray-600">
               {u.descriptions.unit}
             </div>
           </div>

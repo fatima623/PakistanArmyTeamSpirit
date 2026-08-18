@@ -40,7 +40,14 @@ export type PaymentProofUploadInput = {
 };
 
 export type PaymentProofUploadResult = {
+  /**
+   * Logical storage key for the proof. Doubles as the on-disk path where the
+   * filesystem is writable; on serverless hosts nothing is written there and
+   * the bytes are read back from `proofData` instead.
+   */
   internalFilePath: string;
+  /** The proof binary, persisted on the Payment row (LONGBLOB). */
+  proofData: Uint8Array<ArrayBuffer>;
   mimeType: string;
   fileSize: number;
   originalFileName: string;
@@ -159,6 +166,24 @@ export function resolveAbsoluteProofPath(internalFilePath: string): string {
   return absolute;
 }
 
+/**
+ * Best-effort disk copy. Serverless hosts (Vercel) mount the bundle read-only,
+ * so this throws EROFS there — which is not an error: the proof is persisted to
+ * the database by the caller and served from that blob.
+ */
+async function writeProofToDisk(
+  internalFilePath: string,
+  buffer: Buffer
+): Promise<void> {
+  try {
+    const absolute = resolveAbsoluteProofPath(internalFilePath);
+    await mkdir(path.dirname(absolute), { recursive: true });
+    await writeFile(absolute, buffer, { flag: "wx" });
+  } catch {
+    /* read-only filesystem — the DB copy is authoritative */
+  }
+}
+
 export async function savePaymentProofInternal(
   input: PaymentProofUploadInput
 ): Promise<PaymentProofUploadResult> {
@@ -178,18 +203,27 @@ export async function savePaymentProofInternal(
     uploadedAt
   );
   const internalFilePath = buildInternalFilePath(input.userId, fileName);
-  const absolute = resolveAbsoluteProofPath(internalFilePath);
-
-  await mkdir(path.dirname(absolute), { recursive: true });
-  await writeFile(absolute, input.buffer, { flag: "wx" });
+  await writeProofToDisk(internalFilePath, input.buffer);
 
   return {
     internalFilePath,
+    proofData: new Uint8Array(input.buffer),
     mimeType,
     fileSize: input.buffer.length,
     originalFileName: input.originalFileName.slice(0, 255),
     uploadedAt,
   };
+}
+
+/** Reads the stored proof binary, or null when the file is not on this disk. */
+export async function readPaymentProofFromDisk(
+  internalFilePath: string
+): Promise<PaymentProofFilePayload | null> {
+  try {
+    return await readPaymentProofByInternalPath(internalFilePath);
+  } catch {
+    return null;
+  }
 }
 
 export async function readPaymentProofByInternalPath(

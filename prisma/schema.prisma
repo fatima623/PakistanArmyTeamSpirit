@@ -211,6 +211,12 @@ model Payment {
   internalFilePath      String?                   @unique
   proofOriginalFileName String?
   proofFileSize         Int?
+  /**
+   * Proof binary stored in the DB (LONGBLOB) so uploads work on serverless
+   * hosts (Vercel) whose filesystem is read-only. Null on legacy rows that are
+   * still read from disk via `internalFilePath`.
+   */
+  proofData             Bytes?
   proofUploadedAt       DateTime?
   uploaderName          String?
   uploaderEmail         String?

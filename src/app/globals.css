@@ -3119,14 +3119,16 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
 
 /* Night-site tactical square-off. Excludes `.dashboard-day` subtrees so it does
    NOT leak into the day participant portal (which nests under this night
-   `.army-site` shell) — the portal keeps its designed rounded corners. */
-.army-site:not(.dashboard-day) [class~="rounded-sm"]:not(.dashboard-day *),
-.army-site:not(.dashboard-day) [class~="rounded-md"]:not(.dashboard-day *),
-.army-site:not(.dashboard-day) [class~="rounded-lg"]:not(.dashboard-day *),
-.army-site:not(.dashboard-day) button:not(.dashboard-day *),
-.army-site:not(.dashboard-day) input:not(.dashboard-day *),
-.army-site:not(.dashboard-day) select:not(.dashboard-day *),
-.army-site:not(.dashboard-day) textarea:not(.dashboard-day *) {
+   `.army-site` shell) — the portal keeps its designed rounded corners. The
+   `.pats-auth-shell` exemption is the same idea for the sign-in surfaces: they
+   carry their own softened radius scale (see the auth-shell block below). */
+.army-site:not(.dashboard-day) [class~="rounded-sm"]:not(.dashboard-day *):not(.pats-auth-shell *),
+.army-site:not(.dashboard-day) [class~="rounded-md"]:not(.dashboard-day *):not(.pats-auth-shell *),
+.army-site:not(.dashboard-day) [class~="rounded-lg"]:not(.dashboard-day *):not(.pats-auth-shell *),
+.army-site:not(.dashboard-day) button:not(.dashboard-day *):not(.pats-auth-shell *),
+.army-site:not(.dashboard-day) input:not(.dashboard-day *):not(.pats-auth-shell *),
+.army-site:not(.dashboard-day) select:not(.dashboard-day *):not(.pats-auth-shell *),
+.army-site:not(.dashboard-day) textarea:not(.dashboard-day *):not(.pats-auth-shell *) {
   border-radius: 0 !important;
 }
 
@@ -6471,6 +6473,80 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-da
 .army-site:not(.dashboard-day) .pats-login-card [class~="text-brand-olive"],
 .army-site:not(.dashboard-day) .pats-login-card a[class~="text-brand-olive"] {
   color: #8b6914 !important;
+}
+
+/* ── Auth shell — softened surfaces ───────────────────────────────────
+   The sign-in page is the first screen a participant sees, so it steps
+   out of the site's hard-edged "tactical" treatment: the two panels, the
+   fields and the submit button all share one radius scale declared here.
+   The square-off rule above carries the matching `.pats-auth-shell`
+   exemption, so nothing below needs an importance flag to land. */
+.army-site:not(.dashboard-day) .pats-auth-shell {
+  --pats-auth-radius: 1.125rem;
+  --pats-auth-field-radius: 0.625rem;
+  /* Redefining the token is how the shell opts out of the site-wide button
+     radius, which is applied with an importance flag further up. */
+  --pats-radius-btn: var(--pats-auth-field-radius);
+}
+
+.army-site:not(.dashboard-day) .pats-auth-shell .pats-login-card,
+.army-site:not(.dashboard-day) .pats-auth-shell .pats-auth-shell__intro {
+  border-radius: var(--pats-auth-radius);
+  overflow: hidden;
+}
+
+/* Fields: rounded, taller hit area, and a focus ring that reads on white. */
+.army-site:not(.dashboard-day) .pats-auth-shell input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.army-site:not(.dashboard-day) .pats-auth-shell select,
+.army-site:not(.dashboard-day) .pats-auth-shell textarea {
+  border-radius: var(--pats-auth-field-radius);
+  padding-inline: 0.9rem;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-auth-shell input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):focus-visible,
+.army-site:not(.dashboard-day) .pats-auth-shell textarea:focus-visible {
+  border-color: #4a6741;
+  box-shadow: 0 0 0 3px rgba(74, 103, 65, 0.18);
+  outline: none;
+}
+
+.army-site:not(.dashboard-day) .pats-auth-shell [type="checkbox"],
+.army-site:not(.dashboard-day) .pats-auth-shell [role="checkbox"] {
+  border-radius: 0.3rem;
+}
+
+/* Submit button: same radius family as the fields, with a lift on hover. */
+.army-site:not(.dashboard-day) .pats-auth-shell button,
+.army-site:not(.dashboard-day) .pats-auth-shell .pats-btn {
+  border-radius: var(--pats-auth-field-radius);
+}
+
+.army-site:not(.dashboard-day) .pats-auth-shell .pats-btn {
+  box-shadow: 0 6px 16px rgba(26, 36, 27, 0.18);
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+@media (hover: hover) {
+  .army-site:not(.dashboard-day) .pats-auth-shell .pats-btn:hover:not(:disabled) {
+    box-shadow: 0 10px 22px rgba(26, 36, 27, 0.24);
+    transform: translateY(-1px);
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-auth-shell .pats-btn:disabled {
+  box-shadow: none;
+}
+
+/* The header rule and the inline alert follow the same softened language. */
+.army-site:not(.dashboard-day) .pats-login-card .cp-alert-error,
+.army-site:not(.dashboard-day) .pats-login-card .cp-alert-success {
+  border-radius: var(--pats-auth-field-radius);
 }
 
 .army-site:not(.dashboard-day) .cp-h1,
@@ -15433,7 +15509,6 @@ html {
      swap (see the `html.light-theme` block at the end of this module) rather
      than a second set of important-flagged overrides. */
   --ec-ink-strong: #ffffff;
-  --ec-grid-line: rgba(197, 168, 128, 0.05);
   --ec-tint-1: rgba(255, 255, 255, 0.02);
   --ec-tint-2: rgba(255, 255, 255, 0.03);
   --ec-tint-3: rgba(255, 255, 255, 0.04);
@@ -15465,20 +15540,6 @@ html {
   background: var(--ec-page-bg);
   color: var(--ec-sand);
   overflow: hidden;
-}
-
-/* faint operational grid + scanline texture */
-.exercise-contour::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--ec-grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--ec-grid-line) 1px, transparent 1px);
-  background-size: 46px 46px;
-  mask-image: radial-gradient(circle at 50% 0%, black, transparent 85%);
-  pointer-events: none;
-  z-index: 0;
 }
 
 .exercise-contour>* {
@@ -16620,7 +16681,6 @@ html[data-site-theme="day"] .ec-modal {
   --ec-red: #9c3a24;
   --ec-green: #2f6b33;
 
-  --ec-grid-line: rgba(61, 82, 48, 0.06);
   --ec-tint-1: rgba(26, 36, 27, 0.02);
   --ec-tint-2: rgba(26, 36, 27, 0.04);
   --ec-tint-3: rgba(26, 36, 27, 0.05);
@@ -18792,6 +18852,15 @@ html:has(.dashboard-day) body {
   gap: 1.25rem;
   min-height: 0;
   overflow: visible;
+}
+
+/* pp-main is height-locked on desktop (it IS the scroll container), so its
+   flex children would otherwise shrink below their content height to fit —
+   which squashed the hero and clipped its meta line against `overflow: clip`.
+   This is a vertical document flow: nothing in it may be compressed. */
+.pp .pp-main>.pp-main__scroll,
+.pp .pp-main__scroll>* {
+  flex-shrink: 0;
 }
 
 @media (min-width: 1024px) {
@@ -21886,7 +21955,7 @@ html[lang="ar"] .army-site:not(.dashboard-day) .pats-footer-bar__btn {
 /* ═══════════════════════════════════════════════════════════════════════
    Familiarization of PATS (/familiarization)
 
-   One-page pre-arrival brief. The page runs on its own blue-and-white
+   One-page pre-arrival brief. The page runs on its own green-and-white
    palette and its own `fam-*` vocabulary rather than the shared
    `pats-panel` / `pats-rule-card` / `pats-section-heading` surfaces: those
    are pinned to the site's gold-and-olive accent by forced (importance-
@@ -21900,56 +21969,56 @@ html[lang="ar"] .army-site:not(.dashboard-day) .pats-footer-bar__btn {
    ═══════════════════════════════════════════════════════════════════════ */
 
 .army-site .fam-page {
-  /* Blue-on-navy: the page's own accent, replacing --pats-gold. */
-  --fam-accent: #7db8f0;
-  --fam-accent-soft: rgba(125, 184, 240, 0.14);
+  /* Green-on-forest: the page's own accent, replacing --pats-gold. */
+  --fam-accent: #8ec98a;
+  --fam-accent-soft: rgba(142, 201, 138, 0.14);
   --fam-heading: #ffffff;
   --fam-text: rgba(255, 255, 255, 0.92);
   --fam-muted: rgba(255, 255, 255, 0.7);
   --fam-surface: rgba(255, 255, 255, 0.045);
   --fam-surface-2: rgba(255, 255, 255, 0.08);
-  --fam-border: rgba(148, 196, 240, 0.26);
-  --fam-border-strong: rgba(148, 196, 240, 0.5);
-  --fam-thead-bg: rgba(125, 184, 240, 0.16);
-  --fam-thead-text: #cfe4fa;
+  --fam-border: rgba(160, 205, 155, 0.26);
+  --fam-border-strong: rgba(160, 205, 155, 0.5);
+  --fam-thead-bg: rgba(142, 201, 138, 0.16);
+  --fam-thead-text: #d6ebd2;
   --fam-danger: #f0a49c;
   --fam-danger-border: rgba(224, 120, 110, 0.42);
   --fam-danger-surface: rgba(120, 40, 36, 0.2);
   --fam-shadow: none;
   /* Accent for text sitting on the hero photo / meta band — dark in both
-     themes, so this stays light blue either way. */
-  --fam-on-media: #9fd0ff;
+     themes, so this stays light green either way. */
+  --fam-on-media: #a8dda2;
 
-  /* Section bands: blue rather than the site's default warm/navy mix. */
-  --pats-bg-deepest: #0c1826;
-  --pats-bg-dark: #102336;
-  --pats-bg-navy: #143049;
-  --pats-bg-elevated: #17395a;
+  /* Section bands: the site's institutional green rather than blue. */
+  --pats-bg-deepest: #0d1810;
+  --pats-bg-dark: #122318;
+  --pats-bg-navy: #16301f;
+  --pats-bg-elevated: #1c3d27;
 }
 
 html.light-theme .army-site .fam-page,
 html[data-site-theme="day"] .army-site .fam-page,
 html.site-theme-day .army-site .fam-page {
-  --fam-accent: #1d4f91;
-  --fam-accent-soft: rgba(29, 79, 145, 0.08);
-  --fam-heading: #10263c;
-  --fam-text: #33465b;
-  --fam-muted: #5b6f85;
+  --fam-accent: #2f6b33;
+  --fam-accent-soft: rgba(47, 107, 51, 0.08);
+  --fam-heading: #16281a;
+  --fam-text: #3a4c3c;
+  --fam-muted: #62755f;
   --fam-surface: #ffffff;
-  --fam-surface-2: #f2f7fd;
-  --fam-border: #d3e2f2;
-  --fam-border-strong: #a9c7e6;
-  --fam-thead-bg: #1d4f91;
+  --fam-surface-2: #f2f7f0;
+  --fam-border: #d7e5d2;
+  --fam-border-strong: #b1cdaa;
+  --fam-thead-bg: #2f6b33;
   --fam-thead-text: #ffffff;
   --fam-danger: #a3302a;
   --fam-danger-border: rgba(163, 48, 42, 0.3);
   --fam-danger-surface: #fdf3f2;
-  --fam-shadow: 0 1px 2px rgba(16, 38, 60, 0.05), 0 8px 24px rgba(16, 38, 60, 0.05);
-  --fam-on-media: #9fd0ff;
+  --fam-shadow: 0 1px 2px rgba(22, 40, 26, 0.05), 0 8px 24px rgba(22, 40, 26, 0.05);
+  --fam-on-media: #a8dda2;
 
   --pats-bg-deepest: #ffffff;
-  --pats-bg-dark: #f5f9fd;
-  --pats-bg-navy: #eaf2fb;
+  --pats-bg-dark: #f5f9f3;
+  --pats-bg-navy: #eaf3e8;
   --pats-bg-elevated: #ffffff;
 }
 
@@ -21961,7 +22030,7 @@ html.site-theme-day .army-site .fam-page {
 }
 
 .army-site:not(.dashboard-day) .fam-page .pats-page-hero__meta {
-  background: linear-gradient(90deg, #0c1826 0%, #17395a 50%, #0c1826 100%);
+  background: linear-gradient(90deg, #0d1810 0%, #1c3d27 50%, #0d1810 100%);
 }
 
 .army-site:not(.dashboard-day) .fam-page .pats-page-hero__meta dd {
@@ -22160,7 +22229,7 @@ html[data-site-theme="day"] .army-site .fam-anchor-nav__link--active {
   font-size: 0.8125rem;
   line-height: 1.5;
   text-align: center;
-  color: #4a5c6f;
+  color: #4c5f4e;
 }
 
 /* ── Terrain profile ─────────────────────────────────────────────────── */
@@ -22398,7 +22467,7 @@ html[data-site-theme="day"] .army-site .fam-anchor-nav__link--active {
 html:not(.light-theme):not([data-site-theme="day"])
   .army-site
   .fam-leg__index {
-  color: #0c1826;
+  color: #0d1810;
 }
 
 .army-site:not(.dashboard-day) .fam-leg__body {
