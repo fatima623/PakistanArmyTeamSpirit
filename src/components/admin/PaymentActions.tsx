@@ -422,8 +422,8 @@ export function PaymentRowAction({
             ? "portal-table-action-btn--warning"
             : "portal-table-action-btn--info"
         )}
-        aria-label={decided ? "Revisit payment decision" : "Review payment"}
-        title={decided ? "Revisit payment decision" : "Review payment"}
+        aria-label={decided ? "Revisit payment decision" : "Verify payment"}
+        title={decided ? "Revisit payment decision" : "Verify payment"}
         onClick={() => setOpen(true)}
       >
         <TriggerIcon className="h-4 w-4" aria-hidden />

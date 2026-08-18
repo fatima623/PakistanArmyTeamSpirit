@@ -6741,7 +6741,10 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 
 
 
-.pats-portal input,
+/* File inputs opt out: this near-white border is invisible on the portal's
+   white cards, and the flagged shorthand blocked `.pp-file` from drawing its
+   own frame. They are styled by `.pp .pp-file` instead. */
+.pats-portal input:not([type="file"]),
 .pats-portal select,
 .pats-portal textarea:not(.ticket-reply-field) {
   background: #ffffff !important;
@@ -15353,8 +15356,8 @@ html[data-site-theme="day"] .participant-portal.pats-portal :is([class~="text-em
    `.pp .pp-btn--primary` are forced, so the more specific one — this one —
    used to win, turning the solid-green "Mark roster complete" dark-on-dark.
    That only showed under the day/light theme, the one place this applies. */
-html.light-theme .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *):not(.pp-btn):not(.pp-btn *):not(.pp-badge):not(.pp-badge *),
-html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *):not(.pp-btn):not(.pp-btn *):not(.pp-badge):not(.pp-badge *) {
+html.light-theme .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *):not(.pp-btn):not(.pp-btn *):not(.pp-badge):not(.pp-badge *):not(.pp-pager-btn),
+html[data-site-theme="day"] .participant-portal.pats-portal :is(.pats-panel, [class~="portal-card"], .portal-card-accent-amber, .portal-card-accent-sky, .portal-journey-banner) *:not(a):not([class*="text-red"]):not([class*="text-emerald"]):not(.portal-link):not(.ops-status-badge):not(.ops-status-pill):not(svg):not(svg *):not(.pp-btn):not(.pp-btn *):not(.pp-badge):not(.pp-badge *):not(.pp-pager-btn) {
   color: #475569 !important;
 }
 
@@ -20455,11 +20458,24 @@ html:has(.dashboard-day) body {
   color: var(--pp-body);
 }
 
+/* The file control is excluded from the shared field rule above (it owns its
+   own button chrome), so it needs the frame stated here — without it the
+   browser default left a hard-cornered box beside the rounded text fields. */
 .pp .pp-file {
   display: block;
   width: 100%;
+  padding: 0.3rem;
+  border: 1px solid var(--pp-border-strong);
+  border-radius: var(--pp-radius-xs);
+  background: #ffffff;
   font-size: calc(0.8125rem * var(--pp-type-scale));
   color: var(--pp-muted);
+}
+
+.pp .pp-file:focus-within {
+  border-color: var(--pp-primary);
+  box-shadow: var(--pp-ring);
+  outline: none;
 }
 
 .pp .pp-file::file-selector-button {
@@ -20534,10 +20550,13 @@ html:has(.dashboard-day) body {
   background-color: #f8fafc;
 }
 
+/* Deliberately NOT --pp-primary: the deep brand green made the page number
+   read as a smudge once the portal-card text catch-all above recoloured it.
+   This mid-green clears 5:1 against the white numeral on its own. */
 .pp .pp-pager-btn--active,
 .pp .pp-pager-btn--active:hover {
-  border-color: var(--pp-primary, #15613b);
-  background-color: var(--pp-primary, #15613b);
+  border-color: #1f7a4d;
+  background-color: #1f7a4d;
   color: #ffffff;
 }
 

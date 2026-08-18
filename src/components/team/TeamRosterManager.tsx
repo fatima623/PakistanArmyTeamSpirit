@@ -892,7 +892,7 @@ export function TeamRosterManager({
       </section>
 
       <Dialog open={requestOpen} onOpenChange={setRequestOpen}>
-        <DialogContent className="overflow-hidden p-0 sm:max-w-md">
+        <DialogContent className="overflow-hidden rounded-2xl p-0 sm:max-w-md">
           <div className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-800 to-green-900 px-6 py-5">
             <div
               className="pointer-events-none absolute inset-0"
@@ -934,6 +934,7 @@ export function TeamRosterManager({
                 max={200}
                 step={1}
                 inputMode="none"
+                className="rounded-[10px]"
                 value={requestedCount}
                 onKeyDown={(e) => {
                   // Spinner-only: block manual keyboard entry so the value can
@@ -965,6 +966,7 @@ export function TeamRosterManager({
               <Textarea
                 id="justification"
                 rows={4}
+                className="rounded-[10px]"
                 value={justification}
                 onChange={(e) => setJustification(e.target.value)}
                 placeholder={tm.dialog.justificationPlaceholder}
@@ -984,13 +986,14 @@ export function TeamRosterManager({
           <DialogFooter className="gap-2 border-t border-slate-100 px-6 py-4">
             <Button
               variant="outline"
+              className="rounded-[10px]"
               disabled={busy !== null}
               onClick={() => setRequestOpen(false)}
             >
               {tm.dialog.cancel}
             </Button>
             <Button
-              className="bg-emerald-700 text-white hover:bg-emerald-800"
+              className="rounded-[10px] bg-emerald-700 text-white hover:bg-emerald-800"
               disabled={busy !== null || justification.trim().length < 20}
               onClick={submitSizeRequest}
             >
