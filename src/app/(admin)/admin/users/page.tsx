@@ -42,8 +42,11 @@ export const metadata: Metadata = {
 
 const PAGE_SIZE = 20;
 
-/** Overall-status chips: All / Pending / Approved / Under Review /
- *  Returned / Rejected. Pending is the SD Directorate's landing view. */
+/** Overall-status chips: All / Pending / Approved / Under Review / Returned.
+ *  Pending is the SD Directorate's landing view. There is no Rejected chip —
+ *  rejection was removed as an admin decision (Returned replaces it), so it is
+ *  no longer a queue anyone works from. Historic rejected records still render
+ *  their badge under "All". */
 const STATUS_FILTERS: {
   key: string;
   label: string;
@@ -58,7 +61,6 @@ const STATUS_FILTERS: {
     status: APPLICATION_STATUS.UNDER_REVIEW,
   },
   { key: "returned", label: "Returned", status: APPLICATION_STATUS.RETURNED },
-  { key: "rejected", label: "Rejected", status: APPLICATION_STATUS.REJECTED },
 ];
 
 /** Sentinel `country` value for the participants who have no country recorded
@@ -187,7 +189,6 @@ export default async function AdminUsersPage({
     approved: APPLICATION_STATUS.APPROVED,
     under_review: APPLICATION_STATUS.UNDER_REVIEW,
     returned: APPLICATION_STATUS.RETURNED,
-    rejected: APPLICATION_STATUS.REJECTED,
     pending: APPLICATION_STATUS.PENDING,
   };
   if (statusByFilter[filter]) {
@@ -247,8 +248,8 @@ export default async function AdminUsersPage({
     allCount += count;
   }
 
-  /* Chip row: All + the five application statuses (Pending first, as the
-     SD Directorate's default review queue). */
+  /* Chip row: All + the four working application statuses (Pending first, as
+     the SD Directorate's default review queue). */
   const chips = STATUS_FILTERS;
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
