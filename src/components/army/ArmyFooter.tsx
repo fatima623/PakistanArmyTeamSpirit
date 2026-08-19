@@ -1,4 +1,5 @@
 import { COMPETITION_NAME, SITE_NAME } from "@/lib/branding";
+import { computeExerciseYear } from "@/lib/exercise-year";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 /**
@@ -7,7 +8,9 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
  * and legible. The shade layer alone provides the footer's background tint.
  */
 export async function ArmyFooter() {
-  const year = new Date().getFullYear();
+  // Same edition-year rule as the home hero: from July the site is already
+  // pointing at next year's exercise, so the copyright line must agree.
+  const year = computeExerciseYear();
   const { t } = await getDictionary();
   const f = t.publicSite.footer;
 

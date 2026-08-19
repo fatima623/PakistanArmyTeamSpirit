@@ -3121,14 +3121,16 @@ html[data-site-theme="day"] .cinematic-site .cinematic-nav-link-active:hover {
    NOT leak into the day participant portal (which nests under this night
    `.army-site` shell) — the portal keeps its designed rounded corners. The
    `.pats-auth-shell` exemption is the same idea for the sign-in surfaces: they
-   carry their own softened radius scale (see the auth-shell block below). */
-.army-site:not(.dashboard-day) [class~="rounded-sm"]:not(.dashboard-day *):not(.pats-auth-shell *),
-.army-site:not(.dashboard-day) [class~="rounded-md"]:not(.dashboard-day *):not(.pats-auth-shell *),
-.army-site:not(.dashboard-day) [class~="rounded-lg"]:not(.dashboard-day *):not(.pats-auth-shell *),
-.army-site:not(.dashboard-day) button:not(.dashboard-day *):not(.pats-auth-shell *),
-.army-site:not(.dashboard-day) input:not(.dashboard-day *):not(.pats-auth-shell *),
-.army-site:not(.dashboard-day) select:not(.dashboard-day *):not(.pats-auth-shell *),
-.army-site:not(.dashboard-day) textarea:not(.dashboard-day *):not(.pats-auth-shell *) {
+   carry their own softened radius scale (see the auth-shell block below).
+   `.exercise-contour` (the exercise / events catalogue) is exempt for the same
+   reason — every control in it is authored with an explicit radius. */
+.army-site:not(.dashboard-day) [class~="rounded-sm"]:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *),
+.army-site:not(.dashboard-day) [class~="rounded-md"]:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *),
+.army-site:not(.dashboard-day) [class~="rounded-lg"]:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *),
+.army-site:not(.dashboard-day) button:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *),
+.army-site:not(.dashboard-day) input:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *),
+.army-site:not(.dashboard-day) select:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *):not(.registered-map *),
+.army-site:not(.dashboard-day) textarea:not(.dashboard-day *):not(.pats-auth-shell *):not(.exercise-contour *) {
   border-radius: 0 !important;
 }
 
@@ -6609,10 +6611,13 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-site:not(.dashboard-da
   color: #ffffff;
 }
 
-/* Form fields — white inputs on dark pages (register, login, reset, etc.) */
+/* Form fields — white inputs on dark pages (register, login, reset, etc.).
+   The exercise catalogue's <select> is exempt: it is a filter chip, not a form
+   field, and this rule's body type size blew it up to twice the size of the
+   chips beside it. It paints itself from the `--ec-*` tokens instead. */
 .army-site:not(.dashboard-day) input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
 .army-site:not(.dashboard-day) textarea,
-.army-site:not(.dashboard-day) select,
+.army-site:not(.dashboard-day) select:not(.exercise-contour *),
 .army-site:not(.dashboard-day) [role="combobox"] {
   background: #ffffff !important;
   color: #0a0f08 !important;
@@ -16045,9 +16050,10 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   gap: 0.5rem;
 }
 
-/* Category picker. A native <select> so phones get the OS wheel/sheet; the
-   sitewide dark-page rule paints selects white-on-dark-text, so only the
-   geometry is set here to sit level with the search field and chips. */
+/* Category picker. A native <select> so phones get the OS wheel/sheet. It is
+   exempt from the sitewide dark-page form paint (see that rule), so both its
+   geometry and its ground are set here, from the `--ec-*` tokens, and it sits
+   level with the search field and the difficulty chips. */
 .ec-select {
   min-width: 11rem;
   max-width: 100%;
@@ -16059,6 +16065,14 @@ html[data-site-theme="day"] .army-site .exercise-contour .ec-search input:not([t
   font-weight: 600;
   letter-spacing: 0.03em;
   cursor: pointer;
+}
+
+/* Its ground comes from the same tokens as the search field it sits beside, so
+   the pair matches in both themes. The extra `.ec-controls` step outranks the
+   sitewide `.cinematic-site select` paint, which would otherwise force white. */
+.exercise-contour .ec-controls .ec-select {
+  background: var(--ec-raised);
+  color: var(--ec-ink-strong);
 }
 
 .ec-chip {
@@ -22071,6 +22085,28 @@ html.site-theme-day .army-site .fam-page {
   scroll-margin-top: calc(var(--pats-nav-height, 4.5rem) + 3.5rem);
 }
 
+/* Tighter inter-section rhythm than the rest of the site. This page is one
+   continuous brief read top to bottom, not a set of separate landing bands, and
+   the shared 4rem + 4rem left a screen-deep blank between the end of one
+   section and the heading of the next. Retuning the token is enough — the
+   site-wide `.pats-section` padding rules are important-flagged, but they read
+   their value from here. */
+.army-site:not(.dashboard-day) .fam-page {
+  --pats-section-pad-y: 2rem;
+}
+
+@media (min-width: 768px) {
+  .army-site:not(.dashboard-day) .fam-page {
+    --pats-section-pad-y: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .fam-page {
+    --pats-section-pad-y: 2.5rem;
+  }
+}
+
 /* Consistent vertical rhythm between a heading and the block it introduces.
    The heading is wrapped in <ScrollReveal>, hence the `.reveal` selector. */
 .army-site:not(.dashboard-day) .fam-page .fam-heading + *,
@@ -23797,8 +23833,9 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
 /* ==========================================================================
    Public International Participation map — edition (year) filter
    The map now carries every International PATS edition (1st Intl 2016 through
-   the current roster), so it needs a way to look at one year at a time. Chips
-   sit above the map stage and re-paint it in place.
+   the current roster), so it needs a way to look at one year at a time. A
+   picker sits above the map stage and re-paints it in place — listing every
+   edition in the open pushed the map itself further down with each new one.
    ========================================================================== */
 
 .registered-map__years {
@@ -23817,65 +23854,145 @@ html[lang="ar"] .army-site:not(.dashboard-day) .fam-module {
   color: rgba(197, 168, 128, 0.85);
 }
 
-.registered-map__years-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.registered-map__year {
-  border-radius: 999px;
+.registered-map__year-select {
+  min-width: 11rem;
+  max-width: 100%;
+  border-radius: 10px;
   border: 1px solid rgba(197, 168, 128, 0.28);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0.28rem 0.75rem;
-  font-size: 0.78rem;
+  padding: 0.35rem 0.7rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   line-height: 1.3;
-  color: rgba(235, 235, 235, 0.82);
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
 }
 
-.registered-map__year:hover {
-  border-color: rgba(197, 168, 128, 0.6);
-  background: rgba(45, 90, 30, 0.28);
-  color: #ffffff;
-}
-
-.registered-map__year[data-active="true"] {
-  border-color: rgba(230, 207, 127, 0.75);
-  background: rgba(45, 90, 30, 0.75);
-  color: #ffffff;
-}
-
-.registered-map__year:focus-visible {
+.registered-map__year-select:focus-visible {
   outline: 2px solid rgba(230, 207, 127, 0.9);
   outline-offset: 2px;
 }
 
-/* Day theme: the section sits on parchment, so the chips flip to ink-on-light. */
+/* Day theme: the section sits on parchment, so the label flips to ink-on-light.
+   The control itself is painted by the sitewide form rules in both themes. */
 html.light-theme .registered-map__years-label,
 html[data-site-theme="day"] .registered-map__years-label {
   color: #4a5245;
 }
 
-html.light-theme .registered-map__year,
-html[data-site-theme="day"] .registered-map__year {
+html.light-theme .registered-map__year-select,
+html[data-site-theme="day"] .registered-map__year-select {
   border-color: rgba(61, 82, 48, 0.28);
-  background: rgba(255, 255, 255, 0.75);
-  color: #1c2119;
 }
 
-html.light-theme .registered-map__year:hover,
-html[data-site-theme="day"] .registered-map__year:hover {
-  border-color: rgba(61, 82, 48, 0.55);
-  background: rgba(61, 82, 48, 0.12);
-  color: #1c2119;
+/* ==========================================================================
+   /events-detail — compact catalogue header + single-row controls
+   ==========================================================================
+   The catalogue's banner is a page label, not a landing hero: the event cards
+   are the content, and readers were arriving to a screen of empty space with
+   the grid pushed below the fold. The banner is shortened, its display type
+   stepped down, and search/category/difficulty gathered onto ONE row so the
+   first row of cards lands inside the first viewport.
+   Scoped to `.ec-page--events` so /exercise-contour keeps its full-height
+   hero, which shares the same `ec-*` vocabulary.
+   ========================================================================== */
+
+.ec-page--events .ec-hero {
+  padding: 2rem 0 0.25rem;
 }
 
-html.light-theme .registered-map__year[data-active="true"],
-html[data-site-theme="day"] .registered-map__year[data-active="true"] {
-  border-color: #2f4025;
-  background: #3d5230;
-  color: #ffffff;
+.ec-page--events .ec-hero__badge {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.62rem;
+}
+
+.ec-page--events .ec-hero__title {
+  margin-top: 0.8rem;
+  font-size: clamp(1.85rem, 4.2vw, 2.9rem);
+}
+
+.ec-page--events .ec-hero__lede {
+  margin-top: 0.7rem;
+  max-width: 52rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 640px) {
+  .ec-page--events .ec-hero__lede {
+    font-size: 0.94rem;
+  }
+}
+
+.ec-page--events .ec-hero__rule {
+  margin-top: 1rem;
+}
+
+.ec-page--events .ec-section {
+  padding-top: 1.25rem;
+}
+
+.ec-page--events .ec-controls {
+  margin-bottom: 0.9rem;
+}
+
+/* Search anchors the start of the row; the two filters sit together in the
+   opposite corner. Wraps to a second line only when the row cannot fit. */
+.ec-controls__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-inline-start: auto;
+}
+
+.ec-page--events .ec-search {
+  flex: 1 1 13rem;
+  max-width: 20rem;
+}
+
+/* On phones the row breaks anyway, so the filters align with the search field
+   above them rather than hugging the right edge on their own. */
+@media (max-width: 639px) {
+  .ec-controls__filters {
+    justify-content: flex-start;
+    margin-inline-start: 0;
+  }
+
+  .ec-page--events .ec-search {
+    max-width: none;
+  }
+}
+
+.ec-summary {
+  margin-top: 0;
+  margin-bottom: 1.1rem;
+  font-size: 0.85rem;
+}
+
+/* --------------------------------------------------------------------------
+   Rounded controls
+   --------------------------------------------------------------------------
+   The night shell squares off every button/input/select site-wide (the
+   "tactical square-off" rule earlier in this file). The exercise catalogue is
+   authored with its own radius scale, so re-assert it here — same selector
+   weight as the square-off, later in the cascade, so it wins the tie.
+   -------------------------------------------------------------------------- */
+
+.exercise-contour .ec-shell :is(button, input, select, textarea) {
+  border-radius: 10px;
+}
+
+/* Pills stay pills; the card action keeps the card's softer corner. */
+.exercise-contour .ec-shell .ec-chip {
+  border-radius: 999px;
+}
+
+.exercise-contour .ec-shell .ec-card__btn {
+  border-radius: 10px;
+}
+
+/* The modal portals to <body>, outside `.army-site`, so it is untouched by the
+   square-off — a plain declaration is enough for its close affordance. */
+.ec-modal button {
+  border-radius: 8px;
 }

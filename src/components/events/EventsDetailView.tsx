@@ -195,7 +195,7 @@ export function EventsDetailView({ events }: { events: PublicEvent[] }) {
   }, [events, category, difficulty, query, locale]);
 
   return (
-    <div className="exercise-contour">
+    <div className="exercise-contour ec-page--events">
       <div className="ec-shell">
         <section className="ec-hero">
           <div className="ec-hero__badge">
@@ -210,6 +210,9 @@ export function EventsDetailView({ events }: { events: PublicEvent[] }) {
         </section>
 
         <section className="ec-section">
+          {/* Search, category and difficulty all live on ONE control row so the
+              event grid starts inside the first viewport instead of below a
+              stack of filter blocks. The row wraps to two lines on phones. */}
           <div className="ec-controls">
             <div className="ec-search">
               <Search className="ec-search__icon" size={16} aria-hidden />
@@ -221,11 +224,12 @@ export function EventsDetailView({ events }: { events: PublicEvent[] }) {
                 aria-label={t.events.filters.searchAria}
               />
             </div>
-            {/* Categories are a dropdown on every viewport: the chip row grew
-                past a dozen entries and wrapped into several lines, pushing the
-                event cards off-screen on phones. Difficulty stays as chips —
-                it is a short, fixed set. */}
-            <div className="ec-chips">
+
+            <div className="ec-controls__filters">
+              {/* Categories are a dropdown on every viewport: the chip row grew
+                  past a dozen entries and wrapped into several lines, pushing
+                  the event cards off-screen on phones. Difficulty stays as
+                  chips — it is a short, fixed set. */}
               <select
                 className="ec-select"
                 aria-label={t.events.filters.categoryAria}
@@ -241,24 +245,26 @@ export function EventsDetailView({ events }: { events: PublicEvent[] }) {
                   </option>
                 ))}
               </select>
+
+              <div className="ec-chips">
+                {DIFFICULTIES.map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    className="ec-chip"
+                    data-active={difficulty === d ? "true" : undefined}
+                    onClick={() =>
+                      setDifficulty((prev) => (prev === d ? ALL : d))
+                    }
+                  >
+                    {translateEventDifficulty(d, locale)}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="ec-chips" style={{ marginBottom: "1.25rem" }}>
-            {DIFFICULTIES.map((d) => (
-              <button
-                key={d}
-                type="button"
-                className="ec-chip"
-                data-active={difficulty === d ? "true" : undefined}
-                onClick={() => setDifficulty((prev) => (prev === d ? ALL : d))}
-              >
-                {translateEventDifficulty(d, locale)}
-              </button>
-            ))}
-          </div>
-
-          <div className="ec-section-sub" style={{ marginBottom: "1.5rem" }}>
+          <div className="ec-section-sub ec-summary">
             {t.events.summary(events.length, totalMarks)}
           </div>
 

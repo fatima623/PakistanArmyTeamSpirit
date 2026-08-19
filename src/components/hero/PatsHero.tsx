@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
+import { computeExerciseYear } from "@/lib/exercise-year";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
 
@@ -41,11 +42,7 @@ export function PatsHero({ exerciseYear, slides }: Props) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
-    const now = new Date();
-    const currentYear = now.getFullYear();
-    // getMonth() is 0-indexed, so 6 is July
-    const computedYear = now.getMonth() >= 6 ? currentYear + 1 : currentYear;
-    setDynamicYear(computedYear);
+    setDynamicYear(computeExerciseYear());
   }, []);
 
   const heroImages =

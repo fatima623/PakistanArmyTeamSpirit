@@ -355,37 +355,34 @@ export function RegisteredNationsMap() {
   return (
     <div className="registered-map">
       {years.length > 1 ? (
-        <div
-          className="registered-map__years"
-          role="group"
-          aria-label={m?.mapYearAria ?? "Filter the map by edition year"}
-        >
-          <span className="registered-map__years-label">
+        // A picker rather than a chip row: every edition used to be listed in
+        // the open, and the strip grew a line taller with each new one before
+        // the map itself came into view.
+        <div className="registered-map__years">
+          <label
+            className="registered-map__years-label"
+            htmlFor="registered-map-year"
+          >
             {m?.mapYearLabel ?? "Edition"}
-          </span>
-          <div className="registered-map__years-chips">
-            <button
-              type="button"
-              onClick={() => setYear("all")}
-              aria-pressed={year === "all"}
-              data-active={year === "all"}
-              className="registered-map__year"
-            >
-              {m?.mapYearAll ?? "All editions"}
-            </button>
+          </label>
+          <select
+            id="registered-map-year"
+            className="registered-map__year-select"
+            aria-label={m?.mapYearAria ?? "Filter the map by edition year"}
+            value={year}
+            onChange={(e) =>
+              setYear(
+                e.target.value === "all" ? "all" : Number(e.target.value)
+              )
+            }
+          >
+            <option value="all">{m?.mapYearAll ?? "All editions"}</option>
             {years.map((y) => (
-              <button
-                key={y}
-                type="button"
-                onClick={() => setYear(y)}
-                aria-pressed={year === y}
-                data-active={year === y}
-                className="registered-map__year"
-              >
+              <option key={y} value={y}>
                 {y}
-              </button>
+              </option>
             ))}
-          </div>
+          </select>
         </div>
       ) : null}
       <div ref={stageRef} className="registered-map__stage">
