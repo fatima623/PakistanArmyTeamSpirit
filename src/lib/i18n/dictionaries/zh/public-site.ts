@@ -45,7 +45,6 @@ export const publicSite: typeof enPublicSite = {
     eyebrow: "通知",
     title: "公告",
     subtitle: "PATS 赛事的官方通知、更新与协调简报。",
-    latest: "最新",
     countLabel: (count: number) => `已发布 ${count} 条公告`,
     readMore: "阅读更多",
     empty: "暂无公告，请稍后再来查看。",

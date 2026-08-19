@@ -58,7 +58,6 @@ export const publicSite: typeof enPublicSite = {
     title: "Объявления",
     subtitle:
       "Официальные уведомления, обновления и координационные бюллетени соревнования PATS.",
-    latest: "Последние",
     countLabel: (count: number) => `Опубликовано объявлений: ${count}`,
     readMore: "Читать далее",
     empty: "Объявлений пока нет — загляните позже.",

@@ -57,7 +57,6 @@ export const publicSite: typeof enPublicSite = {
     eyebrow: "إشعارات",
     title: "الإعلانات",
     subtitle: "الإشعارات الرسمية والتحديثات ونشرات التنسيق الخاصة بمسابقة PATS.",
-    latest: "الأحدث",
     countLabel: (count: number) => `تم نشر ${count} إعلان`,
     readMore: "اقرأ المزيد",
     empty: "لا توجد إعلانات بعد — يرجى العودة قريبًا.",

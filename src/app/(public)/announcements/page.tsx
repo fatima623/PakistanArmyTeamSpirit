@@ -131,11 +131,6 @@ export default async function AnnouncementsPage({ searchParams }: PageProps) {
                         PATS
                       </div>
                     )}
-                    {/* Newest notice only. Overlaid on the thumbnail rather
-                        than stacked in the body so it costs no extra height. */}
-                    {i === 0 ? (
-                      <span className="pats-announce-badge">{a11n.latest}</span>
-                    ) : null}
                   </div>
                   <div className="pats-announce-card__body">
                     <span className="pats-announce-date">

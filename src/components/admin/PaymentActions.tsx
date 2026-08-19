@@ -304,9 +304,9 @@ function PaymentActionDialog({
 }
 
 /**
- * Payment verification actions — MT (Management Team) only. Four action cards;
- * once a decision (verify / return / reject) is made, the taken action stays
- * visible while the others are locked to prevent duplicate processing.
+ * Payment verification actions — MT (Management Team) only. Three action cards;
+ * once a decision (verify / return) is made, the taken action stays visible
+ * while the others are locked to prevent duplicate processing.
  */
 export function PaymentVerificationActions({
   paymentId,

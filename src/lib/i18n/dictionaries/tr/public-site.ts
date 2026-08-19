@@ -47,7 +47,6 @@ export const publicSite: typeof enPublicSite = {
     title: "Duyurular",
     subtitle:
       "PATS yarışmasına ilişkin resmî bildirimler, güncellemeler ve koordinasyon bültenleri.",
-    latest: "En son",
     countLabel: (count: number) => `${count} duyuru yayınlandı`,
     readMore: "Devamını oku",
     empty: "Henüz duyuru yok — lütfen daha sonra tekrar bakın.",

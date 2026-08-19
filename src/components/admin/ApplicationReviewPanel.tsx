@@ -159,29 +159,10 @@ export function ApplicationReviewPanel({
               "Return for correction"
             )}
           </Button>
-          <Button
-            size="sm"
-            variant="adminDestructive"
-            disabled={loading !== null}
-            onClick={() =>
-              act("reject", APPLICATION_STATUS.REJECTED, {
-                requireReason: true,
-                success: "Registration rejected",
-              })
-            }
-          >
-            {loading === "reject" ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              "Reject"
-            )}
-          </Button>
         </div>
 
         <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y mt-4">
-          <label htmlFor="reject-reason">
-            Reason (required to return or reject)
-          </label>
+          <label htmlFor="reject-reason">Reason (required to return)</label>
           <Textarea
             id="reject-reason"
             value={reason}

@@ -21061,26 +21061,6 @@ html[data-site-theme="day"] .participant-portal.pats-portal .pp-proof-filerow__a
   text-align: center;
 }
 
-/* "Latest" marker — overlaid on the newest card's thumbnail so it adds no
-   vertical space. Logical inset mirrors itself under Arabic RTL. */
-.pats-announce-badge {
-  position: absolute;
-  inset-block-start: 0.6rem;
-  inset-inline-start: 0.6rem;
-  z-index: 1;
-  padding: 0.25rem 0.6rem;
-  border: 1px solid rgba(200, 168, 75, 0.5);
-  border-radius: 999px;
-  background: rgba(18, 22, 20, 0.82);
-  backdrop-filter: blur(4px);
-  font-family: var(--font-barlow), system-ui, sans-serif;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #d8b75c;
-}
-
 .pats-announce-date {
   display: inline-flex;
   align-items: center;

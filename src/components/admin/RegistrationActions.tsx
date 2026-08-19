@@ -10,7 +10,6 @@ import {
   RotateCcw,
   ShieldCheck,
   SquarePen,
-  XCircle,
   type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -31,7 +30,10 @@ import { APPLICATION_STATUS } from "@/lib/constants";
 import { TOAST } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 
-type ActionKey = "approve" | "review" | "return" | "reject";
+// "reject" was removed — the SD can approve, mark under review, or return for
+// correction. RETURNED replaces the old REJECTED "send back" flow, so a
+// registration is never turned away permanently from this panel.
+type ActionKey = "approve" | "review" | "return";
 
 type ActionMeta = {
   status: string;
@@ -104,25 +106,9 @@ const ACTIONS: Record<ActionKey, ActionMeta> = {
     card: "border-orange-200 bg-orange-50/50 hover:border-orange-400 hover:bg-orange-50",
     cardIcon: "text-orange-600",
   },
-  reject: {
-    status: APPLICATION_STATUS.REJECTED,
-    title: "Reject Registration",
-    cardLabel: "Reject",
-    cardHint: "Reject this registration",
-    prompt: "Reject this registration permanently.",
-    note: "Your message below is shown to the participant.",
-    needsReason: true,
-    success: "Registration rejected",
-    confirmLabel: "Reject with message",
-    icon: XCircle,
-    disc: "bg-red-100 text-red-600",
-    confirmBtn: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300",
-    card: "border-red-200 bg-red-50/50 hover:border-red-400 hover:bg-red-50",
-    cardIcon: "text-red-600",
-  },
 };
 
-const ACTION_ORDER: ActionKey[] = ["approve", "review", "return", "reject"];
+const ACTION_ORDER: ActionKey[] = ["approve", "review", "return"];
 
 /**
  * Decision statuses. Once a registration reaches one of these, a decision has

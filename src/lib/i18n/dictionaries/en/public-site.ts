@@ -48,7 +48,6 @@ export const publicSite = {
     title: "Announcements",
     subtitle:
       "Official notices, updates and coordination bulletins for the PATS competition.",
-    latest: "Latest",
     countLabel: (count: number) =>
       `${count} ${count === 1 ? "notice" : "notices"} published`,
     readMore: "Read more",
