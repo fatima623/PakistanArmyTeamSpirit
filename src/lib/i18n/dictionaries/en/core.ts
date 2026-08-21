@@ -19,6 +19,7 @@ export const core = {
 
   // Browser-tab / SEO titles, one per route (localized page metadata).
   meta: {
+    tour: "Site Tour",
     home: "Home",
     announcements: "Announcements",
     awards: "Awards & Recognition",
@@ -46,11 +47,7 @@ export const core = {
     done: "Done",
     logout: "Log out",
     dashboard: "Dashboard",
-    unitInformation: "Unit information",
-    teamRegistration: "Team Registration",
-    payment: "Payment",
-    flightDetails: "Flight Details",
-    hostInformation: "Host Information",
+    tour: "Tour",
     support: "Support",
     journeyComplete: "Journey complete",
   },
@@ -62,7 +59,7 @@ export const core = {
     membersCount: (n: number) => `${n} team member${n === 1 ? "" : "s"}`,
     scheduleEyebrow: "Schedule",
     dataEntryPeriods: "Data entry periods",
-    dataEntryDesc: "Available only after payment has been verified.",
+    dataEntryDesc: "Scheduled windows for submitting your registration data.",
     noPeriods: "No periods scheduled yet.",
     deadlinesEyebrow: "Deadlines",
     timeline: "Timeline",
@@ -79,7 +76,6 @@ export const core = {
       noKeyDates: "No key dates published yet.",
       deadlineLabels: {
         registration: "Registration deadline",
-        payment: "Payment deadline",
       },
     },
   },
@@ -92,20 +88,20 @@ export const core = {
   },
 
   statusBar: {
-    underReviewTitle: "Application under review",
+    inProgressTitle: "Registration in progress",
+    inProgressText:
+      "Work through each step below. The Sports Directorate (SD) approves your registration once every step is complete.",
+    underReviewTitle: "Registration under review",
     underReviewText:
-      "Your registration is being reviewed by PATS. We'll email you as soon as it's approved.",
-    confirmedTitle: "Confirmed — you're cleared for PATS 2026",
+      "Every step is submitted. The Sports Directorate (SD) is reviewing your registration and will notify you once it is approved.",
+    confirmedTitle: "Approved — you're cleared for PATS 2026",
     confirmedTextWithDates: (dates: string) =>
-      `Your payment is verified and your place is confirmed. Scheduled: ${dates}.`,
-    confirmedText: "Your payment is verified and your place is confirmed.",
-    approvedTitle: "Approved — payment required",
-    approvedText:
-      "Your application is approved. Complete your payment to secure your place in the competition.",
+      `Your registration is approved by the SD and your place is confirmed. Scheduled: ${dates}.`,
+    confirmedText:
+      "Your registration is approved by the SD and your place is confirmed.",
     returnedTitle: "Returned for correction",
     approvedOn: (date: string) => `Approved ${date}`,
-    goToPayment: "Go to payment submission",
-    paymentVerified: "Payment verified",
+    continueRegistration: "Continue registration",
   },
 
   registration: {
@@ -138,23 +134,17 @@ export const core = {
         title: "Confirm Participation",
         subtitle: "Confirm your team's availability to take part in PATS 2026.",
       },
+      unitInfo: {
+        eyebrow: "Registration",
+        title: "Unit Information",
+        subtitle:
+          "Provide your unit and Commanding Officer details. Saving unlocks team registration.",
+      },
       verification: {
         eyebrow: "",
-        title: "Registration Verification",
+        title: "Registration Approval",
         subtitle:
-          "Your registration details are reviewed by the Sports Directorate (SD).",
-      },
-      payment: {
-        eyebrow: "",
-        title: "Make Payment",
-        subtitle:
-          "Complete your registration payment to confirm your participation in PATS 2026.",
-      },
-      teamRegistration: {
-        eyebrow: "Team registration",
-        title: "Team Members",
-        subtitle:
-          "Add your team members below. After saving, mark the roster complete to unlock flight details.",
+          "The Sports Directorate (SD) approves your registration once every step is complete.",
       },
       roster: {
         eyebrow: "Team registration",
@@ -183,13 +173,17 @@ export const core = {
         "Your registration details are read-only below. Continue to the next step.",
       registrationVerification: "Registration verification",
       messageFromSd: "Message from the SD:",
-      paymentVerifiedMt: "Payment verified by the Management Team (MT).",
-      paymentVerifiedMtSub:
-        "Your payment records are read-only below. Continue to the next step.",
-      paymentDeadlinePassed:
-        "The payment deadline has passed, so new payment submissions are closed. Please contact PATS administration if you still need to complete your payment.",
-      noPaymentInfo:
-        "No payment information is available for your account yet. Please try again shortly.",
+      unitInfoSaved: "Unit information saved.",
+      unitInfoSavedSub: (date: string) =>
+        `Recorded on ${date}. You can update it until your registration is approved.`,
+      flightsSubmitted: "Flight details submitted.",
+      flightsSubmittedSub:
+        "Your registration is now with the Sports Directorate (SD) for approval.",
+      awaitingApproval: "Awaiting SD approval",
+      awaitingApprovalSub:
+        "Every step is complete. The Sports Directorate will review and approve your registration.",
+      approvalLocked:
+        "Complete confirmation, unit information, team members and flight details to send your registration for approval.",
       teamRegistered: "Team registered.",
       teamRegisteredSub: (date: string) =>
         `Registered on ${date}. Fill in your member roster below.`,

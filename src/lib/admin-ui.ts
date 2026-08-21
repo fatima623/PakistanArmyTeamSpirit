@@ -69,14 +69,14 @@ export const adminTablePillStyles =
 export const adminApproveBtnStyles =
   "[&_.admin-approve-btn]:!h-8 [&_.admin-approve-btn]:!min-h-8 [&_.admin-approve-btn]:!max-h-8 [&_.admin-approve-btn]:!min-w-[4.5rem] [&_.admin-approve-btn]:!rounded-lg [&_.admin-approve-btn]:!border [&_.admin-approve-btn]:!border-green-300 [&_.admin-approve-btn]:!bg-white [&_.admin-approve-btn]:!px-3 [&_.admin-approve-btn]:!text-xs [&_.admin-approve-btn]:!font-semibold [&_.admin-approve-btn]:!text-green-600 [&_.admin-approve-btn]:!shadow-none [&_.admin-approve-btn:hover]:!border-green-500 [&_.admin-approve-btn:hover]:!bg-green-50 [&_.admin-approve-btn:hover]:!text-green-700 [&_.admin-approve-btn:disabled]:!border-green-200 [&_.admin-approve-btn:disabled]:!bg-green-50 [&_.admin-approve-btn:disabled]:!text-green-600";
 
-/** Payment verification */
-export const adminPaymentsPage = "flex w-full flex-col pb-6";
-export const adminPaymentsPanel =
+/** Filterable list pages (tickets, queues) */
+export const adminListPage = "flex w-full flex-col pb-6";
+export const adminListPanel =
   "admin-surface flex w-full flex-col gap-5 p-2 lg:p-6 lg:shadow-[0_2px_12px_rgba(15,23,42,0.05)]";
-export const adminPaymentsControls =
+export const adminListControls =
   "flex flex-col gap-3.5 border-slate-200 bg-slate-50 px-2 py-3 lg:rounded-xl lg:border lg:px-[1.125rem] lg:py-4";
-export const adminPaymentsToolbarSearch = "grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5";
-export const adminPaymentsFilterTabs = "flex w-full flex-wrap items-center gap-2.5";
+export const adminListToolbarSearch = "grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2.5";
+export const adminListFilterTabs = "flex w-full flex-wrap items-center gap-2.5";
 
 /** Surfaces & typography */
 export const adminSurface = "admin-surface";

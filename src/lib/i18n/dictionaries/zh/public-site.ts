@@ -73,6 +73,16 @@ export const publicSite: typeof enPublicSite = {
   },
 
   pages: {
+    tour: {
+      heroEyebrow: "门户",
+      heroTitle: "网站导览",
+      heroSubtitle:
+        "关于 PATS 的所有内容 — 活动、国际参与、奖项、图库、公告与重要日期 — 尽在一处。",
+      sectionEyebrow: "板块",
+      sectionTitle: "浏览导览",
+      sectionDescription:
+        "打开下方任一板块。使用上方导航栏在各板块间切换，或随时返回您的仪表板。",
+    },
     awards: {
       heroEyebrow: "荣誉名录",
       heroTitle: "奖项与表彰",

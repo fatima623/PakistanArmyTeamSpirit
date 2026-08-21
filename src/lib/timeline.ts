@@ -2,7 +2,7 @@ import { getDeadlines } from "@/lib/deadlines";
 import { getKeyDates } from "@/lib/site-data";
 
 export type DeadlineItem = {
-  key: "registration" | "payment";
+  key: "registration";
   label: string;
   date: Date;
   passed: boolean;
@@ -40,15 +40,6 @@ export async function getTimelineData(): Promise<TimelineData> {
       date: deadlines.registrationDeadline,
       passed: now.getTime() > deadlines.registrationDeadline.getTime(),
       daysRemaining: daysFromNow(deadlines.registrationDeadline, now),
-    });
-  }
-  if (deadlines.paymentDeadline) {
-    items.push({
-      key: "payment",
-      label: "Payment deadline",
-      date: deadlines.paymentDeadline,
-      passed: now.getTime() > deadlines.paymentDeadline.getTime(),
-      daysRemaining: daysFromNow(deadlines.paymentDeadline, now),
     });
   }
   items.sort((a, b) => a.date.getTime() - b.date.getTime());

@@ -73,6 +73,20 @@ export const flights = {
     assigned: "Flight record assigned to the traveller",
     selectRequired: "Select the traveller this record belongs to",
   },
+  submit: {
+    title: "Send your registration for approval",
+    desc:
+      "Flight details are the last step. Once every traveller has a passport and a ticket on file, submit the registration so the Sports Directorate (SD) can approve it.",
+    action: "Submit for approval",
+    reopen: "Reopen for editing",
+    incomplete:
+      "Every team member needs both a passport and a ticket on file before you can submit.",
+    submittedTitle: "Registration submitted for approval.",
+    submittedSub:
+      "The Sports Directorate (SD) will review it. You can reopen it while it is still pending.",
+    submittedToast: "Registration sent for approval",
+    reopenedToast: "Registration reopened for editing",
+  },
   errors: {
     nameRequired: "Passenger name is required",
     passportRequired: "Passport number is required",

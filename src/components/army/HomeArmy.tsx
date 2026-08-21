@@ -1,16 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { HeroSlider } from "@/components/army/HeroSlider";
 import type { HeroImage } from "@/components/hero/PatsHero";
 import { ScrollReveal } from "@/components/army/ScrollReveal";
 import { StatsBar } from "@/components/army/StatsBar";
-import { PatsImageGrid } from "@/components/pats/PatsImageGrid";
 import { PatsMissionShowcase } from "@/components/pats/PatsMissionShowcase";
 import { PatsSection } from "@/components/pats/PatsSection";
 import { PatsSectionHeading } from "@/components/pats/PatsSectionHeading";
-import { ABOUT_FEATURE_IMAGE, CAREER_TRACKS } from "@/lib/army-content";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import {
   translateKeyDateLabel,
@@ -29,17 +26,6 @@ type Props = {
 export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
   const { t, locale, dir } = useI18n();
   const previewDates = keyDates.slice(0, 4);
-
-  const careerCards = CAREER_TRACKS.map((c) => ({
-    id: c.id,
-    href: c.href,
-    image: c.image,
-    tag: t.home.careers.cards[c.id].tag,
-    title: t.home.careers.cards[c.id].title,
-    imageFit: "imageFit" in c ? c.imageFit : undefined,
-    imagePosition: "imagePosition" in c ? c.imagePosition : undefined,
-    imageRepeat: "imageRepeat" in c ? c.imageRepeat : undefined,
-  }));
 
   return (
     <div className="army-home scroll-deck" lang={locale} dir={dir}>
@@ -65,67 +51,6 @@ export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
           mottoUrdu={locale === "en"}
           imageAlt={t.home.mission.imageAlt}
         />
-      </PatsSection>
-
-      {/* No `backgroundImage`: the crop it pointed at (bg-28-logos.webp) was
-          never shipped, so the backdrop <img> rendered as a broken-image icon
-          in the corner of the section. */}
-      <PatsSection id="careers" variant="light">
-        <ScrollReveal>
-          <PatsSectionHeading
-            eyebrow={t.home.careers.eyebrow}
-            title={t.home.careers.title}
-            description={t.home.careers.description}
-          />
-        </ScrollReveal>
-        <div
-          className="mt-10"
-          style={{
-            position: "relative",
-            isolation: "isolate",
-            overflow: "visible",
-            width: "100%",
-            maxWidth: "100%",
-          }}
-        >
-          <PatsImageGrid cards={careerCards} />
-        </div>
-      </PatsSection>
-
-      <PatsSection variant="dark">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
-          <ScrollReveal>
-            <PatsSectionHeading
-              eyebrow={t.home.about.eyebrow}
-              title={t.home.about.title}
-              description={t.home.about.lead}
-            />
-            <ul className="pats-body mt-6 space-y-3">
-              {t.home.about.points.map((p) => (
-                <li
-                  key={p.title}
-                  className="border-l-2 border-[var(--pats-gold)]/50 pl-4"
-                >
-                  <strong className="pats-feature-title text-[var(--pats-white)]">
-                    {p.title}
-                  </strong>
-                  <span className="pats-body mt-1 block opacity-90">{p.body}</span>
-                </li>
-              ))}
-            </ul>
-          </ScrollReveal>
-          <ScrollReveal delay={120}>
-            <div className="pats-home-feature-image relative aspect-[4/3] overflow-hidden border border-[var(--pats-border-gold)]">
-              <Image
-                src={ABOUT_FEATURE_IMAGE}
-                alt={t.home.about.imageAlt}
-                fill
-                className="object-cover object-center"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          </ScrollReveal>
-        </div>
       </PatsSection>
 
       {previewDates.length > 0 && (

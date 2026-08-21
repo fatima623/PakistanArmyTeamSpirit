@@ -76,6 +76,16 @@ export const publicSite: typeof enPublicSite = {
   },
 
   pages: {
+    tour: {
+      heroEyebrow: "Portal",
+      heroTitle: "Site turu",
+      heroSubtitle:
+        "PATS hakkında yayımlanan her şey — etkinlikler, uluslararası katılım, ödüller, galeri, duyurular ve önemli tarihler — tek bir yerde.",
+      sectionEyebrow: "Bölümler",
+      sectionTitle: "Tura göz atın",
+      sectionDescription:
+        "Aşağıdaki bölümlerden birini açın. Aralarında geçiş yapmak için üstteki gezinme çubuğunu kullanın veya istediğiniz zaman panonuza dönün.",
+    },
     awards: {
       heroEyebrow: "Onur kaydı",
       heroTitle: "Ödüller ve takdir",

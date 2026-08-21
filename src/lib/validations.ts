@@ -314,7 +314,6 @@ export const SiteSettingsSchema = z.object({
   registrationOpen: z.boolean(),
   intlRegistrationOpen: z.boolean(),
   registrationDeadline: nullableDeadline,
-  paymentDeadline: nullableDeadline,
   participationConfirmDeadline: nullableDeadline,
   teamRegistrationOpenDate: nullableDeadline,
   teamRegistrationCloseDate: nullableDeadline,
@@ -332,18 +331,6 @@ export const SiteSettingsSchema = z.object({
   instagramUrl: z.union([z.string().url(), z.literal("#")]),
   merchandiseQrUrl: z.union([z.string().url(), z.string().email(), z.literal("#")]),
   photographyQrUrl: z.union([z.string().url(), z.string().email(), z.literal("#")]),
-  defaultPaymentAmount: z.coerce.number().positive(),
-  paymentCurrency: z.string().min(1).max(10),
-  paymentBankName: z.string().min(1),
-  paymentBankAccountTitle: z.string().min(1),
-  paymentBankAccountNumber: z.string().min(1),
-  paymentBankIban: z.string(),
-  paymentWiseEmail: z.string().min(1),
-  paymentWiseName: z.string().min(1),
-  paymentMobileNumber: z.string().min(1),
-  paymentMobileTitle: z.string().min(1),
-  paymentRemitlyEmail: z.string().min(1),
-  paymentRemitlyName: z.string().min(1),
 });
 
 export const AdminUserUpdateSchema = z.object({
@@ -356,16 +343,6 @@ export const AdminUserUpdateSchema = z.object({
   role: z.enum(["user", "sdbs", "mtd", "admin"]).optional(),
   applicationStatus: z
     .enum(["PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED", "RETURNED"])
-    .optional(),
-  paymentStatus: z
-    .enum([
-      "PENDING",
-      "SUBMITTED",
-      "VERIFIED",
-      "REJECTED",
-      "APPROVED",
-      "UNDER_REVIEW",
-    ])
     .optional(),
   adminNotes: z.string().optional().nullable(),
   rejectionReason: z.string().optional().nullable(),
@@ -410,73 +387,36 @@ export const AdminResetPasswordSchema = z.object({
  * country and is invisible to every country column and country-wise tally.
  * Staff/host accounts are not participants, so country does not apply to them.
  */
+/**
+ * Admin account creation.
+ *
+ * A participant account is now just a login: the administration provisions the
+ * email + password, and the participant supplies every registration detail
+ * themselves once they confirm participation (name and rank on the unit
+ * information step, then roster, then flights). Only staff accounts still need
+ * a name at creation time, because they never walk the participant workflow.
+ */
 export const AdminCreateUserSchema = z
   .object({
     email: z.string().email("Valid email required"),
-    firstName: z.string().trim().min(1, "Required"),
-    lastName: z.string().trim().min(1, "Required"),
-    rank: z.string().trim().min(1, "Required"),
-    gender: z.enum(["Male", "Female", "Other"]),
+    firstName: z.string().trim().max(100, "Too long").optional(),
+    lastName: z.string().trim().max(100, "Too long").optional(),
+    rank: z.string().trim().max(100, "Too long").optional(),
+    gender: z.enum(["Male", "Female", "Other"]).optional(),
     role: z.enum(["user", "sdbs", "mtd", "admin"]),
     password: passwordFieldSchema,
-    country: z.string().max(100, "Too long").optional(),
-    customCountry: z.string().max(100, "Too long").optional(),
-    nationality: z.string().max(100, "Too long").optional(),
-    // Participant Unit / CO fields (required for role "user" — see superRefine).
-    unitType: z.enum(["Regular", "Reserve"]).optional(),
-    branch: z.enum(["Army", "Navy", "Air Force"]).optional(),
-    unitName: z.string().trim().max(200, "Too long").optional(),
-    arm: z.string().trim().max(100, "Too long").optional(),
-    secondPocEmail: z.string().email("Valid email required").optional().or(z.literal("")),
-    thirdPocEmail: z.string().email("Valid email required").optional().or(z.literal("")),
-    additionalInfo: z.string().max(5000, "Too long").optional(),
-    coName: z.string().trim().max(200, "Too long").optional(),
-    coEmail: z.string().email("Valid email required").optional().or(z.literal("")),
-    coPhone: z.string().trim().max(50, "Too long").optional(),
   })
-  .refine((d) => d.role !== "user" || (d.country?.trim().length ?? 0) > 0, {
-    message: "Required for participants",
-    path: ["country"],
-  })
-  .refine((d) => !d.country?.trim() || isValidCountry(d.country), {
-    message: "Select a valid country",
-    path: ["country"],
-  })
-  .refine(
-    (d) =>
-      d.country !== CUSTOM_COUNTRY_OPTION ||
-      (d.customCountry?.trim().length ?? 0) > 0,
-    { message: "Please enter the country", path: ["customCountry"] }
-  )
-  .refine(
-    (d) => {
-      if (d.role !== "user" || !d.country?.trim()) return true;
-      const resolved = resolveCountryForSubmit(d.country, d.customCountry);
-      return (
-        resolved === PAKISTAN_COUNTRY || (d.nationality?.trim().length ?? 0) > 0
-      );
-    },
-    { message: "Required for international participants", path: ["nationality"] }
-  )
   .superRefine((d, ctx) => {
-    /* Participant accounts carry a full Unit record — mirror the public
-       registration's required Unit/CO fields so an admin-created participant is
-       never left without them. Staff roles skip this entirely. */
-    if (d.role !== "user") return;
-    const required: Array<{ field: string; value: unknown; message: string }> = [
-      { field: "unitType", value: d.unitType, message: "Required" },
-      { field: "branch", value: d.branch, message: "Required" },
-      { field: "unitName", value: d.unitName, message: "Required" },
-      { field: "arm", value: d.arm, message: "Required" },
-      { field: "coName", value: d.coName, message: "Required" },
-      { field: "coEmail", value: d.coEmail, message: "Valid email required" },
-      { field: "coPhone", value: d.coPhone, message: "Required" },
+    if (d.role === "user") return;
+    const required: Array<{ field: string; value: unknown }> = [
+      { field: "firstName", value: d.firstName },
+      { field: "lastName", value: d.lastName },
     ];
-    for (const { field, value, message } of required) {
+    for (const { field, value } of required) {
       if (typeof value !== "string" || !value.trim()) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message,
+          message: "Required",
           path: [field],
         });
       }
@@ -512,28 +452,6 @@ export const HostFormationAssignSchema = z.object({
   hostFormationId: z.string().trim().min(1).nullable(),
 });
 
-export const PaymentSubmitSchema = z.object({
-  amount: z.coerce.number().positive("Amount must be positive"),
-  paymentDate: z.coerce.date(),
-  transactionReference: z.string().min(1, "Reference required"),
-});
-
-/** Shape-only validation; rejection reason rules are enforced in the admin payment API with DB context. */
-export const AdminPaymentUpdateSchema = z.object({
-  // "REJECTED" intentionally omitted — payment rejection was removed. The API
-  // accepts verify / review / RETURNED (send back for correction) only.
-  status: z.enum([
-    "PENDING",
-    "SUBMITTED",
-    "UNDER_REVIEW",
-    "VERIFIED",
-    "RETURNED",
-    "APPROVED",
-  ]),
-  adminNotes: z.string().optional().nullable(),
-  rejectionReason: z.string().optional().nullable(),
-});
-
 export const AdminUnitUpdateSchema = UnitUpdateSchema.extend({
   preferredPhase: z.string().optional().nullable(),
   patrolsRequested: z.number().int().min(1).optional(),
@@ -542,7 +460,7 @@ export const AdminUnitUpdateSchema = UnitUpdateSchema.extend({
 export const TicketCreateSchema = z.object({
   subject: z.string().trim().min(3, "Subject is too short").max(150),
   category: z
-    .enum(["GENERAL", "REGISTRATION", "PAYMENT", "TECHNICAL"])
+    .enum(["GENERAL", "REGISTRATION", "TECHNICAL"])
     .default("GENERAL"),
   priority: z.enum(["LOW", "NORMAL", "HIGH"]).default("NORMAL"),
   message: z.string().trim().min(5, "Please describe your issue").max(5000),

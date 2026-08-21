@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth-edge";
+import { pathnameIsTourPage } from "@/lib/tour-navigation";
 import {
   canAccessAdminArea,
   canAccessHostArea,
@@ -31,12 +32,11 @@ function buildLoginRedirect(origin: string, requestId: string, req: NextRequest)
   return redirectTo(loginUrl, requestId);
 }
 
+/* The public website is only the home page, the login flow and the privacy
+   policy. Everything else that used to be public is now the portal's Tour. */
 function isPublicFastPath(pathname: string): boolean {
   if (pathname === "/") return true;
-  if (pathname.startsWith("/key-dates")) return true;
   if (pathname.startsWith("/privacy")) return true;
-  if (pathname.startsWith("/news/")) return true;
-  if (pathname.startsWith("/page/")) return true;
   if (pathname === "/manifest.webmanifest") return true;
   return false;
 }
@@ -61,9 +61,13 @@ export default auth((req) => {
   const isParticipantArea =
     pathname.startsWith("/event/dashboard") ||
     pathname.startsWith("/event/edit") ||
-    pathname.startsWith("/event/payment") ||
     pathname.startsWith("/event/tickets") ||
-    pathname.startsWith("/event/team");
+    pathname.startsWith("/event/team") ||
+    pathname.startsWith("/event/flights") ||
+    pathname.startsWith("/event/journey") ||
+    pathname.startsWith("/event/host-info") ||
+    pathname.startsWith("/event/confirm-participation");
+  const isTour = pathnameIsTourPage(pathname);
   const isAdmin = pathname.startsWith("/admin");
   const isHostArea = pathname.startsWith("/host");
   const isRegisterPage = pathname === "/event/register";
@@ -78,6 +82,14 @@ export default auth((req) => {
     // Host Formation logins are confined to their read-only /host area.
     if (isHostRole(role)) {
       return redirectTo(new URL("/host", origin), requestId);
+    }
+  }
+
+  /* Tour pages are open to any signed-in role — participants browse them from
+     the sidebar, staff from the admin console. */
+  if (isTour) {
+    if (!isLoggedIn || sessionExpired) {
+      return buildLoginRedirect(origin, requestId, req);
     }
   }
 
@@ -110,18 +122,32 @@ export default auth((req) => {
 export const config = {
   matcher: [
     "/",
-    "/key-dates/:path*",
     "/privacy",
-    "/news/:path*",
-    "/page/:path*",
     "/manifest.webmanifest",
+    /* Tour (login-gated former marketing site) */
+    "/tour/:path*",
+    "/events-detail/:path*",
+    "/international/:path*",
+    "/familiarization/:path*",
+    "/awards/:path*",
+    "/gallery/:path*",
+    "/announcements/:path*",
+    "/key-dates/:path*",
+    "/news/:path*",
+    "/documents/:path*",
+    "/operations/:path*",
+    "/exercise-contour/:path*",
+    "/page/:path*",
     "/admin/:path*",
     "/host/:path*",
     "/event/dashboard/:path*",
     "/event/edit/:path*",
-    "/event/payment/:path*",
     "/event/tickets/:path*",
     "/event/team/:path*",
+    "/event/flights/:path*",
+    "/event/journey/:path*",
+    "/event/host-info/:path*",
+    "/event/confirm-participation/:path*",
     "/event/login",
     "/event/register",
     "/event/forgot-password",

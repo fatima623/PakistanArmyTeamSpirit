@@ -15,14 +15,7 @@ export const ADMIN_NAV_ITEMS = [
   {
     key: "users",
     href: "/admin/users",
-    label: "Participation Requests",
-    roles: ALL_STAFF,
-    group: "Operations",
-  },
-  {
-    key: "payments",
-    href: "/admin/payments",
-    label: "Payment Verification",
+    label: "Team Registrations",
     roles: ALL_STAFF,
     group: "Operations",
   },

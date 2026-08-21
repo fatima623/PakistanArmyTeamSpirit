@@ -1,4 +1,4 @@
-/** Logged-in participant app routes (dashboard, payment, profile edits). */
+/** Logged-in participant app routes (dashboard, registration steps, support). */
 
 /**
  * Every route that renders the `.pp` portal shell must be listed here.
@@ -12,7 +12,6 @@
  */
 const PARTICIPANT_PORTAL_PREFIXES = [
   "/event/dashboard",
-  "/event/payment",
   "/event/edit/",
   "/event/team",
   "/event/tickets",

@@ -159,7 +159,7 @@ function RequestDetailsDialog({
 }
 
 /**
- * Two-step decision flow, mirroring the payments row action: pick approve or
+ * Two-step decision flow: pick approve or
  * reject, then confirm. Rejection is the only branch that collects a note, and
  * it is collected on its own step so the reason box never sits in the table.
  */

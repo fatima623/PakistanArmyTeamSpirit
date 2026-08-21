@@ -20,7 +20,6 @@ export const prisma =
       galleryImage: { imageData: true, posterData: true },
       event: { thumbnailData: true },
       heroSlide: { imageData: true },
-      payment: { proofData: true },
     },
   });
 

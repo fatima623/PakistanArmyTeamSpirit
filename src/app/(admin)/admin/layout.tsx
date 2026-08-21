@@ -1,7 +1,7 @@
 
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { getAdminInitials, getAdminRole } from "@/lib/admin-session";
-import { APPLICATION_STATUS, PAYMENT_STATUS, TICKET_STATUS } from "@/lib/constants";
+import { APPLICATION_STATUS, TICKET_STATUS } from "@/lib/constants";
 import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 
@@ -15,7 +15,6 @@ export default async function AdminSectionLayout({
     userInitials,
     role,
     pendingUsers,
-    pendingPayments,
     openTickets,
     pendingTeamRequests,
     awaitingFinalize,
@@ -27,13 +26,6 @@ export default async function AdminSectionLayout({
         role: PARTICIPANT_ROLE,
         applicationStatus: {
           in: [APPLICATION_STATUS.PENDING, APPLICATION_STATUS.UNDER_REVIEW],
-        },
-      },
-    }),
-    prisma.payment.count({
-      where: {
-        status: {
-          in: [PAYMENT_STATUS.SUBMITTED, PAYMENT_STATUS.UNDER_REVIEW],
         },
       },
     }),
@@ -71,7 +63,6 @@ export default async function AdminSectionLayout({
 
   const navCounts = {
     users: pendingUsers,
-    payments: pendingPayments,
     tickets: openTickets,
     teamRequests: pendingTeamRequests,
     flights: awaitingFinalize,

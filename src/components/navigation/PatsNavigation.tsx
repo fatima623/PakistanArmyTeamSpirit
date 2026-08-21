@@ -12,9 +12,13 @@ import { NAV_BRAND_SUBTITLE, NAV_BRAND_TITLE } from "@/lib/branding";
 import {
   isHrefActive,
   isNavItemActive,
-  PUBLIC_NAV_ITEMS,
   type PublicNavItem,
 } from "@/lib/public-navigation";
+import {
+  TOUR_HOME,
+  TOUR_NAV_ITEMS,
+  pathnameIsTourPage,
+} from "@/lib/tour-navigation";
 import { useSiteChromeScroll } from "@/components/public/site-chrome-scroll-context";
 import { pathnameHasHeroOverlay } from "@/lib/public-layout";
 import { useI18nOptional } from "@/lib/i18n/I18nProvider";
@@ -192,6 +196,25 @@ function NavLoginLink({
   );
 }
 
+function NavPortalLink({
+  onNavigate,
+  label,
+}: {
+  onNavigate?: () => void;
+  label: string;
+}) {
+  return (
+    <Link
+      href="/event/dashboard"
+      prefetch
+      onClick={onNavigate}
+      className="pats-nav__link"
+    >
+      {label}
+    </Link>
+  );
+}
+
 type Props = {
   pathname: string;
 };
@@ -207,7 +230,13 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const t = i18n?.t ?? null;
   const chrome = t?.publicSite.chrome;
   const loginLabel = t ? t.publicSite.nav.login : "Login";
+  const backToPortalLabel = t ? t.common.backToDashboard : "Back to dashboard";
   const isHome = pathname === "/";
+  /* Tour = the former marketing site, now reached from inside the portal. The
+     main website keeps only the home page + login, so its navbar carries no
+     section links at all. */
+  const isTour = pathnameIsTourPage(pathname);
+  const navItems = isTour ? TOUR_NAV_ITEMS : [];
   const overHeroMedia = pathnameHasHeroOverlay(pathname);
   const [menuOpen, setMenuOpen] = useState(false);
   const isDesktop = useIsDesktopNav();
@@ -278,7 +307,7 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
       <div className="pats-nav" aria-label={chrome?.siteNav ?? "Site"}>
         <div className="pats-nav__inner">
           <Link
-            href="/"
+            href={isTour ? TOUR_HOME : "/"}
             className="pats-nav__brand"
             aria-label={chrome?.brandHome ?? "PATS home"}
           >
@@ -302,7 +331,7 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
               className="pats-nav__panel-links"
               aria-label={chrome?.mainNav ?? "Main navigation"}
             >
-              {PUBLIC_NAV_ITEMS.map((item) => (
+              {navItems.map((item) => (
                 <NavItemLink
                   key={item.label}
                   item={item}
@@ -311,11 +340,18 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
                   onNavigate={closeMenu}
                 />
               ))}
-              <NavLoginLink
-                pathname={pathname}
-                onNavigate={closeMenu}
-                label={loginLabel}
-              />
+              {isTour ? (
+                <NavPortalLink
+                  onNavigate={closeMenu}
+                  label={backToPortalLabel}
+                />
+              ) : (
+                <NavLoginLink
+                  pathname={pathname}
+                  onNavigate={closeMenu}
+                  label={loginLabel}
+                />
+              )}
               {i18n ? <PublicLanguageSwitcher /> : null}
               {/* Day/night is a home-page choice only — every other route is
                   pinned to the light theme, so the switch would be inert. */}

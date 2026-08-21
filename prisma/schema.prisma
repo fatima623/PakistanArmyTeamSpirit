@@ -21,7 +21,6 @@ model User {
   role                     String              @default("user")
   approved                 Boolean             @default(false)
   applicationStatus        String              @default("PENDING")
-  paymentStatus            String              @default("PENDING")
   adminNotes               String?             @db.Text
   rejectionReason          String?             @db.Text
   rejectedAt               DateTime?
@@ -37,10 +36,25 @@ model User {
   participationConfirmedAt DateTime?
   participationDeclinedAt  DateTime?
   /**
+   * Unit information step — set once the participant saves their own unit /
+   * CO details (the admin no longer captures them at account creation).
+   */
+  unitInfoCompletedAt      DateTime?
+  /**
    * Team registration workflow.
    */
   teamRegisteredAt         DateTime?
   rosterCompletedAt        DateTime?
+  /**
+   * Flight details step — set when the participant submits a complete set of
+   * per-traveller flight records, which sends the application to the SD queue.
+   */
+  flightsSubmittedAt       DateTime?
+  /**
+   * Set when every participant-side step is done and the registration enters
+   * the SD (Sports Directorate) approval queue.
+   */
+  submittedForApprovalAt   DateTime?
   /**
    * Approved team-size override (defaults to SiteSettings.maxTeamMembers).
    */
@@ -61,9 +75,7 @@ model User {
   teamMembers              TeamMember[]
   emailVerifications       EmailVerification[]
   passwordResets           PasswordReset[]
-  payments                 Payment[]
   auditLogsActed           AuditLog[]          @relation("AuditActor")
-  paymentsVerified         Payment[]           @relation("PaymentVerifier")
   supportTickets           SupportTicket[]     @relation("TicketCreator")
   assignedTickets          SupportTicket[]     @relation("TicketAssignee")
   ticketMessages           TicketMessage[]     @relation("TicketMessageAuthor")
@@ -74,7 +86,6 @@ model User {
   hostLoginFor             HostFormation?      @relation("HostLogin")
 
   @@index([applicationStatus])
-  @@index([paymentStatus])
   @@index([approved])
   @@index([hostFormationId])
 }
@@ -197,55 +208,6 @@ model FlightDetail {
   updatedAt          DateTime    @updatedAt
 
   @@index([userId])
-}
-
-model Payment {
-  id                    String                    @id @default(cuid())
-  userId                String
-  user                  User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  amount                Decimal                   @db.Decimal(10, 2)
-  currency              String                    @default("PKR")
-  status                String                    @default("PENDING")
-  proofFileName         String?
-  proofMimeType         String?
-  internalFilePath      String?                   @unique
-  proofOriginalFileName String?
-  proofFileSize         Int?
-  /**
-   * Proof binary stored in the DB (LONGBLOB) so uploads work on serverless
-   * hosts (Vercel) whose filesystem is read-only. Null on legacy rows that are
-   * still read from disk via `internalFilePath`.
-   */
-  proofData             Bytes?
-  proofUploadedAt       DateTime?
-  uploaderName          String?
-  uploaderEmail         String?
-  paymentDate           DateTime?
-  transactionReference  String?
-  adminNotes            String?                   @db.Text
-  rejectionReason       String?                   @db.Text
-  verifiedById          String?
-  verifiedBy            User?                     @relation("PaymentVerifier", fields: [verifiedById], references: [id], onDelete: SetNull)
-  verifiedAt            DateTime?
-  createdAt             DateTime                  @default(now())
-  updatedAt             DateTime                  @updatedAt
-  rejectionHistory      PaymentRejectionHistory[]
-
-  @@index([userId])
-  @@index([status])
-  @@index([createdAt])
-}
-
-model PaymentRejectionHistory {
-  id        String   @id @default(cuid())
-  paymentId String
-  payment   Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-  type      String
-  reason    String   @db.Text
-  createdAt DateTime @default(now())
-
-  @@index([paymentId])
-  @@index([createdAt])
 }
 
 model SupportTicket {
@@ -546,7 +508,6 @@ model SiteSettings {
   registrationOpen             Boolean   @default(true)
   intlRegistrationOpen         Boolean   @default(true)
   registrationDeadline         DateTime?
-  paymentDeadline              DateTime?
   /**
    * Deadline for the first-login participation confirmation dialog.
    */
@@ -579,22 +540,6 @@ model SiteSettings {
   instagramUrl                 String    @default("#")
   merchandiseQrUrl             String    @default("https://www.theprintsofwales.co.uk/cambrian-patrol/")
   photographyQrUrl             String    @default("mailto:igphoto@yahoo.co.uk")
-  defaultPaymentAmount         Decimal   @default(15000.00) @db.Decimal(10, 2)
-  paymentCurrency              String    @default("PKR")
-  paymentBankName              String    @default("HBL")
-  paymentBankAccountTitle      String    @default("PATS")
-  paymentBankAccountNumber     String    @default("1234567890")
-  paymentBankIban              String    @default("PK00HABB0000000012345678")
-  paymentEasypaisaNumber       String    @default("0312-3456789")
-  paymentEasypaisaTitle        String    @default("PATS")
-  paymentJazzcashNumber        String    @default("0300-9876543")
-  paymentJazzcashTitle         String    @default("PATS")
-  paymentWiseEmail             String    @default("payments@pats.gov.pk")
-  paymentWiseName              String    @default("PATS Organising Committee")
-  paymentMobileNumber          String    @default("+92 300 1234567")
-  paymentMobileTitle           String    @default("PATS")
-  paymentRemitlyEmail          String    @default("payments@pats.gov.pk")
-  paymentRemitlyName           String    @default("PATS Organising Committee")
   /**
    * SLOW | NORMAL | FAST | VERY_FAST — homepage announcement ticker scroll
    */

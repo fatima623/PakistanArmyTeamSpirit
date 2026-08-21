@@ -188,6 +188,11 @@ export function AdminUserForm({
     setForm((f) => ({ ...f, [key]: value }));
 
   const isParticipant = form.role === PARTICIPANT_ROLE;
+  /* Creating a participant provisions a login and nothing else — name, rank,
+     country, unit and CO details are all captured by the participant from the
+     portal once they confirm participation. Editing keeps the full form so an
+     admin can still correct what a participant entered. */
+  const loginOnly = !isEdit && isParticipant;
   const isOtherCountry = form.country === CUSTOM_COUNTRY_OPTION;
   const isInternational = isInternationalParticipant(form.country);
   const hasNoCountryOnRecord = isEdit && !user?.country?.trim();
@@ -210,11 +215,12 @@ export function AdminUserForm({
 
   const validate = (): Record<string, string> => {
     const e: Record<string, string> = {};
+    if (!form.email.trim()) e.email = "Required";
+    if (!isEdit && !form.password.trim()) e.password = "Required";
+    if (loginOnly) return e;
     if (!form.firstName.trim()) e.firstName = "Required";
     if (!form.lastName.trim()) e.lastName = "Required";
-    if (!form.email.trim()) e.email = "Required";
     if (!form.rank.trim()) e.rank = "Required";
-    if (!isEdit && !form.password.trim()) e.password = "Required";
     if (isParticipant) {
       if (!form.country.trim()) e.country = "Required";
       else if (isOtherCountry && !form.customCountry.trim()) {
@@ -234,6 +240,9 @@ export function AdminUserForm({
   };
 
   const buildPayload = () => {
+    if (loginOnly) {
+      return { email: form.email, role: form.role };
+    }
     const base: Record<string, unknown> = {
       firstName: form.firstName,
       lastName: form.lastName,
@@ -355,15 +364,18 @@ export function AdminUserForm({
             {isEdit ? "Edit user" : "Create user"}
           </h1>
           <p className="mt-1 text-[0.8rem] leading-[1.4] text-muted-foreground">
-            {isParticipant
-              ? "Participant account — capture the full registration details below."
-              : "Back-office team member (SD / MT / Admin)."}
+            {loginOnly
+              ? "Participant login. The participant supplies their own name, unit, roster and flight details from the portal once they confirm participation."
+              : isParticipant
+                ? "Participant account — the participant fills these in from the portal; edit only to correct their entries."
+                : "Back-office team member (SD / MT / Admin)."}
           </p>
         </div>
       </header>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-[0.85rem]">
         <Section title="Account details">
+          {loginOnly ? null : (
           <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
             <Field label="First name" required error={errors.firstName}>
               <Input
@@ -380,6 +392,7 @@ export function AdminUserForm({
               />
             </Field>
           </div>
+          )}
 
           <Field label="Email" required error={errors.email}>
             <Input
@@ -390,6 +403,7 @@ export function AdminUserForm({
             />
           </Field>
 
+          {loginOnly ? null : (
           <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
             <Field label="Rank" required error={errors.rank}>
               <Input
@@ -417,6 +431,7 @@ export function AdminUserForm({
               </Select>
             </Field>
           </div>
+          )}
 
           <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
             <Field label="Role" error={errors.role}>
@@ -451,7 +466,7 @@ export function AdminUserForm({
           </div>
         </Section>
 
-        {isParticipant ? (
+        {isParticipant && !loginOnly ? (
           <>
             <Section title="Unit details">
               <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
@@ -628,7 +643,7 @@ export function AdminUserForm({
           </Button>
           <Button type="submit" variant="adminPrimary" disabled={saving}>
             {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isEdit ? "Save changes" : "Create user"}
+            {isEdit ? "Save changes" : loginOnly ? "Create login" : "Create user"}
           </Button>
         </div>
       </form>

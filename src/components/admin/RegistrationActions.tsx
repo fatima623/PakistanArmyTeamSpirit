@@ -22,10 +22,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  ApplicationStatusBadge,
-  PaymentStatusBadge,
-} from "@/components/admin/StatusBadges";
+import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
+import { RegistrationProgressBadge } from "@/components/admin/RegistrationProgressBadge";
+import type { RegistrationProgress } from "@/lib/registration-progress";
 import { APPLICATION_STATUS } from "@/lib/constants";
 import { TOAST } from "@/lib/toast";
 import { cn } from "@/lib/utils";
@@ -319,13 +318,14 @@ function RegistrationActionDialog({
 export function RegistrationVerificationPanel({
   userId,
   applicationStatus,
-  paymentStatus,
+  progress,
   suspended,
   rejectionReason,
 }: {
   userId: string;
   applicationStatus: string;
-  paymentStatus: string;
+  /** How far the participant has got — approval waits until every step is in. */
+  progress: RegistrationProgress;
   suspended: boolean;
   rejectionReason: string | null;
 }) {
@@ -353,9 +353,9 @@ export function RegistrationVerificationPanel({
           </div>
           <div className="flex flex-col items-start gap-1.5 px-4 py-3">
             <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">
-              Payment Status
+              Registration Progress
             </span>
-            <PaymentStatusBadge status={paymentStatus} showPrefix={false} />
+            <RegistrationProgressBadge progress={progress} />
           </div>
           <div className="flex flex-col items-start gap-1.5 px-4 py-3">
             <span className="text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">
@@ -387,7 +387,13 @@ export function RegistrationVerificationPanel({
               const isCurrent = applicationStatus === meta.status;
               const decided = REGISTRATION_DECIDED.includes(applicationStatus);
               const locked = decided && !isCurrent;
-              const disabled = isCurrent || locked;
+              /* Approving is the final step of the flow, so it stays inert
+                 until the participant has submitted everything. */
+              const tooEarly =
+                key === "approve" &&
+                !progress.readyForApproval &&
+                !progress.approved;
+              const disabled = isCurrent || locked || tooEarly;
               return (
                 <button
                   key={key}
@@ -398,7 +404,8 @@ export function RegistrationVerificationPanel({
                     "flex flex-col items-center gap-1 rounded-xl border px-3 py-3.5 text-center transition-all duration-150",
                     meta.card,
                     isCurrent && "cursor-default hover:translate-y-0",
-                    locked && "cursor-not-allowed opacity-45 hover:translate-y-0",
+                    (locked || tooEarly) &&
+                      "cursor-not-allowed opacity-45 hover:translate-y-0",
                     !disabled &&
                       "hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(15,23,42,0.07)]"
                   )}
@@ -407,7 +414,9 @@ export function RegistrationVerificationPanel({
                       ? "Current status — this action was taken"
                       : locked
                         ? "A decision has already been made"
-                        : meta.cardHint
+                        : tooEarly
+                          ? `Waiting on the participant — step ${progress.currentStep} of ${progress.total} (${progress.currentLabel})`
+                          : meta.cardHint
                   }
                 >
                   <span

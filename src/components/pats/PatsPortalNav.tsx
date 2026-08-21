@@ -5,16 +5,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  ClipboardList,
-  CreditCard,
-  Home,
+  Compass,
   LayoutDashboard,
   LifeBuoy,
   LogOut,
   Menu,
-  Plane,
   Shield,
-  Users,
   X,
 } from "lucide-react";
 
@@ -22,37 +18,37 @@ import { logoutAction } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { TOUR_HOME } from "@/lib/tour-navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-type NavGate = "always" | "payment" | "flights" | "hostInfo";
 type NavKey = keyof Dictionary["nav"];
 
-const BASE_LINKS: {
+/**
+ * The sidebar is deliberately short. Every registration step is reached from
+ * the dashboard's Registration progress cards — duplicating them here produced
+ * two competing navigations for the same guided flow, and the sidebar copy had
+ * no way to show which step was unlocked.
+ *
+ * *Tour* leaves the portal shell for the site tour (the former public
+ * marketing site, now behind the login).
+ */
+const NAV_LINKS: {
   href: string;
   labelKey: NavKey;
   Icon: LucideIcon;
-  gate: NavGate;
+  /** Tour lives outside the `.pp` shell, so it must not be prefetched. */
+  external?: boolean;
 }[] = [
-  { href: "/event/dashboard", labelKey: "dashboard", Icon: LayoutDashboard, gate: "always" },
-  { href: "/event/edit/unit", labelKey: "unitInformation", Icon: ClipboardList, gate: "always" },
-  { href: "/event/team", labelKey: "teamRegistration", Icon: Users, gate: "always" },
-  { href: "/event/payment", labelKey: "payment", Icon: CreditCard, gate: "payment" },
-  { href: "/event/flights", labelKey: "flightDetails", Icon: Plane, gate: "flights" },
-  { href: "/event/host-info", labelKey: "hostInformation", Icon: Home, gate: "hostInfo" },
-  { href: "/event/tickets", labelKey: "support", Icon: LifeBuoy, gate: "always" },
+  { href: "/event/dashboard", labelKey: "dashboard", Icon: LayoutDashboard },
+  { href: "/event/tickets", labelKey: "support", Icon: LifeBuoy },
+  { href: TOUR_HOME, labelKey: "tour", Icon: Compass, external: true },
 ];
 
 export function PatsPortalNav({
-  showPaymentLink = false,
-  showFlightsLink = false,
-  showHostInfoLink = false,
   stageLabel,
   stageStep,
   stageTone = "pending",
 }: {
-  showPaymentLink?: boolean;
-  showFlightsLink?: boolean;
-  showHostInfoLink?: boolean;
   stageLabel?: string;
   stageStep?: { current: number; total: number };
   stageTone?: "pending" | "confirmed";
@@ -65,14 +61,6 @@ export function PatsPortalNav({
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
-
-  const gates: Record<NavGate, boolean> = {
-    always: true,
-    payment: showPaymentLink,
-    flights: showFlightsLink,
-    hostInfo: showHostInfoLink,
-  };
-  const links = BASE_LINKS.filter((link) => gates[link.gate]);
 
   const pct =
     stageStep && stageStep.total > 0
@@ -129,7 +117,7 @@ export function PatsPortalNav({
         <div className="pp-nav">
           <p className="pp-nav__label">{t.nav.menu}</p>
           <ul className="pp-nav__list">
-            {links.map((link) => {
+            {NAV_LINKS.map((link) => {
               const active =
                 pathname === link.href ||
                 (link.href !== "/event/dashboard" && pathname.startsWith(link.href));
@@ -138,7 +126,7 @@ export function PatsPortalNav({
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    prefetch
+                    prefetch={link.external ? false : true}
                     className={cn("pp-nav__link", active && "is-active")}
                     aria-current={active ? "page" : undefined}
                   >

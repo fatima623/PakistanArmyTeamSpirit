@@ -99,12 +99,13 @@ export function ParticipantWorkflowPanel({
       </div>
       <ol className="pp-journey__grid">
         {stages.map((stage, i) => {
-          /* Only the active step (current / needs-attention) links to its
-             section and shows hover + a chevron. Completed and locked steps
-             render static — no link, no hover animation, no chevron. */
+          /* Every unlocked step links to its section: the active one so the
+             participant can act on it, the completed ones so a form they have
+             already filled in stays reachable (and correctable). Only locked
+             steps render static — no link, no hover animation, no chevron. */
           const isCurrent =
             stage.state === "current" || stage.state === "attention";
-          const clickable = isCurrent;
+          const clickable = isCurrent || stage.state === "done";
           return (
             <li key={stage.key}>
               {clickable ? (

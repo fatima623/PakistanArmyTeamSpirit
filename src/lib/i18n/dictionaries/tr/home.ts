@@ -28,39 +28,7 @@ export const home: typeof enHome = {
       "Pakistan Army Team Spirit (PATS), her yıl JLA — PATS kapsamında düzenlenen görev ve görev odaklı bir devriye yarışmasıdır. Temel amaç, taktik ve zihinsel yetenekleri değerlendirmek ve geliştirmek için zorlu bir devriye tatbikatıdır — katılımcılar zihinsel ve fiziksel olarak hazır olmalıdır. Takımlar; küçük operasyonlarda ustalık, dayanıklılık ile temel tatbikat ve prosedürlerde yetkinlik kazanmalıdır.",
   },
 
-  careers: {
-    eyebrow: "Katılım",
-    title: "PATS yolculuğunuza başlayın",
-    description:
-      "Doğru üye listesi ve irtibat bilgileriyle devriyenizi bu portal üzerinden kaydedin. Duyuruları, önemli tarihleri ve ödeme adımlarını katılımcı panelinizden takip edin.",
-    cards: {
-      register: { tag: "Katılım", title: "Takımınızı kaydedin" },
-      operations: { tag: "Puanlı etkinlikler", title: "Operasyon brifingi" },
-      international: { tag: "Ortak ülkeler", title: "Uluslararası edisyonlar" },
-    },
-  },
 
-  about: {
-    eyebrow: "PATS Hakkında",
-    title: "Yarışmaya genel bakış",
-    lead:
-      "Pakistan Army Team Spirit (PATS), her yıl JLA — PATS kapsamında düzenlenen görev ve görev odaklı bir devriye yarışmasıdır. Takım ruhuyla takdir edilen azim.",
-    imageAlt: "PATS yarışmasına genel bakış",
-    points: [
-      {
-        title: "60 saatlik operasyonel tatbikat",
-        body: "Bir keşif devriyesi, 30×30 km'lik terörist hâkimiyetindeki araziye sızar; planlanmış hiçbir dinlenme olmadan 20–22 taktik senaryodan geçerek 50–60 km yol kat eder.",
-      },
-      {
-        title: "2016'dan beri uluslararası",
-        body: "Dokuzuncu uluslararası edisyonlar; gerçekçi devriye, oryantasyon ve ortak yarışma standartları için ortak ülkeleri bir araya getirmiştir.",
-      },
-      {
-        title: "Puanlanan muharebe etkinlikleri",
-        body: "Testler, sub-konvansiyonel operasyonları yansıtır — navigasyon, CTR, CBRN, taarruz, sağlık, ateş desteği ve dayanıklılık; birleşik puanlama sistemiyle değerlendirilir.",
-      },
-    ],
-  },
 
   dates: {
     eyebrow: "Önemli tarihler",

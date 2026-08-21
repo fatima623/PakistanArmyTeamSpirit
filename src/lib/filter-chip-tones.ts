@@ -4,11 +4,10 @@ const FILTER_TONE_MAP: Record<string, string> = {
   pending: "pending",
   approved: "approved",
   rejected: "rejected",
-  payment_pending: "payment",
   admins: "admins",
   submitted: "pending",
   verified: "approved",
-  under_review: "payment",
+  under_review: "review",
   returned: "returned",
 };
 
@@ -43,7 +42,7 @@ const CHIP_TONES: Record<string, { active: string; inactive: string }> = {
     inactive: "border-red-300 bg-red-100 text-red-700",
     active: "border-red-600 bg-red-600 text-white",
   },
-  payment: {
+  review: {
     inactive: "border-sky-300 bg-sky-100 text-sky-700",
     active: "border-sky-600 bg-sky-600 text-white",
   },
@@ -84,7 +83,7 @@ const SEG_TONES: Record<string, { active: string; inactive: string }> = {
     inactive: "border-transparent bg-transparent text-red-600",
     active: "border-red-500 bg-red-50 text-red-600 shadow-sm",
   },
-  payment: {
+  review: {
     inactive: "border-transparent bg-transparent text-sky-700",
     active: "border-sky-500 bg-sky-50 text-sky-700 shadow-sm",
   },

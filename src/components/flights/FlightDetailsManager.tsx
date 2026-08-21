@@ -14,6 +14,7 @@ import {
   Pencil,
   Plane,
   Plus,
+  Send,
   Ticket,
   Trash2,
   UserRound,
@@ -194,6 +195,8 @@ export function FlightDetailsManager({
   finalized,
   deadlineIso,
   deadlinePassed,
+  submittedAt = null,
+  approved = false,
 }: {
   initialFlights: FlightRecord[];
   members: TeamMemberRecord[];
@@ -201,6 +204,10 @@ export function FlightDetailsManager({
   finalized: boolean;
   deadlineIso: string | null;
   deadlinePassed: boolean;
+  /** ISO timestamp once the registration has been sent to the SD queue. */
+  submittedAt?: string | null;
+  /** SD has approved — the submission can no longer be reopened. */
+  approved?: boolean;
 }) {
   const router = useRouter();
   const { t, locale } = useI18n();
@@ -220,6 +227,9 @@ export function FlightDetailsManager({
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   /** Roster member picked for each unlinked record, keyed by flight id. */
   const [adoptById, setAdoptById] = useState<Record<string, string>>({});
+  /** Submitted-for-approval marker, mirrored locally for instant feedback. */
+  const [submitted, setSubmitted] = useState<string | null>(submittedAt);
+  const [submitting, setSubmitting] = useState(false);
 
   const editable = canEdit && !finalized && !deadlinePassed;
 
@@ -887,6 +897,34 @@ export function FlightDetailsManager({
     );
   };
 
+  /** Submitting the flight step is what sends the whole registration to SD. */
+  const toggleSubmission = async (submit: boolean) => {
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/user/flights/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ submit }),
+      });
+      if (!res.ok) {
+        toast.error(await apiError(res));
+        return;
+      }
+      const data = await res.json();
+      setSubmitted(data.flightsSubmittedAt ?? null);
+      toast.success(
+        submit ? fl.submit.submittedToast : fl.submit.reopenedToast
+      );
+      router.refresh();
+    } catch {
+      toast.error(t.common.toasts.genericError);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const allComplete = members.length > 0 && completeCount === members.length;
+
   return (
     <div className="space-y-4">
       {finalized ? (
@@ -980,6 +1018,73 @@ export function FlightDetailsManager({
           </ul>
         </section>
       ) : null}
+
+      {finalized ? null : (
+        <section className="pp-card">
+          <div className="pp-card__head">
+            <div className="flex min-w-0 items-start gap-3.5">
+              <span
+                className={`mt-0.5 flex h-11 w-11 flex-none items-center justify-center rounded-xl border ${
+                  submitted
+                    ? "border-emerald-100 bg-emerald-50 text-emerald-700"
+                    : "border-slate-200 bg-slate-50 text-slate-500"
+                }`}
+                aria-hidden
+              >
+                {submitted ? (
+                  <CheckCircle2 className="h-5 w-5" />
+                ) : (
+                  <Send className="h-5 w-5" />
+                )}
+              </span>
+              <div className="min-w-0">
+                <h2 className="pp-card__title">
+                  {submitted ? fl.submit.submittedTitle : fl.submit.title}
+                </h2>
+                <p className="pp-card__desc" style={{ marginTop: "0.2rem" }}>
+                  {submitted
+                    ? fl.submit.submittedSub
+                    : allComplete
+                      ? fl.submit.desc
+                      : fl.submit.incomplete}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {approved ? null : (
+            <div className="flex flex-wrap gap-2">
+              {submitted ? (
+                <button
+                  type="button"
+                  className="pp-btn pp-btn--ghost"
+                  disabled={submitting || !editable}
+                  onClick={() => toggleSubmission(false)}
+                >
+                  {submitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                  ) : null}
+                  {fl.submit.reopen}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="pp-btn pp-btn--primary"
+                  disabled={submitting || !editable || !allComplete}
+                  onClick={() => toggleSubmission(true)}
+                >
+                  {submitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                  ) : (
+                    <Send className="h-4 w-4" aria-hidden />
+                  )}
+                  {fl.submit.action}
+                </button>
+              )}
+            </div>
+          )}
+        </section>
+      )}
     </div>
   );
 }

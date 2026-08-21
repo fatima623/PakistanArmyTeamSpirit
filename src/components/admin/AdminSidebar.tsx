@@ -7,7 +7,6 @@ import {
   Bell,
   Building2,
   Calendar,
-  CreditCard,
   GalleryHorizontal,
   Globe,
   Images,
@@ -36,14 +35,13 @@ import { PatsLogo } from "@/components/pats/PatsLogo";
 /** Sidebar identity strip copy, keyed on staff role. */
 const ROLE_IDENTITY: Record<string, { label: string; access: string }> = {
   admin: { label: "Administrator", access: "System management" },
-  mtd: { label: "MT (Management Team)", access: "Payment verification" },
+  mtd: { label: "MT (Management Team)", access: "Operational oversight" },
   sdbs: { label: "SD (Sports Directorate)", access: "Registration verification" },
 };
 
 const navIcons: Record<(typeof ADMIN_NAV_ITEMS)[number]["key"], LucideIcon> = {
   dashboard: LayoutDashboard,
   users: Users,
-  payments: CreditCard,
   units: Shield,
   international: Globe,
   teamRequests: UserPlus,

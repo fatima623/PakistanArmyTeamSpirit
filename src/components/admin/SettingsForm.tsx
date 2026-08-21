@@ -1,17 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Banknote, Globe, Landmark, Loader2, Smartphone } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import {
-  DEFAULT_PAYMENT_SETTINGS,
-  formatRegistrationFee,
-} from "@/lib/payment-settings";
 import { TOAST } from "@/lib/toast";
 import { adminInput } from "@/lib/admin-ui";
 import { cn } from "@/lib/utils";
@@ -20,7 +16,6 @@ type Settings = {
   registrationOpen: boolean;
   intlRegistrationOpen: boolean;
   registrationDeadline: string;
-  paymentDeadline: string;
   participationConfirmDeadline: string;
   teamRegistrationOpenDate: string;
   teamRegistrationCloseDate: string;
@@ -38,25 +33,12 @@ type Settings = {
   instagramUrl: string;
   merchandiseQrUrl: string;
   photographyQrUrl: string;
-  defaultPaymentAmount: number;
-  paymentCurrency: string;
-  paymentBankName: string;
-  paymentBankAccountTitle: string;
-  paymentBankAccountNumber: string;
-  paymentBankIban: string;
-  paymentWiseEmail: string;
-  paymentWiseName: string;
-  paymentMobileNumber: string;
-  paymentMobileTitle: string;
-  paymentRemitlyEmail: string;
-  paymentRemitlyName: string;
 };
 
 const defaults: Settings = {
   registrationOpen: true,
   intlRegistrationOpen: true,
   registrationDeadline: "",
-  paymentDeadline: "",
   participationConfirmDeadline: "",
   teamRegistrationOpenDate: "",
   teamRegistrationCloseDate: "",
@@ -74,18 +56,6 @@ const defaults: Settings = {
   instagramUrl: "#",
   merchandiseQrUrl: "https://www.theprintsofwales.co.uk/cambrian-patrol/",
   photographyQrUrl: "mailto:igphoto@yahoo.co.uk",
-  defaultPaymentAmount: DEFAULT_PAYMENT_SETTINGS.registrationFee,
-  paymentCurrency: DEFAULT_PAYMENT_SETTINGS.currency,
-  paymentBankName: DEFAULT_PAYMENT_SETTINGS.bankName,
-  paymentBankAccountTitle: DEFAULT_PAYMENT_SETTINGS.bankAccountTitle,
-  paymentBankAccountNumber: DEFAULT_PAYMENT_SETTINGS.bankAccountNumber,
-  paymentBankIban: DEFAULT_PAYMENT_SETTINGS.bankIban,
-  paymentWiseEmail: DEFAULT_PAYMENT_SETTINGS.wiseEmail,
-  paymentWiseName: DEFAULT_PAYMENT_SETTINGS.wiseName,
-  paymentMobileNumber: DEFAULT_PAYMENT_SETTINGS.mobileNumber,
-  paymentMobileTitle: DEFAULT_PAYMENT_SETTINGS.mobileTitle,
-  paymentRemitlyEmail: DEFAULT_PAYMENT_SETTINGS.remitlyEmail,
-  paymentRemitlyName: DEFAULT_PAYMENT_SETTINGS.remitlyName,
 };
 
 /** ISO/Date string → value for an <input type="datetime-local"> (local time). */
@@ -181,47 +151,6 @@ function SettingToggle({
   );
 }
 
-function PaymentMethodCard({
-  icon: Icon,
-  title,
-  subtitle,
-  wide = false,
-  children,
-}: {
-  icon: React.ElementType;
-  title: string;
-  subtitle?: string;
-  /** Full-width primary method — lays fields out in two columns. */
-  wide?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col gap-4 rounded-xl border border-[#e2e8f0] bg-white px-5 pb-5 pt-[1.1rem] shadow-[0_1px_2px_rgba(15,23,42,0.03)] transition-[border-color,box-shadow] hover:border-[#cfe0d5] hover:shadow-[0_4px_14px_rgba(15,23,42,0.06)]">
-      <div className="flex items-center gap-2.5 border-b border-[#eef2f0] pb-3.5">
-        <span
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-[#dbe6dc] bg-[#eaf1ea] text-[#1e5a3a]"
-          aria-hidden
-        >
-          <Icon className="h-4 w-4" />
-        </span>
-        <div className="min-w-0">
-          <h4 className="text-sm font-bold tracking-tight text-[#0f172a]">
-            {title}
-          </h4>
-          {subtitle ? (
-            <p className="mt-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.05em] text-[#94a3b8]">
-              {subtitle}
-            </p>
-          ) : null}
-        </div>
-      </div>
-      <div className={cn("grid grid-cols-1 gap-4", wide && "sm:grid-cols-2")}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export function SettingsForm() {
   const [form, setForm] = useState<Settings>(defaults);
   const [loading, setLoading] = useState(true);
@@ -236,41 +165,9 @@ export function SettingsForm() {
           setForm({
             ...defaults,
             ...data.settings,
-            defaultPaymentAmount: Number(
-              data.settings.defaultPaymentAmount ??
-                DEFAULT_PAYMENT_SETTINGS.registrationFee
-            ),
-            paymentCurrency:
-              data.settings.paymentCurrency ?? defaults.paymentCurrency,
-            paymentBankName:
-              data.settings.paymentBankName ?? defaults.paymentBankName,
-            paymentBankAccountTitle:
-              data.settings.paymentBankAccountTitle ??
-              defaults.paymentBankAccountTitle,
-            paymentBankAccountNumber:
-              data.settings.paymentBankAccountNumber ??
-              defaults.paymentBankAccountNumber,
-            paymentBankIban:
-              data.settings.paymentBankIban ?? defaults.paymentBankIban,
-            paymentWiseEmail:
-              data.settings.paymentWiseEmail ?? defaults.paymentWiseEmail,
-            paymentWiseName:
-              data.settings.paymentWiseName ?? defaults.paymentWiseName,
-            paymentMobileNumber:
-              data.settings.paymentMobileNumber ??
-              defaults.paymentMobileNumber,
-            paymentMobileTitle:
-              data.settings.paymentMobileTitle ?? defaults.paymentMobileTitle,
-            paymentRemitlyEmail:
-              data.settings.paymentRemitlyEmail ??
-              defaults.paymentRemitlyEmail,
-            paymentRemitlyName:
-              data.settings.paymentRemitlyName ??
-              defaults.paymentRemitlyName,
             registrationDeadline: toLocalInput(
               data.settings.registrationDeadline
             ),
-            paymentDeadline: toLocalInput(data.settings.paymentDeadline),
             participationConfirmDeadline: toLocalInput(
               data.settings.participationConfirmDeadline
             ),
@@ -321,8 +218,6 @@ export function SettingsForm() {
       </div>
     );
   }
-
-  const currency = (form.paymentCurrency || "PKR").toUpperCase();
 
   return (
     <div className="mx-auto flex max-w-[64rem] flex-col gap-4 pb-8">
@@ -375,16 +270,6 @@ export function SettingsForm() {
                     ...f,
                     registrationDeadline: e.target.value,
                   }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-            <SettingField label="Payment deadline">
-              <Input
-                type="datetime-local"
-                value={form.paymentDeadline}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, paymentDeadline: e.target.value }))
                 }
                 className={adminInput}
               />
@@ -495,214 +380,15 @@ export function SettingsForm() {
         </div>
       </SettingsCard>
 
-      <SettingsCard
-        title="Payment settings"
-        description="Registration fee and the bank / mobile transfer details shown to approved participants."
-      >
-        <div className={STACK}>
-          <div className="flex flex-wrap items-start gap-x-7 gap-y-4 rounded-xl border border-[#cfe6d8] bg-gradient-to-b from-[#f1f9f4] to-[#f9fbf9] px-[1.35rem] py-[1.15rem]">
-            <div className="flex min-w-0 flex-1 basis-60 flex-col gap-2.5">
-              <span className="text-[0.7rem] font-bold uppercase tracking-[0.08em] text-[#15803d]">
-                Registration fee
-              </span>
-              <div className="inline-flex max-w-full items-stretch self-start overflow-hidden rounded-[10px] border border-[#cbd5e1] bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-[border-color,box-shadow] focus-within:border-[#9cbf8a] focus-within:ring-[3px] focus-within:ring-[#1e5a3a]/15">
-                <span className="inline-flex items-center border-r border-[#e2e8f0] bg-[#f1f5f9] px-3.5 text-[0.8125rem] font-bold tracking-wide text-[#475569]">
-                  {currency}
-                </span>
-                <input
-                  type="number"
-                  step="1"
-                  min="1"
-                  inputMode="numeric"
-                  aria-label="Registration fee amount"
-                  value={form.defaultPaymentAmount}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      defaultPaymentAmount:
-                        parseInt(e.target.value, 10) ||
-                        DEFAULT_PAYMENT_SETTINGS.registrationFee,
-                    }))
-                  }
-                  className="w-[8.5rem] max-w-full border-0 bg-transparent px-3.5 py-2 text-[1.35rem] font-bold tabular-nums text-[#0f172a] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                />
-              </div>
-              <p className="text-[0.78rem] leading-relaxed text-[#475569]">
-                Charged to every approved participant — they see{" "}
-                <strong className="font-bold text-[#15803d]">
-                  {formatRegistrationFee(form.defaultPaymentAmount, currency)}
-                </strong>
-                .
-              </p>
-            </div>
-            <div className="min-w-[8rem] shrink grow-0 basis-44">
-              <SettingField label="Currency" hint="ISO code — e.g. PKR, USD, GBP.">
-                <Input
-                  value={form.paymentCurrency}
-                  maxLength={3}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      paymentCurrency: e.target.value.toUpperCase(),
-                    }))
-                  }
-                  className={cn(
-                    adminInput,
-                    "max-w-[8rem] font-semibold uppercase tracking-wide"
-                  )}
-                />
-              </SettingField>
-            </div>
-          </div>
-
-          <PaymentMethodCard
-            icon={Landmark}
-            title="Bank transfer"
-            subtitle="Domestic PKR account"
-            wide
-          >
-            <SettingField label="Bank name">
-              <Input
-                value={form.paymentBankName}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, paymentBankName: e.target.value }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-            <SettingField label="Account title">
-              <Input
-                value={form.paymentBankAccountTitle}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    paymentBankAccountTitle: e.target.value,
-                  }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-            <SettingField label="Account number">
-              <Input
-                value={form.paymentBankAccountNumber}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    paymentBankAccountNumber: e.target.value,
-                  }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-            <SettingField label="IBAN" hint="Optional — leave blank to hide.">
-              <Input
-                value={form.paymentBankIban}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, paymentBankIban: e.target.value }))
-                }
-                className={adminInput}
-              />
-            </SettingField>
-          </PaymentMethodCard>
-
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-            <PaymentMethodCard
-              icon={Globe}
-              title="Wise transfer"
-              subtitle="International"
-            >
-              <SettingField label="Wise email">
-                <Input
-                  value={form.paymentWiseEmail}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, paymentWiseEmail: e.target.value }))
-                  }
-                  className={adminInput}
-                />
-              </SettingField>
-              <SettingField label="Recipient name">
-                <Input
-                  value={form.paymentWiseName}
-                  onChange={(e) =>
-                    setForm((f) => ({ ...f, paymentWiseName: e.target.value }))
-                  }
-                  className={adminInput}
-                />
-              </SettingField>
-            </PaymentMethodCard>
-
-            <PaymentMethodCard
-              icon={Smartphone}
-              title="Mobile wallets"
-              subtitle="JazzCash / Easypaisa"
-            >
-              <SettingField label="Wallet number">
-                <Input
-                  value={form.paymentMobileNumber}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      paymentMobileNumber: e.target.value,
-                    }))
-                  }
-                  className={adminInput}
-                />
-              </SettingField>
-              <SettingField label="Account title">
-                <Input
-                  value={form.paymentMobileTitle}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      paymentMobileTitle: e.target.value,
-                    }))
-                  }
-                  className={adminInput}
-                />
-              </SettingField>
-            </PaymentMethodCard>
-
-            <PaymentMethodCard
-              icon={Banknote}
-              title="Remitly"
-              subtitle="International"
-            >
-              <SettingField label="Remitly email">
-                <Input
-                  value={form.paymentRemitlyEmail}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      paymentRemitlyEmail: e.target.value,
-                    }))
-                  }
-                  className={adminInput}
-                />
-              </SettingField>
-              <SettingField label="Recipient name">
-                <Input
-                  value={form.paymentRemitlyName}
-                  onChange={(e) =>
-                    setForm((f) => ({
-                      ...f,
-                      paymentRemitlyName: e.target.value,
-                    }))
-                  }
-                  className={adminInput}
-                />
-              </SettingField>
-            </PaymentMethodCard>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 border-t border-black/[0.08] pt-5">
-            <Button onClick={handleSave} disabled={saving} variant="adminPrimary">
-              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {saved ? "Saved" : "Save settings"}
-            </Button>
-            <p className="min-w-0 flex-[1_1_14rem] text-[0.8rem] leading-snug text-muted-foreground">
-              Saves every section on this page.
-            </p>
-          </div>
+      <SettingsCard title="Save">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button onClick={handleSave} disabled={saving} variant="adminPrimary">
+            {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {saved ? "Saved" : "Save settings"}
+          </Button>
+          <p className="min-w-0 flex-[1_1_14rem] text-[0.8rem] leading-snug text-muted-foreground">
+            Saves every section on this page.
+          </p>
         </div>
       </SettingsCard>
     </div>

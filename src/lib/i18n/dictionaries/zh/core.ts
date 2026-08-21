@@ -19,6 +19,7 @@ export const core: typeof enCore = {
   },
 
   meta: {
+    tour: "网站导览",
     home: "首页",
     announcements: "公告",
     awards: "奖项与表彰",
@@ -46,11 +47,7 @@ export const core: typeof enCore = {
     done: "完成",
     logout: "退出登录",
     dashboard: "仪表板",
-    unitInformation: "单位信息",
-    teamRegistration: "团队注册",
-    payment: "付款",
-    flightDetails: "航班信息",
-    hostInformation: "接待信息",
+    tour: "网站导览",
     support: "支持",
     journeyComplete: "流程已完成",
   },
@@ -62,7 +59,7 @@ export const core: typeof enCore = {
     membersCount: (n) => `${n} 名队员`,
     scheduleEyebrow: "日程",
     dataEntryPeriods: "数据录入时段",
-    dataEntryDesc: "仅在付款经核实后可用。",
+    dataEntryDesc: "提交注册数据的计划时段。",
     noPeriods: "尚未安排时段。",
     deadlinesEyebrow: "截止日期",
     timeline: "时间线",
@@ -79,7 +76,6 @@ export const core: typeof enCore = {
       noKeyDates: "尚未发布重要日期。",
       deadlineLabels: {
         registration: "报名截止日期",
-        payment: "付款截止日期",
       },
     },
   },
@@ -92,20 +88,19 @@ export const core: typeof enCore = {
   },
 
   statusBar: {
-    underReviewTitle: "申请审核中",
+    inProgressTitle: "注册进行中",
+    inProgressText:
+      "请逐步完成以下各项。所有步骤完成后，体育局（SD）将审批您的注册。",
+    underReviewTitle: "注册审核中",
     underReviewText:
-      "您的注册正在由 PATS 审核。一经批准，我们将立即通过电子邮件通知您。",
-    confirmedTitle: "已确认 — 您已获准参加 PATS 2026",
+      "所有步骤均已提交。体育局（SD）正在审核您的注册，通过后将通知您。",
+    confirmedTitle: "已批准 — 您已获得 PATS 2026 参赛资格",
     confirmedTextWithDates: (dates) =>
-      `您的付款已核实，参赛资格已确认。安排时间：${dates}。`,
-    confirmedText: "您的付款已核实，参赛资格已确认。",
-    approvedTitle: "已批准 — 需要付款",
-    approvedText:
-      "您的申请已获批准。请完成付款以确保您在比赛中的席位。",
+      `您的注册已由 SD 批准，席位已确认。日程：${dates}。`,
+    confirmedText: "您的注册已由 SD 批准，席位已确认。",
     returnedTitle: "已退回以待更正",
-    approvedOn: (date) => `批准于 ${date}`,
-    goToPayment: "前往付款提交",
-    paymentVerified: "付款已核实",
+    approvedOn: (date) => `${date} 批准`,
+    continueRegistration: "继续注册",
   },
 
   registration: {
@@ -137,23 +132,15 @@ export const core: typeof enCore = {
         title: "确认参与",
         subtitle: "确认您的团队可参加 PATS 2026。",
       },
+      unitInfo: {
+        eyebrow: "注册",
+        title: "单位信息",
+        subtitle: "填写您的单位及指挥官信息。保存后即可开始团队注册。",
+      },
       verification: {
         eyebrow: "",
-        title: "注册核验",
-        subtitle:
-          "您的注册详情将由体育局 (SD) 审核。",
-      },
-      payment: {
-        eyebrow: "",
-        title: "进行付款",
-        subtitle:
-          "完成注册付款以确认您参加 PATS 2026。",
-      },
-      teamRegistration: {
-        eyebrow: "团队注册",
-        title: "团队成员",
-        subtitle:
-          "在下方添加您的团队成员。保存后，请将名单标记为完成，以解锁航班信息。",
+        title: "注册审批",
+        subtitle: "所有步骤完成后，体育局（SD）将审批您的注册。",
       },
       roster: {
         eyebrow: "团队注册",
@@ -182,13 +169,14 @@ export const core: typeof enCore = {
         "以下您的注册详情为只读。请继续下一步。",
       registrationVerification: "注册核验",
       messageFromSd: "来自 SD 的消息：",
-      paymentVerifiedMt: "付款已由管理组 (MT) 核实。",
-      paymentVerifiedMtSub:
-        "以下您的付款记录为只读。请继续下一步。",
-      paymentDeadlinePassed:
-        "付款截止日期已过，因此新的付款提交已关闭。如果您仍需完成付款，请联系 PATS 管理部门。",
-      noPaymentInfo:
-        "您的账户暂无可用的付款信息。请稍后再试。",
+      unitInfoSaved: "单位信息已保存。",
+      unitInfoSavedSub: (date) => `于 ${date} 记录。在注册获批前您仍可修改。`,
+      flightsSubmitted: "航班信息已提交。",
+      flightsSubmittedSub: "您的注册已提交至体育局（SD）等待审批。",
+      awaitingApproval: "等待 SD 审批",
+      awaitingApprovalSub: "所有步骤均已完成。体育局将审核并批准您的注册。",
+      approvalLocked:
+        "请完成参与确认、单位信息、团队成员和航班信息，方可提交注册以待审批。",
       teamRegistered: "团队已注册。",
       teamRegisteredSub: (date) =>
         `注册于 ${date}。请在下方填写您的成员名单。`,

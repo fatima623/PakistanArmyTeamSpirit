@@ -18,6 +18,7 @@ export const core: typeof enCore = {
   },
 
   meta: {
+    tour: "Site Turu",
     home: "Ana sayfa",
     announcements: "Duyurular",
     awards: "Ödüller ve Takdir",
@@ -45,11 +46,7 @@ export const core: typeof enCore = {
     done: "Tamamlandı",
     logout: "Çıkış yap",
     dashboard: "Panel",
-    unitInformation: "Birlik bilgileri",
-    teamRegistration: "Takım Kaydı",
-    payment: "Ödeme",
-    flightDetails: "Uçuş Bilgileri",
-    hostInformation: "Ev Sahibi Bilgileri",
+    tour: "Site Turu",
     support: "Destek",
     journeyComplete: "Kayıt tamamlandı",
   },
@@ -61,7 +58,7 @@ export const core: typeof enCore = {
     membersCount: (n) => `${n} takım üyesi`,
     scheduleEyebrow: "Program",
     dataEntryPeriods: "Veri giriş dönemleri",
-    dataEntryDesc: "Yalnızca ödeme doğrulandıktan sonra kullanılabilir.",
+    dataEntryDesc: "Kayıt verilerinizi göndermeniz için planlanan dönemler.",
     noPeriods: "Henüz planlanmış dönem yok.",
     deadlinesEyebrow: "Son tarihler",
     timeline: "Zaman çizelgesi",
@@ -78,7 +75,6 @@ export const core: typeof enCore = {
       noKeyDates: "Henüz önemli tarih yayımlanmadı.",
       deadlineLabels: {
         registration: "Kayıt son tarihi",
-        payment: "Ödeme son tarihi",
       },
     },
   },
@@ -91,20 +87,19 @@ export const core: typeof enCore = {
   },
 
   statusBar: {
-    underReviewTitle: "Başvuru inceleniyor",
+    inProgressTitle: "Kayıt devam ediyor",
+    inProgressText:
+      "Aşağıdaki adımları tamamlayın. Spor Müdürlüğü (SD), tüm adımlar tamamlandığında kaydınızı onaylar.",
+    underReviewTitle: "Kayıt inceleniyor",
     underReviewText:
-      "Kaydınız PATS tarafından inceleniyor. Onaylandığı anda size e-posta göndereceğiz.",
-    confirmedTitle: "Onaylandı — PATS 2026 için uygunsunuz",
+      "Tüm adımlar gönderildi. Spor Müdürlüğü (SD) kaydınızı inceliyor ve onaylandığında sizi bilgilendirecek.",
+    confirmedTitle: "Onaylandı — PATS 2026 için hazırsınız",
     confirmedTextWithDates: (dates) =>
-      `Ödemeniz doğrulandı ve yeriniz kesinleşti. Planlanan: ${dates}.`,
-    confirmedText: "Ödemeniz doğrulandı ve yeriniz kesinleşti.",
-    approvedTitle: "Onaylandı — ödeme gerekli",
-    approvedText:
-      "Başvurunuz onaylandı. Yarışmadaki yerinizi güvence altına almak için ödemenizi tamamlayın.",
+      `Kaydınız SD tarafından onaylandı ve yeriniz kesinleşti. Program: ${dates}.`,
+    confirmedText: "Kaydınız SD tarafından onaylandı ve yeriniz kesinleşti.",
     returnedTitle: "Düzeltme için iade edildi",
     approvedOn: (date) => `${date} tarihinde onaylandı`,
-    goToPayment: "Ödeme gönderimine git",
-    paymentVerified: "Ödeme doğrulandı",
+    continueRegistration: "Kayda devam et",
   },
 
   registration: {
@@ -136,23 +131,17 @@ export const core: typeof enCore = {
         title: "Katılımı Onayla",
         subtitle: "Takımınızın PATS 2026'ya katılım uygunluğunu onaylayın.",
       },
+      unitInfo: {
+        eyebrow: "Kayıt",
+        title: "Birlik Bilgileri",
+        subtitle:
+          "Birlik ve Birlik Komutanı bilgilerinizi girin. Kaydetmek takım kaydını açar.",
+      },
       verification: {
         eyebrow: "",
-        title: "Kayıt Doğrulaması",
+        title: "Kayıt Onayı",
         subtitle:
-          "Kayıt bilgileriniz Spor Direktörlüğü (SD) tarafından incelenir.",
-      },
-      payment: {
-        eyebrow: "",
-        title: "Ödeme Yap",
-        subtitle:
-          "PATS 2026'ya katılımınızı onaylamak için kayıt ödemenizi tamamlayın.",
-      },
-      teamRegistration: {
-        eyebrow: "Takım kaydı",
-        title: "Takım Üyeleri",
-        subtitle:
-          "Takım üyelerinizi aşağıya ekleyin. Kaydettikten sonra, uçuş bilgilerinin kilidini açmak için listeyi tamamlanmış olarak işaretleyin.",
+          "Spor Müdürlüğü (SD), tüm adımlar tamamlandığında kaydınızı onaylar.",
       },
       roster: {
         eyebrow: "Takım kaydı",
@@ -181,13 +170,17 @@ export const core: typeof enCore = {
         "Kayıt bilgileriniz aşağıda yalnızca görüntülenebilir. Bir sonraki adıma geçin.",
       registrationVerification: "Kayıt doğrulaması",
       messageFromSd: "SD'den mesaj:",
-      paymentVerifiedMt: "Ödeme, Yönetim Ekibi (MT) tarafından doğrulandı.",
-      paymentVerifiedMtSub:
-        "Ödeme kayıtlarınız aşağıda yalnızca görüntülenebilir. Bir sonraki adıma geçin.",
-      paymentDeadlinePassed:
-        "Ödeme son tarihi geçtiği için yeni ödeme gönderimleri kapatıldı. Ödemenizi hâlâ tamamlamanız gerekiyorsa lütfen PATS yönetimiyle iletişime geçin.",
-      noPaymentInfo:
-        "Hesabınız için henüz ödeme bilgisi bulunmuyor. Lütfen kısa süre sonra tekrar deneyin.",
+      unitInfoSaved: "Birlik bilgileri kaydedildi.",
+      unitInfoSavedSub: (date) =>
+        `${date} tarihinde kaydedildi. Kaydınız onaylanana kadar güncelleyebilirsiniz.`,
+      flightsSubmitted: "Uçuş bilgileri gönderildi.",
+      flightsSubmittedSub:
+        "Kaydınız artık onay için Spor Müdürlüğünde (SD).",
+      awaitingApproval: "SD onayı bekleniyor",
+      awaitingApprovalSub:
+        "Tüm adımlar tamamlandı. Spor Müdürlüğü kaydınızı inceleyip onaylayacak.",
+      approvalLocked:
+        "Kaydınızı onaya göndermek için onay, birlik bilgileri, takım üyeleri ve uçuş bilgileri adımlarını tamamlayın.",
       teamRegistered: "Takım kaydedildi.",
       teamRegisteredSub: (date) =>
         `${date} tarihinde kaydedildi. Üye listenizi aşağıya doldurun.`,

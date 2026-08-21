@@ -1,11 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { getCachedSession } from "@/lib/cached-auth";
-import { isApplicationApproved } from "@/lib/user-status";
 import {
-  canViewHostInfo,
   currentWorkflowStageIndex,
   deriveWorkflowStages,
-  isRosterComplete,
   workflowUserSelect,
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
@@ -16,9 +13,6 @@ import { PatsPortalNav } from "./PatsPortalNav";
 export async function PatsPortalNavServer() {
   const session = await getCachedSession();
   const { t } = await getDictionary();
-  let showPaymentLink = false;
-  let showFlightsLink = false;
-  let showHostInfoLink = false;
   let stageLabel: string | undefined;
   let stageStep: { current: number; total: number } | undefined;
   let stageTone: "pending" | "confirmed" = "pending";
@@ -35,17 +29,16 @@ export async function PatsPortalNavServer() {
       getWorkflowSettings(),
     ]);
     if (user) {
-      showPaymentLink =
-        !user.suspended && isApplicationApproved(user.applicationStatus);
-      showFlightsLink = isRosterComplete(user);
-      showHostInfoLink = canViewHostInfo(user, settings);
-
+      /* `hostInfo` is filtered out for the same reason the dashboard's
+         Registration progress panel drops it: it is a post-approval courtesy
+         page, not a step the participant works through. Counting it here made
+         the sidebar advertise "1/6" beside a panel showing five cards. */
       const stages = deriveWorkflowStages({
         user,
         settings,
         teamMemberCount: user._count.teamMembers,
         wf: t.workflow,
-      });
+      }).filter((s) => s.key !== "hostInfo");
       const idx = currentWorkflowStageIndex(stages);
       if (idx >= 0) {
         stageLabel = stages[idx].label;
@@ -61,9 +54,6 @@ export async function PatsPortalNavServer() {
 
   return (
     <PatsPortalNav
-      showPaymentLink={showPaymentLink}
-      showFlightsLink={showFlightsLink}
-      showHostInfoLink={showHostInfoLink}
       stageLabel={stageLabel}
       stageStep={stageStep}
       stageTone={stageTone}

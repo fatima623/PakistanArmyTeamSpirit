@@ -94,7 +94,6 @@ export const ENTITY_TYPE = {
   TEAM_PROFILE: "team_profile",
   TRAVEL_DOC: "travel_document",
   COMPLIANCE_DOC: "compliance_document",
-  PAYMENT: "payment",
 } as const;
 
 /** Registration wizard step IDs (generic labels in UI) */

@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   ArrowUpRight,
   CheckCircle2,
+  Clock,
   Home,
   ShieldCheck,
 } from "lucide-react";
@@ -22,19 +23,20 @@ import {
   getTeamRegistrationWindowState,
   isConfirmationDeadlinePassed,
   isFlightDeadlinePassed,
+  isRegistrationApproved,
+  isReadyForApproval,
   type WorkflowStageKey,
 } from "@/lib/participant-workflow";
-import { APPLICATION_STATUS, isPaymentVerified } from "@/lib/constants";
-import { getParticipantPaymentData } from "@/lib/participant-payment-data";
-import { getDeadlines, paymentClosedByDeadline } from "@/lib/deadlines";
+import { APPLICATION_STATUS } from "@/lib/constants";
 import { teamMemberSelect } from "@/lib/team-members";
 import { flightDetailSelect } from "@/lib/flights";
+import { UNIT_NAMES } from "@/lib/units-list";
 import { formatDateDisplay } from "@/lib/utils";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 import { ParticipationConfirmCard } from "@/components/dashboard/ParticipationConfirmCard";
 import { ParticipantRegistrationDetailsCard } from "@/components/dashboard/ParticipantRegistrationDetailsCard";
-import { PaymentSubmissionForm } from "@/components/dashboard/PaymentSubmissionForm";
+import { UnitEditForm } from "@/components/dashboard/UnitEditForm";
 import { TeamRosterManager } from "@/components/team/TeamRosterManager";
 import {
   FlightDetailsManager,
@@ -97,16 +99,18 @@ export default async function JourneyPage({
         createdAt: true,
         approved: true,
         applicationStatus: true,
-        paymentStatus: true,
         rejectionReason: true,
         suspended: true,
         participationConfirmedAt: true,
         participationDeclinedAt: true,
+        unitInfoCompletedAt: true,
         teamRegisteredAt: true,
         rosterCompletedAt: true,
+        flightsSubmittedAt: true,
+        submittedForApprovalAt: true,
         maxTeamMembersOverride: true,
         flightsFinalizedAt: true,
-        unit: { select: { unitName: true, branch: true, bdeOrFmn: true } },
+        unit: true,
         _count: { select: { teamMembers: true } },
       },
     }),
@@ -152,38 +156,35 @@ export default async function JourneyPage({
   /* Flight details are filed one record per traveller, so the flights step
      needs the roster too — it renders a row per member. */
   const needsRoster = needsTeam || stepKey === "flights";
-  const [paymentData, deadlines, teamMembers, latestRequest, flights] =
-    await Promise.all([
-      stepKey === "payment" ? getParticipantPaymentData(user.id) : null,
-      stepKey === "payment" ? getDeadlines() : null,
-      needsRoster
-        ? prisma.teamMember.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: "asc" },
-            select: teamMemberSelect,
-          })
-        : null,
-      needsTeam
-        ? prisma.teamSizeRequest.findFirst({
-            where: { userId: user.id },
-            orderBy: { createdAt: "desc" },
-            select: {
-              id: true,
-              requestedCount: true,
-              status: true,
-              reviewNote: true,
-              createdAt: true,
-            },
-          })
-        : null,
-      stepKey === "flights"
-        ? prisma.flightDetail.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: "asc" },
-            select: flightDetailSelect,
-          })
-        : null,
-    ]);
+  const [teamMembers, latestRequest, flights] = await Promise.all([
+    needsRoster
+      ? prisma.teamMember.findMany({
+          where: { userId: user.id },
+          orderBy: { createdAt: "asc" },
+          select: teamMemberSelect,
+        })
+      : null,
+    needsTeam
+      ? prisma.teamSizeRequest.findFirst({
+          where: { userId: user.id },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            requestedCount: true,
+            status: true,
+            reviewNote: true,
+            createdAt: true,
+          },
+        })
+      : null,
+    stepKey === "flights"
+      ? prisma.flightDetail.findMany({
+          where: { userId: user.id },
+          orderBy: { createdAt: "asc" },
+          select: flightDetailSelect,
+        })
+      : null,
+  ]);
 
   let content: React.ReactNode = null;
 
@@ -229,92 +230,29 @@ export default async function JourneyPage({
         previouslyDeclined={!!user.participationDeclinedAt}
       />
     );
-  } else if (stepKey === "verification") {
-    const approved =
-      user.applicationStatus === APPLICATION_STATUS.APPROVED || user.approved;
+  } else if (stepKey === "unitInfo") {
+    /* The account is created with a login only, so this form is where the unit
+       record comes from — it stays editable (and revisitable from the progress
+       card) until administration finalizes the team. */
     content = (
       <section className="flex flex-col gap-4">
-        {approved ? (
+        {user.unitInfoCompletedAt ? (
           <StepDoneBanner
-            title={j.banners.verifiedBySd}
-            sub={j.banners.verifiedBySdSub}
-          />
-        ) : (
-          <div className="pp-card">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <span
-                  className="flex h-10 w-10 flex-none items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-700"
-                  aria-hidden
-                >
-                  <ShieldCheck className="h-5 w-5" />
-                </span>
-                <div>
-                  <h2 className="m-0 text-[0.9375rem] font-bold text-slate-900">
-                    {j.banners.registrationVerification}
-                  </h2>
-                  <p className="m-0 mt-0.5 text-[0.8125rem] text-slate-500">
-                    {requestedStage.sub}
-                  </p>
-                </div>
-              </div>
-              <ApplicationStatusBadge
-                status={user.applicationStatus}
-                showPrefix={false}
-              />
-            </div>
-            {user.rejectionReason &&
-            (user.applicationStatus === APPLICATION_STATUS.RETURNED ||
-              user.applicationStatus === APPLICATION_STATUS.REJECTED) ? (
-              <p className="m-0 mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-[0.8125rem] leading-[1.5] text-amber-900">
-                <span className="font-bold">{j.banners.messageFromSd}</span>{" "}
-                {user.rejectionReason}
-              </p>
-            ) : null}
-          </div>
-        )}
-        <ParticipantRegistrationDetailsCard
-          firstName={user.firstName}
-          lastName={user.lastName}
-          email={user.email}
-          rank={user.rank}
-          createdAt={user.createdAt}
-          country={user.country}
-          nationality={user.nationality}
-          unit={user.unit}
-          t={t.registration}
-          unitOptions={t.unit.options}
-          locale={locale}
-        />
-      </section>
-    );
-  } else if (stepKey === "payment") {
-    const verified = isPaymentVerified(user.paymentStatus);
-    const deadlinePassed =
-      !verified && !!deadlines && paymentClosedByDeadline(deadlines);
-    content = (
-      <section className="flex flex-col gap-4">
-        {verified ? (
-          <StepDoneBanner
-            title={j.banners.paymentVerifiedMt}
-            sub={j.banners.paymentVerifiedMtSub}
+            title={j.banners.unitInfoSaved}
+            sub={j.banners.unitInfoSavedSub(
+              formatDateDisplay(user.unitInfoCompletedAt, locale)
+            )}
           />
         ) : null}
-        {deadlinePassed ? (
-          <div className="pp-card">
-            <p className="m-0 text-sm leading-relaxed text-slate-700">
-              {j.banners.paymentDeadlinePassed}
-            </p>
-          </div>
-        ) : paymentData ? (
-          <PaymentSubmissionForm initialData={paymentData} />
-        ) : (
-          <div className="pp-card">
-            <p className="m-0 text-sm leading-relaxed text-slate-700">
-              {j.banners.noPaymentInfo}
-            </p>
-          </div>
-        )}
+        <UnitEditForm
+          user={{
+            firstName: user.firstName,
+            lastName: user.lastName,
+            rank: user.rank,
+            unit: user.unit,
+          }}
+          unitNames={[...UNIT_NAMES]}
+        />
       </section>
     );
   } else if (needsTeam) {
@@ -376,7 +314,76 @@ export default async function JourneyPage({
         finalized={!!user.flightsFinalizedAt}
         deadlineIso={settings.flightDetailsDeadline?.toISOString() ?? null}
         deadlinePassed={isFlightDeadlinePassed(settings)}
+        submittedAt={user.flightsSubmittedAt?.toISOString() ?? null}
+        approved={isRegistrationApproved(user)}
       />
+    );
+  } else if (stepKey === "verification") {
+    const approved = isRegistrationApproved(user);
+    const ready = isReadyForApproval(user);
+    content = (
+      <section className="flex flex-col gap-4">
+        {approved ? (
+          <StepDoneBanner
+            title={j.banners.verifiedBySd}
+            sub={j.banners.verifiedBySdSub}
+          />
+        ) : (
+          <div className="pp-card">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span
+                  className="flex h-10 w-10 flex-none items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-700"
+                  aria-hidden
+                >
+                  {ready ? (
+                    <Clock className="h-5 w-5" />
+                  ) : (
+                    <ShieldCheck className="h-5 w-5" />
+                  )}
+                </span>
+                <div>
+                  <h2 className="m-0 text-[0.9375rem] font-bold text-slate-900">
+                    {ready
+                      ? j.banners.awaitingApproval
+                      : j.banners.registrationVerification}
+                  </h2>
+                  <p className="m-0 mt-0.5 text-[0.8125rem] text-slate-500">
+                    {ready
+                      ? j.banners.awaitingApprovalSub
+                      : j.banners.approvalLocked}
+                  </p>
+                </div>
+              </div>
+              <ApplicationStatusBadge
+                status={user.applicationStatus}
+                showPrefix={false}
+              />
+            </div>
+            {user.rejectionReason &&
+            (user.applicationStatus === APPLICATION_STATUS.RETURNED ||
+              user.applicationStatus === APPLICATION_STATUS.REJECTED) ? (
+              <p className="m-0 mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-[0.8125rem] leading-[1.5] text-amber-900">
+                <span className="font-bold">{j.banners.messageFromSd}</span>{" "}
+                {user.rejectionReason}
+              </p>
+            ) : null}
+          </div>
+        )}
+        <ParticipantRegistrationDetailsCard
+          firstName={user.firstName}
+          lastName={user.lastName}
+          email={user.email}
+          rank={user.rank}
+          createdAt={user.createdAt}
+          country={user.country}
+          nationality={user.nationality}
+          unit={user.unit}
+          t={t.registration}
+          unitOptions={t.unit.options}
+          locale={locale}
+        />
+      </section>
     );
   } else {
     // hostInfo

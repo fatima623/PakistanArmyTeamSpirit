@@ -29,6 +29,7 @@ export const core: typeof enCore = {
   },
 
   meta: {
+    tour: "جولة الموقع",
     home: "الرئيسية",
     announcements: "الإعلانات",
     awards: "الجوائز والتكريم",
@@ -56,11 +57,7 @@ export const core: typeof enCore = {
     done: "تم",
     logout: "تسجيل الخروج",
     dashboard: "لوحة التحكم",
-    unitInformation: "معلومات الوحدة",
-    teamRegistration: "تسجيل الفريق",
-    payment: "الدفع",
-    flightDetails: "تفاصيل الرحلة",
-    hostInformation: "معلومات الاستضافة",
+    tour: "جولة الموقع",
     support: "الدعم",
     journeyComplete: "اكتمل التسجيل",
   },
@@ -72,7 +69,7 @@ export const core: typeof enCore = {
     membersCount: (n) => `${n} من أعضاء الفريق`,
     scheduleEyebrow: "الجدول",
     dataEntryPeriods: "فترات إدخال البيانات",
-    dataEntryDesc: "متاح فقط بعد التحقق من الدفع.",
+    dataEntryDesc: "الفترات المجدولة لإرسال بيانات تسجيلك.",
     noPeriods: "لا توجد فترات مجدولة بعد.",
     deadlinesEyebrow: "المواعيد النهائية",
     timeline: "الجدول الزمني",
@@ -89,7 +86,6 @@ export const core: typeof enCore = {
       noKeyDates: "لم يتم نشر أي تواريخ رئيسية بعد.",
       deadlineLabels: {
         registration: "الموعد النهائي للتسجيل",
-        payment: "الموعد النهائي للدفع",
       },
     },
   },
@@ -102,20 +98,20 @@ export const core: typeof enCore = {
   },
 
   statusBar: {
-    underReviewTitle: "الطلب قيد المراجعة",
+    inProgressTitle: "التسجيل قيد الإنجاز",
+    inProgressText:
+      "أكمل كل خطوة أدناه. تعتمد المديرية الرياضية (SD) تسجيلك بعد اكتمال جميع الخطوات.",
+    underReviewTitle: "التسجيل قيد المراجعة",
     underReviewText:
-      "يتم مراجعة تسجيلك من قبل PATS. سنرسل لك بريدًا إلكترونيًا بمجرد الموافقة عليه.",
-    confirmedTitle: "تم التأكيد — أنت مؤهل للمشاركة في PATS 2026",
+      "تم إرسال جميع الخطوات. تقوم المديرية الرياضية (SD) بمراجعة تسجيلك وستُعلمك عند اعتماده.",
+    confirmedTitle: "تم الاعتماد — أنت مؤهل للمشاركة في PATS 2026",
     confirmedTextWithDates: (dates) =>
-      `تم التحقق من دفعتك وتأكيد مكانك. المواعيد المقررة: ${dates}.`,
-    confirmedText: "تم التحقق من دفعتك وتأكيد مكانك.",
-    approvedTitle: "تمت الموافقة — الدفع مطلوب",
-    approvedText:
-      "تمت الموافقة على طلبك. أكمل الدفع لتأمين مكانك في المسابقة.",
+      `تم اعتماد تسجيلك من قبل المديرية الرياضية وتأكيد مكانك. المواعيد المقررة: ${dates}.`,
+    confirmedText:
+      "تم اعتماد تسجيلك من قبل المديرية الرياضية وتأكيد مكانك.",
     returnedTitle: "أُعيد للتصحيح",
     approvedOn: (date) => `تمت الموافقة في ${date}`,
-    goToPayment: "الانتقال إلى إرسال الدفع",
-    paymentVerified: "تم التحقق من الدفع",
+    continueRegistration: "متابعة التسجيل",
   },
 
   registration: {
@@ -147,23 +143,17 @@ export const core: typeof enCore = {
         title: "تأكيد المشاركة",
         subtitle: "أكّد جاهزية فريقك للمشاركة في PATS 2026.",
       },
+      unitInfo: {
+        eyebrow: "التسجيل",
+        title: "معلومات الوحدة",
+        subtitle:
+          "أدخل بيانات وحدتك وقائدها. الحفظ يفتح تسجيل الفريق.",
+      },
       verification: {
         eyebrow: "",
-        title: "التحقق من التسجيل",
+        title: "اعتماد التسجيل",
         subtitle:
-          "تتم مراجعة تفاصيل تسجيلك من قبل المديرية الرياضية (SD).",
-      },
-      payment: {
-        eyebrow: "",
-        title: "إجراء الدفع",
-        subtitle:
-          "أكمل دفع رسوم التسجيل لتأكيد مشاركتك في PATS 2026.",
-      },
-      teamRegistration: {
-        eyebrow: "تسجيل الفريق",
-        title: "أعضاء الفريق",
-        subtitle:
-          "أضف أعضاء فريقك أدناه. بعد الحفظ، حدّد القائمة كمكتملة لفتح تفاصيل الرحلة.",
+          "تعتمد المديرية الرياضية (SD) تسجيلك بعد اكتمال جميع الخطوات.",
       },
       roster: {
         eyebrow: "تسجيل الفريق",
@@ -192,13 +182,17 @@ export const core: typeof enCore = {
         "تفاصيل تسجيلك أدناه للعرض فقط. تابع إلى الخطوة التالية.",
       registrationVerification: "التحقق من التسجيل",
       messageFromSd: "رسالة من المديرية الرياضية:",
-      paymentVerifiedMt: "تم التحقق من الدفع من قبل فريق الإدارة (MT).",
-      paymentVerifiedMtSub:
-        "سجلات الدفع الخاصة بك أدناه للعرض فقط. تابع إلى الخطوة التالية.",
-      paymentDeadlinePassed:
-        "انتهى الموعد النهائي للدفع، لذا أُغلقت عمليات إرسال الدفع الجديدة. يرجى التواصل مع إدارة PATS إذا كنت لا تزال بحاجة إلى إكمال دفعتك.",
-      noPaymentInfo:
-        "لا تتوفر معلومات دفع لحسابك بعد. يرجى المحاولة مرة أخرى بعد قليل.",
+      unitInfoSaved: "تم حفظ معلومات الوحدة.",
+      unitInfoSavedSub: (date) =>
+        `تم التسجيل في ${date}. يمكنك تحديثها حتى اعتماد تسجيلك.`,
+      flightsSubmitted: "تم إرسال تفاصيل الرحلة.",
+      flightsSubmittedSub:
+        "تسجيلك الآن لدى المديرية الرياضية (SD) للاعتماد.",
+      awaitingApproval: "بانتظار اعتماد المديرية الرياضية",
+      awaitingApprovalSub:
+        "اكتملت جميع الخطوات. ستقوم المديرية الرياضية بمراجعة تسجيلك واعتماده.",
+      approvalLocked:
+        "أكمل التأكيد ومعلومات الوحدة وأعضاء الفريق وتفاصيل الرحلة لإرسال تسجيلك للاعتماد.",
       teamRegistered: "تم تسجيل الفريق.",
       teamRegisteredSub: (date) =>
         `تم التسجيل في ${date}. املأ قائمة أعضائك أدناه.`,

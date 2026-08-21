@@ -75,12 +75,6 @@ const MESSAGES: Record<string, Translations> = {
     ar: "يجب أن تتحقق مديرية الرياضة (SD) من تسجيلك قبل تسجيل الفريق",
     zh: "团队注册前，您的报名须经体育局（SD）核验",
   },
-  yourpaymentmustbeverifiedbythemtbeforeteamregistration: {
-    ru: "Перед регистрацией команды ваш платёж должен быть проверен Группой управления (MT)",
-    tr: "Takım kaydından önce ödemenizin Yönetim Ekibi (MT) tarafından doğrulanması gerekir",
-    ar: "يجب أن يتحقق فريق الإدارة (MT) من دفعتك قبل تسجيل الفريق",
-    zh: "团队注册前，您的付款须经管理组（MT）核验",
-  },
   teamregistrationhasnotopenedyet: {
     ru: "Регистрация команд ещё не открыта",
     tr: "Takım kaydı henüz açılmadı",
@@ -132,25 +126,6 @@ const MESSAGES: Record<string, Translations> = {
     zh: "您已有一份等待管理员审核的申请",
   },
 
-  /* —— Payment ———————————————————————————————————————————— */
-  paymentsubmissionisnotavailableforyouraccountstatus: {
-    ru: "Отправка платежа недоступна при текущем статусе вашей учётной записи",
-    tr: "Hesap durumunuz ödeme göndermeye uygun değil",
-    ar: "إرسال الدفع غير متاح وفقاً لحالة حسابك",
-    zh: "您当前的账户状态无法提交付款",
-  },
-  thepaymentdeadlinehaspassed: {
-    ru: "Срок оплаты истёк.",
-    tr: "Ödeme son tarihi geçti.",
-    ar: "انتهى الموعد النهائي للدفع.",
-    zh: "付款截止日期已过。",
-  },
-  paymentprooffileisrequired: {
-    ru: "Необходимо приложить подтверждение платежа",
-    tr: "Ödeme belgesi dosyası gereklidir",
-    ar: "ملف إثبات الدفع مطلوب",
-    zh: "必须提供付款凭证文件",
-  },
   filemustbeunder5mb: {
     ru: "Размер файла не должен превышать 5 МБ",
     tr: "Dosya 5 MB'tan küçük olmalıdır",

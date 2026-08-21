@@ -5,7 +5,7 @@ import Link from "next/link";
 import { AdminChartsPlaceholder } from "@/components/admin/AdminChartsPlaceholder";
 import { AdminDashboardStats } from "@/components/admin/AdminDashboardStats";
 import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
-import { APPLICATION_STATUS, PAYMENT_STATUS } from "@/lib/constants";
+import { APPLICATION_STATUS } from "@/lib/constants";
 import {
   getKpiSparklines,
   getRegistrationsByYear,
@@ -38,7 +38,7 @@ export default async function AdminOverviewPage() {
     totalUsers,
     approvedUsers,
     pendingUsers,
-    pendingPayments,
+    awaitingApproval,
     recentRegistrations,
     registrationActivity,
     pipeline,
@@ -57,11 +57,14 @@ export default async function AdminOverviewPage() {
         applicationStatus: APPLICATION_STATUS.PENDING,
       },
     }),
-    prisma.payment.count({
+    /* Registrations whose participant has filled in every step and is now
+       waiting on the SD decision. */
+    prisma.user.count({
       where: {
-        status: {
-          in: [PAYMENT_STATUS.SUBMITTED, PAYMENT_STATUS.UNDER_REVIEW],
-        },
+        role: PARTICIPANT_ROLE,
+        submittedForApprovalAt: { not: null },
+        applicationStatus: { not: APPLICATION_STATUS.APPROVED },
+        approved: false,
       },
     }),
     prisma.user.findMany({
@@ -88,7 +91,7 @@ export default async function AdminOverviewPage() {
     total: totalUsers,
     approved: approvedUsers,
     pending: pendingUsers,
-    payments: pendingPayments,
+    awaitingApproval,
   };
 
   return (

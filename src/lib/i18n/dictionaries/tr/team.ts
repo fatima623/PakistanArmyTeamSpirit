@@ -29,7 +29,7 @@ export const team: typeof enTeam = {
     windowNotYetOpen: "Pencere henüz açılmadı",
     windowClosed: "Pencere kapalı",
     unlockNote:
-      "Takım kaydı; katılım onayı, SD kayıt doğrulaması ve MT ödeme doğrulamasından sonra açılır.",
+      "Takım kaydı; katılımı onayladıktan ve birlik bilgilerinizi tamamladıktan sonra açılır.",
   },
   roster: {
     completedShort: "Liste tamamlandı",

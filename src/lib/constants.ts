@@ -9,37 +9,11 @@ export const APPLICATION_STATUS = {
 export type ApplicationStatus =
   (typeof APPLICATION_STATUS)[keyof typeof APPLICATION_STATUS];
 
-export const PAYMENT_STATUS = {
-  PENDING: "PENDING",
-  SUBMITTED: "SUBMITTED",
-  UNDER_REVIEW: "UNDER_REVIEW",
-  VERIFIED: "VERIFIED",
-  REJECTED: "REJECTED",
-  RETURNED: "RETURNED",
-} as const;
-
-export type PaymentStatus =
-  (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
-
-/** Legacy values still present in some DB rows */
-export const LEGACY_PAYMENT_STATUS = {
-  APPROVED: "APPROVED",
-} as const;
-
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   PENDING: "Pending",
   UNDER_REVIEW: "Under Review",
   APPROVED: "Approved",
   REJECTED: "Rejected",
-  RETURNED: "Returned for Correction",
-};
-
-export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
-  PENDING: "Payment Required",
-  SUBMITTED: "Payment Submitted",
-  UNDER_REVIEW: "Under Review",
-  VERIFIED: "Payment Verified",
-  REJECTED: "Proof Rejected",
   RETURNED: "Returned for Correction",
 };
 
@@ -53,62 +27,8 @@ export const APPLICATION_STATUS_TABLE_LABELS: Record<ApplicationStatus, string> 
     RETURNED: "Returned",
   };
 
-export const PAYMENT_STATUS_TABLE_LABELS: Record<PaymentStatus, string> = {
-  PENDING: "Required",
-  SUBMITTED: "Submitted",
-  UNDER_REVIEW: "In review",
-  VERIFIED: "Verified",
-  REJECTED: "Rejected",
-  RETURNED: "Returned",
-};
-
-export const PAYMENT_STATUS_FILTER_LABELS: Record<string, string> = {
-  all: "All",
-  [PAYMENT_STATUS.PENDING]: "Required",
-  [PAYMENT_STATUS.SUBMITTED]: "Submitted",
-  [PAYMENT_STATUS.UNDER_REVIEW]: "In review",
-  [PAYMENT_STATUS.VERIFIED]: "Verified",
-  [PAYMENT_STATUS.REJECTED]: "Rejected",
-  [PAYMENT_STATUS.RETURNED]: "Returned",
-};
-
-export function normalizePaymentStatus(value: string): PaymentStatus {
-  if (value === LEGACY_PAYMENT_STATUS.APPROVED) {
-    return PAYMENT_STATUS.VERIFIED;
-  }
-  const allowed = Object.values(PAYMENT_STATUS);
-  if (allowed.includes(value as PaymentStatus)) {
-    return value as PaymentStatus;
-  }
-  return PAYMENT_STATUS.PENDING;
-}
-
-export function isPaymentVerified(status: string): boolean {
-  return (
-    status === PAYMENT_STATUS.VERIFIED ||
-    status === LEGACY_PAYMENT_STATUS.APPROVED
-  );
-}
-
-export function isPaymentAwaitingVerification(status: string): boolean {
-  return (
-    status === PAYMENT_STATUS.SUBMITTED ||
-    status === PAYMENT_STATUS.UNDER_REVIEW
-  );
-}
-
-export function canResubmitPayment(status: string): boolean {
-  const key = normalizePaymentStatus(status);
-  return (
-    key === PAYMENT_STATUS.PENDING ||
-    key === PAYMENT_STATUS.REJECTED ||
-    key === PAYMENT_STATUS.RETURNED
-  );
-}
-
 export const AUDIT_ENTITY = {
   USER: "user",
-  PAYMENT: "payment",
   UNIT: "unit",
   TICKET: "ticket",
   TEAM_SIZE_REQUEST: "team_size_request",
@@ -187,7 +107,6 @@ export const TICKET_PRIORITY_LABELS: Record<TicketPriority, string> = {
 export const TICKET_CATEGORY = {
   GENERAL: "GENERAL",
   REGISTRATION: "REGISTRATION",
-  PAYMENT: "PAYMENT",
   TECHNICAL: "TECHNICAL",
 } as const;
 
@@ -197,7 +116,6 @@ export type TicketCategory =
 export const TICKET_CATEGORY_LABELS: Record<TicketCategory, string> = {
   GENERAL: "General enquiry",
   REGISTRATION: "Registration",
-  PAYMENT: "Payment",
   TECHNICAL: "Technical issue",
 };
 

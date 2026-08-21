@@ -6,6 +6,8 @@ import {
   Building2,
   CalendarDays,
   Check,
+  FileText,
+  Plane,
   User,
   Users2,
   Workflow,
@@ -13,24 +15,24 @@ import {
 
 import { prisma } from "@/lib/prisma";
 import { cn, formatDateDisplay, formatDateShort } from "@/lib/utils";
-import {
-  AUDIT_ENTITY,
-  APPLICATION_STATUS,
-  isPaymentVerified,
-} from "@/lib/constants";
+import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 import { RegistrationVerificationPanel } from "@/components/admin/admin-dynamic";
 import { HostFormationAssign } from "@/components/admin/HostFormationAssign";
 import { AdminResetPassword } from "@/components/admin/AdminResetPassword";
 import { AdminBreadcrumbs } from "@/components/admin/AdminBreadcrumbs";
-import { TeamRosterDialog } from "@/components/admin/TeamRosterDialog";
 import { getAdminRole } from "@/lib/admin-session";
 import { canApproveRegistration, canManageSystem } from "@/lib/auth-routes";
 import { AuditLogList } from "@/components/admin/AuditLogList";
+import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
+import { RegistrationProgressBadge } from "@/components/admin/RegistrationProgressBadge";
+import { TeamRosterTable } from "@/components/admin/TeamRosterTable";
 import {
-  ApplicationStatusBadge,
-  PaymentStatusBadge,
-} from "@/components/admin/StatusBadges";
+  getRegistrationProgress,
+  registrationProgressSelect,
+} from "@/lib/registration-progress";
+import { getWorkflowSettings } from "@/lib/workflow-settings";
+import { isFlightRecordComplete } from "@/lib/flights";
 import { adminNavLabel } from "@/lib/admin-navigation";
 import { IntlBadge } from "@/components/admin/IntlBadge";
 import { CountryFlag } from "@/components/ui/CountryFlag";
@@ -150,6 +152,32 @@ function WorkflowStepper({ steps }: { steps: WorkflowStep[] }) {
   );
 }
 
+/** Passport / ticket cell — a link to the authorized file route, or a dash. */
+function DocCell({
+  flightId,
+  present,
+  kind,
+}: {
+  flightId: string | undefined;
+  present: boolean;
+  kind: "passport" | "ticket";
+}) {
+  if (!flightId || !present) {
+    return <span className="text-slate-400">Missing</span>;
+  }
+  return (
+    <a
+      href={`/api/admin/flights/${flightId}/file?type=${kind}`}
+      target="_blank"
+      rel="noreferrer"
+      className="inline-flex items-center gap-1 font-semibold text-green-700 no-underline hover:underline"
+    >
+      <FileText size={13} aria-hidden />
+      View
+    </a>
+  );
+}
+
 export default async function AdminUserDetailPage({ params }: PageProps) {
   const { id } = await params;
 
@@ -164,19 +192,12 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       gender: true,
       country: true,
       nationality: true,
-      applicationStatus: true,
-      paymentStatus: true,
       rejectionReason: true,
       rejectedAt: true,
       approvedAt: true,
-      suspended: true,
-      participationConfirmedAt: true,
       participationDeclinedAt: true,
-      teamRegisteredAt: true,
-      rosterCompletedAt: true,
-      maxTeamMembersOverride: true,
-      flightsFinalizedAt: true,
       hostFormationId: true,
+      ...registrationProgressSelect,
       hostFormation: { select: { id: true, name: true } },
       createdAt: true,
       unit: true,
@@ -188,6 +209,21 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           rank: true,
           serviceArm: true,
           gender: true,
+          /* Flight documents are filed one record per traveller, so the team
+             page can show the whole travel picture without a second stop at
+             the Flight Details queue. File paths never leave the server — the
+             row only learns whether each document is on file. */
+          flightDetail: {
+            select: {
+              id: true,
+              passengerName: true,
+              passportNumber: true,
+              passportFileName: true,
+              passportFilePath: true,
+              ticketFileName: true,
+              ticketFilePath: true,
+            },
+          },
         },
         orderBy: { createdAt: "asc" },
       },
@@ -199,12 +235,20 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const viewerRole = await getAdminRole();
+  const [viewerRole, workflowSettings] = await Promise.all([
+    getAdminRole(),
+    getWorkflowSettings(),
+  ]);
+  const progress = getRegistrationProgress(
+    user,
+    workflowSettings,
+    user._count.teamMembers
+  );
   const canManageRoles = canManageSystem(viewerRole);
   const canApprove = canApproveRegistration(viewerRole);
 
   // Host-formation assignment is admin-only. A team is eligible once it is
-  // travel-ready: approved registration + verified payment + finalized flights.
+  // travel-ready: SD-approved registration + finalized flights.
   const formations = canManageRoles
     ? await prisma.hostFormation.findMany({
         orderBy: { createdAt: "desc" },
@@ -213,9 +257,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     : [];
   const travelReady =
     normalizeApplicationStatus(user.applicationStatus) ===
-      APPLICATION_STATUS.APPROVED &&
-    isPaymentVerified(user.paymentStatus) &&
-    user.flightsFinalizedAt != null;
+      APPLICATION_STATUS.APPROVED && user.flightsFinalizedAt != null;
 
   const auditLogs = await prisma.auditLog.findMany({
     where: { entityType: AUDIT_ENTITY.USER, entityId: id },
@@ -226,6 +268,9 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     },
   });
 
+  /* The same five steps the participant sees on their own dashboard, in the
+     same order — SD approval last, because there is nothing to approve until
+     everything above it is in. */
   const workflowSteps: WorkflowStep[] = [
     {
       label: "Participation Confirmed",
@@ -234,9 +279,16 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
         ? `Declined ${formatDateShort(user.participationDeclinedAt)}`
         : "Pending",
     },
-    { label: "Team Registered", date: user.teamRegisteredAt },
+    { label: "Unit Information", date: user.unitInfoCompletedAt },
     { label: "Roster Completed", date: user.rosterCompletedAt },
-    { label: "Flight Details", date: user.flightsFinalizedAt },
+    { label: "Flights Submitted", date: user.flightsSubmittedAt },
+    {
+      label: "Approved by SD",
+      date: user.approvedAt,
+      fallback: user.rejectedAt
+        ? `Returned ${formatDateShort(user.rejectedAt)}`
+        : "Pending",
+    },
   ];
 
   const rosterSummary =
@@ -248,18 +300,25 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       ? ` — completed on ${formatDateDisplay(user.rosterCompletedAt)}`
       : " — in progress");
 
+  const travellers = user.teamMembers.map((m) => ({
+    ...m,
+    complete: isFlightRecordComplete(m.flightDetail),
+  }));
+  const flightsComplete = travellers.filter((t) => t.complete).length;
   const flightSummary =
-    `${user._count.flightDetails} ${user._count.flightDetails === 1 ? "record" : "records"}` +
+    `${flightsComplete} of ${travellers.length} travellers documented` +
     (user.flightsFinalizedAt
       ? ` — finalized ${formatDateShort(user.flightsFinalizedAt)}`
-      : " — not finalized");
+      : user.flightsSubmittedAt
+        ? ` — submitted ${formatDateShort(user.flightsSubmittedAt)}`
+        : " — not submitted");
 
   return (
     <div className="flex w-full flex-col gap-4 pb-6">
       <AdminBreadcrumbs
         items={[
           { label: "Dashboard", href: "/admin" },
-          { label: "Participation Requests", href: "/admin/users" },
+          { label: "Team Registrations", href: "/admin/users" },
           { label: `${user.firstName} ${user.lastName}` },
         ]}
       />
@@ -273,7 +332,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
 
         <div className="flex min-w-0 flex-[1_1_16rem] flex-col gap-1">
           <h1 className="flex flex-wrap items-center gap-2 text-xl font-bold leading-tight tracking-[-0.01em] text-slate-900">
-            {user.firstName} {user.lastName}
+            {`${user.firstName} ${user.lastName}`.trim() || user.email}
             {isInternationalParticipant(user.country) ? <IntlBadge /> : null}
           </h1>
 
@@ -300,8 +359,8 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
               showPrefix={false}
             />
           </HeaderStatusBox>
-          <HeaderStatusBox label="Payment">
-            <PaymentStatusBadge status={user.paymentStatus} showPrefix={false} />
+          <HeaderStatusBox label="Progress">
+            <RegistrationProgressBadge progress={progress} />
           </HeaderStatusBox>
           <HeaderStatusBox label="Account">
             <span
@@ -324,7 +383,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             <RegistrationVerificationPanel
               userId={user.id}
               applicationStatus={user.applicationStatus}
-              paymentStatus={user.paymentStatus}
+              progress={progress}
               rejectionReason={user.rejectionReason}
               suspended={user.suspended}
             />
@@ -380,24 +439,147 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
           </section>
 
           {/* —— Unit Information ——————————————————————————— */}
-          {user.unit ? (
-            <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-              <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
-                <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
-                  <Building2 size={16} aria-hidden />
-                  Unit Information
-                </h3>
-              </header>
-              <div className="p-[18px]">
-                <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
-                  <Field label="Unit name" value={user.unit.unitName} />
-                  <Field label="Type" value={user.unit.unitType} />
-                  <Field label="Branch" value={user.unit.branch} />
-                  <Field label="Arm" value={user.unit.arm} />
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
+                <Building2 size={16} aria-hidden />
+                Unit Information
+              </h3>
+              <span className="text-[0.75rem] text-slate-400">
+                {user.unitInfoCompletedAt
+                  ? `Submitted ${formatDateShort(user.unitInfoCompletedAt)}`
+                  : "Not submitted"}
+              </span>
+            </header>
+            <div className="p-[18px]">
+              {user.unit ? (
+                <div className="flex flex-col gap-4">
+                  <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
+                    <Field label="Unit name" value={user.unit.unitName} />
+                    <Field label="Type" value={user.unit.unitType} />
+                    <Field label="Branch" value={user.unit.branch} />
+                    <Field label="Arm" value={user.unit.arm} />
+                    <Field
+                      label="2nd POC email"
+                      value={user.unit.secondPocEmail?.trim() || "—"}
+                    />
+                    <Field
+                      label="3rd POC email"
+                      value={user.unit.thirdPocEmail?.trim() || "—"}
+                    />
+                  </div>
+                  <div>
+                    <p className="m-0 mb-2 text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">
+                      Commanding Officer
+                    </p>
+                    <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(150px,1fr))]">
+                      <Field label="Name" value={user.unit.coName || "—"} />
+                      <Field label="Email" value={user.unit.coEmail || "—"} />
+                      <Field label="Phone" value={user.unit.coPhone || "—"} />
+                    </div>
+                  </div>
+                  {user.unit.additionalInfo?.trim() ? (
+                    <div>
+                      <p className="m-0 mb-1 text-[0.6875rem] font-bold uppercase tracking-[0.06em] text-slate-400">
+                        Additional information
+                      </p>
+                      <p className="m-0 whitespace-pre-wrap text-[0.8125rem] leading-relaxed text-slate-700">
+                        {user.unit.additionalInfo}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-            </section>
-          ) : null}
+              ) : (
+                <p className="m-0 rounded-[10px] border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-[12.5px] font-medium text-slate-500">
+                  The participant has not filled in their unit information yet.
+                </p>
+              )}
+            </div>
+          </section>
+
+          {/* —— Team Members ——————————————————————————————— */}
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
+                <Users2 size={16} aria-hidden />
+                Team Members
+              </h3>
+              <span className="text-[0.75rem] text-slate-400">{rosterSummary}</span>
+            </header>
+            <div className="p-[18px]">
+              <TeamRosterTable members={user.teamMembers} />
+            </div>
+          </section>
+
+          {/* —— Flight Details ————————————————————————————— */}
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <header className="flex items-center justify-between gap-3 border-b border-gray-200 bg-slate-50 px-[18px] py-3.5">
+              <h3 className="flex items-center gap-2 text-[0.9375rem] font-bold tracking-[-0.01em] text-slate-900 [&_svg]:flex-shrink-0 [&_svg]:text-green-700">
+                <Plane size={16} aria-hidden />
+                Flight Details
+              </h3>
+              <span className="text-[0.75rem] text-slate-400">{flightSummary}</span>
+            </header>
+            <div className="p-[18px]">
+              {travellers.length === 0 ? (
+                <p className="m-0 rounded-[10px] border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-[12.5px] font-medium text-slate-500">
+                  No travellers on the roster yet.
+                </p>
+              ) : (
+                <div className="overflow-x-auto rounded-[10px] border border-brand-line/70">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="bg-slate-50">
+                        {["Traveller", "Passenger name", "Passport no.", "Passport", "Ticket"].map(
+                          (h) => (
+                            <th
+                              key={h}
+                              scope="col"
+                              className="whitespace-nowrap border-b border-brand-line/70 px-3 py-2.5 text-[10.5px] font-bold uppercase tracking-[0.07em] text-slate-500"
+                            >
+                              {h}
+                            </th>
+                          )
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {travellers.map((t) => (
+                        <tr
+                          key={t.id}
+                          className="border-b border-brand-line/50 last:border-b-0 odd:bg-white even:bg-slate-50/60"
+                        >
+                          <td className="px-3 py-2.5 text-[12px] font-semibold text-slate-800">
+                            {t.fullName}
+                          </td>
+                          <td className="px-3 py-2.5 text-[12px] text-slate-600">
+                            {t.flightDetail?.passengerName ?? "—"}
+                          </td>
+                          <td className="px-3 py-2.5 text-[12px] text-slate-600">
+                            {t.flightDetail?.passportNumber ?? "—"}
+                          </td>
+                          <td className="px-3 py-2.5 text-[12px]">
+                            <DocCell
+                              flightId={t.flightDetail?.id}
+                              present={!!t.flightDetail?.passportFilePath}
+                              kind="passport"
+                            />
+                          </td>
+                          <td className="px-3 py-2.5 text-[12px]">
+                            <DocCell
+                              flightId={t.flightDetail?.id}
+                              present={!!t.flightDetail?.ticketFilePath}
+                              kind="ticket"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </section>
 
           {/* —— Workflow Progress —————————————————————————— */}
           <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
@@ -412,26 +594,10 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                 <WorkflowStepper steps={workflowSteps} />
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-200 bg-slate-50 px-4 py-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <Users2 size={16} className="flex-shrink-0 text-green-700" aria-hidden />
-                  <div className="min-w-0">
-                    <p className="m-0 text-[0.8125rem] font-bold text-slate-900">
-                      Roster
-                    </p>
-                    <p className="m-0 text-[0.75rem] text-slate-500">
-                      {rosterSummary}
-                    </p>
-                  </div>
-                </div>
-                <TeamRosterDialog
-                  members={user.teamMembers}
-                  teamName={user.unit?.unitName}
-                />
-              </div>
-
-              <p className="m-0 px-0.5 text-[0.75rem] text-slate-400">
-                Flight details: {flightSummary}
+              <p className="m-0 px-0.5 text-[0.75rem] text-slate-500">
+                {progress.approved
+                  ? "Approved by the Sports Directorate."
+                  : `Step ${progress.currentStep} of ${progress.total} — ${progress.currentLabel}.`}
               </p>
             </div>
           </section>

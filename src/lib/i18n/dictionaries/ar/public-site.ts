@@ -86,6 +86,16 @@ export const publicSite: typeof enPublicSite = {
   },
 
   pages: {
+    tour: {
+      heroEyebrow: "البوابة",
+      heroTitle: "جولة الموقع",
+      heroSubtitle:
+        "كل ما يُنشر عن PATS — الفعاليات والمشاركة الدولية والجوائز والمعرض والإعلانات والتواريخ الرئيسية — في مكان واحد.",
+      sectionEyebrow: "الأقسام",
+      sectionTitle: "تصفح الجولة",
+      sectionDescription:
+        "افتح أي قسم أدناه. استخدم شريط التنقل بالأعلى للتنقل بينها، أو عد إلى لوحة التحكم في أي وقت.",
+    },
     awards: {
       heroEyebrow: "سجل التكريم",
       heroTitle: "الجوائز والتكريم",

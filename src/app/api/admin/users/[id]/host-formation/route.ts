@@ -10,11 +10,7 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { createAuditLog } from "@/lib/audit";
-import {
-  AUDIT_ENTITY,
-  APPLICATION_STATUS,
-  isPaymentVerified,
-} from "@/lib/constants";
+import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { ROLES } from "@/lib/auth-routes";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 
@@ -46,7 +42,6 @@ export async function PUT(request: Request, context: RouteContext) {
         id: true,
         role: true,
         applicationStatus: true,
-        paymentStatus: true,
         flightsFinalizedAt: true,
       },
     });
@@ -66,12 +61,10 @@ export async function PUT(request: Request, context: RouteContext) {
 
       const travelReady =
         normalizeApplicationStatus(user.applicationStatus) ===
-          APPLICATION_STATUS.APPROVED &&
-        isPaymentVerified(user.paymentStatus) &&
-        user.flightsFinalizedAt != null;
+          APPLICATION_STATUS.APPROVED && user.flightsFinalizedAt != null;
       if (!travelReady) {
         throw new ApiError(
-          "Team is not travel-ready — requires approved registration, verified payment, and finalized flight details",
+          "Team is not travel-ready — requires SD-approved registration and finalized flight details",
           409
         );
       }

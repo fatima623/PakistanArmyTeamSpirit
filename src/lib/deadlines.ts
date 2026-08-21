@@ -2,12 +2,10 @@ import { prisma } from "@/lib/prisma";
 
 export type Deadlines = {
   registrationDeadline: Date | null;
-  paymentDeadline: Date | null;
 };
 
 export const NO_DEADLINES: Deadlines = {
   registrationDeadline: null,
-  paymentDeadline: null,
 };
 
 /**
@@ -18,11 +16,10 @@ export async function getDeadlines(): Promise<Deadlines> {
   try {
     const row = await prisma.siteSettings.findUnique({
       where: { id: "singleton" },
-      select: { registrationDeadline: true, paymentDeadline: true },
+      select: { registrationDeadline: true },
     });
     return {
       registrationDeadline: row?.registrationDeadline ?? null,
-      paymentDeadline: row?.paymentDeadline ?? null,
     };
   } catch {
     return { ...NO_DEADLINES };
@@ -41,11 +38,4 @@ export function registrationClosedByDeadline(
   now: Date = new Date()
 ): boolean {
   return isPastDeadline(deadlines.registrationDeadline, now);
-}
-
-export function paymentClosedByDeadline(
-  deadlines: Deadlines,
-  now: Date = new Date()
-): boolean {
-  return isPastDeadline(deadlines.paymentDeadline, now);
 }

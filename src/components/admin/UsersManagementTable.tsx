@@ -2,8 +2,9 @@ import { IntlBadge } from "@/components/admin/IntlBadge";
 import {
   ApplicationStatusBadge,
   OverallStatusBadge,
-  PaymentStatusBadge,
 } from "@/components/admin/StatusBadges";
+import { RegistrationProgressBadge } from "@/components/admin/RegistrationProgressBadge";
+import type { RegistrationProgress } from "@/lib/registration-progress";
 import {
   formatAdminTableCountry,
   isInternationalParticipant,
@@ -19,7 +20,8 @@ export type UserManagementRow = {
   email: string;
   rank: string;
   applicationStatus: string;
-  paymentStatus: string;
+  /** How far through the guided registration this team has got. */
+  progress: RegistrationProgress;
   suspended: boolean;
   createdAt: Date;
   approvedAt: Date | null;
@@ -29,8 +31,12 @@ export type UserManagementRow = {
   unit: { unitName: string } | null;
 };
 
-function initials(first: string, last: string): string {
-  return `${first?.[0] ?? ""}${last?.[0] ?? ""}`.toUpperCase() || "–";
+function initials(first: string, last: string, email: string): string {
+  const fromName = `${first?.[0] ?? ""}${last?.[0] ?? ""}`.trim();
+  if (fromName) return fromName.toUpperCase();
+  /* An admin-created account has no name until the participant fills in their
+     unit information, so fall back to the login rather than showing a dash. */
+  return (email?.[0] ?? "").toUpperCase() || "–";
 }
 
 export function UsersManagementTable({
@@ -61,7 +67,7 @@ export function UsersManagementTable({
           <col className="admin-users-col-participant" />
           <col className="admin-users-col-unit !w-[15%]" />
           <col className="admin-users-col-app !w-[13%]" />
-          <col className="admin-users-col-pay !w-[12%]" />
+          <col className="admin-users-col-pay !w-[16%]" />
           <col className="!w-[14%]" />
           <col className="admin-users-col-actions !w-[128px]" />
         </colgroup>
@@ -77,7 +83,7 @@ export function UsersManagementTable({
               Application Status
             </th>
             <th scope="col">
-              Payment Status
+              Registration Progress
             </th>
             <th scope="col">
               Overall Status
@@ -99,11 +105,11 @@ export function UsersManagementTable({
                 <td className="admin-users-cell-participant">
                   <div className="admin-users-participant">
                     <span className="admin-users-avatar" aria-hidden>
-                      {initials(u.firstName, u.lastName)}
+                      {initials(u.firstName, u.lastName, u.email)}
                     </span>
                     <div className="admin-users-participant-text">
                       <div className="admin-users-participant-name">
-                        {u.firstName} {u.lastName}
+                        {`${u.firstName} ${u.lastName}`.trim() || u.email}
                         {international ? <IntlBadge /> : null}
                       </div>
                       <div className="admin-users-participant-sub">{u.email}</div>
@@ -135,11 +141,10 @@ export function UsersManagementTable({
                 </td>
                 <td>
                   <div className="flex w-full min-w-0 flex-col items-center justify-start gap-1.5">
-                    <PaymentStatusBadge
-                      status={u.paymentStatus}
-                      showPrefix={false}
+                    <RegistrationProgressBadge
+                      progress={u.progress}
                       density="table"
-                      className="admin-users-status-badge--payment"
+                      className="admin-users-status-badge--progress"
                     />
                   </div>
                 </td>

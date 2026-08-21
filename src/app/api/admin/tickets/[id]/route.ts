@@ -47,7 +47,6 @@ export async function GET(_request: Request, { params }: RouteParams) {
             lastName: true,
             email: true,
             applicationStatus: true,
-            paymentStatus: true,
           },
         },
         assignedTo: { select: { id: true, firstName: true, lastName: true } },

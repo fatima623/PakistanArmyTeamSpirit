@@ -65,15 +65,7 @@ export function canApproveRegistration(
   return role === ROLES.SDBS;
 }
 
-/**
- * Payment verification is performed EXCLUSIVELY by the MT
- * (Management Team). Admin and SD have read-only visibility.
- */
-export function canVerifyPayment(role: string | undefined | null): boolean {
-  return role === ROLES.MTD;
-}
-
-/** Only full admins manage settings, content, payments, roles, and deletion. */
+/** Only full admins manage settings, content, roles, and deletion. */
 export function canManageSystem(role: string | undefined | null): boolean {
   return role === ROLES.ADMIN;
 }

@@ -156,7 +156,7 @@ export type KpiSparklines = {
   total: number[];
   approved: number[];
   pending: number[];
-  payments: number[];
+  awaitingApproval: number[];
 };
 
 /**
@@ -172,7 +172,7 @@ export async function getKpiSparklines(months = 7): Promise<KpiSparklines> {
 
   const users = await prisma.user.findMany({
     where: { role: PARTICIPANT_ROLE, createdAt: { gte: start } },
-    select: { createdAt: true, applicationStatus: true, paymentStatus: true },
+    select: { createdAt: true, applicationStatus: true, submittedForApprovalAt: true },
   });
 
   const idx = new Map<string, number>();
@@ -187,9 +187,8 @@ export async function getKpiSparklines(months = 7): Promise<KpiSparklines> {
     total: zeros(),
     approved: zeros(),
     pending: zeros(),
-    payments: zeros(),
+    awaitingApproval: zeros(),
   };
-  const toVerify = new Set(["SUBMITTED", "UNDER_REVIEW"]);
 
   for (const u of users) {
     const i = idx.get(monthKey(u.createdAt));
@@ -197,7 +196,7 @@ export async function getKpiSparklines(months = 7): Promise<KpiSparklines> {
     series.total[i] += 1;
     if (u.applicationStatus === APPLICATION_STATUS.APPROVED) series.approved[i] += 1;
     if (u.applicationStatus === APPLICATION_STATUS.PENDING) series.pending[i] += 1;
-    if (u.paymentStatus && toVerify.has(u.paymentStatus)) series.payments[i] += 1;
+    if (u.submittedForApprovalAt) series.awaitingApproval[i] += 1;
   }
 
   return series;

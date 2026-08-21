@@ -148,7 +148,7 @@ export function HostFormationAssign({
                   title={
                     travelReady
                       ? undefined
-                      : "Team must be approved, payment verified, and flight details finalized first"
+                      : "Team must be approved by the SD and have finalized flight details first"
                   }
                 >
                   {busy ? (
@@ -167,7 +167,7 @@ export function HostFormationAssign({
             {!travelReady ? (
               <p className="m-0 text-[0.75rem] leading-snug text-amber-700">
                 Not yet travel-ready — requires approved registration, verified
-                payment, and finalized flight details.
+                and finalized flight details.
               </p>
             ) : null}
           </>

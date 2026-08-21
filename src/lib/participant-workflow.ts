@@ -1,9 +1,6 @@
 import {
   APPLICATION_STATUS,
   DEFAULT_MAX_TEAM_MEMBERS,
-  PAYMENT_STATUS,
-  isPaymentVerified,
-  normalizePaymentStatus,
 } from "@/lib/constants";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 import { enWorkflow, type WorkflowStrings } from "@/lib/i18n/workflow-strings";
@@ -11,20 +8,19 @@ import { enWorkflow, type WorkflowStrings } from "@/lib/i18n/workflow-strings";
 /**
  * Client-safe participant workflow engine.
  *
- * The guided journey is strictly sequential — each stage unlocks only after
- * the previous one completes:
+ * Accounts are created by the administration with nothing but a login and a
+ * password — every registration detail is captured by the participant, one
+ * unlocked stage at a time:
  *
- *   1. confirmation      — first-login participation confirmation (deadline)
- *   2. verification      — registration verification by SD (Sports Directorate)
- *   3. payment           — fee submission, verified by MT (Management Team)
- *   4. roster            — team registration + member table (capped, extendable)
- *   5. flights           — flight details + passport/ticket PDFs
- *   6. hostInfo          — read-only hosting dashboard once flights finalized
+ *   1. confirmation — first-login participation confirmation (deadline)
+ *   2. unitInfo     — unit + CO details, filled in by the participant
+ *   3. roster       — team registration + member table (capped, extendable)
+ *   4. flights      — flight details + passport/ticket PDFs, then submitted
+ *   5. verification — SD (Sports Directorate) approves the finished registration
+ *   6. hostInfo     — read-only hosting dashboard once flights are finalized
  *
- * `teamRegistration` used to be a stage of its own between payment and roster,
- * but both rendered the same TeamRosterManager — the extra tile only added a
- * click. Registering the team is now done inside the roster stage, which is
- * still window-gated; the window state surfaces in the roster stage's subtitle.
+ * SD verification is deliberately last: there is nothing to verify until the
+ * participant has supplied their unit, their roster and their travel documents.
  */
 
 export type WorkflowSettings = {
@@ -47,22 +43,24 @@ export const DEFAULT_WORKFLOW_SETTINGS: WorkflowSettings = {
 
 export type WorkflowUser = {
   applicationStatus: string;
-  paymentStatus: string;
   approved: boolean;
   suspended: boolean;
   participationConfirmedAt: Date | null;
+  unitInfoCompletedAt: Date | null;
   teamRegisteredAt: Date | null;
   rosterCompletedAt: Date | null;
+  flightsSubmittedAt: Date | null;
+  submittedForApprovalAt: Date | null;
   maxTeamMembersOverride: number | null;
   flightsFinalizedAt: Date | null;
 };
 
 export const WORKFLOW_STAGES = [
   "confirmation",
-  "verification",
-  "payment",
+  "unitInfo",
   "roster",
   "flights",
+  "verification",
   "hostInfo",
 ] as const;
 
@@ -132,15 +130,8 @@ export function hasConfirmedParticipation(user: WorkflowUser): boolean {
   return !!user.participationConfirmedAt;
 }
 
-export function isRegistrationApproved(user: WorkflowUser): boolean {
-  return (
-    normalizeApplicationStatus(user.applicationStatus) ===
-      APPLICATION_STATUS.APPROVED || user.approved
-  );
-}
-
-export function isPaymentComplete(user: WorkflowUser): boolean {
-  return isPaymentVerified(user.paymentStatus);
+export function hasCompletedUnitInfo(user: WorkflowUser): boolean {
+  return !!user.unitInfoCompletedAt;
 }
 
 export function hasRegisteredTeam(user: WorkflowUser): boolean {
@@ -151,8 +142,53 @@ export function isRosterComplete(user: WorkflowUser): boolean {
   return !!user.rosterCompletedAt;
 }
 
+export function areFlightsSubmitted(user: WorkflowUser): boolean {
+  return !!user.flightsSubmittedAt;
+}
+
 export function areFlightsFinalized(user: WorkflowUser): boolean {
   return !!user.flightsFinalizedAt;
+}
+
+export function isRegistrationApproved(user: WorkflowUser): boolean {
+  return (
+    normalizeApplicationStatus(user.applicationStatus) ===
+      APPLICATION_STATUS.APPROVED || user.approved
+  );
+}
+
+/** Every participant-supplied step is filled in — the SD queue can pick it up. */
+export function isReadyForApproval(user: WorkflowUser): boolean {
+  return (
+    hasConfirmedParticipation(user) &&
+    hasCompletedUnitInfo(user) &&
+    isRosterComplete(user) &&
+    areFlightsSubmitted(user)
+  );
+}
+
+/**
+ * Where the registration stands as a whole (the dashboard status banner), as
+ * opposed to which individual step is next.
+ */
+export type RegistrationOverallStage =
+  | "inProgress"
+  | "underReview"
+  | "approved"
+  | "returned";
+
+export function resolveRegistrationOverallStage(
+  user: WorkflowUser
+): RegistrationOverallStage {
+  if (isRegistrationApproved(user)) return "approved";
+  const status = normalizeApplicationStatus(user.applicationStatus);
+  if (
+    status === APPLICATION_STATUS.RETURNED ||
+    status === APPLICATION_STATUS.REJECTED
+  ) {
+    return "returned";
+  }
+  return isReadyForApproval(user) ? "underReview" : "inProgress";
 }
 
 /* ------------------------------------------------------------------ */
@@ -171,6 +207,19 @@ export function canConfirmParticipation(
   );
 }
 
+/**
+ * Unit information unlocks the moment participation is confirmed, and stays
+ * editable until the registration is approved (or flights are finalized), so a
+ * returned registration can be corrected.
+ */
+export function canEditUnitInfo(user: WorkflowUser): boolean {
+  return (
+    !user.suspended &&
+    hasConfirmedParticipation(user) &&
+    !areFlightsFinalized(user)
+  );
+}
+
 export function canRegisterTeam(
   user: WorkflowUser,
   settings: WorkflowSettings,
@@ -179,8 +228,7 @@ export function canRegisterTeam(
   return (
     !user.suspended &&
     hasConfirmedParticipation(user) &&
-    isRegistrationApproved(user) &&
-    isPaymentComplete(user) &&
+    hasCompletedUnitInfo(user) &&
     !hasRegisteredTeam(user) &&
     getTeamRegistrationWindowState(settings, now) === "open"
   );
@@ -200,6 +248,7 @@ export function canEditFlights(
 ): boolean {
   return (
     !user.suspended &&
+    hasCompletedUnitInfo(user) &&
     isRosterComplete(user) &&
     !areFlightsFinalized(user) &&
     !isFlightDeadlinePassed(settings, now)
@@ -234,13 +283,16 @@ export function deriveWorkflowStages(params: {
 
   const confirmed = hasConfirmedParticipation(user);
   const confirmExpired = isConfirmationDeadlinePassed(settings, now);
+  const unitDone = hasCompletedUnitInfo(user);
   const appStatus = normalizeApplicationStatus(user.applicationStatus);
   const approvedStage = isRegistrationApproved(user);
-  const payStatus = normalizePaymentStatus(user.paymentStatus);
-  const paid = isPaymentComplete(user);
+  const returned =
+    appStatus === APPLICATION_STATUS.RETURNED ||
+    appStatus === APPLICATION_STATUS.REJECTED;
   const windowState = getTeamRegistrationWindowState(settings, now);
   const teamRegistered = hasRegisteredTeam(user);
   const rosterDone = isRosterComplete(user);
+  const flightsSubmitted = areFlightsSubmitted(user);
   const flightsDone = areFlightsFinalized(user);
   const limit = effectiveTeamLimit(user, settings);
 
@@ -261,81 +313,43 @@ export function deriveWorkflowStages(params: {
     href: confirmed ? null : "/event/confirm-participation",
   });
 
-  // 2 — Registration verification (SD)
-  const verificationLocked = !confirmed;
+  // 2 — Unit information (participant-entered)
+  /* A step that is already complete never renders as locked — a registration
+     carried over from the old flow can have its unit on file while the newer
+     confirmation step is still outstanding, and showing that as "Locked" hid
+     work the participant had actually done. */
+  const unitLocked = !confirmed && !unitDone;
   stages.push({
-    key: "verification",
-    label: L.verification,
-    state: verificationLocked
-      ? "locked"
-      : approvedStage
-        ? "done"
-        : appStatus === APPLICATION_STATUS.REJECTED ||
-            appStatus === APPLICATION_STATUS.RETURNED
-          ? "attention"
-          : "current",
-    sub: verificationLocked
-      ? S.locked
-      : approvedStage
-        ? S.approvedBySd
-        : appStatus === APPLICATION_STATUS.REJECTED
-          ? S.rejected
-          : appStatus === APPLICATION_STATUS.RETURNED
-            ? S.returnedForCorrection
-            : appStatus === APPLICATION_STATUS.UNDER_REVIEW
-              ? S.underReviewBySd
-              : S.pendingSdVerification,
-    href: verificationLocked ? null : "/event/dashboard",
+    key: "unitInfo",
+    label: L.unitInfo,
+    state: unitDone ? "done" : unitLocked ? "locked" : "current",
+    sub: unitDone
+      ? S.unitRecorded
+      : unitLocked
+        ? S.locked
+        : S.provideUnitDetails,
+    href: unitLocked ? null : "/event/edit/unit",
   });
 
-  // 3 — Payment (MT verifies)
-  const paymentLocked = verificationLocked || !approvedStage;
-  stages.push({
-    key: "payment",
-    label: L.payment,
-    state: paymentLocked
-      ? "locked"
-      : paid
-        ? "done"
-        : payStatus === PAYMENT_STATUS.REJECTED ||
-            payStatus === PAYMENT_STATUS.RETURNED
-          ? "attention"
-          : "current",
-    sub: paymentLocked
-      ? S.locked
-      : paid
-        ? S.verifiedByMt
-        : payStatus === PAYMENT_STATUS.SUBMITTED ||
-            payStatus === PAYMENT_STATUS.UNDER_REVIEW
-          ? S.underReviewByMt
-          : payStatus === PAYMENT_STATUS.REJECTED
-            ? S.proofRejected
-            : payStatus === PAYMENT_STATUS.RETURNED
-              ? S.returnedForCorrection
-              : S.paymentRequired,
-    href: paymentLocked ? null : "/event/payment",
-  });
-
-  // 4 — Team registration + members roster (one stage, window-gated)
-  const rosterLocked = paymentLocked || !paid;
-  /* Before the team is registered this stage still reports the registration
-     window, since that is what the participant is waiting on; "attention"
-     mirrors the old teamRegistration tile for a window that is not open. */
+  // 3 — Team registration + members roster (one stage, window-gated)
+  const rosterLocked = (unitLocked || !unitDone) && !rosterDone;
+  /* Before the team is registered this stage reports the registration window,
+     since that is what the participant is waiting on. */
   const awaitingRegistration = !rosterLocked && !teamRegistered;
   stages.push({
     key: "roster",
     label: L.roster,
-    state: rosterLocked
-      ? "locked"
-      : rosterDone
-        ? "done"
+    state: rosterDone
+      ? "done"
+      : rosterLocked
+        ? "locked"
         : awaitingRegistration && windowState !== "open"
           ? "attention"
           : "current",
-    sub: rosterLocked
-      ? S.locked
-      : rosterDone
-        ? S.membersConfirmed(teamMemberCount)
+    sub: rosterDone
+      ? S.membersConfirmed(teamMemberCount)
+      : rosterLocked
+        ? S.locked
         : awaitingRegistration
           ? windowState === "before"
             ? settings.teamRegistrationOpenDate
@@ -350,32 +364,61 @@ export function deriveWorkflowStages(params: {
     href: rosterLocked ? null : "/event/team",
   });
 
-  // 6 — Flight details
-  const flightsLocked = rosterLocked || !rosterDone;
+  // 4 — Flight details
+  const flightsDoneStep = flightsDone || flightsSubmitted;
+  const flightsLocked = (rosterLocked || !rosterDone) && !flightsDoneStep;
   const flightDeadlinePassed = isFlightDeadlinePassed(settings, now);
   stages.push({
     key: "flights",
     label: L.flights,
-    state: flightsLocked
-      ? "locked"
-      : flightsDone
-        ? "done"
+    state: flightsDoneStep
+      ? "done"
+      : flightsLocked
+        ? "locked"
         : flightDeadlinePassed
           ? "attention"
           : "current",
-    sub: flightsLocked
-      ? S.locked
-      : flightsDone
-        ? S.finalized
-        : flightDeadlinePassed
-          ? S.deadlinePassedLocked
-          : settings.flightDetailsDeadline
-            ? S.submitBy(fmt(settings.flightDetailsDeadline))
-            : S.provideTravelDocs,
+    sub: flightsDone
+      ? S.finalized
+      : flightsSubmitted
+        ? S.flightsSubmitted
+        : flightsLocked
+          ? S.locked
+          : flightDeadlinePassed
+            ? S.deadlinePassedLocked
+            : settings.flightDetailsDeadline
+              ? S.submitBy(fmt(settings.flightDetailsDeadline))
+              : S.provideTravelDocs,
     href: flightsLocked ? null : "/event/flights",
   });
 
-  // 7 — Host information
+  // 5 — SD approval of the completed registration
+  const verificationLocked = !flightsSubmitted && !approvedStage;
+  stages.push({
+    key: "verification",
+    label: L.verification,
+    state: approvedStage
+      ? "done"
+      : verificationLocked
+        ? "locked"
+        : returned
+          ? "attention"
+          : "current",
+    sub: approvedStage
+      ? S.approvedBySd
+      : verificationLocked
+        ? S.completeStepsFirst
+        : appStatus === APPLICATION_STATUS.REJECTED
+          ? S.rejected
+          : appStatus === APPLICATION_STATUS.RETURNED
+            ? S.returnedForCorrection
+            : appStatus === APPLICATION_STATUS.UNDER_REVIEW
+              ? S.underReviewBySd
+              : S.pendingSdVerification,
+    href: verificationLocked && !approvedStage ? null : "/event/dashboard",
+  });
+
+  // 6 — Host information
   const hostAvailable = flightsDone && settings.hostInfoPublished;
   stages.push({
     key: "hostInfo",
@@ -403,12 +446,14 @@ export function currentWorkflowStageIndex(stages: WorkflowStage[]): number {
 /** Select shape needed on User to feed {@link deriveWorkflowStages}. */
 export const workflowUserSelect = {
   applicationStatus: true,
-  paymentStatus: true,
   approved: true,
   suspended: true,
   participationConfirmedAt: true,
+  unitInfoCompletedAt: true,
   teamRegisteredAt: true,
   rosterCompletedAt: true,
+  flightsSubmittedAt: true,
+  submittedForApprovalAt: true,
   maxTeamMembersOverride: true,
   flightsFinalizedAt: true,
 } as const;

@@ -7,7 +7,6 @@ export type PublicSiteSettings = {
   registrationOpen: boolean;
   intlRegistrationOpen: boolean;
   registrationDeadline: Date | null;
-  paymentDeadline: Date | null;
   exerciseYear: number;
   exerciseDates: string;
   privacyPolicyUrl: string;
@@ -22,7 +21,6 @@ export const DEFAULT_SITE_SETTINGS: PublicSiteSettings = {
   registrationOpen: true,
   intlRegistrationOpen: true,
   registrationDeadline: null,
-  paymentDeadline: null,
   exerciseYear: 2026,
   exerciseDates: "2 – 13 October 2026",
   privacyPolicyUrl: "/privacy",
@@ -120,9 +118,6 @@ export async function getSiteSettings(): Promise<PublicSiteSettings> {
     intlRegistrationOpen: row.intlRegistrationOpen,
     registrationDeadline: row.registrationDeadline
       ? new Date(row.registrationDeadline)
-      : null,
-    paymentDeadline: row.paymentDeadline
-      ? new Date(row.paymentDeadline)
       : null,
     exerciseYear: row.exerciseYear,
     exerciseDates: row.exerciseDates,

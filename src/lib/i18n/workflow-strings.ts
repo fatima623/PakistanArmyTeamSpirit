@@ -5,11 +5,10 @@
 export interface WorkflowStrings {
   label: {
     confirmation: string;
-    verification: string;
-    payment: string;
-    teamRegistration: string;
+    unitInfo: string;
     roster: string;
     flights: string;
+    verification: string;
     hostInfo: string;
   };
   sub: {
@@ -21,16 +20,9 @@ export interface WorkflowStrings {
     // shared
     locked: string;
     returnedForCorrection: string;
-    // verification
-    approvedBySd: string;
-    rejected: string;
-    underReviewBySd: string;
-    pendingSdVerification: string;
-    // payment
-    verifiedByMt: string;
-    underReviewByMt: string;
-    proofRejected: string;
-    paymentRequired: string;
+    // unit information
+    unitRecorded: string;
+    provideUnitDetails: string;
     // team registration
     teamRegistered: string;
     opensOn: (date: string) => string;
@@ -43,9 +35,16 @@ export interface WorkflowStrings {
     membersAdded: (count: number, limit: number) => string;
     // flights
     finalized: string;
+    flightsSubmitted: string;
     deadlinePassedLocked: string;
     submitBy: (date: string) => string;
     provideTravelDocs: string;
+    // verification (SD, last stage)
+    approvedBySd: string;
+    rejected: string;
+    underReviewBySd: string;
+    pendingSdVerification: string;
+    completeStepsFirst: string;
     // host info
     available: string;
     awaitingPublication: string;
@@ -56,11 +55,10 @@ export interface WorkflowStrings {
 export const enWorkflow: WorkflowStrings = {
   label: {
     confirmation: "Confirm Participation",
-    verification: "Registration Verification",
-    payment: "Payment",
-    teamRegistration: "Team Registration",
+    unitInfo: "Unit Information",
     roster: "Team Members",
     flights: "Flight Details",
+    verification: "Registration Approval",
     hostInfo: "Host Information",
   },
   sub: {
@@ -70,14 +68,8 @@ export const enWorkflow: WorkflowStrings = {
     confirmBy: (date) => `Confirm by ${date}`,
     locked: "Locked",
     returnedForCorrection: "Returned for correction",
-    approvedBySd: "Approved by SD",
-    rejected: "Rejected",
-    underReviewBySd: "Under review by SD",
-    pendingSdVerification: "Pending SD verification",
-    verifiedByMt: "Verified by MT",
-    underReviewByMt: "Under review by MT",
-    proofRejected: "Proof rejected",
-    paymentRequired: "Payment required",
+    unitRecorded: "Unit details recorded",
+    provideUnitDetails: "Provide your unit details",
     teamRegistered: "Team registered",
     opensOn: (date) => `Opens ${date}`,
     notYetOpen: "Not yet open",
@@ -87,9 +79,15 @@ export const enWorkflow: WorkflowStrings = {
     membersConfirmed: (count) => `${count} member${count === 1 ? "" : "s"} confirmed`,
     membersAdded: (count, limit) => `${count} of ${limit} added`,
     finalized: "Finalized by administration",
+    flightsSubmitted: "Submitted for approval",
     deadlinePassedLocked: "Deadline passed — locked",
     submitBy: (date) => `Submit by ${date}`,
     provideTravelDocs: "Provide travel documents",
+    approvedBySd: "Approved by SD",
+    rejected: "Rejected",
+    underReviewBySd: "Under review by SD",
+    pendingSdVerification: "Pending SD approval",
+    completeStepsFirst: "Complete the steps above first",
     available: "Available",
     awaitingPublication: "Awaiting publication",
   },

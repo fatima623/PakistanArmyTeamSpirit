@@ -2,7 +2,6 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
   APPLICATION_STATUS,
-  PAYMENT_STATUS,
 } from "../src/lib/constants";
 import { BCRYPT_ROUNDS } from "../src/lib/password-policy";
 import {
@@ -58,7 +57,6 @@ const LEGACY_TEST_EMAILS = [
   "admin@cambrian.test",
   "pending@cambrian.test",
   "approved@cambrian.test",
-  "payment@cambrian.test",
   "verified@cambrian.test",
   "rejected@cambrian.test",
 ];
@@ -68,24 +66,35 @@ async function upsertParticipant(params: {
   firstName: string;
   lastName: string;
   applicationStatus: string;
-  paymentStatus: string;
   approved?: boolean;
   rejectionReason?: string;
   unitName?: string;
-  withPayment?: boolean;
-  paymentRecordStatus?: string;
+  /** Workflow markers so seeded teams sit at different steps of the journey. */
+  confirmed?: boolean;
+  rosterCompleted?: boolean;
+  flightsSubmitted?: boolean;
 }) {
   const passwordHash = await bcrypt.hash(TEST_PASSWORD, BCRYPT_ROUNDS);
   const approved =
     params.approved ??
     params.applicationStatus === APPLICATION_STATUS.APPROVED;
 
+  const now = new Date();
+  const workflow = {
+    participationConfirmedAt: params.confirmed ? now : null,
+    unitInfoCompletedAt: params.unitName ? now : null,
+    teamRegisteredAt: params.rosterCompleted ? now : null,
+    rosterCompletedAt: params.rosterCompleted ? now : null,
+    flightsSubmittedAt: params.flightsSubmitted ? now : null,
+    submittedForApprovalAt: params.flightsSubmitted ? now : null,
+  };
+
   const user = await prisma.user.upsert({
     where: { email: params.email.toLowerCase() },
     update: {
       passwordHash,
       applicationStatus: params.applicationStatus,
-      paymentStatus: params.paymentStatus,
+      ...workflow,
       approved,
       rejectionReason: params.rejectionReason ?? null,
       approvedAt:
@@ -107,7 +116,7 @@ async function upsertParticipant(params: {
       gender: "Male",
       role: "user",
       applicationStatus: params.applicationStatus,
-      paymentStatus: params.paymentStatus,
+      ...workflow,
       approved,
       rejectionReason: params.rejectionReason ?? null,
       approvedAt:
@@ -148,24 +157,6 @@ async function upsertParticipant(params: {
     });
   }
 
-  if (params.withPayment) {
-    const existing = await prisma.payment.findFirst({
-      where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
-    });
-    if (!existing) {
-      await prisma.payment.create({
-        data: {
-          userId: user.id,
-          amount: 150,
-          status: params.paymentRecordStatus ?? PAYMENT_STATUS.SUBMITTED,
-          transactionReference: `TEST-${user.id.slice(0, 8)}`,
-          paymentDate: new Date(),
-        },
-      });
-    }
-  }
-
   return user;
 }
 
@@ -193,7 +184,6 @@ async function main() {
       role: "admin",
       approved: true,
       applicationStatus: APPLICATION_STATUS.APPROVED,
-      paymentStatus: PAYMENT_STATUS.VERIFIED,
       emailVerifiedAt: new Date(),
     },
     create: {
@@ -206,7 +196,6 @@ async function main() {
       role: "admin",
       approved: true,
       applicationStatus: APPLICATION_STATUS.APPROVED,
-      paymentStatus: PAYMENT_STATUS.VERIFIED,
       emailVerifiedAt: new Date(),
       privacyAccepted: true,
       privacyAcceptedAt: new Date(),
@@ -244,8 +233,7 @@ async function main() {
         role: staff.role,
         approved: true,
         applicationStatus: APPLICATION_STATUS.APPROVED,
-        paymentStatus: PAYMENT_STATUS.VERIFIED,
-        emailVerifiedAt: new Date(),
+          emailVerifiedAt: new Date(),
         suspended: false,
       },
       create: {
@@ -258,8 +246,7 @@ async function main() {
         role: staff.role,
         approved: true,
         applicationStatus: APPLICATION_STATUS.APPROVED,
-        paymentStatus: PAYMENT_STATUS.VERIFIED,
-        emailVerifiedAt: new Date(),
+          emailVerifiedAt: new Date(),
         privacyAccepted: true,
         privacyAcceptedAt: new Date(),
       },
@@ -271,58 +258,82 @@ async function main() {
     console.log(`  ${staff.email} — ${staff.note}`);
   }
 
+  /* One seeded team per step of the guided registration, so every state the
+     SD queue and the participant dashboard can show is reachable locally. */
   const testAccounts = [
     {
       email: "pending@example.com",
       firstName: "Pat",
       lastName: "Pending",
       applicationStatus: APPLICATION_STATUS.PENDING,
-      paymentStatus: PAYMENT_STATUS.PENDING,
       approved: false,
-      unitName: "1st Pending Unit",
-      note: "application pending",
+      note: "logged in, not yet confirmed",
+    },
+    {
+      email: "confirmed@example.com",
+      firstName: "Con",
+      lastName: "Confirmed",
+      applicationStatus: APPLICATION_STATUS.PENDING,
+      approved: false,
+      confirmed: true,
+      note: "confirmed, unit information due",
+    },
+    {
+      email: "unit@example.com",
+      firstName: "Uma",
+      lastName: "Unit",
+      applicationStatus: APPLICATION_STATUS.PENDING,
+      approved: false,
+      confirmed: true,
+      unitName: "2nd Unit Team",
+      note: "unit information in, roster due",
+    },
+    {
+      email: "roster@example.com",
+      firstName: "Ros",
+      lastName: "Roster",
+      applicationStatus: APPLICATION_STATUS.PENDING,
+      approved: false,
+      confirmed: true,
+      unitName: "3rd Roster Team",
+      rosterCompleted: true,
+      note: "roster complete, flight details due",
+    },
+    {
+      email: "review@example.com",
+      firstName: "Rhea",
+      lastName: "Review",
+      applicationStatus: APPLICATION_STATUS.UNDER_REVIEW,
+      approved: false,
+      confirmed: true,
+      unitName: "4th Review Team",
+      rosterCompleted: true,
+      flightsSubmitted: true,
+      note: "everything submitted, awaiting SD approval",
     },
     {
       email: "approved@example.com",
       firstName: "Ann",
       lastName: "Approved",
       applicationStatus: APPLICATION_STATUS.APPROVED,
-      paymentStatus: PAYMENT_STATUS.PENDING,
-      unitName: "2nd Approved Unit",
-      note: "approved, payment due",
+      confirmed: true,
+      unitName: "5th Approved Team",
+      rosterCompleted: true,
+      flightsSubmitted: true,
+      note: "approved by SD",
     },
     {
-      email: "payment@example.com",
-      firstName: "Pay",
-      lastName: "Submitted",
-      applicationStatus: APPLICATION_STATUS.APPROVED,
-      paymentStatus: PAYMENT_STATUS.SUBMITTED,
-      unitName: "3rd Payment Unit",
-      withPayment: true,
-      paymentRecordStatus: PAYMENT_STATUS.SUBMITTED,
-      note: "payment submitted",
-    },
-    {
-      email: "verified@example.com",
-      firstName: "Val",
-      lastName: "Verified",
-      applicationStatus: APPLICATION_STATUS.APPROVED,
-      paymentStatus: PAYMENT_STATUS.VERIFIED,
-      unitName: "4th Verified Unit",
-      withPayment: true,
-      paymentRecordStatus: PAYMENT_STATUS.VERIFIED,
-      note: "fully verified",
-    },
-    {
-      email: "rejected@example.com",
+      email: "returned@example.com",
       firstName: "Reg",
-      lastName: "Rejected",
-      applicationStatus: APPLICATION_STATUS.REJECTED,
-      paymentStatus: PAYMENT_STATUS.PENDING,
+      lastName: "Returned",
+      applicationStatus: APPLICATION_STATUS.RETURNED,
       approved: false,
+      confirmed: true,
+      unitName: "6th Returned Team",
+      rosterCompleted: true,
+      flightsSubmitted: true,
       rejectionReason: "Incomplete unit documentation for 2026 cycle.",
-      unitName: "5th Rejected Unit",
-      note: "application rejected",
+      note: "returned for correction",
     },
   ] as const;
 
@@ -348,8 +359,8 @@ async function main() {
       await prisma.supportTicket.create({
         data: {
           userId: ticketOwner.id,
-          subject: "Unable to upload payment proof",
-          category: "PAYMENT",
+          subject: "Unable to upload passport PDF",
+          category: "TECHNICAL",
           priority: "HIGH",
           status: "OPEN",
           lastReplyAt: new Date(),
@@ -392,10 +403,9 @@ async function main() {
     }
   }
 
-  // Deadlines in the future so registration/payment stay open and the timeline
+  // Deadlines in the future so registration stays open and the timeline
   // shows a live countdown. Set one to a past date in admin to test the block.
   const registrationDeadline = new Date("2026-07-31T23:59:00");
-  const paymentDeadline = new Date("2026-08-31T23:59:00");
 
   await prisma.siteSettings.upsert({
     where: { id: "singleton" },
@@ -403,9 +413,7 @@ async function main() {
       feeNoticeText: "",
       approvalNoticeText:
         "Your application is under review by PATS. You will be notified when approved.",
-      defaultPaymentAmount: 15000,
       registrationDeadline,
-      paymentDeadline,
     },
     create: {
       id: "singleton",
@@ -413,7 +421,6 @@ async function main() {
       approvalNoticeText:
         "Your application is under review by PATS. You will be notified when approved.",
       registrationDeadline,
-      paymentDeadline,
     },
   });
 
@@ -487,7 +494,7 @@ async function main() {
     },
     {
       message:
-        "Approved teams must complete payment verification before deadline",
+        "Teams must complete every registration step before the deadline",
       priority: TICKER_PRIORITY.CRITICAL,
       status: TICKER_STATUS.ACTIVE,
       visibility: TICKER_VISIBILITY.GLOBAL,

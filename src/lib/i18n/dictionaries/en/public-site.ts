@@ -82,6 +82,16 @@ export const publicSite = {
 
   /** Per-page chrome (hero + section headings) for the marketing subpages. */
   pages: {
+    tour: {
+      heroEyebrow: "Portal",
+      heroTitle: "Site tour",
+      heroSubtitle:
+        "Everything published about PATS — events, international participation, awards, gallery, announcements and key dates — in one place.",
+      sectionEyebrow: "Sections",
+      sectionTitle: "Browse the tour",
+      sectionDescription:
+        "Open any section below. Use the navigation bar above to move between them, or return to your dashboard at any time.",
+    },
     awards: {
       heroEyebrow: "Honors registry",
       heroTitle: "Awards & recognition",
@@ -217,10 +227,10 @@ export const publicSite = {
     intro: {
       eyebrow: "Secure access",
       title: "Participant login",
-      body: "Use your approved patrol credentials to access the participant dashboard, monitor fee status, and review key coordination steps before movement.",
+      body: "Use your patrol credentials to access the participant dashboard, work through each registration step, and review key coordination details before movement.",
       checklist: [
         "Approved patrol accounts only",
-        "Payment and registration status tracking",
+        "Registration progress tracking",
         "Direct access to participant actions and updates",
       ],
     },

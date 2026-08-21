@@ -8,17 +8,16 @@ import { ApiError, handleApiError, requireAuth } from "@/lib/api-helpers";
 import {
   canRegisterTeam,
   getTeamRegistrationWindowState,
+  hasCompletedUnitInfo,
   hasConfirmedParticipation,
-  isPaymentComplete,
-  isRegistrationApproved,
   workflowUserSelect,
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 
 /**
  * Register the participant's team. Allowed only inside the admin-configured
- * team registration window, after participation confirmation, SD registration
- * verification, and MT payment verification.
+ * team registration window, after participation has been confirmed and the
+ * unit information step is complete.
  */
 export async function POST() {
   try {
@@ -40,15 +39,9 @@ export async function POST() {
       if (!hasConfirmedParticipation(user)) {
         throw new ApiError("Confirm your participation first", 409);
       }
-      if (!isRegistrationApproved(user)) {
+      if (!hasCompletedUnitInfo(user)) {
         throw new ApiError(
-          "Your registration must be verified by the SD before team registration",
-          409
-        );
-      }
-      if (!isPaymentComplete(user)) {
-        throw new ApiError(
-          "Your payment must be verified by the MT before team registration",
+          "Complete your unit information before registering your team",
           409
         );
       }

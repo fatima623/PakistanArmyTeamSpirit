@@ -55,7 +55,6 @@ export async function PUT(request: Request) {
     revalidatePath("/key-dates");
     revalidatePath("/page/key-dates");
     revalidatePath("/event/dashboard");
-    revalidatePath("/event/payment");
     revalidatePath("/event/team");
     revalidatePath("/event/flights");
     revalidatePath("/event/host-info");

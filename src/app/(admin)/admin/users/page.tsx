@@ -20,12 +20,12 @@ import {
 } from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
 import { adminNavLabel } from "@/lib/admin-navigation";
+import { APPLICATION_STATUS, type ApplicationStatus } from "@/lib/constants";
 import {
-  APPLICATION_STATUS,
-  LEGACY_PAYMENT_STATUS,
-  PAYMENT_STATUS,
-  type ApplicationStatus,
-} from "@/lib/constants";
+  getRegistrationProgress,
+  registrationProgressSelect,
+} from "@/lib/registration-progress";
+import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 import {
   segmentedChipClasses,
@@ -72,14 +72,12 @@ type SearchParams = Promise<{
   search?: string;
   filter?: string;
   appStatus?: string;
-  payStatus?: string;
   country?: string;
 }>;
 
 function buildHref(params: {
   filter: string;
   search: string;
-  payStatus: string;
   country: string;
   page?: number;
 }): string {
@@ -91,8 +89,6 @@ function buildHref(params: {
      looked dead. An explicit ?filter=all is what actually clears it. */
   query.set("filter", params.filter || "all");
   if (params.search) query.set("search", params.search);
-  if (params.payStatus && params.payStatus !== "all")
-    query.set("payStatus", params.payStatus);
   if (params.country && params.country !== "all")
     query.set("country", params.country);
   query.set("page", String(params.page ?? 1));
@@ -115,7 +111,6 @@ export default async function AdminUsersPage({
   // click never becomes the default.
   const filter = params.filter ?? "pending";
   const appStatus = params.appStatus ?? "";
-  const payStatus = params.payStatus ?? "all";
 
   /* Country dropdown options come from the countries actually present among
      participants (unfiltered), so the list never offers an empty slice. */
@@ -168,12 +163,6 @@ export default async function AdminUsersPage({
       { lastName: { contains: search } },
     ];
   }
-  if (payStatus && payStatus !== "all") {
-    baseWhere.paymentStatus =
-      payStatus === PAYMENT_STATUS.VERIFIED
-        ? { in: [PAYMENT_STATUS.VERIFIED, LEGACY_PAYMENT_STATUS.APPROVED] }
-        : payStatus;
-  }
   /* Country lives on baseWhere (not `where`) so it constrains the table, the
      row count, the status-chip counts AND the CSV export alike. `AND` is used
      for the "not set" case because `OR` is already taken by the search box. */
@@ -193,14 +182,10 @@ export default async function AdminUsersPage({
   };
   if (statusByFilter[filter]) {
     where.applicationStatus = statusByFilter[filter];
-  } else if (filter === "payment_pending") {
-    // Legacy bookmark support
-    where.applicationStatus = APPLICATION_STATUS.APPROVED;
-    where.paymentStatus = PAYMENT_STATUS.PENDING;
   }
   if (appStatus) where.applicationStatus = appStatus;
 
-  const [users, totalCount, grouped] = await Promise.all([
+  const [rows, totalCount, grouped, workflowSettings] = await Promise.all([
     prisma.user.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -213,16 +198,14 @@ export default async function AdminUsersPage({
         email: true,
         rank: true,
         role: true,
-        approved: true,
-        applicationStatus: true,
-        paymentStatus: true,
-        suspended: true,
         createdAt: true,
         approvedAt: true,
         rejectedAt: true,
         country: true,
         nationality: true,
         unit: { select: { unitName: true } },
+        _count: { select: { teamMembers: true } },
+        ...registrationProgressSelect,
       },
     }),
     prisma.user.count({ where }),
@@ -231,7 +214,19 @@ export default async function AdminUsersPage({
       where: baseWhere,
       _count: { _all: true },
     }),
+    getWorkflowSettings(),
   ]);
+
+  /* The table shows how far each team has got through the guided registration,
+     derived exactly as the participant's own progress panel derives it. */
+  const users = rows.map((u) => ({
+    ...u,
+    progress: getRegistrationProgress(
+      u,
+      workflowSettings,
+      u._count.teamMembers
+    ),
+  }));
 
   /* Chip counts (normalised so legacy status strings still tally). */
   const statusCounts: Record<ApplicationStatus, number> = {
@@ -268,10 +263,10 @@ export default async function AdminUsersPage({
       rank: true,
       country: true,
       nationality: true,
-      applicationStatus: true,
-      paymentStatus: true,
       createdAt: true,
       unit: { select: { unitName: true } },
+      _count: { select: { teamMembers: true } },
+      ...registrationProgressSelect,
     },
   });
 
@@ -283,16 +278,20 @@ export default async function AdminUsersPage({
     Country: u.country ?? "",
     Nationality: u.nationality ?? "",
     Application: u.applicationStatus,
-    Payment: u.paymentStatus,
+    Progress: (() => {
+      const p = getRegistrationProgress(
+        u,
+        workflowSettings,
+        u._count.teamMembers
+      );
+      return `${p.done}/${p.total} ${p.currentLabel}`;
+    })(),
     Registered: u.createdAt.toISOString().slice(0, 10),
   }));
 
   /* Every extra filter must ride along on the page links, or paging silently
      drops it. */
   const paginationExtraQuery = [
-    payStatus && payStatus !== "all"
-      ? `payStatus=${encodeURIComponent(payStatus)}`
-      : "",
     country && country !== "all" ? `country=${encodeURIComponent(country)}` : "",
   ]
     .filter(Boolean)
@@ -308,7 +307,7 @@ export default async function AdminUsersPage({
                 className="flex-shrink-0 text-green-800"
                 aria-hidden
               />
-              Participation Requests
+              Team Registrations
             </h2>
 
             <div className="flex w-full flex-wrap items-center gap-1.5 lg:w-auto">
@@ -324,7 +323,6 @@ export default async function AdminUsersPage({
                   href: buildHref({
                     filter: chip.key,
                     search,
-                    payStatus,
                     country,
                   }),
                 }))}
@@ -344,7 +342,6 @@ export default async function AdminUsersPage({
                       href={buildHref({
                         filter: chip.key,
                         search,
-                        payStatus,
                         country,
                       })}
                       className={segmentedChipClasses(chip.key, active)}
@@ -384,10 +381,10 @@ export default async function AdminUsersPage({
                   "Country",
                   "Nationality",
                   "Application",
-                  "Payment",
+                  "Progress",
                   "Registered",
                 ]}
-                filename="participation-requests.csv"
+                filename="team-registrations.csv"
               />
             </div>
           </section>

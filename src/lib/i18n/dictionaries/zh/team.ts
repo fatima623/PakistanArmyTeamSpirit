@@ -30,7 +30,7 @@ export const team: typeof enTeam = {
     windowNotYetOpen: "窗口尚未开放",
     windowClosed: "窗口已关闭",
     unlockNote:
-      "团队注册将在参与确认、体育局 (SD) 注册核验以及管理组 (MT) 付款核实后解锁。",
+      "团队注册将在您确认参与并完成单位信息后解锁。",
   },
   roster: {
     completedShort: "名单已完成",

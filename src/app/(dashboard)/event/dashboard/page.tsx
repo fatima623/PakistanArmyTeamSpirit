@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import {
-  CalendarClock,
-  CreditCard,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
 import { requireConfirmedParticipant } from "@/lib/require-participant";
@@ -16,15 +9,13 @@ import { formatDateDisplay, formatDateShort } from "@/lib/utils";
 import { ParticipantRegistrationDetailsCard } from "@/components/dashboard/ParticipantRegistrationDetailsCard";
 import { ParticipantWorkflowPanel } from "@/components/dashboard/ParticipantWorkflowPanel";
 import { DashboardStatusBar } from "@/components/dashboard/DashboardStatusBar";
-import { APPLICATION_STATUS, isPaymentVerified } from "@/lib/constants";
 import { getSiteSettings } from "@/lib/site-data";
 import { getTimelineData } from "@/lib/timeline";
 import { Timeline } from "@/components/timeline/Timeline";
-import { resolveParticipantJourneyStage } from "@/lib/participant-journey";
 import {
   currentWorkflowStageIndex,
   deriveWorkflowStages,
-  effectiveTeamLimit,
+  resolveRegistrationOverallStage,
 } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -62,7 +53,6 @@ export default async function EventDashboardPage() {
           createdAt: true,
           approved: true,
           applicationStatus: true,
-          paymentStatus: true,
           rejectionReason: true,
           approvedAt: true,
           rejectedAt: true,
@@ -70,8 +60,11 @@ export default async function EventDashboardPage() {
           privacyAccepted: true,
           participationConfirmedAt: true,
           participationDeclinedAt: true,
+          unitInfoCompletedAt: true,
           teamRegisteredAt: true,
           rosterCompletedAt: true,
+          flightsSubmittedAt: true,
+          submittedForApprovalAt: true,
           maxTeamMembersOverride: true,
           flightsFinalizedAt: true,
           unit: {
@@ -104,11 +97,7 @@ export default async function EventDashboardPage() {
 
   const latestUpdates = tickerUpdates.slice(0, 5);
 
-  const stage = resolveParticipantJourneyStage({
-    applicationStatus: user.applicationStatus,
-    paymentStatus: user.paymentStatus,
-    approved: user.approved,
-  });
+  const overallStage = resolveRegistrationOverallStage(user);
 
   const workflowStages = deriveWorkflowStages({
     user,
@@ -117,20 +106,18 @@ export default async function EventDashboardPage() {
     wf: t.workflow,
   });
   const activeStageIdx = currentWorkflowStageIndex(workflowStages);
-
-  const applicationApproved =
-    user.applicationStatus === APPLICATION_STATUS.APPROVED || user.approved;
-  const paymentComplete = isPaymentVerified(user.paymentStatus);
-  const showPaymentLink = applicationApproved && !user.suspended;
-
-  const fullName = `${user.firstName} ${user.lastName}`.trim();
   const activeStage =
     activeStageIdx >= 0 ? workflowStages[activeStageIdx] : null;
-  const chipLabel = activeStage ? activeStage.sub : t.dashboard.allStagesComplete;
-  const chipPending = activeStage ? activeStage.state !== "done" : false;
+  /* The status banner's primary action points at whichever step is next; the
+     Registration progress cards below cover every other step. */
+  const nextStepHref = activeStage
+    ? `/event/journey?step=${activeStage.key}`
+    : null;
 
-  const teamLimit = effectiveTeamLimit(user, workflowSettings);
-
+  /* An admin-created account starts with no name — the participant supplies it
+     on the unit information step — so fall back to the login rather than
+     rendering an empty heading. */
+  const fullName = `${user.firstName} ${user.lastName}`.trim() || user.email;
 
   const feeNoticeHtml =
     settings?.feeNoticeText &&
@@ -150,20 +137,7 @@ export default async function EventDashboardPage() {
             {user.unit?.unitName ?? t.dashboard.unitNotRegistered} · {user.email}
           </p>
         </div>
-        <div className="pp-hero__aside">
-          <span
-            className={`pp-hero__chip ${chipPending ? "pp-hero__chip--pending" : ""}`.trim()}
-          >
-            {chipLabel}
-          </span>
-          <Link href="/event/team" className="pp-hero__team">
-            <Users className="h-4 w-4" aria-hidden />
-            <span>{t.dashboard.membersCount(user._count.teamMembers)}</span>
-          </Link>
-        </div>
       </header>
-
-
 
       <ParticipantWorkflowPanel
         stages={workflowStages.filter((s) => s.key !== "hostInfo")}
@@ -178,11 +152,10 @@ export default async function EventDashboardPage() {
       ) : null}
 
       <DashboardStatusBar
-        stage={stage}
+        stage={overallStage}
         rejectionReason={user.rejectionReason}
         approvedAt={user.approvedAt}
-        canAccessPayment={showPaymentLink}
-        paymentComplete={paymentComplete}
+        nextStepHref={nextStepHref}
         exerciseDates={siteSettings.exerciseDates}
         t={t.statusBar}
         locale={locale}

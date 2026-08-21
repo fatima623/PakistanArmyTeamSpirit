@@ -49,12 +49,12 @@ export const INTERNATIONAL_TEAMS = {
 
 export const REGISTRATION_INFO = {
   description:
-    "Register your patrol through this portal with accurate roster and liaison details. Track notices, key dates, and payment steps in your participant dashboard.",
+    "Register your patrol through this portal with accurate roster and liaison details. Track notices, key dates, and every registration step in your participant dashboard.",
   steps: [
     "Create team account and submit registration with complete roster",
     "Upload required supporting documents",
     "Monitor acceptance status and competition notices",
-    "Complete payment when directed; prepare per official kit list",
+    "Submit flight details when directed; prepare per official kit list",
   ],
 } as const;
 

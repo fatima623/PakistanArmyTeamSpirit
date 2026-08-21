@@ -13,14 +13,8 @@ import {
 import { BCRYPT_ROUNDS } from "@/lib/password-policy";
 import { AdminCreateUserSchema } from "@/lib/validations";
 import { createAuditLog } from "@/lib/audit";
-import {
-  APPLICATION_STATUS,
-  AUDIT_ENTITY,
-  PAYMENT_STATUS,
-} from "@/lib/constants";
+import { APPLICATION_STATUS, AUDIT_ENTITY } from "@/lib/constants";
 import { PARTICIPANT_ROLE, isStaffRole } from "@/lib/auth-routes";
-import { resolveCountryForSubmit } from "@/lib/countries";
-import { resolveNationalityForSubmit } from "@/lib/participant-country";
 import { toCsv } from "@/lib/csv";
 
 const PAGE_SIZE = 25;
@@ -170,73 +164,27 @@ export async function POST(request: Request) {
     const passwordHash = await bcrypt.hash(parsed.data.password, BCRYPT_ROUNDS);
     const now = new Date();
 
-    /* Resolve country exactly as public registration does ("Other" collapses to
-       the typed-in customCountry; Pakistan implies Pakistani nationality).
-       Staff accounts are not participants, so they carry no country. */
-    const country =
-      !staff && parsed.data.country?.trim()
-        ? resolveCountryForSubmit(parsed.data.country, parsed.data.customCountry)
-        : null;
-    const nationality = country
-      ? resolveNationalityForSubmit(country, parsed.data.nationality)
-      : null;
-
+    /* A participant account starts empty on purpose — no name, no country and
+       no Unit row. The participant fills all of that in from the portal, one
+       unlocked workflow step at a time, so nothing here can go stale or
+       contradict what they later enter. The columns are NOT NULL in the schema,
+       hence the blank seeds. */
     const user = await prisma.user.create({
       data: {
         email,
         passwordHash,
-        firstName: parsed.data.firstName,
-        lastName: parsed.data.lastName,
-        rank: parsed.data.rank,
-        gender: parsed.data.gender,
+        firstName: parsed.data.firstName?.trim() ?? "",
+        lastName: parsed.data.lastName?.trim() ?? "",
+        rank: parsed.data.rank?.trim() ?? "",
+        gender: parsed.data.gender ?? "Other",
         role: parsed.data.role,
-        country,
-        nationality,
         approved: staff,
         applicationStatus: staff
           ? APPLICATION_STATUS.APPROVED
           : APPLICATION_STATUS.PENDING,
-        paymentStatus: staff
-          ? PAYMENT_STATUS.VERIFIED
-          : PAYMENT_STATUS.PENDING,
         emailVerifiedAt: now,
         privacyAccepted: true,
         privacyAcceptedAt: now,
-        /* Participants carry a full Unit record (staff accounts do not). The
-           validated payload guarantees the required Unit/CO fields for role
-           "user"; the retired legacy columns get the same neutral defaults the
-           public registration route uses so the NOT NULL schema is satisfied. */
-        ...(staff
-          ? {}
-          : {
-              unit: {
-                create: {
-                  unitType: parsed.data.unitType ?? "Regular",
-                  branch: parsed.data.branch ?? "Army",
-                  unitName: parsed.data.unitName ?? "",
-                  arm: parsed.data.arm ?? "",
-                  secondPocEmail: parsed.data.secondPocEmail || null,
-                  thirdPocEmail: parsed.data.thirdPocEmail || null,
-                  additionalInfo: parsed.data.additionalInfo ?? null,
-                  coName: parsed.data.coName ?? "",
-                  coEmail: parsed.data.coEmail ?? "",
-                  coPhone: parsed.data.coPhone ?? "",
-                  jointPatrol: false,
-                  bdeOrFmn: "",
-                  divOrFmn: "",
-                  service: "",
-                  unitAddress: "",
-                  postcode: "",
-                  telephoneMil: "",
-                  telephoneCiv: "",
-                  coRank: "",
-                  coSalutations: null,
-                  canAccommodateIntl: false,
-                  preferredIntlPatrol: null,
-                  longStandingRelation: false,
-                },
-              },
-            }),
       },
       select: { id: true },
     });
@@ -246,7 +194,7 @@ export async function POST(request: Request) {
       entityId: user.id,
       action: "user_created_by_admin",
       actorId: session.user.id,
-      metadata: { email, role: parsed.data.role, country },
+      metadata: { email, role: parsed.data.role },
     });
 
     return NextResponse.json({ user }, { status: 201 });

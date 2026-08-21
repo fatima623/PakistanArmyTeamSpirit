@@ -27,7 +27,7 @@ export const team = {
     windowNotYetOpen: "Window not yet open",
     windowClosed: "Window closed",
     unlockNote:
-      "Team registration unlocks after participation confirmation, SD registration verification, and MT payment verification.",
+      "Team registration unlocks after you confirm participation and complete your unit information.",
   },
   roster: {
     completedShort: "Roster completed",

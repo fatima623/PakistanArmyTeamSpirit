@@ -9,15 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TOAST } from "@/lib/toast";
 import { APPLICATION_STATUS } from "@/lib/constants";
-import {
-  ApplicationStatusBadge,
-  PaymentStatusBadge,
-} from "@/components/admin/StatusBadges";
+import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
+import { RegistrationProgressBadge } from "@/components/admin/RegistrationProgressBadge";
+import type { RegistrationProgress } from "@/lib/registration-progress";
 
 type Props = {
   userId: string;
   applicationStatus: string;
-  paymentStatus: string;
+  /** How far the participant has got — the SD may only approve a finished one. */
+  progress: RegistrationProgress;
   rejectionReason: string | null;
   suspended: boolean;
 };
@@ -29,7 +29,7 @@ type Props = {
 export function ApplicationReviewPanel({
   userId,
   applicationStatus,
-  paymentStatus,
+  progress,
   rejectionReason,
   suspended,
 }: Props) {
@@ -87,8 +87,8 @@ export function ApplicationReviewPanel({
             />
           </div>
           <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.72rem] [&>label]:font-semibold [&>label]:uppercase [&>label]:tracking-[0.07em] [&>label]:text-muted-foreground">
-            <label>Payment status</label>
-            <PaymentStatusBadge status={paymentStatus} showPrefix={false} />
+            <label>Registration progress</label>
+            <RegistrationProgressBadge progress={progress} />
           </div>
           {suspended ? (
             <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.72rem] [&>label]:font-semibold [&>label]:uppercase [&>label]:tracking-[0.07em] [&>label]:text-muted-foreground">
@@ -107,9 +107,18 @@ export function ApplicationReviewPanel({
           <Button
             size="sm"
             variant="adminApprove"
+            /* Approval is the last step: there is nothing to approve until
+               the participant has completed confirmation, unit information,
+               the roster and flight details. */
             disabled={
               loading !== null ||
+              !progress.readyForApproval ||
               applicationStatus === APPLICATION_STATUS.APPROVED
+            }
+            title={
+              progress.readyForApproval || progress.approved
+                ? undefined
+                : `Waiting on the participant — step ${progress.currentStep} of ${progress.total} (${progress.currentLabel})`
             }
             onClick={() =>
               act("approve", APPLICATION_STATUS.APPROVED, {

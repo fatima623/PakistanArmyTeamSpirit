@@ -18,7 +18,7 @@ type SearchParams = Promise<{
   year?: string;
 }>;
 
-/** Filter-chip styling (no dependency on the payment/user chip palettes). */
+/** Filter-chip styling (no dependency on the shared user chip palette). */
 function chipClass(active: boolean): string {
   return active
     ? "rounded-full border border-brand-olive bg-brand-olive px-3 py-1 text-[0.8rem] font-semibold text-white no-underline"

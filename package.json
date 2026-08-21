@@ -20,7 +20,7 @@
     "db:seed:awards": "npx tsx prisma/seed-awards.ts",
     "db:seed:content": "npx tsx prisma/seed-content.ts",
     "db:seed:hero": "npx tsx prisma/seed-hero.ts",
-    "migrate:payment-proofs": "node scripts/migrate-payment-proofs-to-storage.mjs",
+    "backfill:workflow": "node scripts/backfill-workflow-markers.mjs",
     "repair:pdfs": "node scripts/repair-news-pdf-paths.mjs",
     "media:process": "python scripts/process-pats-media.py",
     "awards:split": "node scripts/split-awards.js",

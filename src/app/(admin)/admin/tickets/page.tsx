@@ -8,9 +8,9 @@ import { LiveSearchInput } from "@/components/admin/LiveSearchInput";
 import { AdminEmptyState } from "@/components/admin/AdminEmptyState";
 import { AdminUsersPagination } from "@/components/admin/AdminUsersPagination";
 import {
-  adminPaymentsControls,
-  adminPaymentsFilterTabs,
-  adminPaymentsToolbarSearch,
+  adminListControls,
+  adminListFilterTabs,
+  adminListToolbarSearch,
   adminUsersPagination,
   filterChipClasses,
 } from "@/lib/admin-ui";
@@ -38,11 +38,11 @@ const FILTERS = [
   TICKET_STATUS.CLOSED,
 ] as const;
 
-/** Colour tone for each filter chip, reusing the payments chip palette. */
+/** Colour tone for each filter chip. */
 const FILTER_TONE: Record<string, string> = {
   all: "all",
   [TICKET_STATUS.OPEN]: "pending",
-  [TICKET_STATUS.IN_PROGRESS]: "payment",
+  [TICKET_STATUS.IN_PROGRESS]: "review",
   [TICKET_STATUS.RESOLVED]: "approved",
   [TICKET_STATUS.CLOSED]: "rejected",
 };
@@ -106,8 +106,8 @@ export default async function AdminTicketsPage({
 
   return (
     <div className="admin-fade-in-up">
-      <section className={adminPaymentsControls}>
-        <div className={adminPaymentsToolbarSearch}>
+      <section className={adminListControls}>
+        <div className={adminListToolbarSearch}>
           <LiveSearchInput
             paramName="search"
             placeholder="Search subject, name, email…"
@@ -117,7 +117,7 @@ export default async function AdminTicketsPage({
             iconClassName="pointer-events-none absolute left-3.5 top-1/2 z-[1] h-[1.125rem] w-[1.125rem] -translate-y-1/2 text-muted-foreground/70"
           />
         </div>
-        <nav className={adminPaymentsFilterTabs} aria-label="Filter tickets">
+        <nav className={adminListFilterTabs} aria-label="Filter tickets">
           {FILTERS.map((f) => (
             <Link
               key={f}

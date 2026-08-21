@@ -1,6 +1,8 @@
 /** Public marketing shell — layout modes. */
 
 const PAGE_BANNER_PATHS = new Set([
+  "/tour",
+  "/events-detail",
   "/operations",
   "/international",
   "/familiarization",
@@ -38,6 +40,8 @@ export function pathnameHasHeroOverlay(pathname: string): boolean {
 
 export function pathnameIsCinematicFullWidth(pathname: string): boolean {
   if (pathname === "/") return true;
+  if (pathname.startsWith("/tour")) return true;
+  if (pathname.startsWith("/events-detail")) return true;
   if (pathname.startsWith("/operations")) return true;
   if (pathname.startsWith("/international")) return true;
   if (pathname.startsWith("/familiarization")) return true;

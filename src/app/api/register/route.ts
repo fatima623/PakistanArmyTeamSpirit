@@ -10,11 +10,7 @@ import {
 } from "@/lib/auth-security";
 import { generateOpaqueToken, hashOpaqueToken } from "@/lib/auth-token";
 import { buildEmailVerificationUrl, sendMail } from "@/lib/mail";
-import {
-  APPLICATION_STATUS,
-  AUDIT_ENTITY,
-  PAYMENT_STATUS,
-} from "@/lib/constants";
+import { APPLICATION_STATUS, AUDIT_ENTITY } from "@/lib/constants";
 import { createAuditLog } from "@/lib/audit";
 import { getDeadlines, registrationClosedByDeadline } from "@/lib/deadlines";
 import { PAKISTAN_COUNTRY, resolveCountryForSubmit } from "@/lib/countries";
@@ -120,8 +116,10 @@ export async function POST(request: Request) {
         country,
         nationality: resolveNationalityForSubmit(country, data.nationality),
         applicationStatus: APPLICATION_STATUS.PENDING,
-        paymentStatus: PAYMENT_STATUS.PENDING,
         approved: false,
+        // Self-registration captures the unit up front, so that step of the
+        // guided workflow starts already complete.
+        unitInfoCompletedAt: now,
         privacyAccepted: true,
         privacyAcceptedAt: now,
         unit: {

@@ -19,11 +19,10 @@ import {
   PARTICIPANT_ROLE,
   canApproveRegistration,
   canManageSystem,
-  canVerifyPayment,
 } from "@/lib/auth-routes";
 import { createAuditLog } from "@/lib/audit";
 import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
-import { buildApplicationUpdateData } from "@/lib/payments";
+import { buildApplicationUpdateData } from "@/lib/application-decision";
 import { sendRegistrationApprovedEmail } from "@/lib/participant-status-emails";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 import { deleteFlightDocByInternalPath } from "@/lib/storage/flight-doc";
@@ -42,7 +41,6 @@ export async function GET(_request: Request, context: RouteContext) {
       select: {
         ...userSelect,
         unit: true,
-        payments: { orderBy: { createdAt: "desc" } },
       },
     });
 
@@ -72,14 +70,11 @@ export async function PUT(request: Request, context: RouteContext) {
     // Role-based responsibilities:
     //   • Registration verification (applicationStatus / approved / reason)
     //     → SD (Sports Directorate) ONLY. Admin & MT are read-only.
-    //   • Payment status → MT (Management Team) ONLY (normally via the
-    //     payments route; mirrored field guarded identically here).
     //   • Account management (profile, role, suspension, notes, password)
     //     → Admin ONLY.
     const session = await requireStaff();
     const isAdmin = canManageSystem(session.user.role);
     const isRegistrationVerifier = canApproveRegistration(session.user.role);
-    const isPaymentVerifierRole = canVerifyPayment(session.user.role);
     requireJsonContentType(request);
     const { id } = await context.params;
     const body = await request.json();
@@ -141,13 +136,6 @@ export async function PUT(request: Request, context: RouteContext) {
     if (editsApplicationDecision && !isRegistrationVerifier) {
       throw new ApiError(
         "Registration verification is performed by the SD (Sports Directorate) only. Your role has view-only access.",
-        403
-      );
-    }
-
-    if (parsed.data.paymentStatus !== undefined && !isPaymentVerifierRole) {
-      throw new ApiError(
-        "Payment verification is performed by the MT (Management Team) only. Your role has view-only access.",
         403
       );
     }
@@ -256,9 +244,6 @@ export async function PUT(request: Request, context: RouteContext) {
     }
     if (parsed.data.suspended !== undefined) {
       data.suspended = parsed.data.suspended;
-    }
-    if (parsed.data.paymentStatus !== undefined) {
-      data.paymentStatus = parsed.data.paymentStatus;
     }
 
     if (parsed.data.applicationStatus !== undefined) {

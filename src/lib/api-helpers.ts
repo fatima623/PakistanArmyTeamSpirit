@@ -4,7 +4,6 @@ import {
   canAccessAdminArea,
   canAccessHostArea,
   canApproveRegistration,
-  canVerifyPayment,
 } from "@/lib/auth-routes";
 
 export class ApiError extends Error {
@@ -62,18 +61,6 @@ export async function requireRegistrationApprover() {
   return session;
 }
 
-/** MT (Management Team) only — payment verification decisions. */
-export async function requirePaymentVerifier() {
-  const session = await requireAuth();
-  if (!canVerifyPayment(session.user.role)) {
-    throw new ApiError(
-      "Payment verification is performed by the MT (Management Team) only",
-      403
-    );
-  }
-  return session;
-}
-
 export function handleApiError(error: unknown) {
   if (error instanceof ApiError) {
     return NextResponse.json({ error: error.message }, { status: error.status });
@@ -104,7 +91,6 @@ export const userSelect = {
   role: true,
   approved: true,
   applicationStatus: true,
-  paymentStatus: true,
   adminNotes: true,
   rejectionReason: true,
   rejectedAt: true,
@@ -114,8 +100,11 @@ export const userSelect = {
   privacyAcceptedAt: true,
   participationConfirmedAt: true,
   participationDeclinedAt: true,
+  unitInfoCompletedAt: true,
   teamRegisteredAt: true,
   rosterCompletedAt: true,
+  flightsSubmittedAt: true,
+  submittedForApprovalAt: true,
   maxTeamMembersOverride: true,
   flightsFinalizedAt: true,
   hostFormationId: true,

@@ -11,11 +11,7 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { createAuditLog } from "@/lib/audit";
-import {
-  AUDIT_ENTITY,
-  APPLICATION_STATUS,
-  PAYMENT_STATUS,
-} from "@/lib/constants";
+import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { BCRYPT_ROUNDS } from "@/lib/password-policy";
 import { ROLES } from "@/lib/auth-routes";
 
@@ -87,7 +83,6 @@ export async function POST(request: Request) {
           role: ROLES.HOST,
           approved: true,
           applicationStatus: APPLICATION_STATUS.APPROVED,
-          paymentStatus: PAYMENT_STATUS.VERIFIED,
           emailVerifiedAt: now,
           privacyAccepted: true,
           privacyAcceptedAt: now,

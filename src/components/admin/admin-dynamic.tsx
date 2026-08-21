@@ -62,14 +62,6 @@ export const UnitsTable = dynamic(
   { loading, ssr: false }
 );
 
-export const PaymentReviewPanel = dynamic(
-  () =>
-    import("@/components/admin/PaymentReviewPanel").then((m) => ({
-      default: m.PaymentReviewPanel,
-    })),
-  { loading, ssr: false }
-);
-
 export const ApplicationReviewPanel = dynamic(
   () =>
     import("@/components/admin/ApplicationReviewPanel").then((m) => ({
