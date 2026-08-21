@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 import { prisma } from "@/lib/prisma";
-import { cn, formatDateDisplay, formatDateShort } from "@/lib/utils";
+import { cn, formatDateTimeDisplay, formatDateTimeShort } from "@/lib/utils";
 import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 import { RegistrationVerificationPanel } from "@/components/admin/admin-dynamic";
@@ -141,7 +141,7 @@ function WorkflowStepper({ steps }: { steps: WorkflowStep[] }) {
               </span>
               <span className="text-[0.6875rem] leading-tight text-slate-400">
                 {step.date
-                  ? formatDateDisplay(step.date)
+                  ? formatDateTimeDisplay(step.date)
                   : (step.fallback ?? "Pending")}
               </span>
             </li>
@@ -276,7 +276,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       label: "Participation Confirmed",
       date: user.participationConfirmedAt,
       fallback: user.participationDeclinedAt
-        ? `Declined ${formatDateShort(user.participationDeclinedAt)}`
+        ? `Declined ${formatDateTimeShort(user.participationDeclinedAt)}`
         : "Pending",
     },
     { label: "Unit Information", date: user.unitInfoCompletedAt },
@@ -286,7 +286,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       label: "Approved by SD",
       date: user.approvedAt,
       fallback: user.rejectedAt
-        ? `Returned ${formatDateShort(user.rejectedAt)}`
+        ? `Returned ${formatDateTimeShort(user.rejectedAt)}`
         : "Pending",
     },
   ];
@@ -297,7 +297,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       ? ` (limit raised to ${user.maxTeamMembersOverride})`
       : "") +
     (user.rosterCompletedAt
-      ? ` — completed on ${formatDateDisplay(user.rosterCompletedAt)}`
+      ? ` — completed on ${formatDateTimeDisplay(user.rosterCompletedAt)}`
       : " — in progress");
 
   const travellers = user.teamMembers.map((m) => ({
@@ -308,9 +308,9 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   const flightSummary =
     `${flightsComplete} of ${travellers.length} travellers documented` +
     (user.flightsFinalizedAt
-      ? ` — finalized ${formatDateShort(user.flightsFinalizedAt)}`
+      ? ` — finalized ${formatDateTimeShort(user.flightsFinalizedAt)}`
       : user.flightsSubmittedAt
-        ? ` — submitted ${formatDateShort(user.flightsSubmittedAt)}`
+        ? ` — submitted ${formatDateTimeShort(user.flightsSubmittedAt)}`
         : " — not submitted");
 
   return (
@@ -348,7 +348,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
 
           <div className="flex items-center gap-1.5 text-[0.8125rem] text-slate-500">
             <CalendarDays size={14} className="flex-shrink-0 text-slate-400" aria-hidden />
-            <span>Registered on {formatDateDisplay(user.createdAt)}</span>
+            <span>Registered on {formatDateTimeDisplay(user.createdAt)}</span>
           </div>
         </div>
 
@@ -420,18 +420,18 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                 ) : null}
                 <Field
                   label="Registered"
-                  value={formatDateDisplay(user.createdAt)}
+                  value={formatDateTimeDisplay(user.createdAt)}
                 />
                 {user.approvedAt ? (
                   <Field
                     label="Approved"
-                    value={formatDateDisplay(user.approvedAt)}
+                    value={formatDateTimeDisplay(user.approvedAt)}
                   />
                 ) : null}
                 {user.rejectedAt ? (
                   <Field
                     label="Returned"
-                    value={formatDateDisplay(user.rejectedAt)}
+                    value={formatDateTimeDisplay(user.rejectedAt)}
                   />
                 ) : null}
               </div>
@@ -447,7 +447,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
               </h3>
               <span className="text-[0.75rem] text-slate-400">
                 {user.unitInfoCompletedAt
-                  ? `Submitted ${formatDateShort(user.unitInfoCompletedAt)}`
+                  ? `Submitted ${formatDateTimeShort(user.unitInfoCompletedAt)}`
                   : "Not submitted"}
               </span>
             </header>

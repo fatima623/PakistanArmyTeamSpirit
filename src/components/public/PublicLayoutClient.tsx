@@ -9,6 +9,7 @@ import { SiteChromeScrollProvider } from "@/components/public/site-chrome-scroll
 import { useSiteChromeScroll } from "@/components/public/site-chrome-scroll-context";
 import { CinematicShell } from "@/components/cinematic/CinematicShell";
 import { useSiteTheme } from "@/components/theme/SiteThemeProvider";
+import { TourBackToDashboard } from "@/components/navigation/TourBackToDashboard";
 import {
   pathnameHasPageBanner,
   pathnameHidesSiteChrome,
@@ -16,6 +17,10 @@ import {
   pathnameIsParticipantPortalApp,
   pathnameUsesInnerPageShell,
 } from "@/lib/public-layout";
+import {
+  pathnameIsTourIndex,
+  pathnameIsTourPage,
+} from "@/lib/tour-navigation";
 import { cn } from "@/lib/utils";
 
 function PublicSiteChrome({
@@ -36,20 +41,24 @@ function PublicSiteChrome({
   const portalApp = pathnameIsParticipantPortalApp(pathname);
   // Gallery + Announcements render standalone: no site nav, ticker, or footer.
   const bareChrome = pathnameHidesSiteChrome(pathname);
+  const tourPage = pathnameIsTourPage(pathname);
+  // The tour index IS the section menu, so it carries no navbar of its own —
+  // the section pages it links to are where the tour navbar earns its keep.
+  const hideChrome = portalApp || bareChrome || pathnameIsTourIndex(pathname);
   const chromeRef = useRef<HTMLDivElement>(null);
   const hasSiteTicker = Boolean(siteTicker);
   const { scrolled: chromeScrolled, pastHero } = useSiteChromeScroll();
   const chromeSolid = chromeScrolled || pastHero;
   const marqueeScrolled = hasSiteTicker && chromeSolid;
 
-  useSiteHeaderHeight(chromeRef);
+  useSiteHeaderHeight(chromeRef, hideChrome);
 
   return (
     <>
       {/* Logged-in participant portal pages render their own sidebar/header,
           so the public marketing nav + news marquee are hidden there. The
           Gallery + Announcements pages are also intentionally chrome-free. */}
-      {portalApp || bareChrome ? null : (
+      {hideChrome ? null : (
         <div
           ref={chromeRef}
           className={cn(
@@ -86,6 +95,7 @@ function PublicSiteChrome({
         </div>
         {bareChrome ? null : <div className="pats-site-footer">{footer}</div>}
       </div>
+      {tourPage ? <TourBackToDashboard /> : null}
     </>
   );
 }

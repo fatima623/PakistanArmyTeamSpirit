@@ -9,7 +9,7 @@ import { portalTableActionIconView,
   adminTableActionsCenter,
   adminTablePillStyles,
 } from "@/lib/admin-ui";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateTimeShort } from "@/lib/utils";
 
 export type UserAccountRow = {
   id: string;
@@ -112,7 +112,7 @@ export function UserAccountsTable({
               </td>
               <td>
                 <span className="admin-users-cell-inner truncate text-[0.8125rem] leading-[1.4] text-slate-900">
-                  {formatDateShort(u.updatedAt)}
+                  {formatDateTimeShort(u.updatedAt)}
                 </span>
               </td>
               <td>

@@ -1,8 +1,13 @@
 /** Public marketing shell — layout modes. */
 
+/* Routes that open with a `PatsPageHero` banner. The banner is designed to
+   bleed UNDER the fixed chrome (it reserves the header's height itself), so the
+   body drops its top padding for these paths. A page listed here without a
+   banner would render its first heading beneath the navbar — which is why
+   /events-detail, whose catalogue starts with a plain `ec-hero` label, is not
+   in this set. */
 const PAGE_BANNER_PATHS = new Set([
   "/tour",
-  "/events-detail",
   "/operations",
   "/international",
   "/familiarization",

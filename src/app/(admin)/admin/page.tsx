@@ -19,7 +19,7 @@ import {
   displayCountry,
   isInternationalParticipant,
 } from "@/lib/participant-country";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateTimeShort } from "@/lib/utils";
 
 const AdminDashboardCharts = dynamic(
   () =>
@@ -152,7 +152,7 @@ export default async function AdminOverviewPage() {
                       ) : null}
                     </td>
                     <td className="text-sm text-brand-ink-muted">
-                      {formatDateShort(u.createdAt)}
+                      {formatDateTimeShort(u.createdAt)}
                     </td>
                     <td>
                       <ApplicationStatusBadge

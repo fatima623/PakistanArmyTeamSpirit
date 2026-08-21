@@ -286,7 +286,8 @@ export default async function AdminUsersPage({
       );
       return `${p.done}/${p.total} ${p.currentLabel}`;
     })(),
-    Registered: u.createdAt.toISOString().slice(0, 10),
+    /* Date AND 24-hour time — the console shows both, so the export matches. */
+    Registered: u.createdAt.toISOString().slice(0, 16).replace("T", " "),
   }));
 
   /* Every extra filter must ride along on the page links, or paging silently

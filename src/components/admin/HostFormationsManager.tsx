@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { adminInput, adminTableActionsCenter, adminTextarea } from "@/lib/admin-ui";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateTimeShort } from "@/lib/utils";
 import { TOAST } from "@/lib/toast";
 
 export type HostFormationRow = {
@@ -231,7 +231,7 @@ export function HostFormationsManager({
                           />
                         </td>
                         <td className="tabular-nums text-muted-foreground">
-                          {formatDateShort(f.createdAt)}
+                          {formatDateTimeShort(f.createdAt)}
                         </td>
                         <td>
                           <div
@@ -283,7 +283,7 @@ export function HostFormationsManager({
                           {f._count.members}
                         </td>
                         <td className="tabular-nums text-muted-foreground">
-                          {formatDateShort(f.createdAt)}
+                          {formatDateTimeShort(f.createdAt)}
                         </td>
                         <td>
                           <div

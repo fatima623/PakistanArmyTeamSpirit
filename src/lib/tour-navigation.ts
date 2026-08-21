@@ -31,6 +31,15 @@ export const TOUR_PREFIXES = [
   "/page",
 ] as const;
 
+/**
+ * The tour's own index page. It is a menu of the sections, so the tour navbar
+ * would only duplicate what the page already lists — the navbar is dropped
+ * here and appears on the section pages, where it is the way between them.
+ */
+export function pathnameIsTourIndex(pathname: string): boolean {
+  return pathname === TOUR_HOME;
+}
+
 export function pathnameIsTourPage(pathname: string): boolean {
   return TOUR_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)

@@ -37,6 +37,35 @@ export function formatDateShort(date: Date | string, locale?: Locale): string {
   }).format(new Date(date));
 }
 
+/** e.g. 21/08/2026, 14:32 — short date + 24-hour clock. Used across the admin
+ *  console, where "when did this land / when was it actioned" needs the time of
+ *  day, not just the day. */
+export function formatDateTimeShort(date: Date | string, locale?: Locale): string {
+  return new Intl.DateTimeFormat(dateTag(locale), {
+    ...utcDateFormat,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(new Date(date));
+}
+
+/** e.g. 21 August 2026, 14:32 — the long-form counterpart of
+ *  {@link formatDateTimeShort}, for detail pages that spell the month out. */
+export function formatDateTimeDisplay(date: Date | string, locale?: Locale): string {
+  return new Intl.DateTimeFormat(dateTag(locale), {
+    ...utcDateFormat,
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(new Date(date));
+}
+
 export function formatDateDisplay(date: Date | string, locale?: Locale): string {
   return new Intl.DateTimeFormat(dateTag(locale), {
     ...utcDateFormat,
@@ -59,7 +88,7 @@ export function formatDateTime(date: Date | string, locale?: Locale): string {
   }).format(new Date(date));
 }
 
-/** e.g. 10 Jul 2026, 6:42 PM in Pakistan Standard Time — used for admin
+/** e.g. 10 Jul 2026, 18:42 in Pakistan Standard Time — used for admin
  *  activity timelines so events show local wall-clock time. Fixed zone keeps
  *  SSR and client hydration output identical. */
 export function formatDateTimePK(date: Date | string, locale?: Locale): string {
@@ -68,8 +97,8 @@ export function formatDateTimePK(date: Date | string, locale?: Locale): string {
     day: "numeric",
     month: "short",
     year: "numeric",
-    hour: "numeric",
+    hour: "2-digit",
     minute: "2-digit",
-    hour12: true,
+    hourCycle: "h23",
   }).format(new Date(date));
 }

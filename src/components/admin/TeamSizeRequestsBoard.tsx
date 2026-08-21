@@ -52,15 +52,21 @@ function fmt(iso: string | null): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
+    hourCycle: "h23",
   });
 }
 
+/* The board's date cells carry the time of day too: reviewers sort a day's
+   worth of requests by when they landed, which a date alone cannot show. */
 function fmtShort(iso: string | null): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-GB", {
+  return new Date(iso).toLocaleString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
   });
 }
 

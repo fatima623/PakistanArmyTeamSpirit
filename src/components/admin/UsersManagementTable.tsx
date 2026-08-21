@@ -10,7 +10,7 @@ import {
   isInternationalParticipant,
 } from "@/lib/participant-country";
 import { UserManagementRowActions } from "@/components/admin/UserManagementRowActions";
-import { formatDateShort } from "@/lib/utils";
+import { formatDateTimeShort } from "@/lib/utils";
 import { adminApproveBtnStyles, adminTablePillStyles } from "@/lib/admin-ui";
 
 export type UserManagementRow = {
@@ -135,7 +135,7 @@ export function UsersManagementTable({
                       className="admin-users-status-badge--app"
                     />
                     <div className="admin-users-app-date">
-                      {formatDateShort(decisionDate)}
+                      {formatDateTimeShort(decisionDate)}
                     </div>
                   </div>
                 </td>
