@@ -120,7 +120,7 @@ export default async function HostTeamDetailPage({
    * display-only *FileName. The paths stay in the `where` clause: they are never
    * selected into this page and never reach a client component.
    */
-  const [withPassport, withTicket] = await Promise.all([
+  const [withPassport, withTicket, withReturnTicket] = await Promise.all([
     prisma.flightDetail.findMany({
       where: { userId: team.id, passportFilePath: { not: null } },
       select: { id: true },
@@ -129,9 +129,14 @@ export default async function HostTeamDetailPage({
       where: { userId: team.id, ticketFilePath: { not: null } },
       select: { id: true },
     }),
+    prisma.flightDetail.findMany({
+      where: { userId: team.id, returnTicketFilePath: { not: null } },
+      select: { id: true },
+    }),
   ]);
   const passportOnFile = new Set(withPassport.map((f) => f.id));
   const ticketOnFile = new Set(withTicket.map((f) => f.id));
+  const returnTicketOnFile = new Set(withReturnTicket.map((f) => f.id));
 
   const rows: RosterFlightRow[] = team.teamMembers.map((m) => ({
     id: m.id,
@@ -147,6 +152,8 @@ export default async function HostTeamDetailPage({
           passportUploadedAt: m.flightDetail.passportUploadedAt,
           ticketPresent: ticketOnFile.has(m.flightDetail.id),
           ticketUploadedAt: m.flightDetail.ticketUploadedAt,
+          returnTicketPresent: returnTicketOnFile.has(m.flightDetail.id),
+          returnTicketUploadedAt: m.flightDetail.returnTicketUploadedAt,
         }
       : null,
   }));
@@ -256,7 +263,13 @@ export default async function HostTeamDetailPage({
               <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="bg-slate-50">
-                    {["Passenger name", "Passport no.", "Passport", "Ticket"].map(
+                    {[
+                      "Passenger name",
+                      "Passport no.",
+                      "Passport",
+                      "Ticket (out)",
+                      "Ticket (return)",
+                    ].map(
                       (h) => (
                         <th
                           key={h}
@@ -291,6 +304,13 @@ export default async function HostTeamDetailPage({
                         <DocPill
                           present={ticketOnFile.has(fd.id)}
                           uploadedAt={fd.ticketUploadedAt}
+                        />
+                      </td>
+                      <td className="px-3 py-2.5 text-center">
+                        <DocPill
+                          present={returnTicketOnFile.has(fd.id)}
+                          uploadedAt={fd.returnTicketUploadedAt}
+                          optional
                         />
                       </td>
                     </tr>

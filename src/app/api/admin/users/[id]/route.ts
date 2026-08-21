@@ -25,6 +25,7 @@ import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { buildApplicationUpdateData } from "@/lib/application-decision";
 import { sendRegistrationApprovedEmail } from "@/lib/participant-status-emails";
 import { normalizeApplicationStatus } from "@/lib/user-status";
+import { isReadyForApproval } from "@/lib/participant-workflow";
 import { deleteFlightDocByInternalPath } from "@/lib/storage/flight-doc";
 import { resolveCountryForSubmit } from "@/lib/countries";
 import { resolveNationalityForSubmit } from "@/lib/participant-country";
@@ -174,6 +175,21 @@ export async function PUT(request: Request, context: RouteContext) {
       existing.approved ||
       normalizeApplicationStatus(existing.applicationStatus) ===
         APPLICATION_STATUS.APPROVED;
+
+    /* SD verification is the LAST step: there is nothing to decide until the
+       participant has confirmed participation, filed their unit information,
+       completed the roster and submitted flight details. The panel disables
+       its buttons for this, but the gate has to live here too — the panel is
+       only a UI, and a direct PUT would otherwise stamp `approvedAt` on a
+       registration whose earlier steps are still blank.
+       An already-decided registration stays editable so a decision can be
+       revisited (or a legacy record corrected). */
+    if (editsApplicationDecision && !wasApproved && !isReadyForApproval(existing)) {
+      throw new ApiError(
+        "This registration is not complete yet. The participant must confirm participation, submit unit information, complete the roster and submit flight details before the SD can verify it.",
+        409
+      );
+    }
 
     const data: Record<string, unknown> = {};
 
@@ -414,7 +430,11 @@ export async function DELETE(_request: Request, context: RouteContext) {
       where: { id },
       include: {
         flightDetails: {
-          select: { passportFilePath: true, ticketFilePath: true },
+          select: {
+            passportFilePath: true,
+            ticketFilePath: true,
+            returnTicketFilePath: true,
+          },
         },
       },
     });
@@ -430,6 +450,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
     for (const flight of existing.flightDetails) {
       await deleteFlightDocByInternalPath(flight.passportFilePath);
       await deleteFlightDocByInternalPath(flight.ticketFilePath);
+      await deleteFlightDocByInternalPath(flight.returnTicketFilePath);
     }
 
     await createAuditLog({

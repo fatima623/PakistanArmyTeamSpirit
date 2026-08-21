@@ -46,6 +46,5 @@ export const home = {
   dates: {
     eyebrow: "Key dates",
     title: "Schedule",
-    fullSchedule: "Full schedule",
   },
 };

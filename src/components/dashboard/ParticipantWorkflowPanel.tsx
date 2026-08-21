@@ -101,11 +101,16 @@ export function ParticipantWorkflowPanel({
         {stages.map((stage, i) => {
           /* Every unlocked step links to its section: the active one so the
              participant can act on it, the completed ones so a form they have
-             already filled in stays reachable (and correctable). Only locked
-             steps render static — no link, no hover animation, no chevron. */
+             already filled in stays reachable (and correctable). Locked steps
+             render static — no link, no hover animation, no chevron.
+             SD verification is static too, in every state: the participant has
+             nothing to fill in there, and its card already shows the decision,
+             so a link only led to a page repeating this same status. */
           const isCurrent =
             stage.state === "current" || stage.state === "attention";
-          const clickable = isCurrent || stage.state === "done";
+          const clickable =
+            stage.key !== "verification" &&
+            (isCurrent || stage.state === "done");
           return (
             <li key={stage.key}>
               {clickable ? (

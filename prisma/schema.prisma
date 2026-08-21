@@ -183,29 +183,42 @@ model TeamSizeRequest {
 
 /// Per-traveler flight information with passport / ticket PDF attachments.
 model FlightDetail {
-  id                 String      @id @default(cuid())
-  userId             String
-  user               User        @relation("FlightDetailUser", fields: [userId], references: [id], onDelete: Cascade)
+  id                     String      @id @default(cuid())
+  userId                 String
+  user                   User        @relation("FlightDetailUser", fields: [userId], references: [id], onDelete: Cascade)
   /**
    * The traveller this record belongs to — one FlightDetail per TeamMember.
    * Stays nullable so legacy team-level rows survive; they are adopted by
    * re-linking. Removing a roster member removes their flight record (the
    * roster delete route unlinks the stored PDFs after the DB commit).
    */
-  teamMemberId       String?     @unique
-  teamMember         TeamMember? @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
-  passengerName      String
-  passportNumber     String
-  passportFilePath   String?     @unique
-  passportFileName   String?
-  passportFileSize   Int?
-  passportUploadedAt DateTime?
-  ticketFilePath     String?     @unique
-  ticketFileName     String?
-  ticketFileSize     Int?
-  ticketUploadedAt   DateTime?
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
+  teamMemberId           String?     @unique
+  teamMember             TeamMember? @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  passengerName          String
+  passportNumber         String
+  passportFilePath       String?     @unique
+  passportFileName       String?
+  passportFileSize       Int?
+  passportUploadedAt     DateTime?
+  /**
+   * Outbound ("coming") flight ticket. Kept on the original `ticket*` column
+   * names so existing rows and stored files carry over untouched.
+   */
+  ticketFilePath         String?     @unique
+  ticketFileName         String?
+  ticketFileSize         Int?
+  ticketUploadedAt       DateTime?
+  /**
+   * Return ("back") flight ticket — a second, optional PDF per traveller. It
+   * does NOT gate `isFlightRecordComplete`: teams that filed before the return
+   * leg existed must not be retroactively blocked.
+   */
+  returnTicketFilePath   String?     @unique
+  returnTicketFileName   String?
+  returnTicketFileSize   Int?
+  returnTicketUploadedAt DateTime?
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
 
   @@index([userId])
 }
@@ -263,12 +276,12 @@ model AuditLog {
 }
 
 model NewsPost {
-  id              String   @id @default(cuid())
-  slug            String   @unique
+  id              String    @id @default(cuid())
+  slug            String    @unique
   title           String
-  content         String   @db.Text
-  published       Boolean  @default(true)
-  publishedAt     DateTime @default(now())
+  content         String    @db.Text
+  published       Boolean   @default(true)
+  publishedAt     DateTime  @default(now())
   /**
    * After this instant the announcement stops scrolling in the public marquee
    * (it stays on /announcements as an archive). Null = never expires.
@@ -284,10 +297,12 @@ model NewsPost {
   imagePath       String?
   imageMimeType   String?
   imageFileSize   Int?
-  /** Cover-image binary stored in the DB (LONGBLOB) for serverless compatibility. */
+  /**
+   * Cover-image binary stored in the DB (LONGBLOB) for serverless compatibility.
+   */
   imageData       Bytes?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 /// Competition event catalogue (dynamic, admin-managed; seeded from CONTOUR_EVENTS).
@@ -316,7 +331,9 @@ model Event {
   thumbnailPath     String?
   thumbnailMimeType String?
   thumbnailFileSize Int?
-  /** Thumbnail binary stored in the DB (LONGBLOB) for serverless compatibility. */
+  /**
+   * Thumbnail binary stored in the DB (LONGBLOB) for serverless compatibility.
+   */
   thumbnailData     Bytes?
   sortOrder         Int      @default(0)
   published         Boolean  @default(true)
@@ -327,29 +344,29 @@ model Event {
 }
 
 model GalleryImage {
-  id            String   @id @default(cuid())
-  title         String
-  caption       String?  @db.Text
-  year          Int?
-  category      String?
+  id             String   @id @default(cuid())
+  title          String
+  caption        String?  @db.Text
+  year           Int?
+  category       String?
   /**
    * Discriminator: "image" | "video". Existing rows predate video support and
    * default to "image" so the migration is additive.
    */
-  mediaType     String   @default("image")
+  mediaType      String   @default("image")
   /**
    * The media binary — a still for mediaType "image", the video file for "video".
    * Field names kept as-is to avoid a rename migration on live data.
    */
-  imagePath     String
-  imageMimeType String
-  imageFileSize Int
+  imagePath      String
+  imageMimeType  String
+  imageFileSize  Int
   /**
    * The media binary, stored in the DB so uploads work on serverless hosts
    * (Vercel) whose filesystem is read-only/ephemeral. Null on legacy rows that
    * are still served from the /uploads disk fallback. Maps to MySQL LONGBLOB.
    */
-  imageData     Bytes?
+  imageData      Bytes?
   /**
    * Poster frame for video items (served from /uploads/gallery). Null for stills,
    * and optional for video — the grid falls back to a generic play tile.
@@ -358,10 +375,10 @@ model GalleryImage {
   posterMimeType String?
   posterFileSize Int?
   posterData     Bytes?
-  sortOrder     Int      @default(0)
-  published     Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  sortOrder      Int      @default(0)
+  published      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([published, sortOrder])
 }
@@ -376,7 +393,9 @@ model HeroSlide {
   imagePath     String
   imageMimeType String
   imageFileSize Int
-  /** Image binary stored in the DB (LONGBLOB) for serverless compatibility. */
+  /**
+   * Image binary stored in the DB (LONGBLOB) for serverless compatibility.
+   */
   imageData     Bytes?
   sortOrder     Int      @default(0)
   published     Boolean  @default(true)

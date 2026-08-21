@@ -7,15 +7,19 @@ import { Eye } from "lucide-react";
 import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
 import { RegistrationRowAction } from "@/components/admin/RegistrationActions";
 import { Button } from "@/components/ui/button";
+import type { RegistrationProgress } from "@/lib/registration-progress";
 import { portalTableActionIconView } from "@/lib/admin-ui";
 
 export const UserManagementRowActions = memo(function UserManagementRowActions({
   userId,
   applicationStatus,
+  progress,
   canReview = false,
 }: {
   userId: string;
   applicationStatus?: string;
+  /** Gates the verification actions — they stay inert until every step is in. */
+  progress: RegistrationProgress;
   /** SD (Sports Directorate) only — shows the verification dialog action. */
   canReview?: boolean;
 }) {
@@ -43,6 +47,7 @@ export const UserManagementRowActions = memo(function UserManagementRowActions({
         <RegistrationRowAction
           userId={userId}
           applicationStatus={applicationStatus}
+          progress={progress}
         />
       ) : null}
       <DeleteUserButton userId={userId} />

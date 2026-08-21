@@ -110,6 +110,24 @@ const ACTIONS: Record<ActionKey, ActionMeta> = {
 const ACTION_ORDER: ActionKey[] = ["approve", "review", "return"];
 
 /**
+ * SD verification is the LAST step of the workflow. Until the participant has
+ * confirmed participation, filed their unit information, completed the roster
+ * and submitted flight details there is nothing to decide on — so EVERY action
+ * (approve, review, return) stays inert, not just approval. An already-decided
+ * registration keeps its actions so a decision can be revisited.
+ *
+ * The same rule is enforced in `PUT /api/admin/users/[id]`; this only keeps the
+ * UI honest about it.
+ */
+function registrationTooEarly(progress: RegistrationProgress): boolean {
+  return !progress.readyForApproval && !progress.approved;
+}
+
+function tooEarlyTitle(progress: RegistrationProgress): string {
+  return `Waiting on the participant — step ${progress.currentStep} of ${progress.total} (${progress.currentLabel})`;
+}
+
+/**
  * Decision statuses. Once a registration reaches one of these, a decision has
  * been made — the taken action stays visible but every other action is locked
  * to prevent duplicate processing. "Under review" is a transitional queue state
@@ -387,12 +405,7 @@ export function RegistrationVerificationPanel({
               const isCurrent = applicationStatus === meta.status;
               const decided = REGISTRATION_DECIDED.includes(applicationStatus);
               const locked = decided && !isCurrent;
-              /* Approving is the final step of the flow, so it stays inert
-                 until the participant has submitted everything. */
-              const tooEarly =
-                key === "approve" &&
-                !progress.readyForApproval &&
-                !progress.approved;
+              const tooEarly = registrationTooEarly(progress);
               const disabled = isCurrent || locked || tooEarly;
               return (
                 <button
@@ -415,7 +428,7 @@ export function RegistrationVerificationPanel({
                       : locked
                         ? "A decision has already been made"
                         : tooEarly
-                          ? `Waiting on the participant — step ${progress.currentStep} of ${progress.total} (${progress.currentLabel})`
+                          ? tooEarlyTitle(progress)
                           : meta.cardHint
                   }
                 >
@@ -435,6 +448,15 @@ export function RegistrationVerificationPanel({
               );
             })}
           </div>
+
+          {registrationTooEarly(progress) ? (
+            <p className="m-0 mt-3 rounded-[10px] border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[0.78rem] leading-[1.5] text-slate-600">
+              <span className="font-bold">Not ready for verification.</span>{" "}
+              The participant is on step {progress.currentStep} of{" "}
+              {progress.total} ({progress.currentLabel}). Verification actions
+              unlock once every earlier step is complete.
+            </p>
+          ) : null}
 
           {rejectionReason ? (
             <p className="m-0 mt-3 rounded-[10px] border border-amber-200 bg-amber-50 px-3.5 py-2.5 text-[0.78rem] leading-[1.5] text-amber-900">
@@ -464,9 +486,12 @@ export function RegistrationVerificationPanel({
 export function RegistrationRowAction({
   userId,
   applicationStatus,
+  progress,
 }: {
   userId: string;
   applicationStatus: string;
+  /** How far the participant has got — the same gate the detail panel uses. */
+  progress: RegistrationProgress;
 }) {
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState<ActionKey | null>(null);
@@ -507,7 +532,9 @@ export function RegistrationRowAction({
             Registration verification
           </DialogTitle>
           <DialogDescription className="mt-0.5 text-[0.8125rem] text-slate-500">
-            Choose an action to proceed with this registration.
+            {registrationTooEarly(progress)
+              ? `Not ready for verification — the participant is on step ${progress.currentStep} of ${progress.total} (${progress.currentLabel}).`
+              : "Choose an action to proceed with this registration."}
           </DialogDescription>
           <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {ACTION_ORDER.map((key) => {
@@ -516,7 +543,8 @@ export function RegistrationRowAction({
               const isCurrent = applicationStatus === meta.status;
               const decided = REGISTRATION_DECIDED.includes(applicationStatus);
               const locked = decided && !isCurrent;
-              const disabled = isCurrent || locked;
+              const tooEarly = registrationTooEarly(progress);
+              const disabled = isCurrent || locked || tooEarly;
               return (
                 <button
                   key={key}
@@ -528,14 +556,16 @@ export function RegistrationRowAction({
                     meta.card,
                     meta.cardIcon,
                     isCurrent && "cursor-default",
-                    locked && "cursor-not-allowed opacity-45"
+                    (locked || tooEarly) && "cursor-not-allowed opacity-45"
                   )}
                   title={
                     isCurrent
                       ? "Current status — this action was taken"
                       : locked
                         ? "A decision has already been made"
-                        : meta.cardHint
+                        : tooEarly
+                          ? tooEarlyTitle(progress)
+                          : meta.cardHint
                   }
                 >
                   <Icon size={15} aria-hidden />

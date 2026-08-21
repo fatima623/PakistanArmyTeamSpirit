@@ -23,6 +23,9 @@ export const flightDetailSelect = {
   ticketFileName: true,
   ticketFileSize: true,
   ticketUploadedAt: true,
+  returnTicketFileName: true,
+  returnTicketFileSize: true,
+  returnTicketUploadedAt: true,
   updatedAt: true,
   teamMember: {
     select: { id: true, fullName: true, rank: true, serviceNumber: true },
@@ -45,14 +48,22 @@ export const flightDetailSummarySelect = {
   ticketFileName: true,
   ticketFileSize: true,
   ticketUploadedAt: true,
+  returnTicketFileName: true,
+  returnTicketFileSize: true,
+  returnTicketUploadedAt: true,
   updatedAt: true,
 } as const;
 
 /**
- * THE definition of a complete flight record — one traveller with BOTH
- * documents on file. Every surface (participant progress, admin finalize gate,
- * the sidebar badge, the host coverage pills) MUST use this, or they will
- * disagree and a team could be locked with zero documents uploaded.
+ * THE definition of a complete flight record — one traveller with a passport
+ * and an OUTBOUND ticket on file. Every surface (participant progress, admin
+ * finalize gate, the sidebar badge, the host coverage pills) MUST use this, or
+ * they will disagree and a team could be locked with zero documents uploaded.
+ *
+ * The RETURN ticket is deliberately not part of this test: it was added after
+ * teams had already filed, and requiring it would retroactively mark completed
+ * registrations incomplete and bounce them out of the SD queue. It is prompted
+ * for in the form and shown everywhere the outbound one is.
  *
  * Checks *FilePath (the stored file), not *FileName (a display-only copy).
  */

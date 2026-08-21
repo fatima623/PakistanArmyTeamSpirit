@@ -91,9 +91,9 @@ export const core = {
     inProgressTitle: "Registration in progress",
     inProgressText:
       "Work through each step below. The Sports Directorate (SD) approves your registration once every step is complete.",
-    underReviewTitle: "Registration under review",
+    underReviewTitle: "Registration completed",
     underReviewText:
-      "Every step is submitted. The Sports Directorate (SD) is reviewing your registration and will notify you once it is approved.",
+      "Your registration has been completed — every step is submitted. The Sports Directorate (SD) will now verify it, and you will receive a confirmation email once it is approved.",
     confirmedTitle: "Approved — you're cleared for PATS 2026",
     confirmedTextWithDates: (dates: string) =>
       `Your registration is approved by the SD and your place is confirmed. Scheduled: ${dates}.`,
@@ -271,7 +271,8 @@ export const core = {
     documents: "Documents",
     noFlightRecords: "No flight records.",
     passport: "Passport",
-    ticket: "Ticket",
+    ticket: "Ticket (out)",
+    returnTicket: "Return ticket",
     readOnlyNote:
       "This information is read-only. Contact the organizers for any corrections.",
   },

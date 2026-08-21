@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { HeroSlider } from "@/components/army/HeroSlider";
 import type { HeroImage } from "@/components/hero/PatsHero";
 import { ScrollReveal } from "@/components/army/ScrollReveal";
@@ -76,11 +75,6 @@ export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 text-center">
-              <Link href="/key-dates" className="pats-btn">
-                {t.home.dates.fullSchedule}
-              </Link>
-            </div>
           </ScrollReveal>
         </PatsSection>
       )}

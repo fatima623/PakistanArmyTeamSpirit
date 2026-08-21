@@ -131,6 +131,7 @@ export default async function HostInfoPage() {
           passportNumber: true,
           passportFileName: true,
           ticketFileName: true,
+          returnTicketFileName: true,
           teamMember: { select: { fullName: true, rank: true } },
         },
       }),
@@ -334,6 +335,11 @@ export default async function HostInfoPage() {
                             aria-hidden
                           />
                           {h.ticket}
+                          <FileCheck2
+                            className={`h-4 w-4 ${f.returnTicketFileName ? "text-emerald-600" : "text-slate-300"}`}
+                            aria-hidden
+                          />
+                          {h.returnTicket}
                         </span>
                       </td>
                     </tr>

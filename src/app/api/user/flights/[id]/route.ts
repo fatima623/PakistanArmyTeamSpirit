@@ -31,9 +31,9 @@ async function fileFromForm(
 }
 
 /**
- * Update a flight record (multipart). New "passport"/"ticket" files replace
- * the stored ones; text fields update in place. Editable until the deadline
- * or administrative lock.
+ * Update a flight record (multipart). New "passport"/"ticket"/"returnTicket"
+ * files replace the stored ones; text fields update in place. Editable until
+ * the deadline or administrative lock.
  */
 export async function PUT(request: Request, context: RouteContext) {
   try {
@@ -84,9 +84,11 @@ export async function PUT(request: Request, context: RouteContext) {
 
     const passportFile = await fileFromForm(formData, "passport");
     const ticketFile = await fileFromForm(formData, "ticket");
+    const returnTicketFile = await fileFromForm(formData, "returnTicket");
 
     let passportUpload = null;
     let ticketUpload = null;
+    let returnTicketUpload = null;
     try {
       if (passportFile) {
         passportUpload = await saveFlightDoc({
@@ -106,6 +108,15 @@ export async function PUT(request: Request, context: RouteContext) {
           declaredMime: ticketFile.mime,
         });
       }
+      if (returnTicketFile) {
+        returnTicketUpload = await saveFlightDoc({
+          userId: session.user.id,
+          kind: "returnTicket",
+          originalFileName: returnTicketFile.name,
+          buffer: returnTicketFile.buffer,
+          declaredMime: returnTicketFile.mime,
+        });
+      }
     } catch (err) {
       // A partially-written upload (e.g. valid passport + invalid ticket) must
       // not be left on disk — nothing references it, so it would never be
@@ -115,6 +126,9 @@ export async function PUT(request: Request, context: RouteContext) {
       );
       await deleteFlightDocByInternalPath(
         ticketUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        returnTicketUpload?.internalFilePath ?? null
       );
       const message = err instanceof Error ? err.message : "Upload failed";
       throw new ApiError(message, 400);
@@ -144,6 +158,14 @@ export async function PUT(request: Request, context: RouteContext) {
                 ticketUploadedAt: ticketUpload.uploadedAt,
               }
             : {}),
+          ...(returnTicketUpload
+            ? {
+                returnTicketFilePath: returnTicketUpload.internalFilePath,
+                returnTicketFileName: returnTicketUpload.originalFileName,
+                returnTicketFileSize: returnTicketUpload.fileSize,
+                returnTicketUploadedAt: returnTicketUpload.uploadedAt,
+              }
+            : {}),
         },
         select: flightDetailSelect,
       });
@@ -157,6 +179,9 @@ export async function PUT(request: Request, context: RouteContext) {
       await deleteFlightDocByInternalPath(
         ticketUpload?.internalFilePath ?? null
       );
+      await deleteFlightDocByInternalPath(
+        returnTicketUpload?.internalFilePath ?? null
+      );
       throw err;
     }
 
@@ -166,6 +191,9 @@ export async function PUT(request: Request, context: RouteContext) {
     }
     if (ticketUpload && existing.ticketFilePath) {
       await deleteFlightDocByInternalPath(existing.ticketFilePath);
+    }
+    if (returnTicketUpload && existing.returnTicketFilePath) {
+      await deleteFlightDocByInternalPath(existing.returnTicketFilePath);
     }
 
     await createAuditLog({
@@ -177,6 +205,7 @@ export async function PUT(request: Request, context: RouteContext) {
         passengerName: parsed.data.passengerName,
         replacedPassport: !!passportUpload,
         replacedTicket: !!ticketUpload,
+        replacedReturnTicket: !!returnTicketUpload,
         actorRole: "user",
       },
     });
@@ -198,13 +227,19 @@ export async function DELETE(_request: Request, context: RouteContext) {
 
     const existing = await prisma.flightDetail.findFirst({
       where: { id, userId: session.user.id },
-      select: { id: true, passportFilePath: true, ticketFilePath: true },
+      select: {
+        id: true,
+        passportFilePath: true,
+        ticketFilePath: true,
+        returnTicketFilePath: true,
+      },
     });
     if (!existing) throw new ApiError("Flight record not found", 404);
 
     await prisma.flightDetail.delete({ where: { id } });
     await deleteFlightDocByInternalPath(existing.passportFilePath);
     await deleteFlightDocByInternalPath(existing.ticketFilePath);
+    await deleteFlightDocByInternalPath(existing.returnTicketFilePath);
 
     await createAuditLog({
       entityType: AUDIT_ENTITY.FLIGHT_DETAIL,

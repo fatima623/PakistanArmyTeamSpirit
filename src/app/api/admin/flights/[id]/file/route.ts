@@ -12,7 +12,7 @@ export async function GET(request: Request, context: RouteContext) {
     await requireStaff();
     const { id } = await context.params;
     const type = new URL(request.url).searchParams.get("type");
-    if (type !== "passport" && type !== "ticket") {
+    if (type !== "passport" && type !== "ticket" && type !== "returnTicket") {
       throw new ApiError("Invalid document type", 400);
     }
 
@@ -23,14 +23,24 @@ export async function GET(request: Request, context: RouteContext) {
         passportFileName: true,
         ticketFilePath: true,
         ticketFileName: true,
+        returnTicketFilePath: true,
+        returnTicketFileName: true,
       },
     });
     if (!flight) throw new ApiError("Flight record not found", 404);
 
     const internalPath =
-      type === "passport" ? flight.passportFilePath : flight.ticketFilePath;
+      type === "passport"
+        ? flight.passportFilePath
+        : type === "ticket"
+          ? flight.ticketFilePath
+          : flight.returnTicketFilePath;
     const fileName =
-      type === "passport" ? flight.passportFileName : flight.ticketFileName;
+      type === "passport"
+        ? flight.passportFileName
+        : type === "ticket"
+          ? flight.ticketFileName
+          : flight.returnTicketFileName;
     if (!internalPath) throw new ApiError("Document not uploaded yet", 404);
 
     const payload = await readFlightDocByInternalPath(internalPath, fileName);

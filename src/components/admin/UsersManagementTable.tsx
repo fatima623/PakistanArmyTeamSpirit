@@ -158,6 +158,7 @@ export function UsersManagementTable({
                   <UserManagementRowActions
                     userId={u.id}
                     applicationStatus={u.applicationStatus}
+                    progress={u.progress}
                     canReview={canApprove}
                   />
                 </td>

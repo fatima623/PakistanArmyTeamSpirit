@@ -49,6 +49,10 @@ export type FlightRecord = {
   ticketFileName: string | null;
   ticketFileSize?: number | null;
   ticketUploadedAt: string | null;
+  /** Return ("back") leg — optional, and never gates completeness. */
+  returnTicketFileName: string | null;
+  returnTicketFileSize?: number | null;
+  returnTicketUploadedAt: string | null;
   updatedAt: string;
   teamMember: {
     id: string;
@@ -69,6 +73,7 @@ type FormState = {
   passportNumber: string;
   passportFile: File | null;
   ticketFile: File | null;
+  returnTicketFile: File | null;
 };
 
 function fmtDateTime(iso: string | null, tag: string): string {
@@ -305,6 +310,7 @@ export function FlightDetailsManager({
       passportNumber: byMember.get(member.id)?.passportNumber ?? "",
       passportFile: null,
       ticketFile: null,
+      returnTicketFile: null,
     };
 
   const patchDraft = (member: TeamMemberRecord, patch: Partial<FormState>) =>
@@ -343,6 +349,7 @@ export function FlightDetailsManager({
     for (const [file, label] of [
       [form.passportFile, fl.errors.passportLabel],
       [form.ticketFile, fl.errors.ticketLabel],
+      [form.returnTicketFile, fl.errors.returnTicketLabel],
     ] as const) {
       if (file && !isPdf(file)) return fl.errors.mustBePdf(label);
       if (file && file.size > MAX_UPLOAD_BYTES)
@@ -379,6 +386,7 @@ export function FlightDetailsManager({
     fd.set("passportNumber", form.passportNumber.trim());
     if (form.passportFile) fd.set("passport", form.passportFile);
     if (form.ticketFile) fd.set("ticket", form.ticketFile);
+    if (form.returnTicketFile) fd.set("returnTicket", form.returnTicketFile);
 
     setBusyId(member.id);
     setRowError(member.id, null);
@@ -480,7 +488,7 @@ export function FlightDetailsManager({
   /* ——————————————————————— rendering ——————————————————————— */
 
   const docsGrid = (flight: FlightRecord) => (
-    <div className="grid gap-3.5 sm:grid-cols-2">
+    <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
       <DocStatus
         label={fl.labels.passport}
         icon={FileText}
@@ -499,6 +507,15 @@ export function FlightDetailsManager({
         href={`/api/user/flights/${flight.id}/file?type=ticket`}
         tx={fl.doc}
       />
+      <DocStatus
+        label={fl.labels.returnTicket}
+        icon={Ticket}
+        uploaded={!!flight.returnTicketFileName}
+        fileName={flight.returnTicketFileName}
+        fileSize={flight.returnTicketFileSize}
+        href={`/api/user/flights/${flight.id}/file?type=returnTicket`}
+        tx={fl.doc}
+      />
     </div>
   );
 
@@ -509,6 +526,7 @@ export function FlightDetailsManager({
     const busy = busyId === member.id;
     const rowError = errorsById[member.id];
     const form = draftFor(member);
+    const hasOutboundTicket = !!flight?.ticketFileName || !!form.ticketFile;
     const confirming = !!flight && confirmDeleteId === flight.id;
 
     return (
@@ -625,6 +643,9 @@ export function FlightDetailsManager({
                   }
                   className="pp-file"
                 />
+                <p className="mt-1 text-xs text-slate-500">
+                  {fl.form.passportDocHint}
+                </p>
                 {flight?.passportFileName ? (
                   <p className="mt-1 text-xs text-slate-500">
                     <FileText className="mr-1 inline h-3 w-3" aria-hidden />
@@ -651,6 +672,9 @@ export function FlightDetailsManager({
                   }
                   className="pp-file"
                 />
+                <p className="mt-1 text-xs text-slate-500">
+                  {fl.form.ticketDocHint}
+                </p>
                 {flight?.ticketFileName ? (
                   <p className="mt-1 text-xs text-slate-500">
                     <FileText className="mr-1 inline h-3 w-3" aria-hidden />
@@ -659,6 +683,48 @@ export function FlightDetailsManager({
                 ) : null}
               </div>
             </div>
+
+            {/* The return leg is a SECOND ticket, offered once the outbound one
+                is in — either already stored or picked in this same draft. A
+                traveller with no outbound ticket yet sees the hint instead, so
+                the two legs can never be filed the wrong way round. */}
+            {hasOutboundTicket ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor={`fd-return-ticket-file-${member.id}`}
+                    className="pp-label"
+                  >
+                    {fl.form.returnTicketDoc}
+                  </label>
+                  <input
+                    id={`fd-return-ticket-file-${member.id}`}
+                    type="file"
+                    accept="application/pdf,.pdf"
+                    disabled={busy}
+                    onChange={(e) =>
+                      patchDraft(member, {
+                        returnTicketFile: e.target.files?.[0] ?? null,
+                      })
+                    }
+                    className="pp-file"
+                  />
+                  <p className="mt-1 text-xs text-slate-500">
+                    {fl.form.returnTicketDocHint}
+                  </p>
+                  {flight?.returnTicketFileName ? (
+                    <p className="mt-1 text-xs text-slate-500">
+                      <FileText className="mr-1 inline h-3 w-3" aria-hidden />
+                      {fl.form.currentFile(flight.returnTicketFileName)}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            ) : (
+              <p className="m-0 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500">
+                {fl.form.returnTicketLocked}
+              </p>
+            )}
 
             <div className="flex flex-wrap gap-2">
               <button

@@ -17,7 +17,7 @@ export const home: typeof enHome = {
     { suffix: " 小时", label: "巡逻演练时长" },
     { suffix: "", label: "站点" },
     { suffix: "+", label: "战术考核" },
-    { suffix: "", label: "计分任务" },
+    { suffix: "", label: "赛项" },
   ],
 
   mission: {
@@ -33,6 +33,5 @@ export const home: typeof enHome = {
   dates: {
     eyebrow: "关键日期",
     title: "日程",
-    fullSchedule: "完整日程",
   },
 };

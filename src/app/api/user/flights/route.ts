@@ -73,8 +73,9 @@ async function fileFromForm(
 
 /**
  * Create a flight record for one traveler (multipart):
- * fields teamMemberId, passengerName, passportNumber; PDF files
- * "passport" and "ticket" (each optional here, replaceable until locked).
+ * fields teamMemberId, passengerName, passportNumber; PDF files "passport",
+ * "ticket" (outbound) and "returnTicket" (each optional here, replaceable
+ * until locked).
  */
 export async function POST(request: Request) {
   try {
@@ -113,9 +114,11 @@ export async function POST(request: Request) {
 
     const passportFile = await fileFromForm(formData, "passport");
     const ticketFile = await fileFromForm(formData, "ticket");
+    const returnTicketFile = await fileFromForm(formData, "returnTicket");
 
     let passportUpload = null;
     let ticketUpload = null;
+    let returnTicketUpload = null;
     try {
       if (passportFile) {
         passportUpload = await saveFlightDoc({
@@ -135,6 +138,15 @@ export async function POST(request: Request) {
           declaredMime: ticketFile.mime,
         });
       }
+      if (returnTicketFile) {
+        returnTicketUpload = await saveFlightDoc({
+          userId: session.user.id,
+          kind: "returnTicket",
+          originalFileName: returnTicketFile.name,
+          buffer: returnTicketFile.buffer,
+          declaredMime: returnTicketFile.mime,
+        });
+      }
     } catch (err) {
       // The passport is written before the ticket is validated, so a bad ticket
       // (e.g. a non-PDF renamed .pdf — the browser reports application/pdf, so
@@ -145,6 +157,9 @@ export async function POST(request: Request) {
       );
       await deleteFlightDocByInternalPath(
         ticketUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        returnTicketUpload?.internalFilePath ?? null
       );
       const message = err instanceof Error ? err.message : "Upload failed";
       throw new ApiError(message, 400);
@@ -166,6 +181,10 @@ export async function POST(request: Request) {
           ticketFileName: ticketUpload?.originalFileName ?? null,
           ticketFileSize: ticketUpload?.fileSize ?? null,
           ticketUploadedAt: ticketUpload?.uploadedAt ?? null,
+          returnTicketFilePath: returnTicketUpload?.internalFilePath ?? null,
+          returnTicketFileName: returnTicketUpload?.originalFileName ?? null,
+          returnTicketFileSize: returnTicketUpload?.fileSize ?? null,
+          returnTicketUploadedAt: returnTicketUpload?.uploadedAt ?? null,
         },
         select: flightDetailSelect,
       });
@@ -177,6 +196,9 @@ export async function POST(request: Request) {
       );
       await deleteFlightDocByInternalPath(
         ticketUpload?.internalFilePath ?? null
+      );
+      await deleteFlightDocByInternalPath(
+        returnTicketUpload?.internalFilePath ?? null
       );
       throw err;
     }
@@ -190,6 +212,7 @@ export async function POST(request: Request) {
         passengerName: parsed.data.passengerName,
         hasPassport: !!passportUpload,
         hasTicket: !!ticketUpload,
+        hasReturnTicket: !!returnTicketUpload,
         actorRole: "user",
       },
     });

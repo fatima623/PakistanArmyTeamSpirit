@@ -14,6 +14,9 @@ export type RosterFlightRecord = {
   passportUploadedAt: Date | null;
   ticketPresent: boolean;
   ticketUploadedAt: Date | null;
+  /** Return leg — optional, so "absent" here is not a gap in the paperwork. */
+  returnTicketPresent: boolean;
+  returnTicketUploadedAt: Date | null;
 };
 
 /** One roster member joined to their flight record (null when nothing filed). */
@@ -32,12 +35,19 @@ export type RosterFlightRow = {
 export function DocPill({
   present,
   uploadedAt,
+  optional = false,
 }: {
   present: boolean;
   uploadedAt?: Date | null;
+  /** Optional documents render their gap in neutral grey, not alarm amber. */
+  optional?: boolean;
 }) {
   if (!present) {
-    return (
+    return optional ? (
+      <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">
+        Not filed
+      </span>
+    ) : (
       <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.05em] text-amber-700">
         Absent
       </span>
@@ -66,7 +76,8 @@ const HEADERS = [
   "Passenger name",
   "Passport no.",
   "Passport",
-  "Ticket",
+  "Ticket (out)",
+  "Ticket (return)",
 ];
 
 /**
@@ -149,10 +160,17 @@ export function RosterFlightTable({
                       uploadedAt={row.flight.ticketUploadedAt}
                     />
                   </td>
+                  <td className="px-3 py-2.5 text-center">
+                    <DocPill
+                      present={row.flight.returnTicketPresent}
+                      uploadedAt={row.flight.returnTicketUploadedAt}
+                      optional
+                    />
+                  </td>
                 </>
               ) : (
                 <td
-                  colSpan={4}
+                  colSpan={5}
                   className="border-l border-amber-200 bg-amber-50 px-3 py-2.5 text-center text-[12.5px] font-bold text-amber-700"
                 >
                   No flight record submitted

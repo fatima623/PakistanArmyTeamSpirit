@@ -303,6 +303,9 @@ export default async function JourneyPage({
       ticketFileName: f.ticketFileName,
       ticketFileSize: f.ticketFileSize ?? null,
       ticketUploadedAt: f.ticketUploadedAt?.toISOString() ?? null,
+      returnTicketFileName: f.returnTicketFileName,
+      returnTicketFileSize: f.returnTicketFileSize ?? null,
+      returnTicketUploadedAt: f.returnTicketUploadedAt?.toISOString() ?? null,
       updatedAt: f.updatedAt.toISOString(),
       teamMember: f.teamMember,
     }));

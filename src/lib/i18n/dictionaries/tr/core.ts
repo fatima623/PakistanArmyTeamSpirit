@@ -90,9 +90,9 @@ export const core: typeof enCore = {
     inProgressTitle: "Kayıt devam ediyor",
     inProgressText:
       "Aşağıdaki adımları tamamlayın. Spor Müdürlüğü (SD), tüm adımlar tamamlandığında kaydınızı onaylar.",
-    underReviewTitle: "Kayıt inceleniyor",
+    underReviewTitle: "Kayıt tamamlandı",
     underReviewText:
-      "Tüm adımlar gönderildi. Spor Müdürlüğü (SD) kaydınızı inceliyor ve onaylandığında sizi bilgilendirecek.",
+      "Kaydınız tamamlandı — tüm adımlar gönderildi. Spor Müdürlüğü (SD) kaydınızı doğrulayacak ve onaylandığında size bir onay e-postası gönderilecek.",
     confirmedTitle: "Onaylandı — PATS 2026 için hazırsınız",
     confirmedTextWithDates: (dates) =>
       `Kaydınız SD tarafından onaylandı ve yeriniz kesinleşti. Program: ${dates}.`,
@@ -268,7 +268,8 @@ export const core: typeof enCore = {
     documents: "Belgeler",
     noFlightRecords: "Uçuş kaydı yok.",
     passport: "Pasaport",
-    ticket: "Bilet",
+    ticket: "Gidiş bileti",
+    returnTicket: "Dönüş bileti",
     readOnlyNote:
       "Bu bilgiler yalnızca görüntülenebilir. Herhangi bir düzeltme için organizatörlerle iletişime geçin.",
   },

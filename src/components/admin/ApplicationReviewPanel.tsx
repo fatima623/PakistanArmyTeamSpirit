@@ -52,6 +52,12 @@ export function ApplicationReviewPanel({
     return true;
   };
 
+  /* SD verification is the last step: until every participant-supplied step is
+     in there is nothing to approve, review or return. The same gate is enforced
+     in `PUT /api/admin/users/[id]`. */
+  const tooEarly = !progress.readyForApproval && !progress.approved;
+  const tooEarlyTitle = `Waiting on the participant — step ${progress.currentStep} of ${progress.total} (${progress.currentLabel})`;
+
   const act = async (
     key: string,
     status: string,
@@ -112,14 +118,10 @@ export function ApplicationReviewPanel({
                the roster and flight details. */
             disabled={
               loading !== null ||
-              !progress.readyForApproval ||
+              tooEarly ||
               applicationStatus === APPLICATION_STATUS.APPROVED
             }
-            title={
-              progress.readyForApproval || progress.approved
-                ? undefined
-                : `Waiting on the participant — step ${progress.currentStep} of ${progress.total} (${progress.currentLabel})`
-            }
+            title={tooEarly ? tooEarlyTitle : undefined}
             onClick={() =>
               act("approve", APPLICATION_STATUS.APPROVED, {
                 success: "Registration approved",
@@ -137,8 +139,10 @@ export function ApplicationReviewPanel({
             variant="adminOutline"
             disabled={
               loading !== null ||
+              tooEarly ||
               applicationStatus === APPLICATION_STATUS.UNDER_REVIEW
             }
+            title={tooEarly ? tooEarlyTitle : undefined}
             onClick={() =>
               act("review", APPLICATION_STATUS.UNDER_REVIEW, {
                 success: "Marked as under review",
@@ -154,7 +158,8 @@ export function ApplicationReviewPanel({
           <Button
             size="sm"
             variant="adminWarning"
-            disabled={loading !== null}
+            disabled={loading !== null || tooEarly}
+            title={tooEarly ? tooEarlyTitle : undefined}
             onClick={() =>
               act("return", APPLICATION_STATUS.RETURNED, {
                 requireReason: true,
@@ -169,6 +174,15 @@ export function ApplicationReviewPanel({
             )}
           </Button>
         </div>
+
+        {tooEarly ? (
+          <p className="m-0 mt-3 rounded-[10px] border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-[0.78rem] leading-[1.5] text-slate-600">
+            <span className="font-bold">Not ready for verification.</span> The
+            participant is on step {progress.currentStep} of {progress.total} (
+            {progress.currentLabel}). Verification actions unlock once every
+            earlier step is complete.
+          </p>
+        ) : null}
 
         <div className="[&>label]:mb-[0.35rem] [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink-muted [&_textarea]:min-h-[5rem] [&_textarea]:resize-y mt-4">
           <label htmlFor="reject-reason">Reason (required to return)</label>

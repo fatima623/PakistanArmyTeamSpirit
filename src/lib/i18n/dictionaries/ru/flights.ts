@@ -12,7 +12,8 @@ export const flights: typeof enFlights = {
   },
   labels: {
     passport: "Паспорт",
-    flightTicket: "Авиабилет",
+    flightTicket: "Авиабилет (туда)",
+    returnTicket: "Обратный билет",
   },
   banners: {
     finalizedTitle:
@@ -52,8 +53,13 @@ export const flights: typeof enFlights = {
     passengerNamePlaceholder: "напр. КАПТ САРА ХАН",
     passportNumber: "Номер паспорта",
     passportNumberPlaceholder: "напр. AB1234567",
-    passportDoc: "Документ паспорта (PDF)",
-    ticketDoc: "Авиабилет (PDF)",
+    passportDoc: "Скан паспорта (PDF)",
+    passportDocHint: "Загрузите первую страницу паспорта.",
+    ticketDoc: "Билет туда (PDF)",
+    ticketDocHint: "Перелёт в Пакистан.",
+    returnTicketDoc: "Обратный билет (PDF)",
+    returnTicketDocHint: "Перелёт домой. Необязательно — добавьте сразу после бронирования.",
+    returnTicketLocked: "Сначала загрузите билет туда — поле обратного билета откроется сразу после.",
     currentFile: (name) => `Текущий: ${name}. Оставьте пустым, чтобы сохранить.`,
     saveChanges: "Сохранить изменения",
     submitFlight: "Сохранить данные о рейсе",
@@ -95,6 +101,7 @@ export const flights: typeof enFlights = {
     mustBeUnder10: (label) => `${label} должен быть меньше 10 МБ`,
     passportLabel: "Паспорт",
     ticketLabel: "Авиабилет",
+    returnTicketLabel: "Обратный билет",
     updated: "Данные о рейсе обновлены",
     submitted: "Данные о рейсе отправлены",
   },

@@ -91,9 +91,9 @@ export const core: typeof enCore = {
     inProgressTitle: "注册进行中",
     inProgressText:
       "请逐步完成以下各项。所有步骤完成后，体育局（SD）将审批您的注册。",
-    underReviewTitle: "注册审核中",
+    underReviewTitle: "注册已完成",
     underReviewText:
-      "所有步骤均已提交。体育局（SD）正在审核您的注册，通过后将通知您。",
+      "您的注册已完成——所有步骤均已提交。体育局（SD）将进行核验，通过后您会收到确认邮件。",
     confirmedTitle: "已批准 — 您已获得 PATS 2026 参赛资格",
     confirmedTextWithDates: (dates) =>
       `您的注册已由 SD 批准，席位已确认。日程：${dates}。`,
@@ -264,7 +264,8 @@ export const core: typeof enCore = {
     documents: "文件",
     noFlightRecords: "无航班记录。",
     passport: "护照",
-    ticket: "机票",
+    ticket: "去程机票",
+    returnTicket: "回程机票",
     readOnlyNote:
       "此信息为只读。如需任何更正，请联系组织方。",
   },

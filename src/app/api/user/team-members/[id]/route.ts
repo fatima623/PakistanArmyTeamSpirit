@@ -91,7 +91,12 @@ export async function DELETE(_request: Request, context: RouteContext) {
       select: {
         id: true,
         flightDetail: {
-          select: { id: true, passportFilePath: true, ticketFilePath: true },
+          select: {
+            id: true,
+            passportFilePath: true,
+            ticketFilePath: true,
+            returnTicketFilePath: true,
+          },
         },
       },
     });
@@ -107,6 +112,9 @@ export async function DELETE(_request: Request, context: RouteContext) {
     if (member.flightDetail) {
       await deleteFlightDocByInternalPath(member.flightDetail.passportFilePath);
       await deleteFlightDocByInternalPath(member.flightDetail.ticketFilePath);
+      await deleteFlightDocByInternalPath(
+        member.flightDetail.returnTicketFilePath
+      );
     }
 
     return NextResponse.json({ success: true });

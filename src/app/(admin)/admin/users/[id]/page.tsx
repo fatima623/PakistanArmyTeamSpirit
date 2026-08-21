@@ -157,13 +157,16 @@ function DocCell({
   flightId,
   present,
   kind,
+  missingLabel = "Missing",
 }: {
   flightId: string | undefined;
   present: boolean;
-  kind: "passport" | "ticket";
+  kind: "passport" | "ticket" | "returnTicket";
+  /** The return leg is optional, so its absence reads "Not filed". */
+  missingLabel?: string;
 }) {
   if (!flightId || !present) {
-    return <span className="text-slate-400">Missing</span>;
+    return <span className="text-slate-400">{missingLabel}</span>;
   }
   return (
     <a
@@ -222,6 +225,8 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
               passportFilePath: true,
               ticketFileName: true,
               ticketFilePath: true,
+              returnTicketFileName: true,
+              returnTicketFilePath: true,
             },
           },
         },
@@ -530,7 +535,14 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                   <table className="w-full border-collapse text-left">
                     <thead>
                       <tr className="bg-slate-50">
-                        {["Traveller", "Passenger name", "Passport no.", "Passport", "Ticket"].map(
+                        {[
+                          "Traveller",
+                          "Passenger name",
+                          "Passport no.",
+                          "Passport",
+                          "Ticket (out)",
+                          "Ticket (return)",
+                        ].map(
                           (h) => (
                             <th
                               key={h}
@@ -570,6 +582,14 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
                               flightId={t.flightDetail?.id}
                               present={!!t.flightDetail?.ticketFilePath}
                               kind="ticket"
+                            />
+                          </td>
+                          <td className="px-3 py-2.5 text-[12px]">
+                            <DocCell
+                              flightId={t.flightDetail?.id}
+                              present={!!t.flightDetail?.returnTicketFilePath}
+                              kind="returnTicket"
+                              missingLabel="Not filed"
                             />
                           </td>
                         </tr>

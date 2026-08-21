@@ -17,7 +17,7 @@ export const home: typeof enHome = {
     { suffix: " Ч", label: "Продолжительность патрульного учения" },
     { suffix: "", label: "Станции" },
     { suffix: "+", label: "Тактические испытания" },
-    { suffix: "", label: "Оцениваемые задачи" },
+    { suffix: "", label: "Испытания" },
   ],
 
   mission: {
@@ -33,6 +33,5 @@ export const home: typeof enHome = {
   dates: {
     eyebrow: "Ключевые даты",
     title: "Расписание",
-    fullSchedule: "Полное расписание",
   },
 };

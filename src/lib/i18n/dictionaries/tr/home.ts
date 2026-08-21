@@ -17,7 +17,7 @@ export const home: typeof enHome = {
     { suffix: " SA", label: "Devriye tatbikatı süresi" },
     { suffix: "", label: "İstasyonlar" },
     { suffix: "+", label: "Taktik testler" },
-    { suffix: "", label: "Puanlanan görevler" },
+    { suffix: "", label: "Etkinlikler" },
   ],
 
   mission: {
@@ -33,6 +33,5 @@ export const home: typeof enHome = {
   dates: {
     eyebrow: "Önemli tarihler",
     title: "Program",
-    fullSchedule: "Tam program",
   },
 };

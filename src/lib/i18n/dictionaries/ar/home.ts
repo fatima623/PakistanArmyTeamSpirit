@@ -17,7 +17,7 @@ export const home: typeof enHome = {
     { suffix: " ساعة", label: "مدة تمرين الدوريات" },
     { suffix: "", label: "المحطات" },
     { suffix: "+", label: "الاختبارات التكتيكية" },
-    { suffix: "", label: "المهام المُقيَّمة" },
+    { suffix: "", label: "الفعاليات" },
   ],
 
   mission: {
@@ -33,6 +33,5 @@ export const home: typeof enHome = {
   dates: {
     eyebrow: "التواريخ الرئيسية",
     title: "الجدول",
-    fullSchedule: "الجدول الكامل",
   },
 };

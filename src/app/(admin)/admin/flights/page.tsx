@@ -14,7 +14,8 @@ export const metadata: Metadata = {
 /**
  * The review record shown to staff. File PATHS never leave this module — the
  * board only ever learns whether a document is on file (`hasPassport` /
- * `hasTicket`) and opens it through /api/admin/flights/{id}/file.
+ * `hasTicket` / `hasReturnTicket`) and opens it through
+ * /api/admin/flights/{id}/file.
  */
 type FlightRow = {
   id: string;
@@ -22,8 +23,10 @@ type FlightRow = {
   passportNumber: string;
   passportFileName: string | null;
   ticketFileName: string | null;
+  returnTicketFileName: string | null;
   hasPassport: boolean;
   hasTicket: boolean;
+  hasReturnTicket: boolean;
   complete: boolean;
   updatedAt: string;
 };
@@ -34,8 +37,10 @@ function toFlightRow(flight: {
   passportNumber: string;
   passportFileName: string | null;
   ticketFileName: string | null;
+  returnTicketFileName: string | null;
   passportFilePath: string | null;
   ticketFilePath: string | null;
+  returnTicketFilePath: string | null;
   updatedAt: Date;
 }): FlightRow {
   return {
@@ -44,8 +49,10 @@ function toFlightRow(flight: {
     passportNumber: flight.passportNumber,
     passportFileName: flight.passportFileName,
     ticketFileName: flight.ticketFileName,
+    returnTicketFileName: flight.returnTicketFileName,
     hasPassport: !!flight.passportFilePath,
     hasTicket: !!flight.ticketFilePath,
+    hasReturnTicket: !!flight.returnTicketFilePath,
     complete: isFlightRecordComplete(flight),
     updatedAt: flight.updatedAt.toISOString(),
   };
@@ -91,6 +98,7 @@ export default async function AdminFlightsPage() {
               // Server-only: reduced to booleans before reaching the client.
               passportFilePath: true,
               ticketFilePath: true,
+              returnTicketFilePath: true,
             },
           },
         },
@@ -103,6 +111,7 @@ export default async function AdminFlightsPage() {
           ...flightDetailSummarySelect,
           passportFilePath: true,
           ticketFilePath: true,
+          returnTicketFilePath: true,
         },
       },
     },

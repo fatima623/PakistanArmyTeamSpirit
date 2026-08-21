@@ -8,7 +8,8 @@ import {
 } from "@/lib/storage/config";
 import { ensureUploadDirs } from "@/lib/storage/ensure-upload-dirs";
 
-export type FlightDocKind = "passport" | "ticket";
+/** `ticket` is the outbound ("coming") leg; `returnTicket` the way back. */
+export type FlightDocKind = "passport" | "ticket" | "returnTicket";
 
 export type FlightDocUploadResult = {
   internalFilePath: string;

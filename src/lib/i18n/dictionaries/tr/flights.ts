@@ -12,7 +12,8 @@ export const flights: typeof enFlights = {
   },
   labels: {
     passport: "Pasaport",
-    flightTicket: "Uçuş Bileti",
+    flightTicket: "Uçuş Bileti (Gidiş)",
+    returnTicket: "Dönüş Bileti",
   },
   banners: {
     finalizedTitle:
@@ -53,7 +54,12 @@ export const flights: typeof enFlights = {
     passportNumber: "Pasaport numarası",
     passportNumberPlaceholder: "örn. AB1234567",
     passportDoc: "Pasaport belgesi (PDF)",
-    ticketDoc: "Uçuş bileti (PDF)",
+    passportDocHint: "Pasaportunuzun ilk sayfasını yükleyin.",
+    ticketDoc: "Gidiş uçuş bileti (PDF)",
+    ticketDocHint: "Pakistan’a geliş yolculuğunuz.",
+    returnTicketDoc: "Dönüş uçuş bileti (PDF)",
+    returnTicketDocHint: "Eve dönüş yolculuğunuz. İsteğe bağlı — rezervasyon yapılır yapılmaz ekleyin.",
+    returnTicketLocked: "Önce gidiş biletini yükleyin — dönüş bileti alanı hemen ardından açılır.",
     currentFile: (name) => `Mevcut: ${name}. Korumak için boş bırakın.`,
     saveChanges: "Değişiklikleri kaydet",
     submitFlight: "Uçuş bilgilerini kaydet",
@@ -95,6 +101,7 @@ export const flights: typeof enFlights = {
     mustBeUnder10: (label) => `${label} 10MB'ın altında olmalıdır`,
     passportLabel: "Pasaport",
     ticketLabel: "Uçuş bileti",
+    returnTicketLabel: "Dönüş uçuş bileti",
     updated: "Uçuş bilgileri güncellendi",
     submitted: "Uçuş bilgileri gönderildi",
   },

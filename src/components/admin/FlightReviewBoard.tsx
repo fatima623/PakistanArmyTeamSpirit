@@ -30,8 +30,11 @@ type ReviewFlight = {
   passportNumber: string;
   passportFileName: string | null;
   ticketFileName: string | null;
+  returnTicketFileName: string | null;
   hasPassport: boolean;
   hasTicket: boolean;
+  /** Return leg — optional, so it never feeds `complete`. */
+  hasReturnTicket: boolean;
   complete: boolean;
   updatedAt: string;
 };
@@ -67,17 +70,20 @@ function DocLink({
   type,
   onFile,
   fileName,
+  missingLabel = "Missing",
 }: {
   flightId: string;
-  type: "passport" | "ticket";
+  type: "passport" | "ticket" | "returnTicket";
   onFile: boolean;
   fileName: string | null;
+  /** The return leg is optional, so its absence reads "Not filed", not "Missing". */
+  missingLabel?: string;
 }) {
   if (!onFile) {
     return (
       <span className="admin-flights-doc admin-flights-doc--missing">
         <FileText className="h-3.5 w-3.5" aria-hidden />
-        Missing
+        {missingLabel}
       </span>
     );
   }
@@ -140,6 +146,15 @@ function FlightCells({ flight }: { flight: ReviewFlight }) {
           type="ticket"
           onFile={flight.hasTicket}
           fileName={flight.ticketFileName}
+        />
+      </td>
+      <td>
+        <DocLink
+          flightId={flight.id}
+          type="returnTicket"
+          onFile={flight.hasReturnTicket}
+          fileName={flight.returnTicketFileName}
+          missingLabel="Not filed"
         />
       </td>
       <td>
@@ -432,7 +447,8 @@ export function FlightReviewBoard({
                     <th scope="col">Passenger Name</th>
                     <th scope="col">Passport No.</th>
                     <th scope="col">Passport</th>
-                    <th scope="col">Ticket</th>
+                    <th scope="col">Ticket (out)</th>
+                    <th scope="col">Ticket (return)</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -450,7 +466,7 @@ export function FlightReviewBoard({
                       {t.flight ? (
                         <FlightCells flight={t.flight} />
                       ) : (
-                        <td colSpan={5}>
+                        <td colSpan={6}>
                           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700">
                             <AlertTriangle className="h-3.5 w-3.5" aria-hidden />
                             No flight record — nothing submitted for this traveller
@@ -462,7 +478,7 @@ export function FlightReviewBoard({
 
                   {team.memberCount === 0 ? (
                     <tr>
-                      <td colSpan={7} className="admin-table-empty">
+                      <td colSpan={8} className="admin-table-empty">
                         No travellers on the roster yet.
                       </td>
                     </tr>

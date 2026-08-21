@@ -16,7 +16,7 @@ export const ARMY_STATS = [
   { value: 60, suffix: " HRS", label: "Patrol exercise duration" },
   { value: 8, suffix: "", label: "Stations" },
   { value: 22, suffix: "+", label: "Tactical tests" },
-  { value: 33, suffix: "", label: "Scored tasks" },
+  { value: 27, suffix: "", label: "Events" },
 ] as const;
 
 export const PATS_PILLARS = [

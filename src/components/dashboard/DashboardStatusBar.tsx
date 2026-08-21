@@ -3,7 +3,6 @@ import {
   AlertTriangle,
   ArrowRight,
   CheckCircle2,
-  Clock,
   ListChecks,
   type LucideIcon,
 } from "lucide-react";
@@ -51,8 +50,12 @@ export function DashboardStatusBar({
     title = t.returnedTitle;
     text = rejectionReason ?? t.inProgressText;
   } else if (stage === "underReview") {
-    variant = "pp-status--approved";
-    Icon = Clock;
+    /* Every participant-side step is in: this is a success for the participant,
+       so it reads as one — the amber "waiting" treatment made a finished
+       registration look like an outstanding task. The SD's own decision is the
+       separate `approved` state below it. */
+    variant = "pp-status--confirmed";
+    Icon = CheckCircle2;
     title = t.underReviewTitle;
     text = t.underReviewText;
   }

@@ -9894,6 +9894,21 @@ html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   font-size: 0.9375rem;
   line-height: 1.75;
   color: #4a5248 !important;
+  /* Justified so the Concept / Purpose paragraph reads as a solid block under
+     the centred heading; hyphenation keeps the inter-word gaps from opening up
+     on narrow columns. */
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+/* Very narrow viewports justify badly at this measure — one or two words per
+   line turns into rivers of whitespace. */
+@media (max-width: 479px) {
+  .pats-mission-showcase__body {
+    text-align: start;
+    hyphens: manual;
+  }
 }
 
 .pats-mission-showcase__motto-row {
@@ -19770,10 +19785,13 @@ html:has(.dashboard-day) body {
   box-shadow: 0 0 0 3px rgba(21, 97, 59, 0.1);
 }
 
+/* The current step is NOT complete: it keeps a white card AND a white dot with
+   its step number, so only a finished step ever reads as green-and-ticked. A
+   filled green dot here made an untouched step look done. */
 .pp .pp-step--current .pp-step__dot {
-  background: var(--pp-primary);
+  background: #fff;
   border-color: var(--pp-primary);
-  color: #fff;
+  color: var(--pp-primary);
 }
 
 .pp .pp-step--attention {
@@ -23878,8 +23896,18 @@ html[data-site-theme="day"] .registered-map__year-select {
    hero, which shares the same `ec-*` vocabulary.
    ========================================================================== */
 
+/* The fixed site chrome sits above this page, and the body only reserves the
+   COLLAPSED bar height — a taller nav (a wrapped link row, a two-line marquee)
+   would otherwise crop the page label. The extra top padding is the margin of
+   safety, so the heading always starts clear of the navbar. */
 .ec-page--events .ec-hero {
-  padding: 2rem 0 0.25rem;
+  padding: 3.25rem 0 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .ec-page--events .ec-hero {
+    padding-top: 4rem;
+  }
 }
 
 .ec-page--events .ec-hero__badge {

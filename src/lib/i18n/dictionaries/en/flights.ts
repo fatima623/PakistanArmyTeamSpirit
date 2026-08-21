@@ -10,7 +10,8 @@ export const flights = {
   },
   labels: {
     passport: "Passport",
-    flightTicket: "Flight Ticket",
+    flightTicket: "Flight Ticket (Outbound)",
+    returnTicket: "Return Ticket",
   },
   banners: {
     finalizedTitle:
@@ -50,9 +51,14 @@ export const flights = {
     passengerName: "Passenger name (as on passport)",
     passengerNamePlaceholder: "e.g. CAPT SARA KHAN",
     passportNumber: "Passport number",
-    passportNumberPlaceholder: "e.g. AB1234567",
-    passportDoc: "Passport document (PDF)",
-    ticketDoc: "Flight ticket (PDF)",
+    passportNumber
+    passportDoc: "Passport picture (PDF)",
+    passportDocHint: "Upload the first page of your passport.",
+    ticketDoc: "Outbound flight ticket (PDF)",
+    ticketDocHint: "Your inbound journey to Pakistan.",
+    returnTicketDoc: "Return flight ticket (PDF)",
+    returnTicketDocHint: "Your journey home. Optional — add it as soon as it is booked.",
+    returnTicketLocked: "Upload the outbound ticket first — the return ticket field unlocks straight after.",
     currentFile: (name: string) => `Current: ${name}. Leave empty to keep it.`,
     saveChanges: "Save changes",
     submitFlight: "Save flight details",
@@ -94,6 +100,7 @@ export const flights = {
     mustBeUnder10: (label: string) => `${label} must be under 10MB`,
     passportLabel: "Passport",
     ticketLabel: "Flight ticket",
+    returnTicketLabel: "Return flight ticket",
     updated: "Flight details updated",
     submitted: "Flight details submitted",
   },
