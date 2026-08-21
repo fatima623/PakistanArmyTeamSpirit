@@ -51,7 +51,7 @@ export const flights: typeof enFlights = {
     passengerNamePlaceholder: "例如 CAPT SARA KHAN",
     passportNumber: "护照号码",
     passportNumberPlaceholder: "例如 AB1234567",
-    passportDoc: "护照文件（PDF）",
+    passportDoc: "护照照片（PDF）",
     passportDocHint: "请上传护照第一页。",
     ticketDoc: "去程机票（PDF）",
     ticketDocHint: "前往巴基斯坦的行程。",

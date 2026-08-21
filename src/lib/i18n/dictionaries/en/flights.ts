@@ -51,7 +51,7 @@ export const flights = {
     passengerName: "Passenger name (as on passport)",
     passengerNamePlaceholder: "e.g. CAPT SARA KHAN",
     passportNumber: "Passport number",
-    passportNumber
+    passportNumberPlaceholder: "e.g. AB1234567",
     passportDoc: "Passport picture (PDF)",
     passportDocHint: "Upload the first page of your passport.",
     ticketDoc: "Outbound flight ticket (PDF)",

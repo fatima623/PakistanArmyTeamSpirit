@@ -53,7 +53,7 @@ export const flights: typeof enFlights = {
     passengerNamePlaceholder: "örn. YZB SARA KHAN",
     passportNumber: "Pasaport numarası",
     passportNumberPlaceholder: "örn. AB1234567",
-    passportDoc: "Pasaport belgesi (PDF)",
+    passportDoc: "Pasaport fotoğrafı (PDF)",
     passportDocHint: "Pasaportunuzun ilk sayfasını yükleyin.",
     ticketDoc: "Gidiş uçuş bileti (PDF)",
     ticketDocHint: "Pakistan’a geliş yolculuğunuz.",

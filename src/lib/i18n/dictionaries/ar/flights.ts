@@ -52,7 +52,7 @@ export const flights: typeof enFlights = {
     passengerNamePlaceholder: "مثل النقيب سارة خان",
     passportNumber: "رقم جواز السفر",
     passportNumberPlaceholder: "مثل AB1234567",
-    passportDoc: "وثيقة جواز السفر (PDF)",
+    passportDoc: "صورة جواز السفر (PDF)",
     passportDocHint: "ارفع الصفحة الأولى من جواز سفرك.",
     ticketDoc: "تذكرة الذهاب (PDF)",
     ticketDocHint: "رحلة القدوم إلى باكستان.",
