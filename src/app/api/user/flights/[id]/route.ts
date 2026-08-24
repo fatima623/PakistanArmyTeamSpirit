@@ -148,6 +148,7 @@ export async function PUT(request: Request, context: RouteContext) {
                 passportFileName: passportUpload.originalFileName,
                 passportFileSize: passportUpload.fileSize,
                 passportUploadedAt: passportUpload.uploadedAt,
+                passportData: passportUpload.data,
               }
             : {}),
           ...(ticketUpload
@@ -156,6 +157,7 @@ export async function PUT(request: Request, context: RouteContext) {
                 ticketFileName: ticketUpload.originalFileName,
                 ticketFileSize: ticketUpload.fileSize,
                 ticketUploadedAt: ticketUpload.uploadedAt,
+                ticketData: ticketUpload.data,
               }
             : {}),
           ...(returnTicketUpload
@@ -164,6 +166,7 @@ export async function PUT(request: Request, context: RouteContext) {
                 returnTicketFileName: returnTicketUpload.originalFileName,
                 returnTicketFileSize: returnTicketUpload.fileSize,
                 returnTicketUploadedAt: returnTicketUpload.uploadedAt,
+                returnTicketData: returnTicketUpload.data,
               }
             : {}),
         },

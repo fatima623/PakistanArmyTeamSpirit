@@ -201,6 +201,13 @@ model FlightDetail {
   passportFileSize       Int?
   passportUploadedAt     DateTime?
   /**
+   * PDF binary stored in the DB (LONGBLOB), as the site's other media is.
+   * Serverless hosts mount the bundle read-only, so a filesystem write throws
+   * ENOENT/EROFS there. `*FilePath` stays the logical key (and the presence
+   * flag every completeness check reads); the bytes live here.
+   */
+  passportData           Bytes?
+  /**
    * Outbound ("coming") flight ticket. Kept on the original `ticket*` column
    * names so existing rows and stored files carry over untouched.
    */
@@ -208,6 +215,7 @@ model FlightDetail {
   ticketFileName         String?
   ticketFileSize         Int?
   ticketUploadedAt       DateTime?
+  ticketData             Bytes?
   /**
    * Return ("back") flight ticket — a second, optional PDF per traveller. It
    * does NOT gate `isFlightRecordComplete`: teams that filed before the return
@@ -217,6 +225,7 @@ model FlightDetail {
   returnTicketFileName   String?
   returnTicketFileSize   Int?
   returnTicketUploadedAt DateTime?
+  returnTicketData       Bytes?
   createdAt              DateTime    @default(now())
   updatedAt              DateTime    @updatedAt
 

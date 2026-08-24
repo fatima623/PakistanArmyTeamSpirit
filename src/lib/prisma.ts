@@ -20,6 +20,14 @@ export const prisma =
       galleryImage: { imageData: true, posterData: true },
       event: { thumbnailData: true },
       heroSlide: { imageData: true },
+      // Flight PDFs: routes that only need "is a document on file" read
+      // *FilePath, so the megabyte payloads stay out of every list query.
+      // The authorized file routes select the bytes explicitly.
+      flightDetail: {
+        passportData: true,
+        ticketData: true,
+        returnTicketData: true,
+      },
     },
   });
 

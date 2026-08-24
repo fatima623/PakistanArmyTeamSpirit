@@ -18,7 +18,7 @@ export const home = {
      */
     motto: HERO_MOTTO,
     description:
-      "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit among partner nations.",
+      "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit .",
     // cta: "Register your team",
     scrollHint: "Scroll down",
   },
@@ -36,7 +36,7 @@ export const home = {
     imageAlt: "PATS international competition marks",
     quote: "PERSEVERANCE ACCLAIMED THROUGH TEAM SPIRIT",
     body:
-      "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented patrolling competition organized annually under JLA PATS. The main aim is a demanding patrolling exercise to assess and enhance tactical and mental abilities — participants must be prepared mentally and physically. Teams must achieve proficiency in minor operations, endurance, and prowess in basic drills and procedures.",
+      "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented exercise organized anually under the supervision of Pakistan Army. The exercise is manifested by its highest standard of physical fitness, robustness, tactical expertise and soldierly attributes.",
   },
 
  

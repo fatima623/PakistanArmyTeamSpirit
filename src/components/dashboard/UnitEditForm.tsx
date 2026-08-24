@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -83,6 +84,7 @@ export function UnitEditForm({
   unitNames: string[];
 }) {
   const unit = user.unit;
+  const router = useRouter();
   const { t, locale } = useI18n();
   const u = t.unit;
   const [submitting, setSubmitting] = useState(false);
@@ -145,6 +147,14 @@ export function UnitEditForm({
       });
       if (res.ok) {
         toast.success(t.common.toasts.saveSuccess);
+        /* Back to the dashboard so the participant picks the next step from
+           the progress panel. `refresh()` first: the panel is server-rendered
+           from `unitInfoCompletedAt`, and without dropping the router cache it
+           would render the step still outstanding until a hard reload.
+           `submitting` deliberately stays true — the navigation is in flight,
+           and re-enabling the button invites a double submit. */
+        router.refresh();
+        router.push("/event/dashboard");
         return;
       }
       const body = await res.json();
@@ -161,9 +171,8 @@ export function UnitEditForm({
       }
     } catch {
       toast.error(t.common.toasts.genericError);
-    } finally {
-      setSubmitting(false);
     }
+    setSubmitting(false);
   };
 
   const cardClass =

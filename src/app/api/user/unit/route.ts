@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { UnitUpdateSchema } from "@/lib/validations";
 import {
@@ -105,6 +106,13 @@ export async function PUT(request: Request) {
         select: { ...userSelect, unit: true },
       });
     });
+
+    /* The dashboard's progress panel and the journey step are server-rendered
+       from `unitInfoCompletedAt`, so they must be re-rendered before the form
+       navigates back — otherwise the step the participant just finished is
+       still drawn as outstanding until a hard refresh. */
+    revalidatePath("/event/dashboard");
+    revalidatePath("/event/journey");
 
     return NextResponse.json({ user });
   } catch (error) {

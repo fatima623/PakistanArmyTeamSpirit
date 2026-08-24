@@ -26,6 +26,10 @@ export type UserManagementRow = {
   createdAt: Date;
   approvedAt: Date | null;
   rejectedAt: Date | null;
+  /** Set when the participant finished every step and entered the SD queue. */
+  submittedForApprovalAt: Date | null;
+  flightsSubmittedAt: Date | null;
+  participationConfirmedAt: Date | null;
   country: string | null;
   nationality: string | null;
   unit: { unitName: string } | null;
@@ -99,7 +103,21 @@ export function UsersManagementTable({
             const meta = [u.rank, formatAdminTableCountry(u.country, u.nationality)]
               .filter((v) => v && v !== "—")
               .join(" · ");
-            const decisionDate = u.approvedAt ?? u.rejectedAt ?? u.createdAt;
+            /* What this timestamp MEANS follows the status it sits under:
+                 decided        → when the SD decided;
+                 registration in→ when the participant finished every step
+                                  (that is what the SD is queuing on);
+                 still filling  → when they confirmed participation;
+                 nothing yet    → when the account was created.
+               Showing `createdAt` for everyone made an account opened weeks
+               ago look like it had just been actioned. */
+            const statusDate =
+              u.approvedAt ??
+              u.rejectedAt ??
+              u.submittedForApprovalAt ??
+              u.flightsSubmittedAt ??
+              u.participationConfirmedAt ??
+              u.createdAt;
             return (
               <tr key={u.id} className="admin-users-row">
                 <td className="admin-users-cell-participant">
@@ -135,7 +153,7 @@ export function UsersManagementTable({
                       className="admin-users-status-badge--app"
                     />
                     <div className="admin-users-app-date">
-                      {formatDateTimeShort(decisionDate)}
+                      {formatDateTimeShort(statusDate)}
                     </div>
                   </div>
                 </td>

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
 import { ApiError, handleApiError, requireAuth } from "@/lib/api-helpers";
-import { readFlightDocByInternalPath } from "@/lib/storage/flight-doc";
+import { readFlightDoc } from "@/lib/storage/flight-doc";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -21,10 +21,13 @@ export async function GET(request: Request, context: RouteContext) {
       select: {
         passportFilePath: true,
         passportFileName: true,
+        passportData: true,
         ticketFilePath: true,
         ticketFileName: true,
+        ticketData: true,
         returnTicketFilePath: true,
         returnTicketFileName: true,
+        returnTicketData: true,
       },
     });
     if (!flight) throw new ApiError("Flight record not found", 404);
@@ -41,9 +44,19 @@ export async function GET(request: Request, context: RouteContext) {
         : type === "ticket"
           ? flight.ticketFileName
           : flight.returnTicketFileName;
+    const data =
+      type === "passport"
+        ? flight.passportData
+        : type === "ticket"
+          ? flight.ticketData
+          : flight.returnTicketData;
     if (!internalPath) throw new ApiError("Document not uploaded yet", 404);
 
-    const payload = await readFlightDocByInternalPath(internalPath, fileName);
+    const payload = await readFlightDoc({
+      data,
+      internalFilePath: internalPath,
+      downloadName: fileName,
+    });
     return new NextResponse(new Uint8Array(payload.buffer), {
       headers: {
         "Content-Type": payload.mimeType,

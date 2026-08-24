@@ -47,6 +47,7 @@ type Decision = "APPROVED" | "REJECTED";
 function fmt(iso: string | null): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleString("en-GB", {
+    timeZone: "Asia/Karachi",
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -61,6 +62,7 @@ function fmt(iso: string | null): string {
 function fmtShort(iso: string | null): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleString("en-GB", {
+    timeZone: "Asia/Karachi",
     day: "numeric",
     month: "short",
     year: "numeric",

@@ -12,6 +12,15 @@ const utcDateFormat = {
   timeZone: "UTC",
 } as const;
 
+/* Admin timestamps are read as local wall-clock time by staff sitting in
+ * Pakistan, so every admin-facing date+time renders in PKT. The zone is FIXED
+ * (never the viewer's) so SSR and hydration produce identical strings, and so
+ * the activity log, the workflow stepper and the participation-requests table
+ * can never disagree about when something happened. */
+const pkDateFormat = {
+  timeZone: "Asia/Karachi",
+} as const;
+
 /* Every formatter takes an OPTIONAL trailing `locale`. Omitting it keeps the
  * historical en-GB output, so admin and other non-localized callers are
  * unaffected; portal callers thread the active locale through. The fixed
@@ -37,12 +46,12 @@ export function formatDateShort(date: Date | string, locale?: Locale): string {
   }).format(new Date(date));
 }
 
-/** e.g. 21/08/2026, 14:32 — short date + 24-hour clock. Used across the admin
- *  console, where "when did this land / when was it actioned" needs the time of
- *  day, not just the day. */
+/** e.g. 21/08/2026, 16:33 PKT — short date + 24-hour clock. Used across the
+ *  admin console, where "when did this land / when was it actioned" needs the
+ *  time of day, not just the day. */
 export function formatDateTimeShort(date: Date | string, locale?: Locale): string {
   return new Intl.DateTimeFormat(dateTag(locale), {
-    ...utcDateFormat,
+    ...pkDateFormat,
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -52,11 +61,11 @@ export function formatDateTimeShort(date: Date | string, locale?: Locale): strin
   }).format(new Date(date));
 }
 
-/** e.g. 21 August 2026, 14:32 — the long-form counterpart of
+/** e.g. 21 August 2026 at 16:33 PKT — the long-form counterpart of
  *  {@link formatDateTimeShort}, for detail pages that spell the month out. */
 export function formatDateTimeDisplay(date: Date | string, locale?: Locale): string {
   return new Intl.DateTimeFormat(dateTag(locale), {
-    ...utcDateFormat,
+    ...pkDateFormat,
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -93,7 +102,7 @@ export function formatDateTime(date: Date | string, locale?: Locale): string {
  *  SSR and client hydration output identical. */
 export function formatDateTimePK(date: Date | string, locale?: Locale): string {
   return new Intl.DateTimeFormat(dateTag(locale), {
-    timeZone: "Asia/Karachi",
+    ...pkDateFormat,
     day: "numeric",
     month: "short",
     year: "numeric",

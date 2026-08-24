@@ -1,4 +1,4 @@
-import { mkdir, readFile, unlink, writeFile } from "fs/promises";
+import { readFile, unlink } from "fs/promises";
 import { randomBytes } from "crypto";
 import path from "path";
 
@@ -6,7 +6,6 @@ import {
   getFlightDocStorageRoot,
   MAX_FLIGHT_DOC_BYTES,
 } from "@/lib/storage/config";
-import { ensureUploadDirs } from "@/lib/storage/ensure-upload-dirs";
 
 /** `ticket` is the outbound ("coming") leg; `returnTicket` the way back. */
 export type FlightDocKind = "passport" | "ticket" | "returnTicket";
@@ -16,6 +15,8 @@ export type FlightDocUploadResult = {
   fileSize: number;
   originalFileName: string;
   uploadedAt: Date;
+  /** PDF bytes, written to the record's `*Data` column. */
+  data: Uint8Array<ArrayBuffer>;
 };
 
 export type FlightDocFilePayload = {
@@ -82,7 +83,18 @@ function buildInternalFlightDocPath(
   return `${safeUserId}/${yyyy}/${mm}/${kind}-${stamp}-${rand}.pdf`;
 }
 
-/** Persist a validated flight document PDF; returns the relative DB path. */
+/**
+ * Validate a flight document PDF and return the row to write.
+ *
+ * The bytes go into the record's `*Data` column, NOT onto disk: serverless
+ * hosts mount the bundle read-only, so `mkdir`/`writeFile` throw ENOENT there
+ * and every upload failed in production. This mirrors how the site's other
+ * media (gallery, hero, news, event) is already stored.
+ *
+ * `internalFilePath` is still generated and stored — it remains the logical
+ * key, the presence flag that `isFlightRecordComplete` and every coverage
+ * query test, and the lookup path for documents uploaded before this change.
+ */
 export async function saveFlightDoc(input: {
   userId: string;
   kind: FlightDocKind;
@@ -90,42 +102,60 @@ export async function saveFlightDoc(input: {
   buffer: Buffer;
   declaredMime: string;
 }): Promise<FlightDocUploadResult> {
-  ensureUploadDirs();
   validateFlightDocPdf(input.buffer, input.originalFileName, input.declaredMime);
 
   const uploadedAt = new Date();
-  const internalFilePath = buildInternalFlightDocPath(
-    input.userId,
-    input.kind,
-    uploadedAt
-  );
-  const absolute = resolveAbsoluteFlightDocPath(internalFilePath);
-
-  await mkdir(path.dirname(absolute), { recursive: true });
-  await writeFile(absolute, input.buffer, { flag: "wx" });
 
   return {
-    internalFilePath,
+    internalFilePath: buildInternalFlightDocPath(
+      input.userId,
+      input.kind,
+      uploadedAt
+    ),
     fileSize: input.buffer.length,
     originalFileName: input.originalFileName.slice(0, 255),
     uploadedAt,
+    data: new Uint8Array(input.buffer),
   };
 }
 
-export async function readFlightDocByInternalPath(
-  internalFilePath: string,
-  downloadName?: string | null
-): Promise<FlightDocFilePayload> {
-  const absolute = resolveAbsoluteFlightDocPath(internalFilePath);
+/**
+ * Resolve a stored document to a servable payload.
+ *
+ * `data` is the DB column and wins. Documents uploaded before the move to
+ * database storage have a path but no bytes, so those fall back to reading the
+ * file — which still works on a self-hosted install and simply 404s on a
+ * serverless host, where the file never existed in the first place.
+ */
+export async function readFlightDoc(input: {
+  data: Uint8Array | Buffer | null;
+  internalFilePath: string;
+  downloadName?: string | null;
+}): Promise<FlightDocFilePayload> {
+  const fileName =
+    input.downloadName || path.basename(input.internalFilePath) || "document.pdf";
+
+  if (input.data && input.data.length > 0) {
+    return {
+      buffer: Buffer.from(input.data),
+      mimeType: "application/pdf",
+      fileName,
+    };
+  }
+
+  const absolute = resolveAbsoluteFlightDocPath(input.internalFilePath);
   const buffer = await readFile(absolute);
-  return {
-    buffer,
-    mimeType: "application/pdf",
-    fileName: downloadName || path.basename(absolute),
-  };
+  return { buffer, mimeType: "application/pdf", fileName };
 }
 
-/** Best-effort removal of a replaced/deleted document. */
+/**
+ * Best-effort removal of a replaced/deleted document's LEGACY disk copy.
+ *
+ * Documents written since the move to database storage have no file to remove
+ * — clearing the row (or the column) is what deletes them. This stays for the
+ * older on-disk ones, and never throws: on a read-only filesystem there is
+ * nothing to unlink and nothing to report.
+ */
 export async function deleteFlightDocByInternalPath(
   internalFilePath: string | null | undefined
 ): Promise<void> {
