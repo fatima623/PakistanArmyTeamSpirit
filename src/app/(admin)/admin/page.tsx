@@ -39,7 +39,6 @@ export default async function AdminOverviewPage() {
     totalUsers,
     approvedUsers,
     pendingUsers,
-    awaitingApproval,
     recentRegistrations,
     registrationActivity,
     pipeline,
@@ -59,17 +58,6 @@ export default async function AdminOverviewPage() {
       where: {
         role: PARTICIPANT_ROLE,
         applicationStatus: pendingApplicationStatusFilter(),
-      },
-    }),
-    /* Registrations whose participant has filled in every step and is now
-       waiting on the SD decision. Keyed off the status rather than
-       `submittedForApprovalAt`, which stays set after a registration is
-       returned for correction and so counted teams the linked
-       ?filter=under_review list does not show. */
-    prisma.user.count({
-      where: {
-        role: PARTICIPANT_ROLE,
-        applicationStatus: APPLICATION_STATUS.UNDER_REVIEW,
       },
     }),
     prisma.user.findMany({
@@ -96,7 +84,6 @@ export default async function AdminOverviewPage() {
     total: totalUsers,
     approved: approvedUsers,
     pending: pendingUsers,
-    awaitingApproval,
   };
 
   return (

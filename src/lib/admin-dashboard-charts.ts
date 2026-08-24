@@ -1,6 +1,7 @@
 import { APPLICATION_STATUS, type ApplicationStatus } from "@/lib/constants";
 import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
+import { normalizeApplicationStatus } from "@/lib/user-status";
 
 export type RegistrationRangeKey = "3m" | "6m" | "1y";
 
@@ -20,8 +21,10 @@ const PIPELINE_LABELS: Record<ApplicationStatus, string> = {
   [APPLICATION_STATUS.REJECTED]: "Rejected",
 };
 
-// "Under Review" and "Rejected" stages were removed from the pipeline per
-// request; only these active stages are surfaced on the dashboard donut.
+// "Under Review" and "Rejected" are not slices of their own, per request. Under
+// Review is not lost though: it normalises into Pending, which is where a team
+// awaiting the SD decision belongs. Only historic Rejected rows fall out of the
+// donut entirely — rejection is no longer an admin decision.
 const PIPELINE_ORDER: ApplicationStatus[] = [
   APPLICATION_STATUS.APPROVED,
   APPLICATION_STATUS.PENDING,
@@ -156,7 +159,6 @@ export type KpiSparklines = {
   total: number[];
   approved: number[];
   pending: number[];
-  awaitingApproval: number[];
 };
 
 /**
@@ -172,7 +174,7 @@ export async function getKpiSparklines(months = 7): Promise<KpiSparklines> {
 
   const users = await prisma.user.findMany({
     where: { role: PARTICIPANT_ROLE, createdAt: { gte: start } },
-    select: { createdAt: true, applicationStatus: true, submittedForApprovalAt: true },
+    select: { createdAt: true, applicationStatus: true },
   });
 
   const idx = new Map<string, number>();
@@ -187,16 +189,17 @@ export async function getKpiSparklines(months = 7): Promise<KpiSparklines> {
     total: zeros(),
     approved: zeros(),
     pending: zeros(),
-    awaitingApproval: zeros(),
   };
 
   for (const u of users) {
     const i = idx.get(monthKey(u.createdAt));
     if (i === undefined) continue;
     series.total[i] += 1;
-    if (u.applicationStatus === APPLICATION_STATUS.APPROVED) series.approved[i] += 1;
-    if (u.applicationStatus === APPLICATION_STATUS.PENDING) series.pending[i] += 1;
-    if (u.submittedForApprovalAt) series.awaitingApproval[i] += 1;
+    /* Normalised so the sparkline traces the same bucket as the value above
+       it — the raw comparison left UNDER_REVIEW out of the Pending trend. */
+    const status = normalizeApplicationStatus(u.applicationStatus);
+    if (status === APPLICATION_STATUS.APPROVED) series.approved[i] += 1;
+    if (status === APPLICATION_STATUS.PENDING) series.pending[i] += 1;
   }
 
   return series;
@@ -213,9 +216,16 @@ export async function getStatusDistribution(): Promise<{
     _count: { _all: true },
   });
 
-  const countMap = new Map(
-    grouped.map((g) => [g.applicationStatus, g._count._all])
-  );
+  /* Bucket by the NORMALISED status, exactly as the /admin/users chips do.
+     Reading raw statuses straight off the groupBy meant UNDER_REVIEW matched no
+     entry in PIPELINE_ORDER and vanished: a team that had submitted for SD
+     approval left the donut reading "Pending 0" out of a total of 6 when there
+     were 7 participants, one of them pending. */
+  const countMap = new Map<ApplicationStatus, number>();
+  for (const g of grouped) {
+    const key = normalizeApplicationStatus(g.applicationStatus);
+    countMap.set(key, (countMap.get(key) ?? 0) + g._count._all);
+  }
 
   const data = PIPELINE_ORDER.map((status) => ({
     status: PIPELINE_LABELS[status],

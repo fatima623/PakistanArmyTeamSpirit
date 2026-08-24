@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Clock, ClipboardCheck, Users } from "lucide-react";
+import { CheckCircle2, Clock, Users } from "lucide-react";
 
 import { AdminStatCard } from "@/components/admin/AdminStatCard";
 
@@ -32,22 +32,12 @@ const STAT_CONFIG = [
     Icon: Clock,
     href: "/admin/users?filter=pending",
   },
-  {
-    label: "Awaiting approval",
-    hint: "All steps submitted",
-    key: "awaitingApproval" as const,
-    tone: "violet" as const,
-    variant: "default" as const,
-    Icon: ClipboardCheck,
-    href: "/admin/users?filter=under_review",
-  },
 ] as const;
 
 export type AdminDashboardStatsData = {
   total: number;
   approved: number;
   pending: number;
-  awaitingApproval: number;
 };
 
 export type AdminDashboardStatsSeries = Record<

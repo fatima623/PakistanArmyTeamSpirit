@@ -11534,6 +11534,13 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
   margin-bottom: 24px;
 }
 
+/* Odd tile out: with three KPIs in a two-column grid the last one would sit
+   half-width beside a hole, so it takes the whole row instead. Scoped to
+   `:nth-child(3):last-child` so it stops applying if a fourth tile returns. */
+.admin-theme .admin-crm-stats > :nth-child(3):last-child {
+  grid-column: 1 / -1;
+}
+
 
 @media (min-width: 640px) {
   .admin-theme .admin-crm-stats {
@@ -11544,7 +11551,12 @@ html[data-site-theme="day"] .army-site :is(.pats-panel, .pats-home-featured-news
 
 @media (min-width: 1024px) {
   .admin-theme .admin-crm-stats {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* One row fits all three here, so the full-width override is not wanted. */
+  .admin-theme .admin-crm-stats > :nth-child(3):last-child {
+    grid-column: auto;
   }
 }
 
