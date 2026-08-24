@@ -26,7 +26,10 @@ import {
   registrationProgressSelect,
 } from "@/lib/registration-progress";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
-import { normalizeApplicationStatus } from "@/lib/user-status";
+import {
+  normalizeApplicationStatus,
+  pendingApplicationStatusFilter,
+} from "@/lib/user-status";
 import {
   segmentedChipClasses,
   adminUsersControls,
@@ -169,13 +172,24 @@ export default async function AdminUsersPage({
 
   const where: Prisma.UserWhereInput = { ...baseWhere };
 
-  const statusByFilter: Record<string, ApplicationStatus> = {
-    approved: APPLICATION_STATUS.APPROVED,
-    returned: APPLICATION_STATUS.RETURNED,
-    pending: APPLICATION_STATUS.PENDING,
-  };
-  if (statusByFilter[filter]) {
-    where.applicationStatus = statusByFilter[filter];
+  /* Each chip maps to the SAME predicate its count is computed from. "Pending"
+     in particular is not the literal "PENDING" string: the count normalises
+     every undecided status into PENDING, so the list has to match the whole
+     bucket (PENDING + UNDER_REVIEW + any legacy value). Matching the string
+     alone hid the teams that had submitted for SD approval — the chip counted
+     them, the table underneath said "No users found". */
+  const filterByChip: Record<string, Prisma.UserWhereInput["applicationStatus"]> =
+    {
+      approved: APPLICATION_STATUS.APPROVED,
+      returned: APPLICATION_STATUS.RETURNED,
+      pending: pendingApplicationStatusFilter(),
+      /* Not a chip, but the dashboard's "Awaiting approval" tile links here.
+         Without an entry it fell through to no status constraint at all and
+         listed every participant. */
+      under_review: APPLICATION_STATUS.UNDER_REVIEW,
+    };
+  if (filterByChip[filter]) {
+    where.applicationStatus = filterByChip[filter];
   }
   if (appStatus) where.applicationStatus = appStatus;
 

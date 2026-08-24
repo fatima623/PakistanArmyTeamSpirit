@@ -6,6 +6,7 @@ import { AdminChartsPlaceholder } from "@/components/admin/AdminChartsPlaceholde
 import { AdminDashboardStats } from "@/components/admin/AdminDashboardStats";
 import { ApplicationStatusBadge } from "@/components/admin/StatusBadges";
 import { APPLICATION_STATUS } from "@/lib/constants";
+import { pendingApplicationStatusFilter } from "@/lib/user-status";
 import {
   getKpiSparklines,
   getRegistrationsByYear,
@@ -51,20 +52,24 @@ export default async function AdminOverviewPage() {
         applicationStatus: APPLICATION_STATUS.APPROVED,
       },
     }),
+    /* Everything the SD Directorate has not decided on yet — the same bucket
+       /admin/users?filter=pending lists, so the tile and the queue it links to
+       can never show different numbers. */
     prisma.user.count({
       where: {
         role: PARTICIPANT_ROLE,
-        applicationStatus: APPLICATION_STATUS.PENDING,
+        applicationStatus: pendingApplicationStatusFilter(),
       },
     }),
     /* Registrations whose participant has filled in every step and is now
-       waiting on the SD decision. */
+       waiting on the SD decision. Keyed off the status rather than
+       `submittedForApprovalAt`, which stays set after a registration is
+       returned for correction and so counted teams the linked
+       ?filter=under_review list does not show. */
     prisma.user.count({
       where: {
         role: PARTICIPANT_ROLE,
-        submittedForApprovalAt: { not: null },
-        applicationStatus: { not: APPLICATION_STATUS.APPROVED },
-        approved: false,
+        applicationStatus: APPLICATION_STATUS.UNDER_REVIEW,
       },
     }),
     prisma.user.findMany({

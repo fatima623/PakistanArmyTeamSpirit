@@ -21,6 +21,25 @@ export function applicationStatusSummary(applicationStatus: string): string {
   return "Your registration is approved by the Sports Directorate.";
 }
 
+/** The statuses that record a decision the SD Directorate has already taken.
+ *  Everything else — PENDING, UNDER_REVIEW, and any legacy or blank value —
+ *  is still awaiting that decision. */
+export const DECIDED_APPLICATION_STATUSES: ApplicationStatus[] = [
+  APPLICATION_STATUS.APPROVED,
+  APPLICATION_STATUS.REJECTED,
+  APPLICATION_STATUS.RETURNED,
+];
+
+/** Prisma filter for the "Pending" bucket — every registration the SD
+ *  Directorate has not decided on yet. It is deliberately the exact inverse of
+ *  `normalizeApplicationStatus`, so a chip count can never disagree with the
+ *  list it labels: matching the literal "PENDING" string dropped every team
+ *  that had submitted for approval (UNDER_REVIEW), which is why the chip read
+ *  "Pending (1)" above a table that said "No users found". */
+export function pendingApplicationStatusFilter(): { notIn: string[] } {
+  return { notIn: [...DECIDED_APPLICATION_STATUSES] };
+}
+
 export function normalizeApplicationStatus(
   value: string
 ): ApplicationStatus {

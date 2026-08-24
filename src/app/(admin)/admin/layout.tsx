@@ -1,7 +1,8 @@
 
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { getAdminInitials, getAdminRole } from "@/lib/admin-session";
-import { APPLICATION_STATUS, TICKET_STATUS } from "@/lib/constants";
+import { TICKET_STATUS } from "@/lib/constants";
+import { pendingApplicationStatusFilter } from "@/lib/user-status";
 import { PARTICIPANT_ROLE } from "@/lib/auth-routes";
 import { prisma } from "@/lib/prisma";
 
@@ -24,9 +25,9 @@ export default async function AdminSectionLayout({
     prisma.user.count({
       where: {
         role: PARTICIPANT_ROLE,
-        applicationStatus: {
-          in: [APPLICATION_STATUS.PENDING, APPLICATION_STATUS.UNDER_REVIEW],
-        },
+        /* Same bucket the Pending chip counts and lists, so the sidebar badge
+           cannot drift from the queue it points at. */
+        applicationStatus: pendingApplicationStatusFilter(),
       },
     }),
     prisma.supportTicket.count({
