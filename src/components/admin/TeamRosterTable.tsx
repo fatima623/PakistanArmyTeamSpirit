@@ -5,7 +5,6 @@ export type RosterMember = {
   fullName: string;
   serviceNumber: string;
   rank: string;
-  serviceArm: string;
   gender: string;
 };
 
@@ -38,7 +37,7 @@ export function TeamRosterTable({
       <table className="w-full border-collapse text-left">
         <thead className="sticky top-0 z-[1]">
           <tr className="bg-slate-50">
-            {["#", "Full name", "Service no.", "Rank", "Service arm", "Gender"].map(
+            {["#", "Full name", "Service no.", "Rank", "Gender"].map(
               (h) => (
                 <th
                   key={h}
@@ -68,9 +67,6 @@ export function TeamRosterTable({
               </td>
               <td className="whitespace-nowrap px-3 py-2.5 text-[12.5px] text-slate-600">
                 {m.rank || "—"}
-              </td>
-              <td className="whitespace-nowrap px-3 py-2.5 text-[12.5px] text-slate-600">
-                {m.serviceArm || "—"}
               </td>
               <td className="whitespace-nowrap px-3 py-2.5 text-[12.5px] text-slate-600">
                 {m.gender || "—"}

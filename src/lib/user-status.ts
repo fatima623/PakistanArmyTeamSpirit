@@ -27,7 +27,6 @@ export function normalizeApplicationStatus(
   if (
     value === APPLICATION_STATUS.APPROVED ||
     value === APPLICATION_STATUS.REJECTED ||
-    value === APPLICATION_STATUS.UNDER_REVIEW ||
     value === APPLICATION_STATUS.RETURNED
   ) {
     return value;

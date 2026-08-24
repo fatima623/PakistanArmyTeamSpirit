@@ -42,7 +42,7 @@ export const metadata: Metadata = {
 
 const PAGE_SIZE = 20;
 
-/** Overall-status chips: All / Pending / Approved / Under Review / Returned.
+/** Overall-status chips: All / Pending / Approved / Returned.
  *  Pending is the SD Directorate's landing view. There is no Rejected chip —
  *  rejection was removed as an admin decision (Returned replaces it), so it is
  *  no longer a queue anyone works from. Historic rejected records still render
@@ -55,11 +55,6 @@ const STATUS_FILTERS: {
   { key: "all", label: "All" },
   { key: "pending", label: "Pending", status: APPLICATION_STATUS.PENDING },
   { key: "approved", label: "Approved", status: APPLICATION_STATUS.APPROVED },
-  {
-    key: "under_review",
-    label: "Under Review",
-    status: APPLICATION_STATUS.UNDER_REVIEW,
-  },
   { key: "returned", label: "Returned", status: APPLICATION_STATUS.RETURNED },
 ];
 
@@ -176,7 +171,6 @@ export default async function AdminUsersPage({
 
   const statusByFilter: Record<string, ApplicationStatus> = {
     approved: APPLICATION_STATUS.APPROVED,
-    under_review: APPLICATION_STATUS.UNDER_REVIEW,
     returned: APPLICATION_STATUS.RETURNED,
     pending: APPLICATION_STATUS.PENDING,
   };

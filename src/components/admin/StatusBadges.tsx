@@ -141,8 +141,6 @@ export function overallStatusOf(
   switch (applicationStatus) {
     case APPLICATION_STATUS.APPROVED:
       return { key: "approved", label: "Approved" };
-    case APPLICATION_STATUS.UNDER_REVIEW:
-      return { key: "review", label: "Under Review" };
     case APPLICATION_STATUS.RETURNED:
       return { key: "returned", label: "Returned" };
     case APPLICATION_STATUS.REJECTED:

@@ -39,7 +39,6 @@ export const home = {
       "Pakistan Army Team Spirit (PATS) is a mission- and task-oriented exercise organized anually under the supervision of Pakistan Army. The exercise is manifested by its highest standard of physical fitness, robustness, tactical expertise and soldierly attributes.",
   },
 
- 
 
 
 
