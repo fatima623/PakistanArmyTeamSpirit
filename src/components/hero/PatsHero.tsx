@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
+import { HERO_MOTTO } from "@/lib/branding";
 import { computeExerciseYear } from "@/lib/exercise-year";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { cn } from "@/lib/utils";
@@ -31,11 +32,6 @@ type Props = {
 
 export function PatsHero({ exerciseYear, slides }: Props) {
   const { t, locale, dir } = useI18n();
-  // English keeps the crest's heraldic Urdu form (nastaliq, RTL). Every other
-  // locale renders a real translation of the motto's meaning, in that locale's
-  // own script and direction — the nastaliq face cannot render Cyrillic, Latin
-  // or CJK, so `.pats-urdu-motto` must not be applied there.
-  const isUrduCrest = locale === "en";
   const sectionRef = useRef<HTMLElement>(null);
   const [showScrollHint, setShowScrollHint] = useState(true);
   const [dynamicYear, setDynamicYear] = useState(exerciseYear);
@@ -102,16 +98,25 @@ export function PatsHero({ exerciseYear, slides }: Props) {
 
       <div className="pats-hero__footer">
         <div className="pats-hero__content">
+          {/* The crest motto always stands in its original Urdu (nastaliq,
+              RTL) — it is heraldry, not copy. Its MEANING follows underneath,
+              in the active locale's own script and direction; the nastaliq
+              face cannot render Cyrillic, Latin or CJK, so `.pats-urdu-motto`
+              never applies to that second line. */}
           <div className="pats-hero__caption">
             <p
-              className={cn(
-                "pats-hero__caption-text",
-                isUrduCrest && "pats-urdu-motto"
-              )}
-              lang={isUrduCrest ? "ur" : locale}
-              dir={isUrduCrest ? "rtl" : dir}
+              className="pats-hero__caption-text pats-urdu-motto"
+              lang="ur"
+              dir="rtl"
             >
-              {t.home.hero.motto}
+              {HERO_MOTTO}
+            </p>
+            <p
+              className="pats-hero__caption-translation"
+              lang={locale}
+              dir={dir}
+            >
+              {t.home.hero.mottoTranslation}
             </p>
           </div>
           <h1 className="pats-hero__headline">

@@ -23,10 +23,27 @@ const MIME_TO_EXT: Record<string, string> = {
 
 export const ALLOWED_HERO_MIME_TYPES = Object.keys(MIME_TO_EXT);
 
+/**
+ * The two home-page carousels this table feeds: the full-bleed hero slider and
+ * the Concept / Purpose portrait. Both store their binaries under
+ * `uploads/hero`, so only the query filter differs.
+ */
+export const HERO_PLACEMENTS = ["hero", "mission"] as const;
+export type HeroPlacement = (typeof HERO_PLACEMENTS)[number];
+export const DEFAULT_HERO_PLACEMENT: HeroPlacement = "hero";
+
+/** Narrows an untrusted string to a placement; falls back to the hero. */
+export function resolveHeroPlacement(value: unknown): HeroPlacement {
+  return (HERO_PLACEMENTS as readonly string[]).includes(String(value))
+    ? (value as HeroPlacement)
+    : DEFAULT_HERO_PLACEMENT;
+}
+
 export const HERO_ADMIN_SELECT = {
   id: true,
   title: true,
   alt: true,
+  placement: true,
   imagePath: true,
   sortOrder: true,
   published: true,

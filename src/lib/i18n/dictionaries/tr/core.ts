@@ -46,8 +46,8 @@ export const core: typeof enCore = {
     done: "Tamamlandı",
     logout: "Çıkış yap",
     dashboard: "Panel",
-    tour: "Site Turu",
-    support: "Destek",
+    tour: "Sanal Tur",
+    support: "Destek / Talep",
     journeyComplete: "Kayıt tamamlandı",
   },
 
@@ -89,14 +89,14 @@ export const core: typeof enCore = {
   statusBar: {
     inProgressTitle: "Kayıt devam ediyor",
     inProgressText:
-      "Aşağıdaki adımları tamamlayın. Spor Müdürlüğü (SD), tüm adımlar tamamlandığında kaydınızı onaylar.",
+      "Aşağıdaki adımları tamamlayın. PATS, tüm adımlar tamamlandığında kaydınızı onaylar.",
     underReviewTitle: "Kayıt tamamlandı",
     underReviewText:
-      "Kaydınız tamamlandı — tüm adımlar gönderildi. Spor Müdürlüğü (SD) kaydınızı doğrulayacak ve onaylandığında size bir onay e-postası gönderilecek.",
+      "Kaydınız tamamlandı — tüm adımlar gönderildi. PATS kaydınızı doğrulayacak ve onaylandığında size bir onay e-postası gönderilecek.",
     confirmedTitle: "Onaylandı — PATS 2026 için hazırsınız",
     confirmedTextWithDates: (dates) =>
-      `Kaydınız SD tarafından onaylandı ve yeriniz kesinleşti. Program: ${dates}.`,
-    confirmedText: "Kaydınız SD tarafından onaylandı ve yeriniz kesinleşti.",
+      `Kaydınız PATS tarafından onaylandı ve yeriniz kesinleşti. Program: ${dates}.`,
+    confirmedText: "Kaydınız PATS tarafından onaylandı ve yeriniz kesinleşti.",
     returnedTitle: "Düzeltme için iade edildi",
     approvedOn: (date) => `${date} tarihinde onaylandı`,
     continueRegistration: "Kayda devam et",
@@ -141,7 +141,7 @@ export const core: typeof enCore = {
         eyebrow: "",
         title: "Kayıt Onayı",
         subtitle:
-          "Spor Müdürlüğü (SD), tüm adımlar tamamlandığında kaydınızı onaylar.",
+          "PATS, tüm adımlar tamamlandığında kaydınızı onaylar.",
       },
       roster: {
         eyebrow: "Takım kaydı",
@@ -165,20 +165,20 @@ export const core: typeof enCore = {
       participationConfirmed: "Katılım onaylandı.",
       confirmedOnSub: (date, unitName) =>
         `${date} tarihinde${unitName ? ` ${unitName} için` : ""} onaylandı. Bu adım yalnızca görüntülenebilir.`,
-      verifiedBySd: "Kayıt, Spor Direktörlüğü (SD) tarafından doğrulandı.",
+      verifiedBySd: "Kayıt, PATS tarafından doğrulandı.",
       verifiedBySdSub:
         "Kayıt bilgileriniz aşağıda yalnızca görüntülenebilir. Bir sonraki adıma geçin.",
       registrationVerification: "Kayıt doğrulaması",
-      messageFromSd: "SD'den mesaj:",
+      messageFromSd: "PATS'den mesaj:",
       unitInfoSaved: "Birlik bilgileri kaydedildi.",
       unitInfoSavedSub: (date) =>
         `${date} tarihinde kaydedildi. Kaydınız onaylanana kadar güncelleyebilirsiniz.`,
       flightsSubmitted: "Uçuş bilgileri gönderildi.",
       flightsSubmittedSub:
-        "Kaydınız artık onay için Spor Müdürlüğünde (SD).",
-      awaitingApproval: "SD onayı bekleniyor",
+        "Kaydınız artık onay için PATS'ta.",
+      awaitingApproval: "PATS onayı bekleniyor",
       awaitingApprovalSub:
-        "Tüm adımlar tamamlandı. Spor Müdürlüğü kaydınızı inceleyip onaylayacak.",
+        "Tüm adımlar tamamlandı. PATS kaydınızı inceleyip onaylayacak.",
       approvalLocked:
         "Kaydınızı onaya göndermek için onay, birlik bilgileri, takım üyeleri ve uçuş bilgileri adımlarını tamamlayın.",
       teamRegistered: "Takım kaydedildi.",

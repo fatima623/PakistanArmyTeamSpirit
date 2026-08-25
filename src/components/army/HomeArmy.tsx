@@ -20,9 +20,16 @@ type Props = {
   settings: PublicSiteSettings;
   keyDates: KeyDateRow[];
   heroSlides?: HeroImage[];
+  /** Admin-published portraits that rotate beside the Concept / Purpose copy. */
+  missionSlides?: HeroImage[];
 };
 
-export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
+export function HomeArmy({
+  settings,
+  keyDates,
+  heroSlides,
+  missionSlides,
+}: Props) {
   const { t, locale, dir } = useI18n();
   const previewDates = keyDates.slice(0, 4);
 
@@ -46,8 +53,10 @@ export function HomeArmy({ settings, keyDates, heroSlides }: Props) {
           eyebrow={t.home.mission.eyebrow}
           quote={t.home.mission.quote}
           body={t.home.mission.body}
-          motto={t.home.hero.motto}
-          mottoUrdu={locale === "en"}
+          images={missionSlides}
+          mottoTranslation={t.home.hero.mottoTranslation}
+          mottoLang={locale}
+          mottoDir={dir}
           imageAlt={t.home.mission.imageAlt}
         />
       </PatsSection>

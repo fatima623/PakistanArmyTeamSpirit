@@ -5,10 +5,12 @@ import { prisma } from "@/lib/prisma";
 import { revalidateHeroPaths } from "@/lib/revalidate-public";
 import { HeroSlideSchema } from "@/lib/validations";
 import {
+  DEFAULT_HERO_PLACEMENT,
   HERO_ADMIN_SELECT,
   MAX_HERO_IMAGE_BYTES,
   deleteHeroImageFile,
   mapHeroImageError,
+  resolveHeroPlacement,
   saveHeroImage,
 } from "@/lib/storage/hero-slide";
 
@@ -24,10 +26,15 @@ function formString(value: FormDataEntryValue | null): string {
   return value == null ? "" : String(value);
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     await requireAdmin();
+    const placement = resolveHeroPlacement(
+      new URL(request.url).searchParams.get("placement") ??
+        DEFAULT_HERO_PLACEMENT
+    );
     const slides = await prisma.heroSlide.findMany({
+      where: { placement },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       select: HERO_ADMIN_SELECT,
     });
@@ -53,6 +60,9 @@ export async function POST(request: Request) {
     const parsed = HeroSlideSchema.safeParse({
       title: formString(formData.get("title")),
       alt: formString(formData.get("alt")),
+      placement: resolveHeroPlacement(
+        formData.get("placement") ?? DEFAULT_HERO_PLACEMENT
+      ),
       sortOrder: formData.get("sortOrder") ?? undefined,
       published: formBool(formData.get("published")),
     });
@@ -71,6 +81,7 @@ export async function POST(request: Request) {
       data: {
         title: data.title,
         alt: data.alt?.trim() ? data.alt.trim() : null,
+        placement: data.placement ?? DEFAULT_HERO_PLACEMENT,
         imagePath: "",
         imageMimeType: "",
         imageFileSize: 0,

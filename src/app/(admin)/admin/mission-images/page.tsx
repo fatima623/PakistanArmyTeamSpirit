@@ -9,22 +9,26 @@ import {
 } from "@/components/admin/HeroSlidesManager";
 
 export const metadata: Metadata = {
-  title: adminNavLabel("hero"),
+  title: adminNavLabel("missionImages"),
 };
 
-export default async function AdminHeroPage() {
+/**
+ * The Concept / Purpose portrait beside the home page mission copy. Same table
+ * and same manager as the hero slider — only the `placement` filter differs.
+ */
+export default async function AdminMissionImagesPage() {
   let slides: AdminHeroSlide[] = [];
   try {
     slides = await prisma.heroSlide.findMany({
-      where: { placement: "hero" },
+      where: { placement: "mission" },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
       select: HERO_ADMIN_SELECT,
     });
   } catch {
-    // HeroSlide migration not applied yet — render an empty manager rather than
-    // a 500 so the section stays reachable (mirrors the gallery page).
+    // HeroSlide.placement not pushed yet — render an empty manager rather than
+    // a 500 so the section stays reachable (mirrors /admin/hero).
     slides = [];
   }
 
-  return <HeroSlidesManager initialSlides={slides} />;
+  return <HeroSlidesManager initialSlides={slides} placement="mission" />;
 }

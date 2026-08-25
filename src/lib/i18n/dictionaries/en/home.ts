@@ -1,8 +1,6 @@
 // English — source of truth for the public landing (home) page.
 // Other locales mirror this shape exactly (enforced via `typeof`).
 
-import { HERO_MOTTO } from "@/lib/branding";
-
 export const home = {
   hero: {
     featuredAria: "Featured highlights",
@@ -10,13 +8,13 @@ export const home = {
     titleLine1: "Pakistan Army Team Spirit (PATS)",
     titleLine2: "Competition",
     /**
-     * The crest motto (Iqbal): "Faith unwavering, action relentless, love
-     * conquering all". English keeps the original Urdu heraldic form — the
-     * hero renders it lang="ur" dir="rtl" in nastaliq. Every other locale
-     * carries a real translation of its meaning, set in that locale's own
-     * script/direction (see PatsHero).
+     * The crest motto (Iqbal) is ALWAYS rendered in its original Urdu form —
+     * `HERO_MOTTO`, set lang="ur" dir="rtl" in nastaliq. This is its meaning,
+     * printed directly underneath in the active locale's own script and
+     * direction (see PatsHero / PatsMissionShowcase).
      */
-    motto: HERO_MOTTO,
+    mottoTranslation:
+      "Faith unwavering, action relentless, love conquering all",
     description:
       "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit .",
     // cta: "Register your team",

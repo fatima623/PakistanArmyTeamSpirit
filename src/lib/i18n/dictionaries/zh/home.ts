@@ -6,8 +6,8 @@ export const home: typeof enHome = {
     featuredAria: "精选亮点",
     titleLine1: "巴基斯坦陆军团队精神 (PATS)",
     titleLine2: "竞赛",
-    // 徽章箴言（伊克巴尔）的意译，原文为乌尔都语。
-    motto: "信念坚定，行动不息，仁爱征服天下",
+    // 徽章箴言（伊克巴尔）的意译，乌尔都语原文显示在上方。
+    mottoTranslation: "信念坚定，行动不息，仁爱征服天下",
     description:
       "国际巴基斯坦陆军团队精神竞赛 — 一项为期 60 小时的巡逻演练，检验伙伴国之间的战术素养、耐力与团队精神。",
     scrollHint: "向下滚动",

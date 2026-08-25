@@ -9850,12 +9850,15 @@ html[data-site-theme="day"] .army-home .pats-section--mission-showcase {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.28) 0%, transparent 42%);
 }
 
+/* Published portraits are stacked in the frame and crossfaded on a timer
+   (see PatsMissionShowcase) — the inactive ones sit at opacity 0. */
 .pats-mission-showcase__soldier-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 20%;
   transform: scale(1.06);
+  transition: opacity 1s ease-in-out;
 }
 
 .pats-mission-showcase__content-stage {
@@ -20786,6 +20789,58 @@ html:not(.light-theme):not([data-site-theme="day"]) .army-home .pats-urdu-motto 
 .army-home .pats-mission-showcase__motto.pats-urdu-motto {
   font-size: var(--pats-type-eyebrow);
   font-weight: 700;
+}
+
+/* ── Crest-motto translation lines ──────────────────────────────────────
+   The motto itself is always the Urdu original; these carry its MEANING in
+   the active locale, printed directly underneath. They are ordinary text in
+   that locale's own script, so they must NOT inherit the nastaliq face — and
+   tracking/uppercasing is dropped under `dir="rtl"`, where letter-spacing
+   pulls a cursive script apart.                                          */
+.army-site:not(.dashboard-day) .pats-hero__caption-translation {
+  margin: 0.3rem 0 0;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+@media (min-width: 640px) {
+  .army-site:not(.dashboard-day) .pats-hero__caption-translation {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-hero__caption-translation[dir="rtl"] {
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: right;
+}
+
+/* Selector matches the motto's own override above: a broad `.cinematic-site p`
+   rule would otherwise paint this white in dark mode, on a panel that is light
+   in every theme. */
+.army-home .pats-mission-showcase .pats-mission-showcase__motto-translation {
+  margin: 0.5rem 0 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-align: center;
+  text-transform: uppercase;
+  color: rgba(74, 82, 72, 0.86);
+}
+
+.army-home
+  .pats-mission-showcase
+  .pats-mission-showcase__motto-translation[dir="rtl"] {
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 /* ── Events Detail — admin-uploaded card thumbnails ─────────────────── */

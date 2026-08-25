@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { MISSION_SOLDIER_PLACEHOLDER } from "@/lib/army-content";
+import { HERO_MOTTO } from "@/lib/branding";
+import type { HeroImage } from "@/components/hero/PatsHero";
 import { PATS_CROP } from "@/lib/media";
 import { cn } from "@/lib/utils";
 
@@ -11,25 +13,67 @@ type Props = {
   eyebrow?: string;
   quote: string;
   body: string;
-  motto?: string;
-  /** Render the motto as the RTL Urdu crest motto (nastaliq, no letter-spacing). */
-  mottoUrdu?: boolean;
+  /**
+   * Admin-published portraits for the left column. They rotate on their own —
+   * there are deliberately no next/previous controls — and fall back to the
+   * bundled art when nothing has been published.
+   */
+  images?: HeroImage[];
+  /** Meaning of the Urdu crest motto, in the active locale. */
+  mottoTranslation?: string;
+  /** Active locale + its direction, for the translation line only. */
+  mottoLang?: string;
+  mottoDir?: "ltr" | "rtl";
   /** Localized alt text for the decorative badges image. */
   imageAlt?: string;
 };
 
 const REVEAL_MS = 900;
 const STAGGER_MS = 150;
+/** How long each Concept / Purpose portrait holds before the next one fades in. */
+const ROTATE_MS = 6000;
+
+/** Shipped art, so the column is never empty on a fresh install. */
+const FALLBACK_IMAGES: HeroImage[] = [
+  { src: MISSION_SOLDIER_PLACEHOLDER, alt: "" },
+];
 
 export function PatsMissionShowcase({
   eyebrow = "Concept / Purpose",
   quote,
   body,
-  motto,
-  mottoUrdu = false,
+  images,
+  mottoTranslation,
+  mottoLang,
+  mottoDir,
   imageAlt = "PATS international competition marks",
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
+  const portraits = images && images.length > 0 ? images : FALLBACK_IMAGES;
+  const [portraitIndex, setPortraitIndex] = useState(0);
+
+  useEffect(() => {
+    // Nothing to rotate to with a single image; and a picture that swaps on a
+    // timer is exactly the motion `prefers-reduced-motion` asks us to drop.
+    if (portraits.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setInterval(() => {
+      // Picked at random rather than cycled: there are no controls, so a fixed
+      // order would read as a loop. Drawing from the OTHER images guarantees
+      // the picture actually changes on every tick.
+      setPortraitIndex((prev) => {
+        const pick = Math.floor(Math.random() * (portraits.length - 1));
+        return pick >= prev ? pick + 1 : pick;
+      });
+    }, ROTATE_MS);
+    return () => window.clearInterval(timer);
+  }, [portraits.length]);
+
+  // Guards against an index left over from a longer previous list.
+  useEffect(() => {
+    setPortraitIndex((prev) => (prev < portraits.length ? prev : 0));
+  }, [portraits.length]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -101,14 +145,19 @@ export function PatsMissionShowcase({
         >
           <div className="pats-mission-showcase__soldier-stage">
             <div className="pats-mission-showcase__soldier-frame group">
-              <Image
-                src={MISSION_SOLDIER_PLACEHOLDER}
-                alt=""
-                fill
-                sizes="(max-width: 1023px) 72vw, 28vw"
-                className="pats-mission-showcase__soldier-img"
-                priority={false}
-              />
+              {portraits.map((portrait, index) => (
+                <Image
+                  key={portrait.src}
+                  src={portrait.src}
+                  alt={portrait.alt}
+                  fill
+                  sizes="(max-width: 1023px) 72vw, 28vw"
+                  className="pats-mission-showcase__soldier-img"
+                  style={{ opacity: index === portraitIndex ? 1 : 0 }}
+                  aria-hidden={portrait.alt ? undefined : true}
+                  priority={false}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -129,21 +178,30 @@ export function PatsMissionShowcase({
               <p className="pats-body pats-body--bright pats-mission-showcase__body">
                 {body}
               </p>
-              {motto ? (
-                <div className="pats-mission-showcase__motto-row">
-                  <span className="pats-mission-showcase__motto-line" aria-hidden />
-                  <p
-                    className={cn(
-                      "pats-mission__motto pats-mission-showcase__motto",
-                      mottoUrdu && "pats-urdu-motto"
-                    )}
-                    lang={mottoUrdu ? "ur" : undefined}
-                    dir={mottoUrdu ? "rtl" : undefined}
-                  >
-                    {motto}
-                  </p>
-                  <span className="pats-mission-showcase__motto-line" aria-hidden />
-                </div>
+              {/* The crest motto is heraldry: it always stands in its
+                  original Urdu between the gold rules. The translated meaning
+                  follows underneath in the active locale's own script and
+                  direction — nastaliq cannot render Cyrillic, Latin or CJK, so
+                  `.pats-urdu-motto` never applies to that line. */}
+              <div className="pats-mission-showcase__motto-row">
+                <span className="pats-mission-showcase__motto-line" aria-hidden />
+                <p
+                  className="pats-mission__motto pats-mission-showcase__motto pats-urdu-motto"
+                  lang="ur"
+                  dir="rtl"
+                >
+                  {HERO_MOTTO}
+                </p>
+                <span className="pats-mission-showcase__motto-line" aria-hidden />
+              </div>
+              {mottoTranslation ? (
+                <p
+                  className="pats-mission-showcase__motto-translation"
+                  lang={mottoLang}
+                  dir={mottoDir}
+                >
+                  {mottoTranslation}
+                </p>
               ) : null}
             </div>
           </div>

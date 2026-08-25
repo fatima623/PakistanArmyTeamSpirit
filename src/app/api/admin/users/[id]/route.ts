@@ -23,7 +23,14 @@ import {
 import { createAuditLog } from "@/lib/audit";
 import { AUDIT_ENTITY, APPLICATION_STATUS } from "@/lib/constants";
 import { buildApplicationUpdateData } from "@/lib/application-decision";
-import { sendRegistrationApprovedEmail } from "@/lib/participant-status-emails";
+import {
+  sendAccountReinstatedEmail,
+  sendAccountSuspendedEmail,
+  sendRegistrationApprovedEmail,
+  sendRegistrationRejectedEmail,
+  sendRegistrationReturnedEmail,
+  sendRegistrationUnderReviewEmail,
+} from "@/lib/participant-status-emails";
 import { normalizeApplicationStatus } from "@/lib/user-status";
 import { isReadyForApproval } from "@/lib/participant-workflow";
 import { deleteFlightDocByInternalPath } from "@/lib/storage/flight-doc";
@@ -391,24 +398,42 @@ export async function PUT(request: Request, context: RouteContext) {
     revalidatePath(`/admin/users/${id}`);
     revalidatePath("/event/dashboard");
 
-    const newlyApproved =
-      !wasApproved &&
-      (user.approved ||
-        normalizeApplicationStatus(user.applicationStatus) ===
-          APPLICATION_STATUS.APPROVED);
+    /* Tell the participant what just happened to them. Every branch is gated
+       on an actual TRANSITION — a PUT that re-saves the same status, or edits
+       an unrelated profile field, must not re-send a decision email. The
+       senders swallow their own SMTP failures, so a mail outage cannot fail an
+       approval the database has already committed. */
+    const previousStatus = normalizeApplicationStatus(existing.applicationStatus);
+    const nextStatus = normalizeApplicationStatus(user.applicationStatus);
+    const recipient = { email: user.email, firstName: user.firstName };
+    const isParticipant = user.role === PARTICIPANT_ROLE;
 
-    if (newlyApproved) {
-      try {
-        await sendRegistrationApprovedEmail({
-          email: user.email,
-          firstName: user.firstName,
-        });
-      } catch (emailError) {
-        console.error(
-          "[admin/users] Failed to send registration approved email",
-          { userId: id, emailError }
-        );
+    if (isParticipant && editsApplicationDecision) {
+      const newlyApproved =
+        !wasApproved &&
+        (user.approved || nextStatus === APPLICATION_STATUS.APPROVED);
+
+      if (newlyApproved) {
+        await sendRegistrationApprovedEmail(recipient);
+      } else if (nextStatus !== previousStatus) {
+        if (nextStatus === APPLICATION_STATUS.RETURNED) {
+          await sendRegistrationReturnedEmail(recipient, user.rejectionReason);
+        } else if (nextStatus === APPLICATION_STATUS.REJECTED) {
+          await sendRegistrationRejectedEmail(recipient, user.rejectionReason);
+        } else if (nextStatus === APPLICATION_STATUS.UNDER_REVIEW) {
+          await sendRegistrationUnderReviewEmail(recipient);
+        }
       }
+    }
+
+    if (
+      isParticipant &&
+      parsed.data.suspended !== undefined &&
+      parsed.data.suspended !== existing.suspended
+    ) {
+      await (parsed.data.suspended
+        ? sendAccountSuspendedEmail(recipient)
+        : sendAccountReinstatedEmail(recipient));
     }
 
     return NextResponse.json({ user });

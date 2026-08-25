@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
     if (isRegistrationApproved(ctx.user)) {
       throw new ApiError(
-        "Your registration has been approved by the SD and can no longer be changed",
+        "Your registration has been approved by PATS and can no longer be changed",
         409
       );
     }

@@ -392,13 +392,21 @@ model GalleryImage {
   @@index([published, sortOrder])
 }
 
-/// Home hero carousel slides (admin-managed; served from /uploads/hero).
+/// Admin-managed home-page carousel slides (served from /uploads/hero).
+/// One table, two surfaces — see `placement`.
 model HeroSlide {
   id            String   @id @default(cuid())
   /// Internal label shown in the admin list; never rendered on the public hero.
   title         String
   /// Decorative alt text. The hero images are aria-hidden, so this is admin-facing.
   alt           String?
+  /**
+   * Which home-page carousel the slide belongs to: "hero" (the full-bleed
+   * headline slider) or "mission" (the Concept / Purpose portrait). Slides
+   * never move between the two, so this is set at upload and left alone.
+   * Legacy rows default to "hero", which is what they all were.
+   */
+  placement     String   @default("hero")
   imagePath     String
   imageMimeType String
   imageFileSize Int
@@ -411,7 +419,7 @@ model HeroSlide {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  @@index([published, sortOrder])
+  @@index([placement, published, sortOrder])
 }
 
 /// Exercise results roll — one row per participating patrol/unit.

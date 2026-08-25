@@ -7,18 +7,18 @@ export function isApplicationApproved(status: string): boolean {
 
 export function applicationStatusSummary(applicationStatus: string): string {
   if (applicationStatus === APPLICATION_STATUS.REJECTED) {
-    return "Your registration was rejected by the Sports Directorate. See the reason provided.";
+    return "Your registration was rejected by PATS. See the reason provided.";
   }
   if (applicationStatus === APPLICATION_STATUS.RETURNED) {
     return "Your registration was returned for correction. Update your details and await re-verification.";
   }
   if (applicationStatus === APPLICATION_STATUS.UNDER_REVIEW) {
-    return "Your registration is under review by the Sports Directorate (SD).";
+    return "Your registration is under review by PATS.";
   }
   if (applicationStatus === APPLICATION_STATUS.PENDING) {
-    return "Complete every registration step; the Sports Directorate (SD) approves your registration once all steps are done.";
+    return "Complete every registration step; PATS approves your registration once all steps are done.";
   }
-  return "Your registration is approved by the Sports Directorate.";
+  return "Your registration is approved by PATS.";
 }
 
 /** The statuses that record a decision the SD Directorate has already taken.

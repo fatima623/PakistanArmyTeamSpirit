@@ -73,6 +73,13 @@ export const ADMIN_NAV_ITEMS = [
   { key: "gallery", href: "/admin/gallery", label: "Gallery Management", roles: ADMIN_ONLY, group: "Content" },
   { key: "hero", href: "/admin/hero", label: "Home Hero Images", roles: ADMIN_ONLY, group: "Content" },
   {
+    key: "missionImages",
+    href: "/admin/mission-images",
+    label: "Concept & Purpose Images",
+    roles: ADMIN_ONLY,
+    group: "Content",
+  },
+  {
     key: "ticker",
     href: "/admin/ticker",
     label: "Ticker Messages",

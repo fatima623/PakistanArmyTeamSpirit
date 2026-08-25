@@ -32,6 +32,7 @@ export type AdminHeroSlide = {
   id: string;
   title: string;
   alt: string | null;
+  placement: string;
   imagePath: string;
   sortOrder: number;
   published: boolean;
@@ -39,6 +40,64 @@ export type AdminHeroSlide = {
 
 const ACCEPT_HERO = "image/png,image/jpeg,image/webp";
 const MAX_HERO_BYTES = 16 * 1024 * 1024;
+
+/**
+ * Both home-page carousels are the same admin surface over the same table —
+ * only the copy and the `placement` filter differ. Keeping the wording here
+ * (rather than forking the component) is what stops the two drifting apart.
+ */
+const COPY = {
+  hero: {
+    heading: "Home hero images",
+    intro:
+      "Published slides crossfade on the home page, in display order. Unpublish a slide to pull it without deleting it.",
+    addAction: "Add slide",
+    noneWarning:
+      "No slides are published — the home page is showing its built-in fallback images.",
+    empty:
+      "No hero slides yet — the home page is using its built-in images. Click “Add slide” to take control of the hero.",
+    back: "Back to hero images",
+    formTitle: "Add hero image",
+    formIntro:
+      "Upload an image and give it an admin title. Published slides crossfade on the home page hero, in display order.",
+    cardTitle: "Hero image",
+    ratioHint:
+      "The hero is full-bleed and cropped to the viewport — landscape images around 2560×1440 work best.",
+    titlePlaceholder: "e.g. Opening parade — wide shot",
+    publishedHint: "Published — appears in the hero",
+    createdToast: "Hero slide added.",
+    deleteTitle: "Delete hero slide?",
+    deleteDescription:
+      "This permanently removes the slide from the home page hero.",
+    editTitle: "Edit hero slide",
+  },
+  mission: {
+    heading: "Concept & Purpose images",
+    intro:
+      "Published images rotate on their own beside the Concept / Purpose text on the home page — there are no next/previous controls, the picture simply changes every few seconds. Unpublish an image to pull it without deleting it.",
+    addAction: "Add image",
+    noneWarning:
+      "No images are published — the Concept / Purpose section is showing its built-in fallback image.",
+    empty:
+      "No Concept & Purpose images yet — the section is using its built-in image. Click “Add image” to take control of it.",
+    back: "Back to Concept & Purpose images",
+    formTitle: "Add Concept & Purpose image",
+    formIntro:
+      "Upload an image and give it an admin title. Published images rotate automatically beside the Concept / Purpose text.",
+    cardTitle: "Concept & Purpose image",
+    ratioHint:
+      "This slot is a tall portrait frame — upright images around 900×1200 work best.",
+    titlePlaceholder: "e.g. Patrol on the ridge — portrait",
+    publishedHint: "Published — appears in the rotation",
+    createdToast: "Image added.",
+    deleteTitle: "Delete this image?",
+    deleteDescription:
+      "This permanently removes the image from the Concept / Purpose rotation.",
+    editTitle: "Edit image",
+  },
+} as const;
+
+export type HeroManagerPlacement = keyof typeof COPY;
 
 function imageUrl(imagePath: string, bust = 0): string {
   const base = `/uploads/${imagePath}`;
@@ -53,9 +112,12 @@ function sortSlides(list: AdminHeroSlide[]): AdminHeroSlide[] {
 
 export function HeroSlidesManager({
   initialSlides,
+  placement = "hero",
 }: {
   initialSlides: AdminHeroSlide[];
+  placement?: HeroManagerPlacement;
 }) {
+  const copy = COPY[placement];
   const [slides, setSlides] = useState<AdminHeroSlide[]>(
     sortSlides(initialSlides)
   );
@@ -124,6 +186,8 @@ export function HeroSlidesManager({
   if (showForm) {
     return (
       <UploadForm
+        copy={copy}
+        placement={placement}
         nextOrder={slides.length}
         onCreated={(slide) => {
           upsert(slide);
@@ -139,29 +203,24 @@ export function HeroSlidesManager({
       <section className="rounded-[14px] border border-brand-line bg-white px-[1.4rem] pb-6 pt-5 shadow-[0_1px_3px_rgba(20,26,20,0.06)]">
         <header className="mb-4 flex flex-wrap items-center justify-between gap-3 [&_h2]:text-[1.05rem] [&_h2]:font-bold [&_h2]:text-brand-ink [&_p]:mt-0.5 [&_p]:text-[0.85rem] [&_p]:text-brand-ink-muted">
           <div>
-            <h2>Home hero images</h2>
-            <p>
-              Published slides crossfade on the home page, in display order.
-              Unpublish a slide to pull it without deleting it.
-            </p>
+            <h2>{copy.heading}</h2>
+            <p>{copy.intro}</p>
           </div>
           <Button variant="adminPrimary" onClick={() => setShowForm(true)}>
             <ImagePlus className="mr-2 h-4 w-4" aria-hidden />
-            Add slide
+            {copy.addAction}
           </Button>
         </header>
 
         {slides.length > 0 && publishedCount === 0 ? (
           <p className="mb-4 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-[0.82rem] text-amber-900">
-            No slides are published — the home page is showing its built-in
-            fallback images.
+            {copy.noneWarning}
           </p>
         ) : null}
 
         {slides.length === 0 ? (
           <div className="rounded-xl border border-dashed border-brand-line px-4 py-10 text-center text-brand-ink-muted">
-            No hero slides yet — the home page is using its built-in images.
-            Click “Add slide” to take control of the hero.
+            {copy.empty}
           </div>
         ) : (
           <div className="grid gap-3">
@@ -225,6 +284,7 @@ export function HeroSlidesManager({
                   </button>
                   <PublishToggle slide={slide} onChange={upsert} />
                   <DeleteSlideButton
+                    copy={copy}
                     slide={slide}
                     onDeleted={(id) =>
                       setSlides((prev) => prev.filter((s) => s.id !== id))
@@ -238,6 +298,7 @@ export function HeroSlidesManager({
       </section>
 
       <EditDialog
+        copy={copy}
         slide={editing}
         onClose={() => setEditing(null)}
         onSaved={(slide, replaced) => {
@@ -280,10 +341,14 @@ function IconButton({
 /* --------------------------------------------------------------- Upload */
 
 function UploadForm({
+  copy,
+  placement,
   nextOrder,
   onCreated,
   onCancel,
 }: {
+  copy: (typeof COPY)[HeroManagerPlacement];
+  placement: HeroManagerPlacement;
   nextOrder: number;
   onCreated: (slide: AdminHeroSlide) => void;
   onCancel: () => void;
@@ -336,6 +401,7 @@ function UploadForm({
       fd.append("file", file);
       fd.append("title", title.trim());
       fd.append("alt", alt.trim());
+      fd.append("placement", placement);
       fd.append("sortOrder", sortOrder || "0");
       fd.append("published", published ? "true" : "false");
 
@@ -349,7 +415,7 @@ function UploadForm({
         return;
       }
       onCreated(data.slide as AdminHeroSlide);
-      toast.success("Hero slide added.");
+      toast.success(copy.createdToast);
       reset();
     } catch {
       toast.error(TOAST.GENERIC_ERROR);
@@ -368,14 +434,13 @@ function UploadForm({
             className="mb-1.5 inline-flex items-center text-[0.78rem] font-medium text-muted-foreground no-underline transition-colors hover:text-green-800"
           >
             <ArrowLeft className="mr-1 inline h-3.5 w-3.5" aria-hidden />
-            Back to hero images
+            {copy.back}
           </button>
           <h1 className="m-0 text-[1.375rem] font-extrabold leading-[1.2] tracking-[-0.02em] text-brand-ink">
-            Add hero image
+            {copy.formTitle}
           </h1>
           <p className="mt-1 text-[0.8rem] leading-[1.4] text-muted-foreground">
-            Upload an image and give it an admin title. Published slides
-            crossfade on the home page hero, in display order.
+            {copy.formIntro}
           </p>
         </div>
       </header>
@@ -383,7 +448,7 @@ function UploadForm({
       <section className="rounded-[14px] border border-brand-line/60 bg-white shadow-[0_1px_3px_rgba(20,30,24,0.05)]">
         <div className="rounded-t-[14px] border-b border-brand-line/60 bg-muted/40 px-[1.1rem] py-[0.7rem]">
           <h3 className="m-0 text-sm font-bold tracking-[-0.01em] text-brand-ink">
-            Hero image
+            {copy.cardTitle}
           </h3>
         </div>
         <div className="flex flex-col gap-5 px-[1.1rem] pb-4 pt-[0.9rem]">
@@ -425,8 +490,7 @@ function UploadForm({
                 />
               </button>
               <p className="text-[0.72rem] text-brand-ink-muted">
-                The hero is full-bleed and cropped to the viewport — landscape
-                images around 2560×1440 work best.
+                {copy.ratioHint}
               </p>
             </div>
 
@@ -439,7 +503,7 @@ function UploadForm({
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="admin-input"
-                    placeholder="e.g. Opening parade — wide shot"
+                    placeholder={copy.titlePlaceholder}
                   />
                   <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
                     Admin-only label so you can tell slides apart. Not shown
@@ -479,9 +543,7 @@ function UploadForm({
                   htmlFor="h-published"
                   className="text-sm text-brand-ink-muted"
                 >
-                  {published
-                    ? "Published — appears in the hero"
-                    : "Draft — hidden"}
+                  {published ? copy.publishedHint : "Draft — hidden"}
                 </label>
               </div>
             </div>
@@ -504,7 +566,7 @@ function UploadForm({
           ) : (
             <Upload className="mr-2 h-4 w-4" />
           )}
-          Add slide
+          {copy.addAction}
         </Button>
       </div>
     </div>
@@ -561,9 +623,11 @@ function PublishToggle({
 /* --------------------------------------------------------------- Delete */
 
 function DeleteSlideButton({
+  copy,
   slide,
   onDeleted,
 }: {
+  copy: (typeof COPY)[HeroManagerPlacement];
   slide: AdminHeroSlide;
   onDeleted: (id: string) => void;
 }) {
@@ -579,8 +643,8 @@ function DeleteSlideButton({
           <Trash2 className="h-4 w-4" aria-hidden />
         </button>
       }
-      title="Delete hero slide?"
-      description="This permanently removes the slide from the home page hero."
+      title={copy.deleteTitle}
+      description={copy.deleteDescription}
       confirmLabel="Delete"
       onConfirm={async () => {
         const res = await fetch(`/api/admin/hero-slides/${slide.id}`, {
@@ -600,10 +664,12 @@ function DeleteSlideButton({
 /* --------------------------------------------------------------- Edit */
 
 function EditDialog({
+  copy,
   slide,
   onClose,
   onSaved,
 }: {
+  copy: (typeof COPY)[HeroManagerPlacement];
   slide: AdminHeroSlide | null;
   onClose: () => void;
   onSaved: (slide: AdminHeroSlide, replaced: boolean) => void;
@@ -701,7 +767,7 @@ function EditDialog({
     <Dialog open={Boolean(slide)} onOpenChange={(o) => !o && onClose()}>
       <DialogContent dir="ltr" className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Edit hero slide</DialogTitle>
+          <DialogTitle>{copy.editTitle}</DialogTitle>
         </DialogHeader>
 
         {slide ? (

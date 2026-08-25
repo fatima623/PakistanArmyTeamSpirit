@@ -6,8 +6,8 @@ export const home: typeof enHome = {
     featuredAria: "Öne çıkanlar",
     titleLine1: "Pakistan Ordusu Takım Ruhu (PATS)",
     titleLine2: "Yarışması",
-    // Armadaki Urduca özdeyişin (İkbal) anlam çevirisi.
-    motto: "Sarsılmaz iman, bitmeyen amel, âlemi fetheden sevgi",
+    // Armadaki Urduca özdeyişin (İkbal) anlam çevirisi; özgün metin üstte kalır.
+    mottoTranslation: "Sarsılmaz iman, bitmeyen amel, âlemi fetheden sevgi",
     description:
       "Uluslararası Pakistan Ordusu Takım Ruhu (PATS) — ortak ülkeler arasında taktik ustalığı, dayanıklılığı ve takım ruhunu sınayan 60 saatlik bir devriye tatbikatı.",
     scrollHint: "Aşağı kaydırın",

@@ -11,6 +11,10 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { isFlightRecordComplete } from "@/lib/flights";
+import {
+  sendFlightsFinalizedEmail,
+  sendFlightsReopenedEmail,
+} from "@/lib/participant-status-emails";
 import { AdminFlightFinalizeSchema } from "@/lib/validations";
 
 /**
@@ -43,6 +47,8 @@ export async function PUT(request: Request) {
       where: { id: userId },
       select: {
         id: true,
+        email: true,
+        firstName: true,
         flightsFinalizedAt: true,
         teamMembers: {
           select: {
@@ -102,6 +108,14 @@ export async function PUT(request: Request) {
         forced: finalized && !!force && gateFailed,
       },
     });
+
+    // Only on an actual lock/unlock transition — re-finalizing an already
+    // finalized team must not re-notify.
+    if (finalized !== (user.flightsFinalizedAt != null)) {
+      await (finalized
+        ? sendFlightsFinalizedEmail(user)
+        : sendFlightsReopenedEmail(user));
+    }
 
     revalidatePath("/admin/flights");
     revalidatePath("/admin/host-formations");

@@ -81,12 +81,12 @@ export const flights: typeof enFlights = {
   submit: {
     title: "提交注册以待审批",
     desc:
-      "航班信息是最后一步。当每位出行人员都已上传护照和机票后，提交注册，交由体育局（SD）审批。",
+      "航班信息是最后一步。当每位出行人员都已上传护照和机票后，提交注册，交由PATS审批。",
     action: "提交审批",
     reopen: "重新打开以编辑",
     incomplete: "提交前，每位团队成员都需上传护照和机票。",
     submittedTitle: "注册已提交审批。",
-    submittedSub: "体育局（SD）将进行审核。在审核完成前，您仍可重新打开。",
+    submittedSub: "PATS将进行审核。在审核完成前，您仍可重新打开。",
     submittedToast: "注册已提交审批",
     reopenedToast: "注册已重新打开以编辑",
   },

@@ -54,8 +54,8 @@ export const flights = {
     passportNumberPlaceholder: "e.g. AB1234567",
     passportDoc: "Passport picture (PDF)",
     passportDocHint: "Upload the first page of your passport.",
-    ticketDoc: "Outbound flight ticket (PDF)",
-    ticketDocHint: "Your inbound journey to Pakistan.",
+    ticketDoc: " flight ticket (PDF)",
+    ticketDocHint: "Your  journey to Pakistan.",
     returnTicketDoc: "Return flight ticket (PDF)",
     returnTicketDocHint: "Your journey home. Optional — add it as soon as it is booked.",
     returnTicketLocked: "Upload the outbound ticket first — the return ticket field unlocks straight after.",
@@ -82,14 +82,14 @@ export const flights = {
   submit: {
     title: "Send your registration for approval",
     desc:
-      "Flight details are the last step. Once every traveller has a passport and a ticket on file, submit the registration so the Sports Directorate (SD) can approve it.",
+      "Flight details are the last step. Once every traveller has a passport and a ticket on file, submit the registration so PATS can approve it.",
     action: "Submit for approval",
     reopen: "Reopen for editing",
     incomplete:
       "Every team member needs both a passport and a ticket on file before you can submit.",
     submittedTitle: "Registration submitted for approval.",
     submittedSub:
-      "The Sports Directorate (SD) will review it. You can reopen it while it is still pending.",
+      "PATS will review it. You can reopen it while it is still pending.",
     submittedToast: "Registration sent for approval",
     reopenedToast: "Registration reopened for editing",
   },

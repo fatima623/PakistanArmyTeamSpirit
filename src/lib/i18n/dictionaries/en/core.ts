@@ -47,8 +47,8 @@ export const core = {
     done: "Done",
     logout: "Log out",
     dashboard: "Dashboard",
-    tour: "Tour",
-    support: "Support",
+    tour: "Virtual Tour",
+    support: "Support / Query",
     journeyComplete: "Journey complete",
   },
 
@@ -90,15 +90,15 @@ export const core = {
   statusBar: {
     inProgressTitle: "Registration in progress",
     inProgressText:
-      "Work through each step below. The Sports Directorate (SD) approves your registration once every step is complete.",
+      "Work through each step below. PATS approves your registration once every step is complete.",
     underReviewTitle: "Registration completed",
     underReviewText:
-      "Your registration has been completed — every step is submitted. The Sports Directorate (SD) will now verify it, and you will receive a confirmation email once it is approved.",
+      "Your registration has been completed — every step is submitted. PATS will now verify it, and you will receive a confirmation email once it is approved.",
     confirmedTitle: "Approved — you're cleared for PATS 2026",
     confirmedTextWithDates: (dates: string) =>
-      `Your registration is approved by the SD and your place is confirmed. Scheduled: ${dates}.`,
+      `Your registration is approved by PATS and your place is confirmed. Scheduled: ${dates}.`,
     confirmedText:
-      "Your registration is approved by the SD and your place is confirmed.",
+      "Your registration is approved by PATS and your place is confirmed.",
     returnedTitle: "Returned for correction",
     approvedOn: (date: string) => `Approved ${date}`,
     continueRegistration: "Continue registration",
@@ -144,7 +144,7 @@ export const core = {
         eyebrow: "",
         title: "Registration Approval",
         subtitle:
-          "The Sports Directorate (SD) approves your registration once every step is complete.",
+          "PATS approves your registration once every step is complete.",
       },
       roster: {
         eyebrow: "Team registration",
@@ -168,20 +168,20 @@ export const core = {
       participationConfirmed: "Participation confirmed.",
       confirmedOnSub: (date: string, unitName: string | null) =>
         `Confirmed on ${date}${unitName ? ` for ${unitName}` : ""}. This step is read-only.`,
-      verifiedBySd: "Registration verified by the Sports Directorate (SD).",
+      verifiedBySd: "Registration verified by PATS.",
       verifiedBySdSub:
         "Your registration details are read-only below. Continue to the next step.",
       registrationVerification: "Registration verification",
-      messageFromSd: "Message from the SD:",
+      messageFromSd: "Message from PATS:",
       unitInfoSaved: "Unit information saved.",
       unitInfoSavedSub: (date: string) =>
         `Recorded on ${date}. You can update it until your registration is approved.`,
       flightsSubmitted: "Flight details submitted.",
       flightsSubmittedSub:
-        "Your registration is now with the Sports Directorate (SD) for approval.",
-      awaitingApproval: "Awaiting SD approval",
+        "Your registration is now with PATS for approval.",
+      awaitingApproval: "Awaiting PATS approval",
       awaitingApprovalSub:
-        "Every step is complete. The Sports Directorate will review and approve your registration.",
+        "Every step is complete. PATS will review and approve your registration.",
       approvalLocked:
         "Complete confirmation, unit information, team members and flight details to send your registration for approval.",
       teamRegistered: "Team registered.",

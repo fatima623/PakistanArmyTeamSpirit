@@ -39,7 +39,7 @@ export interface WorkflowStrings {
     deadlinePassedLocked: string;
     submitBy: (date: string) => string;
     provideTravelDocs: string;
-    // verification (SD, last stage)
+    // verification (PATS, last stage)
     approvedBySd: string;
     rejected: string;
     underReviewBySd: string;
@@ -83,10 +83,10 @@ export const enWorkflow: WorkflowStrings = {
     deadlinePassedLocked: "Deadline passed — locked",
     submitBy: (date) => `Submit by ${date}`,
     provideTravelDocs: "Provide travel documents",
-    approvedBySd: "Approved by SD",
+    approvedBySd: "Approved by PATS",
     rejected: "Rejected",
-    underReviewBySd: "Under review by SD",
-    pendingSdVerification: "Pending SD approval",
+    underReviewBySd: "Under review by PATS",
+    pendingSdVerification: "Pending PATS approval",
     completeStepsFirst: "Complete the steps above first",
     available: "Available",
     awaitingPublication: "Awaiting publication",

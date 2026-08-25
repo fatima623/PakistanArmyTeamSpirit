@@ -47,8 +47,8 @@ export const core: typeof enCore = {
     done: "完成",
     logout: "退出登录",
     dashboard: "仪表板",
-    tour: "网站导览",
-    support: "支持",
+    tour: "虚拟导览",
+    support: "支持 / 咨询",
     journeyComplete: "流程已完成",
   },
 
@@ -90,14 +90,14 @@ export const core: typeof enCore = {
   statusBar: {
     inProgressTitle: "注册进行中",
     inProgressText:
-      "请逐步完成以下各项。所有步骤完成后，体育局（SD）将审批您的注册。",
+      "请逐步完成以下各项。所有步骤完成后，PATS将审批您的注册。",
     underReviewTitle: "注册已完成",
     underReviewText:
-      "您的注册已完成——所有步骤均已提交。体育局（SD）将进行核验，通过后您会收到确认邮件。",
+      "您的注册已完成——所有步骤均已提交。PATS将进行核验，通过后您会收到确认邮件。",
     confirmedTitle: "已批准 — 您已获得 PATS 2026 参赛资格",
     confirmedTextWithDates: (dates) =>
-      `您的注册已由 SD 批准，席位已确认。日程：${dates}。`,
-    confirmedText: "您的注册已由 SD 批准，席位已确认。",
+      `您的注册已由 PATS 批准，席位已确认。日程：${dates}。`,
+    confirmedText: "您的注册已由 PATS 批准，席位已确认。",
     returnedTitle: "已退回以待更正",
     approvedOn: (date) => `${date} 批准`,
     continueRegistration: "继续注册",
@@ -140,7 +140,7 @@ export const core: typeof enCore = {
       verification: {
         eyebrow: "",
         title: "注册审批",
-        subtitle: "所有步骤完成后，体育局（SD）将审批您的注册。",
+        subtitle: "所有步骤完成后，PATS将审批您的注册。",
       },
       roster: {
         eyebrow: "团队注册",
@@ -164,17 +164,17 @@ export const core: typeof enCore = {
       participationConfirmed: "参与已确认。",
       confirmedOnSub: (date, unitName) =>
         `确认于 ${date}${unitName ? `，单位为 ${unitName}` : ""}。此步骤为只读。`,
-      verifiedBySd: "注册已由体育局 (SD) 核验。",
+      verifiedBySd: "注册已由PATS 核验。",
       verifiedBySdSub:
         "以下您的注册详情为只读。请继续下一步。",
       registrationVerification: "注册核验",
-      messageFromSd: "来自 SD 的消息：",
+      messageFromSd: "来自 PATS 的消息：",
       unitInfoSaved: "单位信息已保存。",
       unitInfoSavedSub: (date) => `于 ${date} 记录。在注册获批前您仍可修改。`,
       flightsSubmitted: "航班信息已提交。",
-      flightsSubmittedSub: "您的注册已提交至体育局（SD）等待审批。",
-      awaitingApproval: "等待 SD 审批",
-      awaitingApprovalSub: "所有步骤均已完成。体育局将审核并批准您的注册。",
+      flightsSubmittedSub: "您的注册已提交至PATS等待审批。",
+      awaitingApproval: "等待 PATS 审批",
+      awaitingApprovalSub: "所有步骤均已完成。PATS将审核并批准您的注册。",
       approvalLocked:
         "请完成参与确认、单位信息、团队成员和航班信息，方可提交注册以待审批。",
       teamRegistered: "团队已注册。",

@@ -70,10 +70,10 @@ const MESSAGES: Record<string, Translations> = {
 
   /* —— Team registration ————————————————————————————————— */
   yourregistrationmustbeverifiedbythesdbeforeteamregistration: {
-    ru: "Перед регистрацией команды ваша заявка должна быть проверена Спортивным директоратом (SD)",
-    tr: "Takım kaydından önce kaydınızın Spor Direktörlüğü (SD) tarafından doğrulanması gerekir",
-    ar: "يجب أن تتحقق مديرية الرياضة (SD) من تسجيلك قبل تسجيل الفريق",
-    zh: "团队注册前，您的报名须经体育局（SD）核验",
+    ru: "Перед регистрацией команды ваша заявка должна быть проверена PATS",
+    tr: "Takım kaydından önce kaydınızın PATS tarafından doğrulanması gerekir",
+    ar: "يجب أن تتحقق PATS من تسجيلك قبل تسجيل الفريق",
+    zh: "团队注册前，您的报名须经 PATS 核验",
   },
   teamregistrationhasnotopenedyet: {
     ru: "Регистрация команд ещё не открыта",

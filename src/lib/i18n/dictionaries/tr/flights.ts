@@ -83,14 +83,14 @@ export const flights: typeof enFlights = {
   submit: {
     title: "Kaydınızı onaya gönderin",
     desc:
-      "Uçuş bilgileri son adımdır. Her yolcunun pasaportu ve bileti yüklendikten sonra kaydı gönderin; Spor Müdürlüğü (SD) onaylayacaktır.",
+      "Uçuş bilgileri son adımdır. Her yolcunun pasaportu ve bileti yüklendikten sonra kaydı gönderin; PATS onaylayacaktır.",
     action: "Onaya gönder",
     reopen: "Düzenlemeye yeniden aç",
     incomplete:
       "Göndermeden önce her takım üyesinin hem pasaportu hem de bileti yüklenmiş olmalıdır.",
     submittedTitle: "Kayıt onaya gönderildi.",
     submittedSub:
-      "Spor Müdürlüğü (SD) inceleyecek. Beklemede olduğu sürece yeniden açabilirsiniz.",
+      "PATS inceleyecek. Beklemede olduğu sürece yeniden açabilirsiniz.",
     submittedToast: "Kayıt onaya gönderildi",
     reopenedToast: "Kayıt düzenlemeye yeniden açıldı",
   },

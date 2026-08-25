@@ -13,6 +13,10 @@ import {
   requireAdmin,
   requireJsonContentType,
 } from "@/lib/api-helpers";
+import {
+  sendTeamSizeApprovedEmail,
+  sendTeamSizeRejectedEmail,
+} from "@/lib/participant-status-emails";
 import { AdminTeamSizeReviewSchema } from "@/lib/validations";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -37,7 +41,13 @@ export async function PUT(request: Request, context: RouteContext) {
 
     const existing = await prisma.teamSizeRequest.findUnique({
       where: { id },
-      select: { id: true, userId: true, requestedCount: true, status: true },
+      select: {
+        id: true,
+        userId: true,
+        requestedCount: true,
+        status: true,
+        user: { select: { email: true, firstName: true } },
+      },
     });
     if (!existing) throw new ApiError("Request not found", 404);
     if (existing.status !== TEAM_SIZE_REQUEST_STATUS.PENDING) {
@@ -77,6 +87,22 @@ export async function PUT(request: Request, context: RouteContext) {
         actorRole: session.user.role,
       },
     });
+
+    /* The requester only learns the outcome from this email — the raised cap
+       is silent on their roster page. Best-effort by design (see
+       participant-status-emails), so a mail outage cannot undo the decision. */
+    const reviewNote = parsed.data.reviewNote?.trim() || null;
+    await (approved
+      ? sendTeamSizeApprovedEmail(
+          existing.user,
+          existing.requestedCount,
+          reviewNote
+        )
+      : sendTeamSizeRejectedEmail(
+          existing.user,
+          existing.requestedCount,
+          reviewNote
+        ));
 
     revalidatePath("/admin/team-requests");
     revalidatePath("/event/team");

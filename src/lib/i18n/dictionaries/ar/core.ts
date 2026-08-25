@@ -57,8 +57,8 @@ export const core: typeof enCore = {
     done: "تم",
     logout: "تسجيل الخروج",
     dashboard: "لوحة التحكم",
-    tour: "جولة الموقع",
-    support: "الدعم",
+    tour: "الجولة الافتراضية",
+    support: "الدعم / الاستفسار",
     journeyComplete: "اكتمل التسجيل",
   },
 
@@ -100,15 +100,15 @@ export const core: typeof enCore = {
   statusBar: {
     inProgressTitle: "التسجيل قيد الإنجاز",
     inProgressText:
-      "أكمل كل خطوة أدناه. تعتمد المديرية الرياضية (SD) تسجيلك بعد اكتمال جميع الخطوات.",
+      "أكمل كل خطوة أدناه. تعتمد PATS تسجيلك بعد اكتمال جميع الخطوات.",
     underReviewTitle: "اكتمل التسجيل",
     underReviewText:
-      "اكتمل تسجيلك — تم إرسال جميع الخطوات. ستقوم المديرية الرياضية (SD) بالتحقق منه، وستصلك رسالة تأكيد بالبريد الإلكتروني عند اعتماده.",
+      "اكتمل تسجيلك — تم إرسال جميع الخطوات. ستقوم PATS بالتحقق منه، وستصلك رسالة تأكيد بالبريد الإلكتروني عند اعتماده.",
     confirmedTitle: "تم الاعتماد — أنت مؤهل للمشاركة في PATS 2026",
     confirmedTextWithDates: (dates) =>
-      `تم اعتماد تسجيلك من قبل المديرية الرياضية وتأكيد مكانك. المواعيد المقررة: ${dates}.`,
+      `تم اعتماد تسجيلك من قبل PATS وتأكيد مكانك. المواعيد المقررة: ${dates}.`,
     confirmedText:
-      "تم اعتماد تسجيلك من قبل المديرية الرياضية وتأكيد مكانك.",
+      "تم اعتماد تسجيلك من قبل PATS وتأكيد مكانك.",
     returnedTitle: "أُعيد للتصحيح",
     approvedOn: (date) => `تمت الموافقة في ${date}`,
     continueRegistration: "متابعة التسجيل",
@@ -153,7 +153,7 @@ export const core: typeof enCore = {
         eyebrow: "",
         title: "اعتماد التسجيل",
         subtitle:
-          "تعتمد المديرية الرياضية (SD) تسجيلك بعد اكتمال جميع الخطوات.",
+          "تعتمد PATS تسجيلك بعد اكتمال جميع الخطوات.",
       },
       roster: {
         eyebrow: "تسجيل الفريق",
@@ -177,20 +177,20 @@ export const core: typeof enCore = {
       participationConfirmed: "تم تأكيد المشاركة.",
       confirmedOnSub: (date, unitName) =>
         `تم التأكيد في ${date}${unitName ? ` لصالح ${unitName}` : ""}. هذه الخطوة للعرض فقط.`,
-      verifiedBySd: "تم التحقق من التسجيل من قبل المديرية الرياضية (SD).",
+      verifiedBySd: "تم التحقق من التسجيل من قبل PATS.",
       verifiedBySdSub:
         "تفاصيل تسجيلك أدناه للعرض فقط. تابع إلى الخطوة التالية.",
       registrationVerification: "التحقق من التسجيل",
-      messageFromSd: "رسالة من المديرية الرياضية:",
+      messageFromSd: "رسالة من PATS:",
       unitInfoSaved: "تم حفظ معلومات الوحدة.",
       unitInfoSavedSub: (date) =>
         `تم التسجيل في ${date}. يمكنك تحديثها حتى اعتماد تسجيلك.`,
       flightsSubmitted: "تم إرسال تفاصيل الرحلة.",
       flightsSubmittedSub:
-        "تسجيلك الآن لدى المديرية الرياضية (SD) للاعتماد.",
-      awaitingApproval: "بانتظار اعتماد المديرية الرياضية",
+        "تسجيلك الآن لدى PATS للاعتماد.",
+      awaitingApproval: "بانتظار اعتماد PATS",
       awaitingApprovalSub:
-        "اكتملت جميع الخطوات. ستقوم المديرية الرياضية بمراجعة تسجيلك واعتماده.",
+        "اكتملت جميع الخطوات. ستقوم PATS بمراجعة تسجيلك واعتماده.",
       approvalLocked:
         "أكمل التأكيد ومعلومات الوحدة وأعضاء الفريق وتفاصيل الرحلة لإرسال تسجيلك للاعتماد.",
       teamRegistered: "تم تسجيل الفريق.",

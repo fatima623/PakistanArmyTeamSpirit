@@ -222,11 +222,16 @@ export const GalleryImageUpdateSchema = GalleryImageSchema.partial();
 export const HeroSlideSchema = z.object({
   title: z.string().min(1, "Title required").max(160),
   alt: z.string().max(300).optional().or(z.literal("")),
+  /** Which home-page carousel the slide feeds (see HERO_PLACEMENTS). */
+  placement: z.enum(["hero", "mission"]).optional(),
   sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
   published: z.boolean().optional(),
 });
 
-export const HeroSlideUpdateSchema = HeroSlideSchema.partial();
+/** Placement is fixed at upload — a slide never moves between carousels. */
+export const HeroSlideUpdateSchema = HeroSlideSchema.omit({
+  placement: true,
+}).partial();
 
 export const EventBreakdownItemSchema = z.object({
   label: z.string().min(1, "Label required").max(120),
