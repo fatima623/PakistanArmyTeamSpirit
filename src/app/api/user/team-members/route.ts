@@ -9,6 +9,7 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { requireEditableRoster } from "@/lib/roster-guard";
+import { syncFlightsCompletion } from "@/lib/flights";
 
 /** List the current participant's own team members. */
 export async function GET() {
@@ -66,6 +67,11 @@ export async function POST(request: Request) {
       },
       select: teamMemberSelect,
     });
+
+    // A new traveller with no documents on file makes the flight step
+    // incomplete again — and pulls an unreviewed registration back out of the
+    // SD queue until they are filed.
+    await syncFlightsCompletion(session.user.id);
 
     return NextResponse.json({ teamMember }, { status: 201 });
   } catch (error) {

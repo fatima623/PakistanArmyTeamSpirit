@@ -6,7 +6,11 @@ import { createAuditLog } from "@/lib/audit";
 import { AUDIT_ENTITY } from "@/lib/constants";
 import { ApiError, handleApiError, requireAuth } from "@/lib/api-helpers";
 import { FlightDetailFieldsSchema } from "@/lib/validations";
-import { flightDetailSelect, requireEditableFlights } from "@/lib/flights";
+import {
+  flightDetailSelect,
+  requireEditableFlights,
+  syncFlightsCompletion,
+} from "@/lib/flights";
 import {
   deleteFlightDocByInternalPath,
   saveFlightDoc,
@@ -213,6 +217,8 @@ export async function PUT(request: Request, context: RouteContext) {
       },
     });
 
+    await syncFlightsCompletion(session.user.id);
+
     revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");
     return NextResponse.json({ flight });
@@ -251,6 +257,8 @@ export async function DELETE(_request: Request, context: RouteContext) {
       actorId: session.user.id,
       metadata: { actorRole: "user" },
     });
+
+    await syncFlightsCompletion(session.user.id);
 
     revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");

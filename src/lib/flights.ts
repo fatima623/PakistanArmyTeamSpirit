@@ -1,14 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { ApiError } from "@/lib/api-helpers";
+import { APPLICATION_STATUS } from "@/lib/constants";
 import {
   areFlightsFinalized,
   canEditFlights,
   isFlightDeadlinePassed,
+  isRegistrationApproved,
   isRosterComplete,
   workflowUserSelect,
   type WorkflowSettings,
   type WorkflowUser,
 } from "@/lib/participant-workflow";
+import { normalizeApplicationStatus } from "@/lib/user-status";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 
 /** Client-safe flight record (files exposed via authorized endpoints only). */
@@ -170,4 +173,54 @@ export async function requireEditableFlights(
     throw new ApiError("Flight details are not editable right now", 409);
   }
   return ctx;
+}
+
+
+/**
+ * Keeps `flightsSubmittedAt` in step with the documents actually on file.
+ *
+ * There is no longer a button on the flight step: filing a complete record for
+ * every traveller IS what completes it, and the explicit "Submit for approval"
+ * lives on the Registration Approval step instead. So every route that adds,
+ * edits or removes a flight record — or a roster member, which changes the
+ * denominator — calls this afterwards, and the marker (hence the unlocked
+ * approval step) can never drift from the passports and tickets on file.
+ *
+ * Falling back below complete also withdraws an unreviewed submission: a
+ * registration the SD is looking at must not lose a document behind their back.
+ * Approved and administration-finalized registrations are left alone.
+ */
+export async function syncFlightsCompletion(userId: string): Promise<void> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: workflowUserSelect,
+  });
+  if (!user) return;
+  if (isRegistrationApproved(user) || areFlightsFinalized(user)) return;
+
+  const complete = isTeamFlightsComplete(await loadFlightCoverage(userId));
+
+  if (complete === !!user.flightsSubmittedAt) return;
+
+  if (complete) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { flightsSubmittedAt: new Date() },
+    });
+    return;
+  }
+
+  const underReview =
+    normalizeApplicationStatus(user.applicationStatus) ===
+    APPLICATION_STATUS.UNDER_REVIEW;
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      flightsSubmittedAt: null,
+      submittedForApprovalAt: null,
+      ...(underReview
+        ? { applicationStatus: APPLICATION_STATUS.PENDING }
+        : {}),
+    },
+  });
 }

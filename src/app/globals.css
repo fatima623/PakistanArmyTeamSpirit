@@ -3336,6 +3336,96 @@ html.reveal-active .army-site:not(.dashboard-day) .reveal.visible {
 }
 
 
+/* —— Landing page: the header strip over the hero ————————————————————
+   The bar used to be fully transparent until the first scroll, so the emblem,
+   the wordmark and the hamburger each had to hold their own against whatever
+   photograph was behind them — drop-shadows were doing the entire job, and the
+   hamburger in particular disappeared over a bright slide. A soft top-down
+   scrim gives the whole row (logo, stats, menu button) a surface to sit on
+   while stopping well short of the solid bar it becomes on scroll. */
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav {
+  background: linear-gradient(
+    180deg,
+    rgba(7, 17, 13, 0.78) 0%,
+    rgba(7, 17, 13, 0.5) 62%,
+    rgba(7, 17, 13, 0) 100%
+  );
+  backdrop-filter: blur(7px) saturate(115%);
+  -webkit-backdrop-filter: blur(7px) saturate(115%);
+}
+
+/* The hamburger is the only way into the menu from the landing page, so over
+   the hero it reads as a control — a ringed disc — rather than three bare
+   lines laid on the imagery. */
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__menu-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: rgba(9, 21, 16, 0.45);
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__menu-btn:hover,
+.army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__menu-btn:focus-visible {
+  border-color: var(--gold);
+  background: rgba(9, 21, 16, 0.68);
+}
+
+/* —— Landing page: headline stats carried in the header strip ——————————
+   Rendered only while the bar is the transparent hero overlay (see
+   `showNavStats` in PatsNavigation); from the first scroll the same slot
+   carries the desktop link row. Below 1024px there is no room between the
+   emblem and the hamburger, so the numbers stay in their own band under the
+   hero and nothing here applies. */
+.army-site:not(.dashboard-day) .pats-nav__stats {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .pats-header--home:not(.pats-header--solid) .pats-nav__stats {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.army-site:not(.dashboard-day) .pats-nav__stat {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-align: center;
+}
+
+.army-site:not(.dashboard-day) .pats-nav__stat-value {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+}
+
+.army-site:not(.dashboard-day) .pats-nav__stat-label {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
+
 
 .army-site:not(.dashboard-day) .pats-header--compact,
 .army-site:not(.dashboard-day) .pats-header--shrunk {
@@ -3600,6 +3690,19 @@ html[data-site-theme="day"] .army-site .pats-header--compact .pats-nav__menu-lin
    nav item fits without being clipped by the horizontally-scrolling link row. */
 .army-site:not(.dashboard-day) .pats-header--menu-open .pats-nav__brand {
   display: none;
+}
+
+
+/* …except on the landing page. Desktop reveals its link row inline by reusing
+   `menu-open`, so the rule above was hiding the emblem and wordmark for the
+   whole of the solid scrolled bar — the one place a visitor most expects to
+   find them. The home nav carries only Login + language + theme, so there is
+   room for both. Tour pages keep the original behaviour: their full link row
+   needs the width. */
+@media (min-width: 1024px) {
+  .army-site:not(.dashboard-day) .pats-header--home.pats-header--menu-open .pats-nav__brand {
+    display: flex;
+  }
 }
 
 
@@ -19791,6 +19894,35 @@ html:has(.dashboard-day) body {
 .pp .pp-step__dot svg {
   width: 0.95rem;
   height: 0.95rem;
+}
+
+/* Locked step: the dot keeps its NUMBER so the participant can still see where
+   the step sits in the sequence, and the padlock rides on it as a corner badge
+   rather than replacing the number. */
+.pp .pp-step__dot--locked {
+  position: relative;
+  overflow: visible;
+}
+
+.pp .pp-step__dot--locked .pp-step__dot-lock {
+  position: absolute;
+  right: -0.18rem;
+  bottom: -0.18rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  background: var(--pp-surface-2);
+  border: 1px solid var(--pp-border-strong);
+  color: var(--pp-muted);
+}
+
+.pp .pp-step__dot--locked .pp-step__dot-lock svg {
+  width: 0.55rem;
+  height: 0.55rem;
+  stroke-width: 2.75;
 }
 
 .pp .pp-step__name {

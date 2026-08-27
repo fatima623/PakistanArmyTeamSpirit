@@ -185,14 +185,13 @@ export const core: typeof enCore = {
       unitInfoSaved: "تم حفظ معلومات الوحدة.",
       unitInfoSavedSub: (date) =>
         `تم التسجيل في ${date}. يمكنك تحديثها حتى اعتماد تسجيلك.`,
-      flightsSubmitted: "تم إرسال تفاصيل الرحلة.",
-      flightsSubmittedSub:
-        "تسجيلك الآن لدى PATS للاعتماد.",
+      flightsComplete: "مستندات السفر مكتملة.",
+      flightsCompleteSub:
+        "لدى كل مسافر جواز سفر وتذكرة على الملف. راجع تسجيلك بالكامل في الخطوة التالية وأرسله للاعتماد.",
+      continueToApproval: "المتابعة إلى اعتماد التسجيل",
       awaitingApproval: "بانتظار اعتماد PATS",
       awaitingApprovalSub:
         "اكتملت جميع الخطوات. ستقوم PATS بمراجعة تسجيلك واعتماده.",
-      approvalLocked:
-        "أكمل التأكيد ومعلومات الوحدة وأعضاء الفريق وتفاصيل الرحلة لإرسال تسجيلك للاعتماد.",
       teamRegistered: "تم تسجيل الفريق.",
       teamRegisteredSub: (date) =>
         `تم التسجيل في ${date}. املأ قائمة أعضائك أدناه.`,
@@ -217,6 +216,42 @@ export const core: typeof enCore = {
     },
   },
 
+  approval: {
+    eyebrow: "الخطوة الأخيرة",
+    title: "راجع تسجيلك",
+    desc:
+      "اقرأ كل التفاصيل قبل إرسالها إلى PATS. استخدم روابط التعديل لتصحيح أي خطأ — تراجع PATS التسجيل كما هو عند الإرسال.",
+    edit: "تعديل",
+    editAria: (section: string) => `تعديل ${section}`,
+    sections: {
+      participant: "بيانات المشارك",
+      unit: "معلومات الوحدة",
+      co: "بيانات القائد / النائب",
+      roster: "أعضاء الفريق",
+      flights: "تفاصيل الرحلة",
+    },
+    serviceArm: "الخدمة / السلاح",
+    onFile: "مُرفق",
+    missing: "ناقص",
+    noRoster: "لم تتم إضافة أعضاء بعد.",
+    noFlights: "لم يتم تسجيل بيانات رحلات بعد.",
+    submit: {
+      title: "الإرسال للاعتماد",
+      desc: "اكتملت جميع الخطوات. أرسل تسجيلك إلى PATS للاعتماد.",
+      incomplete:
+        "أكمل جميع الخطوات أعلاه قبل إرسال التسجيل للاعتماد.",
+      action: "إرسال للاعتماد",
+      submittedTitle: "أُرسل للاعتماد",
+      submittedSub: (date: string) =>
+        `أُرسل إلى PATS في ${date}. يمكنك سحبه ما دام لم يصدر قرار.`,
+      withdraw: "سحب الإرسال",
+      submittedToast: "تم إرسال التسجيل للاعتماد",
+      withdrawnToast: "تم سحب الإرسال — يمكنك التعديل وإعادة الإرسال",
+      approvedTitle: "معتمد من PATS",
+      approvedSub: "تم اعتماد تسجيلك. البيانات أدناه للقراءة فقط.",
+    },
+  },
+
   confirm: {
     dateLocale: "ar",
     actionRequired: "إجراء مطلوب",
@@ -235,12 +270,13 @@ export const core: typeof enCore = {
     remaining: "متبقٍ",
     timeRemainingAria: "الوقت المتبقي للتأكيد",
     toBeAnnounced: "سيُعلن عنه المنظمون.",
+    rejectConfirmTitle: "هل أنت متأكد أنك غير متاح؟",
     rejectPrompt:
-      "رفض التسجيل وتسجيل الخروج؟ يمكنك تسجيل الدخول مرة أخرى والتأكيد لاحقًا، طالما لم ينتهِ الموعد النهائي.",
-    yesReject: "نعم، ارفض وسجّل الخروج",
-    goBack: "العودة",
-    confirm: "تأكيد",
-    reject: "رفض",
+      "تحديد فريقك بأنه غير متاح يسجّل هذا القرار على تسجيلك ويُخرجك من الحساب. لن تفقد شيئًا — يمكنك تسجيل الدخول والتأكيد في أي وقت قبل الموعد النهائي أعلاه.",
+    yesReject: "نعم، نحن غير متاحين",
+    goBack: "لا، العودة",
+    confirm: "متاح",
+    reject: "غير متاح",
     signOut: "تسجيل الخروج",
     confirmTitleAttr: "أكّد تسجيلك",
     deadlinePassedAttr: "انتهى الموعد النهائي للتأكيد",

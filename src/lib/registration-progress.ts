@@ -1,6 +1,7 @@
 import {
   currentWorkflowStageIndex,
   deriveWorkflowStages,
+  isReadyForApproval,
   isRegistrationApproved,
   type WorkflowSettings,
   type WorkflowUser,
@@ -23,7 +24,7 @@ export type RegistrationProgress = {
   currentLabel: string;
   /** 1-based position of the current step, or `total` when everything is done. */
   currentStep: number;
-  /** Every participant-side step is filled in and the SD can decide. */
+  /** The participant has submitted the finished registration — the SD can decide. */
   readyForApproval: boolean;
   approved: boolean;
 };
@@ -48,7 +49,7 @@ export function getRegistrationProgress(
     total: stages.length,
     currentLabel: idx >= 0 ? stages[idx].label : "Approved",
     currentStep: idx >= 0 ? idx + 1 : stages.length,
-    readyForApproval: idx >= 0 && stages[idx].key === "verification",
+    readyForApproval: isReadyForApproval(user),
     approved,
   };
 }

@@ -35,7 +35,7 @@ export interface WorkflowStrings {
     membersAdded: (count: number, limit: number) => string;
     // flights
     finalized: string;
-    flightsSubmitted: string;
+    flightsComplete: string;
     deadlinePassedLocked: string;
     submitBy: (date: string) => string;
     provideTravelDocs: string;
@@ -44,7 +44,8 @@ export interface WorkflowStrings {
     rejected: string;
     underReviewBySd: string;
     pendingSdVerification: string;
-    completeStepsFirst: string;
+    reviewAndSubmit: string;
+    ensureDetailsCorrect: string;
     // host info
     available: string;
     awaitingPublication: string;
@@ -79,7 +80,7 @@ export const enWorkflow: WorkflowStrings = {
     membersConfirmed: (count) => `${count} member${count === 1 ? "" : "s"} confirmed`,
     membersAdded: (count, limit) => `${count} of ${limit} added`,
     finalized: "Finalized by administration",
-    flightsSubmitted: "Submitted for approval",
+    flightsComplete: "Travel documents complete",
     deadlinePassedLocked: "Deadline passed — locked",
     submitBy: (date) => `Submit by ${date}`,
     provideTravelDocs: "Provide travel documents",
@@ -87,7 +88,8 @@ export const enWorkflow: WorkflowStrings = {
     rejected: "Rejected",
     underReviewBySd: "Under review by PATS",
     pendingSdVerification: "Pending PATS approval",
-    completeStepsFirst: "Complete the steps above first",
+    reviewAndSubmit: "Review your details and submit",
+    ensureDetailsCorrect: "Ensure all details are correct",
     available: "Available",
     awaitingPublication: "Awaiting publication",
   },

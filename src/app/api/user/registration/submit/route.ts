@@ -11,20 +11,25 @@ import {
   requireAuth,
   requireJsonContentType,
 } from "@/lib/api-helpers";
+import { loadFlightCoverage } from "@/lib/flights";
 import {
-  isTeamFlightsComplete,
-  loadFlightCoverage,
-  requireEditableFlights,
-} from "@/lib/flights";
-import { isRegistrationApproved } from "@/lib/participant-workflow";
+  areFlightsFinalized,
+  isRegistrationApproved,
+  isRegistrationDataComplete,
+  workflowUserSelect,
+} from "@/lib/participant-workflow";
 
 const SubmitSchema = z.object({ submit: z.boolean() });
 
 /**
- * Flight details are the last thing the participant supplies, so submitting
- * them is what sends the whole registration to the SD (Sports Directorate)
- * approval queue. Reopening pulls it back out again — allowed only while the
- * SD has not yet approved and the administration has not finalized.
+ * The participant's own "Submit for approval" — the last action of the guided
+ * workflow, taken on the Registration Approval step after they have read the
+ * whole registration back. Only this puts the record in the SD queue; filling
+ * in the individual steps no longer does (see `syncFlightsCompletion`).
+ *
+ * `submit: false` withdraws it again, so a mistake spotted after submitting can
+ * still be corrected — allowed until the SD approves or administration
+ * finalizes the flight details.
  */
 export async function POST(request: Request) {
   try {
@@ -39,11 +44,24 @@ export async function POST(request: Request) {
       );
     }
 
-    const ctx = await requireEditableFlights(session.user.id);
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: workflowUserSelect,
+    });
+    if (!user) throw new ApiError("User not found", 404);
 
-    if (isRegistrationApproved(ctx.user)) {
+    if (user.suspended) {
+      throw new ApiError("Your account is suspended", 403);
+    }
+    if (isRegistrationApproved(user)) {
       throw new ApiError(
         "Your registration has been approved by PATS and can no longer be changed",
+        409
+      );
+    }
+    if (areFlightsFinalized(user)) {
+      throw new ApiError(
+        "Flight details have been finalized by the administration and are locked",
         409
       );
     }
@@ -54,7 +72,6 @@ export async function POST(request: Request) {
       await prisma.user.update({
         where: { id: session.user.id },
         data: {
-          flightsSubmittedAt: null,
           submittedForApprovalAt: null,
           applicationStatus: APPLICATION_STATUS.PENDING,
         },
@@ -66,13 +83,25 @@ export async function POST(request: Request) {
         actorId: session.user.id,
         metadata: { actorRole: "user" },
       });
+      revalidatePath("/event/journey");
       revalidatePath("/event/dashboard");
-      revalidatePath("/event/flights");
-      return NextResponse.json({ flightsSubmittedAt: null });
+      return NextResponse.json({ submittedForApprovalAt: null });
     }
 
+    /* The stored markers say the steps are done; the live coverage count says
+       the documents behind them are still there. Both are checked so a record
+       deleted in another tab can't be submitted on a stale page. */
+    if (!isRegistrationDataComplete(user)) {
+      throw new ApiError(
+        "Complete every step of your registration before submitting it for approval",
+        409
+      );
+    }
     const coverage = await loadFlightCoverage(session.user.id);
-    if (!isTeamFlightsComplete(coverage)) {
+    if (
+      coverage.teamMemberCount === 0 ||
+      coverage.membersComplete !== coverage.teamMemberCount
+    ) {
       throw new ApiError(
         "Every team member needs a passport and a ticket on file before you can submit",
         409
@@ -82,7 +111,6 @@ export async function POST(request: Request) {
     await prisma.user.update({
       where: { id: session.user.id },
       data: {
-        flightsSubmittedAt: ctx.user.flightsSubmittedAt ?? now,
         submittedForApprovalAt: now,
         applicationStatus: APPLICATION_STATUS.UNDER_REVIEW,
         // A previous "returned" decision is superseded by this resubmission.
@@ -100,9 +128,9 @@ export async function POST(request: Request) {
       },
     });
 
+    revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");
-    revalidatePath("/event/flights");
-    return NextResponse.json({ flightsSubmittedAt: now }, { status: 201 });
+    return NextResponse.json({ submittedForApprovalAt: now }, { status: 201 });
   } catch (error) {
     return handleApiError(error);
   }

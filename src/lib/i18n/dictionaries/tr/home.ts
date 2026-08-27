@@ -8,7 +8,7 @@ export const home: typeof enHome = {
     titleLine2: "Yarışması",
     // Armadaki Urduca özdeyişin (İkbal) anlam çevirisi; özgün metin üstte kalır.
     mottoTranslation:
-      "Sağlam iman, yılmayan amel ve âlemi fetheden sevgi.",
+      "Sarsılmaz iman, yılmaz azim, her şeyi fetheden tutku.",
     description:
       "Uluslararası Pakistan Ordusu Takım Ruhu (PATS) — ortak ülkeler arasında taktik ustalığı, dayanıklılığı ve takım ruhunu sınayan 60 saatlik bir devriye tatbikatı.",
     scrollHint: "Aşağı kaydırın",

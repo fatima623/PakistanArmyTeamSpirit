@@ -157,14 +157,34 @@ export function isRegistrationApproved(user: WorkflowUser): boolean {
   );
 }
 
-/** Every participant-supplied step is filled in — the SD queue can pick it up. */
-export function isReadyForApproval(user: WorkflowUser): boolean {
+/** The participant has sent the finished registration to the SD themselves. */
+export function hasSubmittedForApproval(user: WorkflowUser): boolean {
+  return !!user.submittedForApprovalAt;
+}
+
+/**
+ * Every participant-supplied step is filled in. That unlocks the Registration
+ * Approval step, where the participant reviews the whole registration — it is
+ * NOT what puts them in the SD queue (see {@link isReadyForApproval}).
+ */
+export function isRegistrationDataComplete(user: WorkflowUser): boolean {
   return (
     hasConfirmedParticipation(user) &&
     hasCompletedUnitInfo(user) &&
     isRosterComplete(user) &&
     areFlightsSubmitted(user)
   );
+}
+
+/**
+ * The registration is complete AND the participant has pressed "Submit for
+ * approval" on the Registration Approval step — only then can the SD decide.
+ * Complete data alone is deliberately not enough: the last step exists so the
+ * participant can check the whole record over, and until they submit it is
+ * still theirs to correct.
+ */
+export function isReadyForApproval(user: WorkflowUser): boolean {
+  return isRegistrationDataComplete(user) && hasSubmittedForApproval(user);
 }
 
 /**
@@ -381,7 +401,7 @@ export function deriveWorkflowStages(params: {
     sub: flightsDone
       ? S.finalized
       : flightsSubmitted
-        ? S.flightsSubmitted
+        ? S.flightsComplete
         : flightsLocked
           ? S.locked
           : flightDeadlinePassed
@@ -407,14 +427,16 @@ export function deriveWorkflowStages(params: {
     sub: approvedStage
       ? S.approvedBySd
       : verificationLocked
-        ? S.completeStepsFirst
+        ? S.ensureDetailsCorrect
         : appStatus === APPLICATION_STATUS.REJECTED
           ? S.rejected
           : appStatus === APPLICATION_STATUS.RETURNED
             ? S.returnedForCorrection
             : appStatus === APPLICATION_STATUS.UNDER_REVIEW
               ? S.underReviewBySd
-              : S.pendingSdVerification,
+              : hasSubmittedForApproval(user)
+                ? S.pendingSdVerification
+                : S.reviewAndSubmit,
     href: verificationLocked && !approvedStage ? null : "/event/dashboard",
   });
 

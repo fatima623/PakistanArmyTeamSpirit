@@ -10,6 +10,7 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { requireEditableRoster } from "@/lib/roster-guard";
+import { syncFlightsCompletion } from "@/lib/flights";
 import { deleteFlightDocByInternalPath } from "@/lib/storage/flight-doc";
 
 type RouteContext = { params: Promise<{ id: string }> };
@@ -116,6 +117,10 @@ export async function DELETE(_request: Request, context: RouteContext) {
         member.flightDetail.returnTicketFilePath
       );
     }
+
+    // Removing a traveller can complete the flight step for what is left of the
+    // roster, so the marker is recomputed here too.
+    await syncFlightsCompletion(session.user.id);
 
     return NextResponse.json({ success: true });
   } catch (error) {

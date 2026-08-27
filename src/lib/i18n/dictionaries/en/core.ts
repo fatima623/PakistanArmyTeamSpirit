@@ -176,14 +176,13 @@ export const core = {
       unitInfoSaved: "Unit information saved.",
       unitInfoSavedSub: (date: string) =>
         `Recorded on ${date}. You can update it until your registration is approved.`,
-      flightsSubmitted: "Flight details submitted.",
-      flightsSubmittedSub:
-        "Your registration is now with PATS for approval.",
+      flightsComplete: "Travel documents complete.",
+      flightsCompleteSub:
+        "Every traveller has a passport and a ticket on file. Review your whole registration on the next step and submit it for approval.",
+      continueToApproval: "Continue to Registration Approval",
       awaitingApproval: "Awaiting PATS approval",
       awaitingApprovalSub:
         "Every step is complete. PATS will review and approve your registration.",
-      approvalLocked:
-        "Complete confirmation, unit information, team members and flight details to send your registration for approval.",
       teamRegistered: "Team registered.",
       teamRegisteredSub: (date: string) =>
         `Registered on ${date}. Fill in your member roster below.`,
@@ -208,6 +207,50 @@ export const core = {
     },
   },
 
+  /**
+   * Registration Approval — the last participant step. It reads the whole
+   * registration back before it is sent, so most of its labels are borrowed
+   * from the steps that captured them (`unit.fields`, `team.table`,
+   * `hostInfo`); only the review framing and the submit block live here.
+   */
+  approval: {
+    eyebrow: "Final step",
+    title: "Review your registration",
+    desc:
+      "Read every detail back before sending it to PATS. Use the edit links to correct anything that is wrong — PATS reviews the registration exactly as it stands when you submit.",
+    edit: "Edit",
+    editAria: (section: string) => `Edit ${section}`,
+    sections: {
+      participant: "Participant details",
+      unit: "Unit information",
+      co: "CO / 2IC details",
+      roster: "Team members",
+      flights: "Flight details",
+    },
+    serviceArm: "Service / arm",
+    onFile: "On file",
+    missing: "Missing",
+    noRoster: "No team members added yet.",
+    noFlights: "No flight records filed yet.",
+    submit: {
+      title: "Submit for approval",
+      desc:
+        "Every step is complete. Send your registration to PATS for approval.",
+      incomplete:
+        "Complete every step above before submitting your registration for approval.",
+      action: "Submit for approval",
+      submittedTitle: "Submitted for approval",
+      submittedSub: (date: string) =>
+        `Sent to PATS on ${date}. You can withdraw it while no decision has been made.`,
+      withdraw: "Withdraw submission",
+      submittedToast: "Registration sent for approval",
+      withdrawnToast: "Submission withdrawn — you can edit and resubmit",
+      approvedTitle: "Approved by PATS",
+      approvedSub:
+        "Your registration is approved. The details below are read-only.",
+    },
+  },
+
   confirm: {
     dateLocale: "en-GB",
     actionRequired: "Action required",
@@ -226,10 +269,11 @@ export const core = {
     remaining: "remaining",
     timeRemainingAria: "Time remaining to confirm",
     toBeAnnounced: "To be announced by the organizers.",
+    rejectConfirmTitle: "Are you sure you are not available?",
     rejectPrompt:
-      "Reject registration and sign out? You can log back in and confirm later, as long as the deadline has not expired.",
-    yesReject: "Yes, reject and sign out",
-    goBack: "Go back",
+      "Marking your team as NOT available records the decision against your registration and signs you out. Nothing is lost — you can log back in and confirm at any time before the deadline above.",
+    yesReject: "Yes, we are not available",
+    goBack: "No, go back",
     confirm: "Available",
     reject: "Not Available",
     signOut: "Sign out",

@@ -11,6 +11,7 @@ import {
   loadFlightContext,
   loadFlightCoverage,
   requireEditableFlights,
+  syncFlightsCompletion,
 } from "@/lib/flights";
 import {
   canEditFlights,
@@ -219,6 +220,8 @@ export async function POST(request: Request) {
         actorRole: "user",
       },
     });
+
+    await syncFlightsCompletion(session.user.id);
 
     revalidatePath("/event/journey");
     revalidatePath("/event/dashboard");

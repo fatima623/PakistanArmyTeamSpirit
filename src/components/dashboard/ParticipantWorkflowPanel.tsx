@@ -11,6 +11,12 @@ const STATE_CLASS: Record<WorkflowStage["state"], string> = {
   locked: "pp-step--locked",
 };
 
+/**
+ * The step marker. Every state shows its step NUMBER — a locked step used to
+ * show only a padlock, which told the participant the step was shut but not
+ * where in the sequence it sat, so the padlock rides along as a small badge on
+ * the numbered dot instead of replacing it.
+ */
 function StageDot({
   state,
   index,
@@ -18,12 +24,21 @@ function StageDot({
   state: WorkflowStage["state"];
   index: number;
 }) {
+  if (state === "locked") {
+    return (
+      <div className="pp-step__dot pp-step__dot--locked" aria-hidden>
+        {index + 1}
+        <span className="pp-step__dot-lock">
+          <Lock />
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div className="pp-step__dot" aria-hidden>
       {state === "done" ? (
         <Check strokeWidth={3} />
-      ) : state === "locked" ? (
-        <Lock />
       ) : state === "attention" ? (
         <AlertTriangle />
       ) : (

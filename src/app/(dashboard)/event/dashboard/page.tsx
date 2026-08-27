@@ -8,15 +8,9 @@ import { normalizeBrandingCopy } from "@/lib/site-copy";
 import { formatDateDisplay, formatDateShort } from "@/lib/utils";
 import { ParticipantRegistrationDetailsCard } from "@/components/dashboard/ParticipantRegistrationDetailsCard";
 import { ParticipantWorkflowPanel } from "@/components/dashboard/ParticipantWorkflowPanel";
-import { DashboardStatusBar } from "@/components/dashboard/DashboardStatusBar";
-import { getSiteSettings } from "@/lib/site-data";
 import { getTimelineData } from "@/lib/timeline";
 import { Timeline } from "@/components/timeline/Timeline";
-import {
-  currentWorkflowStageIndex,
-  deriveWorkflowStages,
-  resolveRegistrationOverallStage,
-} from "@/lib/participant-workflow";
+import { deriveWorkflowStages } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { getLocalizedPublicTickerItems } from "@/lib/cached-public-data";
@@ -35,7 +29,6 @@ export default async function EventDashboardPage() {
     user,
     tickerUpdates,
     settings,
-    siteSettings,
     dataEntryPeriods,
     timelineData,
     workflowSettings,
@@ -85,7 +78,6 @@ export default async function EventDashboardPage() {
         where: { id: "singleton" },
         select: { feeNoticeText: true },
       }),
-      getSiteSettings(),
       prisma.dataEntryPeriod.findMany({ orderBy: { openDate: "asc" } }),
       getTimelineData(),
       getWorkflowSettings(),
@@ -97,22 +89,12 @@ export default async function EventDashboardPage() {
 
   const latestUpdates = tickerUpdates.slice(0, 5);
 
-  const overallStage = resolveRegistrationOverallStage(user);
-
   const workflowStages = deriveWorkflowStages({
     user,
     settings: workflowSettings,
     teamMemberCount: user._count.teamMembers,
     wf: t.workflow,
   });
-  const activeStageIdx = currentWorkflowStageIndex(workflowStages);
-  const activeStage =
-    activeStageIdx >= 0 ? workflowStages[activeStageIdx] : null;
-  /* The status banner's primary action points at whichever step is next; the
-     Registration progress cards below cover every other step. */
-  const nextStepHref = activeStage
-    ? `/event/journey?step=${activeStage.key}`
-    : null;
 
   /* An admin-created account starts with no name — the participant supplies it
      on the unit information step — so fall back to the login rather than
@@ -150,16 +132,6 @@ export default async function EventDashboardPage() {
           dangerouslySetInnerHTML={{ __html: feeNoticeHtml }}
         />
       ) : null}
-
-      <DashboardStatusBar
-        stage={overallStage}
-        rejectionReason={user.rejectionReason}
-        approvedAt={user.approvedAt}
-        nextStepHref={nextStepHref}
-        exerciseDates={siteSettings.exerciseDates}
-        t={t.statusBar}
-        locale={locale}
-      />
 
       <div className="pp-grid">
         <div className="pp-grid__col">

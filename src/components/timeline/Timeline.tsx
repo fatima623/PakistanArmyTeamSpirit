@@ -39,7 +39,7 @@ function DeadlinePill({
  * key dates. `compact` renders the dashboard summary (deadlines only).
  *
  * Server component: the caller passes `t` (from `getDictionary()`) and the
- * active `locale`, matching the DashboardStatusBar / ParticipantWorkflowPanel
+ * active `locale`, matching the ParticipantWorkflowPanel
  * pattern.
  */
 export function Timeline({

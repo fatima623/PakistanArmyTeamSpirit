@@ -213,14 +213,50 @@ export function ParticipationConfirmCard({
           </div>
 
           {confirmingReject && !expired ? (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-[1.125rem] py-4">
-              <div className="mb-3 text-sm font-medium leading-[1.55] !text-red-800">
-                {c.rejectPrompt}
+            /* "Not Available" is a one-way door for this session — it records
+               the decision and signs the participant out — and it sits right
+               next to the button they actually want, so a mis-tap is easy. The
+               second step therefore asks the question outright, and "No, go
+               back" is the emphasized button: confirming has to be deliberate. */
+            <div
+              className="rounded-xl border border-red-200 bg-red-50 px-[1.125rem] py-4"
+              role="alertdialog"
+              aria-labelledby="participation-reject-title"
+              aria-describedby="participation-reject-desc"
+            >
+              <div className="flex items-start gap-2.5">
+                <AlertTriangle
+                  className="mt-0.5 h-5 w-5 flex-shrink-0 !text-red-600"
+                  aria-hidden
+                />
+                <div className="min-w-0">
+                  <div
+                    id="participation-reject-title"
+                    className="text-[0.9375rem] font-bold leading-[1.3] !text-red-900"
+                  >
+                    {c.rejectConfirmTitle}
+                  </div>
+                  <div
+                    id="participation-reject-desc"
+                    className="mt-1.5 text-sm font-medium leading-[1.55] !text-red-800"
+                  >
+                    {c.rejectPrompt}
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="mt-3.5 flex flex-wrap gap-2">
                 <button
                   type="button"
-                  className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 flex-none px-3.5 py-2 text-[0.8125rem] !border !border-red-800 !bg-red-600 !text-white hover:!bg-red-700"
+                  className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 !border !border-green-900 !bg-gradient-to-b !from-green-700 !to-green-800 !text-white shadow-[0_1px_2px_rgba(22,101,52,0.35)] hover:!from-green-800 hover:!to-green-900"
+                  disabled={submitting !== null}
+                  autoFocus
+                  onClick={() => setConfirmingReject(false)}
+                >
+                  {c.goBack}
+                </button>
+                <button
+                  type="button"
+                  className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 flex-none px-3.5 py-2 text-[0.8125rem] !border !border-red-300 !bg-white !text-red-700 hover:!border-red-400 hover:!bg-red-50"
                   disabled={submitting !== null}
                   onClick={() => submit("decline")}
                 >
@@ -230,14 +266,6 @@ export function ParticipationConfirmCard({
                     <XCircle className="h-4 w-4" aria-hidden />
                   )}
                   {c.yesReject}
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 !rounded-[10px] px-5 py-3 text-sm font-semibold tracking-[0.01em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 disabled:cursor-not-allowed disabled:opacity-55 flex-none px-3.5 py-2 text-[0.8125rem] !border !border-slate-300 !bg-white !text-slate-600 hover:!bg-slate-50"
-                  disabled={submitting !== null}
-                  onClick={() => setConfirmingReject(false)}
-                >
-                  {c.goBack}
                 </button>
               </div>
             </div>

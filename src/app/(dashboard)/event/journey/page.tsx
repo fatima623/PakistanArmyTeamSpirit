@@ -17,6 +17,7 @@ import {
   WORKFLOW_STAGES,
   currentWorkflowStageIndex,
   deriveWorkflowStages,
+  areFlightsFinalized,
   canEditFlights,
   canRegisterTeam,
   effectiveTeamLimit,
@@ -24,7 +25,8 @@ import {
   isConfirmationDeadlinePassed,
   isFlightDeadlinePassed,
   isRegistrationApproved,
-  isReadyForApproval,
+  isRegistrationDataComplete,
+  hasSubmittedForApproval,
   type WorkflowStageKey,
 } from "@/lib/participant-workflow";
 import { APPLICATION_STATUS } from "@/lib/constants";
@@ -36,6 +38,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { PatsPortalHeader } from "@/components/pats/PatsPortalHeader";
 import { ParticipationConfirmCard } from "@/components/dashboard/ParticipationConfirmCard";
 import { ParticipantRegistrationDetailsCard } from "@/components/dashboard/ParticipantRegistrationDetailsCard";
+import { RegistrationApprovalPanel } from "@/components/dashboard/RegistrationApprovalPanel";
 import { UnitEditForm } from "@/components/dashboard/UnitEditForm";
 import { TeamRosterManager } from "@/components/team/TeamRosterManager";
 import {
@@ -154,8 +157,10 @@ export default async function JourneyPage({
   /* —— Per-step data ————————————————————————————————————————— */
   const needsTeam = stepKey === "roster";
   /* Flight details are filed one record per traveller, so the flights step
-     needs the roster too — it renders a row per member. */
-  const needsRoster = needsTeam || stepKey === "flights";
+     needs the roster too — it renders a row per member. The approval step
+     reads the whole registration back, so it needs both. */
+  const needsRoster =
+    needsTeam || stepKey === "flights" || stepKey === "verification";
   const [teamMembers, latestRequest, flights] = await Promise.all([
     needsRoster
       ? prisma.teamMember.findMany({
@@ -177,7 +182,7 @@ export default async function JourneyPage({
           },
         })
       : null,
-    stepKey === "flights"
+    stepKey === "flights" || stepKey === "verification"
       ? prisma.flightDetail.findMany({
           where: { userId: user.id },
           orderBy: { createdAt: "asc" },
@@ -309,21 +314,61 @@ export default async function JourneyPage({
       updatedAt: f.updatedAt.toISOString(),
       teamMember: f.teamMember,
     }));
+    /* Filing the last document is what completes this step — there is no
+       button here any more — so the step says so itself and points at the
+       Registration Approval step, where the participant reviews everything
+       and actually submits. */
     content = (
-      <FlightDetailsManager
-        initialFlights={serializedFlights}
-        members={teamMembers ?? []}
-        canEdit={canEditFlights(user, settings)}
-        finalized={!!user.flightsFinalizedAt}
-        deadlineIso={settings.flightDetailsDeadline?.toISOString() ?? null}
-        deadlinePassed={isFlightDeadlinePassed(settings)}
-        submittedAt={user.flightsSubmittedAt?.toISOString() ?? null}
-        approved={isRegistrationApproved(user)}
-      />
+      <section className="flex flex-col gap-4">
+        {isRegistrationDataComplete(user) && !user.flightsFinalizedAt ? (
+          <div>
+            <StepDoneBanner
+              title={j.banners.flightsComplete}
+              sub={j.banners.flightsCompleteSub}
+            />
+            <Link
+              href="/event/journey?step=verification"
+              className="pp-btn pp-btn--primary no-underline"
+            >
+              {j.banners.continueToApproval}
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+        ) : null}
+        <FlightDetailsManager
+          initialFlights={serializedFlights}
+          members={teamMembers ?? []}
+          canEdit={canEditFlights(user, settings)}
+          finalized={!!user.flightsFinalizedAt}
+          deadlineIso={settings.flightDetailsDeadline?.toISOString() ?? null}
+          deadlinePassed={isFlightDeadlinePassed(settings)}
+        />
+      </section>
     );
   } else if (stepKey === "verification") {
     const approved = isRegistrationApproved(user);
-    const ready = isReadyForApproval(user);
+    const submitted = hasSubmittedForApproval(user);
+    /* Every roster member gets a row whether or not they have filed anything —
+       a traveller with no record at all is exactly what the participant needs
+       to spot here, and an empty flights table would hide them. */
+    const flightByMember = new Map(
+      (flights ?? [])
+        .filter((f) => f.teamMemberId)
+        .map((f) => [f.teamMemberId as string, f])
+    );
+    const flightRows = (teamMembers ?? []).map((m) => {
+      const f = flightByMember.get(m.id);
+      return {
+        id: f?.id ?? m.id,
+        travellerName: m.fullName,
+        passengerName: f?.passengerName ?? "",
+        passportNumber: f?.passportNumber ?? "",
+        hasPassport: !!f?.passportFileName,
+        hasTicket: !!f?.ticketFileName,
+        hasReturnTicket: !!f?.returnTicketFileName,
+      };
+    });
+
     content = (
       <section className="flex flex-col gap-4">
         {approved ? (
@@ -339,7 +384,7 @@ export default async function JourneyPage({
                   className="flex h-10 w-10 flex-none items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-700"
                   aria-hidden
                 >
-                  {ready ? (
+                  {submitted ? (
                     <Clock className="h-5 w-5" />
                   ) : (
                     <ShieldCheck className="h-5 w-5" />
@@ -347,14 +392,14 @@ export default async function JourneyPage({
                 </span>
                 <div>
                   <h2 className="m-0 text-[0.9375rem] font-bold text-slate-900">
-                    {ready
+                    {submitted
                       ? j.banners.awaitingApproval
                       : j.banners.registrationVerification}
                   </h2>
                   <p className="m-0 mt-0.5 text-[0.8125rem] text-slate-500">
-                    {ready
+                    {submitted
                       ? j.banners.awaitingApprovalSub
-                      : j.banners.approvalLocked}
+                      : t.approval.desc}
                   </p>
                 </div>
               </div>
@@ -373,18 +418,46 @@ export default async function JourneyPage({
             ) : null}
           </div>
         )}
-        <ParticipantRegistrationDetailsCard
-          firstName={user.firstName}
-          lastName={user.lastName}
-          email={user.email}
-          rank={user.rank}
-          createdAt={user.createdAt}
-          country={user.country}
-          nationality={user.nationality}
-          unit={user.unit}
-          t={t.registration}
-          unitOptions={t.unit.options}
-          locale={locale}
+
+        <RegistrationApprovalPanel
+          participant={{
+            firstName: user.firstName,
+            lastName: user.lastName,
+            rank: user.rank,
+            email: user.email,
+            country: user.country,
+            nationality: user.nationality,
+            createdAt: user.createdAt.toISOString(),
+          }}
+          unit={
+            user.unit
+              ? {
+                  unitType: user.unit.unitType,
+                  branch: user.unit.branch,
+                  unitName: user.unit.unitName,
+                  arm: user.unit.arm,
+                  secondPocEmail: user.unit.secondPocEmail,
+                  thirdPocEmail: user.unit.thirdPocEmail,
+                  additionalInfo: user.unit.additionalInfo,
+                  coName: user.unit.coName,
+                  coEmail: user.unit.coEmail,
+                  coPhone: user.unit.coPhone,
+                }
+              : null
+          }
+          members={(teamMembers ?? []).map((m) => ({
+            id: m.id,
+            fullName: m.fullName,
+            rank: m.rank,
+            serviceNumber: m.serviceNumber,
+            serviceArm: m.serviceArm,
+            gender: m.gender,
+          }))}
+          flights={flightRows}
+          dataComplete={isRegistrationDataComplete(user)}
+          submittedAt={user.submittedForApprovalAt?.toISOString() ?? null}
+          approved={approved}
+          locked={areFlightsFinalized(user)}
         />
       </section>
     );

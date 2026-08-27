@@ -82,20 +82,6 @@ export const flights: typeof enFlights = {
     assigned: "Uçuş kaydı yolcuyla eşleştirildi",
     selectRequired: "Bu kaydın ait olduğu yolcuyu seçin",
   },
-  submit: {
-    title: "Kaydınızı onaya gönderin",
-    desc:
-      "Uçuş bilgileri son adımdır. Her yolcunun pasaportu ve bileti yüklendikten sonra kaydı gönderin; PATS onaylayacaktır.",
-    action: "Onaya gönder",
-    reopen: "Düzenlemeye yeniden aç",
-    incomplete:
-      "Göndermeden önce her takım üyesinin hem pasaportu hem de bileti yüklenmiş olmalıdır.",
-    submittedTitle: "Kayıt onaya gönderildi.",
-    submittedSub:
-      "PATS inceleyecek. Beklemede olduğu sürece yeniden açabilirsiniz.",
-    submittedToast: "Kayıt onaya gönderildi",
-    reopenedToast: "Kayıt düzenlemeye yeniden açıldı",
-  },
   errors: {
     nameRequired: "Yolcu adı zorunludur",
     passportRequired: "Pasaport numarası zorunludur",

@@ -171,12 +171,12 @@ export const core: typeof enCore = {
       messageFromSd: "来自 PATS 的消息：",
       unitInfoSaved: "单位信息已保存。",
       unitInfoSavedSub: (date) => `于 ${date} 记录。在注册获批前您仍可修改。`,
-      flightsSubmitted: "航班信息已提交。",
-      flightsSubmittedSub: "您的注册已提交至PATS等待审批。",
+      flightsComplete: "旅行证件齐全。",
+      flightsCompleteSub:
+        "每位队员的护照和机票均已上传。请在下一步核对全部报名信息并提交审批。",
+      continueToApproval: "前往报名审批",
       awaitingApproval: "等待 PATS 审批",
       awaitingApprovalSub: "所有步骤均已完成。PATS将审核并批准您的注册。",
-      approvalLocked:
-        "请完成参与确认、单位信息、团队成员和航班信息，方可提交注册以待审批。",
       teamRegistered: "团队已注册。",
       teamRegisteredSub: (date) =>
         `注册于 ${date}。请在下方填写您的成员名单。`,
@@ -201,6 +201,41 @@ export const core: typeof enCore = {
     },
   },
 
+  approval: {
+    eyebrow: "最后一步",
+    title: "核对您的报名信息",
+    desc:
+      "提交给 PATS 之前请通读全部信息。如有错误，请通过“编辑”链接更正——PATS 将按照您提交时的内容进行审核。",
+    edit: "编辑",
+    editAria: (section: string) => `编辑${section}`,
+    sections: {
+      participant: "参赛人信息",
+      unit: "部队信息",
+      co: "指挥官／副指挥官信息",
+      roster: "队员",
+      flights: "航班信息",
+    },
+    serviceArm: "军种／兵种",
+    onFile: "已上传",
+    missing: "缺少",
+    noRoster: "尚未添加队员。",
+    noFlights: "尚未填写航班记录。",
+    submit: {
+      title: "提交审批",
+      desc: "所有步骤均已完成。请将报名提交 PATS 审批。",
+      incomplete: "请先完成以上所有步骤，然后再提交审批。",
+      action: "提交审批",
+      submittedTitle: "已提交审批",
+      submittedSub: (date: string) =>
+        `已于 ${date} 提交至 PATS。在作出决定前，您仍可撤回。`,
+      withdraw: "撤回提交",
+      submittedToast: "报名已提交审批",
+      withdrawnToast: "提交已撤回——您可以修改后重新提交",
+      approvedTitle: "已获 PATS 批准",
+      approvedSub: "您的报名已获批准。以下信息为只读。",
+    },
+  },
+
   confirm: {
     dateLocale: "zh-CN",
     actionRequired: "需要采取行动",
@@ -219,12 +254,13 @@ export const core: typeof enCore = {
     remaining: "剩余",
     timeRemainingAria: "确认剩余时间",
     toBeAnnounced: "将由组织方公布。",
+    rejectConfirmTitle: "确定您无法参加吗？",
     rejectPrompt:
-      "拒绝注册并退出登录？只要截止日期尚未到期，您可以稍后重新登录并确认。",
-    yesReject: "是，拒绝并退出登录",
-    goBack: "返回",
-    confirm: "确认",
-    reject: "拒绝",
+      "将团队标记为“无法参加”会把该决定记入您的报名并退出登录。不会丢失任何信息——在上述截止日期前，您随时可以重新登录并确认。",
+    yesReject: "是，我们无法参加",
+    goBack: "否，返回",
+    confirm: "可以参加",
+    reject: "无法参加",
     signOut: "退出登录",
     confirmTitleAttr: "确认您的注册",
     deadlinePassedAttr: "确认截止日期已过",

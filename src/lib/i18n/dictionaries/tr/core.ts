@@ -173,14 +173,13 @@ export const core: typeof enCore = {
       unitInfoSaved: "Birlik bilgileri kaydedildi.",
       unitInfoSavedSub: (date) =>
         `${date} tarihinde kaydedildi. Kaydınız onaylanana kadar güncelleyebilirsiniz.`,
-      flightsSubmitted: "Uçuş bilgileri gönderildi.",
-      flightsSubmittedSub:
-        "Kaydınız artık onay için PATS'ta.",
+      flightsComplete: "Seyahat belgeleri tamam.",
+      flightsCompleteSub:
+        "Her yolcunun pasaportu ve bileti yüklendi. Sonraki adımda kaydınızın tamamını gözden geçirip onaya gönderin.",
+      continueToApproval: "Kayıt Onayına geç",
       awaitingApproval: "PATS onayı bekleniyor",
       awaitingApprovalSub:
         "Tüm adımlar tamamlandı. PATS kaydınızı inceleyip onaylayacak.",
-      approvalLocked:
-        "Kaydınızı onaya göndermek için onay, birlik bilgileri, takım üyeleri ve uçuş bilgileri adımlarını tamamlayın.",
       teamRegistered: "Takım kaydedildi.",
       teamRegisteredSub: (date) =>
         `${date} tarihinde kaydedildi. Üye listenizi aşağıya doldurun.`,
@@ -205,6 +204,42 @@ export const core: typeof enCore = {
     },
   },
 
+  approval: {
+    eyebrow: "Son adım",
+    title: "Kaydınızı gözden geçirin",
+    desc:
+      "PATS'a göndermeden önce tüm bilgileri okuyun. Hatalı bir şey varsa düzenle bağlantılarıyla düzeltin — PATS kaydı gönderdiğiniz hâliyle inceler.",
+    edit: "Düzenle",
+    editAria: (section: string) => `${section} bölümünü düzenle`,
+    sections: {
+      participant: "Katılımcı bilgileri",
+      unit: "Birlik bilgileri",
+      co: "Komutan / 2. Komutan bilgileri",
+      roster: "Takım üyeleri",
+      flights: "Uçuş bilgileri",
+    },
+    serviceArm: "Hizmet / sınıf",
+    onFile: "Yüklendi",
+    missing: "Eksik",
+    noRoster: "Henüz takım üyesi eklenmedi.",
+    noFlights: "Henüz uçuş kaydı girilmedi.",
+    submit: {
+      title: "Onaya gönder",
+      desc: "Tüm adımlar tamamlandı. Kaydınızı PATS onayına gönderin.",
+      incomplete:
+        "Kaydınızı onaya göndermeden önce yukarıdaki tüm adımları tamamlayın.",
+      action: "Onaya gönder",
+      submittedTitle: "Onaya gönderildi",
+      submittedSub: (date: string) =>
+        `${date} tarihinde PATS'a gönderildi. Karar verilmediği sürece geri çekebilirsiniz.`,
+      withdraw: "Gönderimi geri çek",
+      submittedToast: "Kayıt onaya gönderildi",
+      withdrawnToast: "Gönderim geri çekildi — düzenleyip yeniden gönderebilirsiniz",
+      approvedTitle: "PATS tarafından onaylandı",
+      approvedSub: "Kaydınız onaylandı. Aşağıdaki bilgiler salt okunurdur.",
+    },
+  },
+
   confirm: {
     dateLocale: "tr-TR",
     actionRequired: "İşlem gerekli",
@@ -223,12 +258,13 @@ export const core: typeof enCore = {
     remaining: "kaldı",
     timeRemainingAria: "Onaylamak için kalan süre",
     toBeAnnounced: "Organizatörler tarafından duyurulacak.",
+    rejectConfirmTitle: "Müsait olmadığınızdan emin misiniz?",
     rejectPrompt:
-      "Kayıt reddedilsin ve oturum kapatılsın mı? Son tarih dolmadığı sürece daha sonra tekrar giriş yapıp onaylayabilirsiniz.",
-    yesReject: "Evet, reddet ve çıkış yap",
-    goBack: "Geri dön",
-    confirm: "Onayla",
-    reject: "Reddet",
+      "Takımınızı müsait değil olarak işaretlemek bu kararı kaydınıza işler ve oturumunuzu kapatır. Hiçbir şey kaybolmaz — yukarıdaki son tarihe kadar tekrar giriş yapıp onaylayabilirsiniz.",
+    yesReject: "Evet, müsait değiliz",
+    goBack: "Hayır, geri dön",
+    confirm: "Müsait",
+    reject: "Müsait Değil",
     signOut: "Çıkış yap",
     confirmTitleAttr: "Kaydınızı onaylayın",
     deadlinePassedAttr: "Onay son tarihi geçti",

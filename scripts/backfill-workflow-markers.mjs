@@ -37,6 +37,7 @@ async function main() {
   let unitFilled = 0;
   let flightsFilled = 0;
   let approvedFilled = 0;
+  let coverageFilled = 0;
 
   for (const u of participants) {
     const data = {};
@@ -76,6 +77,33 @@ async function main() {
       if (touched) approvedFilled += 1;
     }
 
+    /* `flightsSubmittedAt` now means "every traveller has a passport and a
+       ticket on file" — it is set by the API whenever a flight record changes,
+       not by a button on the flight step (the participant submits from the
+       Registration Approval step instead). Rows that filed every document
+       under the old flow but never pressed the old Submit button would sit
+       with the approval step locked forever, so their live coverage decides. */
+    if (!u.flightsSubmittedAt && !data.flightsSubmittedAt) {
+      const [members, complete] = await Promise.all([
+        prisma.teamMember.count({ where: { userId: u.id } }),
+        prisma.teamMember.count({
+          where: {
+            userId: u.id,
+            flightDetail: {
+              is: {
+                passportFilePath: { not: null },
+                ticketFilePath: { not: null },
+              },
+            },
+          },
+        }),
+      ]);
+      if (members > 0 && members === complete) {
+        data.flightsSubmittedAt = u.updatedAt;
+        coverageFilled += 1;
+      }
+    }
+
     if (Object.keys(data).length > 0) {
       await prisma.user.update({ where: { id: u.id }, data });
     }
@@ -85,6 +113,7 @@ async function main() {
   console.log(`unit info marked complete: ${unitFilled}`);
   console.log(`flight submissions filled: ${flightsFilled}`);
   console.log(`approved rows completed:   ${approvedFilled}`);
+  console.log(`flight docs complete:      ${coverageFilled}`);
 }
 
 main()
