@@ -13,10 +13,25 @@ export async function sendMail(options: SendMailOptions): Promise<boolean> {
     process.env.SMTP_FROM ?? "noreply@example.com";
 
   if (!host || !user || !pass) {
+    // Always warn: callers treat mail as fire-and-forget, so an unconfigured
+    // mailer is otherwise indistinguishable from a delivered email.
+    console.warn(
+      `[mail] SMTP not configured (missing ${["SMTP_HOST", "SMTP_USER", "SMTP_PASS"]
+        .filter((k) => !process.env[k])
+        .join(", ")}) — email to ${options.to} not sent.`
+    );
     if (process.env.NODE_ENV === "development") {
-      console.warn("[mail] SMTP not configured — email not sent.");
+      // Bodies can carry reset/verification tokens, so only ever in dev.
       console.warn(`[mail] To: ${options.to}\n${options.text}`);
     }
+    return false;
+  }
+
+  if (host.includes("@")) {
+    console.error(
+      `[mail] SMTP_HOST is "${host}" — that is an email address, not a mail ` +
+        `server hostname (Gmail: smtp.gmail.com). Email to ${options.to} not sent.`
+    );
     return false;
   }
 
@@ -31,13 +46,23 @@ export async function sendMail(options: SendMailOptions): Promise<boolean> {
     auth: { user, pass },
   });
 
-  await transport.sendMail({
-    from,
-    to: options.to,
-    subject: options.subject,
-    text: options.text,
-    html: options.html ?? options.text.replace(/\n/g, "<br>"),
-  });
+  try {
+    await transport.sendMail({
+      from,
+      to: options.to,
+      subject: options.subject,
+      text: options.text,
+      html: options.html ?? options.text.replace(/\n/g, "<br>"),
+    });
+  } catch (error) {
+    // Log before re-throwing: most callers swallow send failures on purpose,
+    // so this is the only place the real SMTP error is ever visible.
+    const { code, message } = error as { code?: string; message?: string };
+    console.error(
+      `[mail] send failed to ${options.to} via ${host}:${port} — ${code ?? "ERROR"}: ${message}`
+    );
+    throw error;
+  }
 
   return true;
 }

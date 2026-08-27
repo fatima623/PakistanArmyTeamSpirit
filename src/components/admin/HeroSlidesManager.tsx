@@ -27,6 +27,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { TOAST } from "@/lib/toast";
+import { prepareImageForUpload } from "@/lib/image-upload";
 
 export type AdminHeroSlide = {
   id: string;
@@ -83,7 +84,7 @@ const COPY = {
     back: "Back to Concept & Purpose images",
     formTitle: "Add Concept & Purpose image",
     formIntro:
-      "Upload an image and give it an admin title. Published images rotate automatically beside the Concept / Purpose text.",
+      "Upload an image — that is all this section needs. It is published straight away and joins the rotation beside the Concept / Purpose text.",
     cardTitle: "Concept & Purpose image",
     ratioHint:
       "This slot is a tall portrait frame — upright images around 900×1200 work best.",
@@ -93,11 +94,26 @@ const COPY = {
     deleteTitle: "Delete this image?",
     deleteDescription:
       "This permanently removes the image from the Concept / Purpose rotation.",
-    editTitle: "Edit image",
+    editTitle: "Replace this image",
   },
 } as const;
 
 export type HeroManagerPlacement = keyof typeof COPY;
+
+/**
+ * The Concept / Purpose slot is a bare picture rotation — no caption is ever
+ * rendered from it, so its forms ask for the image and nothing else. The hero
+ * still carries a title and alt text, which the accessibility layer uses.
+ */
+function isImageOnly(placement: HeroManagerPlacement): boolean {
+  return placement === "mission";
+}
+
+/** Admin-side label for an image-only slide: the file name, minus extension. */
+function titleFromFileName(name: string, fallback: string): string {
+  const stem = name.replace(/\.[^.]+$/, "").trim();
+  return (stem || fallback).slice(0, 160);
+}
 
 function imageUrl(imagePath: string, bust = 0): string {
   const base = `/uploads/${imagePath}`;
@@ -118,6 +134,7 @@ export function HeroSlidesManager({
   placement?: HeroManagerPlacement;
 }) {
   const copy = COPY[placement];
+  const imageOnly = isImageOnly(placement);
   const [slides, setSlides] = useState<AdminHeroSlide[]>(
     sortSlides(initialSlides)
   );
@@ -245,9 +262,11 @@ export function HeroSlidesManager({
                   <div className="text-[0.92rem] font-bold leading-[1.25] text-brand-ink">
                     {slide.title}
                   </div>
-                  <div className="mt-0.5 truncate text-xs text-brand-ink-muted">
-                    {slide.alt ?? "No alt text"}
-                  </div>
+                  {imageOnly ? null : (
+                    <div className="mt-0.5 truncate text-xs text-brand-ink-muted">
+                      {slide.alt ?? "No alt text"}
+                    </div>
+                  )}
                   <span
                     className={`mt-1.5 inline-block rounded-full px-2 py-0.5 text-[0.66rem] font-bold uppercase tracking-[0.04em] text-white ${
                       slide.published
@@ -280,7 +299,7 @@ export function HeroSlidesManager({
                     className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-brand-line bg-white px-3 py-[0.42rem] text-[0.8rem] font-semibold text-brand-ink transition-colors hover:border-brand-olive/45 hover:bg-brand-parchment-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-olive/25"
                   >
                     <Pencil className="h-3.5 w-3.5" aria-hidden />
-                    Edit
+                    {imageOnly ? "Replace" : "Edit"}
                   </button>
                   <PublishToggle slide={slide} onChange={upsert} />
                   <DeleteSlideButton
@@ -299,6 +318,7 @@ export function HeroSlidesManager({
 
       <EditDialog
         copy={copy}
+        placement={placement}
         slide={editing}
         onClose={() => setEditing(null)}
         onSaved={(slide, replaced) => {
@@ -353,6 +373,7 @@ function UploadForm({
   onCreated: (slide: AdminHeroSlide) => void;
   onCancel: () => void;
 }) {
+  const imageOnly = isImageOnly(placement);
   const fileRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -391,19 +412,27 @@ function UploadForm({
       toast.error("Choose an image to upload.");
       return;
     }
-    if (!title.trim()) {
+    if (!imageOnly && !title.trim()) {
       toast.error("A title is required.");
       return;
     }
     setSubmitting(true);
     try {
+      // Shrunk in the browser first: the host rejects a >4.5 MB body with a
+      // 413 before the route ever sees it.
+      const upload = await prepareImageForUpload(file);
       const fd = new FormData();
-      fd.append("file", file);
-      fd.append("title", title.trim());
-      fd.append("alt", alt.trim());
+      fd.append("file", upload);
+      fd.append(
+        "title",
+        imageOnly
+          ? titleFromFileName(file.name, copy.cardTitle)
+          : title.trim()
+      );
+      fd.append("alt", imageOnly ? "" : alt.trim());
       fd.append("placement", placement);
-      fd.append("sortOrder", sortOrder || "0");
-      fd.append("published", published ? "true" : "false");
+      fd.append("sortOrder", imageOnly ? String(nextOrder) : sortOrder || "0");
+      fd.append("published", imageOnly || published ? "true" : "false");
 
       const res = await fetch("/api/admin/hero-slides", {
         method: "POST",
@@ -452,14 +481,22 @@ function UploadForm({
           </h3>
         </div>
         <div className="flex flex-col gap-5 px-[1.1rem] pb-4 pt-[0.9rem]">
-          <div className="grid grid-cols-1 gap-5 min-[820px]:grid-cols-[280px_1fr] min-[820px]:items-start">
+          <div
+            className={
+              imageOnly
+                ? "grid grid-cols-1 gap-5"
+                : "grid grid-cols-1 gap-5 min-[820px]:grid-cols-[280px_1fr] min-[820px]:items-start"
+            }
+          >
             <div className="flex flex-col gap-1.5">
               <label className="text-[0.8rem] font-semibold text-brand-ink">
                 Image *
               </label>
               <button
                 type="button"
-                className="relative flex min-h-[170px] cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover"
+                className={`relative flex cursor-pointer flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-5 text-center hover:border-brand-olive hover:bg-brand-olive/5 [&_img]:absolute [&_img]:inset-0 [&_img]:h-full [&_img]:w-full [&_img]:object-cover ${
+                  imageOnly ? "min-h-[300px]" : "min-h-[170px]"
+                }`}
                 onClick={() => fileRef.current?.click()}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={(e) => {
@@ -494,59 +531,61 @@ function UploadForm({
               </p>
             </div>
 
-            <div>
-              <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
-                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-                  <label htmlFor="h-title">Title *</label>
-                  <Input
-                    id="h-title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="admin-input"
-                    placeholder={copy.titlePlaceholder}
-                  />
-                  <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
-                    Admin-only label so you can tell slides apart. Not shown
-                    publicly.
-                  </p>
+            {imageOnly ? null : (
+              <div>
+                <div className="grid grid-cols-1 gap-[0.85rem] min-[560px]:grid-cols-2">
+                  <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                    <label htmlFor="h-title">Title *</label>
+                    <Input
+                      id="h-title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="admin-input"
+                      placeholder={copy.titlePlaceholder}
+                    />
+                    <p className="mt-1 text-[0.72rem] text-brand-ink-muted">
+                      Admin-only label so you can tell slides apart. Not shown
+                      publicly.
+                    </p>
+                  </div>
+                  <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                    <label htmlFor="h-alt">Alt text</label>
+                    <Input
+                      id="h-alt"
+                      value={alt}
+                      onChange={(e) => setAlt(e.target.value)}
+                      className="admin-input"
+                      placeholder="Optional description for screen readers"
+                    />
+                  </div>
+                  <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                    <label htmlFor="h-order">Display order</label>
+                    <Input
+                      id="h-order"
+                      type="number"
+                      value={sortOrder}
+                      onChange={(e) => setSortOrder(e.target.value)}
+                      className="admin-input"
+                    />
+                  </div>
                 </div>
-                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-                  <label htmlFor="h-alt">Alt text</label>
-                  <Input
-                    id="h-alt"
-                    value={alt}
-                    onChange={(e) => setAlt(e.target.value)}
-                    className="admin-input"
-                    placeholder="Optional description for screen readers"
-                  />
-                </div>
-                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-                  <label htmlFor="h-order">Display order</label>
-                  <Input
-                    id="h-order"
-                    type="number"
-                    value={sortOrder}
-                    onChange={(e) => setSortOrder(e.target.value)}
-                    className="admin-input"
-                  />
-                </div>
-              </div>
 
-              <div className="mt-3 flex items-center gap-3">
-                <Switch
-                  id="h-published"
-                  checked={published}
-                  onCheckedChange={setPublished}
-                  className="data-[state=checked]:bg-brand-olive"
-                />
-                <label
-                  htmlFor="h-published"
-                  className="text-sm text-brand-ink-muted"
-                >
-                  {published ? copy.publishedHint : "Draft — hidden"}
-                </label>
+                <div className="mt-3 flex items-center gap-3">
+                  <Switch
+                    id="h-published"
+                    checked={published}
+                    onCheckedChange={setPublished}
+                    className="data-[state=checked]:bg-brand-olive"
+                  />
+                  <label
+                    htmlFor="h-published"
+                    className="text-sm text-brand-ink-muted"
+                  >
+                    {published ? copy.publishedHint : "Draft — hidden"}
+                  </label>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -665,15 +704,18 @@ function DeleteSlideButton({
 
 function EditDialog({
   copy,
+  placement,
   slide,
   onClose,
   onSaved,
 }: {
   copy: (typeof COPY)[HeroManagerPlacement];
+  placement: HeroManagerPlacement;
   slide: AdminHeroSlide | null;
   onClose: () => void;
   onSaved: (slide: AdminHeroSlide, replaced: boolean) => void;
 }) {
+  const imageOnly = isImageOnly(placement);
   const fileRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [alt, setAlt] = useState("");
@@ -712,32 +754,42 @@ function EditDialog({
 
   const save = async () => {
     if (!slide) return;
-    if (!title.trim()) {
+    if (imageOnly && !replaceFile) {
+      toast.error("Choose a new image to replace this one.");
+      return;
+    }
+    if (!imageOnly && !title.trim()) {
       toast.error("A title is required.");
       return;
     }
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/admin/hero-slides/${slide.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: title.trim(),
-          alt: alt.trim(),
-          sortOrder: sortOrder || "0",
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        toast.error(data.error ?? TOAST.GENERIC_ERROR);
-        return;
+      // Image-only placements have nothing to PATCH — go straight to the file.
+      let latest = slide;
+      if (!imageOnly) {
+        const res = await fetch(`/api/admin/hero-slides/${slide.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: title.trim(),
+            alt: alt.trim(),
+            sortOrder: sortOrder || "0",
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          toast.error(data.error ?? TOAST.GENERIC_ERROR);
+          return;
+        }
+        latest = data.slide as AdminHeroSlide;
       }
-      let latest = data.slide as AdminHeroSlide;
       let replaced = false;
 
       if (replaceFile) {
+        // Shrunk first — a >4.5 MB body is 413'd by the host, not the route.
+        const upload = await prepareImageForUpload(replaceFile);
         const fd = new FormData();
-        fd.append("file", replaceFile);
+        fd.append("file", upload);
         const imgRes = await fetch(
           `/api/admin/hero-slides/${slide.id}/image`,
           { method: "POST", body: fd }
@@ -745,7 +797,10 @@ function EditDialog({
         const imgData = await imgRes.json().catch(() => ({}));
         if (!imgRes.ok) {
           toast.error(
-            imgData.error ?? "Details saved but the image could not be replaced."
+            imgData.error ??
+              (imageOnly
+                ? "The image could not be replaced."
+                : "Details saved but the image could not be replaced.")
           );
           onSaved(latest, false);
           return;
@@ -772,36 +827,42 @@ function EditDialog({
 
         {slide ? (
           <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
+            {imageOnly ? null : (
+              <>
+                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="he-title">Title *</label>
+                  <Input
+                    id="he-title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+                <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="he-alt">Alt text</label>
+                  <Input
+                    id="he-alt"
+                    value={alt}
+                    onChange={(e) => setAlt(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+                <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
+                  <label htmlFor="he-order">Display order</label>
+                  <Input
+                    id="he-order"
+                    type="number"
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+              </>
+            )}
             <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-              <label htmlFor="he-title">Title *</label>
-              <Input
-                id="he-title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="admin-input"
-              />
-            </div>
-            <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-              <label htmlFor="he-alt">Alt text</label>
-              <Input
-                id="he-alt"
-                value={alt}
-                onChange={(e) => setAlt(e.target.value)}
-                className="admin-input"
-              />
-            </div>
-            <div className="[&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-              <label htmlFor="he-order">Display order</label>
-              <Input
-                id="he-order"
-                type="number"
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value)}
-                className="admin-input"
-              />
-            </div>
-            <div className="col-span-full [&>label]:mb-1 [&>label]:block [&>label]:text-[0.8rem] [&>label]:font-semibold [&>label]:text-brand-ink">
-              <label htmlFor="he-replace">Replace image</label>
+              <label htmlFor="he-replace">
+                {imageOnly ? "New image" : "Replace image"}
+              </label>
               <div
                 className="flex items-center gap-3 rounded-xl border-2 border-dashed border-brand-line bg-brand-parchment/40 p-2.5 transition-colors hover:border-brand-olive/60"
                 onDragOver={(e) => e.preventDefault()}
@@ -829,7 +890,9 @@ function EditDialog({
                   <p className="mt-1 truncate text-[0.72rem] text-brand-ink-muted">
                     {replaceFile
                       ? replaceFile.name
-                      : "Drag & drop or click to replace — keeps the current image if left unchanged."}
+                      : imageOnly
+                        ? "Drag & drop or click to choose the image that replaces this one."
+                        : "Drag & drop or click to replace — keeps the current image if left unchanged."}
                   </p>
                 </div>
                 <input

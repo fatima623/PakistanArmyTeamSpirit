@@ -6747,8 +6747,9 @@ html[data-site-theme="day"] .cinematic-site.army-site .pats-data-table__value {
 
 
 /* File inputs opt out: this near-white border is invisible on the portal's
-   white cards, and the flagged shorthand blocked `.pp-file` from drawing its
-   own frame. They are styled by `.pp .pp-file` instead. */
+   white cards, and the flagged shorthand blocked the file control from drawing
+   its own frame. They are styled by `.pp .pp-filefield` instead — where the
+   input itself is transparent and the frame belongs to its wrapper. */
 .pats-portal input:not([type="file"]),
 .pats-portal select,
 .pats-portal textarea:not(.ticket-reply-field) {
@@ -15385,6 +15386,39 @@ html[data-site-theme="day"] .participant-portal.pats-portal :is([class~="text-em
 }
 
 
+/* The DARKER accent shades needed the same rescue. The portal mounts inside
+   PublicLayout, so `.cinematic-site` is an ancestor and its night skin's
+   `p, li, span, label { color: #fff }` (0,2,1) outranks any single Tailwind
+   text utility (0,1,0). The day catch-alls above would have repainted them,
+   but they deliberately skip anything classed `text-emerald`/`text-amber` so
+   those hues survive — which left 800/900 text with nothing but the white.
+   That is why the "Roster completed." / "…finalized" banner titles and the
+   SD message note rendered white-on-mint. Four classes clear the leak on
+   specificity alone, with no new forced declaration. */
+html.light-theme .participant-portal.pats-portal [class~="text-emerald-800"],
+html[data-site-theme="day"] .participant-portal.pats-portal [class~="text-emerald-800"] {
+  color: #065f46;
+}
+
+
+html.light-theme .participant-portal.pats-portal [class~="text-emerald-900"],
+html[data-site-theme="day"] .participant-portal.pats-portal [class~="text-emerald-900"] {
+  color: #064e3b;
+}
+
+
+html.light-theme .participant-portal.pats-portal [class~="text-amber-800"],
+html[data-site-theme="day"] .participant-portal.pats-portal [class~="text-amber-800"] {
+  color: #92400e;
+}
+
+
+html.light-theme .participant-portal.pats-portal [class~="text-amber-900"],
+html[data-site-theme="day"] .participant-portal.pats-portal [class~="text-amber-900"] {
+  color: #78350f;
+}
+
+
 
 /* `.pp-btn` is excluded because this `*` catch-all otherwise repaints the
    design-system buttons' labels slate-600. Both this rule and the white in
@@ -20510,38 +20544,78 @@ html:has(.dashboard-day) body {
 
 /* The file control is excluded from the shared field rule above (it owns its
    own button chrome), so it needs the frame stated here — without it the
-   browser default left a hard-cornered box beside the rounded text fields. */
-.pp .pp-file {
-  display: block;
+   browser default left a hard-cornered box beside the rounded text fields.
+   The native input's own text is not writable, so a field editing a document
+   that is ALREADY stored could only ever read "No file chosen". The chrome is
+   therefore rebuilt from a button and a name slot, with the real input laid
+   over the whole field at zero opacity: it still opens the picker on click,
+   still takes focus (hence `:focus-within` for the ring) and still carries
+   the `<label for>`, but the slot can name the stored file. */
+.pp .pp-filefield {
+  position: relative;
+  display: flex;
   width: 100%;
+  align-items: center;
+  gap: 0.75rem;
   padding: 0.3rem;
   border: 1px solid var(--pp-border-strong);
   border-radius: var(--pp-radius-xs);
   background: #ffffff;
   font-size: calc(0.8125rem * var(--pp-type-scale));
-  color: var(--pp-muted);
 }
 
-.pp .pp-file:focus-within {
+.pp .pp-filefield__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pp .pp-filefield__input:disabled {
+  cursor: not-allowed;
+}
+
+.pp .pp-filefield:focus-within {
   border-color: var(--pp-primary);
   box-shadow: var(--pp-ring);
   outline: none;
 }
 
-.pp .pp-file::file-selector-button {
-  margin-right: 0.75rem;
-  border: 0;
+/* Both children are divs, not spans/labels: the portal's day catch-all forces
+   every one of those to slate, which would flatten this chip's green and the
+   muted/normal split on the name beside it. */
+.pp .pp-filefield__btn {
+  flex: none;
   border-radius: 6px;
   background: var(--pp-primary-soft);
   color: var(--pp-primary);
   font-size: calc(0.72rem * var(--pp-type-scale));
   font-weight: 700;
   padding: 0.45rem 0.75rem;
-  cursor: pointer;
 }
 
-.pp .pp-file::file-selector-button:hover {
+.pp .pp-filefield:hover .pp-filefield__btn {
   background: #d8e6dd;
+}
+
+/* `width: 0` (not just `min-width`) keeps a long PDF name out of the field's
+   intrinsic width — without it the un-wrapped name sizes the grid track and
+   the two-column upload row pushes past a phone's viewport. `flex: 1` grows
+   it back over whatever space the chip leaves. */
+.pp .pp-filefield__name {
+  min-width: 0;
+  width: 0;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--pp-body);
+}
+
+.pp .pp-filefield__name--empty {
+  color: var(--pp-muted);
 }
 
 .pp .pp-doc {

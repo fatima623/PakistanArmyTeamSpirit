@@ -183,6 +183,57 @@ function DocStatus({
 }
 
 /**
+ * PDF picker that can name the file the server already holds.
+ *
+ * A native file input reads "No file chosen" until the visitor picks something
+ * in THIS session — its text comes from its value, and a value cannot be set
+ * from script. Reopening a saved row therefore showed three blank-looking
+ * fields with the stored name relegated to a line underneath. Here the name
+ * slot is ours: it shows the freshly picked file, else the stored one, and the
+ * real input sits over the field at zero opacity so the click, the focus ring
+ * and the `<label for>` all still land on it.
+ */
+function FileField({
+  id,
+  picked,
+  storedName,
+  disabled,
+  onPick,
+  tx,
+}: {
+  id: string;
+  picked: File | null;
+  storedName: string | null;
+  disabled: boolean;
+  onPick: (file: File | null) => void;
+  tx: Dictionary["flights"]["form"];
+}) {
+  const name = picked?.name ?? storedName;
+  return (
+    <div className="pp-filefield">
+      <input
+        id={id}
+        type="file"
+        accept="application/pdf,.pdf"
+        disabled={disabled}
+        className="pp-filefield__input"
+        onChange={(e) => onPick(e.target.files?.[0] ?? null)}
+      />
+      <div className="pp-filefield__btn" aria-hidden>
+        {tx.chooseFile}
+      </div>
+      {/* `title` because a long passport scan's name is ellipsised. */}
+      <div
+        className={`pp-filefield__name${name ? "" : " pp-filefield__name--empty"}`}
+        title={name ?? undefined}
+      >
+        {name ?? tx.noFileChosen}
+      </div>
+    </div>
+  );
+}
+
+/**
  * Flight information — ONE record per roster member. Every traveller flies on
  * their own passport and ticket, so the roster is rendered as a list of rows
  * and each row owns its own form, its own busy flag and its own error. Rows
@@ -631,25 +682,21 @@ export function FlightDetailsManager({
                 >
                   {fl.form.passportDoc}
                 </label>
-                <input
+                <FileField
                   id={`fd-passport-file-${member.id}`}
-                  type="file"
-                  accept="application/pdf,.pdf"
+                  picked={form.passportFile}
+                  storedName={flight?.passportFileName ?? null}
                   disabled={busy}
-                  onChange={(e) =>
-                    patchDraft(member, {
-                      passportFile: e.target.files?.[0] ?? null,
-                    })
-                  }
-                  className="pp-file"
+                  onPick={(passportFile) => patchDraft(member, { passportFile })}
+                  tx={fl.form}
                 />
                 <p className="mt-1 text-xs text-slate-500">
                   {fl.form.passportDocHint}
                 </p>
-                {flight?.passportFileName ? (
+                {flight?.passportFileName && !form.passportFile ? (
                   <p className="mt-1 text-xs text-slate-500">
                     <FileText className="mr-1 inline h-3 w-3" aria-hidden />
-                    {fl.form.currentFile(flight.passportFileName)}
+                    {fl.form.keepFileHint}
                   </p>
                 ) : null}
               </div>
@@ -660,25 +707,21 @@ export function FlightDetailsManager({
                 >
                   {fl.form.ticketDoc}
                 </label>
-                <input
+                <FileField
                   id={`fd-ticket-file-${member.id}`}
-                  type="file"
-                  accept="application/pdf,.pdf"
+                  picked={form.ticketFile}
+                  storedName={flight?.ticketFileName ?? null}
                   disabled={busy}
-                  onChange={(e) =>
-                    patchDraft(member, {
-                      ticketFile: e.target.files?.[0] ?? null,
-                    })
-                  }
-                  className="pp-file"
+                  onPick={(ticketFile) => patchDraft(member, { ticketFile })}
+                  tx={fl.form}
                 />
                 <p className="mt-1 text-xs text-slate-500">
                   {fl.form.ticketDocHint}
                 </p>
-                {flight?.ticketFileName ? (
+                {flight?.ticketFileName && !form.ticketFile ? (
                   <p className="mt-1 text-xs text-slate-500">
                     <FileText className="mr-1 inline h-3 w-3" aria-hidden />
-                    {fl.form.currentFile(flight.ticketFileName)}
+                    {fl.form.keepFileHint}
                   </p>
                 ) : null}
               </div>
@@ -697,25 +740,23 @@ export function FlightDetailsManager({
                   >
                     {fl.form.returnTicketDoc}
                   </label>
-                  <input
+                  <FileField
                     id={`fd-return-ticket-file-${member.id}`}
-                    type="file"
-                    accept="application/pdf,.pdf"
+                    picked={form.returnTicketFile}
+                    storedName={flight?.returnTicketFileName ?? null}
                     disabled={busy}
-                    onChange={(e) =>
-                      patchDraft(member, {
-                        returnTicketFile: e.target.files?.[0] ?? null,
-                      })
+                    onPick={(returnTicketFile) =>
+                      patchDraft(member, { returnTicketFile })
                     }
-                    className="pp-file"
+                    tx={fl.form}
                   />
                   <p className="mt-1 text-xs text-slate-500">
                     {fl.form.returnTicketDocHint}
                   </p>
-                  {flight?.returnTicketFileName ? (
+                  {flight?.returnTicketFileName && !form.returnTicketFile ? (
                     <p className="mt-1 text-xs text-slate-500">
                       <FileText className="mr-1 inline h-3 w-3" aria-hidden />
-                      {fl.form.currentFile(flight.returnTicketFileName)}
+                      {fl.form.keepFileHint}
                     </p>
                   ) : null}
                 </div>

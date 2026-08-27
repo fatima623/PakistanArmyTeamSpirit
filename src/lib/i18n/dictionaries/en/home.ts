@@ -14,7 +14,7 @@ export const home = {
      * direction (see PatsHero / PatsMissionShowcase).
      */
     mottoTranslation:
-      "Faith unwavering, action relentless, love conquering all",
+      "Strong faith, relentless action, and love conquering the world.",
     description:
       "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit .",
     // cta: "Register your team",

@@ -25,7 +25,8 @@
     "media:process": "python scripts/process-pats-media.py",
     "awards:split": "node scripts/split-awards.js",
     "awards:crop-display": "node scripts/crop-award-display.js",
-    "audit:check": "node scripts/audit-check.mjs"
+    "audit:check": "node scripts/audit-check.mjs",
+    "mail:check": "node scripts/check-smtp.mjs"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
