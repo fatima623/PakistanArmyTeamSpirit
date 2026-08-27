@@ -604,7 +604,7 @@ export function AdminUserForm({
             </Section>
 
             <Section title="Detail of Defence Attaché (CO)">
-              <Field label="CO name" required error={errors.coName}>
+              <Field label="CO/2IC name" required error={errors.coName}>
                 <Input
                   value={form.coName}
                   onChange={(e) => set("coName", e.target.value)}
@@ -612,7 +612,7 @@ export function AdminUserForm({
                 />
               </Field>
               <div className="grid grid-cols-1 gap-[0.85rem] sm:grid-cols-2">
-                <Field label="CO email" required error={errors.coEmail}>
+                <Field label="CO/2IC email" required error={errors.coEmail}>
                   <Input
                     type="email"
                     value={form.coEmail}
@@ -620,7 +620,7 @@ export function AdminUserForm({
                     className={adminInput}
                   />
                 </Field>
-                <Field label="CO phone" required error={errors.coPhone}>
+                <Field label="CO/2IC phone" required error={errors.coPhone}>
                   <Input
                     value={form.coPhone}
                     onChange={(e) => set("coPhone", e.target.value)}

@@ -4,6 +4,13 @@ import { cn } from "@/lib/utils"
 
 export interface FormFieldProps {
   label: string
+  /**
+   * The form field this block wraps. Rendered as `data-field`, which is how a
+   * failed submit finds the first invalid block to scroll to and focus — the
+   * control inside may be a Radix trigger or a combobox with no ref of its own,
+   * so react-hook-form cannot reach it.
+   */
+  name?: string
   required?: boolean
   hint?: string
   error?: string
@@ -19,6 +26,7 @@ export interface FormFieldProps {
 
 export function FormField({
   label,
+  name,
   required,
   hint,
   error,
@@ -40,7 +48,10 @@ export function FormField({
 
   if (stacked) {
     return (
-      <div className={cn("flex min-w-0 flex-col gap-1.5", className)}>
+      <div
+        data-field={name}
+        className={cn("flex min-w-0 flex-col gap-1.5", className)}
+      >
         <label className="pats-form-label">
           {label}
           {required && (
@@ -55,7 +66,7 @@ export function FormField({
   }
 
   return (
-    <div className={cn("contents", className)}>
+    <div data-field={name} className={cn("contents", className)}>
       <label className="pats-form-label pt-2">
         {label}
         {required && <span className="ml-1 text-brand-red">*</span>}

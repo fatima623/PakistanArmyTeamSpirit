@@ -1,11 +1,12 @@
 "use client";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ChevronsUp,
+  Globe,
   Loader2,
   Mail,
   MessageSquare,
@@ -20,6 +21,7 @@ import {
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { CountrySelect } from "@/components/ui/CountrySelect";
 import { FormField } from "@/components/ui/FormField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +36,7 @@ import {
 } from "@/components/ui/select";
 import { UnitUpdateSchema } from "@/lib/validations";
 import { ARM_OPTIONS } from "@/lib/form-options";
+import { NAMED_COUNTRIES } from "@/lib/countries";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { apiErrorMessage, translateApiMessage } from "@/lib/i18n/api-error-i18n";
 import { translateUnitName } from "@/lib/i18n/unit-name-i18n";
@@ -58,8 +61,33 @@ export type UnitEditUser = {
   firstName: string;
   lastName: string;
   rank: string;
+  /** Country of application — stored on User, seeded by the admin, editable here. */
+  country: string | null;
   unit: UnitData | null;
 };
+
+/**
+ * The order the form reads in, top to bottom. A failed submit walks this to
+ * find the first field the participant still has to deal with — `errors` is a
+ * plain object, so its key order follows the schema, not the layout, and the
+ * two disagree (CO details sit above Unit details on screen).
+ */
+const FIELD_ORDER = [
+  "firstName",
+  "lastName",
+  "rank",
+  "country",
+  "coName",
+  "coEmail",
+  "coPhone",
+  "unitType",
+  "branch",
+  "unitName",
+  "arm",
+  "secondPocEmail",
+  "thirdPocEmail",
+  "additionalInfo",
+] as const;
 
 /** Input with a muted leading icon — matches the redesigned card fields. */
 const IconInput = forwardRef<
@@ -89,8 +117,17 @@ export function UnitEditForm({
   const u = t.unit;
   const [submitting, setSubmitting] = useState(false);
 
-  // Localize zod validation messages (from UnitUpdateSchema) to the active
-  // locale via the shared api-error dictionary.
+  /* Localize zod validation messages (from UnitUpdateSchema) to the active
+     locale. The schema emits stable English tokens; the two the participant
+     actually hits get the unit dictionary's full sentences ("This field is
+     required" reads as an instruction where the bare token "Required" reads as
+     a label), and anything else falls back to the shared api-error dictionary. */
+  const schemaMessage = (message: string) => {
+    if (message === "Required") return u.errors.required;
+    if (message === "Valid email required") return u.errors.email;
+    return translateApiMessage(message, locale);
+  };
+
   const resolver: Resolver<UnitEditValues> = async (
     values,
     context,
@@ -104,7 +141,7 @@ export function UnitEditForm({
     for (const key of Object.keys(errs)) {
       const err = errs[key];
       if (err && typeof err.message === "string") {
-        err.message = translateApiMessage(err.message, locale);
+        err.message = schemaMessage(err.message);
       }
     }
     return result;
@@ -120,10 +157,15 @@ export function UnitEditForm({
     formState: { errors },
   } = useForm<UnitEditValues>({
     resolver,
+    /* Our own handler does the focusing: half these controls are Radix
+       triggers or a combobox with no ref for react-hook-form to focus, and
+       its instant jump also fights the smooth scroll below. */
+    shouldFocusError: false,
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
       rank: user.rank,
+      country: user.country ?? "",
       unitType: (unit?.unitType as UnitEditValues["unitType"]) ?? "Regular",
       branch: (unit?.branch as UnitEditValues["branch"]) ?? "Army",
       unitName: unit?.unitName ?? "",
@@ -136,6 +178,32 @@ export function UnitEditForm({
       coPhone: unit?.coPhone ?? "",
     },
   });
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  /**
+   * Take the participant to the first field that still needs them: scroll its
+   * block into the middle of the viewport and focus the control inside it. Used
+   * both for client-side validation failures and for whatever the API rejects,
+   * so an error is never left sitting off-screen with only a toast to show for
+   * it.
+   */
+  const goToFirstInvalid = (invalid: readonly string[]) => {
+    const target = FIELD_ORDER.find((field) => invalid.includes(field));
+    if (!target) return;
+    const block = formRef.current?.querySelector<HTMLElement>(
+      `[data-field="${target}"]`
+    );
+    if (!block) return;
+    /* `display: contents` blocks have no box of their own, and a Radix select
+       renders its trigger as a button — so scroll and focus whatever control is
+       actually inside rather than the wrapper. */
+    const control = block.querySelector<HTMLElement>(
+      "input:not([type='hidden']), textarea, select, button, [tabindex]:not([tabindex='-1'])"
+    );
+    (control ?? block).scrollIntoView({ behavior: "smooth", block: "center" });
+    control?.focus({ preventScroll: true });
+  };
 
   const onSubmit = async (data: UnitEditValues) => {
     setSubmitting(true);
@@ -159,13 +227,15 @@ export function UnitEditForm({
       }
       const body = await res.json();
       if (body.errors) {
+        const fields = Object.keys(body.errors as Record<string, string[]>);
         Object.entries(body.errors as Record<string, string[]>).forEach(
           ([field, messages]) => {
             setError(field as keyof UnitEditValues, {
-              message: translateApiMessage(messages[0], locale),
+              message: schemaMessage(messages[0]),
             });
           }
         );
+        goToFirstInvalid(fields);
       } else {
         toast.error(apiErrorMessage(body, locale, t.common.toasts.genericError));
       }
@@ -181,7 +251,14 @@ export function UnitEditForm({
     "grid grid-cols-1 items-start gap-x-5 gap-y-4 sm:grid-cols-2";
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit(onSubmit, (invalid) =>
+        goToFirstInvalid(Object.keys(invalid))
+      )}
+      noValidate
+      className="space-y-5"
+    >
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {/* Personal Details */}
         <section className={cardClass}>
@@ -200,14 +277,42 @@ export function UnitEditForm({
           </div>
           <div className="p-5">
             <div className={bodyGrid}>
-              <FormField stacked label={u.fields.firstName} required error={errors.firstName?.message}>
+              <FormField name="firstName" stacked label={u.fields.firstName} required error={errors.firstName?.message}>
                 <IconInput icon={User} {...register("firstName")} />
               </FormField>
-              <FormField stacked label={u.fields.lastName} required error={errors.lastName?.message}>
+              <FormField name="lastName" stacked label={u.fields.lastName} required error={errors.lastName?.message}>
                 <IconInput icon={User} {...register("lastName")} />
               </FormField>
-              <FormField stacked className="sm:col-span-2" label={u.fields.rank} required error={errors.rank?.message}>
+              <FormField name="rank" stacked label={u.fields.rank} required error={errors.rank?.message}>
                 <IconInput icon={ChevronsUp} {...register("rank")} />
+              </FormField>
+              {/* Country of application lives on User, not Unit — the admin
+                  seeds it with the login and the participant confirms it here,
+                  which is the first point in the flow they see their own record. */}
+              <FormField name="country" stacked label={u.fields.country} required error={errors.country?.message}>
+                <Controller
+                  name="country"
+                  control={control}
+                  render={({ field }) => (
+                    <div className="relative">
+                      <Globe
+                        className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-slate-400"
+                        aria-hidden
+                      />
+                      <CountrySelect
+                        value={field.value}
+                        onChange={field.onChange}
+                        /* No "Other" — this form has no "specify your own"
+                           follow-up, so offering it would file the literal
+                           string "Other" as the participant's country. */
+                        options={NAMED_COUNTRIES}
+                        className="rounded-lg pl-9"
+                        placeholder={u.placeholders.select}
+                        aria-invalid={!!errors.country}
+                      />
+                    </div>
+                  )}
+                />
               </FormField>
             </div>
           </div>
@@ -230,13 +335,13 @@ export function UnitEditForm({
           </div>
           <div className="p-5">
             <div className="grid grid-cols-1 gap-4">
-              <FormField stacked label={u.fields.coName} required error={errors.coName?.message}>
+              <FormField name="coName" stacked label={u.fields.coName} required error={errors.coName?.message}>
                 <IconInput icon={User} {...register("coName")} />
               </FormField>
-              <FormField stacked label={u.fields.coEmail} required error={errors.coEmail?.message}>
+              <FormField name="coEmail" stacked label={u.fields.coEmail} required error={errors.coEmail?.message}>
                 <IconInput icon={Mail} type="email" {...register("coEmail")} />
               </FormField>
-              <FormField stacked label={u.fields.coPhone} required error={errors.coPhone?.message}>
+              <FormField name="coPhone" stacked label={u.fields.coPhone} required error={errors.coPhone?.message}>
                 <IconInput icon={Phone} {...register("coPhone")} />
               </FormField>
             </div>
@@ -261,7 +366,7 @@ export function UnitEditForm({
         </div>
         <div className="p-5">
           <div className={bodyGrid}>
-            <FormField stacked label={u.fields.unitType} required error={errors.unitType?.message}>
+            <FormField name="unitType" stacked label={u.fields.unitType} required error={errors.unitType?.message}>
               <RadioGroup
                 value={watch("unitType")}
                 onValueChange={(v) =>
@@ -280,7 +385,7 @@ export function UnitEditForm({
               </RadioGroup>
             </FormField>
 
-            <FormField stacked label={u.fields.branch} required error={errors.branch?.message}>
+            <FormField name="branch" stacked label={u.fields.branch} required error={errors.branch?.message}>
               <RadioGroup
                 value={watch("branch")}
                 onValueChange={(v) =>
@@ -299,7 +404,7 @@ export function UnitEditForm({
               </RadioGroup>
             </FormField>
 
-            <FormField stacked label={u.fields.unitName} required error={errors.unitName?.message}>
+            <FormField name="unitName" stacked label={u.fields.unitName} required error={errors.unitName?.message}>
               <Controller
                 name="unitName"
                 control={control}
@@ -320,7 +425,7 @@ export function UnitEditForm({
               />
             </FormField>
 
-            <FormField stacked label={u.fields.arm} required error={errors.arm?.message}>
+            <FormField name="arm" stacked label={u.fields.arm} required error={errors.arm?.message}>
               <Controller
                 name="arm"
                 control={control}
@@ -341,13 +446,13 @@ export function UnitEditForm({
               />
             </FormField>
 
-            <FormField stacked label={u.fields.secondPocEmail} error={errors.secondPocEmail?.message}>
+            <FormField name="secondPocEmail" stacked label={u.fields.secondPocEmail} error={errors.secondPocEmail?.message}>
               <IconInput icon={Mail} type="email" {...register("secondPocEmail")} />
             </FormField>
-            <FormField stacked label={u.fields.thirdPocEmail} error={errors.thirdPocEmail?.message}>
+            <FormField name="thirdPocEmail" stacked label={u.fields.thirdPocEmail} error={errors.thirdPocEmail?.message}>
               <IconInput icon={Mail} type="email" {...register("thirdPocEmail")} />
             </FormField>
-            <FormField
+            <FormField name="additionalInfo"
               stacked
               className="sm:col-span-2"
               label={u.fields.additionalInfo}

@@ -254,6 +254,7 @@ export default async function JourneyPage({
             firstName: user.firstName,
             lastName: user.lastName,
             rank: user.rank,
+            country: user.country,
             unit: user.unit,
           }}
           unitNames={[...UNIT_NAMES]}

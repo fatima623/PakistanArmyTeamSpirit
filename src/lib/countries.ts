@@ -201,9 +201,19 @@ export const PAKISTAN_COUNTRY = "Pakistan";
 
 export const CUSTOM_COUNTRY_OPTION = "Other";
 
-export const WORLD_COUNTRIES: readonly string[] = [
+/**
+ * Every real country, Pakistan first. Use this wherever there is no
+ * "specify your own" follow-up field to catch {@link CUSTOM_COUNTRY_OPTION} —
+ * offering "Other" with nowhere to type the actual country files the literal
+ * string "Other" as a participant's country of application.
+ */
+export const NAMED_COUNTRIES: readonly string[] = [
   PAKISTAN_COUNTRY,
   ...OTHER_COUNTRIES,
+];
+
+export const WORLD_COUNTRIES: readonly string[] = [
+  ...NAMED_COUNTRIES,
   CUSTOM_COUNTRY_OPTION,
 ];
 

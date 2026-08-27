@@ -158,6 +158,10 @@ export const UnitUpdateSchema = z.object({
   firstName: z.string().min(1, "Required"),
   lastName: z.string().min(1, "Required"),
   rank: z.string().min(1, "Required"),
+  /* Country of application. Lives on User, not Unit — the admin seeds it when
+     they create the login, and the participant confirms or corrects it on the
+     unit information step. */
+  country: z.string().trim().min(1, "Please enter the country"),
   unitType: z.enum(["Regular", "Reserve"]),
   branch: z.enum(["Army", "Navy", "Air Force"]),
   unitName: z.string().min(1, "Required"),
@@ -457,7 +461,11 @@ export const HostFormationAssignSchema = z.object({
   hostFormationId: z.string().trim().min(1).nullable(),
 });
 
-export const AdminUnitUpdateSchema = UnitUpdateSchema.extend({
+/* The admin's unit editor covers the Unit row only — a participant's country
+   is edited from the user form — so it keeps the pre-country shape. */
+export const AdminUnitUpdateSchema = UnitUpdateSchema.omit({
+  country: true,
+}).extend({
   preferredPhase: z.string().optional().nullable(),
   patrolsRequested: z.number().int().min(1).optional(),
 });

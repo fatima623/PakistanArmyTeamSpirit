@@ -14,9 +14,9 @@ export const home = {
      * direction (see PatsHero / PatsMissionShowcase).
      */
     mottoTranslation:
-      "Unwavering faith, relentless resolve, passion that conquers all.",
+      "Unwavering faith, relentless resolve, passion that conquers all",
     description:
-      "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit .",
+      "International Pakistan Army Team Spirit a 60-hour patrolling exercise testing tactical mastery, endurance, and team spirit ",
     // cta: "Register your team",
     scrollHint: "Scroll down",
   },

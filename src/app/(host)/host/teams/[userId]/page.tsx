@@ -222,8 +222,8 @@ export default async function HostTeamDetailPage({
                 [unit.coRank, unit.coName].filter(Boolean).join(" ") || null
               }
             />
-            <Field label="CO email" value={unit.coEmail} />
-            <Field label="CO phone" value={unit.coPhone} />
+            <Field label="CO/2IC email" value={unit.coEmail} />
+            <Field label="CO/2IC phone" value={unit.coPhone} />
             <Field label="Telephone (mil)" value={unit.telephoneMil} />
             <Field label="Telephone (civ)" value={unit.telephoneCiv} />
             <Field label="Address" value={unit.unitAddress} />

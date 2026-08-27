@@ -59,9 +59,9 @@ export const register = {
     secondPoc: "2nd POC email",
     thirdPoc: "3rd POC email (optional)",
     additionalInfo: "Additional info (optional)",
-    coName: "CO name",
-    coEmail: "CO email",
-    coPhone: "CO phone",
+    coName: "CO/2IC  name",
+    coEmail: "CO/2IC email",
+    coPhone: "CO/2IC phone",
   },
 
   // Labels only — the keys are the submitted values and must stay unchanged.

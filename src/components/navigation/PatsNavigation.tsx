@@ -8,7 +8,6 @@ import { PatsLogo } from "@/components/pats/PatsLogo";
 import { PublicLanguageSwitcher } from "@/components/navigation/PublicLanguageSwitcher";
 import { SiteThemeToggle } from "@/components/theme/SiteThemeToggle";
 import { useSiteTheme } from "@/components/theme/SiteThemeProvider";
-import { ARMY_STATS } from "@/lib/army-content";
 import { NAV_BRAND_SUBTITLE, NAV_BRAND_TITLE } from "@/lib/branding";
 import {
   isHrefActive,
@@ -57,35 +56,6 @@ function PafMenuIcon() {
       <span className="pats-nav__menu-line" />
       <span className="pats-nav__menu-line" />
     </span>
-  );
-}
-
-/**
- * The landing page's headline numbers, carried in the header strip beside the
- * emblem while the bar is still transparent over the hero. They occupy the same
- * slot the desktop link row takes over on scroll, so the two never compete —
- * and the standalone stats band further down the page is still below the fold
- * the whole time these are on screen.
- */
-function NavStats({
-  localized,
-}: {
-  localized: readonly { suffix: string; label: string }[] | null;
-}) {
-  return (
-    <ul className="pats-nav__stats">
-      {ARMY_STATS.map((stat, i) => (
-        <li key={stat.label} className="pats-nav__stat">
-          <span className="pats-nav__stat-value">
-            {stat.value}
-            {localized?.[i]?.suffix ?? stat.suffix}
-          </span>
-          <span className="pats-nav__stat-label">
-            {localized?.[i]?.label ?? stat.label}
-          </span>
-        </li>
-      ))}
-    </ul>
   );
 }
 
@@ -277,9 +247,6 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const isScrolled = isSolid;
   const isCompact = isSolid;
   const isShrunk = overHeroMedia ? pastHero : true;
-  /* Landing page only, and only while the bar is still the transparent overlay
-     on the hero — from the first scroll the same strip carries the link row. */
-  const showNavStats = isHome && !isSolid && !menuOpen;
 
   // On DESKTOP the link row is revealed inline as the header goes solid on
   // scroll (and stays shown on non-hero pages). On MOBILE that same `menuOpen`
@@ -390,8 +357,6 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
                   pinned to the light theme, so the switch would be inert. */}
               {isHome ? <SiteThemeToggle /> : null}
             </nav>
-          ) : showNavStats ? (
-            <NavStats localized={t ? t.home.stats : null} />
           ) : null}
 
           <button

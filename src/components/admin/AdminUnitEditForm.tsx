@@ -184,10 +184,10 @@ export function AdminUnitEditForm({ unit }: { unit: AdminUnitData }) {
               </SelectContent>
             </Select>
           </FormFieldAdmin>
-          <FormFieldAdmin label="CO name" required error={errors.coName?.message}>
+          <FormFieldAdmin label="CO/2IC  name" required error={errors.coName?.message}>
             <Input className="admin-input" {...register("coName")} />
           </FormFieldAdmin>
-          <FormFieldAdmin label="CO email" required error={errors.coEmail?.message}>
+          <FormFieldAdmin label="CO/2IC  email" required error={errors.coEmail?.message}>
             <Input type="email" className="admin-input" {...register("coEmail")} />
           </FormFieldAdmin>
         </div>

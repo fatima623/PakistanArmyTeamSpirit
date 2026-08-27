@@ -14,6 +14,7 @@ export const unit: typeof enUnit = {
     firstName: "Имя",
     lastName: "Фамилия",
     rank: "Звание",
+    country: "Страна подачи заявки",
     unitType: "Тип подразделения",
     branch: "Род войск",
     unitName: "Название подразделения",

@@ -14,6 +14,7 @@ export const unit: typeof enUnit = {
     firstName: "Ad",
     lastName: "Soyad",
     rank: "Rütbe",
+    country: "Başvuru ülkesi",
     unitType: "Birlik türü",
     branch: "Kuvvet",
     unitName: "Birlik adı",

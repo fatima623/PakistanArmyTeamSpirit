@@ -10,6 +10,7 @@ import {
   userSelect,
 } from "@/lib/api-helpers";
 import { canEditUnitInfo, workflowUserSelect } from "@/lib/participant-workflow";
+import { PAKISTAN_COUNTRY } from "@/lib/countries";
 
 /**
  * Unit information is the participant's second registration step. The admin
@@ -88,6 +89,14 @@ export async function PUT(request: Request) {
           firstName: data.firstName,
           lastName: data.lastName,
           rank: data.rank,
+          country: data.country,
+          /* Nationality is not on this form. Keep the one case the register
+             form also derives — a Pakistani team is Pakistani — and leave any
+             other nationality exactly as recorded rather than guessing one
+             from the country. */
+          ...(data.country === PAKISTAN_COUNTRY
+            ? { nationality: "Pakistani" }
+            : {}),
           // Completing the step unlocks team registration. Re-saving keeps the
           // original timestamp so the progress panel does not jump around.
           unitInfoCompletedAt:

@@ -12,6 +12,12 @@ type Props = {
   id?: string;
   className?: string;
   placeholder?: string;
+  /**
+   * The list to offer. Defaults to every country PLUS the "Other" escape
+   * hatch — pass `NAMED_COUNTRIES` on a form that has no "specify your own"
+   * follow-up field, or "Other" ends up stored as the country itself.
+   */
+  options?: readonly string[];
   "aria-invalid"?: boolean;
 };
 
@@ -25,6 +31,7 @@ export function CountrySelect({
      untranslated string on that form. English-only callers (/admin) pass their
      own. */
   placeholder,
+  options = WORLD_COUNTRIES,
   "aria-invalid": ariaInvalid,
 }: Props) {
   const listId = useId();
@@ -52,11 +59,9 @@ export function CountrySelect({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return WORLD_COUNTRIES;
-    return WORLD_COUNTRIES.filter((country) =>
-      country.toLowerCase().includes(q)
-    );
-  }, [query]);
+    if (!q) return options;
+    return options.filter((country) => country.toLowerCase().includes(q));
+  }, [query, options]);
 
   function selectCountry(country: string) {
     onChange(country);
@@ -65,7 +70,7 @@ export function CountrySelect({
   }
 
   function handleBlur() {
-    const match = WORLD_COUNTRIES.find(
+    const match = options.find(
       (country) => country.toLowerCase() === query.trim().toLowerCase()
     );
     if (match) {
@@ -109,7 +114,7 @@ export function CountrySelect({
                South Sudan — the exact country the user typed loses to a longer
                one that merely contains it. Mirrors handleBlur's exact lookup. */
             const q = query.trim().toLowerCase();
-            const exact = WORLD_COUNTRIES.find(
+            const exact = options.find(
               (country) => country.toLowerCase() === q
             );
             const choice = exact ?? filtered[0];
@@ -124,7 +129,7 @@ export function CountrySelect({
         }}
       />
       <datalist id={listId}>
-        {WORLD_COUNTRIES.map((country) => (
+        {options.map((country) => (
           <option key={country} value={country} />
         ))}
       </datalist>
