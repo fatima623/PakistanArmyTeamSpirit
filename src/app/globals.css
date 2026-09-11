@@ -24836,18 +24836,49 @@ html[data-site-theme="day"] .registered-map__year-select {
   }
 }
 
-/* Laptop-height and landscape-phone viewports: the motto and the hairline are
-   the two lines the composition can lose without changing what it says. */
-@media (max-height: 620px) {
-  .pats-landing .pats-landing__motto,
-  .pats-landing .pats-landing__rule {
-    display: none;
+/* Short viewports keep every line — the crest, the motto and the gold rule are
+   the page's identity, so they shrink instead of disappearing. The shell is
+   `100dvh` with `overflow: hidden`, and these steps keep the stack inside it. */
+@media (max-height: 680px) {
+  .pats-landing {
+    --landing-crest: clamp(64px, 11vh, 96px);
+    padding-block: clamp(0.75rem, 2.5vh, 1.5rem);
+  }
+
+  .pats-landing .pats-landing__stage {
+    gap: clamp(0.4rem, 1.1vh, 0.8rem);
+  }
+
+  .pats-landing .pats-landing__title-line {
+    font-size: clamp(1.45rem, min(5.2vw, 6.2vh), 2.5rem);
+  }
+
+  .pats-landing .pats-landing__lede {
+    font-size: clamp(0.82rem, min(1.4vw, 1.8vh), 0.95rem);
+    line-height: 1.55;
+  }
+
+  .pats-landing .pats-landing__cta {
+    margin-top: 0;
+    min-height: clamp(2.35rem, 5.5vh, 2.8rem);
   }
 }
 
-@media (max-height: 460px) {
-  .pats-landing .pats-landing__crest {
-    display: none;
+@media (max-height: 480px) {
+  .pats-landing {
+    --landing-crest: clamp(52px, 9.5vh, 72px);
+  }
+
+  .pats-landing .pats-landing__motto {
+    font-size: 0.72rem;
+  }
+
+  .pats-landing .pats-landing__lede {
+    /* Two lines at most down here; the headline carries the meaning. */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 }
 
