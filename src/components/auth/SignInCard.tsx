@@ -147,9 +147,7 @@ export function SignInCard({ variant = "page", footer, className }: Props) {
       )}
     >
       <header className="pats-signin__header">
-        <span className="pats-signin__eyebrow">{L.card.eyebrow}</span>
         <h1 className="pats-signin__title">{L.card.title}</h1>
-        <p className="pats-signin__description">{L.card.description}</p>
       </header>
 
       <AnimatePresence mode="wait">

@@ -55,10 +55,12 @@ export const ADMIN_NAV_ITEMS = [
     group: "Operations",
   },
   {
+    /* The support desk is shared — every staff role answers the same queue
+       (the Host Formation reaches it from its own portal instead). */
     key: "tickets",
     href: "/admin/tickets",
-    label: "Support Tickets",
-    roles: ADMIN_ONLY,
+    label: "Queries / FAQs",
+    roles: ALL_STAFF,
     group: "Operations",
   },
   {

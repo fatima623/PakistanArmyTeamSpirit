@@ -24343,11 +24343,14 @@ html[data-site-theme="day"] .registered-map__year-select {
 
   position: relative;
   isolation: isolate;
-  min-height: 100dvh;
+  /* Exactly one screen: the page is never taller than the viewport, so it
+     never scrolls. Everything inside is sized against `vh` to match. */
+  height: 100dvh;
+  max-height: 100dvh;
   display: grid;
   place-items: center;
   overflow: hidden;
-  padding: clamp(2.5rem, 7vh, 5rem) 1.25rem;
+  padding: clamp(1.25rem, 4vh, 3rem) 1.25rem;
   background:
     linear-gradient(180deg, #fdfdfc 0%, #f2f4f2 46%, #e7ebe8 100%);
   color: var(--landing-ink);
@@ -24479,9 +24482,10 @@ html[data-site-theme="day"] .registered-map__year-select {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: clamp(0.85rem, 1.8vh, 1.35rem);
+  gap: clamp(0.5rem, 1.5vh, 1.25rem);
   width: 100%;
   max-width: 46rem;
+  max-height: 100%;
   animation: pats-landing-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -24498,12 +24502,16 @@ html[data-site-theme="day"] .registered-map__year-select {
 
 /* ── Crest — turns slowly on its vertical axis ─────────────────────── */
 
+.pats-landing {
+  --landing-crest: clamp(74px, 13vh, 132px);
+}
+
 .pats-landing .pats-landing__crest {
   position: relative;
   display: grid;
   place-items: center;
-  width: 132px;
-  height: 132px;
+  width: var(--landing-crest);
+  height: var(--landing-crest);
   perspective: 1000px;
 }
 
@@ -24534,8 +24542,8 @@ html[data-site-theme="day"] .registered-map__year-select {
 
 .pats-landing .pats-landing__crest-spin {
   position: relative;
-  width: 132px;
-  height: 132px;
+  width: var(--landing-crest);
+  height: var(--landing-crest);
   transform-style: preserve-3d;
   animation: pats-landing-flip 7s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
@@ -24554,6 +24562,9 @@ html[data-site-theme="day"] .registered-map__year-select {
 }
 
 .pats-landing .pats-landing__crest-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   filter: drop-shadow(0 10px 22px rgb(var(--brand-ink) / 0.22));
 }
 
@@ -24592,7 +24603,7 @@ html[data-site-theme="day"] .registered-map__year-select {
 
 .pats-landing .pats-landing__title-line {
   font-family: var(--font-barlow), var(--font-arabic), system-ui, sans-serif;
-  font-size: clamp(1.9rem, 6vw, 3.5rem);
+  font-size: clamp(1.6rem, min(6vw, 7.2vh), 3.5rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: 0.01em;
@@ -24644,8 +24655,8 @@ html[data-site-theme="day"] .registered-map__year-select {
 .pats-landing .pats-landing__lede {
   margin: 0;
   max-width: 40rem;
-  font-size: clamp(0.95rem, 1.5vw, 1.0625rem);
-  line-height: 1.7;
+  font-size: clamp(0.875rem, min(1.5vw, 2vh), 1.0625rem);
+  line-height: 1.65;
   color: var(--landing-ink-soft);
   text-wrap: pretty;
 }
@@ -24653,11 +24664,11 @@ html[data-site-theme="day"] .registered-map__year-select {
 /* ── Call to action ────────────────────────────────────────────────── */
 
 .pats-landing .pats-landing__cta {
-  margin-top: clamp(0.5rem, 1.5vh, 1rem);
+  margin-top: clamp(0.25rem, 1vh, 0.85rem);
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
-  min-height: 3.1rem;
+  min-height: clamp(2.6rem, 6vh, 3.1rem);
   padding-inline: 2.25rem;
   border: 0;
   border-radius: 999px;
@@ -24816,19 +24827,27 @@ html[data-site-theme="day"] .registered-map__year-select {
 }
 
 @media (max-width: 480px) {
-  .pats-landing .pats-landing__crest,
-  .pats-landing .pats-landing__crest-spin {
-    width: 104px;
-    height: 104px;
-  }
-
-  .pats-landing .pats-landing__crest-img {
-    width: 104px;
-    height: 104px;
+  .pats-landing {
+    --landing-crest: clamp(66px, 11vh, 104px);
   }
 
   .pats-landing .pats-landing__title-sub {
     letter-spacing: 0.28em;
+  }
+}
+
+/* Laptop-height and landscape-phone viewports: the motto and the hairline are
+   the two lines the composition can lose without changing what it says. */
+@media (max-height: 620px) {
+  .pats-landing .pats-landing__motto,
+  .pats-landing .pats-landing__rule {
+    display: none;
+  }
+}
+
+@media (max-height: 460px) {
+  .pats-landing .pats-landing__crest {
+    display: none;
   }
 }
 
@@ -24858,6 +24877,11 @@ html[data-site-theme="day"] .registered-map__year-select {
    ══════════════════════════════════════════════════════════════════════ */
 
 .pats-signin {
+  /* The marketing shell sizes every field with `font-size: var(--pats-type-body)`
+     behind an importance flag. Redefining the token here is how this card opts
+     down to a tighter scale without adding a flag of its own — 1rem, not less,
+     so focusing a field still does not trigger iOS Safari's zoom. */
+  --pats-type-body: 1rem;
   --signin-ink: rgb(var(--brand-ink));
   --signin-ink-soft: rgb(var(--brand-ink-muted));
   --signin-line: rgb(var(--brand-line) / 0.75);
@@ -24896,9 +24920,9 @@ html[data-site-theme="day"] .registered-map__year-select {
    colour rules below therefore repeat `.pats-signin` — the cheapest way over
    that bar without an importance flag, which the CSS ratchet forbids. */
 .pats-signin.pats-signin .pats-signin__eyebrow {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--signin-gold);
 }
@@ -24906,9 +24930,9 @@ html[data-site-theme="day"] .registered-map__year-select {
 .pats-signin .pats-signin__title {
   margin: 0;
   font-family: var(--font-barlow), var(--font-arabic), system-ui, sans-serif;
-  font-size: 1.75rem;
+  font-size: 1.35rem;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.2;
   letter-spacing: 0.01em;
   text-transform: uppercase;
   color: var(--signin-ink);
@@ -24916,7 +24940,7 @@ html[data-site-theme="day"] .registered-map__year-select {
 
 .pats-signin.pats-signin .pats-signin__description {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.825rem;
   line-height: 1.55;
   color: var(--signin-ink-soft);
 }
@@ -24952,22 +24976,22 @@ html[data-site-theme="day"] .registered-map__year-select {
 }
 
 .pats-signin.pats-signin .pats-signin__label {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--signin-ink-soft);
 }
 
 .pats-signin .pats-signin__input {
   width: 100%;
-  height: 2.85rem;
-  padding-inline: 0.85rem;
+  height: 2.6rem;
+  padding-inline: 0.8rem;
   border: 1px solid var(--signin-line);
   border-radius: 0.65rem;
   background: rgb(255 255 255 / 0.9);
   color: var(--signin-ink);
-  font-size: 0.95rem;
+  font-size: 1rem;
   transition:
     border-color 0.18s ease,
     box-shadow 0.18s ease;
@@ -25035,9 +25059,9 @@ html[data-site-theme="day"] .registered-map__year-select {
 }
 
 .pats-signin.pats-signin .pats-signin__remember-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--signin-ink);
 }
@@ -25048,15 +25072,15 @@ html[data-site-theme="day"] .registered-map__year-select {
   justify-content: center;
   gap: 0.55rem;
   width: 100%;
-  min-height: 2.95rem;
+  min-height: 2.75rem;
   margin-top: 0.15rem;
   border: 0;
   border-radius: 0.7rem;
   cursor: pointer;
   font-family: var(--font-barlow), var(--font-arabic), system-ui, sans-serif;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgb(var(--brand-sand));
   background: linear-gradient(
@@ -25249,7 +25273,7 @@ html[data-site-theme="day"] .registered-map__year-select {
 }
 
 .pats-signin-dialog .pats-signin__title {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 
 .pats-signin-dialog__close {

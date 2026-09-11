@@ -34,7 +34,7 @@ export const core = {
     unitInfo: "Update unit information",
     hostInfo: "Host Information",
     journey: "Registration Journey",
-    support: "Support",
+    support: "Queries / FAQs",
     supportTicket: "Support ticket",
     confirmParticipation: "Confirm Participation",
   },
@@ -48,7 +48,7 @@ export const core = {
     logout: "Log out",
     dashboard: "Dashboard",
     tour: "Virtual Tour",
-    support: "Support / Query",
+    support: "Query / FAQs",
     journeyComplete: "Journey complete",
   },
 

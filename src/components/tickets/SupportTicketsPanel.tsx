@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ChevronRight, Loader2, MessageSquare, Plus } from "lucide-react";
 import { toast } from "sonner";
 
+import { FaqAccordion } from "@/components/tickets/FaqAccordion";
 import { NewTicketForm } from "@/components/tickets/NewTicketForm";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
 import { Button } from "@/components/ui/button";
@@ -22,9 +23,13 @@ export type SupportTicketListItem = {
 };
 
 /**
- * Participant support view. While the new-ticket form is open the existing
- * ticket list is hidden to keep focus on composing; once the form closes
- * (cancel or submit) the list returns. Each open ticket carries inline
+ * Participant "Query / FAQs" view.
+ *
+ * The FAQ accordion comes first on purpose: most queries are one of a dozen
+ * recurring questions, and answering them in place is faster for the
+ * participant than waiting on a reply. The query list follows. While the
+ * new-query form is open both are hidden to keep focus on composing; once the
+ * form closes (cancel or submit) they return. Each open query carries inline
  * "Resolve" / "Close" actions so participants can wrap up a thread without
  * opening it.
  */
@@ -87,6 +92,14 @@ export function SupportTicketsPanel({
       ) : null}
 
       <NewTicketForm open={creating} onOpenChange={setCreating} />
+
+      {!creating ? (
+        <FaqAccordion
+          title={tk.faq.title}
+          subtitle={tk.faq.subtitle}
+          items={tk.faq.items}
+        />
+      ) : null}
 
       {!creating ? (
         tickets.length === 0 ? (

@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
-import { handleApiError, requireAdmin } from "@/lib/api-helpers";
+import { handleApiError, requireTicketDesk } from "@/lib/api-helpers";
 import { normalizeTicketStatus, TICKET_STATUS } from "@/lib/constants";
 import type { Prisma } from "@prisma/client";
 
+/**
+ * Every ticket, for the whole support desk — Admin, MT, SD and the Host
+ * Formation login all read the same queue (see `TICKET_DESK_ROLES`).
+ */
 export async function GET(request: Request) {
   try {
-    await requireAdmin();
+    await requireTicketDesk();
     const { searchParams } = new URL(request.url);
     const statusParam = searchParams.get("status");
     const search = searchParams.get("q")?.trim();

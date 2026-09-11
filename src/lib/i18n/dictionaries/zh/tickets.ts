@@ -3,10 +3,10 @@ import type { tickets as enTickets } from "../en/tickets";
 // Simplified Chinese (zh-CN) translations for the support tickets surfaces.
 export const tickets: typeof enTickets = {
   panel: {
-    title: "支持",
-    subtitle: "提交工单，我们的团队会尽快回复您。",
-    newTicket: "新建工单",
-    empty: "您还没有任何支持工单。如果需要帮助，请在上方提交工单。",
+    title: "咨询 / 常见问题",
+    subtitle: "请先查看下方的解答。若没有找到答案，请提交咨询，管理方会回复您。",
+    newTicket: "新建咨询",
+    empty: "您还没有提交过咨询。如需帮助，请在上方提交。",
     listMeta: (category, count, updated) =>
       `${category} · ${count} 条消息 · 更新于 ${updated}`,
   },
@@ -29,12 +29,63 @@ export const tickets: typeof enTickets = {
     TECHNICAL: "技术问题",
   },
   staffTag: "PATS 团队",
+
+  faq: {
+    title: "常见问题",
+    subtitle: "关于 PATS 最常见问题的简要解答。",
+    items: [
+      {
+        q: "如何获得 PATS 门户的账号？",
+        a: "账号由 PATS 管理方创建，不提供公开注册。您的队伍获得提名后，管理方会创建登录账号，并将凭据发送至您登记的电子邮箱。",
+      },
+      {
+        q: "忘记密码怎么办？",
+        a: "请使用登录页面的“忘记密码？”链接。系统会向您登记的邮箱发送一个限时有效的安全重置链接。若未收到邮件，请在此提交咨询。",
+      },
+      {
+        q: "注册分为哪几步？顺序如何？",
+        a: "共五步，逐步解锁：1) 确认参加，2) 单位信息，3) 队员名单，4) 航班信息，5) 由 SD（体育局）核验。控制台会显示当前可办理的步骤以及尚未完成的事项。",
+      },
+      {
+        q: "我的队伍最多可以有多少人？",
+        a: "队伍人数上限公布在您的控制台，对所有队伍一致。若贵代表团确需超出，请提交扩员申请并说明理由，管理方将逐案审定。",
+      },
+      {
+        q: "航班信息需要提交哪些内容？",
+        a: "每位出行队员一条记录：抵达与离境航班的日期、时间和航班号，以及该旅客的护照与机票文件。名单上每位成员都有记录后，该步骤才算完成。",
+      },
+      {
+        q: "什么时候算作已提交注册？",
+        a: "整份名单的航班信息提交后，您的注册会自动进入 SD 核验队列，无需另行发送任何材料。控制台的状态会显示当前进度。",
+      },
+      {
+        q: "保存后还能修改单位或主官信息吗？",
+        a: "在该步骤仍开放时可以：从控制台重新打开“单位信息”并保存修改。注册通过核验之后，请在此提交咨询，由管理方代为更正。",
+      },
+      {
+        q: "在哪里了解演习本身的情况？",
+        a: "请从侧边栏打开“导览”。其中包含活动详情、国际参与、PATS 介绍、奖项、图库、公告与重要日期——所有公开发布的 PATS 内容。",
+      },
+      {
+        q: "谁能看到我的咨询？谁来回复？",
+        a: "咨询是一场共享的对话：PATS 管理方全体与承办编队都可以看到，任何一方都可以回复。每条回复都会显示作者姓名及其所属部门。",
+      },
+      {
+        q: "咨询关闭后还能重新打开吗？",
+        a: "已关闭的咨询仍可查阅，但不再接受回复。若同一问题再次出现，请新建一条咨询，并在主题中注明此前的那条。",
+      },
+      {
+        q: "门户支持哪些语言？",
+        a: "英语、阿拉伯语、俄语、土耳其语和中文。可随时使用语言选择器切换，您的选择会记录在本设备上。",
+      },
+    ],
+  },
   detail: {
-    backToSupport: "返回支持",
+    backToSupport: "返回咨询",
     subtitle: (category, date) => `${category} · 创建于 ${date}`,
   },
   form: {
-    title: "提交支持工单",
+    title: "提交咨询",
     subject: "主题",
     subjectPlaceholder: "简要概述您的问题",
     category: "类别",
@@ -42,20 +93,23 @@ export const tickets: typeof enTickets = {
     help: "我们能为您做些什么？",
     helpPlaceholder: "请详细描述您的问题",
     cancel: "取消",
-    submit: "提交工单",
-    toastRaised: "工单已提交",
+    submit: "提交咨询",
+    toastRaised: "咨询已提交",
   },
   reply: {
     closedNotice:
-      "此工单已关闭。如需进一步帮助，请提交新工单。",
+      "此咨询已关闭。如需进一步帮助，请提交新的咨询。",
     placeholder: "撰写回复…",
-    closeTicket: "关闭工单",
+    closeTicket: "关闭咨询",
     sendReply: "发送回复",
-    toastClosed: "工单已关闭",
+    toastClosed: "咨询已关闭",
+    reply: "回复",
+    replyingTo: "回复",
+    cancelReply: "取消回复",
   },
   actions: {
     resolve: "解决",
     close: "关闭",
-    toastResolved: "工单已标记为已解决",
+    toastResolved: "咨询已标记为已解决",
   },
 };

@@ -228,9 +228,7 @@ export const publicSite: typeof enPublicSite = {
       ],
     },
     card: {
-      eyebrow: "Katılımcı erişimi",
       title: "Devam etmek için giriş yapın",
-      description: "Takım hesabınız için onaylanan e-posta ve parolayı girin.",
       emailLabel: "E-posta adresi",
       passwordLabel: "Parola",
       rememberHintOn: "Bu cihazda oturum 30 güne kadar açık kalır.",

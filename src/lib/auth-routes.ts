@@ -84,6 +84,26 @@ export function canAccessHostArea(role: string | undefined | null): boolean {
   return isHostRole(role);
 }
 
+/**
+ * The support desk.
+ *
+ * A participant's query is raised once and answered by whoever picks it up, so
+ * every ticket is a shared conversation: it is visible to — and answerable by —
+ * ALL back-office roles plus the Host Formation login. Host is included here
+ * and nowhere else; it stays out of `STAFF_ROLES` so it still cannot reach
+ * /admin or the participant portal.
+ */
+export const TICKET_DESK_ROLES: string[] = [
+  ROLES.ADMIN,
+  ROLES.MTD,
+  ROLES.SDBS,
+  ROLES.HOST,
+];
+
+export function canAccessTicketDesk(role: string | undefined | null): boolean {
+  return !!role && TICKET_DESK_ROLES.includes(role);
+}
+
 /** Post-login / role-based home route. */
 export function getRoleHomePath(role: string | undefined | null): string {
   if (isStaffRole(role)) return "/admin";

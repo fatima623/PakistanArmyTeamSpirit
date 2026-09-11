@@ -216,9 +216,7 @@ export const publicSite: typeof enPublicSite = {
       ],
     },
     card: {
-      eyebrow: "参赛者访问",
       title: "登录以继续",
-      description: "输入您团队账户已获批的电子邮件与密码。",
       emailLabel: "电子邮件地址",
       passwordLabel: "密码",
       rememberHintOn: "此设备将保持登录状态最长 30 天。",

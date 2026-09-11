@@ -34,7 +34,7 @@ export const core: typeof enCore = {
     unitInfo: "更新单位信息",
     hostInfo: "东道信息",
     journey: "注册流程",
-    support: "支持",
+    support: "咨询 / 常见问题",
     supportTicket: "支持工单",
     confirmParticipation: "确认参与",
   },
@@ -48,7 +48,7 @@ export const core: typeof enCore = {
     logout: "退出登录",
     dashboard: "仪表板",
     tour: "虚拟导览",
-    support: "支持 / 咨询",
+    support: "咨询 / 常见问题",
     journeyComplete: "流程已完成",
   },
 

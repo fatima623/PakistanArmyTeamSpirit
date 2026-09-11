@@ -481,6 +481,8 @@ export const TicketCreateSchema = z.object({
 
 export const TicketReplySchema = z.object({
   body: z.string().trim().min(1, "Message required").max(5000),
+  /** Group-chat quote reply — id of the message being answered. */
+  replyToId: z.string().trim().min(1).optional().nullable(),
 });
 
 export const AdminTicketUpdateSchema = z.object({

@@ -10,7 +10,11 @@ import {
   requireJsonContentType,
 } from "@/lib/api-helpers";
 import { TicketReplySchema } from "@/lib/validations";
-import { buildAdminTicketUrl, notifyTicket } from "@/lib/tickets";
+import {
+  buildAdminTicketUrl,
+  notifyTicket,
+  resolveTicketReplyTarget,
+} from "@/lib/tickets";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -39,6 +43,11 @@ export async function POST(request: Request, { params }: RouteParams) {
       throw new ApiError("This ticket is closed", 409);
     }
 
+    const replyToId = await resolveTicketReplyTarget(
+      ticket.id,
+      parsed.data.replyToId
+    );
+
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { firstName: true, lastName: true, email: true },
@@ -60,6 +69,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         authorRole: "user",
         authorName,
         body: parsed.data.body,
+        replyToId,
       },
       select: {
         id: true,
@@ -67,6 +77,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         authorName: true,
         body: true,
         createdAt: true,
+        replyTo: { select: { id: true, authorName: true, body: true } },
       },
     });
 

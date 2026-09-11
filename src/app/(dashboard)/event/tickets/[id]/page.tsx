@@ -7,8 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { TICKET_STATUS } from "@/lib/constants";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { TicketThread } from "@/components/tickets/TicketThread";
-import { TicketReplyBox } from "@/components/tickets/TicketReplyBox";
+import { TicketConversation } from "@/components/tickets/TicketConversation";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getDictionary();
@@ -46,6 +45,7 @@ export default async function ParticipantTicketDetailPage({
           authorName: true,
           body: true,
           createdAt: true,
+          replyTo: { select: { id: true, authorName: true, body: true } },
         },
       },
     },
@@ -85,19 +85,26 @@ export default async function ParticipantTicketDetailPage({
           </div>
         </header>
 
-        {/* Scrollable conversation */}
-        <div className="max-h-[60vh] overflow-y-auto bg-slate-50/70 px-3 py-4 sm:px-5">
-          <TicketThread
-            messages={ticket.messages}
-            staffLabel={tk.staffTag}
-            locale={locale}
-          />
-        </div>
-
-        {/* Reply composer — stays put at the bottom */}
-        <div className="border-t border-brand-line bg-white px-3 py-3 sm:px-5">
-          <TicketReplyBox ticketId={ticket.id} closed={closed} />
-        </div>
+        <TicketConversation
+          ticketId={ticket.id}
+          messages={ticket.messages}
+          postUrl={`/api/tickets/${ticket.id}/messages`}
+          closeUrl={`/api/tickets/${ticket.id}/close`}
+          closed={closed}
+          locale={locale}
+          staffLabel={tk.staffTag}
+          strings={{
+            placeholder: tk.reply.placeholder,
+            send: tk.reply.sendReply,
+            reply: tk.reply.reply,
+            replyingTo: tk.reply.replyingTo,
+            cancelReply: tk.reply.cancelReply,
+            closedNotice: tk.reply.closedNotice,
+            closeTicket: tk.reply.closeTicket,
+            toastClosed: tk.reply.toastClosed,
+            genericError: dict.common.toasts.genericError,
+          }}
+        />
       </div>
     </div>
   );

@@ -6,17 +6,27 @@ import { AUDIT_ENTITY, TICKET_STATUS } from "@/lib/constants";
 import {
   ApiError,
   handleApiError,
-  requireAdmin,
   requireJsonContentType,
+  requireTicketDesk,
 } from "@/lib/api-helpers";
 import { TicketReplySchema } from "@/lib/validations";
-import { buildParticipantTicketUrl, notifyTicket } from "@/lib/tickets";
+import {
+  buildParticipantTicketUrl,
+  notifyTicket,
+  resolveTicketReplyTarget,
+  ticketAuthorRole,
+} from "@/lib/tickets";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
+/**
+ * A desk reply. Any member of the support desk — Admin, MT, SD or the Host
+ * Formation login — may answer any ticket, and every reply lands in the one
+ * shared thread the participant and the rest of the desk are both reading.
+ */
 export async function POST(request: Request, { params }: RouteParams) {
   try {
-    const session = await requireAdmin();
+    const session = await requireTicketDesk();
     const { id } = await params;
     requireJsonContentType(request);
     const body = await request.json();
@@ -40,6 +50,11 @@ export async function POST(request: Request, { params }: RouteParams) {
       throw new ApiError("Ticket not found", 404);
     }
 
+    const replyToId = await resolveTicketReplyTarget(
+      ticket.id,
+      parsed.data.replyToId
+    );
+
     const staff = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { firstName: true, lastName: true },
@@ -52,9 +67,11 @@ export async function POST(request: Request, { params }: RouteParams) {
       data: {
         ticketId: ticket.id,
         authorId: session.user.id,
-        authorRole: "staff",
+        // The concrete role, so the thread can say which desk answered.
+        authorRole: ticketAuthorRole(session.user.role),
         authorName,
         body: parsed.data.body,
+        replyToId,
       },
       select: {
         id: true,
@@ -62,6 +79,7 @@ export async function POST(request: Request, { params }: RouteParams) {
         authorName: true,
         body: true,
         createdAt: true,
+        replyTo: { select: { id: true, authorName: true, body: true } },
       },
     });
 

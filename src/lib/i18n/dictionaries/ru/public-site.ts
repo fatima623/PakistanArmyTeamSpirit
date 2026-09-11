@@ -243,9 +243,7 @@ export const publicSite: typeof enPublicSite = {
       ],
     },
     card: {
-      eyebrow: "Доступ участника",
       title: "Войдите, чтобы продолжить",
-      description: "Введите электронную почту и пароль, утверждённые для учётной записи вашей команды.",
       emailLabel: "Адрес электронной почты",
       passwordLabel: "Пароль",
       rememberHintOn: "Это устройство будет оставаться в системе до 30 дней.",

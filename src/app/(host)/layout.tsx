@@ -1,5 +1,6 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { LifeBuoy, LogOut } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +45,17 @@ export default async function HostLayout({
             </p>
           </div>
         </div>
-        <form action={logoutAction}>
+        <div className="flex items-center gap-2">
+          {/* The support desk is shared with the administration — a host reads
+              and answers the same participant queries from here. */}
+          <Link
+            href="/host/tickets"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-[0.8125rem] font-semibold text-slate-700 no-underline transition-colors hover:border-slate-400 hover:bg-slate-50"
+          >
+            <LifeBuoy className="h-4 w-4" aria-hidden />
+            Queries
+          </Link>
+          <form action={logoutAction}>
           <button
             type="submit"
             className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-[0.8125rem] font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:bg-slate-50"
@@ -52,7 +63,8 @@ export default async function HostLayout({
             <LogOut className="h-4 w-4" aria-hidden />
             Log Out
           </button>
-        </form>
+          </form>
+        </div>
       </header>
       <main className="mx-auto w-full max-w-[1200px] px-4 py-6 sm:px-6">
         {children}

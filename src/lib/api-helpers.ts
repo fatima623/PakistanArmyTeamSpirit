@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import {
   canAccessAdminArea,
   canAccessHostArea,
+  canAccessTicketDesk,
   canApproveRegistration,
 } from "@/lib/auth-routes";
 
@@ -35,6 +36,19 @@ export async function requireAdmin() {
 export async function requireStaff() {
   const session = await requireAuth();
   if (!canAccessAdminArea(session.user.role)) {
+    throw new ApiError("Forbidden", 403);
+  }
+  return session;
+}
+
+/**
+ * The support desk — every back-office role plus the Host Formation login.
+ * Tickets are a shared conversation, so all of them read and answer the same
+ * threads (see `TICKET_DESK_ROLES`).
+ */
+export async function requireTicketDesk() {
+  const session = await requireAuth();
+  if (!canAccessTicketDesk(session.user.role)) {
     throw new ApiError("Forbidden", 403);
   }
   return session;

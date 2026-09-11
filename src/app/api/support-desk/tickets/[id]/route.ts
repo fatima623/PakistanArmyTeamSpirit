@@ -11,8 +11,8 @@ import {
 import {
   ApiError,
   handleApiError,
-  requireAdmin,
   requireJsonContentType,
+  requireTicketDesk,
 } from "@/lib/api-helpers";
 import { AdminTicketUpdateSchema } from "@/lib/validations";
 import {
@@ -25,7 +25,7 @@ type RouteParams = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, { params }: RouteParams) {
   try {
-    await requireAdmin();
+    await requireTicketDesk();
     const { id } = await params;
 
     const ticket = await prisma.supportTicket.findUnique({
@@ -58,6 +58,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
             authorName: true,
             body: true,
             createdAt: true,
+            replyTo: {
+              select: { id: true, authorName: true, body: true },
+            },
           },
         },
       },
@@ -75,7 +78,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
-    const session = await requireAdmin();
+    const session = await requireTicketDesk();
     const { id } = await params;
     requireJsonContentType(request);
     const body = await request.json();

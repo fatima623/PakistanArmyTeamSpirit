@@ -44,7 +44,7 @@ export const core: typeof enCore = {
     unitInfo: "تحديث بيانات الوحدة",
     hostInfo: "معلومات الاستضافة",
     journey: "مسار التسجيل",
-    support: "الدعم",
+    support: "الاستفسارات / الأسئلة الشائعة",
     supportTicket: "طلب دعم",
     confirmParticipation: "تأكيد المشاركة",
   },
@@ -58,7 +58,7 @@ export const core: typeof enCore = {
     logout: "تسجيل الخروج",
     dashboard: "لوحة التحكم",
     tour: "الجولة الافتراضية",
-    support: "الدعم / الاستفسار",
+    support: "استفسار / أسئلة شائعة",
     journeyComplete: "اكتمل التسجيل",
   },
 

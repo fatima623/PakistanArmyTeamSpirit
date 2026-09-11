@@ -1,19 +1,45 @@
+import { prisma } from "@/lib/prisma";
 import { sendMail } from "@/lib/mail";
+import { TICKET_DESK_ROLES, canAccessTicketDesk } from "@/lib/auth-routes";
+
+/* Pure author-role helpers live in `ticket-roles` so the client-side thread
+   view can import them without dragging Prisma and the mailer along. */
+export {
+  isStaffAuthorRole,
+  ticketAuthorRole,
+  ticketAuthorRoleLabel,
+} from "@/lib/ticket-roles";
 
 /**
  * Roles allowed to act as support "team" members (respond to / manage tickets).
- * Currently only `admin`; extend this when the MTD / SDBS roles are introduced
- * so ticket staffing stays in one place.
+ * The desk is shared: Admin, MT, SD and the Host Formation login all see every
+ * ticket and all reply into the same thread. `TICKET_DESK_ROLES` is the single
+ * source of that list.
  */
-export const TICKET_STAFF_ROLES = ["admin"] as const;
+export const TICKET_STAFF_ROLES = TICKET_DESK_ROLES;
 
 export function isTicketStaffRole(role: string | null | undefined): boolean {
-  return !!role && (TICKET_STAFF_ROLES as readonly string[]).includes(role);
+  return canAccessTicketDesk(role);
 }
 
-/** Author-role snapshot stored on each message ("staff" vs "user"). */
-export function ticketAuthorRole(role: string | null | undefined): string {
-  return isTicketStaffRole(role) ? "staff" : "user";
+/**
+ * Resolve a quote-reply target.
+ *
+ * Returns the id only when the quoted message really belongs to this ticket,
+ * so a reply can never be stitched onto a message from someone else's thread.
+ * An unknown id degrades to a plain (unquoted) message rather than an error —
+ * the message the sender is answering may have been deleted meanwhile.
+ */
+export async function resolveTicketReplyTarget(
+  ticketId: string,
+  replyToId: string | null | undefined
+): Promise<string | null> {
+  if (!replyToId) return null;
+  const target = await prisma.ticketMessage.findFirst({
+    where: { id: replyToId, ticketId },
+    select: { id: true },
+  });
+  return target?.id ?? null;
 }
 
 function appBaseUrl(): string {

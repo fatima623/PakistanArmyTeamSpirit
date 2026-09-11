@@ -42,7 +42,7 @@ export const core: typeof enCore = {
     unitInfo: "Обновление данных подразделения",
     hostInfo: "Информация о принимающей стороне",
     journey: "Процесс регистрации",
-    support: "Поддержка",
+    support: "Запросы / частые вопросы",
     supportTicket: "Обращение в поддержку",
     confirmParticipation: "Подтверждение участия",
   },
@@ -56,7 +56,7 @@ export const core: typeof enCore = {
     logout: "Выйти",
     dashboard: "Панель",
     tour: "Виртуальный тур",
-    support: "Поддержка / запрос",
+    support: "Запрос / вопросы",
     journeyComplete: "Регистрация завершена",
   },
 

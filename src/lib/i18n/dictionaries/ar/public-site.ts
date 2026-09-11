@@ -250,9 +250,7 @@ export const publicSite: typeof enPublicSite = {
       ],
     },
     card: {
-      eyebrow: "وصول المشارك",
       title: "سجّل الدخول للمتابعة",
-      description: "أدخل البريد الإلكتروني وكلمة المرور المعتمدين لحساب فريقك.",
       emailLabel: "عنوان البريد الإلكتروني",
       passwordLabel: "كلمة المرور",
       rememberHintOn: "سيبقى هذا الجهاز مسجّل الدخول لمدة تصل إلى 30 يومًا.",

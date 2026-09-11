@@ -235,9 +235,7 @@ export const publicSite = {
       ],
     },
     card: {
-     
       title: "Sign in to continue",
-      
       emailLabel: "Email address",
       passwordLabel: "Password",
       rememberHintOn: "This device will stay signed in for up to 30 days.",

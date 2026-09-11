@@ -26,13 +26,17 @@ export function LandingLoginDialog({ open, onOpenChange }: Props) {
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="pats-signin-overlay" />
-        <DialogPrimitive.Content className="pats-signin-dialog" dir={dir}>
+        {/* The card carries the only heading, so the panel needs no separate
+            description — `aria-describedby={undefined}` tells Radix that is
+            deliberate rather than an omission. */}
+        <DialogPrimitive.Content
+          className="pats-signin-dialog"
+          dir={dir}
+          aria-describedby={undefined}
+        >
           <DialogPrimitive.Title className="sr-only">
             {t.publicSite.login.card.title}
           </DialogPrimitive.Title>
-          <DialogPrimitive.Description className="sr-only">
-            {t.publicSite.login.card.description}
-          </DialogPrimitive.Description>
 
           <DialogPrimitive.Close
             className="pats-signin-dialog__close"

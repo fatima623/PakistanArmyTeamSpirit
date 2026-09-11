@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 import { LandingLanguageSwitcher } from "@/components/landing/LandingLanguageSwitcher";
 import { LandingLoginDialog } from "@/components/landing/LandingLoginDialog";
-import { PatsLogo } from "@/components/pats/PatsLogo";
-import { HERO_MOTTO } from "@/lib/branding";
+import { HERO_MOTTO, PATS_LOGO } from "@/lib/branding";
 import { computeExerciseYear } from "@/lib/exercise-year";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 
@@ -23,6 +23,12 @@ type Props = {
  * standfirst (the same strings the home page uses, which now lives at `/tour`
  * behind the login), and the way in. Signing in is a dialog over this screen
  * rather than a separate page, so the visitor never leaves it.
+ *
+ * It is a ONE-SCREEN page: the shell is exactly `100dvh` and everything in it
+ * is sized against the viewport height, so there is nothing to scroll to. The
+ * body's own scrollbar is locked while it is mounted for the same reason —
+ * `body` carries a `100vh` minimum, which on mobile browsers is taller than
+ * `100dvh` and would otherwise leave a few pixels of drift.
  */
 export function LandingScreen({ exerciseYear }: Props) {
   const { t, locale, dir } = useI18n();
@@ -34,6 +40,15 @@ export function LandingScreen({ exerciseYear }: Props) {
   // rollover still advertises the right edition.
   useEffect(() => {
     setYear(computeExerciseYear());
+  }, []);
+
+  useEffect(() => {
+    const { body } = document;
+    const previous = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = previous;
+    };
   }, []);
 
   return (
@@ -52,10 +67,30 @@ export function LandingScreen({ exerciseYear }: Props) {
           <span className="pats-landing__crest-halo" aria-hidden />
           <span className="pats-landing__crest-spin">
             <span className="pats-landing__crest-face">
-              <PatsLogo variant="full" size={132} priority className="pats-landing__crest-img" />
+              <Image
+                src={PATS_LOGO.src}
+                alt={PATS_LOGO.alt}
+                width={264}
+                height={264}
+                quality={95}
+                priority
+                sizes="264px"
+                className="pats-landing__crest-img"
+              />
             </span>
-            <span className="pats-landing__crest-face pats-landing__crest-face--back" aria-hidden>
-              <PatsLogo variant="full" size={132} className="pats-landing__crest-img" />
+            <span
+              className="pats-landing__crest-face pats-landing__crest-face--back"
+              aria-hidden
+            >
+              <Image
+                src={PATS_LOGO.src}
+                alt=""
+                width={264}
+                height={264}
+                quality={95}
+                sizes="264px"
+                className="pats-landing__crest-img"
+              />
             </span>
           </span>
         </div>

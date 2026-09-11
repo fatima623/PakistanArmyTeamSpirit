@@ -33,7 +33,7 @@ export const core: typeof enCore = {
     unitInfo: "Birlik bilgilerini güncelle",
     hostInfo: "Ev Sahibi Bilgileri",
     journey: "Kayıt Süreci",
-    support: "Destek",
+    support: "Talepler / SSS",
     supportTicket: "Destek talebi",
     confirmParticipation: "Katılımı Onayla",
   },
@@ -47,7 +47,7 @@ export const core: typeof enCore = {
     logout: "Çıkış yap",
     dashboard: "Panel",
     tour: "Sanal Tur",
-    support: "Destek / Talep",
+    support: "Talep / SSS",
     journeyComplete: "Kayıt tamamlandı",
   },
 

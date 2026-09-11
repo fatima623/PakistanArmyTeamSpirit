@@ -255,18 +255,31 @@ model SupportTicket {
 }
 
 model TicketMessage {
-  id         String        @id @default(cuid())
+  id         String          @id @default(cuid())
   ticketId   String
-  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  ticket     SupportTicket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   authorId   String?
-  author     User?         @relation("TicketMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
-  authorRole String        @default("user")
+  author     User?           @relation("TicketMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  /**
+   * Snapshot of the author's role at send time — "user" for the participant
+   * who raised the ticket, otherwise the staff role (admin / sdbs / mtd /
+   * host). Every ticket is a group conversation: the participant plus every
+   * back-office role, so the thread has to say who each message came from.
+   */
+  authorRole String          @default("user")
   authorName String
-  body       String        @db.Text
-  createdAt  DateTime      @default(now())
+  body       String          @db.Text
+  /**
+   * Group-chat quote reply — the message this one answers, if any.
+   */
+  replyToId  String?
+  replyTo    TicketMessage?  @relation("TicketMessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies    TicketMessage[] @relation("TicketMessageReply")
+  createdAt  DateTime        @default(now())
 
   @@index([ticketId])
   @@index([createdAt])
+  @@index([replyToId])
 }
 
 model AuditLog {
