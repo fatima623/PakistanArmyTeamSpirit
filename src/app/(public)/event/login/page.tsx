@@ -1,9 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
-import { LoginForm } from "@/components/public/LoginForm";
-import { PatsPageHero } from "@/components/pats/PatsPageHero";
-import { PatsSection } from "@/components/pats/PatsSection";
+import { SignInCardWithBack } from "@/components/auth/SignInCardWithBack";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -11,34 +9,26 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t.meta.login };
 }
 
+/**
+ * `/event/login` — the sign-in screen as a standalone route.
+ *
+ * The landing page normally opens this same card as a dialog over itself; this
+ * route is where the middleware's `?next=` redirects land, and where a direct
+ * bookmark resolves. It renders bare (no navbar, marquee or footer — see
+ * `BARE_CHROME_PREFIXES`) so both routes present exactly the same surface, with
+ * a back link standing in for the dialog's close button.
+ */
 export default async function EventLoginPage() {
-  const { t, locale, dir } = await getDictionary();
-  const L = t.publicSite.login;
+  const { locale, dir } = await getDictionary();
 
+  // `pats-auth-shell` is on the wrapper only for its exemption from the
+  // site-wide square-off rule; the layout below is this page's own.
   return (
-    <div lang={locale} dir={dir}>
-      <PatsPageHero
-        eyebrow={L.hero.eyebrow}
-        title={L.hero.title}
-        subtitle={L.hero.subtitle}
-      />
-      <PatsSection variant="navy">
-        <div className="pats-auth-shell">
-          <div className="pats-auth-shell__intro">
-            <p className="pats-eyebrow">{L.intro.eyebrow}</p>
-            <h2 className="pats-section-title">{L.intro.title}</h2>
-            <p className="pats-body mt-4">{L.intro.body}</p>
-            <ul className="pats-auth-shell__checklist">
-              {L.intro.checklist.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <Suspense fallback={null}>
-            <LoginForm />
-          </Suspense>
-        </div>
-      </PatsSection>
+    <div className="pats-signin-page pats-auth-shell" lang={locale} dir={dir}>
+      <div className="pats-signin-page__sky" aria-hidden />
+      <Suspense fallback={null}>
+        <SignInCardWithBack />
+      </Suspense>
     </div>
   );
 }

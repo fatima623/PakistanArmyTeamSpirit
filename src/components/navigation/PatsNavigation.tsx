@@ -17,6 +17,7 @@ import {
 import {
   TOUR_HOME,
   TOUR_NAV_ITEMS,
+  pathnameIsTourIndex,
   pathnameIsTourPage,
 } from "@/lib/tour-navigation";
 import { useSiteChromeScroll } from "@/components/public/site-chrome-scroll-context";
@@ -231,10 +232,13 @@ export function PatsNavigation({ pathname: pathnameProp }: Props) {
   const chrome = t?.publicSite.chrome;
   const loginLabel = t ? t.publicSite.nav.login : "Login";
   const backToPortalLabel = t ? t.common.backToDashboard : "Back to dashboard";
-  const isHome = pathname === "/";
+  /* The home page now lives at the tour index, so the treatments that were
+     keyed to `/` — the transparent-over-hero header and the day/night switch —
+     follow it there. */
+  const isHome = pathnameIsTourIndex(pathname);
   /* Tour = the former marketing site, now reached from inside the portal. The
-     main website keeps only the home page + login, so its navbar carries no
-     section links at all. */
+     main website outside it is the bare landing page + login, which render no
+     navbar at all. */
   const isTour = pathnameIsTourPage(pathname);
   const navItems = isTour ? TOUR_NAV_ITEMS : [];
   const overHeroMedia = pathnameHasHeroOverlay(pathname);

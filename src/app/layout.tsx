@@ -134,13 +134,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  // The stored preference only decides the HOME page; every other route is
-  // pinned to the light theme (see themeForPathname).
+  // The stored preference only decides the HOME page (now the tour index);
+  // every other route is pinned to the light theme (see themeForPathname).
   const themePreference = parseSiteTheme(
     cookieStore.get(SITE_THEME_COOKIE)?.value ?? DEFAULT_SITE_THEME
   );
-  // A null pathname means the middleware matcher skipped this route; "/" is in
-  // the matcher, so that can only be a non-home page — which is light either way.
+  // A null pathname means the middleware matcher skipped this route; /tour is
+  // in the matcher, so that can only be a non-home page — light either way.
   const initialSiteTheme = themeForPathname(
     (await getRequestPathnameOrNull()) ?? "",
     themePreference
@@ -165,7 +165,7 @@ export default async function RootLayout({
       >
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var m=document.cookie.match(/(?:^|; )${SITE_THEME_COOKIE}=(day|night)/);var home=location.pathname==="/";var t=home?(m?m[1]:"night"):"day";var d=t==="day";document.documentElement.dataset.siteTheme=t;document.documentElement.classList.toggle("site-theme-day",d);document.documentElement.classList.toggle("light-theme",d);}catch(e){}})();document.documentElement.classList.add("page-loading");`,
+            __html: `(function(){try{var m=document.cookie.match(/(?:^|; )${SITE_THEME_COOKIE}=(day|night)/);var home=location.pathname==="/tour";var t=home?(m?m[1]:"night"):"day";var d=t==="day";document.documentElement.dataset.siteTheme=t;document.documentElement.classList.toggle("site-theme-day",d);document.documentElement.classList.toggle("light-theme",d);}catch(e){}})();document.documentElement.classList.add("page-loading");`,
           }}
         />
         <Providers initialSiteTheme={initialSiteTheme}>{children}</Providers>

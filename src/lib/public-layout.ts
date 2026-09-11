@@ -1,5 +1,7 @@
 /** Public marketing shell — layout modes. */
 
+import { TOUR_HOME } from "@/lib/tour-navigation";
+
 /* Routes that open with a `PatsPageHero` banner. The banner is designed to
    bleed UNDER the fixed chrome (it reserves the header's height itself), so the
    body drops its top padding for these paths. A page listed here without a
@@ -7,7 +9,6 @@
    /events-detail, whose catalogue starts with a plain `ec-hero` label, is not
    in this set. */
 const PAGE_BANNER_PATHS = new Set([
-  "/tour",
   "/operations",
   "/international",
   "/familiarization",
@@ -18,13 +19,12 @@ const PAGE_BANNER_PATHS = new Set([
   "/key-dates",
   "/privacy",
   "/event/register",
-  "/event/login",
   "/event/forgot-password",
 ]);
 
-/** Homepage only — full-viewport cinematic hero. */
+/** Tour home only — full-viewport cinematic hero (the former `/`). */
 export function pathnameHasFullscreenHero(pathname: string): boolean {
-  return pathname === "/";
+  return pathname === TOUR_HOME;
 }
 
 /** Inner routes with compact photo/video banner (PAF internal page header). */
@@ -44,7 +44,6 @@ export function pathnameHasHeroOverlay(pathname: string): boolean {
 }
 
 export function pathnameIsCinematicFullWidth(pathname: string): boolean {
-  if (pathname === "/") return true;
   if (pathname.startsWith("/tour")) return true;
   if (pathname.startsWith("/events-detail")) return true;
   if (pathname.startsWith("/operations")) return true;
@@ -63,11 +62,20 @@ export function pathnameIsCinematicFullWidth(pathname: string): boolean {
 
 /** Light content shell (PAF-style body below compact banner). */
 export function pathnameUsesInnerPageShell(pathname: string): boolean {
-  return pathname !== "/" && pathnameIsCinematicFullWidth(pathname);
+  if (pathname === TOUR_HOME) return false;
+  // Bare pages own their whole viewport — the padded inner shell would only
+  // push their (already centred) card off-centre.
+  if (pathnameHidesSiteChrome(pathname)) return false;
+  return pathnameIsCinematicFullWidth(pathname);
 }
 
-/** Standalone pages that render bare — no global header/nav, ticker or footer. */
-const BARE_CHROME_PREFIXES: string[] = [];
+/**
+ * Standalone pages that render bare — no global header/nav, ticker or footer.
+ * The sign-in screen is one: it is reached from the bare landing page (usually
+ * as a dialog over it), so site chrome there would reintroduce exactly the
+ * pre-login navigation the landing page exists to remove.
+ */
+const BARE_CHROME_PREFIXES: string[] = ["/event/login"];
 
 /** True for pages that should show only their own content (no site chrome). */
 export function pathnameHidesSiteChrome(pathname: string): boolean {

@@ -1,3 +1,5 @@
+import { TOUR_HOME } from "@/lib/tour-navigation";
+
 export const SITE_THEME_COOKIE = "pats-site-theme";
 export const SITE_THEME_STORAGE_KEY = "pats-site-theme";
 export const SITE_THEME_CHANGE_EVENT = "pats-site-theme-change";
@@ -15,8 +17,9 @@ export function isDaySiteTheme(theme: SiteTheme): boolean {
 }
 
 /**
- * The day/night switch is a HOME PAGE feature. Every other route — public
- * inner pages, auth, the participant portal, admin — renders the light theme
+ * The day/night switch is a HOME PAGE feature — and the home page is now the
+ * tour index, `/tour`. Every other route (the bare landing at `/`, the tour's
+ * inner pages, auth, the participant portal, admin) renders the light theme
  * regardless of the stored preference.
  *
  * This is the single source of truth for that rule: the root layout, the
@@ -24,7 +27,7 @@ export function isDaySiteTheme(theme: SiteTheme): boolean {
  * never end up with the server and the client disagreeing about the theme.
  */
 export function pathnameAllowsThemeChoice(pathname: string): boolean {
-  return pathname === "/";
+  return pathname === TOUR_HOME;
 }
 
 /** The theme a given route must render in, given the stored preference. */

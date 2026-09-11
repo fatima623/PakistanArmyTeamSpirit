@@ -39,12 +39,10 @@ function PublicSiteChrome({
   const innerPageShell = pathnameUsesInnerPageShell(pathname);
   const pageBanner = pathnameHasPageBanner(pathname);
   const portalApp = pathnameIsParticipantPortalApp(pathname);
-  // Gallery + Announcements render standalone: no site nav, ticker, or footer.
+  // The sign-in screen renders standalone: no site nav, ticker, or footer.
   const bareChrome = pathnameHidesSiteChrome(pathname);
   const tourPage = pathnameIsTourPage(pathname);
-  // The tour index IS the section menu, so it carries no navbar of its own —
-  // the section pages it links to are where the tour navbar earns its keep.
-  const hideChrome = portalApp || bareChrome || pathnameIsTourIndex(pathname);
+  const hideChrome = portalApp || bareChrome;
   const chromeRef = useRef<HTMLDivElement>(null);
   const hasSiteTicker = Boolean(siteTicker);
   const { scrolled: chromeScrolled, pastHero } = useSiteChromeScroll();
@@ -56,8 +54,8 @@ function PublicSiteChrome({
   return (
     <>
       {/* Logged-in participant portal pages render their own sidebar/header,
-          so the public marketing nav + news marquee are hidden there. The
-          Gallery + Announcements pages are also intentionally chrome-free. */}
+          so the tour nav + news marquee are hidden there. The sign-in screen is
+          likewise intentionally chrome-free. */}
       {hideChrome ? null : (
         <div
           ref={chromeRef}
@@ -113,10 +111,12 @@ export function PublicLayoutClient({
 }) {
   const pathname = usePathname();
   const { dayTheme } = useSiteTheme();
-  const isHome = pathname === "/";
+  // The tour index is the former home page, so it keeps the home page's
+  // full-bleed cinematic shell (hero bleeding edge-to-edge under the navbar).
+  const isTourHome = pathnameIsTourIndex(pathname);
 
   return (
-    <CinematicShell fullBleed={isHome} dayTheme={dayTheme}>
+    <CinematicShell fullBleed={isTourHome} dayTheme={dayTheme}>
       <SiteChromeScrollProvider enabled>
         <PublicSiteChrome siteTicker={siteTicker} nav={nav} footer={footer}>
           {children}
