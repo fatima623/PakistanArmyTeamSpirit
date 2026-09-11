@@ -33,9 +33,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
       select: {
         id: true,
         subject: true,
-        category: true,
         status: true,
-        priority: true,
         createdAt: true,
         lastReplyAt: true,
         closedAt: true,
@@ -105,14 +103,9 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 
     const data: {
       status?: TicketStatus;
-      priority?: string;
       assignedToId?: string | null;
       closedAt?: Date | null;
     } = {};
-
-    if (parsed.data.priority) {
-      data.priority = parsed.data.priority;
-    }
 
     if (parsed.data.assignedToId !== undefined) {
       if (parsed.data.assignedToId) {
@@ -139,7 +132,6 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       select: {
         id: true,
         status: true,
-        priority: true,
         assignedToId: true,
         closedAt: true,
       },

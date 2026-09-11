@@ -5,21 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye } from "lucide-react";
 
-import {
-  TICKET_CATEGORY_LABELS,
-  TICKET_PRIORITY_LABELS,
-  type TicketCategory,
-  type TicketPriority,
-} from "@/lib/constants";
 import { adminTableActionsCenter, portalTableActionIconView } from "@/lib/admin-ui";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
 
 export type AdminTicketRowData = {
   id: string;
   subject: string;
-  category: string;
   status: string;
-  priority: string;
   requester: string;
   /** Human-friendly "updated" label (e.g. "3h ago"), computed server-side. */
   updated: string;
@@ -49,18 +41,6 @@ export function AdminTicketRow({ ticket }: { ticket: AdminTicketRowData }) {
         >
           {ticket.subject}
         </Link>
-      </td>
-      <td className="admin-tickets-muted">
-        {TICKET_CATEGORY_LABELS[ticket.category as TicketCategory] ??
-          ticket.category}
-      </td>
-      <td>
-        <span
-          className={`admin-tag-priority admin-tag-priority--${ticket.priority.toLowerCase()}`}
-        >
-          {TICKET_PRIORITY_LABELS[ticket.priority as TicketPriority] ??
-            ticket.priority}
-        </span>
       </td>
       <td className="admin-tickets-requester">{ticket.requester}</td>
       <td className="admin-tickets-muted">{ticket.updated}</td>

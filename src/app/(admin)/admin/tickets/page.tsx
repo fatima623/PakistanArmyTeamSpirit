@@ -91,9 +91,7 @@ export default async function AdminTicketsPage({
       select: {
         id: true,
         subject: true,
-        category: true,
         status: true,
-        priority: true,
         lastReplyAt: true,
         user: { select: { firstName: true, lastName: true, email: true } },
       },
@@ -146,8 +144,6 @@ export default async function AdminTicketsPage({
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Subject</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Priority</th>
                   <th scope="col">Requester</th>
                   <th scope="col">Updated</th>
                   <th scope="col">Status</th>
@@ -161,9 +157,7 @@ export default async function AdminTicketsPage({
                     ticket={{
                       id: t.id,
                       subject: t.subject,
-                      category: t.category,
                       status: t.status,
-                      priority: t.priority,
                       requester: `${t.user.firstName} ${t.user.lastName}`,
                       updated: timeAgo(t.lastReplyAt, now),
                       num: (page - 1) * PAGE_SIZE + i + 1,

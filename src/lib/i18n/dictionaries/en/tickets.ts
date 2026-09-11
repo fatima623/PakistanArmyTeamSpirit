@@ -6,26 +6,14 @@ export const tickets = {
     newTicket: "New query",
     empty:
       "You have not raised any queries yet. Raise one above if you need help.",
-    listMeta: (category: string, count: number, updated: string) =>
-      `${category} · ${count} message${count === 1 ? "" : "s"} · Updated ${updated}`,
+    listMeta: (count: number, updated: string) =>
+      `${count} message${count === 1 ? "" : "s"} · Updated ${updated}`,
   },
   statuses: {
     OPEN: "Open",
     IN_PROGRESS: "In Progress",
     RESOLVED: "Resolved",
     CLOSED: "Closed",
-  },
-  priorities: {
-    LOW: "Low",
-    NORMAL: "Normal",
-    HIGH: "High",
-  },
-  priorityTag: (label: string) => `${label} priority`,
-  categories: {
-    GENERAL: "General enquiry",
-    REGISTRATION: "Registration",
-    PAYMENT: "Payment",
-    TECHNICAL: "Technical issue",
   },
   staffTag: "PATS team",
 
@@ -86,14 +74,11 @@ export const tickets = {
   },
   detail: {
     backToSupport: "Back to queries",
-    subtitle: (category: string, date: string) => `${category} · Opened ${date}`,
   },
   form: {
     title: "Raise a query",
     subject: "Subject",
     subjectPlaceholder: "Brief summary of your issue",
-    category: "Category",
-    priority: "Priority",
     help: "How can we help?",
     helpPlaceholder: "Describe your issue in detail",
     cancel: "Cancel",

@@ -7,26 +7,13 @@ export const tickets: typeof enTickets = {
       "راجع الإجابات أدناه أولاً. وإذا لم تجد سؤالك، فأنشئ استفساراً وسترد عليه الإدارة.",
     newTicket: "استفسار جديد",
     empty: "لم تنشئ أي استفسار بعد. أنشئ واحداً أعلاه إذا كنت بحاجة إلى مساعدة.",
-    listMeta: (category, count, updated) =>
-      `${category} · ${count} رسالة · حُدّث ${updated}`,
+    listMeta: (count, updated) => `${count} رسالة · حُدّث ${updated}`,
   },
   statuses: {
     OPEN: "مفتوحة",
     IN_PROGRESS: "قيد المعالجة",
     RESOLVED: "تم الحل",
     CLOSED: "مغلقة",
-  },
-  priorities: {
-    LOW: "منخفضة",
-    NORMAL: "عادية",
-    HIGH: "عالية",
-  },
-  priorityTag: (label) => `أولوية ${label}`,
-  categories: {
-    GENERAL: "استفسار عام",
-    REGISTRATION: "التسجيل",
-    PAYMENT: "الدفع",
-    TECHNICAL: "مشكلة تقنية",
   },
   staffTag: "فريق PATS",
 
@@ -82,14 +69,11 @@ export const tickets: typeof enTickets = {
   },
   detail: {
     backToSupport: "العودة إلى الاستفسارات",
-    subtitle: (category, date) => `${category} · فُتحت ${date}`,
   },
   form: {
     title: "إنشاء استفسار",
     subject: "الموضوع",
     subjectPlaceholder: "ملخص موجز لمشكلتك",
-    category: "الفئة",
-    priority: "الأولوية",
     help: "كيف يمكننا المساعدة؟",
     helpPlaceholder: "صف مشكلتك بالتفصيل",
     cancel: "إلغاء",

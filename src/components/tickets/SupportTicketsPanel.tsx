@@ -16,7 +16,6 @@ import { normalizeTicketStatus, TICKET_STATUS } from "@/lib/constants";
 export type SupportTicketListItem = {
   id: string;
   subject: string;
-  categoryLabel: string;
   messageCount: number;
   status: string;
   updatedLabel: string;
@@ -131,11 +130,7 @@ export function SupportTicketsPanel({
                         {t.subject}
                       </div>
                       <div className="mt-[0.2rem] text-[0.76rem] leading-[1.4] !text-slate-500">
-                        {tk.panel.listMeta(
-                          t.categoryLabel,
-                          t.messageCount,
-                          t.updatedLabel
-                        )}
+                        {tk.panel.listMeta(t.messageCount, t.updatedLabel)}
                       </div>
                     </div>
                     <div className="inline-flex shrink-0 items-center gap-[0.65rem]">

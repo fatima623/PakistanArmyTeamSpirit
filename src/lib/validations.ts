@@ -472,10 +472,6 @@ export const AdminUnitUpdateSchema = UnitUpdateSchema.omit({
 
 export const TicketCreateSchema = z.object({
   subject: z.string().trim().min(3, "Subject is too short").max(150),
-  category: z
-    .enum(["GENERAL", "REGISTRATION", "TECHNICAL"])
-    .default("GENERAL"),
-  priority: z.enum(["LOW", "NORMAL", "HIGH"]).default("NORMAL"),
   message: z.string().trim().min(5, "Please describe your issue").max(5000),
 });
 
@@ -487,7 +483,6 @@ export const TicketReplySchema = z.object({
 
 export const AdminTicketUpdateSchema = z.object({
   status: z.enum(["OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"]).optional(),
-  priority: z.enum(["LOW", "NORMAL", "HIGH"]).optional(),
   assignedToId: z.string().optional().nullable(),
 });
 

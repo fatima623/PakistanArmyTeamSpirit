@@ -23,9 +23,7 @@ export async function GET() {
       select: {
         id: true,
         subject: true,
-        category: true,
         status: true,
-        priority: true,
         lastReplyAt: true,
         createdAt: true,
         _count: { select: { messages: true } },
@@ -63,8 +61,6 @@ export async function POST(request: Request) {
       data: {
         userId: session.user.id,
         subject: parsed.data.subject,
-        category: parsed.data.category,
-        priority: parsed.data.priority,
         status: TICKET_STATUS.OPEN,
         lastReplyAt: new Date(),
         messages: {
@@ -84,7 +80,7 @@ export async function POST(request: Request) {
       entityId: ticket.id,
       action: "ticket_created",
       actorId: session.user.id,
-      metadata: { subject: ticket.subject, category: parsed.data.category },
+      metadata: { subject: ticket.subject },
     });
 
     const staffInbox =

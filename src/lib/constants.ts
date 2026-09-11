@@ -89,36 +89,6 @@ export const TICKET_OPEN_STATUSES: TicketStatus[] = [
   TICKET_STATUS.RESOLVED,
 ];
 
-export const TICKET_PRIORITY = {
-  LOW: "LOW",
-  NORMAL: "NORMAL",
-  HIGH: "HIGH",
-} as const;
-
-export type TicketPriority =
-  (typeof TICKET_PRIORITY)[keyof typeof TICKET_PRIORITY];
-
-export const TICKET_PRIORITY_LABELS: Record<TicketPriority, string> = {
-  LOW: "Low",
-  NORMAL: "Normal",
-  HIGH: "High",
-};
-
-export const TICKET_CATEGORY = {
-  GENERAL: "GENERAL",
-  REGISTRATION: "REGISTRATION",
-  TECHNICAL: "TECHNICAL",
-} as const;
-
-export type TicketCategory =
-  (typeof TICKET_CATEGORY)[keyof typeof TICKET_CATEGORY];
-
-export const TICKET_CATEGORY_LABELS: Record<TicketCategory, string> = {
-  GENERAL: "General enquiry",
-  REGISTRATION: "Registration",
-  TECHNICAL: "Technical issue",
-};
-
 export function normalizeTicketStatus(value: string): TicketStatus {
   const allowed = Object.values(TICKET_STATUS);
   return allowed.includes(value as TicketStatus)

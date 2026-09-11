@@ -9,22 +9,8 @@ import { FormField } from "@/components/ui/FormField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  TICKET_CATEGORY_LABELS,
-  TICKET_PRIORITY_LABELS,
-} from "@/lib/constants";
 import { apiErrorMessage } from "@/lib/i18n/api-error-i18n";
 import { useI18n } from "@/lib/i18n/I18nProvider";
-
-const CATEGORY_KEYS = Object.keys(TICKET_CATEGORY_LABELS);
-const PRIORITY_KEYS = Object.keys(TICKET_PRIORITY_LABELS);
 
 export function NewTicketForm({
   open: openProp,
@@ -45,15 +31,11 @@ export function NewTicketForm({
   };
   const [submitting, setSubmitting] = useState(false);
   const [subject, setSubject] = useState("");
-  const [category, setCategory] = useState("GENERAL");
-  const [priority, setPriority] = useState("NORMAL");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const reset = () => {
     setSubject("");
-    setCategory("GENERAL");
-    setPriority("NORMAL");
     setMessage("");
     setErrors({});
   };
@@ -66,7 +48,7 @@ export function NewTicketForm({
       const res = await fetch("/api/tickets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject, category, priority, message }),
+        body: JSON.stringify({ subject, message }),
       });
       if (res.ok) {
         const { ticket } = await res.json();
@@ -116,38 +98,6 @@ export function NewTicketForm({
           maxLength={150}
         />
       </FormField>
-
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <FormField label={tk.form.category} error={errors.category}>
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {CATEGORY_KEYS.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {tk.categories[value as keyof typeof tk.categories]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormField>
-
-        <FormField label={tk.form.priority} error={errors.priority}>
-          <Select value={priority} onValueChange={setPriority}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {PRIORITY_KEYS.map((value) => (
-                <SelectItem key={value} value={value}>
-                  {tk.priorities[value as keyof typeof tk.priorities]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormField>
-      </div>
 
       <FormField label={tk.form.help} required error={errors.message}>
         <Textarea

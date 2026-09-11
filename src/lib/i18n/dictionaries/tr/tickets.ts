@@ -8,26 +8,13 @@ export const tickets: typeof enTickets = {
     newTicket: "Yeni talep",
     empty:
       "Henüz bir talep oluşturmadınız. Yardıma ihtiyacınız varsa yukarıdan oluşturun.",
-    listMeta: (category, count, updated) =>
-      `${category} · ${count} mesaj · Güncellendi ${updated}`,
+    listMeta: (count, updated) => `${count} mesaj · Güncellendi ${updated}`,
   },
   statuses: {
     OPEN: "Açık",
     IN_PROGRESS: "İşlemde",
     RESOLVED: "Çözüldü",
     CLOSED: "Kapalı",
-  },
-  priorities: {
-    LOW: "Düşük",
-    NORMAL: "Normal",
-    HIGH: "Yüksek",
-  },
-  priorityTag: (label) => `${label} öncelik`,
-  categories: {
-    GENERAL: "Genel soru",
-    REGISTRATION: "Kayıt",
-    PAYMENT: "Ödeme",
-    TECHNICAL: "Teknik sorun",
   },
   staffTag: "PATS ekibi",
 
@@ -83,14 +70,11 @@ export const tickets: typeof enTickets = {
   },
   detail: {
     backToSupport: "Taleplere dön",
-    subtitle: (category, date) => `${category} · Açıldı ${date}`,
   },
   form: {
     title: "Talep oluştur",
     subject: "Konu",
     subjectPlaceholder: "Sorununuzun kısa özeti",
-    category: "Kategori",
-    priority: "Öncelik",
     help: "Size nasıl yardımcı olabiliriz?",
     helpPlaceholder: "Sorununuzu ayrıntılı olarak açıklayın",
     cancel: "İptal",

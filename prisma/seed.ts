@@ -360,8 +360,6 @@ async function main() {
         data: {
           userId: ticketOwner.id,
           subject: "Unable to upload passport PDF",
-          category: "TECHNICAL",
-          priority: "HIGH",
           status: "OPEN",
           lastReplyAt: new Date(),
           messages: {
@@ -378,8 +376,6 @@ async function main() {
         data: {
           userId: ticketOwner.id,
           subject: "Question about unit phase selection",
-          category: "REGISTRATION",
-          priority: "NORMAL",
           status: "IN_PROGRESS",
           lastReplyAt: new Date(),
           messages: {

@@ -35,9 +35,7 @@ export async function GET(request: Request) {
       select: {
         id: true,
         subject: true,
-        category: true,
         status: true,
-        priority: true,
         lastReplyAt: true,
         createdAt: true,
         user: {

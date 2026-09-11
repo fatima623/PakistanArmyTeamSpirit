@@ -237,9 +237,7 @@ model SupportTicket {
   userId       String
   user         User            @relation("TicketCreator", fields: [userId], references: [id], onDelete: Cascade)
   subject      String
-  category     String          @default("GENERAL")
   status       String          @default("OPEN")
-  priority     String          @default("NORMAL")
   assignedToId String?
   assignedTo   User?           @relation("TicketAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   lastReplyAt  DateTime        @default(now())

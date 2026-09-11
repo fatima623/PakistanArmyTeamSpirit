@@ -7,26 +7,13 @@ export const tickets: typeof enTickets = {
     subtitle: "请先查看下方的解答。若没有找到答案，请提交咨询，管理方会回复您。",
     newTicket: "新建咨询",
     empty: "您还没有提交过咨询。如需帮助，请在上方提交。",
-    listMeta: (category, count, updated) =>
-      `${category} · ${count} 条消息 · 更新于 ${updated}`,
+    listMeta: (count, updated) => `${count} 条消息 · 更新于 ${updated}`,
   },
   statuses: {
     OPEN: "待处理",
     IN_PROGRESS: "处理中",
     RESOLVED: "已解决",
     CLOSED: "已关闭",
-  },
-  priorities: {
-    LOW: "低",
-    NORMAL: "普通",
-    HIGH: "高",
-  },
-  priorityTag: (label) => `${label}优先级`,
-  categories: {
-    GENERAL: "一般咨询",
-    REGISTRATION: "注册",
-    PAYMENT: "付款",
-    TECHNICAL: "技术问题",
   },
   staffTag: "PATS 团队",
 
@@ -82,14 +69,11 @@ export const tickets: typeof enTickets = {
   },
   detail: {
     backToSupport: "返回咨询",
-    subtitle: (category, date) => `${category} · 创建于 ${date}`,
   },
   form: {
     title: "提交咨询",
     subject: "主题",
     subjectPlaceholder: "简要概述您的问题",
-    category: "类别",
-    priority: "优先级",
     help: "我们能为您做些什么？",
     helpPlaceholder: "请详细描述您的问题",
     cancel: "取消",

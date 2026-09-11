@@ -16,26 +16,14 @@ export const tickets: typeof enTickets = {
     newTicket: "Новый запрос",
     empty:
       "Вы ещё не создавали запросов. Создайте его выше, если нужна помощь.",
-    listMeta: (category, count, updated) =>
-      `${category} · ${count} ${ruPlural(count, "сообщение", "сообщения", "сообщений")} · Обновлено ${updated}`,
+    listMeta: (count, updated) =>
+      `${count} ${ruPlural(count, "сообщение", "сообщения", "сообщений")} · Обновлено ${updated}`,
   },
   statuses: {
     OPEN: "Открыто",
     IN_PROGRESS: "В работе",
     RESOLVED: "Решено",
     CLOSED: "Закрыто",
-  },
-  priorities: {
-    LOW: "Низкий",
-    NORMAL: "Обычный",
-    HIGH: "Высокий",
-  },
-  priorityTag: (label) => `${label} приоритет`,
-  categories: {
-    GENERAL: "Общий вопрос",
-    REGISTRATION: "Регистрация",
-    PAYMENT: "Оплата",
-    TECHNICAL: "Техническая проблема",
   },
   staffTag: "Команда PATS",
 
@@ -91,14 +79,11 @@ export const tickets: typeof enTickets = {
   },
   detail: {
     backToSupport: "Назад к запросам",
-    subtitle: (category, date) => `${category} · Открыто ${date}`,
   },
   form: {
     title: "Создать запрос",
     subject: "Тема",
     subjectPlaceholder: "Краткое описание вашей проблемы",
-    category: "Категория",
-    priority: "Приоритет",
     help: "Чем мы можем помочь?",
     helpPlaceholder: "Опишите вашу проблему подробно",
     cancel: "Отмена",

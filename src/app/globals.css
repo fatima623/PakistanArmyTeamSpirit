@@ -18491,46 +18491,6 @@ html.light-theme .participant-portal :is([class~="portal-card"], .pats-panel) :i
 }
 
 
-.admin-theme .admin-tag-priority {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 9px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-
-.admin-theme .admin-tag-priority::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-
-.admin-theme .admin-tag-priority--high {
-  background: #fcebe9;
-  color: #b42318;
-}
-
-
-.admin-theme .admin-tag-priority--normal {
-  background: #f0f1ec;
-  color: #5a655c;
-}
-
-
-.admin-theme .admin-tag-priority--low {
-  background: #e9f0fd;
-  color: #1d4ed8;
-}
-
-
-
 .admin-theme .admin-flights-wrap {
   overflow-x: auto;
   border: 1px solid #e4e7e0;
