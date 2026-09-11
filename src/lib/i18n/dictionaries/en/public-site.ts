@@ -235,9 +235,9 @@ export const publicSite = {
       ],
     },
     card: {
-      eyebrow: "Participant access",
+     
       title: "Sign in to continue",
-      description: "Enter the email and password approved for your team account.",
+      
       emailLabel: "Email address",
       passwordLabel: "Password",
       rememberHintOn: "This device will stay signed in for up to 30 days.",
