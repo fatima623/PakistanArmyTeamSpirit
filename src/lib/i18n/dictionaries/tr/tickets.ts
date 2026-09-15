@@ -21,6 +21,8 @@ export const tickets: typeof enTickets = {
   faq: {
     title: "Sık sorulan sorular",
     subtitle: "PATS hakkında en sık sorulan soruların kısa yanıtları.",
+    show: "SSS'yi göster",
+    hide: "SSS'yi gizle",
     items: [
       {
         q: "PATS portalı için hesabı nasıl alırım?",
@@ -96,5 +98,12 @@ export const tickets: typeof enTickets = {
     resolve: "Çöz",
     close: "Kapat",
     toastResolved: "Talep çözüldü olarak işaretlendi",
+  },
+  table: {
+    sNo: "S.No",
+    subject: "Konu",
+    date: "Tarih",
+    status: "Durum",
+    actions: "İşlemler",
   },
 };

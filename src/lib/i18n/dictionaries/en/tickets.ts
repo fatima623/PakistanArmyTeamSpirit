@@ -25,6 +25,9 @@ export const tickets = {
   faq: {
     title: "Frequently asked questions",
     subtitle: "Quick answers to the most common questions about PATS.",
+    /** Labels for the button that shows/hides the FAQ accordion. */
+    show: "View FAQs",
+    hide: "Hide FAQs",
     items: [
       {
         q: "How do I get an account for the PATS portal?",
@@ -101,5 +104,13 @@ export const tickets = {
     resolve: "Resolve",
     close: "Close",
     toastResolved: "Query marked resolved",
+  },
+  /** Column headers for the participant query table. */
+  table: {
+    sNo: "S.No",
+    subject: "Subject",
+    date: "Date",
+    status: "Status",
+    actions: "Actions",
   },
 };

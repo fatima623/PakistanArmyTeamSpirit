@@ -5,7 +5,7 @@ import {
 
 const STATUS_STYLE: Record<string, { bg: string; fg: string; border: string }> =
   {
-    OPEN: { bg: "#fffbeb", fg: "#b45309", border: "#fde68a" },
+    OPEN: { bg: "#fef3c7", fg: "#78350f", border: "#fcd34d" },
     IN_PROGRESS: { bg: "#eff6ff", fg: "#1d4ed8", border: "#bfdbfe" },
     RESOLVED: { bg: "#f0fdf4", fg: "#15803d", border: "#bbf7d0" },
     CLOSED: { bg: "#f1f5f9", fg: "#475569", border: "#e2e8f0" },
@@ -23,6 +23,11 @@ export function TicketStatusBadge({
   const s = STATUS_STYLE[key] ?? STATUS_STYLE.CLOSED;
   return (
     <span
+      // The class name carries no styles of its own; it exists so the portal's
+      // `:is(…span…){color:…!important}` sweep — which spares `[class*="badge"]`
+      // — leaves this badge's inline status colour intact instead of repainting
+      // its label slate-600.
+      className="ticket-status-badge"
       style={{
         display: "inline-flex",
         alignItems: "center",

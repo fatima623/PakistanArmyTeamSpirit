@@ -20,6 +20,8 @@ export const tickets: typeof enTickets = {
   faq: {
     title: "الأسئلة الشائعة",
     subtitle: "إجابات سريعة عن أكثر الأسئلة تكراراً حول PATS.",
+    show: "عرض الأسئلة الشائعة",
+    hide: "إخفاء الأسئلة الشائعة",
     items: [
       {
         q: "كيف أحصل على حساب في بوابة PATS؟",
@@ -95,5 +97,12 @@ export const tickets: typeof enTickets = {
     resolve: "حل",
     close: "إغلاق",
     toastResolved: "تم وضع علامة على الاستفسار كمحلول",
+  },
+  table: {
+    sNo: "م",
+    subject: "الموضوع",
+    date: "التاريخ",
+    status: "الحالة",
+    actions: "الإجراءات",
   },
 };

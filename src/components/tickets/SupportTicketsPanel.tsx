@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronRight, Loader2, MessageSquare, Plus } from "lucide-react";
+import {
+  ChevronDown,
+  HelpCircle,
+  Loader2,
+  MessageSquare,
+  Plus,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { FaqAccordion } from "@/components/tickets/FaqAccordion";
@@ -12,6 +18,7 @@ import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import { normalizeTicketStatus, TICKET_STATUS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export type SupportTicketListItem = {
   id: string;
@@ -24,13 +31,14 @@ export type SupportTicketListItem = {
 /**
  * Participant "Query / FAQs" view.
  *
- * The FAQ accordion comes first on purpose: most queries are one of a dozen
- * recurring questions, and answering them in place is faster for the
- * participant than waiting on a reply. The query list follows. While the
- * new-query form is open both are hidden to keep focus on composing; once the
- * form closes (cancel or submit) they return. Each open query carries inline
- * "Resolve" / "Close" actions so participants can wrap up a thread without
- * opening it.
+ * The FAQ block is collapsed behind a disclosure button so it no longer pushes
+ * the query list far down the page: participants open it only when they want to
+ * scan the common answers, and it stays out of the way otherwise. The queries
+ * themselves render as a proper table — subject, date, status and per-row
+ * Resolve / Close actions — so a participant can read status at a glance and
+ * wrap up a thread without opening it. While the new-query form is open the FAQ
+ * button and the table are hidden to keep focus on composing; once the form
+ * closes (cancel or submit) they return.
  */
 export function SupportTicketsPanel({
   tickets,
@@ -38,10 +46,12 @@ export function SupportTicketsPanel({
   tickets: SupportTicketListItem[];
 }) {
   const [creating, setCreating] = useState(false);
+  const [showFaq, setShowFaq] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
   const router = useRouter();
   const { t: i18n } = useI18n();
   const tk = i18n.tickets;
+  const faqPanelId = useId();
 
   const updateStatus = async (
     id: string,
@@ -93,11 +103,38 @@ export function SupportTicketsPanel({
       <NewTicketForm open={creating} onOpenChange={setCreating} />
 
       {!creating ? (
-        <FaqAccordion
-          title={tk.faq.title}
-          subtitle={tk.faq.subtitle}
-          items={tk.faq.items}
-        />
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            aria-expanded={showFaq}
+            aria-controls={faqPanelId}
+            onClick={() => setShowFaq((v) => !v)}
+            className="flex items-center gap-2.5 self-start rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[0.9rem] font-semibold !text-slate-700 shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-colors hover:border-slate-300 hover:bg-slate-50"
+          >
+            <HelpCircle
+              className="h-[1.1rem] w-[1.1rem] shrink-0 text-emerald-600"
+              aria-hidden
+            />
+            {showFaq ? tk.faq.hide : tk.faq.show}
+            <ChevronDown
+              className={cn(
+                "h-4 w-4 shrink-0 text-slate-400 transition-transform duration-200",
+                showFaq && "rotate-180 text-emerald-600"
+              )}
+              aria-hidden
+            />
+          </button>
+
+          <div id={faqPanelId}>
+            {showFaq ? (
+              <FaqAccordion
+                title={tk.faq.title}
+                subtitle={tk.faq.subtitle}
+                items={tk.faq.items}
+              />
+            ) : null}
+          </div>
+        </div>
       ) : null}
 
       {!creating ? (
@@ -107,96 +144,111 @@ export function SupportTicketsPanel({
             <p className="text-slate-500">{tk.panel.empty}</p>
           </div>
         ) : (
-          <ul className="m-0 flex list-none flex-col gap-[0.6rem] p-0">
-            {tickets.map((t) => {
-              const status = normalizeTicketStatus(t.status);
-              const canResolve =
-                status === TICKET_STATUS.OPEN ||
-                status === TICKET_STATUS.IN_PROGRESS;
-              const canClose = status !== TICKET_STATUS.CLOSED;
-              const busy = busyId === t.id;
+          <div className="overflow-x-auto rounded-lg border border-slate-200">
+            <table className="w-full min-w-[640px] border-collapse text-sm">
+              <thead>
+                <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide !text-slate-500">
+                  <th scope="col" className="w-14 px-3 py-2.5">
+                    {tk.table.sNo}
+                  </th>
+                  <th scope="col" className="px-3 py-2.5">
+                    {tk.table.subject}
+                  </th>
+                  <th scope="col" className="w-32 px-3 py-2.5">
+                    {tk.table.date}
+                  </th>
+                  <th scope="col" className="w-32 px-3 py-2.5">
+                    {tk.table.status}
+                  </th>
+                  <th scope="col" className="px-3 py-2.5 text-right">
+                    {tk.table.actions}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 bg-white">
+                {tickets.map((t, i) => {
+                  const status = normalizeTicketStatus(t.status);
+                  const canResolve =
+                    status === TICKET_STATUS.OPEN ||
+                    status === TICKET_STATUS.IN_PROGRESS;
+                  const canClose = status !== TICKET_STATUS.CLOSED;
+                  const busy = busyId === t.id;
 
-              return (
-                <li key={t.id} className="flex flex-wrap items-center gap-2">
-                  <Link
-                    href={`/event/tickets/${t.id}`}
-                    className="group flex min-w-0 flex-auto items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-[1.1rem] py-[0.8rem] no-underline shadow-[0_1px_2px_rgba(15,23,42,0.05)] transition-[border-color,box-shadow,background] duration-150 hover:border-slate-300 hover:shadow-[0_3px_12px_rgba(15,23,42,0.09)]"
-                  >
-                    <span className="support-ticket__icon" aria-hidden>
-                      <MessageSquare className="h-4 w-4" />
-                    </span>
-                    <div className="min-w-0 flex-auto">
-                      <div className="truncate text-[0.92rem] font-semibold leading-[1.35] text-slate-800">
-                        {t.subject}
-                      </div>
-                      <div className="mt-[0.2rem] text-[0.76rem] leading-[1.4] !text-slate-500">
-                        {tk.panel.listMeta(t.messageCount, t.updatedLabel)}
-                      </div>
-                    </div>
-                    <div className="inline-flex shrink-0 items-center gap-[0.65rem]">
-                      <TicketStatusBadge
-                        status={t.status}
-                        label={
-                          tk.statuses[
-                            normalizeTicketStatus(
-                              t.status
-                            ) as keyof typeof tk.statuses
-                          ]
-                        }
-                      />
-                      <ChevronRight
-                        className="h-4 w-4 text-slate-400 transition-transform duration-150 group-hover:translate-x-[2px]"
-                        aria-hidden
-                      />
-                    </div>
-                  </Link>
-
-                  {canResolve || canClose ? (
-                    <div className="flex shrink-0 items-center gap-1.5">
-                      {busy ? (
-                        <Loader2
-                          className="h-4 w-4 animate-spin text-slate-400"
-                          aria-hidden
+                  return (
+                    <tr key={t.id}>
+                      <td className="px-3 py-3 !text-slate-500">{i + 1}</td>
+                      <td className="px-3 py-3">
+                        <Link
+                          href={`/event/tickets/${t.id}`}
+                          className="font-semibold leading-[1.35] text-slate-800 no-underline transition-colors hover:text-emerald-700 hover:underline"
+                        >
+                          {t.subject}
+                        </Link>
+                        <span className="mt-[0.2rem] flex items-center gap-1 text-[0.72rem] !text-slate-400">
+                          <MessageSquare className="h-3 w-3" aria-hidden />
+                          {t.messageCount}
+                        </span>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-3 !text-slate-600">
+                        {t.updatedLabel}
+                      </td>
+                      <td className="px-3 py-3">
+                        <TicketStatusBadge
+                          status={t.status}
+                          label={tk.statuses[status]}
                         />
-                      ) : null}
-                      {canResolve ? (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateStatus(
-                              t.id,
-                              TICKET_STATUS.RESOLVED,
-                              tk.actions.toastResolved
-                            )
-                          }
-                          disabled={busy}
-                          className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-[0.74rem] font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          {tk.actions.resolve}
-                        </button>
-                      ) : null}
-                      {canClose ? (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateStatus(
-                              t.id,
-                              TICKET_STATUS.CLOSED,
-                              tk.reply.toastClosed
-                            )
-                          }
-                          disabled={busy}
-                          className="rounded-md border border-red-200 bg-red-50 px-2.5 py-1.5 text-[0.74rem] font-semibold text-red-700 transition-colors hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          {tk.actions.close}
-                        </button>
-                      ) : null}
-                    </div>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
+                      </td>
+                      <td className="px-3 py-3">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {busy ? (
+                            <Loader2
+                              className="h-4 w-4 animate-spin text-slate-400"
+                              aria-hidden
+                            />
+                          ) : null}
+                          {canResolve ? (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateStatus(
+                                  t.id,
+                                  TICKET_STATUS.RESOLVED,
+                                  tk.actions.toastResolved
+                                )
+                              }
+                              disabled={busy}
+                              className="whitespace-nowrap rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 text-[0.74rem] font-semibold text-emerald-700 transition-colors hover:bg-emerald-100 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              {tk.actions.resolve}
+                            </button>
+                          ) : null}
+                          {canClose ? (
+                            <button
+                              type="button"
+                              onClick={() =>
+                                updateStatus(
+                                  t.id,
+                                  TICKET_STATUS.CLOSED,
+                                  tk.reply.toastClosed
+                                )
+                              }
+                              disabled={busy}
+                              className="whitespace-nowrap rounded-md border border-red-300 bg-red-200 px-2.5 py-1.5 text-[0.74rem] font-semibold !text-slate-900 transition-colors hover:bg-red-300 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              {tk.actions.close}
+                            </button>
+                          ) : null}
+                          {!canResolve && !canClose && !busy ? (
+                            <span className="!text-slate-400">—</span>
+                          ) : null}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         )
       ) : null}
     </div>

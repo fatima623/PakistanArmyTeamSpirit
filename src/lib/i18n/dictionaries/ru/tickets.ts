@@ -30,6 +30,8 @@ export const tickets: typeof enTickets = {
   faq: {
     title: "Часто задаваемые вопросы",
     subtitle: "Короткие ответы на самые частые вопросы о PATS.",
+    show: "Показать частые вопросы",
+    hide: "Скрыть частые вопросы",
     items: [
       {
         q: "Как получить учётную запись в портале PATS?",
@@ -105,5 +107,12 @@ export const tickets: typeof enTickets = {
     resolve: "Решить",
     close: "Закрыть",
     toastResolved: "Запрос отмечен как решённый",
+  },
+  table: {
+    sNo: "№",
+    subject: "Тема",
+    date: "Дата",
+    status: "Статус",
+    actions: "Действия",
   },
 };

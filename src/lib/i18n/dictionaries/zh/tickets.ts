@@ -20,6 +20,8 @@ export const tickets: typeof enTickets = {
   faq: {
     title: "常见问题",
     subtitle: "关于 PATS 最常见问题的简要解答。",
+    show: "查看常见问题",
+    hide: "隐藏常见问题",
     items: [
       {
         q: "如何获得 PATS 门户的账号？",
@@ -95,5 +97,12 @@ export const tickets: typeof enTickets = {
     resolve: "解决",
     close: "关闭",
     toastResolved: "咨询已标记为已解决",
+  },
+  table: {
+    sNo: "序号",
+    subject: "主题",
+    date: "日期",
+    status: "状态",
+    actions: "操作",
   },
 };
