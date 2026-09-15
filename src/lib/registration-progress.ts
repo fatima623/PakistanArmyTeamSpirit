@@ -8,7 +8,8 @@ import {
 } from "@/lib/participant-workflow";
 
 /**
- * Staff-facing view of how far a participant has got. Both the SD (who decides)
+ * Staff-facing view of how far a participant has got. Both the SD Dte (which
+ * decides)
  * and the Admin (who oversees) read the same derivation the participant sees on
  * their dashboard, so the three surfaces can never disagree about which step a
  * team is on.

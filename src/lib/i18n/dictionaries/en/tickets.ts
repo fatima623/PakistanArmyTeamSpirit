@@ -36,7 +36,7 @@ export const tickets = {
       },
       {
         q: "What are the registration steps and in what order?",
-        a: "Five steps, each unlocking the next: 1) Confirm Participation, 2) Unit Information, 3) Team Members, 4) Flight Details, 5) Verification by the SD (Sports Directorate). Your dashboard shows which step is open and what is still outstanding.",
+        a: "Five steps, each unlocking the next: 1) Confirm Participation, 2) Unit Information, 3) Team Members, 4) Flight Details, 5) Verification by the SD Dte (Staff Duties Directorate). Your dashboard shows which step is open and what is still outstanding.",
       },
       {
         q: "How many members can my team have?",
@@ -48,7 +48,7 @@ export const tickets = {
       },
       {
         q: "When is my registration considered submitted?",
-        a: "Once the flight details for the whole roster are submitted, your registration enters the SD verification queue automatically. You do not need to send anything separately — the dashboard status tells you where it stands.",
+        a: "Once the flight details for the whole roster are submitted, your registration enters the SD Dte verification queue automatically. You do not need to send anything separately — the dashboard status tells you where it stands.",
       },
       {
         q: "Can I change my unit or CO details after saving them?",

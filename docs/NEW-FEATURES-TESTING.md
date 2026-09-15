@@ -3,12 +3,17 @@
 This guide covers manual testing for the features added in this round:
 
 1. **Support Ticket System** (#8)
-2. **MTD + SDBS roles & registration approval by MTD** (#3)
+2. **SD Dte + MT Dte roles & registration approval by SD Dte** (#3)
 3. **Timeline with enforced deadlines** (#6)
 
 > All three are already wired into the running app. Database migrations have
 > been applied (`SupportTicket`, `TicketMessage`, `SiteSettings.registrationDeadline`,
-> `SiteSettings.paymentDeadline`, `KeyDate.date`).
+> `KeyDate.date`).
+>
+> ⚠️ **Stale sections:** payment was later removed from the product entirely — no
+> payment step, status, deadline or screen exists any more. Skip §3c and any
+> payment row in the account table below; they are left over from an earlier
+> build. Ticket categories and priorities were also removed.
 
 ---
 
@@ -19,8 +24,8 @@ Run `npm run db:seed` to (re)create these. Passwords:
 | Account | Email | Password | Use |
 |---------|-------|----------|-----|
 | Admin | `admin@example.com` | value of `ADMIN_PASSWORD_PLAIN` in `.env` (falls back to `Admin123!` if unset) | Full admin |
-| MTD | `mtd@example.com` | `TestPass123!` | Approver role |
-| SDBS | `sdbs@example.com` | `TestPass123!` | Viewer role |
+| MT Dte (Military Training Directorate) | `mtd@example.com` | `TestPass123!` | Staff role |
+| SD Dte (Staff Duties Directorate) | `sdbs@example.com` | `TestPass123!` | Registration verification |
 | Participant (pending) | `pending@example.com` | `TestPass123!` | Awaiting approval |
 | Participant (approved) | `approved@example.com` | `TestPass123!` | Approved, payment due; **owns 2 sample tickets** |
 | Participant (payment) | `payment@example.com` | `TestPass123!` | Payment submitted |
@@ -41,7 +46,7 @@ The seed also sets a **registration deadline (31 Jul 2026)** and **payment deadl
 | Email (optional) | Ticket/deadline notifications only send if SMTP env vars are set (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`). Without them, the email body is logged to the dev console instead — that's expected. Set `SUPPORT_NOTIFY_EMAIL` to choose the support inbox (defaults to `SMTP_USER`). |
 
 **Tip — testing two roles at once:** use a normal browser window for the
-participant and an incognito/second browser for admin/MTD, so you don't have to
+participant and an incognito/second browser for admin/SD Dte, so you don't have to
 log in and out repeatedly.
 
 ---
@@ -61,7 +66,7 @@ log in and out repeatedly.
 - Submit with a 1–2 character subject or empty message → ✅ inline field errors, no ticket created.
 
 ### 1b. Staff responds
-1. Log in as **admin** (or MTD/SDBS — see note below).
+1. Log in as **admin** (or SD Dte / MT Dte — see note below).
 2. Sidebar → **Support Tickets** (`/admin/tickets`).
    - ✅ The new ticket shows with participant name, category, **Open** status, message count.
 3. Use the **status filter chips** (All / Open / In Progress / Resolved / Closed) and the **search box** (subject / name / email).
@@ -74,7 +79,7 @@ log in and out repeatedly.
    - ✅ Changes persist after refresh; status change emails the participant.
 
 > **Note:** the admin Support Tickets pages are currently admin-only in the nav.
-> MTD/SDBS can reach a ticket by direct URL but the section is hidden from their
+> SD Dte / MT Dte can reach a ticket by direct URL but the section is hidden from their
 > sidebar by design.
 
 ### 1c. Participant reply / reopen / close
@@ -92,33 +97,40 @@ log in and out repeatedly.
 
 ---
 
-## 2. MTD + SDBS Roles
+## 2. SD Dte + MT Dte Roles
 
-Roles: **Participant** (`user`) · **SDBS** (viewer) · **MTD** (approver) · **Administrator** (full).
+Roles: **Participant** (`user`) · **SD Dte — Staff Duties Directorate** (`sdbs`) · **MT Dte — Military Training Directorate** (`mtd`) · **Administrator** (full).
+
+> **The SD Dte is the only approver**, and it decides at the END — once the
+> participant has completed Confirm Participation, Unit Information, Team Members
+> and Flight Details. MT Dte and Admin can see the queue but cannot decide.
 
 ### 2a. Assign a role (admin only)
-1. As **admin**: Sidebar → **Participation Requests** → open a participant.
-2. In **Account details** you'll see a **Role** dropdown (admins only) → choose **MTD (approver)** → **Save role**.
+1. As **admin**: Sidebar → **Team Registrations** → open a participant.
+2. In **Account details** you'll see a **Role** dropdown (admins only) → choose **SD Dte (Staff Duties Directorate)** → **Save role**.
    - ✅ Toast "Role updated"; the Role line shows the new label.
-3. Repeat for another user → set **SDBS (viewer)**.
+3. Repeat for another user → set **MT Dte (Military Training Directorate)**.
 
-### 2b. MTD can approve registrations
-1. Log in as the **MTD** user (you'll need that account's credentials).
+### 2b. SD Dte approves registrations
+1. Log in as the **SD Dte** user (`sdbs@example.com`).
    - ✅ After login you land in **/admin** (staff home), not the participant dashboard.
-2. Sidebar shows a **reduced menu**: Dashboard, Participation Requests, Payment Verification, Participating Teams (no News/Announcements/Key Dates/Settings/Tickets).
-3. Open a pending participant → **Application review** panel is visible.
+2. Sidebar shows a **reduced menu** (no Settings / content management).
+3. Open a participant who has finished every step → **Application review** panel is visible.
 4. Click **Approve** (or **Return application** with a reason).
-   - ✅ Status updates; the participant is notified (approval email) and the change is in **Activity history**.
-5. Confirm MTD **cannot** manage the system:
+   - ✅ Status updates; the participant is notified and the change appears in **Activity history**.
+5. Confirm SD Dte **cannot** manage the system:
    - ✅ No **Role** dropdown, no **Delete**, no **Reset password** on the user page.
    - ✅ Visiting `/admin/settings` by URL: the page loads but **Save** returns *Forbidden* (writes are admin-only).
 
-### 2c. SDBS is view-only
-1. Log in as the **SDBS** user.
-   - ✅ Sidebar shows view sections (Dashboard, Participation Requests, Payment Verification, Participating Teams).
+### 2c. MT Dte cannot approve
+1. Log in as the **MT Dte** user (`mtd@example.com`).
+   - ✅ Sidebar shows the view sections (Dashboard, Team Registrations, Participating Teams…).
 2. Open a participant.
    - ✅ **No** Application review panel, **no** role/delete/reset controls — read-only.
-3. (API spot-check, optional) A `PUT /api/admin/users/<id>` from SDBS returns **403**.
+3. (API spot-check, optional) A `PUT /api/admin/users/<id>` carrying
+   `applicationStatus` / `approved` / `rejectionReason` from MT Dte returns **403**
+   with *"Registration verification is performed by the SD Dte (Staff Duties
+   Directorate) only."*
 
 ### 2d. Participants still blocked from /admin
 - As a normal participant, visit `/admin` → ✅ redirected to `/event/dashboard`.
@@ -162,7 +174,7 @@ Roles: **Participant** (`user`) · **SDBS** (viewer) · **MTD** (approver) · **
 
 ### 4a. Grouped admin sidebar
 - As admin, check the left sidebar is grouped under **Operations / Content / System** headings.
-- As **MTD** or **SDBS**, only the **Operations** group (their permitted items) shows — empty groups are hidden.
+- As **MT Dte** or **SD Dte**, only the **Operations** group (their permitted items) shows — empty groups are hidden.
 
 ### 4b. Admin dashboard quick-actions
 1. As admin, open **/admin**.

@@ -3,7 +3,7 @@ import { Pencil } from "lucide-react";
 
 import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
 import { Button } from "@/components/ui/button";
-import { ROLE_LABELS } from "@/lib/auth-routes";
+import { ROLE_LABELS, ROLE_SHORT_LABELS } from "@/lib/auth-routes";
 import { portalTableActionIconView,
   adminApproveBtnStyles,
   adminTableActionsCenter,
@@ -97,8 +97,13 @@ export function UserAccountsTable({
                 </div>
               </td>
               <td>
-                <span className={`admin-role-pill admin-role-pill--${u.role}`}>
-                  {ROLE_LABELS[u.role] ?? u.role}
+                {/* The pill is narrow, so it carries the short name and puts
+                    the Directorate's full title in the tooltip. */}
+                <span
+                  className={`admin-role-pill admin-role-pill--${u.role}`}
+                  title={ROLE_LABELS[u.role] ?? u.role}
+                >
+                  {ROLE_SHORT_LABELS[u.role] ?? u.role}
                 </span>
               </td>
               <td>

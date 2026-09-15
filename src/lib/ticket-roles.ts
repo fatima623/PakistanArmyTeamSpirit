@@ -5,7 +5,7 @@
  * mailer, and the thread view is a client component. Everything here is pure.
  */
 
-import { ROLE_LABELS, canAccessTicketDesk } from "@/lib/auth-routes";
+import { ROLE_SHORT_LABELS, canAccessTicketDesk } from "@/lib/auth-routes";
 
 /**
  * Author-role snapshot stored on each message.
@@ -27,12 +27,14 @@ export function isStaffAuthorRole(role: string | null | undefined): boolean {
 /**
  * Badge text for a message author. Empty for the participant (their name is
  * already shown), and a generic team label for the legacy flat `"staff"` role
- * and anything unrecognised.
+ * and anything unrecognised. Uses the short role names — this sits inside a
+ * chat bubble, where "SD Dte" reads and "SD Dte (Staff Duties Directorate)"
+ * would wrap.
  */
 export function ticketAuthorRoleLabel(
   role: string | null | undefined,
   fallback = "PATS team"
 ): string {
   if (!role || role === "user") return "";
-  return ROLE_LABELS[role] ?? fallback;
+  return ROLE_SHORT_LABELS[role] ?? fallback;
 }

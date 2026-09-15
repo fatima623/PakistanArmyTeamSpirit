@@ -13,7 +13,7 @@ export function UserApplicationStatusCell({
   userId: string;
   applicationStatus: string;
   suspended?: boolean;
-  /** SD (Sports Directorate) only — enables the quick-approve button. */
+  /** SD Dte (Staff Duties Directorate) only — enables quick-approve. */
   canApprove?: boolean;
 }) {
   const isPending = applicationStatus === APPLICATION_STATUS.PENDING;

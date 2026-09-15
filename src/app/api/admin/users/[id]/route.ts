@@ -77,7 +77,7 @@ export async function PUT(request: Request, context: RouteContext) {
   try {
     // Role-based responsibilities:
     //   • Registration verification (applicationStatus / approved / reason)
-    //     → SD (Sports Directorate) ONLY. Admin & MT are read-only.
+    //     → SD Dte (Staff Duties Directorate) ONLY. Admin & MT Dte are read-only.
     //   • Account management (profile, role, suspension, notes, password)
     //     → Admin ONLY.
     const session = await requireStaff();
@@ -143,7 +143,7 @@ export async function PUT(request: Request, context: RouteContext) {
 
     if (editsApplicationDecision && !isRegistrationVerifier) {
       throw new ApiError(
-        "Registration verification is performed by the SD (Sports Directorate) only. Your role has view-only access.",
+        "Registration verification is performed by the SD Dte (Staff Duties Directorate) only. Your role has view-only access.",
         403
       );
     }

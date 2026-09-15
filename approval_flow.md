@@ -1,9 +1,40 @@
-# PATS Registration Approval Flow — Specification & Build Notes
+# PATS Registration Approval Flow
 
-> **Status:** NOT yet implemented. This document is the design/spec so the multi-level
-> approval hierarchy can be built later.
-> **Author:** captured during verification pass on **2026-07-02**.
-> **Scope:** registration + payment approval routing between JLA / MT Dte / SD Dte.
+> **Status: the multi-level design below was ABANDONED and never built.**
+> Everything from §3 onwards is kept only as a record of what was once proposed —
+> do not implement it and do not treat it as a description of the product.
+> The flow that actually ships is in §0 immediately below.
+> **Original author:** captured during a verification pass on **2026-07-02**.
+> **Superseded:** **2026-09-14**.
+
+---
+
+## 0. What the product actually does (current, implemented)
+
+**One approver: the SD Dte (Staff Duties Directorate).** There is no Level-1 /
+Level-2 hand-off, and there is no payment step.
+
+The participant works through four steps in order — Confirm Participation → Unit
+Information → Team Members → Flight Details. Submitting flight details for the
+whole roster sets `submittedForApprovalAt`, which places the registration in the
+**SD Dte verification queue automatically**. The SD Dte then makes the single
+decision at the end: approve, return for correction, or reject. Host information
+is published afterwards.
+
+| Role | Slug | Power over a registration |
+|---|---|---|
+| **JLA Admin** (Junior Leaders Academy) | `admin` | **View only.** Owns everything else: settings, roles, accounts, suspension, notes, passwords, team-size requests, flight finalization |
+| **SD Dte** (Staff Duties Directorate) | `sdbs` | **The only approver — decides** (approve / return / reject) |
+| **MT Dte** (Military Training Directorate) | `mtd` | **View only** |
+| Participant | `user` | Completes the four steps; sees own dashboard |
+
+Enforced by `canApproveRegistration(role) === ROLES.SDBS`
+([src/lib/auth-routes.ts](src/lib/auth-routes.ts)), `requireRegistrationApprover()`
+([src/lib/api-helpers.ts](src/lib/api-helpers.ts)) and the per-field check in
+`PUT /api/admin/users/[id]`, which rejects any `applicationStatus` / `approved` /
+`rejectionReason` edit from a non-SD role with a 403.
+
+---
 
 ---
 
@@ -28,19 +59,23 @@ The three staff roles already exist in the codebase. They map to the org roles a
 
 | Org role (business name) | Code role slug | Current label ([auth-routes.ts](src/lib/auth-routes.ts)) | Current power |
 |---|---|---|---|
-| **JLA Admin** (Junior Leaders Academy) | `admin` | "Administrator" | Full admin; only role that verifies payments & manages everything |
-| **MT Dte Admin** (Level 1 approver) | `mtd` | "MTD (approver)" | Can approve/return registrations |
-| **SD Dte Admin** (final approver) | `sdbs` | "SDBS (viewer)" | **Read-only today — cannot approve** |
+| **JLA Admin** (Junior Leaders Academy) | `admin` | "Administrator" | Full admin everywhere EXCEPT the registration decision, where it is read-only |
+| **MT Dte Admin** | `mtd` | "MT Dte (Military Training Directorate)" | **Read-only** — cannot approve |
+| **SD Dte Admin** | `sdbs` | "SD Dte (Staff Duties Directorate)" | **The only approver** — decides at the end of the participant's steps |
 | Participant | `user` | "Participant" | Registers, pays, views own dashboard |
 
 Defined in [src/lib/auth-routes.ts](src/lib/auth-routes.ts):
 `ROLES`, `STAFF_ROLES = [admin, mtd, sdbs]`, `ASSIGNABLE_ROLES`, `ROLE_LABELS`,
-`isAdminRole`, `isStaffRole`, `canAccessAdminArea`, `canApproveRegistration (admin||mtd)`,
+`isAdminRole`, `isStaffRole`, `canAccessAdminArea`, `canApproveRegistration (sdbs only)`,
 `canManageSystem (admin)`, `getRoleHomePath`.
 
 ---
 
-## 3. Target workflow (required)
+## 3. Target workflow (ABANDONED — historical record only)
+
+> ⚠️ The hierarchy below was never built and is **not** what the product does.
+> It also assumes a payment step that has since been removed entirely. See §0.
+
 
 ```
 [User] registers a team  ─────────────►  [User] submits payment

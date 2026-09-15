@@ -616,7 +616,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
 
               <p className="m-0 px-0.5 text-[0.75rem] text-slate-500">
                 {progress.approved
-                  ? "Approved by the Sports Directorate."
+                  ? "Approved by the Staff Duties Directorate."
                   : `Step ${progress.currentStep} of ${progress.total} — ${progress.currentLabel}.`}
               </p>
             </div>

@@ -161,7 +161,7 @@ Full-stack change; **additive/non-destructive** DB migration.
 | Admin | Payment Verification | 6-col avatar table (+ Amount/Reference), "Manual verification" alert |
 | Admin | Participating Teams | **card grid** — status pill, branch, captain block, member count, Export roster |
 | Admin | Support Tickets | **card list** — TK-ref, priority pill, submitter avatar, time-ago, status |
-| Admin | User Management | avatar table, role pill (Participant/SDBS/MTD/Admin) + account status pill, "Invite user" |
+| Admin | User Management | avatar table, role pill (Participant / SD Dte / MT Dte / Admin) + account status pill, "Invite user" |
 | Admin | News Management | **card list** — icon, title, date, PDF, Published/Draft pill |
 | Admin | Announcements | **Live preview** ticker bar added; list reskinned (see residuals) |
 | Admin | Key Dates | reskinned functional table |

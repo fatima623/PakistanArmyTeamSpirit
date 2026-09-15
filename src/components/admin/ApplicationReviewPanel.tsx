@@ -23,8 +23,8 @@ type Props = {
 };
 
 /**
- * Registration verification panel — rendered ONLY for the SD (Sports
- * Directorate). Admin and MT have read-only visibility elsewhere.
+ * Registration verification panel — rendered ONLY for the SD Dte (Staff
+ * Duties Directorate). Admin and MT Dte have read-only visibility elsewhere.
  */
 export function ApplicationReviewPanel({
   userId,

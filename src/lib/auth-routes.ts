@@ -28,16 +28,38 @@ export const ASSIGNABLE_ROLES: string[] = [
   ROLES.ADMIN,
 ];
 
+/**
+ * Display names for the staff roles.
+ *
+ * `sdbs` and `mtd` are the two Directorates, and their acronyms are fixed:
+ * **SD Dte = Staff Duties Directorate** and **MT Dte = Military Training
+ * Directorate**. Nothing else. Keep every user-facing expansion in this file so
+ * the two can never drift apart again — read them from here rather than
+ * re-typing the words in a component.
+ */
 export const ROLE_LABELS: Record<string, string> = {
   user: "Participant",
-  sdbs: "SD (Sports Directorate)",
-  mtd: "MT (Management Team)",
+  sdbs: "SD Dte (Staff Duties Directorate)",
+  mtd: "MT Dte (Military Training Directorate)",
+  admin: "Administrator",
+  host: "Host Formation",
+};
+
+/** Compact forms, for pills and other chrome too narrow for the full name. */
+export const ROLE_SHORT_LABELS: Record<string, string> = {
+  user: "Participant",
+  sdbs: "SD Dte",
+  mtd: "MT Dte",
   admin: "Administrator",
   host: "Host Formation",
 };
 
 export function roleLabel(role: string | null | undefined): string {
   return (role && ROLE_LABELS[role]) || role || "—";
+}
+
+export function roleShortLabel(role: string | null | undefined): string {
+  return (role && ROLE_SHORT_LABELS[role]) || role || "—";
 }
 
 /** True only for full administrators. */
@@ -56,8 +78,8 @@ export function canAccessAdminArea(role: string | undefined | null): boolean {
 }
 
 /**
- * Registration verification is performed EXCLUSIVELY by the SD
- * (Sports Directorate). Admin and MT have read-only visibility.
+ * Registration verification is performed EXCLUSIVELY by the SD Dte (Staff
+ * Duties Directorate). Admin and MT Dte have read-only visibility.
  */
 export function canApproveRegistration(
   role: string | undefined | null

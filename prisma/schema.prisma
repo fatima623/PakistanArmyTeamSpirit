@@ -52,7 +52,7 @@ model User {
   flightsSubmittedAt       DateTime?
   /**
    * Set when every participant-side step is done and the registration enters
-   * the SD (Sports Directorate) approval queue.
+   * the SD Dte (Staff Duties Directorate) approval queue.
    */
   submittedForApprovalAt   DateTime?
   /**

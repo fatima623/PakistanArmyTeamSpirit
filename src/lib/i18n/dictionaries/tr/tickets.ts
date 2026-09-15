@@ -32,7 +32,7 @@ export const tickets: typeof enTickets = {
       },
       {
         q: "Kayıt adımları nelerdir ve hangi sırayla ilerler?",
-        a: "Her biri bir sonrakini açan beş adım: 1) Katılım onayı, 2) Birlik bilgileri, 3) Ekip üyeleri, 4) Uçuş bilgileri, 5) SD (Spor Müdürlüğü) tarafından doğrulama. Panonuz hangi adımın açık olduğunu ve nelerin eksik kaldığını gösterir.",
+        a: "Her biri bir sonrakini açan beş adım: 1) Katılım onayı, 2) Birlik bilgileri, 3) Ekip üyeleri, 4) Uçuş bilgileri, 5) SD Dte (Karargâh Görevleri Müdürlüğü) tarafından doğrulama. Panonuz hangi adımın açık olduğunu ve nelerin eksik kaldığını gösterir.",
       },
       {
         q: "Ekibimde kaç kişi olabilir?",
@@ -44,7 +44,7 @@ export const tickets: typeof enTickets = {
       },
       {
         q: "Kaydım ne zaman gönderilmiş sayılır?",
-        a: "Tüm listenin uçuş bilgileri gönderildiğinde kaydınız otomatik olarak SD doğrulama sırasına girer. Ayrıca bir şey göndermeniz gerekmez; panodaki durum nerede olduğunuzu gösterir.",
+        a: "Tüm listenin uçuş bilgileri gönderildiğinde kaydınız otomatik olarak SD Dte doğrulama sırasına girer. Ayrıca bir şey göndermeniz gerekmez; panodaki durum nerede olduğunuzu gösterir.",
       },
       {
         q: "Birlik veya komutan bilgilerimi kaydettikten sonra değiştirebilir miyim?",

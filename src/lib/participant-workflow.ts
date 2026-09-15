@@ -16,7 +16,7 @@ import { enWorkflow, type WorkflowStrings } from "@/lib/i18n/workflow-strings";
  *   2. unitInfo     — unit + CO details, filled in by the participant
  *   3. roster       — team registration + member table (capped, extendable)
  *   4. flights      — flight details + passport/ticket PDFs, then submitted
- *   5. verification — SD (Sports Directorate) approves the finished registration
+ *   5. verification — SD Dte (Staff Duties Directorate) approves the finished registration
  *   6. hostInfo     — read-only hosting dashboard once flights are finalized
  *
  * SD verification is deliberately last: there is nothing to verify until the

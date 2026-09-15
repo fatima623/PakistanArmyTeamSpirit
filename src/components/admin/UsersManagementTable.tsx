@@ -48,7 +48,7 @@ export function UsersManagementTable({
   canApprove = false,
 }: {
   users: UserManagementRow[];
-  /** SD (Sports Directorate) only — enables the verification row action. */
+  /** SD Dte (Staff Duties Directorate) only — enables the verification action. */
   canApprove?: boolean;
 }) {
   if (users.length === 0) {

@@ -63,12 +63,12 @@ export async function requireHost() {
   return session;
 }
 
-/** SD (Sports Directorate) only — registration verification decisions. */
+/** SD Dte (Staff Duties Directorate) only — registration verification. */
 export async function requireRegistrationApprover() {
   const session = await requireAuth();
   if (!canApproveRegistration(session.user.role)) {
     throw new ApiError(
-      "Registration verification is performed by the SD (Sports Directorate) only",
+      "Registration verification is performed by the SD Dte (Staff Duties Directorate) only",
       403
     );
   }

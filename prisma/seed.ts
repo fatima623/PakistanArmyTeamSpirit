@@ -204,24 +204,25 @@ async function main() {
 
   console.log(`Admin: ${adminEmail} / ${adminPassword}`);
 
-  // Staff accounts for testing the MTD (approver) and SDBS (viewer) roles.
+  // Staff accounts for the two Directorates: MT Dte (Military Training) and
+  // SD Dte (Staff Duties).
   const staffPasswordHash = await bcrypt.hash(TEST_PASSWORD, BCRYPT_ROUNDS);
   const staffAccounts = [
     {
       email: "mtd@example.com",
-      firstName: "Maya",
-      lastName: "Approver",
+      firstName: "MT",
+      lastName: "Directorate",
       rank: "Maj",
       role: "mtd",
-      note: "MTD (approver)",
+      note: "MT Dte (Military Training Directorate)",
     },
     {
       email: "sdbs@example.com",
-      firstName: "Sam",
-      lastName: "Viewer",
+      firstName: "SD",
+      lastName: "Directorate",
       rank: "Capt",
       role: "sdbs",
-      note: "SDBS (viewer)",
+      note: "SD Dte (Staff Duties Directorate)",
     },
   ] as const;
 

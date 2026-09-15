@@ -32,12 +32,15 @@ import {
   type AdminNavKey,
 } from "@/lib/admin-navigation";
 import { PatsLogo } from "@/components/pats/PatsLogo";
+import { roleShortLabel } from "@/lib/auth-routes";
 
-/** Sidebar identity strip copy, keyed on staff role. */
-const ROLE_IDENTITY: Record<string, { label: string; access: string }> = {
-  admin: { label: "Administrator", access: "System management" },
-  mtd: { label: "MT (Management Team)", access: "Operational oversight" },
-  sdbs: { label: "SD (Sports Directorate)", access: "Registration verification" },
+/** Sidebar identity strip copy, keyed on staff role. The name comes from the
+ *  shared role map (compact form — the strip is a narrow pill); only the access
+ *  line is written here. */
+const ROLE_ACCESS: Record<string, string> = {
+  admin: "System management",
+  mtd: "Operational oversight",
+  sdbs: "Registration verification",
 };
 
 const navIcons: Record<(typeof ADMIN_NAV_ITEMS)[number]["key"], LucideIcon> = {
@@ -70,9 +73,9 @@ export function AdminSidebar({
   onClose?: () => void;
 }) {
   const pathname = usePathname();
-  const identity = (role && ROLE_IDENTITY[role]) || {
-    label: "Staff",
-    access: "Limited",
+  const identity = {
+    label: role ? roleShortLabel(role) : "Staff",
+    access: (role && ROLE_ACCESS[role]) || "Limited",
   };
   const navGroups = role
     ? adminNavGroupsForRole(role)

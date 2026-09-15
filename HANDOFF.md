@@ -171,28 +171,41 @@ the product grew):
 
 ## 6. Domain workflow, roles & statuses
 
-**Roles** (`User.role`): `user` (participant) · `sdbs` (viewer) · `mtd` (approver) ·
-`admin` (full). MTD can approve registrations; SDBS is read-only; admin manages
-everything. Helpers live in `src/lib/` (constants, user-status, participant-journey).
+**Roles** (`User.role`): `user` (participant) · `sdbs` (SD Dte — Staff Duties
+Directorate) · `mtd` (MT Dte — Military Training Directorate) · `admin` (full) ·
+`host` (Host Formation, read-only `/host`).
+
+**There is exactly ONE approver: the SD Dte.** It is the only role that may decide
+a registration (approve / return / reject), and it does so at the END, once the
+participant has completed every step. Admin and MT Dte see the same queue but are
+**read-only** on that decision; admin owns everything else (settings, roles,
+accounts, suspension, notes, passwords). Enforced by
+`canApproveRegistration(role) === "sdbs"` in `src/lib/auth-routes.ts`, by
+`requireRegistrationApprover()` in `api-helpers.ts`, and per-field in
+`PUT /api/admin/users/[id]`.
 
 **Application status** (`APPLICATION_STATUS`): `PENDING` → `APPROVED` / `REJECTED`
 (returned for correction).
 
-**Payment status** (`PAYMENT_STATUS`): `PENDING` → `SUBMITTED`/`UNDER_REVIEW` →
-`VERIFIED`/`APPROVED` (paid) or `REJECTED`/`RETURNED`.
+**Payment was removed** from the product — there is no payment step, no payment
+status and no payment table.
 
-**Participant journey stage** (`resolveParticipantJourneyStage` in
-`src/lib/participant-journey.ts`) collapses the two statuses into **1/2/3** which
-drives the dashboard UI:
-- **1 — Awaiting review** (application pending)
-- **2 — Payment required** (approved, not yet paid)
-- **3 — Confirmed** (payment verified)
+**Participant workflow stages** (`WORKFLOW_STAGES` /
+`deriveWorkflowStages` in `src/lib/participant-workflow.ts`) drive the dashboard:
 
-End-to-end flow: **register** (`/api/register`, persists User + Unit + optional
-TeamMembers, sends verification email) → **verify email** → **staff approves**
-(admin/MTD) → **participant pays** (`/api/user/payment`, proof upload) → **staff
-verifies payment** → **confirmed**. Deadlines (registration & payment) are enforced
-**server-side** at the API even though the public banner reads cached settings.
+1. `confirmation` — Confirm Participation
+2. `unitInfo` — Unit Information
+3. `roster` — Team Members
+4. `flights` — Flight Details
+5. `verification` — **SD Dte decides** (the only approval in the flow)
+6. `hostInfo` — Host Information (post-approval, read-only)
+
+End-to-end flow: **admin creates the account** (there is no public sign-up) →
+participant works through steps 1–4 → submitting the whole roster's flight details
+sets `submittedForApprovalAt`, which puts the registration in the **SD Dte
+verification queue** automatically → **SD Dte approves** (or returns it for
+correction) → host information is published. Deadlines are enforced **server-side**
+at the API even though the public banner reads cached settings.
 
 ---
 
@@ -324,8 +337,8 @@ see `docs/NEW-FEATURES-TESTING.md` for the full matrix and manual test flows:
 | Account | Email | Notes |
 |---------|-------|-------|
 | Admin | `admin@example.com` | `ADMIN_PASSWORD_PLAIN` (or `Admin123!`) |
-| MTD (approver) | `mtd@example.com` | staff home `/admin` |
-| SDBS (viewer) | `sdbs@example.com` | read-only |
+| MT Dte (Military Training Directorate) | `mtd@example.com` | staff home `/admin` |
+| SD Dte (Staff Duties Directorate) | `sdbs@example.com` | read-only |
 | Participant (pending) | `pending@example.com` | awaiting approval |
 | Participant (approved) | `approved@example.com` | payment due; owns 2 sample tickets |
 | Participant (payment) | `payment@example.com` | payment submitted |

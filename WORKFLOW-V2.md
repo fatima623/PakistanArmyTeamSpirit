@@ -28,19 +28,24 @@ participants will see the confirmation dialog on next login (as requested).
 
 ## Role matrix
 
-| Action | Admin | SD (`sdbs`) | MT (`mtd`) |
+**The SD Dte is the only approver.** It decides the registration once — at the
+end, after the participant has finished every step. No other role can approve,
+and there is no second level.
+
+| Action | Admin | SD Dte — Staff Duties Directorate (`sdbs`) | MT Dte — Military Training Directorate (`mtd`) |
 |---|---|---|---|
 | Registration verification (approve/reject/return/under-review) | view | **decide** | view |
-| Payment verification | view | view | **decide** |
 | Team-size requests | **decide** | view | view |
 | Flight finalize / unlock | **decide** | view | view |
 | Settings, roles, accounts, suspension, notes | **decide** | – | – |
 
-Enforced server-side in `src/lib/auth-routes.ts` (`canApproveRegistration` = SD,
-`canVerifyPayment` = MT), `api-helpers.ts` (`requireRegistrationApprover`,
-`requirePaymentVerifier`), and per-field checks in
-`api/admin/users/[id]` + `api/admin/payments/[id]`. Every decision writes an
-`AuditLog` entry with `actorRole` (shown in Activity history panels).
+Enforced server-side in `src/lib/auth-routes.ts` (`canApproveRegistration` =
+`sdbs` only), `api-helpers.ts` (`requireRegistrationApprover`), and per-field
+checks in `api/admin/users/[id]`. Every decision writes an `AuditLog` entry
+(shown in Activity history panels).
+
+> Payment was removed from the product: there is no payment step, no payment
+> verification and no `canVerifyPayment` / `requirePaymentVerifier` helper.
 
 ## Admin configuration (Site Settings → "Participant workflow" / "Host information")
 
@@ -63,5 +68,5 @@ Enforced server-side in `src/lib/auth-routes.ts` (`canApproveRegistration` = SD,
 ## Notes
 - `TeamMember.serviceNumber` is relabeled **Serial Number** in the UI; `rank` is new; `serviceArm` is now optional.
 - `APPLICATION_STATUS` gained `UNDER_REVIEW` and `RETURNED`. Login is blocked only for `REJECTED`.
-- Payment auto "under review" on open now happens only when an MT member opens the proof.
+- Payment auto "under review" on open now happens only when an MT Dte member opens the proof.
 - `tsconfig.check.json` is a scoped typecheck config used during development; safe to delete.

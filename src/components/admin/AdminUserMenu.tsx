@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { ChevronDown, LogOut, ShieldCheck } from "lucide-react";
 
 import { logoutAction } from "@/lib/actions/auth";
+import { roleShortLabel } from "@/lib/auth-routes";
 import { cn } from "@/lib/utils";
 
 export function AdminUserMenu({ userInitials }: { userInitials: string }) {
@@ -37,11 +38,9 @@ export function AdminUserMenu({ userInitials }: { userInitials: string }) {
       ? `${user.firstName} ${user.lastName}`
       : "Administrator";
   const email = user?.email ?? "";
-  const roleLabel =
-    ({ admin: "Super Admin", mtd: "Approver", sdbs: "Viewer" } as Record<
-      string,
-      string
-    >)[user?.role ?? ""] ?? "Staff";
+  // The Directorates are named from the shared map so the badge can never
+  // disagree with the rest of the console about what SD/MT Dte stand for.
+  const roleLabel = user?.role ? roleShortLabel(user.role) : "Staff";
 
   return (
     <div ref={ref} className="relative">

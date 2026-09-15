@@ -20,7 +20,7 @@ export const UserManagementRowActions = memo(function UserManagementRowActions({
   applicationStatus?: string;
   /** Gates the verification actions — they stay inert until every step is in. */
   progress: RegistrationProgress;
-  /** SD (Sports Directorate) only — shows the verification dialog action. */
+  /** SD Dte (Staff Duties Directorate) only — shows the verification action. */
   canReview?: boolean;
 }) {
   return (
