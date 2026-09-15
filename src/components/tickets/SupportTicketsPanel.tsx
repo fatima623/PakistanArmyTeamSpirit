@@ -145,22 +145,22 @@ export function SupportTicketsPanel({
           </div>
         ) : (
           <div className="overflow-x-auto rounded-lg border border-slate-200">
-            <table className="w-full min-w-[640px] border-collapse text-sm">
+            <table className="w-full min-w-[640px] table-fixed border-collapse text-[13px]">
               <thead>
-                <tr className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide !text-slate-500">
-                  <th scope="col" className="w-14 px-3 py-2.5">
+                <tr className="bg-slate-50 text-[11px] font-semibold uppercase tracking-[0.04em] !text-slate-500">
+                  <th scope="col" className="w-1/5 px-3 py-2.5 text-center">
                     {tk.table.sNo}
                   </th>
-                  <th scope="col" className="px-3 py-2.5">
+                  <th scope="col" className="w-1/5 px-3 py-2.5 text-left">
                     {tk.table.subject}
                   </th>
-                  <th scope="col" className="w-32 px-3 py-2.5">
+                  <th scope="col" className="w-1/5 px-3 py-2.5 text-center">
                     {tk.table.date}
                   </th>
-                  <th scope="col" className="w-32 px-3 py-2.5">
+                  <th scope="col" className="w-1/5 px-3 py-2.5 text-center">
                     {tk.table.status}
                   </th>
-                  <th scope="col" className="px-3 py-2.5 text-right">
+                  <th scope="col" className="w-1/5 px-3 py-2.5 text-center">
                     {tk.table.actions}
                   </th>
                 </tr>
@@ -176,30 +176,32 @@ export function SupportTicketsPanel({
 
                   return (
                     <tr key={t.id}>
-                      <td className="px-3 py-3 !text-slate-500">{i + 1}</td>
-                      <td className="px-3 py-3">
+                      <td className="px-3 py-2.5 text-center !text-slate-500">
+                        {i + 1}
+                      </td>
+                      <td className="px-3 py-2.5">
                         <Link
                           href={`/event/tickets/${t.id}`}
-                          className="font-semibold leading-[1.35] text-slate-800 no-underline transition-colors hover:text-emerald-700 hover:underline"
+                          className="block truncate text-[13px] font-semibold leading-[1.35] text-slate-800 no-underline transition-colors hover:text-emerald-700 hover:underline"
                         >
                           {t.subject}
                         </Link>
-                        <span className="mt-[0.2rem] flex items-center gap-1 text-[0.72rem] !text-slate-400">
-                          <MessageSquare className="h-3 w-3" aria-hidden />
+                        <span className="mt-[0.15rem] flex items-center gap-1 text-[0.7rem] !text-slate-400">
+                          <MessageSquare className="h-3 w-3 shrink-0" aria-hidden />
                           {t.messageCount}
                         </span>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-3 !text-slate-600">
+                      <td className="whitespace-nowrap px-3 py-2.5 text-center !text-slate-600">
                         {t.updatedLabel}
                       </td>
-                      <td className="px-3 py-3">
+                      <td className="px-3 py-2.5 text-center">
                         <TicketStatusBadge
                           status={t.status}
                           label={tk.statuses[status]}
                         />
                       </td>
-                      <td className="px-3 py-3">
-                        <div className="flex items-center justify-end gap-1.5">
+                      <td className="px-3 py-2.5">
+                        <div className="flex items-center justify-center gap-1.5">
                           {busy ? (
                             <Loader2
                               className="h-4 w-4 animate-spin text-slate-400"
