@@ -24553,6 +24553,33 @@ html[data-site-theme="day"] .registered-map__year-select {
   color: rgb(var(--brand-olive) / 0.85);
 }
 
+/* The crest motto and its English meaning read as one pair, then a deliberate
+   gap sets them apart from the exercise name below. */
+.pats-landing .pats-landing__motto-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: clamp(0.85rem, 3.2vh, 2.1rem);
+}
+
+.pats-landing .pats-landing__motto-translation {
+  margin: 0;
+  max-width: 32rem;
+  font-family: var(--font-barlow), var(--font-arabic), system-ui, sans-serif;
+  font-size: clamp(0.7rem, 1.3vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--landing-ink-soft);
+}
+
+.pats-landing .pats-landing__motto-translation[dir="rtl"] {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 .pats-landing .pats-landing__title {
   margin: 0;
   display: flex;
@@ -24807,6 +24834,11 @@ html[data-site-theme="day"] .registered-map__year-select {
 
   .pats-landing .pats-landing__stage {
     gap: clamp(0.4rem, 1.1vh, 0.8rem);
+  }
+
+  .pats-landing .pats-landing__motto-block {
+    gap: 0.3rem;
+    margin-bottom: clamp(0.5rem, 1.6vh, 1rem);
   }
 
   .pats-landing .pats-landing__title-line {

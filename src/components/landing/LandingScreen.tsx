@@ -95,10 +95,17 @@ export function LandingScreen({ exerciseYear }: Props) {
           </span>
         </div>
 
-        {/* Heraldry, not copy — always the original Urdu, in nastaliq, RTL. */}
-        <p className="pats-landing__motto pats-urdu-motto" lang="ur" dir="rtl">
-          {HERO_MOTTO}
-        </p>
+        {/* Heraldry, not copy — always the original Urdu, in nastaliq, RTL. Its
+            meaning follows underneath in the active locale, exactly as the
+            /tour hero prints it (t.home.hero.mottoTranslation). */}
+        <div className="pats-landing__motto-block">
+          <p className="pats-landing__motto pats-urdu-motto" lang="ur" dir="rtl">
+            {HERO_MOTTO}
+          </p>
+          <p className="pats-landing__motto-translation" lang={locale} dir={dir}>
+            {t.home.hero.mottoTranslation}
+          </p>
+        </div>
 
         <h1 className="pats-landing__title">
           <span className="pats-landing__title-line">{t.home.hero.titleLine1}</span>
