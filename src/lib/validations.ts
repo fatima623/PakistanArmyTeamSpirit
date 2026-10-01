@@ -266,6 +266,13 @@ export const KeyDateSchema = z.object({
   sortOrder: z.number().int().min(0),
 });
 
+export const FaqSchema = z.object({
+  question: z.string().min(1, "Question required").max(500),
+  answer: z.string().min(1, "Answer required").max(5000),
+  sortOrder: z.number().int().min(0),
+  published: z.boolean().optional().default(true),
+});
+
 const tickerPriorityValues = ["CRITICAL", "HIGH", "MEDIUM", "NORMAL"] as const;
 const tickerStatusValues = ["ACTIVE", "DRAFT", "DISABLED", "EXPIRED"] as const;
 const tickerVisibilityValues = [

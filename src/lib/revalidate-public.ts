@@ -47,6 +47,14 @@ export function revalidateKeyDatesPaths() {
   revalidatePath("/admin/key-dates");
 }
 
+export function revalidateFaqPaths() {
+  // FAQs surface in the participant "Queries / FAQs" view. That route is
+  // session-gated (dynamic) so it re-reads on every request, but revalidate the
+  // admin list too so the manager reflects a change made elsewhere.
+  revalidatePath("/event/tickets");
+  revalidatePath("/admin/faqs");
+}
+
 export function revalidateTickerPaths() {
   // Ticker messages only surface on the participant dashboard now — the
   // public marquee scrolls Announcements (see revalidateNewsPaths).

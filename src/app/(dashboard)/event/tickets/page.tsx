@@ -5,6 +5,7 @@ import { requireConfirmedParticipant } from "@/lib/require-participant";
 import { formatDateShort } from "@/lib/utils";
 import { SupportTicketsPanel } from "@/components/tickets/SupportTicketsPanel";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { getPublishedFaqs } from "@/lib/faq-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getDictionary();
@@ -14,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ParticipantTicketsPage() {
   const session = await requireConfirmedParticipant();
   const { locale } = await getDictionary();
+
+  const faqItems = await getPublishedFaqs(locale);
 
   const tickets = await prisma.supportTicket.findMany({
     where: { userId: session.user.id },
@@ -35,5 +38,5 @@ export default async function ParticipantTicketsPage() {
     updatedLabel: formatDateShort(t.lastReplyAt, locale),
   }));
 
-  return <SupportTicketsPanel tickets={items} />;
+  return <SupportTicketsPanel tickets={items} faqItems={faqItems} />;
 }

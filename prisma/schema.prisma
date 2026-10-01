@@ -461,6 +461,24 @@ model KeyDate {
   updatedAt DateTime  @updatedAt
 }
 
+/// Admin-managed FAQ entries shown in the participant "Queries / FAQs" view.
+///
+/// English (the source of truth) lives here; ru/tr/ar/zh renderings live in the
+/// polymorphic `Translation` table (model "Faq", fields "question"/"answer") and
+/// fall back to this English when absent. Seeded from the former static i18n
+/// `tickets.faq.items` via `prisma/seed-faqs.ts`.
+model Faq {
+  id        String   @id @default(cuid())
+  question  String   @db.Text
+  answer    String   @db.Text
+  sortOrder Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, sortOrder])
+}
+
 /// Per-locale translations of admin-entered content.
 ///
 /// English lives on the source model itself (`Event.title`, `NewsPost.content`,

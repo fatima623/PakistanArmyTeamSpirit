@@ -53,9 +53,12 @@ export const TRANSLATABLE_FIELDS = {
   // The scrolling marquee text. `TickerAnnouncement.message` is the only
   // free-text field; priority/visibility/status are fixed vocab, never stored.
   TickerAnnouncement: ["message"],
+  // Admin-managed participant FAQ entries (see `Faq` model). Both fields are
+  // free text; English is the source and ru/tr/ar/zh are stored here.
+  Faq: ["question", "answer"],
 } as const satisfies Record<string, readonly string[]>;
 
-/** "Event" | "NewsPost" | "GalleryImage" | "KeyDate" | "TickerAnnouncement" — matches Translation.model. */
+/** "Event" | "NewsPost" | "GalleryImage" | "KeyDate" | "TickerAnnouncement" | "Faq" — matches Translation.model. */
 export type TranslatableModel = keyof typeof TRANSLATABLE_FIELDS;
 
 /** The translatable field names of a given model, as a union of literals. */

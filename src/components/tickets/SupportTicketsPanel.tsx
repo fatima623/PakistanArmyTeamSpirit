@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import { FaqAccordion } from "@/components/tickets/FaqAccordion";
+import { FaqAccordion, type FaqItem } from "@/components/tickets/FaqAccordion";
 import { NewTicketForm } from "@/components/tickets/NewTicketForm";
 import { TicketStatusBadge } from "@/components/tickets/TicketStatusBadge";
 import { Button } from "@/components/ui/button";
@@ -42,8 +42,15 @@ export type SupportTicketListItem = {
  */
 export function SupportTicketsPanel({
   tickets,
+  faqItems,
 }: {
   tickets: SupportTicketListItem[];
+  /**
+   * Admin-managed FAQ entries, already localized server-side. The labels around
+   * the accordion (title / subtitle / show / hide) still come from the
+   * dictionary; only the entries themselves are DB-driven now.
+   */
+  faqItems: FaqItem[];
 }) {
   const [creating, setCreating] = useState(false);
   const [showFaq, setShowFaq] = useState(false);
@@ -102,7 +109,7 @@ export function SupportTicketsPanel({
 
       <NewTicketForm open={creating} onOpenChange={setCreating} />
 
-      {!creating ? (
+      {!creating && faqItems.length > 0 ? (
         <div className="flex flex-col gap-3">
           <button
             type="button"
@@ -130,7 +137,7 @@ export function SupportTicketsPanel({
               <FaqAccordion
                 title={tk.faq.title}
                 subtitle={tk.faq.subtitle}
-                items={tk.faq.items}
+                items={faqItems}
               />
             ) : null}
           </div>

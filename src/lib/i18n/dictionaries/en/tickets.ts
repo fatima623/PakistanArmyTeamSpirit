@@ -18,9 +18,14 @@ export const tickets = {
   staffTag: "PATS team",
 
   /**
-   * Answers to the questions that otherwise arrive as queries. Shown as an
-   * accordion above the query list. Keep them short — anything that needs a
-   * long answer belongs in the Tour instead.
+   * FAQ block shown as an accordion above the query list.
+   *
+   * `title` / `subtitle` / `show` / `hide` are the static chrome around the
+   * accordion and stay here. The `items` are now ADMIN-MANAGED in the database
+   * (`Faq` model, edited at /admin/faqs) and read per-request by the participant
+   * page — the array below is only the ONE-TIME SEED for that table (see
+   * `prisma/seed-faqs.ts`, run `npm run db:seed:faqs`). It is no longer rendered;
+   * edit FAQ content in the admin panel, not here.
    */
   faq: {
     title: "Frequently asked questions",

@@ -38,6 +38,14 @@ export const KeyDatesManager = dynamic(
   { loading, ssr: false }
 );
 
+export const FaqsManager = dynamic(
+  () =>
+    import("@/components/admin/FaqsManager").then((m) => ({
+      default: m.FaqsManager,
+    })),
+  { loading, ssr: false }
+);
+
 export const HostFormationsManager = dynamic(
   () =>
     import("@/components/admin/HostFormationsManager").then((m) => ({

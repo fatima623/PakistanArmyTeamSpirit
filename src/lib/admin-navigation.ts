@@ -89,6 +89,7 @@ export const ADMIN_NAV_ITEMS = [
     group: "Content",
   },
   { key: "keyDates", href: "/admin/key-dates", label: "Key Dates", roles: ADMIN_ONLY, group: "Content" },
+  { key: "faqs", href: "/admin/faqs", label: "FAQs", roles: ADMIN_ONLY, group: "Content" },
   { key: "settings", href: "/admin/settings", label: "Site Settings", roles: ADMIN_ONLY, group: "System" },
 ] as const;
 
