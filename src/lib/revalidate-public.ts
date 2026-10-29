@@ -43,8 +43,10 @@ export function revalidateEventPaths() {
 }
 
 export function revalidateKeyDatesPaths() {
+  revalidateTag("key-dates");
   revalidatePublicSite();
   revalidatePath("/admin/key-dates");
+  revalidatePath("/event/dashboard");
 }
 
 export function revalidateFaqPaths() {

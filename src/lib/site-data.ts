@@ -107,7 +107,7 @@ const getCachedKeyDatesRows = unstable_cache(
     }
   },
   ["key-dates"],
-  { revalidate: SITE_DATA_REVALIDATE_SEC }
+  { revalidate: SITE_DATA_REVALIDATE_SEC, tags: ["key-dates"] }
 );
 
 export async function getSiteSettings(): Promise<PublicSiteSettings> {

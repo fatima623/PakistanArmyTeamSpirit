@@ -14,7 +14,7 @@ import { deriveWorkflowStages } from "@/lib/participant-workflow";
 import { getWorkflowSettings } from "@/lib/workflow-settings";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { getLocalizedPublicTickerItems } from "@/lib/cached-public-data";
-import { translateDataEntryLabel } from "@/lib/i18n/data-entry-period-i18n";
+import { translateKeyDateLabel, translateKeyDateValue } from "@/lib/i18n/key-date-i18n";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getDictionary();
@@ -29,7 +29,6 @@ export default async function EventDashboardPage() {
     user,
     tickerUpdates,
     settings,
-    dataEntryPeriods,
     timelineData,
     workflowSettings,
   ] = await Promise.all([
@@ -78,7 +77,6 @@ export default async function EventDashboardPage() {
         where: { id: "singleton" },
         select: { feeNoticeText: true },
       }),
-      prisma.dataEntryPeriod.findMany({ orderBy: { openDate: "asc" } }),
       getTimelineData(),
       getWorkflowSettings(),
     ]);
@@ -88,6 +86,7 @@ export default async function EventDashboardPage() {
   }
 
   const latestUpdates = tickerUpdates.slice(0, 5);
+  const { keyDates } = timelineData;
 
   const workflowStages = deriveWorkflowStages({
     user,
@@ -154,24 +153,24 @@ export default async function EventDashboardPage() {
               <div>
                 <p className="pp-eyebrow">{t.dashboard.scheduleEyebrow}</p>
                 <h2 className="pp-card__title" style={{ marginTop: "0.15rem" }}>
-                  {t.dashboard.dataEntryPeriods}
+                  {t.dashboard.timelinePanel.keyDates}
                 </h2>
-                <p className="pp-card__desc">
-                  {t.dashboard.dataEntryDesc}
-                </p>
               </div>
             </div>
-            {dataEntryPeriods.length === 0 ? (
-              <p className="pp-muted">{t.dashboard.noPeriods}</p>
+            {/* Admin-managed key dates (/admin/key-dates), in admin order. */}
+            {keyDates.length === 0 ? (
+              <p className="pp-muted">{t.dashboard.timelinePanel.noKeyDates}</p>
             ) : (
               <ul className="pp-dates">
-                {dataEntryPeriods.map((p) => (
-                  <li key={p.id} className="pp-dates__item">
+                {keyDates.map((k) => (
+                  <li key={k.id} className="pp-dates__item">
                     <span className="pp-dates__date">
-                      {formatDateDisplay(p.openDate, locale)}
+                      {k.date
+                        ? formatDateDisplay(k.date, locale)
+                        : translateKeyDateValue(k.value, locale)}
                     </span>
                     <span className="pp-dates__label">
-                      {translateDataEntryLabel(p.label, locale)}
+                      {translateKeyDateLabel(k.label, locale)}
                     </span>
                   </li>
                 ))}
