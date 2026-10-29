@@ -96,11 +96,26 @@ export const ADMIN_NAV_ITEMS = [
 export type AdminNavKey = (typeof ADMIN_NAV_ITEMS)[number]["key"];
 export type AdminNavItem = (typeof ADMIN_NAV_ITEMS)[number];
 
+/**
+ * Content managers that only feed the participant Tour, which is hidden from
+ * participants for now. Their sidebar items are commented out here; the pages
+ * stay reachable by URL and keep their header titles. Uncomment to restore.
+ */
+const HIDDEN_FROM_SIDEBAR: ReadonlySet<string> = new Set<AdminNavKey>([
+  "news", // Announcements
+  "events", // Events Management
+  "gallery", // Gallery Management
+  "hero", // Home Hero Images
+  "missionImages", // Concept & Purpose Images
+]);
+
 /** Nav items visible to the given staff role. */
 export function adminNavItemsForRole(role: string | null | undefined) {
   const r = role ?? "";
-  return ADMIN_NAV_ITEMS.filter((item) =>
-    (item.roles as readonly string[]).includes(r)
+  return ADMIN_NAV_ITEMS.filter(
+    (item) =>
+      !HIDDEN_FROM_SIDEBAR.has(item.key) &&
+      (item.roles as readonly string[]).includes(r)
   );
 }
 

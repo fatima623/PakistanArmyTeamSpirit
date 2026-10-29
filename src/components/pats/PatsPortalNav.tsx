@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
-  Compass,
+  // Compass, — used by the commented-out Tour nav item below
   LayoutDashboard,
   LifeBuoy,
   LogOut,
@@ -18,7 +18,7 @@ import { logoutAction } from "@/lib/actions/auth";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n/I18nProvider";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { TOUR_HOME } from "@/lib/tour-navigation";
+// import { TOUR_HOME } from "@/lib/tour-navigation"; — see the Tour nav item
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 type NavKey = keyof Dictionary["nav"];
@@ -41,7 +41,8 @@ const NAV_LINKS: {
 }[] = [
   { href: "/event/dashboard", labelKey: "dashboard", Icon: LayoutDashboard },
   { href: "/event/tickets", labelKey: "support", Icon: LifeBuoy },
-  { href: TOUR_HOME, labelKey: "tour", Icon: Compass, external: true },
+  // Tour hidden from participants for now — restore this line to bring it back.
+  // { href: TOUR_HOME, labelKey: "tour", Icon: Compass, external: true },
 ];
 
 export function PatsPortalNav({
